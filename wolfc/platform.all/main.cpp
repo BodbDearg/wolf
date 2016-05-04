@@ -26,7 +26,7 @@ int main(int argc, const char * argv[]) {
     llvm::Constant * putsFn = module.getOrInsertFunction("puts", putsFnType);
     
     // Create the function for main
-    llvm::FunctionType * mainFnType = llvm::FunctionType::get(llvm::Type::getVoidTy(gLLVMContext), {}, false);
+    llvm::FunctionType * mainFnType = llvm::FunctionType::get(llvm::Type::getInt32Ty(gLLVMContext), {}, false);
     llvm::Function * mainFn = llvm::Function::Create(mainFnType,
                                                      llvm::Function::ExternalLinkage,
                                                      "main",
@@ -41,7 +41,7 @@ int main(int argc, const char * argv[]) {
     gIRBuilder.CreateCall(putsFn, helloWorldStr);
     
     // Return void
-    gIRBuilder.CreateRetVoid();
+    gIRBuilder.CreateRet(llvm::ConstantInt::get(llvm::Type::getInt32Ty(gLLVMContext), 0));
     
     // Dump the code to stdout
     module.dump();
