@@ -174,7 +174,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\nTEST_DIR=\"${DERIVED_FILE_DIR}\"\nmkdir -p \"${TEST_DIR}\"\n\necho \"**************\"\necho \"**************\"\n\n# Generate the llvm ir code\n${BUILT_PRODUCTS_DIR}/wolfc > \"${TEST_DIR}/wolfc-test.ll\"\n\n# Generate assembly\nLLVM_AS=`which llvm-as`\nLLC=`which llc`\nenv -i -- \"${LLVM_AS}\" \"${TEST_DIR}/wolfc-test.ll\"\nenv -i -- \"${LLC}\" \"${TEST_DIR}/wolfc-test.bc\"\n\necho \"**************\"\necho \"**************\"\n\ncat \"${TEST_DIR}/wolfc-test.s\"\n\necho \"**************\"\necho \"**************\"\n\n# Compile that assembly to an executable\nclang \"${TEST_DIR}/wolfc-test.s\" -o \"${TEST_DIR}/wolfc-test.out\"\n";
+			shellScript = "set -e\nTEST_DIR=\"${DERIVED_FILE_DIR}\"\nmkdir -p \"${TEST_DIR}\"\n\necho \"**************\"\necho \"**************\"\n\n# Generate the llvm ir code\n\"${BUILT_PRODUCTS_DIR}/wolfc\" 2> \"${TEST_DIR}/wolfc-test.ll\"\n\n# Generate assembly\nllc -march=x86-64 -o \"${TEST_DIR}/wolfc-test.s\" \"${TEST_DIR}/wolfc-test.ll\"\n\necho \"**************\"\necho \"**************\"\n\ncat \"${TEST_DIR}/wolfc-test.s\"\n\necho \"**************\"\necho \"**************\"\n\n# Compile that assembly to an executable\nclang \"${TEST_DIR}/wolfc-test.s\" -o \"${BUILT_PRODUCTS_DIR}/wolfc-test\"\nchmod +x \"${BUILT_PRODUCTS_DIR}/wolfc-test\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -353,6 +353,7 @@
 				1FFD98BB1CD9EC0C00398CA6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
