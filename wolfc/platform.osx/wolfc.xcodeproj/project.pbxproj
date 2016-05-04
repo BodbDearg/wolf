@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1FFD98A91CD9B3AD00398CA6 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD98A81CD9B3AD00398CA6 /* main.cpp */; };
+		1FFD98B31CD9D48A00398CA6 /* libpthread.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FFD98B21CD9D48A00398CA6 /* libpthread.tbd */; };
+		1FFD98B51CD9D49500398CA6 /* libcurses.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FFD98B41CD9D49500398CA6 /* libcurses.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +27,8 @@
 /* Begin PBXFileReference section */
 		1FFD989D1CD9B34900398CA6 /* wolfc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = wolfc; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FFD98A81CD9B3AD00398CA6 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		1FFD98B21CD9D48A00398CA6 /* libpthread.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libpthread.tbd; path = usr/lib/libpthread.tbd; sourceTree = SDKROOT; };
+		1FFD98B41CD9D49500398CA6 /* libcurses.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurses.tbd; path = usr/lib/libcurses.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +36,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FFD98B51CD9D49500398CA6 /* libcurses.tbd in Frameworks */,
+				1FFD98B31CD9D48A00398CA6 /* libpthread.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +47,7 @@
 		1FFD98941CD9B34900398CA6 = {
 			isa = PBXGroup;
 			children = (
+				1FFD98B61CD9D4C000398CA6 /* Frameworks */,
 				1FFD98A71CD9B3AD00398CA6 /* platform.all */,
 				1FFD989E1CD9B34900398CA6 /* Products */,
 			);
@@ -63,24 +70,16 @@
 			path = ../platform.all;
 			sourceTree = "<group>";
 		};
-/* End PBXGroup section */
-
-/* Begin PBXLegacyTarget section */
-		1FFD98AE1CD9C48A00398CA6 /* llvm */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 1FFD98AF1CD9C48B00398CA6 /* Build configuration list for PBXLegacyTarget "llvm" */;
-			buildPhases = (
+		1FFD98B61CD9D4C000398CA6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1FFD98B41CD9D49500398CA6 /* libcurses.tbd */,
+				1FFD98B21CD9D48A00398CA6 /* libpthread.tbd */,
 			);
-			buildToolPath = /usr/local/bin/cmake;
-			buildWorkingDirectory = /Users/darraghcoy/GIT/wolf/wolfc/third_party_libs/llvm;
-			dependencies = (
-			);
-			name = llvm;
-			passBuildSettingsInEnvironment = 1;
-			productName = llvm;
+			name = Frameworks;
+			sourceTree = "<group>";
 		};
-/* End PBXLegacyTarget section */
+/* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
 		1FFD989C1CD9B34900398CA6 /* wolfc */ = {
@@ -112,9 +111,6 @@
 					1FFD989C1CD9B34900398CA6 = {
 						CreatedOnToolsVersion = 7.3;
 					};
-					1FFD98AE1CD9C48A00398CA6 = {
-						CreatedOnToolsVersion = 7.3;
-					};
 				};
 			};
 			buildConfigurationList = 1FFD98981CD9B34900398CA6 /* Build configuration list for PBXProject "wolfc" */;
@@ -130,7 +126,6 @@
 			projectRoot = "";
 			targets = (
 				1FFD989C1CD9B34900398CA6 /* wolfc */,
-				1FFD98AE1CD9C48A00398CA6 /* llvm */,
 			);
 		};
 /* End PBXProject section */
@@ -233,6 +228,11 @@
 					__STDC_LIMIT_MACROS,
 				);
 				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				OTHER_LDFLAGS = (
+					"-lLLVMCore",
+					"-lLLVMSupport",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -246,37 +246,11 @@
 					__STDC_LIMIT_MACROS,
 				);
 				HEADER_SEARCH_PATHS = /usr/local/include;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		1FFD98B01CD9C48B00398CA6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				DEBUGGING_SYMBOLS = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				OTHER_LDFLAGS = (
+					"-lLLVMCore",
+					"-lLLVMSupport",
 				);
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		1FFD98B11CD9C48B00398CA6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -301,14 +275,6 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
-		};
-		1FFD98AF1CD9C48B00398CA6 /* Build configuration list for PBXLegacyTarget "llvm" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1FFD98B01CD9C48B00398CA6 /* Debug */,
-				1FFD98B11CD9C48B00398CA6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
