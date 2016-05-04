@@ -29,6 +29,7 @@
 		1FFD98A81CD9B3AD00398CA6 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		1FFD98B21CD9D48A00398CA6 /* libpthread.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libpthread.tbd; path = usr/lib/libpthread.tbd; sourceTree = SDKROOT; };
 		1FFD98B41CD9D49500398CA6 /* libcurses.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurses.tbd; path = usr/lib/libcurses.tbd; sourceTree = SDKROOT; };
+		1FFD98B71CD9D82A00398CA6 /* WCMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCMacros.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				1FFD98A81CD9B3AD00398CA6 /* main.cpp */,
+				1FFD98B71CD9D82A00398CA6 /* WCMacros.h */,
 			);
 			name = platform.all;
 			path = ../platform.all;
