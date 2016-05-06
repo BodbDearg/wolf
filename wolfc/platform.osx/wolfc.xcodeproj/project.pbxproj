@@ -23,6 +23,7 @@
 
 /* Begin PBXBuildFile section */
 		1FFD48891CDC5C8A0084D66C /* WCFileUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD48871CDC5C8A0084D66C /* WCFileUtils.cpp */; };
+		1FFD488D1CDC6A7F0084D66C /* WCStringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD488B1CDC6A7F0084D66C /* WCStringUtils.cpp */; };
 		1FFD98A91CD9B3AD00398CA6 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD98A81CD9B3AD00398CA6 /* main.cpp */; };
 		1FFD98B31CD9D48A00398CA6 /* libpthread.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FFD98B21CD9D48A00398CA6 /* libpthread.tbd */; };
 		1FFD98B51CD9D49500398CA6 /* libcurses.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FFD98B41CD9D49500398CA6 /* libcurses.tbd */; };
@@ -55,6 +56,8 @@
 		1FFD48871CDC5C8A0084D66C /* WCFileUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCFileUtils.cpp; sourceTree = "<group>"; };
 		1FFD48881CDC5C8A0084D66C /* WCFileUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCFileUtils.hpp; sourceTree = "<group>"; };
 		1FFD488A1CDC61B00084D66C /* WCFinally.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WCFinally.hpp; sourceTree = "<group>"; };
+		1FFD488B1CDC6A7F0084D66C /* WCStringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCStringUtils.cpp; sourceTree = "<group>"; };
+		1FFD488C1CDC6A7F0084D66C /* WCStringUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCStringUtils.hpp; sourceTree = "<group>"; };
 		1FFD989D1CD9B34900398CA6 /* wolfc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = wolfc; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FFD98A81CD9B3AD00398CA6 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		1FFD98B21CD9D48A00398CA6 /* libpthread.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libpthread.tbd; path = usr/lib/libpthread.tbd; sourceTree = SDKROOT; };
@@ -101,6 +104,8 @@
 				1FFD48871CDC5C8A0084D66C /* WCFileUtils.cpp */,
 				1FFD48881CDC5C8A0084D66C /* WCFileUtils.hpp */,
 				1FFD488A1CDC61B00084D66C /* WCFinally.hpp */,
+				1FFD488B1CDC6A7F0084D66C /* WCStringUtils.cpp */,
+				1FFD488C1CDC6A7F0084D66C /* WCStringUtils.hpp */,
 			);
 			name = platform.all;
 			path = ../platform.all;
@@ -194,6 +199,7 @@
 			files = (
 				1FFD98A91CD9B3AD00398CA6 /* main.cpp in Sources */,
 				1FFD48891CDC5C8A0084D66C /* WCFileUtils.cpp in Sources */,
+				1FFD488D1CDC6A7F0084D66C /* WCStringUtils.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
