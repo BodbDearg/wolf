@@ -1,5 +1,13 @@
 #pragma once
 
+#include <cassert>
+
+/**
+ * Assert macro.
+ */
+#define WC_ASSERT(cond)\
+    assert((cond))
+
 /**
  * Beginning of third party includes.
  * Disable warnings in third party includes.

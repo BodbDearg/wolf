@@ -1,18 +1,22 @@
 #pragma once
 
-#include "WCTypes.hpp"
+#include <cstddef>
 
 /**
  * Utilities for querying character classes.
  */
 namespace WCCharUtils {
-    /* Tells if a character is 0-9 */
-    inline constexpr bool isDigit(uchar_t c) {
-        return c >= static_cast<uchar_t>('0') && c <= static_cast<uchar_t>('9');
+    /**
+     * Tells if a character is 0-9 
+     */
+    inline constexpr bool isDigit(char32_t c) {
+        return c >= '0' && c <= '9';
     }
     
-    /* Tells if a character is a line separator */
-    inline constexpr bool isLineSeparator(uchar_t c) {
+    /** 
+     * Tells if a character is a line separator 
+     */
+    inline constexpr bool isLineSeparator(char32_t c) {
         // See: https://en.wikipedia.org/wiki/Newline
         switch (c) {
             case 0x000A:        // Line Feed (LF)
@@ -31,8 +35,10 @@ namespace WCCharUtils {
         return false;
     }
     
-    /* Tells if a character is a whitespace character */
-    inline constexpr bool isWhitespace(uchar_t c) {
+    /** 
+     * Tells if a character is a whitespace character 
+     */
+    inline constexpr bool isWhitespace(char32_t c) {
         // See: https://en.wikipedia.org/wiki/Whitespace_character
         switch (c) {
             case 0x0009:        // Horizontal tab (HT)
