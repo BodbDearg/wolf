@@ -1,9 +1,11 @@
 #include "WCFileUtils.hpp"
+#include "WCStringUtils.hpp"
 #include "WCFinally.hpp"
 #include <cstdio>
 
-char * WCFileUtils::readFileAsUTF8String(const char * filePath) {
+char * WCFileUtils::readUTF8TextFileAsUTF8String(const char * filePath, size_t & fileSizeInBytes) {
     // Open the file
+    fileSizeInBytes = 0;
     std::FILE * file = std::fopen(filePath, "rb");
     
     if (!file) {
@@ -45,5 +47,17 @@ char * WCFileUtils::readFileAsUTF8String(const char * filePath) {
     
     // Null terminate buffer and return
     charBuffer[fileSize] = 0;
+    fileSizeInBytes = fileSize;
     return charBuffer;
+}
+
+char32_t * WCFileUtils::readUTF8TextFileAsUTF32String(const char * filePath) {
+    size_t fileSizeInBytes = 0;
+    std::unique_ptr<char[]> utf8Str(readUTF8TextFileAsUTF8String(filePath, fileSizeInBytes));
+    
+    if (utf8Str) {
+        return WCStringUtils::convertUtf8ToUtf32(utf8Str.get(), fileSizeInBytes);
+    }
+    
+    return nullptr;
 }

@@ -120,15 +120,22 @@ char32_t * WCStringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf
         }
         else {
             // Single byte character: Bit pattern 0???????
-            *utf32Str = utf8Byte1;
-            
-            ++utf32Str;
-            ++utf8Str;
-            --numUtf8Bytes;
+            // Check however we haven't reached NULL. If that is the case then stop.
+            if (utf8Byte1 != 0) {
+                *utf32Str = utf8Byte1;
+                
+                ++utf32Str;
+                ++utf8Str;
+                --numUtf8Bytes;
+            }
+            else {
+                // NULL terminator reached, stop conversion.
+                break;
+            }
         }
     }
     
-    // Null terminate the utf32 string and return
+    // NULL terminate the utf32 string and return
     *utf32Str = 0;
     return utf32Str;
 }
@@ -146,8 +153,15 @@ char * WCStringUtils::convertUtf32ToUtf8(const char32_t * utf32Str, size_t strin
         
         if (utf32Char < 0x80) {
             // 1 byte encoded character
-            utf8Str[0] = static_cast<char>(utf32Char);
-            ++utf8Str;
+            // Check however we haven't reached NULL. If that is the case then stop.
+            if (utf32Char != 0) {
+                utf8Str[0] = static_cast<char>(utf32Char);
+                ++utf8Str;
+            }
+            else {
+                // NULL terminator reached, stop conversion.
+                break;
+            }
         }
         else if (utf32Char < 0x800) {
             // 2 byte encoded character
