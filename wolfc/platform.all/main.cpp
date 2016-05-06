@@ -1,4 +1,9 @@
 #include "WCMacros.hpp"
+#include "WCFileUtils.hpp"
+#include <memory>
+#include <cstdio>
+
+/*
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
@@ -11,7 +16,25 @@ llvm::LLVMContext gLLVMContext;
 // The IR builder for the llvm compiler
 llvm::IRBuilder<> gIRBuilder(gLLVMContext);
 
+*/
+
 int main(int argc, const char * argv[]) {
+    // Arg check
+    if (argc != 3) {
+        std::printf("Usage: %s <Input Wolf File> <Output LLVM IR File>\n", argv[0]);
+        return -1;
+    }
+    
+    // Read the input file
+    std::unique_ptr<char32_t[]> inputSrc(WCFileUtils::readUTF8TextFileAsUTF32String(argv[1]));
+    
+    if (!inputSrc) {
+        std::printf("Failed to read input Wolf source file '%s'!\n", argv[1]);
+        return -1;
+    }
+    
+    /*
+    
     // The module, which holds all the code.
     llvm::Module module("WolfTest", gLLVMContext);
     
@@ -45,5 +68,8 @@ int main(int argc, const char * argv[]) {
     
     // Dump the code to stdout
     module.dump();
+     
+    */
+     
     return 0;
 }

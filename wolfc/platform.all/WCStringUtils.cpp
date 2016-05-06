@@ -7,7 +7,8 @@ char32_t * WCStringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf
     // Don't know how long the actual string will be so just use the byte length. This may not be the most
     // space efficient solution but deliberately sacraficing space here for speed... Don't want to have
     // multiple allocs and possible array copying.
-    char32_t * utf32Str = new char32_t[numUtf8Bytes + 1];
+    char32_t * utf32StrBuffer = new char32_t[numUtf8Bytes + 1];
+    char32_t * utf32StrPtr = utf32StrBuffer;
     
     while (numUtf8Bytes > 0) {
         char utf8Byte1 = *utf8Str;
@@ -32,8 +33,8 @@ char32_t * WCStringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf
                                     utf32Char |= (utf8Str[4] & 0x3F) << 6;
                                     utf32Char |= (utf8Str[5] & 0x3F) << 6;
                                     
-                                    *utf32Str = utf32Char;
-                                    ++utf32Str;
+                                    *utf32StrPtr = utf32Char;
+                                    ++utf32StrPtr;
                                     utf8Str += 6;
                                     numUtf8Bytes -= 6;
                                 }
@@ -50,8 +51,8 @@ char32_t * WCStringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf
                                     utf32Char |= (utf8Str[3] & 0x3F) << 6;
                                     utf32Char |= (utf8Str[4] & 0x3F);
                                     
-                                    *utf32Str = utf32Char;
-                                    ++utf32Str;
+                                    *utf32StrPtr = utf32Char;
+                                    ++utf32StrPtr;
                                     utf8Str += 5;
                                     numUtf8Bytes -= 5;
                                 }
@@ -68,8 +69,8 @@ char32_t * WCStringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf
                                 utf32Char |= (utf8Str[2] & 0x3F) << 6;
                                 utf32Char |= (utf8Str[3] & 0x3F);
                                 
-                                *utf32Str = utf32Char;
-                                ++utf32Str;
+                                *utf32StrPtr = utf32Char;
+                                ++utf32StrPtr;
                                 utf8Str += 4;
                                 numUtf8Bytes -= 4;
                             }
@@ -85,8 +86,8 @@ char32_t * WCStringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf
                             utf32Char |= (utf8Str[1] & 0x3F) << 6;
                             utf32Char |= (utf8Str[2] & 0x3F);
                             
-                            *utf32Str = utf32Char;
-                            ++utf32Str;
+                            *utf32StrPtr = utf32Char;
+                            ++utf32StrPtr;
                             utf8Str += 3;
                             numUtf8Bytes -= 3;
                         }
@@ -101,8 +102,8 @@ char32_t * WCStringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf
                         char32_t utf32Char = (utf8Byte1 & 0x1F) << 6;
                         utf32Char |= (utf8Str[1] & 0x3F);
                         
-                        *utf32Str = utf32Char;
-                        ++utf32Str;
+                        *utf32StrPtr = utf32Char;
+                        ++utf32StrPtr;
                         utf8Str += 2;
                         numUtf8Bytes -= 2;
                     }
@@ -122,9 +123,9 @@ char32_t * WCStringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf
             // Single byte character: Bit pattern 0???????
             // Check however we haven't reached NULL. If that is the case then stop.
             if (utf8Byte1 != 0) {
-                *utf32Str = utf8Byte1;
+                *utf32StrPtr = utf8Byte1;
                 
-                ++utf32Str;
+                ++utf32StrPtr;
                 ++utf8Str;
                 --numUtf8Bytes;
             }
@@ -136,8 +137,8 @@ char32_t * WCStringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf
     }
     
     // NULL terminate the utf32 string and return
-    *utf32Str = 0;
-    return utf32Str;
+    *utf32StrPtr = 0;
+    return utf32StrBuffer;
 }
 
 char * WCStringUtils::convertUtf32ToUtf8(const char32_t * utf32Str, size_t stringLength) {
@@ -146,7 +147,8 @@ char * WCStringUtils::convertUtf32ToUtf8(const char32_t * utf32Str, size_t strin
     // Don't know yet what size in bytes actual string will be so just use the length * 6. This may not
     // be the most space efficient solution but deliberately sacraficing space here for speed... Don't want
     // to have multiple allocs and possible array copying.
-    char * utf8Str = new char[stringLength + 1];
+    char * utf8StrBuffer = new char[stringLength + 1];
+    char * utf8StrPtr = utf8StrBuffer;
     
     while (stringLength > 0) {
         uint32_t utf32Char = utf32Str[0];
@@ -155,8 +157,8 @@ char * WCStringUtils::convertUtf32ToUtf8(const char32_t * utf32Str, size_t strin
             // 1 byte encoded character
             // Check however we haven't reached NULL. If that is the case then stop.
             if (utf32Char != 0) {
-                utf8Str[0] = static_cast<char>(utf32Char);
-                ++utf8Str;
+                utf8StrPtr[0] = static_cast<char>(utf32Char);
+                ++utf8StrPtr;
             }
             else {
                 // NULL terminator reached, stop conversion.
@@ -165,43 +167,43 @@ char * WCStringUtils::convertUtf32ToUtf8(const char32_t * utf32Str, size_t strin
         }
         else if (utf32Char < 0x800) {
             // 2 byte encoded character
-            utf8Str[0] = 0xC0 | (utf32Char >> 6);
-            utf8Str[1] = 0x80 | (utf32Char & 0x3F);
-            utf8Str += 2;
+            utf8StrPtr[0] = 0xC0 | (utf32Char >> 6);
+            utf8StrPtr[1] = 0x80 | (utf32Char & 0x3F);
+            utf8StrPtr += 2;
         }
         else if (utf32Char < 0x10000) {
             // 3 byte encoded character
-            utf8Str[0] = 0xE0 | (utf32Char >> 12);
-            utf8Str[1] = 0x80 | ((utf32Char >> 6) & 0x3F);
-            utf8Str[2] = 0x80 | (utf32Char & 0x3F);
-            utf8Str += 3;
+            utf8StrPtr[0] = 0xE0 | (utf32Char >> 12);
+            utf8StrPtr[1] = 0x80 | ((utf32Char >> 6) & 0x3F);
+            utf8StrPtr[2] = 0x80 | (utf32Char & 0x3F);
+            utf8StrPtr += 3;
         }
         else if (utf32Char < 0x200000) {
             // 4 byte encoded character
-            utf8Str[0] = 0xF0 | (utf32Char >> 18);
-            utf8Str[1] = 0x80 | ((utf32Char >> 12) & 0x3F);
-            utf8Str[2] = 0x80 | ((utf32Char >> 6) & 0x3F);
-            utf8Str[3] = 0x80 | (utf32Char & 0x3F);
-            utf8Str += 4;
+            utf8StrPtr[0] = 0xF0 | (utf32Char >> 18);
+            utf8StrPtr[1] = 0x80 | ((utf32Char >> 12) & 0x3F);
+            utf8StrPtr[2] = 0x80 | ((utf32Char >> 6) & 0x3F);
+            utf8StrPtr[3] = 0x80 | (utf32Char & 0x3F);
+            utf8StrPtr += 4;
         }
         else if (utf32Char < 0x4000000) {
             // 5 byte encoded character
-            utf8Str[0] = 0xF8 | (utf32Char >> 24);
-            utf8Str[1] = 0x80 | ((utf32Char >> 18) & 0x3F);
-            utf8Str[2] = 0x80 | ((utf32Char >> 12) & 0x3F);
-            utf8Str[3] = 0x80 | ((utf32Char >> 6) & 0x3F);
-            utf8Str[4] = 0x80 | (utf32Char & 0x3F);
-            utf8Str += 5;
+            utf8StrPtr[0] = 0xF8 | (utf32Char >> 24);
+            utf8StrPtr[1] = 0x80 | ((utf32Char >> 18) & 0x3F);
+            utf8StrPtr[2] = 0x80 | ((utf32Char >> 12) & 0x3F);
+            utf8StrPtr[3] = 0x80 | ((utf32Char >> 6) & 0x3F);
+            utf8StrPtr[4] = 0x80 | (utf32Char & 0x3F);
+            utf8StrPtr += 5;
         }
         else if (utf32Char < 0x80000000) {
             // 6 byte encoded character
-            utf8Str[0] = 0xFC | (utf32Char >> 30);
-            utf8Str[1] = 0x80 | ((utf32Char >> 24) & 0x3F);
-            utf8Str[2] = 0x80 | ((utf32Char >> 18) & 0x3F);
-            utf8Str[3] = 0x80 | ((utf32Char >> 12) & 0x3F);
-            utf8Str[4] = 0x80 | ((utf32Char >> 6) & 0x3F);
-            utf8Str[5] = 0x80 | (utf32Char & 0x3F);
-            utf8Str += 6;
+            utf8StrPtr[0] = 0xFC | (utf32Char >> 30);
+            utf8StrPtr[1] = 0x80 | ((utf32Char >> 24) & 0x3F);
+            utf8StrPtr[2] = 0x80 | ((utf32Char >> 18) & 0x3F);
+            utf8StrPtr[3] = 0x80 | ((utf32Char >> 12) & 0x3F);
+            utf8StrPtr[4] = 0x80 | ((utf32Char >> 6) & 0x3F);
+            utf8StrPtr[5] = 0x80 | (utf32Char & 0x3F);
+            utf8StrPtr += 6;
         }
         
         ++utf32Str;
@@ -209,6 +211,6 @@ char * WCStringUtils::convertUtf32ToUtf8(const char32_t * utf32Str, size_t strin
     }
     
     // Null terminate the utf8 string and return
-    *utf8Str = 0;
-    return utf8Str;
+    *utf8StrPtr = 0;
+    return utf8StrBuffer;
 }
