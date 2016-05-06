@@ -1,4 +1,4 @@
-#include "WCMacros.h"
+#include "WCMacros.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
