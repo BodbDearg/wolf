@@ -1,24 +1,24 @@
-BinaryExpression
+BinaryExpression:
 	UnaryExpression
 	UnaryExpression + Expression
 	UnaryExpression - Expression
 	UnaryExpression / Expression
 	UnaryExpression * Expression
 
-UnaryExpression
+UnaryExpression:
 	IntegerLiteral
 	-IntegerLiteral
 	+IntegerLiteral
 	(BinaryExpression)
 
-IntegerLiteral
+IntegerLiteral:
 	IntegerDigits
 
-IntegerDigits
+IntegerDigits:
 	IntegerDigit
 	IntegerDigit IntegerDigits
 
-IntegerDigit
+IntegerDigit:
 	0
 	1
 	2

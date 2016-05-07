@@ -4,6 +4,11 @@
 
 namespace WCStringUtils {
     /**
+     * Give the length of the given null terminated utf32 string.
+     */
+    size_t strlen(const char32_t * utf32Str);
+    
+    /**
      * Convert a null terminated utf8 encoded c string into utf32.
      * Will encode at max 'numUtf8Bytes' but may stop shorter than that if it finds a null terminator.
      */

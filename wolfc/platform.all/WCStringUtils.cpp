@@ -1,5 +1,18 @@
 #include "WCStringUtils.hpp"
 #include "WCMacros.hpp"
+#include <cstdint>
+
+size_t WCStringUtils::strlen(const char32_t * utf32Str) {
+    WC_ASSERT(utf32Str);
+    size_t length = 0;
+    
+    while (*utf32Str) {
+        ++utf32Str;
+        ++length;
+    }
+    
+    return length;
+}
 
 char32_t * WCStringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf8Bytes) {
     WC_ASSERT(utf8Str);
