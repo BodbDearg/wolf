@@ -22,6 +22,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		1F03CC431CDEC42E00F6E440 /* WCLexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F03CC411CDEC42E00F6E440 /* WCLexer.cpp */; };
 		1F44B8F81CDD6641008416B3 /* WCToken.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F44B8F61CDD6641008416B3 /* WCToken.cpp */; };
 		1FFD48891CDC5C8A0084D66C /* WCFileUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD48871CDC5C8A0084D66C /* WCFileUtils.cpp */; };
 		1FFD488D1CDC6A7F0084D66C /* WCStringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD488B1CDC6A7F0084D66C /* WCStringUtils.cpp */; };
@@ -53,6 +54,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1F03CC411CDEC42E00F6E440 /* WCLexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCLexer.cpp; sourceTree = "<group>"; };
+		1F03CC421CDEC42E00F6E440 /* WCLexer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCLexer.hpp; sourceTree = "<group>"; };
 		1F44B8F61CDD6641008416B3 /* WCToken.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCToken.cpp; sourceTree = "<group>"; };
 		1F44B8F71CDD6641008416B3 /* WCToken.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCToken.hpp; sourceTree = "<group>"; };
 		1FFD48821CDC3DEA0084D66C /* WCCharUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCCharUtils.hpp; sourceTree = "<group>"; };
@@ -111,6 +114,8 @@
 				1FFD488C1CDC6A7F0084D66C /* WCStringUtils.hpp */,
 				1F44B8F61CDD6641008416B3 /* WCToken.cpp */,
 				1F44B8F71CDD6641008416B3 /* WCToken.hpp */,
+				1F03CC411CDEC42E00F6E440 /* WCLexer.cpp */,
+				1F03CC421CDEC42E00F6E440 /* WCLexer.hpp */,
 			);
 			name = platform.all;
 			path = ../platform.all;
@@ -205,6 +210,7 @@
 				1FFD98A91CD9B3AD00398CA6 /* main.cpp in Sources */,
 				1FFD48891CDC5C8A0084D66C /* WCFileUtils.cpp in Sources */,
 				1FFD488D1CDC6A7F0084D66C /* WCStringUtils.cpp in Sources */,
+				1F03CC431CDEC42E00F6E440 /* WCLexer.cpp in Sources */,
 				1F44B8F81CDD6641008416B3 /* WCToken.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
