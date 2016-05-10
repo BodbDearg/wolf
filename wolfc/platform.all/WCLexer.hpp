@@ -4,11 +4,13 @@
 #include <cstddef>
 #include <vector>
 
+WC_BEGIN_NAMESPACE
+
 /**
  * Splits input source text into Wolf tokens.
  * See WCToken for more info on valid tokens in the language.
  */
-class WCLexer {
+class Lexer {
 public:
     /* The default token capacity for the lexer */
     static constexpr const size_t kDefaultInitialTokenCapacity = 1024 * 32;
@@ -17,9 +19,9 @@ public:
      * Creates the lexer. The given number of tokens is allocated
      * for the initial token capacity.
      */
-    WCLexer(size_t initialTokenCapacity = kDefaultInitialTokenCapacity);
+    Lexer(size_t initialTokenCapacity = kDefaultInitialTokenCapacity);
     
-    ~WCLexer();
+    ~Lexer();
     
     /**
      * Parse the given input source string and convert into a series of tokens.
@@ -55,13 +57,13 @@ private:
      * set also. If the token is a literal, it is up to the callee to perform any additional 
      * initialization that is required.
      */
-    WCToken & allocToken(WCTokenType tokenType);
+    Token & allocToken(TokenType tokenType);
     
     /* Emit a lexer error to stderror. Line and column information are emitted also. */
     void error(const char * msg, ...);
     
     /* The list of parsed tokens */
-    WCToken * mTokenList;
+    Token * mTokenList;
     
     /* The number of tokens currently allocated */
     size_t mTokenCapacity;
@@ -80,6 +82,8 @@ private:
     
 #if DEBUG == 1
     /* A list for ease of debugging/inspection not used for release builds - list of parsed tokens */
-    std::vector<WCToken*> mDebugTokenList;
+    std::vector<Token*> mDebugTokenList;
 #endif  // #if DEBUG == 1
 };
+
+WC_END_NAMESPACE

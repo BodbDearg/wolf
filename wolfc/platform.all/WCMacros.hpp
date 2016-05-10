@@ -3,6 +3,16 @@
 #include <cassert>
 
 /**
+ * Begin namespace macro for the compiler.
+ */
+#define WC_BEGIN_NAMESPACE namespace wolfc {
+
+/**
+ * End namespace macro for the compiler.
+ */
+#define WC_END_NAMESPACE }
+
+/**
  * Assert macro.
  */
 #define WC_ASSERT(cond)\

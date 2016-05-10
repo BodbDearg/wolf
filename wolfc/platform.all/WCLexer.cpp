@@ -7,7 +7,9 @@
 #include <cstdio>
 #include <cstdarg>
 
-WCLexer::WCLexer(size_t initialTokenCapacity) :
+WC_BEGIN_NAMESPACE
+
+Lexer::Lexer(size_t initialTokenCapacity) :
     mTokenList(nullptr),
     mTokenCapacity(initialTokenCapacity),
     mTokenCount(0),
@@ -16,14 +18,14 @@ WCLexer::WCLexer(size_t initialTokenCapacity) :
     increaseTokenListCapacity(initialTokenCapacity);
 }
 
-WCLexer::~WCLexer() {
+Lexer::~Lexer() {
     if (mTokenList) {
         std::free(mTokenList);
         mTokenList = nullptr;
     }
 }
 
-bool WCLexer::process(const char32_t * srcText) {
+bool Lexer::process(const char32_t * srcText) {
     // Init lexer state
     WC_ASSERT(srcText);
     mLexerState = {};
@@ -46,22 +48,22 @@ bool WCLexer::process(const char32_t * srcText) {
         }
                                                
         // If we get to here then we have an error
-        std::unique_ptr<char[]> charAsUtf8(WCStringUtils::convertUtf32ToUtf8(&c, 1));
+        std::unique_ptr<char[]> charAsUtf8(StringUtils::convertUtf32ToUtf8(&c, 1));
         error("Unexpected character '%s' at start of token!\n", charAsUtf8.get());
         return false;
     }
     
     // Now add in the end of file token and return true for success
-    allocToken(WCTokenType::kEOF);
+    allocToken(TokenType::kEOF);
     return true;
 }
 
-bool WCLexer::consumeWhitespace(char32_t currentChar) {
-    if (!WCCharUtils::isWhitespace(currentChar)) {
+bool Lexer::consumeWhitespace(char32_t currentChar) {
+    if (!CharUtils::isWhitespace(currentChar)) {
         return false;   // Did not parse whitespace
     }
     
-    if (WCCharUtils::isLineSeparator(currentChar)) {
+    if (CharUtils::isLineSeparator(currentChar)) {
         if (currentChar == '\r' && mLexerState.srcPtr[1] == '\n') {
             // Carriage return and newline combo: interpret as just one newline
             mLexerState.srcPtr += 2;
@@ -84,14 +86,14 @@ bool WCLexer::consumeWhitespace(char32_t currentChar) {
     return true;    // Parsed some whitespace
 }
 
-void WCLexer::consumeNonWhiteSpace(size_t numChars) {
+void Lexer::consumeNonWhiteSpace(size_t numChars) {
     mLexerState.srcPtr += numChars;
     mLexerState.srcCol += numChars;
 }
 
-bool WCLexer::parseNumericLiteral(char32_t currentChar) {
+bool Lexer::parseNumericLiteral(char32_t currentChar) {
     // Must start with a digit to be a numeric
-    if (!WCCharUtils::isDigit(currentChar)) {
+    if (!CharUtils::isDigit(currentChar)) {
         return false;
     }
     
@@ -100,7 +102,7 @@ bool WCLexer::parseNumericLiteral(char32_t currentChar) {
     const char32_t * endCharPtr = startCharPtr + 1;
     
     while ((currentChar = endCharPtr[0])) {
-        if (WCCharUtils::isDigit(currentChar)) {
+        if (CharUtils::isDigit(currentChar)) {
             ++endCharPtr;
         }
         else {
@@ -124,42 +126,42 @@ bool WCLexer::parseNumericLiteral(char32_t currentChar) {
     }
     
     // Now make the token
-    WCToken & token = allocToken(WCTokenType::kIntLiteral);
-    token.mData.intVal = value;
+    Token & token = allocToken(TokenType::kIntLiteral);
+    token.data.intVal = value;
     
     // All good!
     return true;
 }
 
-bool WCLexer::parseBasicTokens(char32_t currentChar) {
+bool Lexer::parseBasicTokens(char32_t currentChar) {
     switch (currentChar) {
         case '(':
-            allocToken(WCTokenType::kLParen);
+            allocToken(TokenType::kLParen);
             consumeNonWhiteSpace(1);
             return true;
             
         case ')':
-            allocToken(WCTokenType::kRParen);
+            allocToken(TokenType::kRParen);
             consumeNonWhiteSpace(1);
             return true;
             
         case '+':
-            allocToken(WCTokenType::kPlus);
+            allocToken(TokenType::kPlus);
             consumeNonWhiteSpace(1);
             return true;
             
         case '-':
-            allocToken(WCTokenType::kMinus);
+            allocToken(TokenType::kMinus);
             consumeNonWhiteSpace(1);
             return true;
             
         case '*':
-            allocToken(WCTokenType::kAsterisk);
+            allocToken(TokenType::kAsterisk);
             consumeNonWhiteSpace(1);
             return true;
             
         case '/':
-            allocToken(WCTokenType::kSlash);
+            allocToken(TokenType::kSlash);
             consumeNonWhiteSpace(1);
             return true;
             
@@ -170,28 +172,28 @@ bool WCLexer::parseBasicTokens(char32_t currentChar) {
     return false;
 }
 
-void WCLexer::increaseTokenListCapacity(size_t newCapacity) {
+void Lexer::increaseTokenListCapacity(size_t newCapacity) {
     if (newCapacity < mTokenCapacity) {
         return;
     }
     
     mTokenCapacity = newCapacity;
-    mTokenList = reinterpret_cast<WCToken*>(std::realloc(mTokenList, mTokenCapacity * sizeof(WCToken)));
+    mTokenList = reinterpret_cast<Token*>(std::realloc(mTokenList, mTokenCapacity * sizeof(Token)));
 }
 
-WCToken & WCLexer::allocToken(WCTokenType tokenType) {
+Token & Lexer::allocToken(TokenType tokenType) {
     // If not enough room, grow capacity according to the Golden ratio (approx 1.6) and add 1 to ensure we alloc at least one token.
     if (mTokenCount + 1 > mTokenCapacity) {
         increaseTokenListCapacity(((mTokenCapacity * 16) / 10) + 1);
     }
     
     // Initialize the token
-    WCToken * token = mTokenList + mTokenCount;
-    token->mType = tokenType;
-    token->mSrcPtr = mLexerState.srcPtr;
-    token->mSrcLine = mLexerState.srcLine;
-    token->mSrcCol = mLexerState.srcCol;
-    token->mData = {};
+    Token * token = mTokenList + mTokenCount;
+    token->type = tokenType;
+    token->srcPtr = mLexerState.srcPtr;
+    token->srcLine = mLexerState.srcLine;
+    token->srcCol = mLexerState.srcCol;
+    token->data = {};
     
 #if DEBUG == 1
     // Debug only: put the token into this list for ease of inspection
@@ -203,7 +205,7 @@ WCToken & WCLexer::allocToken(WCTokenType tokenType) {
     return *token;
 }
 
-void WCLexer::error(const char * msg, ...) {
+void Lexer::error(const char * msg, ...) {
     // Generic error info
     std::fprintf(stderr,
                  "Error! Failed to parse the given source into tokens at: line %zu, column %zu\n",
@@ -216,3 +218,5 @@ void WCLexer::error(const char * msg, ...) {
     std::vfprintf(stderr, msg, args);
     va_end(args);
 }
+
+WC_END_NAMESPACE

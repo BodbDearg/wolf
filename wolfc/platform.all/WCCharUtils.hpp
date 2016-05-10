@@ -1,11 +1,14 @@
 #pragma once
 
+#include "WCMacros.hpp"
 #include <cstddef>
+
+WC_BEGIN_NAMESPACE
 
 /**
  * Utilities for querying character classes.
  */
-namespace WCCharUtils {
+namespace CharUtils {
     /**
      * Tells if a character is 0-9 
      */
@@ -81,3 +84,5 @@ namespace WCCharUtils {
         return false;
     }
 }
+
+WC_END_NAMESPACE

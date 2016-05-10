@@ -3,7 +3,9 @@
 #include "WCFinally.hpp"
 #include <cstdio>
 
-char * WCFileUtils::readUTF8TextFileAsUTF8String(const char * filePath, size_t & fileSizeInBytes) {
+WC_BEGIN_NAMESPACE
+
+char * FileUtils::readUTF8TextFileAsUTF8String(const char * filePath, size_t & fileSizeInBytes) {
     // Open the file
     fileSizeInBytes = 0;
     std::FILE * file = std::fopen(filePath, "rb");
@@ -12,7 +14,7 @@ char * WCFileUtils::readUTF8TextFileAsUTF8String(const char * filePath, size_t &
         return nullptr;
     }
     
-    WCFinally closeFile([&](){
+    Finally closeFile([&](){
         std::fclose(file);
     });
     
@@ -51,13 +53,15 @@ char * WCFileUtils::readUTF8TextFileAsUTF8String(const char * filePath, size_t &
     return charBuffer;
 }
 
-char32_t * WCFileUtils::readUTF8TextFileAsUTF32String(const char * filePath) {
+char32_t * FileUtils::readUTF8TextFileAsUTF32String(const char * filePath) {
     size_t fileSizeInBytes = 0;
     std::unique_ptr<char[]> utf8Str(readUTF8TextFileAsUTF8String(filePath, fileSizeInBytes));
     
     if (utf8Str) {
-        return WCStringUtils::convertUtf8ToUtf32(utf8Str.get(), fileSizeInBytes);
+        return StringUtils::convertUtf8ToUtf32(utf8Str.get(), fileSizeInBytes);
     }
     
     return nullptr;
 }
+
+WC_END_NAMESPACE

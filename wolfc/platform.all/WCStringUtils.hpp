@@ -1,8 +1,11 @@
 #pragma once
 
+#include "WCMacros.hpp"
 #include <cstddef>
 
-namespace WCStringUtils {
+WC_BEGIN_NAMESPACE
+
+namespace StringUtils {
     /**
      * Give the length of the given null terminated utf32 string.
      */
@@ -20,3 +23,5 @@ namespace WCStringUtils {
      */
     char * convertUtf32ToUtf8(const char32_t * utf32Str, size_t stringLength);
 }
+
+WC_END_NAMESPACE

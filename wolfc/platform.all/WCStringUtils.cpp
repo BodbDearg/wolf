@@ -1,8 +1,9 @@
 #include "WCStringUtils.hpp"
-#include "WCMacros.hpp"
 #include <cstdint>
 
-size_t WCStringUtils::strlen(const char32_t * utf32Str) {
+WC_BEGIN_NAMESPACE
+
+size_t StringUtils::strlen(const char32_t * utf32Str) {
     WC_ASSERT(utf32Str);
     size_t length = 0;
     
@@ -14,7 +15,7 @@ size_t WCStringUtils::strlen(const char32_t * utf32Str) {
     return length;
 }
 
-char32_t * WCStringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf8Bytes) {
+char32_t * StringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf8Bytes) {
     WC_ASSERT(utf8Str);
     
     // Don't know how long the actual string will be so just use the byte length. This may not be the most
@@ -154,7 +155,7 @@ char32_t * WCStringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf
     return utf32StrBuffer;
 }
 
-char * WCStringUtils::convertUtf32ToUtf8(const char32_t * utf32Str, size_t stringLength) {
+char * StringUtils::convertUtf32ToUtf8(const char32_t * utf32Str, size_t stringLength) {
     WC_ASSERT(utf32Str);
     
     // Don't know yet what size in bytes actual string will be so just use the length * 6. This may not
@@ -227,3 +228,5 @@ char * WCStringUtils::convertUtf32ToUtf8(const char32_t * utf32Str, size_t strin
     *utf8StrPtr = 0;
     return utf8StrBuffer;
 }
+
+WC_END_NAMESPACE

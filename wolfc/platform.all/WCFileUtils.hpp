@@ -1,8 +1,11 @@
 #pragma once
 
+#include "WCMacros.hpp"
 #include <cstddef>
 
-namespace WCFileUtils {
+WC_BEGIN_NAMESPACE
+
+namespace FileUtils {
     /** 
      * Reads a file encoded as utf8 as a null terminated utf8 c-string
      */
@@ -13,3 +16,5 @@ namespace WCFileUtils {
      */
     char32_t * readUTF8TextFileAsUTF32String(const char * filePath);
 }
+
+WC_END_NAMESPACE

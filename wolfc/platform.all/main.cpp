@@ -4,8 +4,6 @@
 #include <memory>
 #include <cstdio>
 
-/*
-
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
     #include <llvm/IR/IRBuilder.h>
@@ -17,8 +15,6 @@ llvm::LLVMContext gLLVMContext;
 // The IR builder for the llvm compiler
 llvm::IRBuilder<> gIRBuilder(gLLVMContext);
 
-*/
-
 int main(int argc, const char * argv[]) {
     // Arg check
     if (argc != 3) {
@@ -27,7 +23,7 @@ int main(int argc, const char * argv[]) {
     }
     
     // Read the input file
-    std::unique_ptr<char32_t[]> inputSrc(WCFileUtils::readUTF8TextFileAsUTF32String(argv[1]));
+    std::unique_ptr<char32_t[]> inputSrc(wolfc::FileUtils::readUTF8TextFileAsUTF32String(argv[1]));
     
     if (!inputSrc) {
         std::printf("Failed to read input Wolf source file '%s'!\n", argv[1]);
@@ -35,7 +31,7 @@ int main(int argc, const char * argv[]) {
     }
     
     // Run it through the lexer
-    WCLexer lexer;
+    wolfc::Lexer lexer;
     
     if (!lexer.process(inputSrc.get())) {
         return -1;

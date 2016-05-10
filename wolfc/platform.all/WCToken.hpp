@@ -3,8 +3,10 @@
 #include "WCMacros.hpp"
 #include <cstdint>
 
+WC_BEGIN_NAMESPACE
+
 /* Enum representing the type of token */
-enum class WCTokenType {
+enum class TokenType {
     kEOF,           // End of file token
     kIntLiteral,    // Unsigned integer literal, like '01203'
     kLParen,        // '('
@@ -19,21 +21,21 @@ enum class WCTokenType {
  * Class representing a token. Contains the token type, source information and additional data that
  * varies depending on the token type (if applicable)
  */
-struct WCToken {
+struct Token {
     /* The type of token. See enum definition for more details. */
-    WCTokenType mType;
+    TokenType type;
     
     /**
      * Pointer to the location in the source code where the literal occurred. 
      * This class does NOT own this memory. And it must remain valid for the lifetime of the token.
      */
-    const char32_t * mSrcPtr;
+    const char32_t * srcPtr;
     
     /* Line in the source where the token starts, with 0 being the first line. */
-    size_t mSrcLine;
+    size_t srcLine;
     
     /* Column in the source where the token starts, with 0 being the first column */
-    size_t mSrcCol;
+    size_t srcCol;
     
     /** 
      * This holds the actual data for the token. Unused/undefined for anything other than a literal.
@@ -42,5 +44,8 @@ struct WCToken {
     union {
         uint64_t    intVal;
         uint8_t     rawBytes[16];
-    } mData;
+    } data;
 };
+
+
+WC_END_NAMESPACE

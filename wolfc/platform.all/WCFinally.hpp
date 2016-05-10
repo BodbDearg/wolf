@@ -3,19 +3,25 @@
 #include "WCMacros.hpp"
 #include <functional>
 
+WC_BEGIN_NAMESPACE
+
 /**
  * Object which invokes a lambda on destruction. Useful for RAII type patterns.
  */
-class WCFinally {
+class Finally {
 public:
-    WCFinally(const std::function<void ()> & callback) : mCallback(callback) {
+    Finally(const std::function<void ()> & callback) :
+        mCallback(callback)
+    {
         WC_ASSERT(mCallback);
     }
     
-    ~WCFinally() {
+    ~Finally() {
         mCallback();
     }
     
 private:
     std::function<void ()>  mCallback;
 };
+
+WC_END_NAMESPACE

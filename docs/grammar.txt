@@ -1,25 +1,25 @@
-BinaryExpression:
-	UnaryExpression
-	UnaryExpression + Expression
-	UnaryExpression - Expression
-	UnaryExpression / Expression
-	UnaryExpression * Expression
+BinaryExpr:
+	UnaryExpr
+	UnaryExpr + BinaryExpr
+	UnaryExpr - BinaryExpr
+	UnaryExpr / BinaryExpr
+	UnaryExpr * BinaryExpr
 
-UnaryExpression:
-	UnsignedIntegerLiteral
-	-UnsignedIntegerLiteral
-	+UnsignedIntegerLiteral
-	(BinaryExpression)
+UnaryExpr:
+	UIntLit
+	-UIntLit
+	+UIntLit
+	(BinaryExpr)
 
-UnsignedIntegerLiteral:
+UIntLit:
 	Digits
 
 Digits:
 	Digit
 	Digit Digits
 
-Digits:
-	0
+Digit:
+    0
 	1
 	2
 	3
