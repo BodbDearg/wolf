@@ -19,6 +19,8 @@ public:
      */
     WCLexer(size_t initialTokenCapacity = kDefaultInitialTokenCapacity);
     
+    ~WCLexer();
+    
     /**
      * Parse the given input source string and convert into a series of tokens.
      * Returns false and saves an error message if this process fails.

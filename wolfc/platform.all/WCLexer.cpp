@@ -16,6 +16,13 @@ WCLexer::WCLexer(size_t initialTokenCapacity) :
     increaseTokenListCapacity(initialTokenCapacity);
 }
 
+WCLexer::~WCLexer() {
+    if (mTokenList) {
+        std::free(mTokenList);
+        mTokenList = nullptr;
+    }
+}
+
 bool WCLexer::process(const char32_t * srcText) {
     // Init lexer state
     WC_ASSERT(srcText);
