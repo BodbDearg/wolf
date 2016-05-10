@@ -6,19 +6,19 @@ BinaryExpression:
 	UnaryExpression * Expression
 
 UnaryExpression:
-	IntegerLiteral
-	-IntegerLiteral
-	+IntegerLiteral
+	UnsignedIntegerLiteral
+	-UnsignedIntegerLiteral
+	+UnsignedIntegerLiteral
 	(BinaryExpression)
 
-IntegerLiteral:
-	IntegerDigits
+UnsignedIntegerLiteral:
+	Digits
 
-IntegerDigits:
-	IntegerDigit
-	IntegerDigit IntegerDigits
+Digits:
+	Digit
+	Digit Digits
 
-IntegerDigit:
+Digits:
 	0
 	1
 	2

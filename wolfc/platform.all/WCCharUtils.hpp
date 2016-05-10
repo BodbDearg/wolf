@@ -77,5 +77,7 @@ namespace WCCharUtils {
             default:
                 break;
         }
+        
+        return false;
     }
 }

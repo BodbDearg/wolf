@@ -56,6 +56,7 @@
 /* Begin PBXFileReference section */
 		1F03CC411CDEC42E00F6E440 /* WCLexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCLexer.cpp; sourceTree = "<group>"; };
 		1F03CC421CDEC42E00F6E440 /* WCLexer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCLexer.hpp; sourceTree = "<group>"; };
+		1F231DAD1CE165AD0085E1C6 /* docs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = docs; path = ../../docs; sourceTree = "<group>"; };
 		1F44B8F61CDD6641008416B3 /* WCToken.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCToken.cpp; sourceTree = "<group>"; };
 		1F44B8F71CDD6641008416B3 /* WCToken.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCToken.hpp; sourceTree = "<group>"; };
 		1FFD48821CDC3DEA0084D66C /* WCCharUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCCharUtils.hpp; sourceTree = "<group>"; };
@@ -87,6 +88,7 @@
 		1FFD98941CD9B34900398CA6 = {
 			isa = PBXGroup;
 			children = (
+				1F231DAD1CE165AD0085E1C6 /* docs */,
 				1FFD98B61CD9D4C000398CA6 /* Frameworks */,
 				1FFD98A71CD9B3AD00398CA6 /* platform.all */,
 				1FFD989E1CD9B34900398CA6 /* Products */,

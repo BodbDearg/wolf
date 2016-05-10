@@ -1,5 +1,6 @@
 #include "WCMacros.hpp"
 #include "WCFileUtils.hpp"
+#include "WCLexer.hpp"
 #include <memory>
 #include <cstdio>
 
@@ -30,6 +31,13 @@ int main(int argc, const char * argv[]) {
     
     if (!inputSrc) {
         std::printf("Failed to read input Wolf source file '%s'!\n", argv[1]);
+        return -1;
+    }
+    
+    // Run it through the lexer
+    WCLexer lexer;
+    
+    if (!lexer.process(inputSrc.get())) {
         return -1;
     }
     
