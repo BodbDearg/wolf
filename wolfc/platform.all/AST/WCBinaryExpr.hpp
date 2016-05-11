@@ -35,17 +35,17 @@ public:
 class BinaryExprTwoOps : public BinaryExpr {
 public:
     BinaryExprTwoOps(UnaryExpr & leftExpr,
-                     UnaryExpr & rightExpr);
+                     BinaryExpr & rightExpr);
     
     UnaryExpr & mLeftExpr;
-    UnaryExpr & mRightExpr;
+    BinaryExpr & mRightExpr;
 };
 
 /* 'UnaryExpression + BinaryExpression' */
 class BinaryExprAdd : public BinaryExprTwoOps {
 public:
     BinaryExprAdd(UnaryExpr & leftExpr,
-                  UnaryExpr & rightExpr);
+                  BinaryExpr & rightExpr);
     
     virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
 };
@@ -54,7 +54,7 @@ public:
 class BinaryExprSub : public BinaryExprTwoOps {
 public:
     BinaryExprSub(UnaryExpr & leftExpr,
-                  UnaryExpr & rightExpr);
+                  BinaryExpr & rightExpr);
     
     virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
 };
@@ -63,7 +63,7 @@ public:
 class BinaryExprMul : public BinaryExprTwoOps {
 public:
     BinaryExprMul(UnaryExpr & leftExpr,
-                  UnaryExpr & rightExpr);
+                  BinaryExpr & rightExpr);
     
     virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
 };
@@ -72,7 +72,7 @@ public:
 class BinaryExprDiv : public BinaryExprTwoOps {
 public:
     BinaryExprDiv(UnaryExpr & leftExpr,
-                  UnaryExpr & rightExpr);
+                  BinaryExpr & rightExpr);
     
     virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
 };
