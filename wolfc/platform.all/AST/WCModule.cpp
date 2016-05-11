@@ -70,7 +70,7 @@ bool Module::generateCode() {
     irBuilder.SetInsertPoint(mainBlock);
     
     // Create the string to print the program result
-    llvm::Value * helloWorldStr = irBuilder.CreateGlobalStringPtr("The answer is: %zu");
+    llvm::Value * helloWorldStr = irBuilder.CreateGlobalStringPtr("Program result is: %zu\n");
     
     // Evaluate the expression result
     llvm::Value * exprResult = mExpr->generateCode(irBuilder);
