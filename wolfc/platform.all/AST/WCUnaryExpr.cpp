@@ -32,7 +32,7 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
             
         /* -IntLit */
         case TokenType::kMinus: {
-            ++currentToken;
+            ++currentToken; // Skip '-'
             IntLit * uintLit = IntLit::parse(currentToken);
             
             if (!uintLit) {
@@ -44,7 +44,7 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
             
         /* +IntLit */
         case TokenType::kPlus: {
-            ++currentToken;
+            ++currentToken; // Skip '+'
             IntLit * uintLit = IntLit::parse(currentToken);
             
             if (!uintLit) {
@@ -57,7 +57,7 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
         /* (BinaryExpr) */
         case TokenType::kLParen: {
             const Token * lparenToken = currentToken;
-            ++currentToken;
+            ++currentToken; // Skip '('
             BinaryExpr * expr = BinaryExpr::parse(currentToken);
             
             if (!expr) {
@@ -73,6 +73,7 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
                 return nullptr;
             }
             
+            ++currentToken; // Skip ')'
             return new UnaryExprParen(*expr);
         }   break;
             
