@@ -10,11 +10,12 @@ void ASTNode::error(const char * msg, ...) {
     va_start(args, msg);
     std::vfprintf(stderr, msg, args);
     va_end(args);
+    std::fprintf(stderr, "\n");
 }
 
 void ASTNode::error(const Token & srcToken, const char * msg, ...) {
     // Generic error info
-    error("Compile error! Error at: line %zu, column %zu\n",
+    error("Compile error! Error at: line %zu, column %zu",
           srcToken.srcLine + 1,
           srcToken.srcCol + 1);
     
@@ -23,6 +24,7 @@ void ASTNode::error(const Token & srcToken, const char * msg, ...) {
     va_start(args, msg);
     std::vfprintf(stderr, msg, args);
     va_end(args);
+    std::fprintf(stderr, "\n");
 }
 
 WC_END_NAMESPACE

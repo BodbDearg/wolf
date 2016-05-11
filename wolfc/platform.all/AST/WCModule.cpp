@@ -38,7 +38,7 @@ bool Module::generateCode() {
     mLLVMMod.reset();
     
     if (!mExpr) {
-        error("Can't generate code, parsing was not successful!\n");
+        error("Can't generate code, parsing was not successful!");
         return false;
     }
     
@@ -77,7 +77,7 @@ bool Module::generateCode() {
     
     if (!exprResult) {
         mLLVMMod.reset();
-        error("Codegen failed! Failed to generate code for the module!\n");
+        error("Codegen failed! Failed to generate code for the module!");
     }
     
     // Call printf!

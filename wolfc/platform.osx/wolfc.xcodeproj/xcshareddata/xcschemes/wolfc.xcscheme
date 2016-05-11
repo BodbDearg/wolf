@@ -64,7 +64,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "$(PROJECT_DIR)/../test_data/test.wolf"
+            argument = "$(PROJECT_DIR)/../test_data/wolfc-test.wolf"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

@@ -62,7 +62,7 @@ private:
      */
     Token & allocToken(TokenType tokenType);
     
-    /* Emit a lexer error to stderror. Line and column information are emitted also. */
+    /* Emit a lexer error to stderror follwed by a newline. Line and column information are emitted also. */
     void error(const char * msg, ...);
     
     /* The list of parsed tokens */

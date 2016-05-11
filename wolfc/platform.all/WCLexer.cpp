@@ -49,7 +49,7 @@ bool Lexer::process(const char32_t * srcText) {
                                                
         // If we get to here then we have an error
         std::unique_ptr<char[]> charAsUtf8(StringUtils::convertUtf32ToUtf8(&c, 1));
-        error("Unexpected character '%s' at start of token!\n", charAsUtf8.get());
+        error("Unexpected character '%s' at start of token!", charAsUtf8.get());
         return false;
     }
     
@@ -221,6 +221,7 @@ void Lexer::error(const char * msg, ...) {
     va_start(args, msg);
     std::vfprintf(stderr, msg, args);
     va_end(args);
+    std::fprintf(stderr, "\n");
 }
 
 WC_END_NAMESPACE
