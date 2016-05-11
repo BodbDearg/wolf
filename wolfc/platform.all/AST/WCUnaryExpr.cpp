@@ -86,7 +86,7 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
 }
 
 UnaryExprIntLit::UnaryExprIntLit(IntLit & lit) : mLit(lit) {
-    // Nothing to do here...
+    WC_EMPTY_FUNC_BODY()
 }
 
 llvm::Value * UnaryExprIntLit::generateCode(llvm::IRBuilder<> & irBuilder) {
@@ -94,7 +94,7 @@ llvm::Value * UnaryExprIntLit::generateCode(llvm::IRBuilder<> & irBuilder) {
 }
 
 UnaryExprIntLitNeg::UnaryExprIntLitNeg(IntLit & lit) : mLit(lit) {
-    // Nothing to do here...
+    WC_EMPTY_FUNC_BODY()
 }
 
 llvm::Value * UnaryExprIntLitNeg::generateCode(llvm::IRBuilder<> & irBuilder) {
@@ -102,11 +102,11 @@ llvm::Value * UnaryExprIntLitNeg::generateCode(llvm::IRBuilder<> & irBuilder) {
 }
 
 UnaryExprIntLitPos::UnaryExprIntLitPos(IntLit & lit) : UnaryExprIntLit(lit) {
-    // Nothing to do here...
+    WC_EMPTY_FUNC_BODY()
 }
 
 UnaryExprParen::UnaryExprParen(BinaryExpr & expr) : mExpr(expr) {
-    // Nothing to do here...
+    WC_EMPTY_FUNC_BODY()
 }
     
 llvm::Value * UnaryExprParen::generateCode(llvm::IRBuilder<> & irBuilder) {

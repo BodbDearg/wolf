@@ -19,7 +19,7 @@ IntLit * IntLit::parse(const Token *& tokenPtr) {
 }
 
 IntLit::IntLit(const Token & token) : mToken(token) {
-    // Nothing to do here...
+    WC_EMPTY_FUNC_BODY()
 }
 
 llvm::Value * IntLit::generateCode(llvm::IRBuilder<> & irBuilder) {

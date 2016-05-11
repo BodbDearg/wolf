@@ -19,6 +19,11 @@
     assert((cond))
 
 /**
+ * Documentation macro. Specify an empty function body.
+ */
+#define WC_EMPTY_FUNC_BODY()
+
+/**
  * Beginning of third party includes.
  * Disable warnings in third party includes.
  */

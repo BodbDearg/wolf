@@ -10,11 +10,12 @@ WC_THIRD_PARTY_INCLUDES_END
 WC_BEGIN_NAMESPACE
 
 Module::Module(llvm::LLVMContext & llvmCtx) : mLLVMCtx(llvmCtx) {
-    // Nothing to do here...
+    WC_EMPTY_FUNC_BODY()
 }
 
 Module::~Module() {
     // Defined here so callee doesn't need to know details of objects destroyed by std::unique_ptr...
+    WC_EMPTY_FUNC_BODY()
 }
 
 bool Module::parseCode(const Token * tokenList) {
