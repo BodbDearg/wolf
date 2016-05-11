@@ -1,3 +1,6 @@
+Module:
+    BinaryExpr
+
 BinaryExpr:
 	UnaryExpr
 	UnaryExpr + BinaryExpr
@@ -6,12 +9,12 @@ BinaryExpr:
 	UnaryExpr * BinaryExpr
 
 UnaryExpr:
-	UIntLit
-	-UIntLit
-	+UIntLit
+	IntLit
+	-IntLit
+	+IntLit
 	(BinaryExpr)
 
-UIntLit:
+IntLit:
 	Digits
 
 Digits:

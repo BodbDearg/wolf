@@ -59,7 +59,7 @@ BinaryExpr * BinaryExpr::parse(const Token *& tokenPtr) {
 BinaryExprUnary::BinaryExprUnary(UnaryExpr & expr) :
     mExpr(expr)
 {
-    
+    // Nothing to do here...
 }
 
 llvm::Value * BinaryExprUnary::generateCode(llvm::IRBuilder<> & irBuilder) {
@@ -71,14 +71,14 @@ BinaryExprTwoOps::BinaryExprTwoOps(UnaryExpr & leftExpr,
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
-    
+    // Nothing to do here...
 }
 
 BinaryExprAdd::BinaryExprAdd(UnaryExpr & leftExpr,
                              UnaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
 {
-    
+    // Nothing to do here...
 }
 
 llvm::Value * BinaryExprAdd::generateCode(llvm::IRBuilder<> & irBuilder) {
@@ -91,7 +91,7 @@ BinaryExprSub::BinaryExprSub(UnaryExpr & leftExpr,
                              UnaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
 {
-    
+    // Nothing to do here...
 }
 
 llvm::Value * BinaryExprSub::generateCode(llvm::IRBuilder<> & irBuilder) {
@@ -104,7 +104,7 @@ BinaryExprMul::BinaryExprMul(UnaryExpr & leftExpr,
                              UnaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
 {
-    
+    // Nothing to do here...
 }
 
 llvm::Value * BinaryExprMul::generateCode(llvm::IRBuilder<> & irBuilder) {
@@ -117,7 +117,7 @@ BinaryExprDiv::BinaryExprDiv(UnaryExpr & leftExpr,
                              UnaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
 {
-    
+    // Nothing to do here...
 }
 
 llvm::Value * BinaryExprDiv::generateCode(llvm::IRBuilder<> & irBuilder) {

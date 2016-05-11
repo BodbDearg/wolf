@@ -1,0 +1,29 @@
+#include "WCIntLit.hpp"
+#include "WCToken.hpp"
+
+WC_BEGIN_NAMESPACE
+
+bool IntLit::peek(const Token * tokenPtr) {
+    return tokenPtr->type == TokenType::kIntLiteral;
+}
+
+IntLit * IntLit::parse(const Token *& tokenPtr) {
+    if (tokenPtr->type != TokenType::kIntLiteral) {
+        error(*tokenPtr, "Expected integer literal!");
+        return nullptr;
+    }
+    
+    IntLit * intLit = new IntLit(*tokenPtr);
+    ++tokenPtr;
+    return intLit;
+}
+
+IntLit::IntLit(const Token & token) : mToken(token) {
+    // Nothing to do here...
+}
+
+llvm::Value * IntLit::generateCode(llvm::IRBuilder<> & irBuilder) {
+    return irBuilder.getInt64(mToken.data.intVal);
+}
+
+WC_END_NAMESPACE

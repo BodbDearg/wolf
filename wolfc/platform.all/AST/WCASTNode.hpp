@@ -23,7 +23,7 @@ public:
     virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) = 0;
     
     /* Emit a lexer error to stderror. Line and column information are emitted also. */
-    void error(const Token & srcToken, const char * msg, ...);
+    static void error(const Token & srcToken, const char * msg, ...);
 };
 
 WC_END_NAMESPACE

@@ -5,13 +5,13 @@
 WC_BEGIN_NAMESPACE
 
 class BinaryExpr;
-class UIntLit;
+class IntLit;
 
 /*
 UnaryExpr:
-	UIntLit
-	-UIntLit
-	+UIntLit
+	IntLit
+	-IntLit
+	+IntLit
 	(BinaryExpr)
 */
 class UnaryExpr : public ASTNode {
@@ -21,32 +21,36 @@ public:
     static UnaryExpr * parse(const Token *& currentToken);
 };
 
-/* UIntLit */
-class UnaryExprUIntLit : public UnaryExpr {
+/* IntLit */
+class UnaryExprIntLit : public UnaryExpr {
 public:
-    UnaryExprUIntLit(UIntLit & lit);
+    UnaryExprIntLit(IntLit & lit);
     
     virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
+    
+    IntLit & mLit;
 };
 
-/* -UIntLit */
-class UnaryExprUIntLitNeg : public UnaryExpr {
+/* -IntLit */
+class UnaryExprIntLitNeg : public UnaryExpr {
 public:
-    UnaryExprUIntLitNeg(UIntLit & lit);
+    UnaryExprIntLitNeg(IntLit & lit);
     
     virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
+    
+    IntLit & mLit;
 };
 
-/* +UIntLit */
-class UnaryExprUIntLitPos : public UnaryExprUIntLit {
+/* +IntLit */
+class UnaryExprIntLitPos : public UnaryExprIntLit {
 public:
-    UnaryExprUIntLitPos(UIntLit & lit);
+    UnaryExprIntLitPos(IntLit & lit);
 };
 
 /* (BinaryExpr) */
-class UnaryExprParen : public UnaryExprUIntLit {
+class UnaryExprParen : public UnaryExpr {
 public:
-    UnaryExprParen(BinaryExpr & lit);
+    UnaryExprParen(BinaryExpr & expr);
     
     virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
     
