@@ -1,11 +1,14 @@
 #pragma once
 
-#include "WCASTNode.hpp"
+#include "WCASTNodeCodegen.hpp"
 
 WC_BEGIN_NAMESPACE
 
-/* Holds a simple unsigned integer literal */
-class IntLit : public ASTNode {
+/*
+IntLit:
+	Digits
+*/
+class IntLit : public ASTNodeCodegen {
 public:
     static bool peek(const Token * tokenPtr);
     

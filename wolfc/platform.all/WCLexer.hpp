@@ -29,6 +29,9 @@ public:
      */
     bool process(const char32_t * srcText);
     
+    /* Give the token list for the lexer */
+    const Token * getTokenList() const;
+    
 private:
     /* Try to consume some whitespace. Return false if no whitespace was consumed. */
     bool consumeWhitespace(char32_t currentChar);

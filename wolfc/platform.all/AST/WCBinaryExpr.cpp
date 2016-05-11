@@ -23,6 +23,7 @@ BinaryExpr * BinaryExpr::parse(const Token *& tokenPtr) {
         case TokenType::kSlash:
         {
             // Parse the right expression
+            const Token * opToken = tokenPtr;
             ++tokenPtr;
             UnaryExpr * unaryExpr2 = UnaryExpr::parse(tokenPtr);
             
@@ -31,7 +32,7 @@ BinaryExpr * BinaryExpr::parse(const Token *& tokenPtr) {
             }
             
             // Now construct the full expression
-            switch (tokenPtr->type){
+            switch (opToken->type){
                 case TokenType::kPlus:
                     return new BinaryExprAdd(*unaryExpr, *unaryExpr2);
                 case TokenType::kMinus:
@@ -59,7 +60,7 @@ BinaryExpr * BinaryExpr::parse(const Token *& tokenPtr) {
 BinaryExprUnary::BinaryExprUnary(UnaryExpr & expr) :
     mExpr(expr)
 {
-    // Nothing to do here...
+    
 }
 
 llvm::Value * BinaryExprUnary::generateCode(llvm::IRBuilder<> & irBuilder) {

@@ -67,10 +67,6 @@
             argument = "$(PROJECT_DIR)/../test_data/test.wolf"
             isEnabled = "YES">
          </CommandLineArgument>
-         <CommandLineArgument
-            argument = "$(PROJECT_DIR)/../test_output/test.ll"
-            isEnabled = "YES">
-         </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
          <AdditionalOption

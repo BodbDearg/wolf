@@ -2,14 +2,6 @@
 
 #include "WCMacros.hpp"
 
-WC_THIRD_PARTY_INCLUDES_BEGIN
-    #include <llvm/IR/IRBuilder.h>
-WC_THIRD_PARTY_INCLUDES_END
-
-namespace llvm {
-    class Value;
-}
-
 WC_BEGIN_NAMESPACE
 
 struct Token;
@@ -19,10 +11,13 @@ struct Token;
  */
 class ASTNode {
 public:
-    /* Generates the code for this AST node */
-    virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) = 0;
+    /* Emit a formatted error message to stderr. */
+    static void error(const char * msg, ...);
     
-    /* Emit a lexer error to stderror. Line and column information are emitted also. */
+    /**
+     * Emit a formatted error message to stderr.
+     * Line and column information from the given token are added also. 
+     */
     static void error(const Token & srcToken, const char * msg, ...);
 };
 

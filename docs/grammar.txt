@@ -1,5 +1,5 @@
 Module:
-    BinaryExpr
+    BinaryExpr <EOF>
 
 BinaryExpr:
 	UnaryExpr

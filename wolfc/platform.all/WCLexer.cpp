@@ -58,6 +58,10 @@ bool Lexer::process(const char32_t * srcText) {
     return true;
 }
 
+const Token * Lexer::getTokenList() const {
+    return mTokenList;
+}
+
 bool Lexer::consumeWhitespace(char32_t currentChar) {
     if (!CharUtils::isWhitespace(currentChar)) {
         return false;   // Did not parse whitespace

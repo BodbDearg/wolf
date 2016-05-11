@@ -1,6 +1,6 @@
 #pragma once
 
-#include "WCASTNode.hpp"
+#include "WCASTNodeCodegen.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -14,7 +14,7 @@ UnaryExpr:
 	+IntLit
 	(BinaryExpr)
 */
-class UnaryExpr : public ASTNode {
+class UnaryExpr : public ASTNodeCodegen {
 public:
     static bool peek(const Token * currentToken);
     
