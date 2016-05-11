@@ -19,7 +19,7 @@
     assert((cond))
 
 /**
- * Documentation macro. Specify an empty function body.
+ * Documentation macro. Clarify an empty function body is intentional.
  */
 #define WC_EMPTY_FUNC_BODY()
 
