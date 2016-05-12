@@ -272,7 +272,7 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral(char32_t currentChar) {
             
             // If it was an unrecognized char then spit out an error
             if (!escapedChar) {
-                std::unique_ptr<char[]> escapedCharAsUtf8(StringUtils::convertUtf32ToUtf8(&escapedChar, 1));
+                std::unique_ptr<char[]> escapedCharAsUtf8(StringUtils::convertUtf32ToUtf8(&c2, 1));
                 error(decodeLexState, "Unrecognized escape sequence '\\%s'!", escapedCharAsUtf8.get());
                 return ParseResult::kFail;
             }
