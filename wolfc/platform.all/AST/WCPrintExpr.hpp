@@ -4,7 +4,8 @@
 
 WC_BEGIN_NAMESPACE
 
-class UnaryExpr;
+class BinaryExpr;
+class StrLit;
 
 /*
 PrintExpr
@@ -19,11 +20,27 @@ public:
 };
 
 /* print ( StringLit ) */
-class PrintExprStrLit : public ASTNodeCodegen {
+class PrintExprStrLit : public PrintExpr {
 public:
-    static bool peek(const Token * tokenPtr);
+    static PrintExprStrLit * parse(const Token *& tokenPtr);
     
-    static PrintExpr * parse(const Token *& tokenPtr);
+    PrintExprStrLit(StrLit & lit);
+    
+    virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
+    
+    StrLit & mLit;
+};
+
+/* print ( BinaryExpr ) */
+class PrintExprBinaryExpr : public PrintExpr {
+public:
+    static PrintExprBinaryExpr * parse(const Token *& tokenPtr);
+    
+    PrintExprBinaryExpr(BinaryExpr & expr);
+    
+    virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
+    
+    BinaryExpr & mExpr;
 };
 
 WC_END_NAMESPACE
