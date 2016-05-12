@@ -8,7 +8,8 @@ WC_BEGIN_NAMESPACE
 /* Enum representing the type of token */
 enum class TokenType {
     kEOF,           // End of file token
-    kIntLiteral,    // Unsigned integer literal, like '01203'
+    kIntLit,        // Unsigned integer literal, like '01203'
+    kStrLit,        // String literal, like "Hello World"
     kLParen,        // '('
     kRParen,        // ')'
     kPlus,          // '+'
@@ -42,8 +43,13 @@ struct Token {
      * We don't initialize this in all cases for reasons of efficiency.
      */
     union {
-        uint64_t    intVal;
-        uint8_t     rawBytes[16];
+        uint8_t rawBytes[16];
+        uint64_t intVal;
+        
+        struct StrData {
+            char32_t * ptr;
+            size_t length;
+        } strVal;
     } data;
 };
 

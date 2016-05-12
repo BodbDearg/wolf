@@ -4,11 +4,11 @@
 WC_BEGIN_NAMESPACE
 
 bool IntLit::peek(const Token * tokenPtr) {
-    return tokenPtr->type == TokenType::kIntLiteral;
+    return tokenPtr->type == TokenType::kIntLit;
 }
 
 IntLit * IntLit::parse(const Token *& tokenPtr) {
-    if (tokenPtr->type != TokenType::kIntLiteral) {
+    if (tokenPtr->type != TokenType::kIntLit) {
         error(*tokenPtr, "Expected integer literal!");
         return nullptr;
     }

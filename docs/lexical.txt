@@ -1,0 +1,46 @@
+*** String literals ***
+
+StringLit:
+    " DblQuotedStrChars "
+
+DblQuotedStrChars
+    DblQuotedStrChar
+    DblQuotedStrChar DblQuotedStrChars
+
+DblQuotedStrChar
+    EscapedChar
+    <Any char, excluding newlines, blackslash and double quotes>
+
+EscapedChar
+    \"
+    \'
+    \0
+    \a
+    \b
+    \f
+    \n
+    \r
+    \t
+    \v
+    \\
+
+*** Numeric literals ***
+
+IntLit:
+	Digits
+
+Digits:
+	Digit
+	Digit Digits
+
+Digit:
+    0
+	1
+	2
+	3
+	4
+	5
+	6
+	7
+	8
+	9

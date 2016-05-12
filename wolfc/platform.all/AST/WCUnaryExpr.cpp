@@ -6,7 +6,7 @@
 WC_BEGIN_NAMESPACE
 
 bool UnaryExpr::peek(const Token * currentToken) {
-    if (currentToken->type == TokenType::kIntLiteral ||
+    if (currentToken->type == TokenType::kIntLit ||
         currentToken->type == TokenType::kMinus ||
         currentToken->type == TokenType::kPlus ||
         currentToken->type == TokenType::kLParen)
@@ -20,7 +20,7 @@ bool UnaryExpr::peek(const Token * currentToken) {
 UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
     switch (currentToken->type) {
         /* UIntLit */
-        case TokenType::kIntLiteral: {
+        case TokenType::kIntLit: {
             IntLit * uintLit = IntLit::parse(currentToken);
             
             if (!uintLit) {

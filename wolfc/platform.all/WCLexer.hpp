@@ -33,6 +33,20 @@ public:
     const Token * getTokenList() const;
     
 private:
+    /* Struct holding lexer state, current source pointer and line/col info */
+    struct LexerState {
+        const char32_t * srcPtr;
+        size_t srcLine;
+        size_t srcCol;
+    };
+    
+    /* Result of parsing */
+    enum class ParseResult {
+        kNone,      /* Didn't parse anything */
+        kSuccess,   /* Parsing went ok */
+        kFail       /* Parsing failed */
+    };
+    
     /* Try to consume some whitespace. Return false if no whitespace was consumed. */
     bool consumeWhitespace(char32_t currentChar);
     
@@ -46,10 +60,13 @@ private:
     void consumeNonWhiteSpace(size_t numChars);
     
     /* Try to parse a numeric literal. Return false if no numeric literal was parsed. */
-    bool parseNumericLiteral(char32_t currentChar);
+    ParseResult parseNumericLiteral(char32_t currentChar);
+    
+    /* Try to parse a double quoted string literal. Return false if no string literal was parsed. */
+    ParseResult parseDoubleQuotedStringLiteral(char32_t currentChar);
     
     /* Try to parse some basic tokens. */
-    bool parseBasicTokens(char32_t currentChar);
+    ParseResult parseBasicTokens(char32_t currentChar);
     
     /* Increase the token list capacity to the given capacity. If smaller than old capacity, nothing happens. */
     void increaseTokenListCapacity(size_t newCapacity);
@@ -61,8 +78,17 @@ private:
      * initialization that is required.
      */
     Token & allocToken(TokenType tokenType);
+
+    /**
+     * Emit a lexer error to stderror followed by a newline.
+     * The given line and column information are emitted also.
+     */
+    void error(const LexerState & srcLocation, const char * msg, ...);
     
-    /* Emit a lexer error to stderror follwed by a newline. Line and column information are emitted also. */
+    /**
+     * Emit a lexer error to stderror follwed by a newline.
+     * The current lexer state line and column information are emitted also. 
+     */
     void error(const char * msg, ...);
     
     /* The list of parsed tokens */
@@ -74,13 +100,7 @@ private:
     /* The number of tokens actually in the token list */
     size_t mTokenCount;
     
-    /* Current lexer state */
-    struct LexerState {
-        const char32_t * srcPtr;
-        size_t srcLine;
-        size_t srcCol;
-    };
-    
+    /* The current state of the lexer */
     LexerState mLexerState;
     
 #if DEBUG == 1

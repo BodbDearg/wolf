@@ -34,18 +34,27 @@ bool Lexer::process(const char32_t * srcText) {
     // Continue until there is no source left
     while (char32_t c = mLexerState.srcPtr[0]) {
         // Skip all whitespace before parsing something interesting
-        if (consumeWhitespace(c)) {
-            continue;
-        }
+        if (consumeWhitespace(c)) continue;
         
         // Try to parse stuff in this order of importance
-        if (parseBasicTokens(c)) {
-            continue;
-        }
+        #define INVOKE_PARSE_FUNC(func)\
+            \
+            {\
+                ParseResult result = func(c);\
+                \
+                if (result == ParseResult::kSuccess) {\
+                    /* Parsing succeeded */\
+                    continue;\
+                }\
+                else if (result != ParseResult::kNone) {\
+                    /* Parsing failed */\
+                    return false;\
+                }\
+            }
         
-        if (parseNumericLiteral(c)) {
-            continue;
-        }
+        INVOKE_PARSE_FUNC(parseBasicTokens);
+        INVOKE_PARSE_FUNC(parseNumericLiteral);
+        INVOKE_PARSE_FUNC(parseDoubleQuotedStringLiteral);
                                                
         // If we get to here then we have an error
         std::unique_ptr<char[]> charAsUtf8(StringUtils::convertUtf32ToUtf8(&c, 1));
@@ -95,10 +104,10 @@ void Lexer::consumeNonWhiteSpace(size_t numChars) {
     mLexerState.srcCol += numChars;
 }
 
-bool Lexer::parseNumericLiteral(char32_t currentChar) {
+Lexer::ParseResult Lexer::parseNumericLiteral(char32_t currentChar) {
     // Must start with a digit to be a numeric
     if (!CharUtils::isDigit(currentChar)) {
-        return false;
+        return ParseResult::kNone;
     }
     
     // Continue until the end of the numeric literal
@@ -129,51 +138,163 @@ bool Lexer::parseNumericLiteral(char32_t currentChar) {
         ++currentCharPtr;
     }
     
-    // Now make the token
-    Token & token = allocToken(TokenType::kIntLiteral);
+    // Now make the token and finish up
+    Token & token = allocToken(TokenType::kIntLit);
     token.data.intVal = value;
-    
-    // All good!
-    return true;
+    return ParseResult::kSuccess;
 }
 
-bool Lexer::parseBasicTokens(char32_t currentChar) {
+Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral(char32_t currentChar) {
+    // Must start with a double quote
+    if (currentChar != '"') {
+        return ParseResult::kNone;
+    }
+    
+    // Alright skip the opening '"'
+    consumeNonWhiteSpace(1);
+    const char32_t * strStart = mLexerState.srcPtr;
+    
+    // Save the lexer state at this point for later decoding:
+    LexerState decodeLexState = mLexerState;
+    
+    // Search for the end of the string until we reach '"':
+    char c = mLexerState.srcPtr[0];
+    
+    while (c != '"') {
+        // Bail with an error if we hit null
+        if (c == 0) {
+            error("Unexpected EOF while parsing double quoted string! Is the closing '\"' present?");
+            return ParseResult::kFail;
+        }
+        
+        // If we hit a newline then that is an error also
+        if (CharUtils::isLineSeparator(c)) {
+            error("Unexpected newline while parsing double quoted string! Newline characters must be escaped!");
+            return ParseResult::kFail;
+        }
+        
+        // Consume the char and move onto the next
+        consumeNonWhiteSpace(1);
+        c = mLexerState.srcPtr[0];
+    }
+    
+    // Now we have the end of the string
+    const char32_t * strEnd = mLexerState.srcPtr;
+    
+    // Skip the end '"'
+    consumeNonWhiteSpace(1);
+    
+    // Compute the size of the buffer we need to hold the string in:
+    size_t strBufferSize = strEnd - strStart + 1;
+    
+    // Allocate a token and the buffer to hold the string
+    // TODO: what manages this memory?
+    Token & tok = allocToken(TokenType::kStrLit);
+    tok.data.strVal.ptr = new char32_t[strBufferSize];
+    char32_t * decodedStrPtr = tok.data.strVal.ptr;
+    
+    // Now decode the string into the buffer
+    for (const char32_t * strCur = strStart; strCur != strEnd; ++strCur) {
+        // See if escaped char:
+        char32_t c1 = strCur[0];
+        
+        if (c1 == '\\') {
+            // Possible escaped char: must not be at the end of the string though
+            if (strCur + 1 >= strEnd) {
+                error(decodeLexState, "Unexpected end string while parsing '\\' escape sequence!");
+                return ParseResult::kFail;
+            }
+            
+            // Read ahead and see what char we have
+            char32_t c2 = strCur[1];
+            
+            // Now parse the escaped char
+            char32_t escapedChar = 0;
+            
+            switch (c2) {
+                case '"': escapedChar = '"'; break;
+                case '\'': escapedChar = '\''; break;
+                case '0': escapedChar = '\0'; break;
+                case 'a': escapedChar = '\a'; break;
+                case 'b': escapedChar = '\b'; break;
+                case 'f': escapedChar = '\f'; break;
+                case 'n': escapedChar = '\n'; break;
+                case 'r': escapedChar = '\r'; break;
+                case 't': escapedChar = '\t'; break;
+                case 'v': escapedChar = '\v'; break;
+                case '\\': escapedChar = '\\'; break;
+                    
+                default:
+                    break;
+            }
+            
+            // If it was an unrecognized char then spit out an error
+            if (!escapedChar) {
+                std::unique_ptr<char[]> escapedCharAsUtf8(StringUtils::convertUtf32ToUtf8(&escapedChar, 1));
+                error(decodeLexState, "Unrecognized escape sequence '\\%s'!", escapedCharAsUtf8.get());
+                return ParseResult::kFail;
+            }
+            
+            // Save the escaped char. Note: Need to skip two characters for this
+            decodedStrPtr[0] = escapedChar;
+            ++strCur;
+            decodeLexState.srcPtr += 2;
+            decodeLexState.srcCol += 2;
+        }
+        else {
+            // Ordinary char, parse as normal
+            decodedStrPtr[0] = c1;
+            ++decodeLexState.srcPtr;
+            ++decodeLexState.srcCol;
+        }
+        
+        // Move along in the decoded string buffer
+        ++decodedStrPtr;
+        ++tok.data.strVal.length;
+    }
+    
+    // Null terminate the decoded string when done
+    tok.data.strVal.ptr[tok.data.strVal.length] = 0;
+    return ParseResult::kSuccess;
+}
+
+Lexer::ParseResult Lexer::parseBasicTokens(char32_t currentChar) {
     switch (currentChar) {
         case '(':
             allocToken(TokenType::kLParen);
             consumeNonWhiteSpace(1);
-            return true;
+            return ParseResult::kSuccess;
             
         case ')':
             allocToken(TokenType::kRParen);
             consumeNonWhiteSpace(1);
-            return true;
+            return ParseResult::kSuccess;
             
         case '+':
             allocToken(TokenType::kPlus);
             consumeNonWhiteSpace(1);
-            return true;
+            return ParseResult::kSuccess;
             
         case '-':
             allocToken(TokenType::kMinus);
             consumeNonWhiteSpace(1);
-            return true;
+            return ParseResult::kSuccess;
             
         case '*':
             allocToken(TokenType::kAsterisk);
             consumeNonWhiteSpace(1);
-            return true;
+            return ParseResult::kSuccess;
             
         case '/':
             allocToken(TokenType::kSlash);
             consumeNonWhiteSpace(1);
-            return true;
+            return ParseResult::kSuccess;
             
         default:
             break;
     }
     
-    return false;
+    return ParseResult::kNone;
 }
 
 void Lexer::increaseTokenListCapacity(size_t newCapacity) {
@@ -209,12 +330,27 @@ Token & Lexer::allocToken(TokenType tokenType) {
     return *token;
 }
 
+void Lexer::error(const LexerState & srcLocation, const char * msg, ...) {
+    // Generic error info
+    std::fprintf(stderr,
+                 "Error! Failed to parse the given source into tokens at: line %zu, column %zu\n",
+                 srcLocation.srcLine + 1,
+                 srcLocation.srcCol + 1);
+    
+    // Specific error message
+    std::va_list args;
+    va_start(args, msg);
+    std::vfprintf(stderr, msg, args);
+    va_end(args);
+    std::fprintf(stderr, "\n");
+}
+
 void Lexer::error(const char * msg, ...) {
     // Generic error info
     std::fprintf(stderr,
                  "Error! Failed to parse the given source into tokens at: line %zu, column %zu\n",
-                 (mLexerState.srcLine + 1),
-                 (mLexerState.srcCol + 1));
+                 mLexerState.srcLine + 1,
+                 mLexerState.srcCol + 1);
     
     // Specific error message
     std::va_list args;
