@@ -21,7 +21,8 @@
 /**
  * Documentation macro. Clarify an empty function body is intentional.
  */
-#define WC_EMPTY_FUNC_BODY()
+#define WC_EMPTY_FUNC_BODY()\
+    do {} while (0)
 
 /**
  * Beginning of third party includes.

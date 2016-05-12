@@ -22,7 +22,7 @@ StrLit * StrLit::parse(const Token *& tokenPtr) {
 }
 
 StrLit::StrLit(const Token & token) : mToken(token) {
-    WC_EMPTY_FUNC_BODY()
+    WC_EMPTY_FUNC_BODY();
 }
 
 llvm::Value * StrLit::generateCode(const CodegenCtx & cgCtx) {

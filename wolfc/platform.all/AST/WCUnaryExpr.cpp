@@ -87,7 +87,7 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
 }
 
 UnaryExprIntLit::UnaryExprIntLit(IntLit & lit) : mLit(lit) {
-    WC_EMPTY_FUNC_BODY()
+    WC_EMPTY_FUNC_BODY();
 }
 
 llvm::Value * UnaryExprIntLit::generateCode(const CodegenCtx & cgCtx) {
@@ -95,7 +95,7 @@ llvm::Value * UnaryExprIntLit::generateCode(const CodegenCtx & cgCtx) {
 }
 
 UnaryExprIntLitNeg::UnaryExprIntLitNeg(IntLit & lit) : mLit(lit) {
-    WC_EMPTY_FUNC_BODY()
+    WC_EMPTY_FUNC_BODY();
 }
 
 llvm::Value * UnaryExprIntLitNeg::generateCode(const CodegenCtx & cgCtx) {
@@ -103,11 +103,11 @@ llvm::Value * UnaryExprIntLitNeg::generateCode(const CodegenCtx & cgCtx) {
 }
 
 UnaryExprIntLitPos::UnaryExprIntLitPos(IntLit & lit) : UnaryExprIntLit(lit) {
-    WC_EMPTY_FUNC_BODY()
+    WC_EMPTY_FUNC_BODY();
 }
 
 UnaryExprParen::UnaryExprParen(BinaryExpr & expr) : mExpr(expr) {
-    WC_EMPTY_FUNC_BODY()
+    WC_EMPTY_FUNC_BODY();
 }
     
 llvm::Value * UnaryExprParen::generateCode(const CodegenCtx & cgCtx) {

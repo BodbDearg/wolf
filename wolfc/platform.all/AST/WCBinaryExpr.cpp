@@ -61,7 +61,7 @@ BinaryExpr * BinaryExpr::parse(const Token *& tokenPtr) {
 BinaryExprUnary::BinaryExprUnary(UnaryExpr & expr) :
     mExpr(expr)
 {
-    WC_EMPTY_FUNC_BODY()
+    WC_EMPTY_FUNC_BODY();
 }
 
 llvm::Value * BinaryExprUnary::generateCode(const CodegenCtx & cgCtx) {
@@ -72,13 +72,13 @@ BinaryExprTwoOps::BinaryExprTwoOps(UnaryExpr & leftExpr, BinaryExpr & rightExpr)
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
-    WC_EMPTY_FUNC_BODY()
+    WC_EMPTY_FUNC_BODY();
 }
 
 BinaryExprAdd::BinaryExprAdd(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
 {
-    WC_EMPTY_FUNC_BODY()
+    WC_EMPTY_FUNC_BODY();
 }
 
 llvm::Value * BinaryExprAdd::generateCode(const CodegenCtx & cgCtx) {
@@ -90,7 +90,7 @@ llvm::Value * BinaryExprAdd::generateCode(const CodegenCtx & cgCtx) {
 BinaryExprSub::BinaryExprSub(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
 {
-    WC_EMPTY_FUNC_BODY()
+    WC_EMPTY_FUNC_BODY();
 }
 
 llvm::Value * BinaryExprSub::generateCode(const CodegenCtx & cgCtx) {
@@ -102,7 +102,7 @@ llvm::Value * BinaryExprSub::generateCode(const CodegenCtx & cgCtx) {
 BinaryExprMul::BinaryExprMul(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
 {
-    WC_EMPTY_FUNC_BODY()
+    WC_EMPTY_FUNC_BODY();
 }
 
 llvm::Value * BinaryExprMul::generateCode(const CodegenCtx & cgCtx) {
@@ -114,7 +114,7 @@ llvm::Value * BinaryExprMul::generateCode(const CodegenCtx & cgCtx) {
 BinaryExprDiv::BinaryExprDiv(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
 {
-    WC_EMPTY_FUNC_BODY()
+    WC_EMPTY_FUNC_BODY();
 }
 
 llvm::Value * BinaryExprDiv::generateCode(const CodegenCtx & cgCtx) {

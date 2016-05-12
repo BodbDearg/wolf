@@ -1,5 +1,5 @@
 #include "WCModule.hpp"
-#include "WCBinaryExpr.hpp"
+#include "WCPrintExprs.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCToken.hpp"
 
@@ -10,24 +10,24 @@ WC_THIRD_PARTY_INCLUDES_END
 WC_BEGIN_NAMESPACE
 
 Module::Module(llvm::LLVMContext & llvmCtx) : mLLVMCtx(llvmCtx) {
-    WC_EMPTY_FUNC_BODY()
+    WC_EMPTY_FUNC_BODY();
 }
 
 Module::~Module() {
     // Defined here so callee doesn't need to know details of objects destroyed by std::unique_ptr...
-    WC_EMPTY_FUNC_BODY()
+    WC_EMPTY_FUNC_BODY();
 }
 
 bool Module::parseCode(const Token * tokenList) {
-    mExpr.reset(BinaryExpr::parse(tokenList));
+    mExprs.reset(PrintExprs::parse(tokenList));
     
-    if (!mExpr) {
+    if (!mExprs) {
         return false;
     }
     
     if (tokenList->type != TokenType::kEOF) {
         error(*tokenList, "Expected EOF following binary expression!");
-        mExpr.reset();
+        mExprs.reset();
         return false;
     }
     
@@ -38,7 +38,7 @@ bool Module::generateCode() {
     // Clear out previous code and check we parsed ok
     mLLVMMod.reset();
     
-    if (!mExpr) {
+    if (!mExprs) {
         error("Can't generate code, parsing was not successful!");
         return false;
     }
@@ -57,7 +57,7 @@ bool Module::generateCode() {
                                                                 },
                                                                 true);
     
-    llvm::Constant * printfFn = mLLVMMod->getOrInsertFunction("printf", printfFnType);
+    mLLVMMod->getOrInsertFunction("printf", printfFnType);
     
     // Create the function for main
     llvm::FunctionType * mainFnType = llvm::FunctionType::get(llvm::Type::getInt32Ty(mLLVMCtx), {}, false);
@@ -70,19 +70,8 @@ bool Module::generateCode() {
     llvm::BasicBlock * mainBlock = llvm::BasicBlock::Create(mLLVMCtx, "", mainFn);
     irBuilder.SetInsertPoint(mainBlock);
     
-    // Create the string to print the program result
-    llvm::Value * helloWorldStr = irBuilder.CreateGlobalStringPtr("Program result is: %zu\n");
-    
-    // Evaluate the expression result
-    llvm::Value * exprResult = mExpr->generateCode(CodegenCtx(irBuilder, *mLLVMMod));
-    
-    if (!exprResult) {
-        mLLVMMod.reset();
-        error("Codegen failed! Failed to generate code for the module!");
-    }
-    
-    // Call printf!
-    irBuilder.CreateCall(printfFn, { helloWorldStr, exprResult });
+    // Generate the code
+    mExprs->generateCode(CodegenCtx(mLLVMCtx, irBuilder, *mLLVMMod));
     
     // Return 0 for success
     irBuilder.CreateRet(llvm::ConstantInt::get(llvm::Type::getInt32Ty(mLLVMCtx), 0));

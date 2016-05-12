@@ -10,11 +10,11 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class BinaryExpr;
+class PrintExprs;
 
 /* 
 Module:
-    BinaryExpr <EOF>
+    PrintExprs <EOF>
 */
 class Module : public ASTNode {
 public:
@@ -36,7 +36,7 @@ public:
     
     llvm::LLVMContext &             mLLVMCtx;
     std::unique_ptr<llvm::Module>   mLLVMMod;
-    std::unique_ptr<BinaryExpr>     mExpr;
+    std::unique_ptr<PrintExprs>     mExprs;
 };
 
 WC_END_NAMESPACE
