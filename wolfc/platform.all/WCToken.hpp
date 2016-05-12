@@ -16,6 +16,7 @@ enum class TokenType {
     kMinus,         // '-'
     kAsterisk,      // '*'
     kSlash,         // '/'
+    kPrint,         // print
 };
 
 /**

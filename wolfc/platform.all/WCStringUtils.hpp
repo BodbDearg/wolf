@@ -6,10 +6,11 @@
 WC_BEGIN_NAMESPACE
 
 namespace StringUtils {
-    /**
-     * Give the length of the given null terminated utf32 string.
-     */
+    /* Give the length of the given null terminated utf32 string. */
     size_t strlen(const char32_t * utf32Str);
+    
+    /* Tells if the 1st string starts with the 2nd string */
+    bool stringStartsWith(const char32_t * s1, const char32_t * s2);
     
     /**
      * Convert a null terminated utf8 encoded c string into utf32.

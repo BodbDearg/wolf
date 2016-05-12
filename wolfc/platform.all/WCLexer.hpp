@@ -48,7 +48,7 @@ private:
     };
     
     /* Try to consume some whitespace. Return false if no whitespace was consumed. */
-    bool consumeWhitespace(char32_t currentChar);
+    bool tryConsumeWhitespaceChar(char32_t currentChar);
     
     /**
      * Advance the lexer position by the given number of NON whitespace chars.
@@ -57,7 +57,10 @@ private:
      *  (1) The given number of characters exist in the source code text.
      *  (2) The given number of characters are NOT whitespace, and treats them as so.
      */
-    void consumeNonWhiteSpace(size_t numChars);
+    void consumeNumNonWhiteSpaceChars(size_t numChars);
+    
+    /* Try to parse some basic tokens. */
+    ParseResult parseBasicTokens(char32_t currentChar);
     
     /* Try to parse a numeric literal. Return false if no numeric literal was parsed. */
     ParseResult parseNumericLiteral(char32_t currentChar);
@@ -65,8 +68,8 @@ private:
     /* Try to parse a double quoted string literal. Return false if no string literal was parsed. */
     ParseResult parseDoubleQuotedStringLiteral(char32_t currentChar);
     
-    /* Try to parse some basic tokens. */
-    ParseResult parseBasicTokens(char32_t currentChar);
+    /* Try to parse some keywords. */
+    ParseResult parseKeywords(char32_t currentChar);
     
     /* Increase the token list capacity to the given capacity. If smaller than old capacity, nothing happens. */
     void increaseTokenListCapacity(size_t newCapacity);

@@ -1,5 +1,13 @@
 Module:
-    BinaryExpr <EOF>
+    PrintExprs <EOF>
+
+PrintExprs
+    PrintExpr
+    PrintExpr PrintExprs
+
+PrintExpr
+    print ( StringLit )
+    print ( BinaryExpr )
 
 BinaryExpr:
 	UnaryExpr

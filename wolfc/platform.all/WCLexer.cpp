@@ -34,7 +34,9 @@ bool Lexer::process(const char32_t * srcText) {
     // Continue until there is no source left
     while (char32_t c = mLexerState.srcPtr[0]) {
         // Skip all whitespace before parsing something interesting
-        if (consumeWhitespace(c)) continue;
+        if (tryConsumeWhitespaceChar(c)) {
+            continue;
+        }
         
         // Try to parse stuff in this order of importance
         #define INVOKE_PARSE_FUNC(func)\
@@ -55,6 +57,7 @@ bool Lexer::process(const char32_t * srcText) {
         INVOKE_PARSE_FUNC(parseBasicTokens);
         INVOKE_PARSE_FUNC(parseNumericLiteral);
         INVOKE_PARSE_FUNC(parseDoubleQuotedStringLiteral);
+        INVOKE_PARSE_FUNC(parseKeywords);
                                                
         // If we get to here then we have an error
         std::unique_ptr<char[]> charAsUtf8(StringUtils::convertUtf32ToUtf8(&c, 1));
@@ -71,7 +74,7 @@ const Token * Lexer::getTokenList() const {
     return mTokenList;
 }
 
-bool Lexer::consumeWhitespace(char32_t currentChar) {
+bool Lexer::tryConsumeWhitespaceChar(char32_t currentChar) {
     if (!CharUtils::isWhitespace(currentChar)) {
         return false;   // Did not parse whitespace
     }
@@ -99,9 +102,48 @@ bool Lexer::consumeWhitespace(char32_t currentChar) {
     return true;    // Parsed some whitespace
 }
 
-void Lexer::consumeNonWhiteSpace(size_t numChars) {
+void Lexer::consumeNumNonWhiteSpaceChars(size_t numChars) {
     mLexerState.srcPtr += numChars;
     mLexerState.srcCol += numChars;
+}
+
+Lexer::ParseResult Lexer::parseBasicTokens(char32_t currentChar) {
+    switch (currentChar) {
+        case '(':
+            allocToken(TokenType::kLParen);
+            consumeNumNonWhiteSpaceChars(1);
+            return ParseResult::kSuccess;
+            
+        case ')':
+            allocToken(TokenType::kRParen);
+            consumeNumNonWhiteSpaceChars(1);
+            return ParseResult::kSuccess;
+            
+        case '+':
+            allocToken(TokenType::kPlus);
+            consumeNumNonWhiteSpaceChars(1);
+            return ParseResult::kSuccess;
+            
+        case '-':
+            allocToken(TokenType::kMinus);
+            consumeNumNonWhiteSpaceChars(1);
+            return ParseResult::kSuccess;
+            
+        case '*':
+            allocToken(TokenType::kAsterisk);
+            consumeNumNonWhiteSpaceChars(1);
+            return ParseResult::kSuccess;
+            
+        case '/':
+            allocToken(TokenType::kSlash);
+            consumeNumNonWhiteSpaceChars(1);
+            return ParseResult::kSuccess;
+            
+        default:
+            break;
+    }
+    
+    return ParseResult::kNone;
 }
 
 Lexer::ParseResult Lexer::parseNumericLiteral(char32_t currentChar) {
@@ -125,7 +167,7 @@ Lexer::ParseResult Lexer::parseNumericLiteral(char32_t currentChar) {
     
     // Skip these in the parser
     size_t numNumericChars = endCharPtr - startCharPtr;
-    consumeNonWhiteSpace(numNumericChars);
+    consumeNumNonWhiteSpaceChars(numNumericChars);
     
     // Parse the number itself
     const char32_t * currentCharPtr = startCharPtr;
@@ -151,7 +193,7 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral(char32_t currentChar) {
     }
     
     // Alright skip the opening '"'
-    consumeNonWhiteSpace(1);
+    consumeNumNonWhiteSpaceChars(1);
     const char32_t * strStart = mLexerState.srcPtr;
     
     // Save the lexer state at this point for later decoding:
@@ -174,7 +216,7 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral(char32_t currentChar) {
         }
         
         // Consume the char and move onto the next
-        consumeNonWhiteSpace(1);
+        consumeNumNonWhiteSpaceChars(1);
         c = mLexerState.srcPtr[0];
     }
     
@@ -182,7 +224,7 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral(char32_t currentChar) {
     const char32_t * strEnd = mLexerState.srcPtr;
     
     // Skip the end '"'
-    consumeNonWhiteSpace(1);
+    consumeNumNonWhiteSpaceChars(1);
     
     // Compute the size of the buffer we need to hold the string in:
     size_t strBufferSize = strEnd - strStart + 1;
@@ -258,40 +300,34 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral(char32_t currentChar) {
     return ParseResult::kSuccess;
 }
 
-Lexer::ParseResult Lexer::parseBasicTokens(char32_t currentChar) {
-    switch (currentChar) {
-        case '(':
-            allocToken(TokenType::kLParen);
-            consumeNonWhiteSpace(1);
-            return ParseResult::kSuccess;
+Lexer::ParseResult Lexer::parseKeywords(char32_t currentChar) {
+    // Keywords must start with an alpha
+    if (!CharUtils::isAlpha(currentChar)) {
+        return Lexer::ParseResult::kNone;
+    }
+    
+    // TODO: this is slow, use some sort of binary search method BST
+    auto parseKeyword = [&](const char32_t * keyword, TokenType tokenType) {
+        // See if the keyword follows
+        if (StringUtils::stringStartsWith(mLexerState.srcPtr, keyword)) {
+            // Must be whitespace or some other non identifier char to delimit end of keyword
+            size_t keywordLen = StringUtils::strlen(keyword);
             
-        case ')':
-            allocToken(TokenType::kRParen);
-            consumeNonWhiteSpace(1);
-            return ParseResult::kSuccess;
+            if (!CharUtils::isValidIdentifierMiddleChar(mLexerState.srcPtr[keywordLen])) {
+                // Found a valid keyword: save it as the given token
+                allocToken(tokenType);
+                
+                // Skip these chars
+                consumeNumNonWhiteSpaceChars(keywordLen);
+                return true;
+            }
+        }
             
-        case '+':
-            allocToken(TokenType::kPlus);
-            consumeNonWhiteSpace(1);
-            return ParseResult::kSuccess;
-            
-        case '-':
-            allocToken(TokenType::kMinus);
-            consumeNonWhiteSpace(1);
-            return ParseResult::kSuccess;
-            
-        case '*':
-            allocToken(TokenType::kAsterisk);
-            consumeNonWhiteSpace(1);
-            return ParseResult::kSuccess;
-            
-        case '/':
-            allocToken(TokenType::kSlash);
-            consumeNonWhiteSpace(1);
-            return ParseResult::kSuccess;
-            
-        default:
-            break;
+        return false;
+    };
+    
+    if (parseKeyword(U"print", TokenType::kPrint)) {
+        return ParseResult::kSuccess;
     }
     
     return ParseResult::kNone;

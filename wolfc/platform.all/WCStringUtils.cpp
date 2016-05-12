@@ -3,6 +3,38 @@
 
 WC_BEGIN_NAMESPACE
 
+bool StringUtils::stringStartsWith(const char32_t * s1, const char32_t * s2) {
+    WC_ASSERT(s1);
+    WC_ASSERT(s2);
+    
+    while (true) {
+        // Grab the val of both chars at this position
+        char32_t c1 = s1[0];
+        char32_t c2 = s2[0];
+        
+        // See if not equal
+        if (c1 != c2) {
+            // If s2 has ended before s1 and they were equal so far then s2 starts with s1!
+            if (c2 == 0) {
+                return true;
+            }
+            
+            // Otherwise we found an inequality
+            return false;
+        }
+        
+        // If we reached the end of s2 and s1 then break out and return true
+        if (c2 == 0) {
+            break;
+        }
+        
+        ++s1;
+        ++s2;
+    }
+    
+    return true;    // s1 and s2 are same length and equal
+}
+
 size_t StringUtils::strlen(const char32_t * utf32Str) {
     WC_ASSERT(utf32Str);
     size_t length = 0;
