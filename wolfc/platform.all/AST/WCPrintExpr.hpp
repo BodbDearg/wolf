@@ -26,7 +26,7 @@ public:
     
     PrintExprStrLit(StrLit & lit);
     
-    virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     StrLit & mLit;
 };
@@ -38,7 +38,7 @@ public:
     
     PrintExprBinaryExpr(BinaryExpr & expr);
     
-    virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     BinaryExpr & mExpr;
 };

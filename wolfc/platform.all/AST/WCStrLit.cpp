@@ -1,4 +1,5 @@
 #include "WCStrLit.hpp"
+#include "WCCodegenCtx.hpp"
 #include "WCStringUtils.hpp"
 #include "WCToken.hpp"
 #include <memory>
@@ -24,13 +25,13 @@ StrLit::StrLit(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY()
 }
 
-llvm::Value * StrLit::generateCode(llvm::IRBuilder<> & irBuilder) {
+llvm::Value * StrLit::generateCode(const CodegenCtx & cgCtx) {
     // TODO: how to handle encodings here?
     // Convert to UTF8 for now...
     std::unique_ptr<char[]> strUtf8(StringUtils::convertUtf32ToUtf8(mToken.data.strVal.ptr,
                                                                     mToken.data.strVal.length));
     
-    return irBuilder.CreateGlobalStringPtr(strUtf8.get());
+    return cgCtx.irBuilder.CreateGlobalStringPtr(strUtf8.get());
 }
 
 WC_END_NAMESPACE

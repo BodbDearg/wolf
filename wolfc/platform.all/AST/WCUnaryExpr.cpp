@@ -1,5 +1,6 @@
 #include "WCUnaryExpr.hpp"
 #include "WCBinaryExpr.hpp"
+#include "WCCodegenCtx.hpp"
 #include "WCIntLit.hpp"
 #include "WCToken.hpp"
 
@@ -89,16 +90,16 @@ UnaryExprIntLit::UnaryExprIntLit(IntLit & lit) : mLit(lit) {
     WC_EMPTY_FUNC_BODY()
 }
 
-llvm::Value * UnaryExprIntLit::generateCode(llvm::IRBuilder<> & irBuilder) {
-    return mLit.generateCode(irBuilder);
+llvm::Value * UnaryExprIntLit::generateCode(const CodegenCtx & cgCtx) {
+    return mLit.generateCode(cgCtx);
 }
 
 UnaryExprIntLitNeg::UnaryExprIntLitNeg(IntLit & lit) : mLit(lit) {
     WC_EMPTY_FUNC_BODY()
 }
 
-llvm::Value * UnaryExprIntLitNeg::generateCode(llvm::IRBuilder<> & irBuilder) {
-    return irBuilder.CreateNeg(mLit.generateCode(irBuilder));
+llvm::Value * UnaryExprIntLitNeg::generateCode(const CodegenCtx & cgCtx) {
+    return cgCtx.irBuilder.CreateNeg(mLit.generateCode(cgCtx));
 }
 
 UnaryExprIntLitPos::UnaryExprIntLitPos(IntLit & lit) : UnaryExprIntLit(lit) {
@@ -109,8 +110,8 @@ UnaryExprParen::UnaryExprParen(BinaryExpr & expr) : mExpr(expr) {
     WC_EMPTY_FUNC_BODY()
 }
     
-llvm::Value * UnaryExprParen::generateCode(llvm::IRBuilder<> & irBuilder) {
-    return mExpr.generateCode(irBuilder);
+llvm::Value * UnaryExprParen::generateCode(const CodegenCtx & cgCtx) {
+    return mExpr.generateCode(cgCtx);
 }
 
 WC_END_NAMESPACE

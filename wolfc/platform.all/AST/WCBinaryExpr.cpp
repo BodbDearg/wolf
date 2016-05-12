@@ -1,6 +1,7 @@
 #include "WCBinaryExpr.hpp"
-#include "WCUnaryExpr.hpp"
+#include "WCCodegenCtx.hpp"
 #include "WCToken.hpp"
+#include "WCUnaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -63,68 +64,63 @@ BinaryExprUnary::BinaryExprUnary(UnaryExpr & expr) :
     WC_EMPTY_FUNC_BODY()
 }
 
-llvm::Value * BinaryExprUnary::generateCode(llvm::IRBuilder<> & irBuilder) {
-    return mExpr.generateCode(irBuilder);
+llvm::Value * BinaryExprUnary::generateCode(const CodegenCtx & cgCtx) {
+    return mExpr.generateCode(cgCtx);
 }
 
-BinaryExprTwoOps::BinaryExprTwoOps(UnaryExpr & leftExpr,
-                                   BinaryExpr & rightExpr) :
+BinaryExprTwoOps::BinaryExprTwoOps(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
     WC_EMPTY_FUNC_BODY()
 }
 
-BinaryExprAdd::BinaryExprAdd(UnaryExpr & leftExpr,
-                             BinaryExpr & rightExpr) :
+BinaryExprAdd::BinaryExprAdd(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY()
 }
 
-llvm::Value * BinaryExprAdd::generateCode(llvm::IRBuilder<> & irBuilder) {
-    llvm::Value * left = mLeftExpr.generateCode(irBuilder);
-    llvm::Value * right = mRightExpr.generateCode(irBuilder);
-    return irBuilder.CreateAdd(left, right);
+llvm::Value * BinaryExprAdd::generateCode(const CodegenCtx & cgCtx) {
+    llvm::Value * left = mLeftExpr.generateCode(cgCtx);
+    llvm::Value * right = mRightExpr.generateCode(cgCtx);
+    return cgCtx.irBuilder.CreateAdd(left, right);
 }
 
-BinaryExprSub::BinaryExprSub(UnaryExpr & leftExpr,
-                             BinaryExpr & rightExpr) :
+BinaryExprSub::BinaryExprSub(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY()
 }
 
-llvm::Value * BinaryExprSub::generateCode(llvm::IRBuilder<> & irBuilder) {
-    llvm::Value * left = mLeftExpr.generateCode(irBuilder);
-    llvm::Value * right = mRightExpr.generateCode(irBuilder);
-    return irBuilder.CreateSub(left, right);
+llvm::Value * BinaryExprSub::generateCode(const CodegenCtx & cgCtx) {
+    llvm::Value * left = mLeftExpr.generateCode(cgCtx);
+    llvm::Value * right = mRightExpr.generateCode(cgCtx);
+    return cgCtx.irBuilder.CreateSub(left, right);
 }
 
-BinaryExprMul::BinaryExprMul(UnaryExpr & leftExpr,
-                             BinaryExpr & rightExpr) :
+BinaryExprMul::BinaryExprMul(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY()
 }
 
-llvm::Value * BinaryExprMul::generateCode(llvm::IRBuilder<> & irBuilder) {
-    llvm::Value * left = mLeftExpr.generateCode(irBuilder);
-    llvm::Value * right = mRightExpr.generateCode(irBuilder);
-    return irBuilder.CreateMul(left, right);
+llvm::Value * BinaryExprMul::generateCode(const CodegenCtx & cgCtx) {
+    llvm::Value * left = mLeftExpr.generateCode(cgCtx);
+    llvm::Value * right = mRightExpr.generateCode(cgCtx);
+    return cgCtx.irBuilder.CreateMul(left, right);
 }
 
-BinaryExprDiv::BinaryExprDiv(UnaryExpr & leftExpr,
-                             BinaryExpr & rightExpr) :
+BinaryExprDiv::BinaryExprDiv(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY()
 }
 
-llvm::Value * BinaryExprDiv::generateCode(llvm::IRBuilder<> & irBuilder) {
-    llvm::Value * left = mLeftExpr.generateCode(irBuilder);
-    llvm::Value * right = mRightExpr.generateCode(irBuilder);
-    return irBuilder.CreateSDiv(left, right);
+llvm::Value * BinaryExprDiv::generateCode(const CodegenCtx & cgCtx) {
+    llvm::Value * left = mLeftExpr.generateCode(cgCtx);
+    llvm::Value * right = mRightExpr.generateCode(cgCtx);
+    return cgCtx.irBuilder.CreateSDiv(left, right);
 }
 
 WC_END_NAMESPACE

@@ -1,10 +1,10 @@
 #include "WCModule.hpp"
 #include "WCBinaryExpr.hpp"
+#include "WCCodegenCtx.hpp"
 #include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
-    #include <llvm/IR/IRBuilder.h>
 WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
@@ -74,7 +74,7 @@ bool Module::generateCode() {
     llvm::Value * helloWorldStr = irBuilder.CreateGlobalStringPtr("Program result is: %zu\n");
     
     // Evaluate the expression result
-    llvm::Value * exprResult = mExpr->generateCode(irBuilder);
+    llvm::Value * exprResult = mExpr->generateCode(CodegenCtx(irBuilder, *mLLVMMod));
     
     if (!exprResult) {
         mLLVMMod.reset();

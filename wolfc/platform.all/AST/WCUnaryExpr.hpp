@@ -26,7 +26,7 @@ class UnaryExprIntLit : public UnaryExpr {
 public:
     UnaryExprIntLit(IntLit & lit);
     
-    virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     IntLit & mLit;
 };
@@ -36,7 +36,7 @@ class UnaryExprIntLitNeg : public UnaryExpr {
 public:
     UnaryExprIntLitNeg(IntLit & lit);
     
-    virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     IntLit & mLit;
 };
@@ -52,7 +52,7 @@ class UnaryExprParen : public UnaryExpr {
 public:
     UnaryExprParen(BinaryExpr & expr);
     
-    virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     BinaryExpr & mExpr;
 };

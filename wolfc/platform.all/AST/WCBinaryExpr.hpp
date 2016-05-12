@@ -26,7 +26,7 @@ class BinaryExprUnary : public BinaryExpr {
 public:
     BinaryExprUnary(UnaryExpr & expr);
     
-    virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     UnaryExpr & mExpr;
 };
@@ -34,8 +34,7 @@ public:
 /* Base for a two operand binary expression */
 class BinaryExprTwoOps : public BinaryExpr {
 public:
-    BinaryExprTwoOps(UnaryExpr & leftExpr,
-                     BinaryExpr & rightExpr);
+    BinaryExprTwoOps(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
     
     UnaryExpr & mLeftExpr;
     BinaryExpr & mRightExpr;
@@ -44,37 +43,33 @@ public:
 /* 'UnaryExpression + BinaryExpression' */
 class BinaryExprAdd : public BinaryExprTwoOps {
 public:
-    BinaryExprAdd(UnaryExpr & leftExpr,
-                  BinaryExpr & rightExpr);
+    BinaryExprAdd(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
     
-    virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
 };
 
 /* 'UnaryExpression - BinaryExpression' */
 class BinaryExprSub : public BinaryExprTwoOps {
 public:
-    BinaryExprSub(UnaryExpr & leftExpr,
-                  BinaryExpr & rightExpr);
+    BinaryExprSub(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
     
-    virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
 };
 
 /* 'UnaryExpression * BinaryExpression' */
 class BinaryExprMul : public BinaryExprTwoOps {
 public:
-    BinaryExprMul(UnaryExpr & leftExpr,
-                  BinaryExpr & rightExpr);
+    BinaryExprMul(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
     
-    virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
 };
 
 /* 'UnaryExpression / BinaryExpression' */
 class BinaryExprDiv : public BinaryExprTwoOps {
 public:
-    BinaryExprDiv(UnaryExpr & leftExpr,
-                  BinaryExpr & rightExpr);
+    BinaryExprDiv(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
     
-    virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) override;
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
 };
 
 WC_END_NAMESPACE

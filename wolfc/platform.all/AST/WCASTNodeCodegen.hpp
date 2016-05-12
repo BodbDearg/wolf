@@ -2,15 +2,13 @@
 
 #include "WCASTNode.hpp"
 
-WC_THIRD_PARTY_INCLUDES_BEGIN
-    #include <llvm/IR/IRBuilder.h>
-WC_THIRD_PARTY_INCLUDES_END
-
 namespace llvm {
     class Value;
 }
 
 WC_BEGIN_NAMESPACE
+
+struct CodegenCtx;
 
 /**
  * Abstract base class for all AST nodes which generate one LLVM code element directly.
@@ -18,7 +16,7 @@ WC_BEGIN_NAMESPACE
 class ASTNodeCodegen : public ASTNode {
 public:
     /* Generates the code for this AST node */
-    virtual llvm::Value * generateCode(llvm::IRBuilder<> & irBuilder) = 0;
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) = 0;
 };
 
 WC_END_NAMESPACE

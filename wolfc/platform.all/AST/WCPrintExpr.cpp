@@ -72,7 +72,7 @@ PrintExprStrLit::PrintExprStrLit(StrLit & lit) : mLit(lit) {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * PrintExprStrLit::generateCode(llvm::IRBuilder<> & irBuilder) {
+llvm::Value * PrintExprStrLit::generateCode(const CodegenCtx & cgCtx) {
     // TODO
     return nullptr;
 }
@@ -91,7 +91,7 @@ PrintExprBinaryExpr::PrintExprBinaryExpr(BinaryExpr & expr) : mExpr(expr) {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * PrintExprBinaryExpr::generateCode(llvm::IRBuilder<> & irBuilder) {
+llvm::Value * PrintExprBinaryExpr::generateCode(const CodegenCtx & cgCtx) {
     // TODO
     return nullptr;
 }

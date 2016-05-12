@@ -1,5 +1,6 @@
 #include "WCIntLit.hpp"
 #include "WCToken.hpp"
+#include "WCCodegenCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -22,8 +23,8 @@ IntLit::IntLit(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY()
 }
 
-llvm::Value * IntLit::generateCode(llvm::IRBuilder<> & irBuilder) {
-    return irBuilder.getInt64(mToken.data.intVal);
+llvm::Value * IntLit::generateCode(const CodegenCtx & cgCtx) {
+    return cgCtx.irBuilder.getInt64(mToken.data.intVal);
 }
 
 WC_END_NAMESPACE
