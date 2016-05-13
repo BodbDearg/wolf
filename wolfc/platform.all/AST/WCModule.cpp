@@ -1,6 +1,6 @@
 #include "WCModule.hpp"
-#include "WCPrintExprs.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCScope.hpp"
 #include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -19,15 +19,15 @@ Module::~Module() {
 }
 
 bool Module::parseCode(const Token * tokenList) {
-    mExprs.reset(PrintExprs::parse(tokenList));
+    mScope.reset(Scope::parse(tokenList));
     
-    if (!mExprs) {
+    if (!mScope) {
         return false;
     }
     
     if (tokenList->type != TokenType::kEOF) {
-        error(*tokenList, "Expected EOF following binary expression!");
-        mExprs.reset();
+        error(*tokenList, "Expected EOF after scope!");
+        mScope.reset();
         return false;
     }
     
@@ -38,7 +38,7 @@ bool Module::generateCode() {
     // Clear out previous code and check we parsed ok
     mLLVMMod.reset();
     
-    if (!mExprs) {
+    if (!mScope) {
         error("Can't generate code, parsing was not successful!");
         return false;
     }
@@ -71,7 +71,7 @@ bool Module::generateCode() {
     irBuilder.SetInsertPoint(mainBlock);
     
     // Generate the code
-    mExprs->generateCode(CodegenCtx(mLLVMCtx, irBuilder, *mLLVMMod));
+    mScope->generateCode(CodegenCtx(mLLVMCtx, irBuilder, *mLLVMMod));
     
     // Return 0 for success
     irBuilder.CreateRet(llvm::ConstantInt::get(llvm::Type::getInt32Ty(mLLVMCtx), 0));

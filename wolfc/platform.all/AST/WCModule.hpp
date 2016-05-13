@@ -10,11 +10,11 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class PrintExprs;
+class Scope;
 
 /* 
 Module:
-    PrintExprs <EOF>
+    Scope <EOF>
 */
 class Module : public ASTNode {
 public:
@@ -36,7 +36,7 @@ public:
     
     llvm::LLVMContext &             mLLVMCtx;
     std::unique_ptr<llvm::Module>   mLLVMMod;
-    std::unique_ptr<PrintExprs>     mExprs;
+    std::unique_ptr<Scope>          mScope;
 };
 
 WC_END_NAMESPACE

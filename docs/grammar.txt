@@ -1,5 +1,8 @@
 Module:
-    PrintExprs <EOF>
+    Scope <EOF>
+
+Scope:
+    PrintExprs
 
 PrintExprs
     PrintExpr
