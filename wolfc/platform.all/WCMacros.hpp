@@ -38,6 +38,7 @@
         _Pragma("clang diagnostic ignored \"-Wconversion\"")\
         _Pragma("clang diagnostic ignored \"-Wnewline-eof\"")\
         _Pragma("clang diagnostic ignored \"-Wnon-virtual-dtor\"")\
+        _Pragma("clang diagnostic ignored \"-Wshadow\"")\
         _Pragma("clang diagnostic ignored \"-Wdocumentation\"")\
         _Pragma("clang diagnostic ignored \"-Winconsistent-missing-override\"")
 #else
