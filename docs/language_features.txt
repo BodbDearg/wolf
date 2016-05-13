@@ -12,11 +12,23 @@ Statements:
     - do ... end
     - scope .. end
     - return ..
+    - 'goto' NOT supported
+
+Variables:
+    - Initialized by default
+    - = void for no initialization
 
 Modules:
     - Each translation unit compiles to a module stub
     - Module stub hides non public members
     - Module stub defines size info of type
+
+Compound types:
+    bitfield - struct like, each member is a single bit
+    struct - no access control, Just raw data.
+        - Init with braces or named init.
+        - No non trivial constructors (must be bitwise init,copy)
+        - Intended for interfacing with C and low level code
 
 Primitives Types:
     void:       empty/no-type
