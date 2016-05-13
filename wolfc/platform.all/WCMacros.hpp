@@ -1,31 +1,21 @@
 #pragma once
 
-/**
- * Begin namespace macro for the compiler.
- */
+/* Begin namespace macro for the compiler. */
 #define WC_BEGIN_NAMESPACE namespace wolfc {
 
-/**
- * End namespace macro for the compiler.
- */
+/* End namespace macro for the compiler. */
 #define WC_END_NAMESPACE }
 
-/**
- * Documentation macro. Clarify an empty function body is intentional.
- */
+/* Documentation macro. Clarify an empty function body is intentional. */
 #define WC_EMPTY_FUNC_BODY()\
     do {} while (0)
 
-/**
- * Get rid of unused parameter warnings from the compiler.
- */
+/* Get rid of unused parameter warnings from the compiler. */
 #define WC_UNUSED_PARAM(param)\
     \
     (void) param
 
-/**
- * Generate code to disallow copying and assign for the named type.
- */
+/* Generate code to disallow copying and assign for the named type. */
 #define WC_DISALLOW_COPY_AND_ASSIGN(ClassName)\
     \
     ClassName(const ClassName & other) = delete;\
@@ -58,9 +48,7 @@
     \
     WC_CALL_MACRO_OVERLOAD(__WC_GUARD_ASSERT_IMPL_, __VA_ARGS__)
 
-/**
- * Make the debugger stop.
- */
+/* Make the debugger stop. */
 #ifdef _MSC_VER
     
     #define WC_DEBUG_BREAK()\
@@ -81,9 +69,7 @@
 
 #endif
 
-/**
- * Manual memory management.
- */
+/* Manual memory management. */
 #define WC_SAFE_DELETE_NULL(ptr)\
     \
     do {\
@@ -137,9 +123,7 @@
     #define WC_THIRD_PARTY_INCLUDES_END
 #endif
 
-/**
- * Internal implementation stuff for the guard and guard assert macros.
- */
+/* Internal implementation stuff for the guard and guard assert macros. */
 #define __WC_GUARD_IMPL_1(BooleanExpression)\
     \
     do {\

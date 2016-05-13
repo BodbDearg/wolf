@@ -10,9 +10,7 @@ WC_BEGIN_NAMESPACE
 
 struct CodegenCtx;
 
-/**
- * Abstract base class for all AST nodes which generate one LLVM code element directly.
- */
+/* Abstract base class for all AST nodes which generate one LLVM code element directly. */
 class ASTNodeCodegen : public ASTNode {
 public:
     /* Generates the code for this AST node */

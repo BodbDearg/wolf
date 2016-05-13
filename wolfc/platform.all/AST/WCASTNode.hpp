@@ -6,9 +6,7 @@ WC_BEGIN_NAMESPACE
 
 struct Token;
 
-/**
- * Abstract base class for all AST nodes.
- */
+/* Abstract base class for all AST nodes. */
 class ASTNode {
 public:
     virtual ~ASTNode();

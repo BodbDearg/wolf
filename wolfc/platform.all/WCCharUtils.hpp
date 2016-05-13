@@ -5,18 +5,12 @@
 
 WC_BEGIN_NAMESPACE
 
-/**
- * Utilities for querying character classes.
- */
+/* Utilities for querying character classes. */
 namespace CharUtils {
-    /**
-     * Tells if a character is valid to be used in an identifier as the first character.
-     */
+    /*Tells if a character is valid to be used in an identifier as the first character. */
     bool isValidIdentifierStartChar(char32_t c);
     
-    /**
-     * Tells if a character is valid to be used in an identifier for characters other than the start.
-     */
+    /* Tells if a character is valid to be used in an identifier for characters other than the start. */
     bool isValidIdentifierMiddleChar(char32_t c);
     
     /* Tell if a character is an alpha (regular letter) character. */
@@ -52,9 +46,7 @@ namespace CharUtils {
         return false;
     }
     
-    /** 
-     * Tells if a character is a whitespace character 
-     */
+    /* Tells if a character is a whitespace character */
     inline constexpr bool isWhitespace(char32_t c) {
         // See: https://en.wikipedia.org/wiki/Whitespace_character
         switch (c) {
