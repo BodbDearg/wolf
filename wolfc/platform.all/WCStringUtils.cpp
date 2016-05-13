@@ -57,7 +57,7 @@ char32_t * StringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf8B
     char32_t * utf32StrPtr = utf32StrBuffer;
     
     while (numUtf8Bytes > 0) {
-        char utf8Byte1 = *utf8Str;
+        uint8_t utf8Byte1 = static_cast<uint8_t>(*utf8Str);
         
         if (utf8Byte1 & 0x80) {
             // Possible multi byte sequence detected: Bit pattern 1???????
@@ -72,14 +72,14 @@ char32_t * StringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf8B
                             if (utf8Byte1 & 0x04) {
                                 // Six byte encoding:
                                 if (numUtf8Bytes >= 6) {
-                                    char32_t utf32Char = (utf8Byte1 & 0x01) << 30;
-                                    utf32Char |= (utf8Str[1] & 0x3F) << 24;
-                                    utf32Char |= (utf8Str[2] & 0x3F) << 18;
-                                    utf32Char |= (utf8Str[3] & 0x3F) << 12;
-                                    utf32Char |= (utf8Str[4] & 0x3F) << 6;
-                                    utf32Char |= (utf8Str[5] & 0x3F) << 6;
+                                    uint32_t utf32Char = (utf8Byte1 & 0x01u) << 30;
+                                    utf32Char |= (static_cast<uint8_t>(utf8Str[1]) & 0x3Fu) << 24;
+                                    utf32Char |= (static_cast<uint8_t>(utf8Str[2]) & 0x3Fu) << 18;
+                                    utf32Char |= (static_cast<uint8_t>(utf8Str[3]) & 0x3Fu) << 12;
+                                    utf32Char |= (static_cast<uint8_t>(utf8Str[4]) & 0x3Fu) << 6;
+                                    utf32Char |= (static_cast<uint8_t>(utf8Str[5]) & 0x3Fu) << 6;
                                     
-                                    *utf32StrPtr = utf32Char;
+                                    *utf32StrPtr = static_cast<char32_t>(utf32Char);
                                     ++utf32StrPtr;
                                     utf8Str += 6;
                                     numUtf8Bytes -= 6;
@@ -91,13 +91,13 @@ char32_t * StringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf8B
                             else {
                                 // Five byte encoding:
                                 if (numUtf8Bytes >= 5) {
-                                    char32_t utf32Char = (utf8Byte1 & 0x03) << 24;
-                                    utf32Char |= (utf8Str[1] & 0x3F) << 18;
-                                    utf32Char |= (utf8Str[2] & 0x3F) << 12;
-                                    utf32Char |= (utf8Str[3] & 0x3F) << 6;
-                                    utf32Char |= (utf8Str[4] & 0x3F);
+                                    uint32_t utf32Char = (utf8Byte1 & 0x03u) << 24;
+                                    utf32Char |= (static_cast<uint8_t>(utf8Str[1]) & 0x3Fu) << 18;
+                                    utf32Char |= (static_cast<uint8_t>(utf8Str[2]) & 0x3Fu) << 12;
+                                    utf32Char |= (static_cast<uint8_t>(utf8Str[3]) & 0x3Fu) << 6;
+                                    utf32Char |= (static_cast<uint8_t>(utf8Str[4]) & 0x3Fu);
                                     
-                                    *utf32StrPtr = utf32Char;
+                                    *utf32StrPtr = static_cast<char32_t>(utf32Char);
                                     ++utf32StrPtr;
                                     utf8Str += 5;
                                     numUtf8Bytes -= 5;
@@ -110,12 +110,12 @@ char32_t * StringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf8B
                         else {
                             // Four byte encoding:
                             if (numUtf8Bytes >= 4) {
-                                char32_t utf32Char = (utf8Byte1 & 0x07) << 18;
-                                utf32Char |= (utf8Str[1] & 0x3F) << 12;
-                                utf32Char |= (utf8Str[2] & 0x3F) << 6;
-                                utf32Char |= (utf8Str[3] & 0x3F);
+                                uint32_t utf32Char = (utf8Byte1 & 0x07u) << 18;
+                                utf32Char |= (static_cast<uint8_t>(utf8Str[1]) & 0x3Fu) << 12;
+                                utf32Char |= (static_cast<uint8_t>(utf8Str[2]) & 0x3Fu) << 6;
+                                utf32Char |= (static_cast<uint8_t>(utf8Str[3]) & 0x3Fu);
                                 
-                                *utf32StrPtr = utf32Char;
+                                *utf32StrPtr = static_cast<char32_t>(utf32Char);
                                 ++utf32StrPtr;
                                 utf8Str += 4;
                                 numUtf8Bytes -= 4;
@@ -128,11 +128,11 @@ char32_t * StringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf8B
                     else {
                         // Three byte encoding:
                         if (numUtf8Bytes >= 3) {
-                            char32_t utf32Char = (utf8Byte1 & 0x0F) << 12;
-                            utf32Char |= (utf8Str[1] & 0x3F) << 6;
-                            utf32Char |= (utf8Str[2] & 0x3F);
+                            uint32_t utf32Char = (utf8Byte1 & 0x0Fu) << 12;
+                            utf32Char |= (static_cast<uint8_t>(utf8Str[1]) & 0x3Fu) << 6;
+                            utf32Char |= (static_cast<uint8_t>(utf8Str[2]) & 0x3Fu);
                             
-                            *utf32StrPtr = utf32Char;
+                            *utf32StrPtr = static_cast<char32_t>(utf32Char);
                             ++utf32StrPtr;
                             utf8Str += 3;
                             numUtf8Bytes -= 3;
@@ -145,10 +145,10 @@ char32_t * StringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf8B
                 else {
                     // Two byte encoding: do a safety check on subsequent bytes however to make sure they're not null
                     if (numUtf8Bytes >= 2) {
-                        char32_t utf32Char = (utf8Byte1 & 0x1F) << 6;
-                        utf32Char |= (utf8Str[1] & 0x3F);
+                        uint32_t utf32Char = (utf8Byte1 & 0x1Fu) << 6;
+                        utf32Char |= (static_cast<uint8_t>(utf8Str[1]) & 0x3Fu);
                         
-                        *utf32StrPtr = utf32Char;
+                        *utf32StrPtr = static_cast<char32_t>(utf32Char);
                         ++utf32StrPtr;
                         utf8Str += 2;
                         numUtf8Bytes -= 2;
@@ -193,7 +193,7 @@ char * StringUtils::convertUtf32ToUtf8(const char32_t * utf32Str, size_t stringL
     // Don't know yet what size in bytes actual string will be so just use the length * 6. This may not
     // be the most space efficient solution but deliberately sacraficing space here for speed... Don't want
     // to have multiple allocs and possible array copying.
-    char * utf8StrBuffer = new char[stringLength + 1];
+    char * utf8StrBuffer = new char[(stringLength * 6) + 1];
     char * utf8StrPtr = utf8StrBuffer;
     
     while (stringLength > 0) {
@@ -213,42 +213,42 @@ char * StringUtils::convertUtf32ToUtf8(const char32_t * utf32Str, size_t stringL
         }
         else if (utf32Char < 0x800) {
             // 2 byte encoded character
-            utf8StrPtr[0] = 0xC0 | (utf32Char >> 6);
-            utf8StrPtr[1] = 0x80 | (utf32Char & 0x3F);
+            utf8StrPtr[0] = static_cast<char>(0xC0 | (utf32Char >> 6));
+            utf8StrPtr[1] = static_cast<char>(0x80 | (utf32Char & 0x3F));
             utf8StrPtr += 2;
         }
         else if (utf32Char < 0x10000) {
             // 3 byte encoded character
-            utf8StrPtr[0] = 0xE0 | (utf32Char >> 12);
-            utf8StrPtr[1] = 0x80 | ((utf32Char >> 6) & 0x3F);
-            utf8StrPtr[2] = 0x80 | (utf32Char & 0x3F);
+            utf8StrPtr[0] = static_cast<char>(0xE0 | (utf32Char >> 12));
+            utf8StrPtr[1] = static_cast<char>(0x80 | ((utf32Char >> 6) & 0x3F));
+            utf8StrPtr[2] = static_cast<char>(0x80 | (utf32Char & 0x3F));
             utf8StrPtr += 3;
         }
         else if (utf32Char < 0x200000) {
             // 4 byte encoded character
-            utf8StrPtr[0] = 0xF0 | (utf32Char >> 18);
-            utf8StrPtr[1] = 0x80 | ((utf32Char >> 12) & 0x3F);
-            utf8StrPtr[2] = 0x80 | ((utf32Char >> 6) & 0x3F);
-            utf8StrPtr[3] = 0x80 | (utf32Char & 0x3F);
+            utf8StrPtr[0] = static_cast<char>(0xF0 | (utf32Char >> 18));
+            utf8StrPtr[1] = static_cast<char>(0x80 | ((utf32Char >> 12) & 0x3F));
+            utf8StrPtr[2] = static_cast<char>(0x80 | ((utf32Char >> 6) & 0x3F));
+            utf8StrPtr[3] = static_cast<char>(0x80 | (utf32Char & 0x3F));
             utf8StrPtr += 4;
         }
         else if (utf32Char < 0x4000000) {
             // 5 byte encoded character
-            utf8StrPtr[0] = 0xF8 | (utf32Char >> 24);
-            utf8StrPtr[1] = 0x80 | ((utf32Char >> 18) & 0x3F);
-            utf8StrPtr[2] = 0x80 | ((utf32Char >> 12) & 0x3F);
-            utf8StrPtr[3] = 0x80 | ((utf32Char >> 6) & 0x3F);
-            utf8StrPtr[4] = 0x80 | (utf32Char & 0x3F);
+            utf8StrPtr[0] = static_cast<char>(0xF8 | (utf32Char >> 24));
+            utf8StrPtr[1] = static_cast<char>(0x80 | ((utf32Char >> 18) & 0x3F));
+            utf8StrPtr[2] = static_cast<char>(0x80 | ((utf32Char >> 12) & 0x3F));
+            utf8StrPtr[3] = static_cast<char>(0x80 | ((utf32Char >> 6) & 0x3F));
+            utf8StrPtr[4] = static_cast<char>(0x80 | (utf32Char & 0x3F));
             utf8StrPtr += 5;
         }
         else if (utf32Char < 0x80000000) {
             // 6 byte encoded character
-            utf8StrPtr[0] = 0xFC | (utf32Char >> 30);
-            utf8StrPtr[1] = 0x80 | ((utf32Char >> 24) & 0x3F);
-            utf8StrPtr[2] = 0x80 | ((utf32Char >> 18) & 0x3F);
-            utf8StrPtr[3] = 0x80 | ((utf32Char >> 12) & 0x3F);
-            utf8StrPtr[4] = 0x80 | ((utf32Char >> 6) & 0x3F);
-            utf8StrPtr[5] = 0x80 | (utf32Char & 0x3F);
+            utf8StrPtr[0] = static_cast<char>(0xFC | (utf32Char >> 30));
+            utf8StrPtr[1] = static_cast<char>(0x80 | ((utf32Char >> 24) & 0x3F));
+            utf8StrPtr[2] = static_cast<char>(0x80 | ((utf32Char >> 18) & 0x3F));
+            utf8StrPtr[3] = static_cast<char>(0x80 | ((utf32Char >> 12) & 0x3F));
+            utf8StrPtr[4] = static_cast<char>(0x80 | ((utf32Char >> 6) & 0x3F));
+            utf8StrPtr[5] = static_cast<char>(0x80 | (utf32Char & 0x3F));
             utf8StrPtr += 6;
         }
         

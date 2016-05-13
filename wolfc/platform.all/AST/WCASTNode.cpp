@@ -5,6 +5,10 @@
 
 WC_BEGIN_NAMESPACE
 
+ASTNode::~ASTNode() {
+    WC_EMPTY_FUNC_BODY();
+}
+
 void ASTNode::error(const char * msg, ...) {
     std::va_list args;
     va_start(args, msg);

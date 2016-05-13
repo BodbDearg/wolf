@@ -34,14 +34,14 @@ char * FileUtils::readUTF8TextFileAsUTF8String(const char * filePath, size_t & f
     }
     
     // Alloc char buffer and read
-    char * charBuffer = new char[fileSize + 1];
+    char * charBuffer = new char[static_cast<size_t>(fileSize) + 1];
     
     if (!charBuffer) {
         return nullptr;
     }
     
     if (fileSize > 0) {
-        if (std::fread(charBuffer, fileSize, 1, file) != 1) {
+        if (std::fread(charBuffer, static_cast<size_t>(fileSize), 1, file) != 1) {
             delete[] charBuffer;
             return nullptr;
         }
@@ -49,7 +49,7 @@ char * FileUtils::readUTF8TextFileAsUTF8String(const char * filePath, size_t & f
     
     // Null terminate buffer and return
     charBuffer[fileSize] = 0;
-    fileSizeInBytes = fileSize;
+    fileSizeInBytes = static_cast<size_t>(fileSize);
     return charBuffer;
 }
 

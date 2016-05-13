@@ -15,10 +15,13 @@ WC_BEGIN_NAMESPACE
 
 /* Struct holding the context for code generation */
 struct CodegenCtx {
-    CodegenCtx(llvm::LLVMContext & llvmCtx, llvm::IRBuilder<> & irBuilder, llvm::Module & module) :
-        llvmCtx(llvmCtx),
-        irBuilder(irBuilder),
-        module(module)
+    CodegenCtx(llvm::LLVMContext & llvmCtxIn,
+               llvm::IRBuilder<> & irBuilderIn,
+               llvm::Module & moduleIn)
+    :
+        llvmCtx(llvmCtxIn),
+        irBuilder(irBuilderIn),
+        module(moduleIn)
     {
         WC_EMPTY_FUNC_BODY();
     }

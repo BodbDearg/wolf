@@ -166,7 +166,7 @@ Lexer::ParseResult Lexer::parseNumericLiteral(char32_t currentChar) {
     }
     
     // Skip these in the parser
-    size_t numNumericChars = endCharPtr - startCharPtr;
+    size_t numNumericChars = static_cast<size_t>(endCharPtr - startCharPtr);
     consumeNumNonWhiteSpaceChars(numNumericChars);
     
     // Parse the number itself
@@ -200,7 +200,7 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral(char32_t currentChar) {
     LexerState decodeLexState = mLexerState;
     
     // Search for the end of the string until we reach '"':
-    char c = mLexerState.srcPtr[0];
+    char32_t c = mLexerState.srcPtr[0];
     
     while (c != '"') {
         // Bail with an error if we hit null
@@ -227,7 +227,7 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral(char32_t currentChar) {
     consumeNumNonWhiteSpaceChars(1);
     
     // Compute the size of the buffer we need to hold the string in:
-    size_t strBufferSize = strEnd - strStart + 1;
+    size_t strBufferSize = static_cast<size_t>(strEnd - strStart + 1);
     
     // Allocate a token and the buffer to hold the string
     // TODO: what manages this memory?

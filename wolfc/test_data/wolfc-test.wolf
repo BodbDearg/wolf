@@ -1,4 +1,4 @@
-print("Hello world!\n")
+print("😍Hello world!\n")
 print("Just to let you know 😱😱😱, (1 + 2) / (2 - 1) is: ")
 print((1 + 2) / (2 - 1))
 print("\n")

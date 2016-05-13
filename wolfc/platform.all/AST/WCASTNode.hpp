@@ -11,6 +11,8 @@ struct Token;
  */
 class ASTNode {
 public:
+    virtual ~ASTNode();
+    
     /* Emit a formatted error message followed by a newline to stderr. */
     static void error(const char * msg, ...);
     
