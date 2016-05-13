@@ -23,11 +23,7 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
         /* UIntLit */
         case TokenType::kIntLit: {
             IntLit * uintLit = IntLit::parse(currentToken);
-            
-            if (!uintLit) {
-                return nullptr;
-            }
-            
+            WC_GUARD(uintLit, nullptr);
             return new UnaryExprIntLit(*uintLit);
         }   break;
             
@@ -35,11 +31,7 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
         case TokenType::kMinus: {
             ++currentToken; // Skip '-'
             IntLit * uintLit = IntLit::parse(currentToken);
-            
-            if (!uintLit) {
-                return nullptr;
-            }
-            
+            WC_GUARD(uintLit, nullptr);
             return new UnaryExprIntLitNeg(*uintLit);
         }   break;
             
@@ -47,11 +39,7 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
         case TokenType::kPlus: {
             ++currentToken; // Skip '+'
             IntLit * uintLit = IntLit::parse(currentToken);
-            
-            if (!uintLit) {
-                return nullptr;
-            }
-            
+            WC_GUARD(uintLit, nullptr);
             return new UnaryExprIntLitPos(*uintLit);
         }   break;
             
@@ -59,11 +47,9 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
         case TokenType::kLParen: {
             const Token * lparenToken = currentToken;
             ++currentToken; // Skip '('
-            BinaryExpr * expr = BinaryExpr::parse(currentToken);
             
-            if (!expr) {
-                return nullptr;
-            }
+            BinaryExpr * expr = BinaryExpr::parse(currentToken);
+            WC_GUARD(expr, nullptr);
             
             if (currentToken->type != TokenType::kRParen) {
                 error(*currentToken,

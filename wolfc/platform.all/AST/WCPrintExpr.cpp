@@ -11,11 +11,7 @@ WC_THIRD_PARTY_INCLUDES_END
 WC_BEGIN_NAMESPACE
 
 bool PrintExpr::peek(const Token * tokenPtr) {
-    if (tokenPtr[0].type == TokenType::kPrint) {
-        return true;
-    }
-    
-    return false;
+    return tokenPtr[0].type == TokenType::kPrint;
 }
 
 PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
@@ -48,9 +44,7 @@ PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
     }
     
     // Must have parsed ok!
-    if (!parsedPrintExpr) {
-        return nullptr;
-    }
+    WC_GUARD(parsedPrintExpr, nullptr);
     
     // Expect ')' following all that:
     if (tokenPtr->type != TokenType::kRParen) {
@@ -65,11 +59,7 @@ PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
 
 PrintExprStrLit * PrintExprStrLit::parse(const Token *& tokenPtr) {
     StrLit * strLit = StrLit::parse(tokenPtr);
-    
-    if (!strLit) {
-        return nullptr;
-    }
-    
+    WC_GUARD(strLit, nullptr);
     return new PrintExprStrLit(*strLit);
 }
 
@@ -103,11 +93,7 @@ llvm::Value * PrintExprStrLit::generateCode(const CodegenCtx & cgCtx) {
 
 PrintExprBinaryExpr * PrintExprBinaryExpr::parse(const Token *& tokenPtr) {
     BinaryExpr * binaryExpr = BinaryExpr::parse(tokenPtr);
-    
-    if (!binaryExpr) {
-        return nullptr;
-    }
-    
+    WC_GUARD(binaryExpr, nullptr);
     return new PrintExprBinaryExpr(*binaryExpr);
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "WCAssert.hpp"
 #include "WCMacros.hpp"
 #include <functional>
 

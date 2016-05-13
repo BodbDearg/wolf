@@ -12,17 +12,11 @@ bool PrintExprs::peek(const Token * tokenPtr) {
 
 PrintExprs * PrintExprs::parse(const Token *& tokenPtr) {
     PrintExpr * startExpr = PrintExpr::parse(tokenPtr);
-    
-    if (!startExpr) {
-        return nullptr;
-    }
+    WC_GUARD(startExpr, nullptr);
     
     if (PrintExprs::peek(tokenPtr)) {
         PrintExprs * endExprs = PrintExprs::parse(tokenPtr);
-        
-        if (!endExprs) {
-            return nullptr;
-        }
+        WC_GUARD(endExprs, nullptr);
         
         return new PrintExprsMulti(*startExpr, *endExprs);
     }
@@ -48,13 +42,8 @@ PrintExprsMulti::PrintExprsMulti(PrintExpr & startExpr, PrintExprs & endExprs) :
 
 llvm::Value * PrintExprsMulti::generateCode(const CodegenCtx & cgCtx) {
     // Generate the instructions for all these calls
-    if (!mStartExpr.generateCode(cgCtx)) {
-        return nullptr;
-    }
-    
-    if (!mEndExprs.generateCode(cgCtx)) {
-        return nullptr;
-    }
+    WC_GUARD(mStartExpr.generateCode(cgCtx), nullptr);
+    WC_GUARD(mEndExprs.generateCode(cgCtx), nullptr);
     
     // Return the last instruction generate
     return &(*(cgCtx.irBuilder.GetInsertPoint()));

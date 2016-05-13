@@ -1,6 +1,6 @@
 #pragma once
 
-#include "WCLogger.h"
+#include "WCLogger.hpp"
 
 /* Default setting for whether asserts are enabled or not */
 #ifndef WC_ASSERT_ENABLED

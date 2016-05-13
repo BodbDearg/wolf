@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cassert>
-
 /**
  * Begin namespace macro for the compiler.
  */
@@ -11,12 +9,6 @@
  * End namespace macro for the compiler.
  */
 #define WC_END_NAMESPACE }
-
-/**
- * Assert macro.
- */
-#define WC_ASSERT(cond)\
-    assert((cond))
 
 /**
  * Documentation macro. Clarify an empty function body is intentional.

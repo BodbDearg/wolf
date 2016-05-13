@@ -1,4 +1,5 @@
 #include "WCStringUtils.hpp"
+#include "WCAssert.hpp"
 #include <cstdint>
 
 WC_BEGIN_NAMESPACE

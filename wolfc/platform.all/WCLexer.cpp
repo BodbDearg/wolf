@@ -1,11 +1,12 @@
 #include "WCLexer.hpp"
-#include "WCToken.hpp"
+#include "WCAssert.hpp"
 #include "WCCharUtils.hpp"
 #include "WCStringUtils.hpp"
+#include "WCToken.hpp"
 #include <memory>
-#include <cstdlib>
-#include <cstdio>
 #include <cstdarg>
+#include <cstdio>
+#include <cstdlib>
 
 WC_BEGIN_NAMESPACE
 
@@ -75,10 +76,10 @@ const Token * Lexer::getTokenList() const {
 }
 
 bool Lexer::tryConsumeWhitespaceChar(char32_t currentChar) {
-    if (!CharUtils::isWhitespace(currentChar)) {
-        return false;   // Did not parse whitespace
-    }
+    // Must be a whitespace char to consume at least one!
+    WC_GUARD(CharUtils::isWhitespace(currentChar), false);
     
+    // See if line separator or just normal whitespace
     if (CharUtils::isLineSeparator(currentChar)) {
         if (currentChar == '\r' && mLexerState.srcPtr[1] == '\n') {
             // Carriage return and newline combo: interpret as just one newline
@@ -148,9 +149,7 @@ Lexer::ParseResult Lexer::parseBasicTokens(char32_t currentChar) {
 
 Lexer::ParseResult Lexer::parseNumericLiteral(char32_t currentChar) {
     // Must start with a digit to be a numeric
-    if (!CharUtils::isDigit(currentChar)) {
-        return ParseResult::kNone;
-    }
+    WC_GUARD(CharUtils::isDigit(currentChar), ParseResult::kNone);
     
     // Continue until the end of the numeric literal
     const char32_t * startCharPtr = mLexerState.srcPtr;
@@ -188,9 +187,7 @@ Lexer::ParseResult Lexer::parseNumericLiteral(char32_t currentChar) {
 
 Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral(char32_t currentChar) {
     // Must start with a double quote
-    if (currentChar != '"') {
-        return ParseResult::kNone;
-    }
+    WC_GUARD(currentChar == '"', ParseResult::kNone);
     
     // Alright skip the opening '"'
     consumeNumNonWhiteSpaceChars(1);
@@ -302,25 +299,23 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral(char32_t currentChar) {
 
 Lexer::ParseResult Lexer::parseKeywords(char32_t currentChar) {
     // Keywords must start with an alpha
-    if (!CharUtils::isAlpha(currentChar)) {
-        return Lexer::ParseResult::kNone;
-    }
+    WC_GUARD(CharUtils::isAlpha(currentChar), Lexer::ParseResult::kNone);
     
     // TODO: this is slow, use some sort of binary search method BST
     auto parseKeyword = [&](const char32_t * keyword, TokenType tokenType) {
         // See if the keyword follows
-        if (StringUtils::stringStartsWith(mLexerState.srcPtr, keyword)) {
-            // Must be whitespace or some other non identifier char to delimit end of keyword
-            size_t keywordLen = StringUtils::strlen(keyword);
+        WC_GUARD(StringUtils::stringStartsWith(mLexerState.srcPtr, keyword), false);
+        
+        // Must be whitespace or some other non identifier char to delimit end of keyword
+        size_t keywordLen = StringUtils::strlen(keyword);
+        
+        if (!CharUtils::isValidIdentifierMiddleChar(mLexerState.srcPtr[keywordLen])) {
+            // Found a valid keyword: save it as the given token
+            allocToken(tokenType);
             
-            if (!CharUtils::isValidIdentifierMiddleChar(mLexerState.srcPtr[keywordLen])) {
-                // Found a valid keyword: save it as the given token
-                allocToken(tokenType);
-                
-                // Skip these chars
-                consumeNumNonWhiteSpaceChars(keywordLen);
-                return true;
-            }
+            // Skip these chars
+            consumeNumNonWhiteSpaceChars(keywordLen);
+            return true;
         }
             
         return false;
@@ -334,10 +329,7 @@ Lexer::ParseResult Lexer::parseKeywords(char32_t currentChar) {
 }
 
 void Lexer::increaseTokenListCapacity(size_t newCapacity) {
-    if (newCapacity < mTokenCapacity) {
-        return;
-    }
-    
+    WC_GUARD(newCapacity >= mTokenCapacity);
     mTokenCapacity = newCapacity;
     mTokenList = reinterpret_cast<Token*>(std::realloc(mTokenList, mTokenCapacity * sizeof(Token)));
 }

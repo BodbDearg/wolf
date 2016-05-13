@@ -28,21 +28,12 @@ int main(int argc, const char * argv[]) {
     
     // Run it through the lexer
     wolfc::Lexer lexer;
-    
-    if (!lexer.process(inputSrc.get())) {
-        return -1;
-    }
+    WC_GUARD(lexer.process(inputSrc.get()), -1);
     
     // Generate the module and codegen
     wolfc::Module module(llvmContext);
-    
-    if (!module.parseCode(lexer.getTokenList())) {
-        return -1;
-    }
-    
-    if (!module.generateCode()) {
-        return -1;
-    }
+    WC_GUARD(module.parseCode(lexer.getTokenList()), -1);
+    WC_GUARD(module.generateCode(), -1);
     
     // Dump the code to stdout!
     module.dumpIRCodeToStdout();

@@ -9,11 +9,7 @@ bool Scope::peek(const Token * tokenPtr) {
 
 Scope * Scope::parse(const Token *& tokenPtr) {
     PrintExprs * printExprs = PrintExprs::parse(tokenPtr);
-    
-    if (!printExprs) {
-        return nullptr;
-    }
-    
+    WC_GUARD(printExprs, nullptr);
     return new Scope(*printExprs);
 }
 

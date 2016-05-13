@@ -30,9 +30,8 @@ bool CharUtils::isAlpha(char32_t c) {
         // Not an alpha char:
         return false;
     }
-    else {
-        return !isWhitespace(c);    // Unicode: accept any char that is not whitespace
-    }
+    
+    return !isWhitespace(c);    // Unicode: accept any char that is not whitespace
 }
 
 WC_END_NAMESPACE

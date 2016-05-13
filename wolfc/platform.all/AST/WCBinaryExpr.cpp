@@ -1,4 +1,5 @@
 #include "WCBinaryExpr.hpp"
+#include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCToken.hpp"
 #include "WCUnaryExpr.hpp"
@@ -11,26 +12,19 @@ bool BinaryExpr::peek(const Token * tokenPtr) {
 
 BinaryExpr * BinaryExpr::parse(const Token *& tokenPtr) {
     UnaryExpr * unaryExpr = UnaryExpr::parse(tokenPtr);
-    
-    if (!unaryExpr) {
-        return nullptr;
-    }
+    WC_GUARD(unaryExpr, nullptr);
     
     switch (tokenPtr->type) {
         // Two operand binary expression
         case TokenType::kPlus:
         case TokenType::kMinus:
         case TokenType::kAsterisk:
-        case TokenType::kSlash:
-        {
+        case TokenType::kSlash: {
             // Parse the right expression
             const Token * opToken = tokenPtr;
             ++tokenPtr;
             BinaryExpr * binaryExpr = BinaryExpr::parse(tokenPtr);
-            
-            if (!binaryExpr) {
-                return nullptr;
-            }
+            WC_GUARD(binaryExpr, nullptr);
             
             // Now construct the full expression
             switch (opToken->type){

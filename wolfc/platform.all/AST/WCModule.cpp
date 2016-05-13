@@ -1,4 +1,5 @@
 #include "WCModule.hpp"
+#include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
@@ -20,10 +21,7 @@ Module::~Module() {
 
 bool Module::parseCode(const Token * tokenList) {
     mScope.reset(Scope::parse(tokenList));
-    
-    if (!mScope) {
-        return false;
-    }
+    WC_GUARD(mScope, false);
     
     if (tokenList->type != TokenType::kEOF) {
         error(*tokenList, "Expected EOF after scope!");
@@ -83,12 +81,7 @@ bool Module::wasCodeGeneratedOk() {
 }
 
 void Module::dumpIRCodeToStdout() {
-    WC_ASSERT(mLLVMMod.get());
-    
-    if (!mLLVMMod.get()) {
-        return;
-    }
-    
+    WC_GUARD_ASSERT(mLLVMMod.get());
     mLLVMMod->dump();
 }
 
