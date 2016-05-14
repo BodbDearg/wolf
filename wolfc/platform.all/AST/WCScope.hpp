@@ -4,11 +4,11 @@
 
 WC_BEGIN_NAMESPACE
 
-class PrintExprs;
+class Exprs;
 
 /*
 Scope:
-    PrintExprs
+    Exprs
 */
 class Scope : public ASTNodeCodegen {
 public:
@@ -16,11 +16,11 @@ public:
     
     static Scope * parse(const Token *& tokenPtr);
     
-    Scope(PrintExprs & exprs);
+    Scope(Exprs & exprs);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
-    PrintExprs & mExprs;
+    Exprs & mExprs;
 };
 
 WC_END_NAMESPACE

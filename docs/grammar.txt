@@ -2,11 +2,19 @@ Module:
     Scope <EOF>
 
 Scope:
-    PrintExprs
+    Exprs
 
-PrintExprs
+Exprs:
+    Expr
+    Expr Exprs
+
+Expr:
     PrintExpr
-    PrintExpr PrintExprs
+    AssignExpr
+
+AssignExpr:
+    BinaryExpr
+    BinaryExpr = AssignExpr
 
 PrintExpr
     print ( StringLit )
