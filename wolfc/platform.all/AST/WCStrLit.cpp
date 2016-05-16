@@ -10,18 +10,21 @@ bool StrLit::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kStrLit;
 }
 
-StrLit * StrLit::parse(const Token *& tokenPtr) {
+StrLit * StrLit::parse(ASTNode & parent, const Token *& tokenPtr) {
     if (tokenPtr->type != TokenType::kStrLit) {
         error(*tokenPtr, "Expected string literal!");
         return nullptr;
     }
     
-    StrLit * intLit = new StrLit(*tokenPtr);
+    StrLit * intLit = new StrLit(parent, *tokenPtr);
     ++tokenPtr;
     return intLit;
 }
 
-StrLit::StrLit(const Token & token) : mToken(token) {
+StrLit::StrLit(ASTNode & parent, const Token & token) :
+    ASTNodeCodegen(parent),
+    mToken(token)
+{
     WC_EMPTY_FUNC_BODY();
 }
 

@@ -6,12 +6,16 @@
 
 WC_BEGIN_NAMESPACE
 
+BinaryExpr::BinaryExpr(ASTNode & parent) : ASTNodeCodegen(parent) {
+    WC_EMPTY_FUNC_BODY();
+}
+
 bool BinaryExpr::peek(const Token * tokenPtr) {
     return UnaryExpr::peek(tokenPtr);
 }
 
-BinaryExpr * BinaryExpr::parse(const Token *& tokenPtr) {
-    UnaryExpr * unaryExpr = UnaryExpr::parse(tokenPtr);
+BinaryExpr * BinaryExpr::parse(ASTNode & parent, const Token *& tokenPtr) {
+    UnaryExpr * unaryExpr = UnaryExpr::parse(parent, tokenPtr);
     WC_GUARD(unaryExpr, nullptr);
     
     switch (tokenPtr->type) {
@@ -23,19 +27,19 @@ BinaryExpr * BinaryExpr::parse(const Token *& tokenPtr) {
             // Parse the right expression
             const Token * opToken = tokenPtr;
             ++tokenPtr;
-            BinaryExpr * binaryExpr = BinaryExpr::parse(tokenPtr);
+            BinaryExpr * binaryExpr = BinaryExpr::parse(parent, tokenPtr);
             WC_GUARD(binaryExpr, nullptr);
             
             // Now construct the full expression
             switch (opToken->type){
                 case TokenType::kPlus:
-                    return new BinaryExprAdd(*unaryExpr, *binaryExpr);
+                    return new BinaryExprAdd(parent, *unaryExpr, *binaryExpr);
                 case TokenType::kMinus:
-                    return new BinaryExprSub(*unaryExpr, *binaryExpr);
+                    return new BinaryExprSub(parent, *unaryExpr, *binaryExpr);
                 case TokenType::kAsterisk:
-                    return new BinaryExprMul(*unaryExpr, *binaryExpr);
+                    return new BinaryExprMul(parent, *unaryExpr, *binaryExpr);
                 case TokenType::kSlash:
-                    return new BinaryExprDiv(*unaryExpr, *binaryExpr);
+                    return new BinaryExprDiv(parent, *unaryExpr, *binaryExpr);
                     
                 default:
                     WC_ASSERT(0);
@@ -46,13 +50,14 @@ BinaryExpr * BinaryExpr::parse(const Token *& tokenPtr) {
             
         // No-op binary expression
         default:
-            return new BinaryExprUnary(*unaryExpr);
+            return new BinaryExprUnary(parent, *unaryExpr);
     }
     
     return nullptr;
 }
 
-BinaryExprUnary::BinaryExprUnary(UnaryExpr & expr) :
+BinaryExprUnary::BinaryExprUnary(ASTNode & parent, UnaryExpr & expr) :
+    BinaryExpr(parent),
     mExpr(expr)
 {
     WC_EMPTY_FUNC_BODY();
@@ -62,15 +67,16 @@ llvm::Value * BinaryExprUnary::generateCode(const CodegenCtx & cgCtx) {
     return mExpr.generateCode(cgCtx);
 }
 
-BinaryExprTwoOps::BinaryExprTwoOps(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
+BinaryExprTwoOps::BinaryExprTwoOps(ASTNode & parent, UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
+    BinaryExpr(parent),
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-BinaryExprAdd::BinaryExprAdd(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
-    BinaryExprTwoOps(leftExpr, rightExpr)
+BinaryExprAdd::BinaryExprAdd(ASTNode & parent, UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
+    BinaryExprTwoOps(parent, leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -81,8 +87,8 @@ llvm::Value * BinaryExprAdd::generateCode(const CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateAdd(left, right);
 }
 
-BinaryExprSub::BinaryExprSub(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
-    BinaryExprTwoOps(leftExpr, rightExpr)
+BinaryExprSub::BinaryExprSub(ASTNode & parent, UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
+    BinaryExprTwoOps(parent, leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -93,8 +99,8 @@ llvm::Value * BinaryExprSub::generateCode(const CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateSub(left, right);
 }
 
-BinaryExprMul::BinaryExprMul(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
-    BinaryExprTwoOps(leftExpr, rightExpr)
+BinaryExprMul::BinaryExprMul(ASTNode & parent, UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
+    BinaryExprTwoOps(parent, leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -105,8 +111,8 @@ llvm::Value * BinaryExprMul::generateCode(const CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateMul(left, right);
 }
 
-BinaryExprDiv::BinaryExprDiv(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
-    BinaryExprTwoOps(leftExpr, rightExpr)
+BinaryExprDiv::BinaryExprDiv(ASTNode & parent, UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
+    BinaryExprTwoOps(parent, leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }

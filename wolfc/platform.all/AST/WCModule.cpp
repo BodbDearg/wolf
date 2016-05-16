@@ -10,7 +10,10 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
-Module::Module(llvm::LLVMContext & llvmCtx) : mLLVMCtx(llvmCtx) {
+Module::Module(llvm::LLVMContext & llvmCtx) :
+    ASTNode(nullptr),
+    mLLVMCtx(llvmCtx)
+{
     WC_EMPTY_FUNC_BODY();
 }
 
@@ -20,7 +23,7 @@ Module::~Module() {
 }
 
 bool Module::parseCode(const Token * tokenList) {
-    mScope.reset(Scope::parse(tokenList));
+    mScope.reset(Scope::parse(*this, tokenList));
     WC_GUARD(mScope, false);
     
     if (tokenList->type != TokenType::kEOF) {

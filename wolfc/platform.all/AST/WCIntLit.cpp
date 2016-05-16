@@ -8,18 +8,21 @@ bool IntLit::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kIntLit;
 }
 
-IntLit * IntLit::parse(const Token *& tokenPtr) {
+IntLit * IntLit::parse(ASTNode & parent, const Token *& tokenPtr) {
     if (tokenPtr->type != TokenType::kIntLit) {
         error(*tokenPtr, "Expected integer literal!");
         return nullptr;
     }
     
-    IntLit * intLit = new IntLit(*tokenPtr);
+    IntLit * intLit = new IntLit(parent, *tokenPtr);
     ++tokenPtr;
     return intLit;
 }
 
-IntLit::IntLit(const Token & token) : mToken(token) {
+IntLit::IntLit(ASTNode & parent, const Token & token) :
+    ASTNodeCodegen(parent),
+    mToken(token)
+{
     WC_EMPTY_FUNC_BODY();
 }
 

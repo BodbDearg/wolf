@@ -9,6 +9,8 @@ struct Token;
 /* Abstract base class for all AST nodes. */
 class ASTNode {
 public:
+    ASTNode(ASTNode * parent);
+    
     virtual ~ASTNode();
     
     /* Emit a formatted error message followed by a newline to stderr. */
@@ -19,6 +21,8 @@ public:
      * Line and column information from the given token are added also. 
      */
     static void error(const Token & srcToken, const char * msg, ...);
+    
+    ASTNode * mParent;
 };
 
 WC_END_NAMESPACE

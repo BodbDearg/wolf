@@ -18,13 +18,15 @@ class UnaryExpr : public ASTNodeCodegen {
 public:
     static bool peek(const Token * currentToken);
     
-    static UnaryExpr * parse(const Token *& currentToken);
+    static UnaryExpr * parse(ASTNode & parent, const Token *& currentToken);
+    
+    UnaryExpr(ASTNode & parent);
 };
 
 /* IntLit */
 class UnaryExprIntLit : public UnaryExpr {
 public:
-    UnaryExprIntLit(IntLit & lit);
+    UnaryExprIntLit(ASTNode & parent, IntLit & lit);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
@@ -34,7 +36,7 @@ public:
 /* -IntLit */
 class UnaryExprIntLitNeg : public UnaryExpr {
 public:
-    UnaryExprIntLitNeg(IntLit & lit);
+    UnaryExprIntLitNeg(ASTNode & parent, IntLit & lit);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
@@ -44,13 +46,13 @@ public:
 /* +IntLit */
 class UnaryExprIntLitPos : public UnaryExprIntLit {
 public:
-    UnaryExprIntLitPos(IntLit & lit);
+    UnaryExprIntLitPos(ASTNode & parent, IntLit & lit);
 };
 
 /* (BinaryExpr) */
 class UnaryExprParen : public UnaryExpr {
 public:
-    UnaryExprParen(BinaryExpr & expr);
+    UnaryExprParen(ASTNode & parent, BinaryExpr & expr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     

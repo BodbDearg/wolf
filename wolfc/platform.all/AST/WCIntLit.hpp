@@ -9,9 +9,9 @@ class IntLit : public ASTNodeCodegen {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static IntLit * parse(const Token *& tokenPtr);
+    static IntLit * parse(ASTNode & parent, const Token *& tokenPtr);
     
-    IntLit(const Token & token);
+    IntLit(ASTNode & parent, const Token & token);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     

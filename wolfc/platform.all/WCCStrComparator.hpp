@@ -6,7 +6,7 @@
 WC_BEGIN_NAMESPACE
 
 struct CStrComparator {
-    bool operator()(const char32_t * s1, const char32_t * s2) {
+    bool operator()(const char32_t * s1, const char32_t * s2) const {
         return StringUtils::strcmp(s1, s2) < static_cast<int32_t>(0);
     }
 };

@@ -15,13 +15,15 @@ class Exprs : public ASTNodeCodegen {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static Exprs * parse(const Token *& tokenPtr);
+    static Exprs * parse(ASTNode & parent, const Token *& tokenPtr);
+    
+    Exprs(ASTNode & parent);
 };
 
 /* Expr */
 class ExprsSingle : public Exprs {
 public:
-    ExprsSingle(Expr & expr);
+    ExprsSingle(ASTNode & parent, Expr & expr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
@@ -31,7 +33,7 @@ public:
 /* Expr Exprs */
 class ExprsMulti : public Exprs {
 public:
-    ExprsMulti(Expr & leftExpr, Exprs & rightExprs);
+    ExprsMulti(ASTNode & parent, Expr & leftExpr, Exprs & rightExprs);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     

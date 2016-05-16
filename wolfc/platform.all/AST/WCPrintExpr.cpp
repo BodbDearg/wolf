@@ -14,7 +14,7 @@ bool PrintExpr::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kPrint;
 }
 
-PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
+PrintExpr * PrintExpr::parse(ASTNode & parent, const Token *& tokenPtr) {
     if (tokenPtr->type != TokenType::kPrint) {
         error(*tokenPtr, "Expected keyword 'print'!");
         return nullptr;
@@ -33,10 +33,10 @@ PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
     PrintExpr * parsedPrintExpr = nullptr;
     
     if (StrLit::peek(tokenPtr)) {
-        parsedPrintExpr = PrintExprStrLit::parse(tokenPtr);
+        parsedPrintExpr = PrintExprStrLit::parse(parent, tokenPtr);
     }
     else if (BinaryExpr::peek(tokenPtr)) {
-        parsedPrintExpr = PrintExprBinaryExpr::parse(tokenPtr);
+        parsedPrintExpr = PrintExprBinaryExpr::parse(parent, tokenPtr);
     }
     else {
         error(*tokenPtr, "Unexpected tokens following 'print' and '('! Expect binary expression or string literal!");
@@ -57,13 +57,20 @@ PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
     return parsedPrintExpr;
 }
 
-PrintExprStrLit * PrintExprStrLit::parse(const Token *& tokenPtr) {
-    StrLit * strLit = StrLit::parse(tokenPtr);
-    WC_GUARD(strLit, nullptr);
-    return new PrintExprStrLit(*strLit);
+PrintExpr::PrintExpr(ASTNode & parent) : ASTNodeCodegen(parent) {
+    WC_EMPTY_FUNC_BODY();
 }
 
-PrintExprStrLit::PrintExprStrLit(StrLit & lit) : mLit(lit) {
+PrintExprStrLit * PrintExprStrLit::parse(ASTNode & parent, const Token *& tokenPtr) {
+    StrLit * strLit = StrLit::parse(parent, tokenPtr);
+    WC_GUARD(strLit, nullptr);
+    return new PrintExprStrLit(parent, *strLit);
+}
+
+PrintExprStrLit::PrintExprStrLit(ASTNode & parent, StrLit & lit) :
+    PrintExpr(parent),
+    mLit(lit)
+{
     WC_EMPTY_FUNC_BODY();
 }
 
@@ -91,13 +98,16 @@ llvm::Value * PrintExprStrLit::generateCode(const CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateCall(printfFn, { fmtStr, arg1Val });
 }
 
-PrintExprBinaryExpr * PrintExprBinaryExpr::parse(const Token *& tokenPtr) {
-    BinaryExpr * binaryExpr = BinaryExpr::parse(tokenPtr);
+PrintExprBinaryExpr * PrintExprBinaryExpr::parse(ASTNode & parent, const Token *& tokenPtr) {
+    BinaryExpr * binaryExpr = BinaryExpr::parse(parent, tokenPtr);
     WC_GUARD(binaryExpr, nullptr);
-    return new PrintExprBinaryExpr(*binaryExpr);
+    return new PrintExprBinaryExpr(parent, *binaryExpr);
 }
 
-PrintExprBinaryExpr::PrintExprBinaryExpr(BinaryExpr & expr) : mExpr(expr) {
+PrintExprBinaryExpr::PrintExprBinaryExpr(ASTNode & parent, BinaryExpr & expr) :
+    PrintExpr(parent),
+    mExpr(expr)
+{
     WC_EMPTY_FUNC_BODY();
 }
 

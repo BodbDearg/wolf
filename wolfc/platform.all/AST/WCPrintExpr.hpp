@@ -16,15 +16,17 @@ class PrintExpr : public ASTNodeCodegen {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static PrintExpr * parse(const Token *& tokenPtr);
+    static PrintExpr * parse(ASTNode & parent, const Token *& tokenPtr);
+    
+    PrintExpr(ASTNode & parent);
 };
 
 /* print ( StringLit ) */
 class PrintExprStrLit : public PrintExpr {
 public:
-    static PrintExprStrLit * parse(const Token *& tokenPtr);
+    static PrintExprStrLit * parse(ASTNode & parent, const Token *& tokenPtr);
     
-    PrintExprStrLit(StrLit & lit);
+    PrintExprStrLit(ASTNode & parent, StrLit & lit);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
@@ -34,9 +36,9 @@ public:
 /* print ( BinaryExpr ) */
 class PrintExprBinaryExpr : public PrintExpr {
 public:
-    static PrintExprBinaryExpr * parse(const Token *& tokenPtr);
+    static PrintExprBinaryExpr * parse(ASTNode & parent, const Token *& tokenPtr);
     
-    PrintExprBinaryExpr(BinaryExpr & expr);
+    PrintExprBinaryExpr(ASTNode & parent, BinaryExpr & expr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     

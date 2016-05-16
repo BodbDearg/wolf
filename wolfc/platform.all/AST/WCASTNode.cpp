@@ -5,6 +5,10 @@
 
 WC_BEGIN_NAMESPACE
 
+ASTNode::ASTNode(ASTNode * parent) : mParent(parent) {
+    WC_EMPTY_FUNC_BODY();
+}
+
 ASTNode::~ASTNode() {
     WC_EMPTY_FUNC_BODY();
 }
