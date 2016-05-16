@@ -68,8 +68,8 @@ private:
     /* Try to parse a double quoted string literal. Return false if no string literal was parsed. */
     ParseResult parseDoubleQuotedStringLiteral(char32_t currentChar);
     
-    /* Try to parse some keywords. */
-    ParseResult parseKeywords(char32_t currentChar);
+    /* Try to parse keywords and literals. */
+    ParseResult parseKeywordsAndLiterals(char32_t currentChar);
     
     /* Increase the token list capacity to the given capacity. If smaller than old capacity, nothing happens. */
     void increaseTokenListCapacity(size_t newCapacity);

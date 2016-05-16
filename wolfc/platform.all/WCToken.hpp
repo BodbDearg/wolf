@@ -7,16 +7,31 @@ WC_BEGIN_NAMESPACE
 
 /* Enum representing the type of token */
 enum class TokenType {
-    kEOF,           // End of file token
-    kIntLit,        // Unsigned integer literal, like '01203'
-    kStrLit,        // String literal, like "Hello World"
-    kLParen,        // '('
-    kRParen,        // ')'
-    kPlus,          // '+'
-    kMinus,         // '-'
-    kAsterisk,      // '*'
-    kSlash,         // '/'
-    kPrint,         // print
+    /* End of file token. Always the last token in a sequence */
+    kEOF,
+    /* Unsigned integer literal, like '01203'. The value is stored in the 'data' field as 'intVal'. */
+    kIntLit,
+    /* String literal, like "Hello World". The value is store in the 'data' field as 'strVal'. */
+    kStrLit,
+    /** 
+     * A name/idenifier component for variables, function and class names etc.
+     * The identifeir name is stored in the 'data' field as 'strVal'.
+     */
+    kIdentifier,
+    /* '(' */
+    kLParen,
+    /* ')' */
+    kRParen,
+    /* '+' */
+    kPlus,
+    /* '-' */
+    kMinus,
+    /* '*' */
+    kAsterisk,
+    /* '/' */
+    kSlash,
+    /* print */
+    kPrint,
 };
 
 /**
@@ -40,15 +55,21 @@ struct Token {
     size_t srcCol;
     
     /** 
-     * This holds the actual data for the token. Unused/undefined for anything other than a literal.
+     * This holds the actual data for the token. Unused/undefined for anything other than a literal or identifier.
      * We don't initialize this in all cases for reasons of efficiency.
      */
     union {
+        /* The raw bytes of the data */
         uint8_t rawBytes[16];
+        
+        /* The data when interpreted as a 64-bit int */
         uint64_t intVal;
         
+        /* The data when interpreted as a string */
         struct StrData {
+            /* Pointer to the string */
             char32_t * ptr;
+            /* Length of the string */
             size_t length;
         } strVal;
     } data;

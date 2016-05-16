@@ -58,7 +58,7 @@ bool Lexer::process(const char32_t * srcText) {
         INVOKE_PARSE_FUNC(parseBasicTokens);
         INVOKE_PARSE_FUNC(parseNumericLiteral);
         INVOKE_PARSE_FUNC(parseDoubleQuotedStringLiteral);
-        INVOKE_PARSE_FUNC(parseKeywords);
+        INVOKE_PARSE_FUNC(parseKeywordsAndLiterals);
                                                
         // If we get to here then we have an error
         std::unique_ptr<char[]> charAsUtf8(StringUtils::convertUtf32ToUtf8(&c, 1));
@@ -297,35 +297,80 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral(char32_t currentChar) {
     return ParseResult::kSuccess;
 }
 
-Lexer::ParseResult Lexer::parseKeywords(char32_t currentChar) {
-    // Keywords must start with an alpha
-    WC_GUARD(CharUtils::isAlpha(currentChar), Lexer::ParseResult::kNone);
+Lexer::ParseResult Lexer::parseKeywordsAndLiterals(char32_t currentChar) {
+    // Check start character is ok
+    WC_GUARD(CharUtils::isValidIdentifierStartChar(currentChar), Lexer::ParseResult::kNone);
     
+    // Keep parsing until we reach the end of the literal/keyword
+    const char32_t * parsedStrStartPtr = mLexerState.srcPtr;
+    const char32_t * parsedStrEndPtr = parsedStrStartPtr + 1;
+    
+    while (CharUtils::isValidIdentifierStartChar(parsedStrEndPtr[0])) {
+        ++parsedStrEndPtr;
+    }
+    
+    size_t parsedStrLen = static_cast<size_t>(parsedStrEndPtr - parsedStrStartPtr);
+    
+    // Check for these keywords
     // TODO: this is slow, use some sort of binary search method BST
-    auto parseKeyword = [&](const char32_t * keyword, TokenType tokenType) {
-        // See if the keyword follows
-        WC_GUARD(StringUtils::stringStartsWith(mLexerState.srcPtr, keyword), false);
+    auto parseKeyword  = [&](const char32_t * keywordStr, TokenType keywordTokenType) -> bool {
+        // Compute length of keyword
+        size_t keywordLen = StringUtils::strlen(keywordStr);
         
-        // Must be whitespace or some other non identifier char to delimit end of keyword
-        size_t keywordLen = StringUtils::strlen(keyword);
-        
-        if (!CharUtils::isValidIdentifierMiddleChar(mLexerState.srcPtr[keywordLen])) {
-            // Found a valid keyword: save it as the given token
-            allocToken(tokenType);
-            
-            // Skip these chars
-            consumeNumNonWhiteSpaceChars(keywordLen);
-            return true;
+        // If the lengths do not match then it cannot be this keyword
+        if (keywordLen != parsedStrLen) {
+            return false;
         }
+        
+        // Go through the keyword string and make sure each char matches with the given string
+        const char32_t * parsedStrCurPtr = parsedStrStartPtr;
+        const char32_t * keywordCurPtr = keywordStr;
+        
+        while (true) {
+            // Get the current char in both strings
+            char32_t keywordChar = keywordCurPtr[0];
+            char32_t parsedStrChar = parsedStrCurPtr[0];
             
-        return false;
+            // See if we reached the end of the keyword:
+            if (keywordChar == 0) {
+                break;
+            }
+            
+            // See if we find a mismatch:
+            if (keywordChar != parsedStrChar) {
+                return false;
+            }
+            
+            // Move onto the next chars
+            ++parsedStrCurPtr;
+            ++keywordCurPtr;
+        }
+        
+        // Reached keyword end and both strings match: create a keyword token
+        allocToken(keywordTokenType);
+        
+        // Consume the keyword chars
+        consumeNumNonWhiteSpaceChars(keywordLen);
+        return true;
     };
     
     if (parseKeyword(U"print", TokenType::kPrint)) {
         return ParseResult::kSuccess;
     }
     
-    return ParseResult::kNone;
+    // If we've got to here we are dealing with an identifier. Allocate enough memory to store the
+    // identifier and save:
+    Token & tok = allocToken(TokenType::kIdentifier);
+    tok.data.strVal.ptr = new char32_t[parsedStrLen + 1];
+    std::memcpy(tok.data.strVal.ptr, parsedStrStartPtr, parsedStrLen * sizeof(char32_t));
+    tok.data.strVal.ptr[parsedStrLen] = 0;
+    tok.data.strVal.length = parsedStrLen;
+    
+    // Consume the identifier chars
+    consumeNumNonWhiteSpaceChars(parsedStrLen);
+    
+    // All good!
+    return ParseResult::kSuccess;
 }
 
 void Lexer::increaseTokenListCapacity(size_t newCapacity) {

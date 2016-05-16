@@ -28,7 +28,11 @@ BinaryExpr:
 	UnaryExpr * BinaryExpr
 
 UnaryExpr:
-	IntLit
-	-IntLit
-	+IntLit
+	PrimaryExpr
+	-PrimaryExpr
+	+PrimaryExpr
 	(BinaryExpr)
+
+PrimaryExpr
+    IntLit
+    Identifier
