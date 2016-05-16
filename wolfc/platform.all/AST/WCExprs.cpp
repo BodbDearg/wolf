@@ -8,41 +8,34 @@ bool Exprs::peek(const Token * tokenPtr) {
     return Expr::peek(tokenPtr);
 }
     
-Exprs * Exprs::parse(ASTNode & parent, const Token *& tokenPtr) {
-    Expr * expr = Expr::parse(parent, tokenPtr);
+Exprs * Exprs::parse(const Token *& tokenPtr) {
+    Expr * expr = Expr::parse(tokenPtr);
     WC_GUARD(expr, nullptr);
     
     if (Exprs::peek(tokenPtr)) {
-        Exprs * exprs = Exprs::parse(parent, tokenPtr);
+        Exprs * exprs = Exprs::parse(tokenPtr);
         WC_GUARD(exprs, nullptr);
-        return new ExprsMulti(parent, *expr, *exprs);
+        return new ExprsMulti(*expr, *exprs);
     }
     else {
-        return new ExprsSingle(parent, *expr);
+        return new ExprsSingle(*expr);
     }
 }
 
-Exprs::Exprs(ASTNode & parent) : ASTNodeCodegen(parent) {
-    WC_EMPTY_FUNC_BODY();
-}
-
-ExprsSingle::ExprsSingle(ASTNode & parent, Expr & expr) :
-    Exprs(parent),
-    mExpr(expr)
-{
-    WC_EMPTY_FUNC_BODY();
+ExprsSingle::ExprsSingle(Expr & expr) : mExpr(expr) {
+    mExpr.mParent = this;
 }
     
 llvm::Value * ExprsSingle::generateCode(const CodegenCtx & cgCtx) {
     return mExpr.generateCode(cgCtx);
 };
     
-ExprsMulti::ExprsMulti(ASTNode & parent, Expr & leftExpr, Exprs & rightExprs) :
-    Exprs(parent),
+ExprsMulti::ExprsMulti(Expr & leftExpr, Exprs & rightExprs) :
     mLeftExpr(leftExpr),
     mRightExprs(rightExprs)
 {
-    WC_EMPTY_FUNC_BODY();
+    mLeftExpr.mParent = this;
+    mRightExprs.mParent = this;
 }
 
 llvm::Value * ExprsMulti::generateCode(const CodegenCtx & cgCtx) {

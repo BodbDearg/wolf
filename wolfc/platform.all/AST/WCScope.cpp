@@ -8,17 +8,14 @@ bool Scope::peek(const Token * tokenPtr) {
     return Exprs::peek(tokenPtr);
 }
 
-Scope * Scope::parse(ASTNode & parent, const Token *& tokenPtr) {
-    Exprs * exprs = Exprs::parse(parent, tokenPtr);
+Scope * Scope::parse(const Token *& tokenPtr) {
+    Exprs * exprs = Exprs::parse(tokenPtr);
     WC_GUARD(exprs, nullptr);
-    return new Scope(parent, *exprs);
+    return new Scope(*exprs);
 }
 
-Scope::Scope(ASTNode & parent, Exprs & exprs) :
-    ASTNodeCodegen(parent),
-    mExprs(exprs)
-{
-    WC_EMPTY_FUNC_BODY();
+Scope::Scope(Exprs & exprs) : mExprs(exprs) {
+    mExprs.mParent = this;
 }
 
 llvm::Value * Scope::generateCode(const CodegenCtx & cgCtx) {

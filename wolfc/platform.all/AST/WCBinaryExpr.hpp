@@ -16,17 +16,15 @@ BinaryExpr:
 */
 class BinaryExpr : public ASTNodeCodegen {
 public:
-    BinaryExpr(ASTNode & parent);
-    
     static bool peek(const Token * tokenPtr);
     
-    static BinaryExpr * parse(ASTNode & parent, const Token *& tokenPtr);
+    static BinaryExpr * parse(const Token *& tokenPtr);
 };
 
 /* 'UnaryExpression' */
 class BinaryExprUnary : public BinaryExpr {
 public:
-    BinaryExprUnary(ASTNode & parent, UnaryExpr & expr);
+    BinaryExprUnary(UnaryExpr & expr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
@@ -36,7 +34,7 @@ public:
 /* Base for a two operand binary expression */
 class BinaryExprTwoOps : public BinaryExpr {
 public:
-    BinaryExprTwoOps(ASTNode & parent, UnaryExpr & leftExpr, BinaryExpr & rightExpr);
+    BinaryExprTwoOps(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
     
     UnaryExpr & mLeftExpr;
     BinaryExpr & mRightExpr;
@@ -45,7 +43,7 @@ public:
 /* 'UnaryExpression + BinaryExpression' */
 class BinaryExprAdd : public BinaryExprTwoOps {
 public:
-    BinaryExprAdd(ASTNode & parent, UnaryExpr & leftExpr, BinaryExpr & rightExpr);
+    BinaryExprAdd(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
 };
@@ -53,7 +51,7 @@ public:
 /* 'UnaryExpression - BinaryExpression' */
 class BinaryExprSub : public BinaryExprTwoOps {
 public:
-    BinaryExprSub(ASTNode & parent, UnaryExpr & leftExpr, BinaryExpr & rightExpr);
+    BinaryExprSub(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
 };
@@ -61,7 +59,7 @@ public:
 /* 'UnaryExpression * BinaryExpression' */
 class BinaryExprMul : public BinaryExprTwoOps {
 public:
-    BinaryExprMul(ASTNode & parent, UnaryExpr & leftExpr, BinaryExpr & rightExpr);
+    BinaryExprMul(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
 };
@@ -69,7 +67,7 @@ public:
 /* 'UnaryExpression / BinaryExpression' */
 class BinaryExprDiv : public BinaryExprTwoOps {
 public:
-    BinaryExprDiv(ASTNode & parent, UnaryExpr & leftExpr, BinaryExpr & rightExpr);
+    BinaryExprDiv(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
 };

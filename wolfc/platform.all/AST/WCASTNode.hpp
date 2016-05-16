@@ -9,7 +9,7 @@ struct Token;
 /* Abstract base class for all AST nodes. */
 class ASTNode {
 public:
-    ASTNode(ASTNode * parent);
+    ASTNode();
     
     virtual ~ASTNode();
     

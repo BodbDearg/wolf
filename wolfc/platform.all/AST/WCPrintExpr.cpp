@@ -1,4 +1,5 @@
 #include "WCPrintExpr.hpp"
+#include "WCAssert.hpp"
 #include "WCBinaryExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCStrLit.hpp"
@@ -14,7 +15,7 @@ bool PrintExpr::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kPrint;
 }
 
-PrintExpr * PrintExpr::parse(ASTNode & parent, const Token *& tokenPtr) {
+PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
     if (tokenPtr->type != TokenType::kPrint) {
         error(*tokenPtr, "Expected keyword 'print'!");
         return nullptr;
@@ -33,10 +34,14 @@ PrintExpr * PrintExpr::parse(ASTNode & parent, const Token *& tokenPtr) {
     PrintExpr * parsedPrintExpr = nullptr;
     
     if (StrLit::peek(tokenPtr)) {
-        parsedPrintExpr = PrintExprStrLit::parse(parent, tokenPtr);
+        StrLit * strLit = StrLit::parse(tokenPtr);
+        WC_GUARD_ASSERT(strLit, nullptr);
+        parsedPrintExpr = new PrintExprStrLit(*strLit);
     }
     else if (BinaryExpr::peek(tokenPtr)) {
-        parsedPrintExpr = PrintExprBinaryExpr::parse(parent, tokenPtr);
+        BinaryExpr * binaryExpr = BinaryExpr::parse(tokenPtr);
+        WC_GUARD_ASSERT(binaryExpr, nullptr);
+        parsedPrintExpr = new PrintExprBinaryExpr(*binaryExpr);
     }
     else {
         error(*tokenPtr, "Unexpected tokens following 'print' and '('! Expect binary expression or string literal!");
@@ -57,21 +62,8 @@ PrintExpr * PrintExpr::parse(ASTNode & parent, const Token *& tokenPtr) {
     return parsedPrintExpr;
 }
 
-PrintExpr::PrintExpr(ASTNode & parent) : ASTNodeCodegen(parent) {
-    WC_EMPTY_FUNC_BODY();
-}
-
-PrintExprStrLit * PrintExprStrLit::parse(ASTNode & parent, const Token *& tokenPtr) {
-    StrLit * strLit = StrLit::parse(parent, tokenPtr);
-    WC_GUARD(strLit, nullptr);
-    return new PrintExprStrLit(parent, *strLit);
-}
-
-PrintExprStrLit::PrintExprStrLit(ASTNode & parent, StrLit & lit) :
-    PrintExpr(parent),
-    mLit(lit)
-{
-    WC_EMPTY_FUNC_BODY();
+PrintExprStrLit::PrintExprStrLit(StrLit & lit) : mLit(lit) {
+    mLit.mParent = this;
 }
 
 llvm::Value * PrintExprStrLit::generateCode(const CodegenCtx & cgCtx) {
@@ -98,17 +90,8 @@ llvm::Value * PrintExprStrLit::generateCode(const CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateCall(printfFn, { fmtStr, arg1Val });
 }
 
-PrintExprBinaryExpr * PrintExprBinaryExpr::parse(ASTNode & parent, const Token *& tokenPtr) {
-    BinaryExpr * binaryExpr = BinaryExpr::parse(parent, tokenPtr);
-    WC_GUARD(binaryExpr, nullptr);
-    return new PrintExprBinaryExpr(parent, *binaryExpr);
-}
-
-PrintExprBinaryExpr::PrintExprBinaryExpr(ASTNode & parent, BinaryExpr & expr) :
-    PrintExpr(parent),
-    mExpr(expr)
-{
-    WC_EMPTY_FUNC_BODY();
+PrintExprBinaryExpr::PrintExprBinaryExpr(BinaryExpr & expr) : mExpr(expr) {
+    mExpr.mParent = this;
 }
 
 llvm::Value * PrintExprBinaryExpr::generateCode(const CodegenCtx & cgCtx) {

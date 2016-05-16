@@ -16,9 +16,9 @@ class Scope : public ASTNodeCodegen {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static Scope * parse(ASTNode & parent, const Token *& tokenPtr);
+    static Scope * parse(const Token *& tokenPtr);
     
-    Scope(ASTNode & parent, Exprs & exprs);
+    Scope(Exprs & exprs);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     

@@ -18,29 +18,29 @@ bool UnaryExpr::peek(const Token * currentToken) {
     return false;
 }
 
-UnaryExpr * UnaryExpr::parse(ASTNode & parent, const Token *& currentToken) {
+UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
     switch (currentToken->type) {
         /* UIntLit */
         case TokenType::kIntLit: {
-            IntLit * uintLit = IntLit::parse(parent, currentToken);
+            IntLit * uintLit = IntLit::parse(currentToken);
             WC_GUARD(uintLit, nullptr);
-            return new UnaryExprIntLit(parent, *uintLit);
+            return new UnaryExprIntLit(*uintLit);
         }   break;
             
         /* -IntLit */
         case TokenType::kMinus: {
             ++currentToken; // Skip '-'
-            IntLit * uintLit = IntLit::parse(parent, currentToken);
+            IntLit * uintLit = IntLit::parse(currentToken);
             WC_GUARD(uintLit, nullptr);
-            return new UnaryExprIntLitNeg(parent, *uintLit);
+            return new UnaryExprIntLitNeg(*uintLit);
         }   break;
             
         /* +IntLit */
         case TokenType::kPlus: {
             ++currentToken; // Skip '+'
-            IntLit * uintLit = IntLit::parse(parent, currentToken);
+            IntLit * uintLit = IntLit::parse(currentToken);
             WC_GUARD(uintLit, nullptr);
-            return new UnaryExprIntLitPos(parent, *uintLit);
+            return new UnaryExprIntLitPos(*uintLit);
         }   break;
             
         /* (BinaryExpr) */
@@ -48,7 +48,7 @@ UnaryExpr * UnaryExpr::parse(ASTNode & parent, const Token *& currentToken) {
             const Token * lparenToken = currentToken;
             ++currentToken; // Skip '('
             
-            BinaryExpr * expr = BinaryExpr::parse(parent, currentToken);
+            BinaryExpr * expr = BinaryExpr::parse(currentToken);
             WC_GUARD(expr, nullptr);
             
             if (currentToken->type != TokenType::kRParen) {
@@ -61,7 +61,7 @@ UnaryExpr * UnaryExpr::parse(ASTNode & parent, const Token *& currentToken) {
             }
             
             ++currentToken; // Skip ')'
-            return new UnaryExprParen(parent, *expr);
+            return new UnaryExprParen(*expr);
         }   break;
             
         default:
@@ -72,41 +72,28 @@ UnaryExpr * UnaryExpr::parse(ASTNode & parent, const Token *& currentToken) {
     return nullptr;
 }
 
-UnaryExpr::UnaryExpr(ASTNode & parent) : ASTNodeCodegen(parent) {
-    WC_EMPTY_FUNC_BODY();
-}
-
-UnaryExprIntLit::UnaryExprIntLit(ASTNode & parent, IntLit & lit) :
-    UnaryExpr(parent),
-    mLit(lit)
-{
-    WC_EMPTY_FUNC_BODY();
+UnaryExprIntLit::UnaryExprIntLit(IntLit & lit) : mLit(lit) {
+    mLit.mParent = this;
 }
 
 llvm::Value * UnaryExprIntLit::generateCode(const CodegenCtx & cgCtx) {
     return mLit.generateCode(cgCtx);
 }
 
-UnaryExprIntLitNeg::UnaryExprIntLitNeg(ASTNode & parent, IntLit & lit) :
-    UnaryExpr(parent),
-    mLit(lit)
-{
-    WC_EMPTY_FUNC_BODY();
+UnaryExprIntLitNeg::UnaryExprIntLitNeg(IntLit & lit) : mLit(lit) {
+    mLit.mParent = this;
 }
 
 llvm::Value * UnaryExprIntLitNeg::generateCode(const CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateNeg(mLit.generateCode(cgCtx));
 }
 
-UnaryExprIntLitPos::UnaryExprIntLitPos(ASTNode & parent, IntLit & lit) : UnaryExprIntLit(parent, lit) {
+UnaryExprIntLitPos::UnaryExprIntLitPos(IntLit & lit) : UnaryExprIntLit(lit) {
     WC_EMPTY_FUNC_BODY();
 }
 
-UnaryExprParen::UnaryExprParen(ASTNode & parent, BinaryExpr & expr) :
-    UnaryExpr(parent),
-    mExpr(expr)
-{
-    WC_EMPTY_FUNC_BODY();
+UnaryExprParen::UnaryExprParen(BinaryExpr & expr) : mExpr(expr) {
+    mExpr.mParent = this;
 }
     
 llvm::Value * UnaryExprParen::generateCode(const CodegenCtx & cgCtx) {

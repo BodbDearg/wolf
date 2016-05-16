@@ -9,11 +9,11 @@ bool Expr::peek(const Token * tokenPtr) {
     return PrintExpr::peek(tokenPtr);
 }
     
-Expr * Expr::parse(ASTNode & parent, const Token *& tokenPtr) {
+Expr * Expr::parse(const Token *& tokenPtr) {
     if (PrintExpr::peek(tokenPtr)) {
-        PrintExpr * printExpr = PrintExpr::parse(parent, tokenPtr);
+        PrintExpr * printExpr = PrintExpr::parse(tokenPtr);
         WC_GUARD(printExpr, nullptr);
-        return new ExprPrint(parent, *printExpr);
+        return new ExprPrint(*printExpr);
     }
     // TODO: peek and parse AssignExpr here
     else {
@@ -23,31 +23,20 @@ Expr * Expr::parse(ASTNode & parent, const Token *& tokenPtr) {
     return nullptr;
 }
 
-Expr::Expr(ASTNode & parent) : ASTNodeCodegen(parent) {
-    
-}
-
-ExprPrint::ExprPrint(ASTNode & parent, PrintExpr & expr) :
-    Expr(parent),
-    mExpr(expr)
-{
-    WC_EMPTY_FUNC_BODY();
+ExprPrint::ExprPrint(PrintExpr & expr) : mExpr(expr) {
+    mExpr.mParent = this;
 }
     
 llvm::Value * ExprPrint::generateCode(const CodegenCtx & cgCtx) {
     return mExpr.generateCode(cgCtx);
 }
     
-ExprAssign::ExprAssign(ASTNode & parent, AssignExpr & expr) :
-    Expr(parent),
-    mExpr(expr)
-{
-    WC_EMPTY_FUNC_BODY();
+ExprAssign::ExprAssign(AssignExpr & expr) : mExpr(expr) {
+    #warning IMPLEMENT ME
 }
     
 llvm::Value * ExprAssign::generateCode(const CodegenCtx & cgCtx) {
-    // TODO: implement
-    WC_UNUSED_PARAM(cgCtx);
+    #warning IMPLEMENT ME
     return nullptr;
 }
 

@@ -5,7 +5,7 @@
 
 WC_BEGIN_NAMESPACE
 
-ASTNode::ASTNode(ASTNode * parent) : mParent(parent) {
+ASTNode::ASTNode() : mParent(nullptr) {
     WC_EMPTY_FUNC_BODY();
 }
 
