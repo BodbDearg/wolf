@@ -5,13 +5,13 @@
 WC_BEGIN_NAMESPACE
 
 class BinaryExpr;
-class IntLit;
+class PrimaryExpr;
 
 /*
 UnaryExpr:
-	IntLit
-	-IntLit
-	+IntLit
+	PrimaryExpr
+	-PrimaryExpr
+	+PrimaryExpr
 	(BinaryExpr)
 */
 class UnaryExpr : public ASTNodeCodegen {
@@ -21,30 +21,30 @@ public:
     static UnaryExpr * parse(const Token *& currentToken);
 };
 
-/* IntLit */
-class UnaryExprIntLit : public UnaryExpr {
+/* PrimaryExpr */
+class UnaryExprPrimary : public UnaryExpr {
 public:
-    UnaryExprIntLit(IntLit & lit);
+    UnaryExprPrimary(PrimaryExpr & expr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
-    IntLit & mLit;
+    PrimaryExpr & mExpr;
 };
 
-/* -IntLit */
-class UnaryExprIntLitNeg : public UnaryExpr {
+/* -PrimaryExpr */
+class UnaryExprNegPrimary : public UnaryExpr {
 public:
-    UnaryExprIntLitNeg(IntLit & lit);
+    UnaryExprNegPrimary(PrimaryExpr & expr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
-    IntLit & mLit;
+    PrimaryExpr & mExpr;
 };
 
-/* +IntLit */
-class UnaryExprIntLitPos : public UnaryExprIntLit {
+/* +PrimaryExpr */
+class UnaryExprPosPrimary : public UnaryExprPrimary {
 public:
-    UnaryExprIntLitPos(IntLit & lit);
+    UnaryExprPosPrimary(PrimaryExpr & expr);
 };
 
 /* (BinaryExpr) */

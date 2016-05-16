@@ -1,46 +1,44 @@
 #include "WCUnaryExpr.hpp"
 #include "WCBinaryExpr.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCIntLit.hpp"
+#include "WCPrimaryExpr.hpp"
 #include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
 
 bool UnaryExpr::peek(const Token * currentToken) {
-    if (currentToken->type == TokenType::kIntLit ||
-        currentToken->type == TokenType::kMinus ||
+    /* 
+    -PrimaryExpr
+    +PrimaryExpr
+    (BinaryExpr)
+    */
+    if (currentToken->type == TokenType::kMinus ||
         currentToken->type == TokenType::kPlus ||
         currentToken->type == TokenType::kLParen)
     {
-        return true;
+        return PrimaryExpr::peek(currentToken + 1);
     }
     
-    return false;
+    /* PrimaryExpr */
+    return PrimaryExpr::peek(currentToken);
 }
 
 UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
     switch (currentToken->type) {
-        /* UIntLit */
-        case TokenType::kIntLit: {
-            IntLit * uintLit = IntLit::parse(currentToken);
-            WC_GUARD(uintLit, nullptr);
-            return new UnaryExprIntLit(*uintLit);
-        }   break;
-            
         /* -IntLit */
         case TokenType::kMinus: {
             ++currentToken; // Skip '-'
-            IntLit * uintLit = IntLit::parse(currentToken);
-            WC_GUARD(uintLit, nullptr);
-            return new UnaryExprIntLitNeg(*uintLit);
+            PrimaryExpr * expr = PrimaryExpr::parse(currentToken);
+            WC_GUARD(expr, nullptr);
+            return new UnaryExprNegPrimary(*expr);
         }   break;
             
-        /* +IntLit */
+        /* +PrimaryExpr */
         case TokenType::kPlus: {
             ++currentToken; // Skip '+'
-            IntLit * uintLit = IntLit::parse(currentToken);
-            WC_GUARD(uintLit, nullptr);
-            return new UnaryExprIntLitPos(*uintLit);
+            PrimaryExpr * expr = PrimaryExpr::parse(currentToken);
+            WC_GUARD(expr, nullptr);
+            return new UnaryExprPosPrimary(*expr);
         }   break;
             
         /* (BinaryExpr) */
@@ -49,7 +47,6 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
             ++currentToken; // Skip '('
             
             BinaryExpr * expr = BinaryExpr::parse(currentToken);
-            WC_GUARD(expr, nullptr);
             
             if (currentToken->type != TokenType::kRParen) {
                 error(*currentToken,
@@ -61,34 +58,38 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
             }
             
             ++currentToken; // Skip ')'
+            WC_GUARD(expr, nullptr);
             return new UnaryExprParen(*expr);
         }   break;
             
-        default:
-            break;
+        /* PrimaryExpr */
+        default: {
+            PrimaryExpr * expr = PrimaryExpr::parse(currentToken);
+            WC_GUARD(expr, nullptr);
+            return new UnaryExprPrimary(*expr);
+        }   break;
     }
     
-    error(*currentToken, "Expected Unary Expression!");
-    return nullptr;
+    return nullptr;     // Should never reach here
 }
 
-UnaryExprIntLit::UnaryExprIntLit(IntLit & lit) : mLit(lit) {
-    mLit.mParent = this;
+UnaryExprPrimary::UnaryExprPrimary(PrimaryExpr & expr) : mExpr(expr) {
+    mExpr.mParent = this;
 }
 
-llvm::Value * UnaryExprIntLit::generateCode(const CodegenCtx & cgCtx) {
-    return mLit.generateCode(cgCtx);
+llvm::Value * UnaryExprPrimary::generateCode(const CodegenCtx & cgCtx) {
+    return mExpr.generateCode(cgCtx);
 }
 
-UnaryExprIntLitNeg::UnaryExprIntLitNeg(IntLit & lit) : mLit(lit) {
-    mLit.mParent = this;
+UnaryExprNegPrimary::UnaryExprNegPrimary(PrimaryExpr & expr) : mExpr(expr) {
+    mExpr.mParent = this;
 }
 
-llvm::Value * UnaryExprIntLitNeg::generateCode(const CodegenCtx & cgCtx) {
-    return cgCtx.irBuilder.CreateNeg(mLit.generateCode(cgCtx));
+llvm::Value * UnaryExprNegPrimary::generateCode(const CodegenCtx & cgCtx) {
+    return cgCtx.irBuilder.CreateNeg(mExpr.generateCode(cgCtx));
 }
 
-UnaryExprIntLitPos::UnaryExprIntLitPos(IntLit & lit) : UnaryExprIntLit(lit) {
+UnaryExprPosPrimary::UnaryExprPosPrimary(PrimaryExpr & expr) : UnaryExprPrimary(expr) {
     WC_EMPTY_FUNC_BODY();
 }
 

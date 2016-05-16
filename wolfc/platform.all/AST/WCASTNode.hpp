@@ -4,15 +4,12 @@
 
 WC_BEGIN_NAMESPACE
 
+class Scope;
 struct Token;
 
 /* Abstract base class for all AST nodes. */
 class ASTNode {
 public:
-    ASTNode();
-    
-    virtual ~ASTNode();
-    
     /* Emit a formatted error message followed by a newline to stderr. */
     static void error(const char * msg, ...);
     
@@ -21,6 +18,12 @@ public:
      * Line and column information from the given token are added also. 
      */
     static void error(const Token & srcToken, const char * msg, ...);
+    
+    ASTNode();
+    
+    virtual ~ASTNode();
+    
+    Scope * getParentScope();
     
     ASTNode * mParent;
 };
