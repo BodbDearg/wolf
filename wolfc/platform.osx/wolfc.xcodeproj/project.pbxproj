@@ -86,6 +86,7 @@
 		1F843D1B1CE9474E0065FB7A /* WCLexer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCLexer.hpp; sourceTree = "<group>"; };
 		1F843D1C1CE9474E0065FB7A /* WCToken.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCToken.hpp; sourceTree = "<group>"; };
 		1F843D1E1CE947A80065FB7A /* WCTokenType.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WCTokenType.hpp; sourceTree = "<group>"; };
+		1F843D1F1CE94D9D0065FB7A /* WCCStrComparator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WCCStrComparator.hpp; sourceTree = "<group>"; };
 		1F8BEB2D1CE59BA800A78DDE /* WCScope.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCScope.cpp; sourceTree = "<group>"; };
 		1F8BEB2E1CE59BA800A78DDE /* WCScope.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCScope.hpp; sourceTree = "<group>"; };
 		1F8BEB301CE5A02700A78DDE /* WCAssert.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCAssert.hpp; sourceTree = "<group>"; };
@@ -205,6 +206,7 @@
 				1F8BEB311CE5A02700A78DDE /* WCLogger.cpp */,
 				1F8BEB321CE5A02700A78DDE /* WCLogger.hpp */,
 				1FFD98B71CD9D82A00398CA6 /* WCMacros.hpp */,
+				1F843D1F1CE94D9D0065FB7A /* WCCStrComparator.hpp */,
 				1FFD488B1CDC6A7F0084D66C /* WCStringUtils.cpp */,
 				1FFD488C1CDC6A7F0084D66C /* WCStringUtils.hpp */,
 			);

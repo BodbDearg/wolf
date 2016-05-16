@@ -1,13 +1,16 @@
 #pragma once
 
 #include "WCMacros.hpp"
-#include <cstddef>
+#include <cstdint>
 
 WC_BEGIN_NAMESPACE
 
 namespace StringUtils {
     /* Give the length of the given null terminated utf32 string. */
     size_t strlen(const char32_t * utf32Str);
+    
+    /* Compare two strings lexically. Return 0 if equal. */
+    int32_t strcmp(const char32_t * s1, const char32_t * s2);
     
     /* Tells if the 1st string starts with the 2nd string */
     bool stringStartsWith(const char32_t * s1, const char32_t * s2);

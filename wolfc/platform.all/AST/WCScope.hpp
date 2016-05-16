@@ -1,6 +1,8 @@
 #pragma once
 
 #include "WCASTNodeCodegen.hpp"
+#include "WCCStrComparator.hpp"
+#include <map>
 
 WC_BEGIN_NAMESPACE
 
@@ -21,6 +23,7 @@ public:
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     Exprs & mExprs;
+    std::map<char32_t*, llvm::Value*, CStrComparator> mVariableValues;
 };
 
 WC_END_NAMESPACE

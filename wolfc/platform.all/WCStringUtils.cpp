@@ -4,6 +4,44 @@
 
 WC_BEGIN_NAMESPACE
 
+size_t StringUtils::strlen(const char32_t * utf32Str) {
+    WC_ASSERT(utf32Str);
+    size_t length = 0;
+    
+    while (*utf32Str) {
+        ++utf32Str;
+        ++length;
+    }
+    
+    return length;
+}
+
+int32_t StringUtils::strcmp(const char32_t * s1, const char32_t * s2) {
+    WC_ASSERT(s1);
+    WC_ASSERT(s2);
+    
+    while (true) {
+        char32_t c1 = s1[0];
+        char32_t c2 = s2[0];
+        int32_t diff = static_cast<int32_t>(c1) - static_cast<int32_t>(c2);
+        
+        if (diff != 0) {
+            return diff;
+        }
+        
+        if (c1 == 0) {
+            if (c2 == 0) {
+                break;  // End of both strings
+            }
+        }
+        
+        ++s1;
+        ++s2;
+    }
+    
+    return 0;
+}
+
 bool StringUtils::stringStartsWith(const char32_t * s1, const char32_t * s2) {
     WC_ASSERT(s1);
     WC_ASSERT(s2);
@@ -34,18 +72,6 @@ bool StringUtils::stringStartsWith(const char32_t * s1, const char32_t * s2) {
     }
     
     return true;    // s1 and s2 are same length and equal
-}
-
-size_t StringUtils::strlen(const char32_t * utf32Str) {
-    WC_ASSERT(utf32Str);
-    size_t length = 0;
-    
-    while (*utf32Str) {
-        ++utf32Str;
-        ++length;
-    }
-    
-    return length;
 }
 
 char32_t * StringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf8Bytes) {

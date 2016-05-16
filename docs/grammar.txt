@@ -33,6 +33,6 @@ UnaryExpr:
 	+PrimaryExpr
 	(BinaryExpr)
 
-PrimaryExpr
+PrimaryExpr:
     IntLit
     Identifier
