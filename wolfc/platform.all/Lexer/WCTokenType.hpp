@@ -35,6 +35,12 @@ enum class TokenType {
     /* '/' */
     kSlash,
     
+    /* '=' */
+    kEquals,
+    
+    /* var */
+    kVar,
+    
     /* print */
     kPrint,
 };

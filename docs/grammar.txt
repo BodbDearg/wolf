@@ -10,7 +10,11 @@ Exprs:
 
 Expr:
     PrintExpr
+    VarDecl
     AssignExpr
+
+VarDecl:
+    var Identifier = AssignExpr
 
 AssignExpr:
     BinaryExpr

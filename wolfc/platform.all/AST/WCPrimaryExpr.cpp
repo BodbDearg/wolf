@@ -47,12 +47,29 @@ llvm::Value * PrimaryExprIntLit::generateCode(const CodegenCtx & cgCtx) {
     return mLit.generateCode(cgCtx);
 }
 
+bool PrimaryExprIntLit::isLValue() const {
+    return false;
+}
+
+llvm::Value * PrimaryExprIntLit::codegenAddrOf(const CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    return nullptr;
+}
+
 PrimaryExprIdentifier::PrimaryExprIdentifier(Identifier & identifier) : mIdentifier(identifier) {
     mIdentifier.mParent = this;
 }
 
 llvm::Value * PrimaryExprIdentifier::generateCode(const CodegenCtx & cgCtx) {
     return mIdentifier.generateCode(cgCtx);
+}
+
+llvm::Value * PrimaryExprIdentifier::codegenAddrOf(const CodegenCtx & cgCtx) {
+    return mIdentifier.codegenAddrOf(cgCtx);
+}
+
+bool PrimaryExprIdentifier::isLValue() const {
+    return true;
 }
 
 WC_END_NAMESPACE

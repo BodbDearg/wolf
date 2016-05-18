@@ -60,12 +60,29 @@ llvm::Value * BinaryExprUnary::generateCode(const CodegenCtx & cgCtx) {
     return mExpr.generateCode(cgCtx);
 }
 
+bool BinaryExprUnary::isLValue() const {
+    return mExpr.isLValue();
+}
+
+llvm::Value * BinaryExprUnary::codegenAddrOf(const CodegenCtx & cgCtx) {
+    return mExpr.codegenAddrOf(cgCtx);
+}
+
 BinaryExprTwoOps::BinaryExprTwoOps(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
+}
+
+bool BinaryExprTwoOps::isLValue() const {
+    return false;
+}
+
+llvm::Value * BinaryExprTwoOps::codegenAddrOf(const CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    return nullptr;
 }
 
 BinaryExprAdd::BinaryExprAdd(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :

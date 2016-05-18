@@ -81,6 +81,14 @@ llvm::Value * UnaryExprPrimary::generateCode(const CodegenCtx & cgCtx) {
     return mExpr.generateCode(cgCtx);
 }
 
+bool UnaryExprPrimary::isLValue() const {
+    return mExpr.isLValue();
+}
+
+llvm::Value * UnaryExprPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
+    return mExpr.codegenAddrOf(cgCtx);
+}
+
 UnaryExprNegPrimary::UnaryExprNegPrimary(PrimaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -89,8 +97,24 @@ llvm::Value * UnaryExprNegPrimary::generateCode(const CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateNeg(mExpr.generateCode(cgCtx));
 }
 
+bool UnaryExprNegPrimary::isLValue() const {
+    return false;
+}
+
+llvm::Value * UnaryExprNegPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
+    return mExpr.codegenAddrOf(cgCtx);
+}
+
 UnaryExprPosPrimary::UnaryExprPosPrimary(PrimaryExpr & expr) : UnaryExprPrimary(expr) {
     WC_EMPTY_FUNC_BODY();
+}
+
+bool UnaryExprPosPrimary::isLValue() const {
+    return false;
+}
+
+llvm::Value * UnaryExprPosPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
+    return mExpr.codegenAddrOf(cgCtx);
 }
 
 UnaryExprParen::UnaryExprParen(BinaryExpr & expr) : mExpr(expr) {
@@ -99,6 +123,14 @@ UnaryExprParen::UnaryExprParen(BinaryExpr & expr) : mExpr(expr) {
     
 llvm::Value * UnaryExprParen::generateCode(const CodegenCtx & cgCtx) {
     return mExpr.generateCode(cgCtx);
+}
+
+bool UnaryExprParen::isLValue() const {
+    return mExpr.isLValue();
+}
+
+llvm::Value * UnaryExprParen::codegenAddrOf(const CodegenCtx & cgCtx) {
+    return mExpr.codegenAddrOf(cgCtx);
 }
 
 WC_END_NAMESPACE

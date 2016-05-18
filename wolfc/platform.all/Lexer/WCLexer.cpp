@@ -140,6 +140,11 @@ Lexer::ParseResult Lexer::parseBasicTokens(char32_t currentChar) {
             consumeNumNonWhiteSpaceChars(1);
             return ParseResult::kSuccess;
             
+        case '=':
+            allocToken(TokenType::kEquals);
+            consumeNumNonWhiteSpaceChars(1);
+            return ParseResult::kSuccess;
+            
         default:
             break;
     }
@@ -354,7 +359,9 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals(char32_t currentChar) {
         return true;
     };
     
-    if (parseKeyword(U"print", TokenType::kPrint)) {
+    if (parseKeyword(U"print", TokenType::kPrint) ||
+        parseKeyword(U"var", TokenType::kVar))
+    {
         return ParseResult::kSuccess;
     }
     

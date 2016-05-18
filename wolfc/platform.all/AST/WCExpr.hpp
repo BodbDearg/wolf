@@ -6,10 +6,12 @@ WC_BEGIN_NAMESPACE
 
 class PrintExpr;
 class AssignExpr;
+class VarDecl;
 
 /*
 Expr:
     PrintExpr
+    VarDecl
     AssignExpr
 */
 class Expr : public ASTNodeCodegen {
@@ -27,6 +29,16 @@ public:
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     PrintExpr & mExpr;
+};
+
+/* ExprVarDecl */
+class ExprVarDecl : public Expr {
+public:
+    ExprVarDecl(VarDecl & decl);
+    
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    
+    VarDecl & mDecl;
 };
 
 /* ExprAssign */

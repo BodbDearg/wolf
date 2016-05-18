@@ -1,7 +1,10 @@
 #include "WCIdentifier.hpp"
+#include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCScope.hpp"
+#include "WCStringUtils.hpp"
 #include "WCToken.hpp"
+#include <memory>
 
 WC_BEGIN_NAMESPACE
 
@@ -25,14 +28,33 @@ Identifier::Identifier(const Token & token) : mToken(token) {
 }
 
 llvm::Value * Identifier::generateCode(const CodegenCtx & cgCtx) {
+    // Grab the parent scope, there should always be one
     Scope * parentScope = getParentScope();
+    WC_GUARD_ASSERT(parentScope, nullptr);
     
-    if (!parentScope) {
-        error("Can't codegen, no parent scope!");
-        return nullptr;
+    // Grab the variable
+    llvm::Value * value = parentScope->getVariable(mToken.data.strVal.ptr);
+    
+    if (!value) {
+        std::unique_ptr<char[]> identifierNameUtf8(StringUtils::convertUtf32ToUtf8(mToken.data.strVal.ptr,
+                                                                                   mToken.data.strVal.length));
+        
+        error("No variable named '%s' in the current scope!", identifierNameUtf8.get());
     }
     
-    return parentScope->getOrCreateVariable(mToken.data.strVal.ptr, cgCtx);
+    // Create an instruction to load it
+    return cgCtx.irBuilder.CreateLoad(value);
+}
+
+llvm::Value * Identifier::codegenAddrOf(const CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    Scope * parentScope = getParentScope();
+    WC_GUARD_ASSERT(parentScope, nullptr);
+    return parentScope->getVariable(mToken.data.strVal.ptr);
+}
+
+char * Identifier::getUtf8Name() const {
+    return StringUtils::convertUtf32ToUtf8(mToken.data.strVal.ptr, mToken.data.strVal.length);
 }
 
 WC_END_NAMESPACE

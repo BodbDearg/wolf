@@ -19,6 +19,15 @@ public:
     static bool peek(const Token * currentToken);
     
     static UnaryExpr * parse(const Token *& currentToken);
+    
+    /**
+     * Tell if this expression evaluates to an lvalue. lvalues are values that can be asssigned to.
+     * See lvalues versus rvalues: https://msdn.microsoft.com/en-us/library/f90831hc.aspx
+     */
+    virtual bool isLValue() const = 0;
+    
+    /* Codegen the llvm value that represents the address of this expression. Only possible for lvalues! */
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) = 0;
 };
 
 /* PrimaryExpr */
@@ -29,6 +38,10 @@ public:
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     PrimaryExpr & mExpr;
+    
+    virtual bool isLValue() const override;
+    
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
 };
 
 /* -PrimaryExpr */
@@ -38,6 +51,10 @@ public:
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
+    virtual bool isLValue() const override;
+    
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
     PrimaryExpr & mExpr;
 };
 
@@ -45,6 +62,10 @@ public:
 class UnaryExprPosPrimary : public UnaryExprPrimary {
 public:
     UnaryExprPosPrimary(PrimaryExpr & expr);
+    
+    virtual bool isLValue() const override;
+    
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
 };
 
 /* (BinaryExpr) */
@@ -53,6 +74,10 @@ public:
     UnaryExprParen(BinaryExpr & expr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    
+    virtual bool isLValue() const override;
+    
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
     BinaryExpr & mExpr;
 };

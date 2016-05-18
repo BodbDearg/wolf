@@ -19,6 +19,15 @@ public:
     static bool peek(const Token * tokenPtr);
     
     static BinaryExpr * parse(const Token *& tokenPtr);
+    
+    /**
+     * Tell if this expression evaluates to an lvalue. lvalues are values that can be asssigned to.
+     * See lvalues versus rvalues: https://msdn.microsoft.com/en-us/library/f90831hc.aspx
+     */
+    virtual bool isLValue() const = 0;
+    
+    /* Codegen the llvm value that represents the address of this expression. Only possible for lvalues! */
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) = 0;
 };
 
 /* 'UnaryExpression' */
@@ -28,6 +37,10 @@ public:
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
+    virtual bool isLValue() const override;
+    
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
     UnaryExpr & mExpr;
 };
 
@@ -35,6 +48,10 @@ public:
 class BinaryExprTwoOps : public BinaryExpr {
 public:
     BinaryExprTwoOps(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
+    
+    virtual bool isLValue() const override;
+    
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
     UnaryExpr & mLeftExpr;
     BinaryExpr & mRightExpr;

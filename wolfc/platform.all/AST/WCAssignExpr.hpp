@@ -4,19 +4,18 @@
 
 WC_BEGIN_NAMESPACE
 
-class IntLit;
-class Identifier;
+class BinaryExpr;
 
 /*
-PrimaryExpr:
-    IntLit
-    Identifier
+AssignExpr:
+    BinaryExpr
+    BinaryExpr = AssignExpr
 */
-class PrimaryExpr : public ASTNodeCodegen {
+class AssignExpr : public ASTNodeCodegen {
 public:
-    static bool peek(const Token * currentToken);
+    static bool peek(const Token * tokenPtr);
     
-    static PrimaryExpr * parse(const Token *& currentToken);
+    static AssignExpr * parse(const Token *& tokenPtr);
     
     /**
      * Tell if this expression evaluates to an lvalue. lvalues are values that can be asssigned to.
@@ -28,10 +27,10 @@ public:
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) = 0;
 };
 
-/* IntLit */
-class PrimaryExprIntLit : public PrimaryExpr {
+/* BinaryExpr */
+class AssignExprNoAssign : public AssignExpr {
 public:
-    PrimaryExprIntLit(IntLit & lit);
+    AssignExprNoAssign(BinaryExpr & expr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
@@ -39,13 +38,13 @@ public:
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
-    IntLit & mLit;
+    BinaryExpr & mExpr;
 };
 
-/* Identifier */
-class PrimaryExprIdentifier : public PrimaryExpr {
+/* BinaryExpr = AssignExpr */
+class AssignExprAssign : public AssignExpr {
 public:
-    PrimaryExprIdentifier(Identifier & identifier);
+    AssignExprAssign(BinaryExpr & leftExpr, AssignExpr & rightExpr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
@@ -53,7 +52,8 @@ public:
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
-    Identifier & mIdentifier;
+    BinaryExpr & mLeftExpr;
+    AssignExpr & mRightExpr;
 };
 
 WC_END_NAMESPACE

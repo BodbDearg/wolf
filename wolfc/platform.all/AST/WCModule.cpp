@@ -70,7 +70,9 @@ bool Module::generateCode() {
     irBuilder.SetInsertPoint(mainBlock);
     
     // Generate the code
-    mScope->generateCode(CodegenCtx(mLLVMCtx, irBuilder, *mLLVMMod));
+    if (!mScope->generateCode(CodegenCtx(mLLVMCtx, irBuilder, *mLLVMMod))) {
+        return false;
+    }
     
     // Return 0 for success
     irBuilder.CreateRet(llvm::ConstantInt::get(llvm::Type::getInt32Ty(mLLVMCtx), 0));
