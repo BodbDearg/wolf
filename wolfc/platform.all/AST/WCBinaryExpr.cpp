@@ -125,7 +125,9 @@ BinaryExprAdd::BinaryExprAdd(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
 
 llvm::Value * BinaryExprAdd::generateCode(const CodegenCtx & cgCtx) {
     llvm::Value * left = mLeftExpr.generateCode(cgCtx);
+    WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.generateCode(cgCtx);
+    WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateAdd(left, right);
 }
 
@@ -141,7 +143,9 @@ BinaryExprSub::BinaryExprSub(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
 
 llvm::Value * BinaryExprSub::generateCode(const CodegenCtx & cgCtx) {
     llvm::Value * left = mLeftExpr.generateCode(cgCtx);
+    WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.generateCode(cgCtx);
+    WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateSub(left, right);
 }
 
@@ -157,7 +161,9 @@ BinaryExprMul::BinaryExprMul(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
 
 llvm::Value * BinaryExprMul::generateCode(const CodegenCtx & cgCtx) {
     llvm::Value * left = mLeftExpr.generateCode(cgCtx);
+    WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.generateCode(cgCtx);
+    WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateMul(left, right);
 }
 
@@ -173,7 +179,9 @@ BinaryExprDiv::BinaryExprDiv(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
 
 llvm::Value * BinaryExprDiv::generateCode(const CodegenCtx & cgCtx) {
     llvm::Value * left = mLeftExpr.generateCode(cgCtx);
+    WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.generateCode(cgCtx);
+    WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateSDiv(left, right);
 }
 

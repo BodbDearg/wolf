@@ -48,6 +48,7 @@ llvm::Value * Identifier::generateCode(const CodegenCtx & cgCtx) {
                                                                                    mToken.data.strVal.length));
         
         compileError("No variable named '%s' in the current scope!", identifierNameUtf8.get());
+        return nullptr;
     }
     
     // Create an instruction to load it
