@@ -1,6 +1,7 @@
 #include "WCExprs.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCExpr.hpp"
+#include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -13,10 +14,17 @@ bool Exprs::peek(const Token * tokenPtr) {
 }
     
 Exprs * Exprs::parse(const Token *& tokenPtr) {
+    const Token * startTok = tokenPtr;
     Expr * expr = Expr::parse(tokenPtr);
     WC_GUARD(expr, nullptr);
     
     if (Exprs::peek(tokenPtr)) {
+        if (tokenPtr->srcLine <= startTok->srcLine) {
+            // TODO: support semi colon for multiple expressions per line
+            parseError(*tokenPtr, "Multiple expressions are not allowed on one line!");
+            return nullptr;
+        }
+        
         Exprs * exprs = Exprs::parse(tokenPtr);
         WC_GUARD(exprs, nullptr);
         return new ExprsMulti(*expr, *exprs);
