@@ -10,14 +10,11 @@ struct Token;
 /* Abstract base class for all AST nodes. */
 class ASTNode {
 public:
-    /* Emit a formatted error message followed by a newline to stderr. */
-    static void error(const char * msg, ...);
-    
     /**
-     * Emit a formatted error message followed by a newline to stderr.
-     * Line and column information from the given token are added also. 
+     * Emit a formatted error message followed by a newline to stderr for a parse error at the given token.
+     * Line and column information from the given token are added also.
      */
-    static void error(const Token & srcToken, const char * msg, ...);
+    static void parseError(const Token & srcToken, const char * msg, ...);
     
     ASTNode();
     
@@ -31,6 +28,12 @@ public:
     
     /* Figure out what the parent scope AST node of this node is. */
     Scope * getParentScope();
+    
+    /**
+     * Emit a formatted error message followed by a newline to stderr for a compile error.
+     * The line and column information for this node are output also.
+     */
+    void compileError(const char * msg, ...);
     
     /* The parent of this AST node. This should be set by the parent itself in the constructor. */
     ASTNode * mParent;

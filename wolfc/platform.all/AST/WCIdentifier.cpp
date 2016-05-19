@@ -14,7 +14,7 @@ bool Identifier::peek(const Token * tokenPtr) {
 
 Identifier * Identifier::parse(const Token *& tokenPtr) {
     if (tokenPtr->type != TokenType::kIdentifier) {
-        error(*tokenPtr, "Expected identifier!");
+        parseError(*tokenPtr, "Expected identifier!");
         return nullptr;
     }
     
@@ -47,7 +47,7 @@ llvm::Value * Identifier::generateCode(const CodegenCtx & cgCtx) {
         std::unique_ptr<char[]> identifierNameUtf8(StringUtils::convertUtf32ToUtf8(mToken.data.strVal.ptr,
                                                                                    mToken.data.strVal.length));
         
-        error("No variable named '%s' in the current scope!", identifierNameUtf8.get());
+        compileError("No variable named '%s' in the current scope!", identifierNameUtf8.get());
     }
     
     // Create an instruction to load it

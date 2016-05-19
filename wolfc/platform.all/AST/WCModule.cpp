@@ -35,7 +35,7 @@ bool Module::parseCode(const Token * tokenList) {
     mScope->mParent = this;
     
     if (tokenList->type != TokenType::kEOF) {
-        error(*tokenList, "Expected EOF after scope!");
+        parseError(*tokenList, "Expected EOF after scope!");
         mScope.reset();
         return false;
     }
@@ -48,7 +48,7 @@ bool Module::generateCode() {
     mLLVMMod.reset();
     
     if (!mScope) {
-        error("Can't generate code, parsing was not successful!");
+        compileError("Can't generate code, parsing was not successful!");
         return false;
     }
     

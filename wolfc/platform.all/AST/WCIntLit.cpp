@@ -10,7 +10,7 @@ bool IntLit::peek(const Token * tokenPtr) {
 
 IntLit * IntLit::parse(const Token *& tokenPtr) {
     if (tokenPtr->type != TokenType::kIntLit) {
-        error(*tokenPtr, "Expected integer literal!");
+        parseError(*tokenPtr, "Expected integer literal!");
         return nullptr;
     }
     

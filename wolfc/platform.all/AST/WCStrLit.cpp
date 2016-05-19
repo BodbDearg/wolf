@@ -12,7 +12,7 @@ bool StrLit::peek(const Token * tokenPtr) {
 
 StrLit * StrLit::parse(const Token *& tokenPtr) {
     if (tokenPtr->type != TokenType::kStrLit) {
-        error(*tokenPtr, "Expected string literal!");
+        parseError(*tokenPtr, "Expected string literal!");
         return nullptr;
     }
     

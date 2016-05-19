@@ -54,10 +54,10 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
             BinaryExpr * expr = BinaryExpr::parse(currentToken);
             
             if (currentToken->type != TokenType::kRParen) {
-                error(*currentToken,
-                      "Expected closing ')' to match '(' at line %zu and column %zu!",
-                      lparenTok->srcLine,
-                      lparenTok->srcCol);
+                parseError(*currentToken,
+                           "Expected closing ')' to match '(' at line %zu and column %zu!",
+                           lparenTok->srcLine,
+                           lparenTok->srcCol);
                 
                 return nullptr;
             }

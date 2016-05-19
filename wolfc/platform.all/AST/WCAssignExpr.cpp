@@ -84,8 +84,7 @@ const Token & AssignExprAssign::getEndToken() const {
 llvm::Value * AssignExprAssign::generateCode(const CodegenCtx & cgCtx) {
     // Left side of expression must be an lvalue!
     if (!mLeftExpr.isLValue()) {
-        // TODO: we need line number info here!!
-        error("Can't assign to an rvalue!");
+        compileError("Can't assign to an rvalue!");
         return nullptr;
     }
     

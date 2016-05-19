@@ -21,7 +21,7 @@ bool PrintExpr::peek(const Token * tokenPtr) {
 
 PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
     if (tokenPtr->type != TokenType::kPrint) {
-        error(*tokenPtr, "Expected keyword 'print'!");
+        parseError(*tokenPtr, "Expected keyword 'print'!");
         return nullptr;
     }
     
@@ -29,7 +29,7 @@ PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
     ++tokenPtr;     // Consume 'print'
     
     if (tokenPtr->type != TokenType::kLParen) {
-        error(*tokenPtr, "Expected '(' following 'print'!");
+        parseError(*tokenPtr, "Expected '(' following 'print'!");
         return nullptr;
     }
     
@@ -43,7 +43,7 @@ PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
         
         // Expect ')' following that:
         if (tokenPtr->type != TokenType::kRParen) {
-            error(*tokenPtr, "Expected closing ')' for 'print()' expression!");
+            parseError(*tokenPtr, "Expected closing ')' for 'print()' expression!");
             return nullptr;
         }
         
@@ -59,7 +59,7 @@ PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
         
         // Expect ')' following all that:
         if (tokenPtr->type != TokenType::kRParen) {
-            error(*tokenPtr, "Expected closing ')' for 'print()' expression!");
+            parseError(*tokenPtr, "Expected closing ')' for 'print()' expression!");
             return nullptr;
         }
         
@@ -69,7 +69,7 @@ PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
         return new PrintExprBinaryExpr(*printTok, *closingParenTok, *binaryExpr);
     }
     else {
-        error(*tokenPtr, "Unexpected tokens following 'print' and '('! Expect binary expression or string literal!");
+        parseError(*tokenPtr, "Unexpected tokens following 'print' and '('! Expect binary expression or string literal!");
         return nullptr;
     }
     
@@ -108,7 +108,7 @@ llvm::Value * PrintExprStrLit::generateCode(const CodegenCtx & cgCtx) {
     llvm::Constant * printfFn = cgCtx.module.getFunction("printf");
     
     if (!printfFn) {
-        error("Codegen failed! Can't find 'printf' function!");
+        compileError("Codegen failed! Can't find 'printf' function!");
         return nullptr;
     }
     
@@ -119,7 +119,7 @@ llvm::Value * PrintExprStrLit::generateCode(const CodegenCtx & cgCtx) {
     llvm::Value * arg1Val = mLit.generateCode(cgCtx);
     
     if (!arg1Val) {
-        error("Codegen failed! Can't generate code for string literal!");
+        compileError("Codegen failed! Can't generate code for string literal!");
         return nullptr;
     }
     
@@ -143,7 +143,7 @@ llvm::Value * PrintExprBinaryExpr::generateCode(const CodegenCtx & cgCtx) {
     llvm::Constant * printfFn = cgCtx.module.getFunction("printf");
     
     if (!printfFn) {
-        error("Codegen failed! Can't find 'printf' function!");
+        compileError("Codegen failed! Can't find 'printf' function!");
         return nullptr;
     }
     
@@ -154,7 +154,7 @@ llvm::Value * PrintExprBinaryExpr::generateCode(const CodegenCtx & cgCtx) {
     llvm::Value * arg1Val = mExpr.generateCode(cgCtx);
     
     if (!arg1Val) {
-        error("Codegen failed! Can't generate code for binary expression!");
+        compileError("Codegen failed! Can't generate code for binary expression!");
         return nullptr;
     }
     

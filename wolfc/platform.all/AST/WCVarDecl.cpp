@@ -15,7 +15,7 @@ VarDecl * VarDecl::parse(const Token *& tokenPtr) {
     // Parse 'var' keyword
     if (tokenPtr->type != TokenType::kVar) {
         // TODO: add 'let' to docs here?
-        error(*tokenPtr, "Expected keyword 'var' at start of variable declaration!");
+        parseError(*tokenPtr, "Expected keyword 'var' at start of variable declaration!");
         return nullptr;
     }
     
@@ -28,7 +28,7 @@ VarDecl * VarDecl::parse(const Token *& tokenPtr) {
     
     // Parse the '='
     if (tokenPtr->type != TokenType::kEquals) {
-        error(*tokenPtr, "Expected '=' following variable name for variable declaration!");
+        parseError(*tokenPtr, "Expected '=' following variable name for variable declaration!");
         return nullptr;
     }
     
@@ -62,7 +62,7 @@ llvm::Value * VarDecl::generateCode(const CodegenCtx & cgCtx) {
     Scope * parentScope = getParentScope();
     
     if (!parentScope) {
-        error("Can't codegen, no parent scope!");
+        compileError("Can't codegen, no parent scope!");
         return nullptr;
     }
     
@@ -70,14 +70,14 @@ llvm::Value * VarDecl::generateCode(const CodegenCtx & cgCtx) {
     llvm::Value * leftValue = parentScope->getVariable(mIdent.mToken.data.strVal.ptr);
     
     if (leftValue) {
-        error("The variable '%s' has been redefined!", std::unique_ptr<char[]>(mIdent.getUtf8Name()).get());
+        compileError("The variable '%s' has been redefined!", std::unique_ptr<char[]>(mIdent.getUtf8Name()).get());
         return nullptr;
     }
         
     leftValue = parentScope->getOrCreateVariable(mIdent.mToken.data.strVal.ptr, cgCtx);
     
     if (!leftValue) {
-        error("Can't codegen, unable to allocate room for variable!");
+        compileError("Can't codegen, unable to allocate room for variable!");
         return nullptr;
     }
     

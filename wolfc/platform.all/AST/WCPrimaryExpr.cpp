@@ -39,7 +39,7 @@ PrimaryExpr * PrimaryExpr::parse(const Token *& currentToken) {
             break;
     }
     
-    error(*currentToken, "Expected primary expression!");
+    parseError(*currentToken, "Expected primary expression!");
     return nullptr;
 }
 
