@@ -26,6 +26,12 @@ struct Token {
     /* Column in the source where the token starts, with 0 being the first column */
     size_t srcCol;
     
+    /**
+     * Length of the token that was parsed. Note that for string literals this does NOT equate to the string
+     * length. This is just the length of the string (in characters) that was parsed to make the token.
+     */
+    size_t srcLength;
+    
     /** 
      * This holds the actual data for the token. Unused/undefined for anything other than a literal or identifier.
      * We don't initialize this in all cases for reasons of efficiency.

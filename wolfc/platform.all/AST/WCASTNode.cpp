@@ -55,7 +55,7 @@ void ASTNode::compileError(const char * msg, ...) {
                  startToken.srcLine + 1,
                  startToken.srcCol + 1,
                  endToken.srcLine + 1,
-                 endToken.srcCol + 1);
+                 endToken.srcCol + 1 + endToken.srcLength);
     
     // Specific error info
     std::va_list args;

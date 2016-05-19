@@ -67,7 +67,7 @@ bool Lexer::process(const char32_t * srcText) {
     }
     
     // Now add in the end of file token and return true for success
-    allocToken(TokenType::kEOF);
+    allocToken(TokenType::kEOF, 0);
     return true;
 }
 
@@ -111,37 +111,37 @@ void Lexer::consumeNumNonWhiteSpaceChars(size_t numChars) {
 Lexer::ParseResult Lexer::parseBasicTokens(char32_t currentChar) {
     switch (currentChar) {
         case '(':
-            allocToken(TokenType::kLParen);
+            allocToken(TokenType::kLParen, 1);
             consumeNumNonWhiteSpaceChars(1);
             return ParseResult::kSuccess;
             
         case ')':
-            allocToken(TokenType::kRParen);
+            allocToken(TokenType::kRParen, 1);
             consumeNumNonWhiteSpaceChars(1);
             return ParseResult::kSuccess;
             
         case '+':
-            allocToken(TokenType::kPlus);
+            allocToken(TokenType::kPlus, 1);
             consumeNumNonWhiteSpaceChars(1);
             return ParseResult::kSuccess;
             
         case '-':
-            allocToken(TokenType::kMinus);
+            allocToken(TokenType::kMinus, 1);
             consumeNumNonWhiteSpaceChars(1);
             return ParseResult::kSuccess;
             
         case '*':
-            allocToken(TokenType::kAsterisk);
+            allocToken(TokenType::kAsterisk, 1);
             consumeNumNonWhiteSpaceChars(1);
             return ParseResult::kSuccess;
             
         case '/':
-            allocToken(TokenType::kSlash);
+            allocToken(TokenType::kSlash, 1);
             consumeNumNonWhiteSpaceChars(1);
             return ParseResult::kSuccess;
             
         case '=':
-            allocToken(TokenType::kEquals);
+            allocToken(TokenType::kEquals, 1);
             consumeNumNonWhiteSpaceChars(1);
             return ParseResult::kSuccess;
             
@@ -157,12 +157,12 @@ Lexer::ParseResult Lexer::parseNumericLiteral(char32_t currentChar) {
     WC_GUARD(CharUtils::isDigit(currentChar), ParseResult::kNone);
     
     // Continue until the end of the numeric literal
-    const char32_t * startCharPtr = mLexerState.srcPtr;
-    const char32_t * endCharPtr = startCharPtr + 1;
+    const char32_t * tokStart = mLexerState.srcPtr;
+    const char32_t * tokEnd = tokStart + 1;
     
-    while ((currentChar = endCharPtr[0])) {
+    while ((currentChar = tokEnd[0])) {
         if (CharUtils::isDigit(currentChar)) {
-            ++endCharPtr;
+            ++tokEnd;
         }
         else {
             break;
@@ -170,14 +170,14 @@ Lexer::ParseResult Lexer::parseNumericLiteral(char32_t currentChar) {
     }
     
     // Skip these in the parser
-    size_t numNumericChars = static_cast<size_t>(endCharPtr - startCharPtr);
+    size_t numNumericChars = static_cast<size_t>(tokEnd - tokStart);
     consumeNumNonWhiteSpaceChars(numNumericChars);
     
     // Parse the number itself
-    const char32_t * currentCharPtr = startCharPtr;
+    const char32_t * currentCharPtr = tokStart;
     uint64_t value = 0;
     
-    while (currentCharPtr != endCharPtr) {
+    while (currentCharPtr != tokEnd) {
         // TODO: check for numeric overflow
         uint64_t digit = currentCharPtr[0] - '0';
         value = value * 10 + digit;
@@ -185,7 +185,7 @@ Lexer::ParseResult Lexer::parseNumericLiteral(char32_t currentChar) {
     }
     
     // Now make the token and finish up
-    Token & token = allocToken(TokenType::kIntLit);
+    Token & token = allocToken(TokenType::kIntLit, static_cast<size_t>(tokEnd - tokStart));
     token.data.intVal = value;
     return ParseResult::kSuccess;
 }
@@ -195,6 +195,7 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral(char32_t currentChar) {
     WC_GUARD(currentChar == '"', ParseResult::kNone);
     
     // Alright skip the opening '"'
+    const char32_t * tokStart = mLexerState.srcPtr;
     consumeNumNonWhiteSpaceChars(1);
     const char32_t * strStart = mLexerState.srcPtr;
     
@@ -227,13 +228,14 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral(char32_t currentChar) {
     
     // Skip the end '"'
     consumeNumNonWhiteSpaceChars(1);
+    const char32_t * tokEnd = mLexerState.srcPtr;
     
     // Compute the size of the buffer we need to hold the string in:
     size_t strBufferSize = static_cast<size_t>(strEnd - strStart + 1);
     
     // Allocate a token and the buffer to hold the string
     // TODO: what manages this memory?
-    Token & tok = allocToken(TokenType::kStrLit);
+    Token & tok = allocToken(TokenType::kStrLit, size_t(tokEnd - tokStart));
     tok.data.strVal.ptr = new char32_t[strBufferSize];
     char32_t * decodedStrPtr = tok.data.strVal.ptr;
     
@@ -352,7 +354,7 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals(char32_t currentChar) {
         }
         
         // Reached keyword end and both strings match: create a keyword token
-        allocToken(keywordTokenType);
+        allocToken(keywordTokenType, keywordLen);
         
         // Consume the keyword chars
         consumeNumNonWhiteSpaceChars(keywordLen);
@@ -367,7 +369,7 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals(char32_t currentChar) {
     
     // If we've got to here we are dealing with an identifier. Allocate enough memory to store the
     // identifier and save:
-    Token & tok = allocToken(TokenType::kIdentifier);
+    Token & tok = allocToken(TokenType::kIdentifier, parsedStrLen);
     tok.data.strVal.ptr = new char32_t[parsedStrLen + 1];
     std::memcpy(tok.data.strVal.ptr, parsedStrStartPtr, parsedStrLen * sizeof(char32_t));
     tok.data.strVal.ptr[parsedStrLen] = 0;
@@ -386,7 +388,7 @@ void Lexer::increaseTokenListCapacity(size_t newCapacity) {
     mTokenList = reinterpret_cast<Token*>(std::realloc(mTokenList, mTokenCapacity * sizeof(Token)));
 }
 
-Token & Lexer::allocToken(TokenType tokenType) {
+Token & Lexer::allocToken(TokenType tokenType, size_t tokenSrcLength) {
     // If not enough room, grow capacity according to the Golden ratio (approx 1.6) and add 1 to ensure we alloc at least one token.
     if (mTokenCount + 1 > mTokenCapacity) {
         increaseTokenListCapacity(((mTokenCapacity * 16) / 10) + 1);
@@ -398,6 +400,7 @@ Token & Lexer::allocToken(TokenType tokenType) {
     token->srcPtr = mLexerState.srcPtr;
     token->srcLine = mLexerState.srcLine;
     token->srcCol = mLexerState.srcCol;
+    token->srcLength = tokenSrcLength;
     token->data = {};
     
 #if DEBUG == 1

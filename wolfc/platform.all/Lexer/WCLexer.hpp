@@ -80,7 +80,7 @@ private:
      * set also. If the token is a literal, it is up to the callee to perform any additional 
      * initialization that is required.
      */
-    Token & allocToken(TokenType tokenType);
+    Token & allocToken(TokenType tokenType, size_t tokenSrcLength);
 
     /**
      * Emit a lexer error to stderror followed by a newline.
