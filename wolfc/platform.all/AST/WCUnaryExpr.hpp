@@ -35,19 +35,27 @@ class UnaryExprPrimary : public UnaryExpr {
 public:
     UnaryExprPrimary(PrimaryExpr & expr);
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    virtual const Token & getStartToken() const override;
     
-    PrimaryExpr & mExpr;
+    virtual const Token & getEndToken() const override;
+    
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     virtual bool isLValue() const override;
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    PrimaryExpr & mExpr;
 };
 
 /* -PrimaryExpr */
 class UnaryExprNegPrimary : public UnaryExpr {
 public:
-    UnaryExprNegPrimary(PrimaryExpr & expr);
+    UnaryExprNegPrimary(const Token & startToken, PrimaryExpr & expr);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
@@ -55,23 +63,34 @@ public:
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
-    PrimaryExpr & mExpr;
+    const Token &   mStartToken;
+    PrimaryExpr &   mExpr;
 };
 
 /* +PrimaryExpr */
 class UnaryExprPosPrimary : public UnaryExprPrimary {
 public:
-    UnaryExprPosPrimary(PrimaryExpr & expr);
+    UnaryExprPosPrimary(const Token & startToken, PrimaryExpr & expr);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
     
     virtual bool isLValue() const override;
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    const Token &   mStartToken;
 };
 
 /* (BinaryExpr) */
 class UnaryExprParen : public UnaryExpr {
 public:
-    UnaryExprParen(BinaryExpr & expr);
+    UnaryExprParen(const Token & startToken, const Token & endToken, BinaryExpr & expr);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
@@ -79,7 +98,9 @@ public:
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
-    BinaryExpr & mExpr;
+    const Token &   mStartToken;
+    const Token &   mEndToken;
+    BinaryExpr &    mExpr;
 };
 
 WC_END_NAMESPACE

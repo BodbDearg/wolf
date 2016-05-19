@@ -23,6 +23,14 @@ IntLit::IntLit(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY();
 }
 
+const Token & IntLit::getStartToken() const {
+    return mToken;
+}
+
+const Token & IntLit::getEndToken() const {
+    return mToken;
+}
+
 llvm::Value * IntLit::generateCode(const CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.getInt64(mToken.data.intVal);
 }

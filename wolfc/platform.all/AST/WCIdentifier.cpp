@@ -27,6 +27,14 @@ Identifier::Identifier(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY();
 }
 
+const Token & Identifier::getStartToken() const {
+    return mToken;
+}
+
+const Token & Identifier::getEndToken() const {
+    return mToken;
+}
+
 llvm::Value * Identifier::generateCode(const CodegenCtx & cgCtx) {
     // Grab the parent scope, there should always be one
     Scope * parentScope = getParentScope();

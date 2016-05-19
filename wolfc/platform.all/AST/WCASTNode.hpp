@@ -23,8 +23,16 @@ public:
     
     virtual ~ASTNode();
     
+    /* Return the token that the AST node starts at. */
+    virtual const Token & getStartToken() const = 0;
+    
+    /* Return the token that the AST node ends at. */
+    virtual const Token & getEndToken() const = 0;
+    
+    /* Figure out what the parent scope AST node of this node is. */
     Scope * getParentScope();
     
+    /* The parent of this AST node. This should be set by the parent itself in the constructor. */
     ASTNode * mParent;
 };
 

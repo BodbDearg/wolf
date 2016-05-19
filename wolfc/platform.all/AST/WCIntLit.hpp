@@ -13,6 +13,10 @@ public:
     
     IntLit(const Token & token);
     
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     const Token & mToken;

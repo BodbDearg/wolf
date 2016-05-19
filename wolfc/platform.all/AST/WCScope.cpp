@@ -18,6 +18,14 @@ Scope::Scope(Exprs & exprs) : mExprs(exprs) {
     mExprs.mParent = this;
 }
 
+const Token & Scope::getStartToken() const {
+    return mExprs.getStartToken();
+}
+
+const Token & Scope::getEndToken() const {
+    return mExprs.getEndToken();
+}
+
 llvm::Value * Scope::generateCode(const CodegenCtx & cgCtx) {
     return mExprs.generateCode(cgCtx);
 }

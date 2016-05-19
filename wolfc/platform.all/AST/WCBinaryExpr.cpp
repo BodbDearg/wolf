@@ -6,6 +6,10 @@
 
 WC_BEGIN_NAMESPACE
 
+//-----------------------------------------------------------------------------
+// BinaryExpr
+//-----------------------------------------------------------------------------
+
 bool BinaryExpr::peek(const Token * tokenPtr) {
     return UnaryExpr::peek(tokenPtr);
 }
@@ -52,8 +56,20 @@ BinaryExpr * BinaryExpr::parse(const Token *& tokenPtr) {
     return nullptr;
 }
 
+//-----------------------------------------------------------------------------
+// BinaryExprUnary
+//-----------------------------------------------------------------------------
+
 BinaryExprUnary::BinaryExprUnary(UnaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
+}
+
+const Token & BinaryExprUnary::getStartToken() const {
+    return mExpr.getStartToken();
+}
+
+const Token & BinaryExprUnary::getEndToken() const {
+    return mExpr.getEndToken();
 }
 
 llvm::Value * BinaryExprUnary::generateCode(const CodegenCtx & cgCtx) {
@@ -68,12 +84,24 @@ llvm::Value * BinaryExprUnary::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
+//-----------------------------------------------------------------------------
+// BinaryExprTwoOps
+//-----------------------------------------------------------------------------
+
 BinaryExprTwoOps::BinaryExprTwoOps(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
+}
+
+const Token & BinaryExprTwoOps::getStartToken() const {
+    return mLeftExpr.getStartToken();
+}
+
+const Token & BinaryExprTwoOps::getEndToken() const {
+    return mRightExpr.getEndToken();
 }
 
 bool BinaryExprTwoOps::isLValue() const {
@@ -84,6 +112,10 @@ llvm::Value * BinaryExprTwoOps::codegenAddrOf(const CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     return nullptr;
 }
+
+//-----------------------------------------------------------------------------
+// BinaryExprAdd
+//-----------------------------------------------------------------------------
 
 BinaryExprAdd::BinaryExprAdd(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
@@ -97,6 +129,10 @@ llvm::Value * BinaryExprAdd::generateCode(const CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateAdd(left, right);
 }
 
+//-----------------------------------------------------------------------------
+// BinaryExprSub
+//-----------------------------------------------------------------------------
+
 BinaryExprSub::BinaryExprSub(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
 {
@@ -109,6 +145,10 @@ llvm::Value * BinaryExprSub::generateCode(const CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateSub(left, right);
 }
 
+//-----------------------------------------------------------------------------
+// BinaryExprMul
+//-----------------------------------------------------------------------------
+
 BinaryExprMul::BinaryExprMul(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)
 {
@@ -120,6 +160,10 @@ llvm::Value * BinaryExprMul::generateCode(const CodegenCtx & cgCtx) {
     llvm::Value * right = mRightExpr.generateCode(cgCtx);
     return cgCtx.irBuilder.CreateMul(left, right);
 }
+
+//-----------------------------------------------------------------------------
+// BinaryExprDiv
+//-----------------------------------------------------------------------------
 
 BinaryExprDiv::BinaryExprDiv(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
     BinaryExprTwoOps(leftExpr, rightExpr)

@@ -6,6 +6,10 @@
 
 WC_BEGIN_NAMESPACE
 
+//-----------------------------------------------------------------------------
+// Expr
+//-----------------------------------------------------------------------------
+
 bool Expr::peek(const Token * tokenPtr) {
     return  PrintExpr::peek(tokenPtr) ||
             VarDecl::peek(tokenPtr) ||
@@ -33,24 +37,60 @@ Expr * Expr::parse(const Token *& tokenPtr) {
     return new ExprAssign(*assignExpr);
 }
 
+//-----------------------------------------------------------------------------
+// ExprPrint
+//-----------------------------------------------------------------------------
+
 ExprPrint::ExprPrint(PrintExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
-    
+
+const Token & ExprPrint::getStartToken() const {
+    return mExpr.getStartToken();
+}
+
+const Token & ExprPrint::getEndToken() const {
+    return mExpr.getEndToken();
+}
+
 llvm::Value * ExprPrint::generateCode(const CodegenCtx & cgCtx) {
     return mExpr.generateCode(cgCtx);
 }
+
+//-----------------------------------------------------------------------------
+// ExprVarDecl
+//-----------------------------------------------------------------------------
 
 ExprVarDecl::ExprVarDecl(VarDecl & decl) : mDecl(decl) {
     mDecl.mParent = this;
 }
 
+const Token & ExprVarDecl::getStartToken() const {
+    return mDecl.getStartToken();
+}
+
+const Token & ExprVarDecl::getEndToken() const {
+    return mDecl.getEndToken();
+}
+
 llvm::Value * ExprVarDecl::generateCode(const CodegenCtx & cgCtx) {
     return mDecl.generateCode(cgCtx);
 }
-    
+
+//-----------------------------------------------------------------------------
+// ExprAssign
+//-----------------------------------------------------------------------------
+
 ExprAssign::ExprAssign(AssignExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
+}
+
+const Token & ExprAssign::getStartToken() const {
+    return mExpr.getStartToken();
+}
+
+const Token & ExprAssign::getEndToken() const {
+    return mExpr.getEndToken();
 }
     
 llvm::Value * ExprAssign::generateCode(const CodegenCtx & cgCtx) {

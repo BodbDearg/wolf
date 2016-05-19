@@ -26,6 +26,10 @@ class ExprPrint : public Expr {
 public:
     ExprPrint(PrintExpr & expr);
     
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     PrintExpr & mExpr;
@@ -36,6 +40,10 @@ class ExprVarDecl : public Expr {
 public:
     ExprVarDecl(VarDecl & decl);
     
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     VarDecl & mDecl;
@@ -45,6 +53,10 @@ public:
 class ExprAssign : public Expr {
 public:
     ExprAssign(AssignExpr & expr);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     

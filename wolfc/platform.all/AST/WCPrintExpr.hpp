@@ -17,12 +17,21 @@ public:
     static bool peek(const Token * tokenPtr);
     
     static PrintExpr * parse(const Token *& tokenPtr);
+    
+    PrintExpr(const Token & startToken, const Token & endToken);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
+    const Token & mStartToken;
+    const Token & mEndToken;
 };
 
 /* print ( StringLit ) */
 class PrintExprStrLit : public PrintExpr {
 public:
-    PrintExprStrLit(StrLit & lit);
+    PrintExprStrLit(const Token & startToken, const Token & endToken, StrLit & lit);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
@@ -32,7 +41,7 @@ public:
 /* print ( BinaryExpr ) */
 class PrintExprBinaryExpr : public PrintExpr {
 public:
-    PrintExprBinaryExpr(BinaryExpr & expr);
+    PrintExprBinaryExpr(const Token & startToken, const Token & endToken, BinaryExpr & expr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     

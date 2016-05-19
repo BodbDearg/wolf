@@ -5,6 +5,10 @@
 
 WC_BEGIN_NAMESPACE
 
+//-----------------------------------------------------------------------------
+// AssignExpr
+//-----------------------------------------------------------------------------
+
 bool AssignExpr::peek(const Token * tokenPtr) {
     return BinaryExpr::peek(tokenPtr);
 }
@@ -29,8 +33,20 @@ AssignExpr * AssignExpr::parse(const Token *& tokenPtr) {
     return new AssignExprNoAssign(*binaryExpr);
 }
 
+//-----------------------------------------------------------------------------
+// AssignExprNoAssign
+//-----------------------------------------------------------------------------
+
 AssignExprNoAssign::AssignExprNoAssign(BinaryExpr & expr) : mExpr(expr) {
     expr.mParent = this;
+}
+
+const Token & AssignExprNoAssign::getStartToken() const {
+    return mExpr.getStartToken();
+}
+
+const Token & AssignExprNoAssign::getEndToken() const {
+    return mExpr.getEndToken();
 }
 
 llvm::Value * AssignExprNoAssign::generateCode(const CodegenCtx & cgCtx) {
@@ -45,12 +61,24 @@ llvm::Value * AssignExprNoAssign::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
+//-----------------------------------------------------------------------------
+// AssignExprAssign
+//-----------------------------------------------------------------------------
+
 AssignExprAssign::AssignExprAssign(BinaryExpr & leftExpr, AssignExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
+}
+
+const Token & AssignExprAssign::getStartToken() const {
+    return mLeftExpr.getStartToken();
+}
+
+const Token & AssignExprAssign::getEndToken() const {
+    return mRightExpr.getEndToken();
 }
 
 llvm::Value * AssignExprAssign::generateCode(const CodegenCtx & cgCtx) {

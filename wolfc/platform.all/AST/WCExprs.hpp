@@ -23,6 +23,10 @@ class ExprsSingle : public Exprs {
 public:
     ExprsSingle(Expr & expr);
     
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     Expr & mExpr;
@@ -32,6 +36,10 @@ public:
 class ExprsMulti : public Exprs {
 public:
     ExprsMulti(Expr & leftExpr, Exprs & rightExprs);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     

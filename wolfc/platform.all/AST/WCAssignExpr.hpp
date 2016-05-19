@@ -32,6 +32,10 @@ class AssignExprNoAssign : public AssignExpr {
 public:
     AssignExprNoAssign(BinaryExpr & expr);
     
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     virtual bool isLValue() const override;
@@ -46,10 +50,14 @@ class AssignExprAssign : public AssignExpr {
 public:
     AssignExprAssign(BinaryExpr & leftExpr, AssignExpr & rightExpr);
     
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     virtual bool isLValue() const override;
-    
+
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
     BinaryExpr & mLeftExpr;

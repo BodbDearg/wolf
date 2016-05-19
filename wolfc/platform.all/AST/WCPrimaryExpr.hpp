@@ -33,6 +33,10 @@ class PrimaryExprIntLit : public PrimaryExpr {
 public:
     PrimaryExprIntLit(IntLit & lit);
     
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     virtual bool isLValue() const override;
@@ -46,6 +50,10 @@ public:
 class PrimaryExprIdentifier : public PrimaryExpr {
 public:
     PrimaryExprIdentifier(Identifier & identifier);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     

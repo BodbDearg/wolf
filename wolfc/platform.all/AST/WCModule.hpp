@@ -22,6 +22,10 @@ public:
     
     ~Module();
     
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
     /* Parse the code for the module from the given token array */
     bool parseCode(const Token * tokenList);
     

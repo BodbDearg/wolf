@@ -17,12 +17,17 @@ public:
     
     static VarDecl * parse(const Token *& tokenPtr);
     
-    VarDecl(Identifier & ident, AssignExpr & expr);
+    VarDecl(const Token & token, Identifier & ident, AssignExpr & expr);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
-    Identifier & mIdent;
-    AssignExpr & mExpr;
+    const Token &   mStartToken;
+    Identifier &    mIdent;
+    AssignExpr &    mExpr;
 };
 
 WC_END_NAMESPACE

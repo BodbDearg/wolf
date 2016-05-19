@@ -6,6 +6,10 @@
 
 WC_BEGIN_NAMESPACE
 
+//-----------------------------------------------------------------------------
+// UnaryExpr
+//-----------------------------------------------------------------------------
+
 bool UnaryExpr::peek(const Token * currentToken) {
     /* 
     -PrimaryExpr
@@ -27,39 +31,41 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
     switch (currentToken->type) {
         /* -IntLit */
         case TokenType::kMinus: {
-            ++currentToken; // Skip '-'
+            const Token * minusTok = currentToken;
+            ++currentToken;     // Skip '-'
             PrimaryExpr * expr = PrimaryExpr::parse(currentToken);
             WC_GUARD(expr, nullptr);
-            return new UnaryExprNegPrimary(*expr);
+            return new UnaryExprNegPrimary(*minusTok, *expr);
         }   break;
             
         /* +PrimaryExpr */
         case TokenType::kPlus: {
-            ++currentToken; // Skip '+'
+            const Token * plusTok = currentToken;
+            ++currentToken;     // Skip '+'
             PrimaryExpr * expr = PrimaryExpr::parse(currentToken);
             WC_GUARD(expr, nullptr);
-            return new UnaryExprPosPrimary(*expr);
+            return new UnaryExprPosPrimary(*plusTok, *expr);
         }   break;
             
         /* (BinaryExpr) */
         case TokenType::kLParen: {
-            const Token * lparenToken = currentToken;
-            ++currentToken; // Skip '('
-            
+            const Token * lparenTok = currentToken;
+            ++currentToken;     // Skip '('
             BinaryExpr * expr = BinaryExpr::parse(currentToken);
             
             if (currentToken->type != TokenType::kRParen) {
                 error(*currentToken,
                       "Expected closing ')' to match '(' at line %zu and column %zu!",
-                      lparenToken->srcLine,
-                      lparenToken->srcCol);
+                      lparenTok->srcLine,
+                      lparenTok->srcCol);
                 
                 return nullptr;
             }
             
-            ++currentToken; // Skip ')'
+            const Token * rparenTok = currentToken;
+            ++currentToken;     // Skip ')'
             WC_GUARD(expr, nullptr);
-            return new UnaryExprParen(*expr);
+            return new UnaryExprParen(*lparenTok, *rparenTok, *expr);
         }   break;
             
         /* PrimaryExpr */
@@ -73,8 +79,20 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
     return nullptr;     // Should never reach here
 }
 
+//-----------------------------------------------------------------------------
+// UnaryExprPrimary
+//-----------------------------------------------------------------------------
+
 UnaryExprPrimary::UnaryExprPrimary(PrimaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
+}
+
+const Token & UnaryExprPrimary::getStartToken() const {
+    return mExpr.getStartToken();
+}
+
+const Token & UnaryExprPrimary::getEndToken() const {
+    return mExpr.getEndToken();
 }
 
 llvm::Value * UnaryExprPrimary::generateCode(const CodegenCtx & cgCtx) {
@@ -89,8 +107,23 @@ llvm::Value * UnaryExprPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-UnaryExprNegPrimary::UnaryExprNegPrimary(PrimaryExpr & expr) : mExpr(expr) {
+//-----------------------------------------------------------------------------
+// UnaryExprNegPrimary
+//-----------------------------------------------------------------------------
+
+UnaryExprNegPrimary::UnaryExprNegPrimary(const Token & startToken, PrimaryExpr & expr) :
+    mStartToken(startToken),
+    mExpr(expr)
+{
     mExpr.mParent = this;
+}
+
+const Token & UnaryExprNegPrimary::getStartToken() const {
+    return mStartToken;
+}
+
+const Token & UnaryExprNegPrimary::getEndToken() const {
+    return mExpr.getEndToken();
 }
 
 llvm::Value * UnaryExprNegPrimary::generateCode(const CodegenCtx & cgCtx) {
@@ -105,8 +138,23 @@ llvm::Value * UnaryExprNegPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-UnaryExprPosPrimary::UnaryExprPosPrimary(PrimaryExpr & expr) : UnaryExprPrimary(expr) {
+//-----------------------------------------------------------------------------
+// UnaryExprPosPrimary
+//-----------------------------------------------------------------------------
+
+UnaryExprPosPrimary::UnaryExprPosPrimary(const Token & startToken, PrimaryExpr & expr) :
+    UnaryExprPrimary(expr),
+    mStartToken(startToken)
+{
     WC_EMPTY_FUNC_BODY();
+}
+
+const Token & UnaryExprPosPrimary::getStartToken() const {
+    return mStartToken;
+}
+
+const Token & UnaryExprPosPrimary::getEndToken() const {
+    return mExpr.getEndToken();
 }
 
 bool UnaryExprPosPrimary::isLValue() const {
@@ -117,10 +165,26 @@ llvm::Value * UnaryExprPosPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-UnaryExprParen::UnaryExprParen(BinaryExpr & expr) : mExpr(expr) {
+//-----------------------------------------------------------------------------
+// UnaryExprParen
+//-----------------------------------------------------------------------------
+
+UnaryExprParen::UnaryExprParen(const Token & startToken, const Token & endToken, BinaryExpr & expr) :
+    mStartToken(startToken),
+    mEndToken(endToken),
+    mExpr(expr)
+{
     mExpr.mParent = this;
 }
-    
+
+const Token & UnaryExprParen::getStartToken() const {
+    return mStartToken;
+}
+
+const Token & UnaryExprParen::getEndToken() const {
+    return mEndToken;
+}
+
 llvm::Value * UnaryExprParen::generateCode(const CodegenCtx & cgCtx) {
     return mExpr.generateCode(cgCtx);
 }

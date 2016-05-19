@@ -25,6 +25,14 @@ StrLit::StrLit(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY();
 }
 
+const Token & StrLit::getStartToken() const {
+    return mToken;
+}
+
+const Token & StrLit::getEndToken() const {
+    return mToken;
+}
+
 llvm::Value * StrLit::generateCode(const CodegenCtx & cgCtx) {
     // TODO: how to handle encodings here?
     // Convert to UTF8 for now...

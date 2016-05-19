@@ -11,6 +11,10 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
+//-----------------------------------------------------------------------------
+// PrintExpr
+//-----------------------------------------------------------------------------
+
 bool PrintExpr::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kPrint;
 }
@@ -21,6 +25,7 @@ PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
         return nullptr;
     }
     
+    const Token * printTok = tokenPtr;
     ++tokenPtr;     // Consume 'print'
     
     if (tokenPtr->type != TokenType::kLParen) {
@@ -31,38 +36,70 @@ PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
     ++tokenPtr;     // Consume '('
     
     // See what form of the syntax is ahead
-    PrintExpr * parsedPrintExpr = nullptr;
-    
     if (StrLit::peek(tokenPtr)) {
+        // Print a string literal: parse that
         StrLit * strLit = StrLit::parse(tokenPtr);
         WC_GUARD_ASSERT(strLit, nullptr);
-        parsedPrintExpr = new PrintExprStrLit(*strLit);
+        
+        // Expect ')' following that:
+        if (tokenPtr->type != TokenType::kRParen) {
+            error(*tokenPtr, "Expected closing ')' for 'print()' expression!");
+            return nullptr;
+        }
+        
+        // Consume closing ')' and return parsed expression
+        const Token * closingParenTok = tokenPtr;
+        ++tokenPtr;
+        return new PrintExprStrLit(*printTok, *closingParenTok, *strLit);
     }
     else if (BinaryExpr::peek(tokenPtr)) {
+        // Print a binary expression: parse that
         BinaryExpr * binaryExpr = BinaryExpr::parse(tokenPtr);
         WC_GUARD_ASSERT(binaryExpr, nullptr);
-        parsedPrintExpr = new PrintExprBinaryExpr(*binaryExpr);
+        
+        // Expect ')' following all that:
+        if (tokenPtr->type != TokenType::kRParen) {
+            error(*tokenPtr, "Expected closing ')' for 'print()' expression!");
+            return nullptr;
+        }
+        
+        // Consume closing ')' and return parsed expression
+        const Token * closingParenTok = tokenPtr;
+        ++tokenPtr;
+        return new PrintExprBinaryExpr(*printTok, *closingParenTok, *binaryExpr);
     }
     else {
         error(*tokenPtr, "Unexpected tokens following 'print' and '('! Expect binary expression or string literal!");
         return nullptr;
     }
     
-    // Must have parsed ok!
-    WC_GUARD(parsedPrintExpr, nullptr);
-    
-    // Expect ')' following all that:
-    if (tokenPtr->type != TokenType::kRParen) {
-        error(*tokenPtr, "Expected closing ')' for 'print()' expression!");
-        return nullptr;
-    }
-    
-    // Consume closing ')' and return parsed expression
-    ++tokenPtr;
-    return parsedPrintExpr;
+    WC_RAISE_ASSERTION("This code should not be reached!");
+    return nullptr;
 }
 
-PrintExprStrLit::PrintExprStrLit(StrLit & lit) : mLit(lit) {
+PrintExpr::PrintExpr(const Token & startToken, const Token & endToken) :
+    mStartToken(startToken),
+    mEndToken(endToken)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+const Token & PrintExpr::getStartToken() const {
+    return mStartToken;
+}
+
+const Token & PrintExpr::getEndToken() const {
+    return mEndToken;
+}
+
+//-----------------------------------------------------------------------------
+// PrintExprStrLit
+//-----------------------------------------------------------------------------
+
+PrintExprStrLit::PrintExprStrLit(const Token & startToken, const Token & endToken, StrLit & lit) :
+    PrintExpr(startToken, endToken),
+    mLit(lit)
+{
     mLit.mParent = this;
 }
 
@@ -90,7 +127,14 @@ llvm::Value * PrintExprStrLit::generateCode(const CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateCall(printfFn, { fmtStr, arg1Val });
 }
 
-PrintExprBinaryExpr::PrintExprBinaryExpr(BinaryExpr & expr) : mExpr(expr) {
+//-----------------------------------------------------------------------------
+// PrintExprBinaryExpr
+//-----------------------------------------------------------------------------
+
+PrintExprBinaryExpr::PrintExprBinaryExpr(const Token & startToken, const Token & endToken, BinaryExpr & expr) :
+    PrintExpr(startToken, endToken),
+    mExpr(expr)
+{
     mExpr.mParent = this;
 }
 

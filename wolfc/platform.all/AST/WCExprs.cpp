@@ -4,6 +4,10 @@
 
 WC_BEGIN_NAMESPACE
 
+//-----------------------------------------------------------------------------
+// Exprs
+//-----------------------------------------------------------------------------
+
 bool Exprs::peek(const Token * tokenPtr) {
     return Expr::peek(tokenPtr);
 }
@@ -22,20 +26,44 @@ Exprs * Exprs::parse(const Token *& tokenPtr) {
     }
 }
 
+//-----------------------------------------------------------------------------
+// ExprsSingle
+//-----------------------------------------------------------------------------
+
 ExprsSingle::ExprsSingle(Expr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
-    
+
+const Token & ExprsSingle::getStartToken() const {
+    return mExpr.getStartToken();
+}
+
+const Token & ExprsSingle::getEndToken() const {
+    return mExpr.getEndToken();
+}
+
 llvm::Value * ExprsSingle::generateCode(const CodegenCtx & cgCtx) {
     return mExpr.generateCode(cgCtx);
 };
-    
+
+//-----------------------------------------------------------------------------
+// ExprsMulti
+//-----------------------------------------------------------------------------
+
 ExprsMulti::ExprsMulti(Expr & leftExpr, Exprs & rightExprs) :
     mLeftExpr(leftExpr),
     mRightExprs(rightExprs)
 {
     mLeftExpr.mParent = this;
     mRightExprs.mParent = this;
+}
+
+const Token & ExprsMulti::getStartToken() const {
+    return mLeftExpr.getStartToken();
+}
+
+const Token & ExprsMulti::getEndToken() const {
+    return mRightExprs.getEndToken();
 }
 
 llvm::Value * ExprsMulti::generateCode(const CodegenCtx & cgCtx) {

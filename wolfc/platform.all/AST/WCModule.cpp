@@ -19,6 +19,16 @@ Module::~Module() {
     WC_EMPTY_FUNC_BODY();
 }
 
+const Token & Module::getStartToken() const {
+    WC_ASSERT(mScope.get());
+    return mScope->getStartToken();
+}
+
+const Token & Module::getEndToken() const {
+    WC_ASSERT(mScope.get());
+    return mScope->getEndToken();
+}
+
 bool Module::parseCode(const Token * tokenList) {
     mScope.reset(Scope::parse(tokenList));
     WC_GUARD(mScope, false);

@@ -35,6 +35,10 @@ class BinaryExprUnary : public BinaryExpr {
 public:
     BinaryExprUnary(UnaryExpr & expr);
     
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     virtual bool isLValue() const override;
@@ -48,6 +52,10 @@ public:
 class BinaryExprTwoOps : public BinaryExpr {
 public:
     BinaryExprTwoOps(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
     
     virtual bool isLValue() const override;
     

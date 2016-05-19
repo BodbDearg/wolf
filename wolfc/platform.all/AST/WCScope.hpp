@@ -20,6 +20,10 @@ public:
     
     Scope(Exprs & exprs);
     
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     /* Get or create a variable within this scope */

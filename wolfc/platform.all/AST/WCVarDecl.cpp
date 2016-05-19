@@ -19,6 +19,7 @@ VarDecl * VarDecl::parse(const Token *& tokenPtr) {
         return nullptr;
     }
     
+    const Token * varToken = tokenPtr;
     ++tokenPtr;     // Skip 'var'
     
     // Parse the identifier ahead
@@ -36,12 +37,24 @@ VarDecl * VarDecl::parse(const Token *& tokenPtr) {
     // Parse the assign expression and return result of parsing
     AssignExpr * expr = AssignExpr::parse(tokenPtr);
     WC_GUARD(expr, nullptr);
-    return new VarDecl(*ident, *expr);
+    return new VarDecl(*varToken, *ident, *expr);
 }
 
-VarDecl::VarDecl(Identifier & ident, AssignExpr & expr) : mIdent(ident), mExpr(expr) {
+VarDecl::VarDecl(const Token & token, Identifier & ident, AssignExpr & expr) :
+    mStartToken(token),
+    mIdent(ident),
+    mExpr(expr)
+{
     mIdent.mParent = this;
     mExpr.mParent = this;
+}
+
+const Token & VarDecl::getStartToken() const {
+    return mStartToken;
+}
+
+const Token & VarDecl::getEndToken() const {
+    return mExpr.getEndToken();
 }
 
 llvm::Value * VarDecl::generateCode(const CodegenCtx & cgCtx) {
