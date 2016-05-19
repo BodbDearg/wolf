@@ -312,7 +312,7 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals(char32_t currentChar) {
     const char32_t * parsedStrStartPtr = mLexerState.srcPtr;
     const char32_t * parsedStrEndPtr = parsedStrStartPtr + 1;
     
-    while (CharUtils::isValidIdentifierStartChar(parsedStrEndPtr[0])) {
+    while (CharUtils::isValidIdentifierMiddleChar(parsedStrEndPtr[0])) {
         ++parsedStrEndPtr;
     }
     
