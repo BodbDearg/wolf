@@ -6,11 +6,13 @@ WC_BEGIN_NAMESPACE
 
 class IntLit;
 class Identifier;
+class ReadnumExpr;
 
 /*
 PrimaryExpr:
     IntLit
     Identifier
+    ReadnumExpr
 */
 class PrimaryExpr : public ASTNodeCodegen {
 public:
@@ -62,6 +64,24 @@ public:
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
     Identifier & mIdentifier;
+};
+
+/* ReadnumExpr */
+class PrimaryExprReadnum : public PrimaryExpr {
+public:
+    PrimaryExprReadnum(ReadnumExpr & expr);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    
+    virtual bool isLValue() const override;
+    
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    ReadnumExpr & mExpr;
 };
 
 WC_END_NAMESPACE

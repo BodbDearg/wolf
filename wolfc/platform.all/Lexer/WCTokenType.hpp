@@ -41,6 +41,9 @@ enum class TokenType {
     /* var */
     kVar,
     
-    /* print */
+    /* TEMPORARY: print */
     kPrint,
+    
+    /* TEMPORARY: readnum */
+    kReadnum,
 };

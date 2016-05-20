@@ -1,6 +1,7 @@
 #include "WCPrimaryExpr.hpp"
 #include "WCIdentifier.hpp"
 #include "WCIntLit.hpp"
+#include "WCReadnumExpr.hpp"
 #include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -10,33 +11,27 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool PrimaryExpr::peek(const Token * currentToken) {
-    if (currentToken->type == TokenType::kIntLit ||
-        currentToken->type == TokenType::kIdentifier)
-    {
-        return true;
-    }
-    
-    return false;
+    return  IntLit::peek(currentToken) ||
+            Identifier::peek(currentToken) ||
+            ReadnumExpr::peek(currentToken);
 }
 
 PrimaryExpr * PrimaryExpr::parse(const Token *& currentToken) {
-    switch (currentToken->type) {
-        /* IntLit */
-        case TokenType::kIntLit: {
-            IntLit * uintLit = IntLit::parse(currentToken);
-            WC_GUARD(uintLit, nullptr);
-            return new PrimaryExprIntLit(*uintLit);
-        }   break;
-            
-        /* Identifier */
-        case TokenType::kIdentifier: {
-            Identifier * identifier = Identifier::parse(currentToken);
-            WC_GUARD(identifier, nullptr);
-            return new PrimaryExprIdentifier(*identifier);
-        }   break;
-            
-        default:
-            break;
+    
+    if (IntLit::peek(currentToken)) {
+        IntLit * uintLit = IntLit::parse(currentToken);
+        WC_GUARD(uintLit, nullptr);
+        return new PrimaryExprIntLit(*uintLit);
+    }
+    else if (Identifier::peek(currentToken)) {
+        Identifier * identifier = Identifier::parse(currentToken);
+        WC_GUARD(identifier, nullptr);
+        return new PrimaryExprIdentifier(*identifier);
+    }
+    else if (ReadnumExpr::peek(currentToken)) {
+        ReadnumExpr * expr = ReadnumExpr::parse(currentToken);
+        WC_GUARD(expr, nullptr);
+        return new PrimaryExprReadnum(*expr);
     }
     
     parseError(*currentToken, "Expected primary expression!");
@@ -98,6 +93,35 @@ bool PrimaryExprIdentifier::isLValue() const {
 
 llvm::Value * PrimaryExprIdentifier::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mIdentifier.codegenAddrOf(cgCtx);
+}
+
+//-----------------------------------------------------------------------------
+// PrimaryExprReadnum
+//-----------------------------------------------------------------------------
+
+PrimaryExprReadnum::PrimaryExprReadnum(ReadnumExpr & expr) : mExpr(expr) {
+    mExpr.mParent = this;
+}
+    
+const Token & PrimaryExprReadnum::getStartToken() const {
+    return mExpr.getStartToken();
+}
+
+const Token & PrimaryExprReadnum::getEndToken() const {
+    return mExpr.getEndToken();
+}
+    
+llvm::Value * PrimaryExprReadnum::generateCode(const CodegenCtx & cgCtx) {
+    return mExpr.generateCode(cgCtx);
+}
+    
+bool PrimaryExprReadnum::isLValue() const {
+    return false;
+}
+    
+llvm::Value * PrimaryExprReadnum::codegenAddrOf(const CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    return nullptr;
 }
 
 WC_END_NAMESPACE

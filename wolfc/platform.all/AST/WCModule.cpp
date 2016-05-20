@@ -68,6 +68,16 @@ bool Module::generateCode() {
     
     mLLVMMod->getOrInsertFunction("printf", printfFnType);
     
+    // Declare the c standard library function 'scanf'
+    llvm::FunctionType * scanfFnType = llvm::FunctionType::get(llvm::Type::getInt32Ty(mLLVMCtx),
+                                                               llvm::ArrayRef<llvm::Type*>
+                                                               {
+                                                                   llvm::Type::getInt8Ty(mLLVMCtx)->getPointerTo(),
+                                                               },
+                                                               true);
+    
+    mLLVMMod->getOrInsertFunction("scanf", scanfFnType);
+    
     // Create the function for main
     llvm::FunctionType * mainFnType = llvm::FunctionType::get(llvm::Type::getInt32Ty(mLLVMCtx), {}, false);
     llvm::Function * mainFn = llvm::Function::Create(mainFnType,

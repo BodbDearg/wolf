@@ -362,7 +362,8 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals(char32_t currentChar) {
     };
     
     if (parseKeyword(U"print", TokenType::kPrint) ||
-        parseKeyword(U"var", TokenType::kVar))
+        parseKeyword(U"var", TokenType::kVar) ||
+        parseKeyword(U"readnum", TokenType::kReadnum))
     {
         return ParseResult::kSuccess;
     }

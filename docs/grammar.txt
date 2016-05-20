@@ -40,3 +40,7 @@ UnaryExpr:
 PrimaryExpr:
     IntLit
     Identifier
+    ReadnumExpr
+
+ReadnumExpr
+    readnum ( )
