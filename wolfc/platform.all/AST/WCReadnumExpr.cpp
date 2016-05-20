@@ -64,16 +64,18 @@ llvm::Value * ReadnumExpr::generateCode(const CodegenCtx & cgCtx) {
     }
     
     // Create a format string for scanf
-    llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%zd");
+    llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%zd", "readnum_expr_fmt_str");
     
     // Create a stack var to hold the output:
-    llvm::Value * outputVar = cgCtx.irBuilder.CreateAlloca(cgCtx.irBuilder.getInt64Ty());
+    llvm::Value * outputVar = cgCtx.irBuilder.CreateAlloca(cgCtx.irBuilder.getInt64Ty(),
+                                                           nullptr,
+                                                           "readnum_expr_temp_stack_var");
     
     // Create the call to scanf!
-    cgCtx.irBuilder.CreateCall(scanfFn, { fmtStr, outputVar });
+    cgCtx.irBuilder.CreateCall(scanfFn, { fmtStr, outputVar }, "readnum_expr_scanf_call");
     
     // And return the stack var
-    return cgCtx.irBuilder.CreateLoad(outputVar);
+    return cgCtx.irBuilder.CreateLoad(outputVar, "readnum_expr_load_temp_stack_var");
 }
 
 WC_END_NAMESPACE

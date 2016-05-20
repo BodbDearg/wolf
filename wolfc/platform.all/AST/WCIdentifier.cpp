@@ -40,19 +40,20 @@ llvm::Value * Identifier::generateCode(const CodegenCtx & cgCtx) {
     Scope * parentScope = getParentScope();
     WC_GUARD_ASSERT(parentScope, nullptr);
     
+    // Convert identifier name to utf8
+    std::unique_ptr<char[]> identifierNameUtf8(StringUtils::convertUtf32ToUtf8(mToken.data.strVal.ptr,
+                                                                               mToken.data.strVal.length));
+    
     // Grab the variable
     llvm::Value * value = parentScope->getVariable(mToken.data.strVal.ptr);
     
     if (!value) {
-        std::unique_ptr<char[]> identifierNameUtf8(StringUtils::convertUtf32ToUtf8(mToken.data.strVal.ptr,
-                                                                                   mToken.data.strVal.length));
-        
         compileError("No variable named '%s' in the current scope!", identifierNameUtf8.get());
         return nullptr;
     }
     
     // Create an instruction to load it
-    return cgCtx.irBuilder.CreateLoad(value);
+    return cgCtx.irBuilder.CreateLoad(value, std::string("load_ident_val:") + identifierNameUtf8.get());
 }
 
 llvm::Value * Identifier::codegenAddrOf(const CodegenCtx & cgCtx) {

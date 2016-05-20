@@ -113,7 +113,7 @@ llvm::Value * PrintExprStrLit::generateCode(const CodegenCtx & cgCtx) {
     }
     
     // Create a format string for printf
-    llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%s");
+    llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%s", "print_stmnt_str_fmt_str");
     
     // Evaluate the code for the argument to printf
     llvm::Value * arg1Val = mLit.generateCode(cgCtx);
@@ -124,7 +124,7 @@ llvm::Value * PrintExprStrLit::generateCode(const CodegenCtx & cgCtx) {
     }
     
     // Call printf!
-    return cgCtx.irBuilder.CreateCall(printfFn, { fmtStr, arg1Val });
+    return cgCtx.irBuilder.CreateCall(printfFn, { fmtStr, arg1Val }, "print_stmnt_printf_call");
 }
 
 //-----------------------------------------------------------------------------
@@ -148,7 +148,7 @@ llvm::Value * PrintExprBinaryExpr::generateCode(const CodegenCtx & cgCtx) {
     }
     
     // Create a format string for printf
-    llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%zd");
+    llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%zd", "print_stmnt_int_fmt_str");
     
     // Evaluate the code for the argument to printf
     llvm::Value * arg1Val = mExpr.generateCode(cgCtx);
@@ -159,7 +159,7 @@ llvm::Value * PrintExprBinaryExpr::generateCode(const CodegenCtx & cgCtx) {
     }
     
     // Call printf!
-    return cgCtx.irBuilder.CreateCall(printfFn, { fmtStr, arg1Val });
+    return cgCtx.irBuilder.CreateCall(printfFn, { fmtStr, arg1Val }, "print_stmnt_printf_call");
 }
 
 WC_END_NAMESPACE

@@ -39,7 +39,7 @@ llvm::Value * StrLit::generateCode(const CodegenCtx & cgCtx) {
     std::unique_ptr<char[]> strUtf8(StringUtils::convertUtf32ToUtf8(mToken.data.strVal.ptr,
                                                                     mToken.data.strVal.length));
     
-    return cgCtx.irBuilder.CreateGlobalStringPtr(strUtf8.get());
+    return cgCtx.irBuilder.CreateGlobalStringPtr(strUtf8.get(), "usr_string_lit");
 }
 
 WC_END_NAMESPACE

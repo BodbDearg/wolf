@@ -128,7 +128,7 @@ llvm::Value * BinaryExprAdd::generateCode(const CodegenCtx & cgCtx) {
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.generateCode(cgCtx);
     WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateAdd(left, right);
+    return cgCtx.irBuilder.CreateAdd(left, right, "bin_expr_add");
 }
 
 //-----------------------------------------------------------------------------
@@ -146,7 +146,7 @@ llvm::Value * BinaryExprSub::generateCode(const CodegenCtx & cgCtx) {
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.generateCode(cgCtx);
     WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateSub(left, right);
+    return cgCtx.irBuilder.CreateSub(left, right, "bin_expr_sub");
 }
 
 //-----------------------------------------------------------------------------
@@ -164,7 +164,7 @@ llvm::Value * BinaryExprMul::generateCode(const CodegenCtx & cgCtx) {
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.generateCode(cgCtx);
     WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateMul(left, right);
+    return cgCtx.irBuilder.CreateMul(left, right, "bin_expr_mul");
 }
 
 //-----------------------------------------------------------------------------
@@ -182,7 +182,7 @@ llvm::Value * BinaryExprDiv::generateCode(const CodegenCtx & cgCtx) {
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.generateCode(cgCtx);
     WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateSDiv(left, right);
+    return cgCtx.irBuilder.CreateSDiv(left, right, "bin_expr_div");
 }
 
 WC_END_NAMESPACE

@@ -86,7 +86,7 @@ bool Module::generateCode() {
                                                      mLLVMMod.get());
     
     // Create the block for main and set it as the insert point for ir builder
-    llvm::BasicBlock * mainBlock = llvm::BasicBlock::Create(mLLVMCtx, "", mainFn);
+    llvm::BasicBlock * mainBlock = llvm::BasicBlock::Create(mLLVMCtx, "main_fn_block", mainFn);
     irBuilder.SetInsertPoint(mainBlock);
     
     // Generate the code
