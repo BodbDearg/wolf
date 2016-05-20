@@ -148,7 +148,7 @@ llvm::Value * PrintExprBinaryExpr::generateCode(const CodegenCtx & cgCtx) {
     }
     
     // Create a format string for printf
-    llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%zu");
+    llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%zd");
     
     // Evaluate the code for the argument to printf
     llvm::Value * arg1Val = mExpr.generateCode(cgCtx);
