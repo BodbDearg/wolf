@@ -4,27 +4,27 @@
 
 WC_BEGIN_NAMESPACE
 
-class PrintStmnt;
 class AssignExpr;
+class PrintStmnt;
 class VarDecl;
 
 /*
-Expr:
-    PrintExpr
+Stmnt:
+    PrintStmnt
     VarDecl
     AssignExpr
 */
-class Expr : public ASTNodeCodegen {
+class Stmnt : public ASTNodeCodegen {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static Expr * parse(const Token *& tokenPtr);
+    static Stmnt * parse(const Token *& tokenPtr);
 };
 
-/* ExprPrint */
-class ExprPrintStmnt : public Expr {
+/* PrintStmnt */
+class StmntPrintStmnt : public Stmnt {
 public:
-    ExprPrintStmnt(PrintStmnt & stmnt);
+    StmntPrintStmnt(PrintStmnt & stmnt);
     
     virtual const Token & getStartToken() const override;
     
@@ -35,10 +35,10 @@ public:
     PrintStmnt & mStmnt;
 };
 
-/* ExprVarDecl */
-class ExprVarDecl : public Expr {
+/* VarDecl */
+class StmntVarDecl : public Stmnt {
 public:
-    ExprVarDecl(VarDecl & decl);
+    StmntVarDecl(VarDecl & decl);
     
     virtual const Token & getStartToken() const override;
     
@@ -49,10 +49,10 @@ public:
     VarDecl & mDecl;
 };
 
-/* ExprAssign */
-class ExprAssign : public Expr {
+/* AssignExpr */
+class StmntAssignExpr : public Stmnt {
 public:
-    ExprAssign(AssignExpr & expr);
+    StmntAssignExpr(AssignExpr & expr);
     
     virtual const Token & getStartToken() const override;
     

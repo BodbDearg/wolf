@@ -1,4 +1,4 @@
-#include "WCExpr.hpp"
+#include "WCStmnt.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCPrintStmnt.hpp"
@@ -10,90 +10,90 @@ WC_BEGIN_NAMESPACE
 // Expr
 //-----------------------------------------------------------------------------
 
-bool Expr::peek(const Token * tokenPtr) {
+bool Stmnt::peek(const Token * tokenPtr) {
     return  PrintStmnt::peek(tokenPtr) ||
             VarDecl::peek(tokenPtr) ||
             AssignExpr::peek(tokenPtr);
 }
     
-Expr * Expr::parse(const Token *& tokenPtr) {
+Stmnt * Stmnt::parse(const Token *& tokenPtr) {
     // Parse print expression if ahead
     if (PrintStmnt::peek(tokenPtr)) {
         PrintStmnt * printStmnt = PrintStmnt::parse(tokenPtr);
         WC_GUARD(printStmnt, nullptr);
-        return new ExprPrintStmnt(*printStmnt);
+        return new StmntPrintStmnt(*printStmnt);
     }
     
     // Parse var decl if ahead
     if (VarDecl::peek(tokenPtr)) {
         VarDecl * varDecl = VarDecl::parse(tokenPtr);
         WC_GUARD(varDecl, nullptr);
-        return new ExprVarDecl(*varDecl);
+        return new StmntVarDecl(*varDecl);
     }
     
     // Otherwise parse assign expression
     AssignExpr * assignExpr = AssignExpr::parse(tokenPtr);
     WC_GUARD(assignExpr, nullptr);
-    return new ExprAssign(*assignExpr);
+    return new StmntAssignExpr(*assignExpr);
 }
 
 //-----------------------------------------------------------------------------
-// ExprPrint
+// StmntPrintStmnt
 //-----------------------------------------------------------------------------
 
-ExprPrintStmnt::ExprPrintStmnt(PrintStmnt & stmnt) : mStmnt(stmnt) {
+StmntPrintStmnt::StmntPrintStmnt(PrintStmnt & stmnt) : mStmnt(stmnt) {
     mStmnt.mParent = this;
 }
 
-const Token & ExprPrintStmnt::getStartToken() const {
+const Token & StmntPrintStmnt::getStartToken() const {
     return mStmnt.getStartToken();
 }
 
-const Token & ExprPrintStmnt::getEndToken() const {
+const Token & StmntPrintStmnt::getEndToken() const {
     return mStmnt.getEndToken();
 }
 
-llvm::Value * ExprPrintStmnt::generateCode(const CodegenCtx & cgCtx) {
+llvm::Value * StmntPrintStmnt::generateCode(const CodegenCtx & cgCtx) {
     return mStmnt.generateCode(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
-// ExprVarDecl
+// StmntVarDecl
 //-----------------------------------------------------------------------------
 
-ExprVarDecl::ExprVarDecl(VarDecl & decl) : mDecl(decl) {
+StmntVarDecl::StmntVarDecl(VarDecl & decl) : mDecl(decl) {
     mDecl.mParent = this;
 }
 
-const Token & ExprVarDecl::getStartToken() const {
+const Token & StmntVarDecl::getStartToken() const {
     return mDecl.getStartToken();
 }
 
-const Token & ExprVarDecl::getEndToken() const {
+const Token & StmntVarDecl::getEndToken() const {
     return mDecl.getEndToken();
 }
 
-llvm::Value * ExprVarDecl::generateCode(const CodegenCtx & cgCtx) {
+llvm::Value * StmntVarDecl::generateCode(const CodegenCtx & cgCtx) {
     return mDecl.generateCode(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
-// ExprAssign
+// StmntAssignExpr
 //-----------------------------------------------------------------------------
 
-ExprAssign::ExprAssign(AssignExpr & expr) : mExpr(expr) {
+StmntAssignExpr::StmntAssignExpr(AssignExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-const Token & ExprAssign::getStartToken() const {
+const Token & StmntAssignExpr::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & ExprAssign::getEndToken() const {
+const Token & StmntAssignExpr::getEndToken() const {
     return mExpr.getEndToken();
 }
     
-llvm::Value * ExprAssign::generateCode(const CodegenCtx & cgCtx) {
+llvm::Value * StmntAssignExpr::generateCode(const CodegenCtx & cgCtx) {
     return mExpr.generateCode(cgCtx);
 }
 

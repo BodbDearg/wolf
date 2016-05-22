@@ -4,24 +4,24 @@
 
 WC_BEGIN_NAMESPACE
 
-class Expr;
+class Stmnt;
 
 /*
-Exprs:
-    Expr
-    Expr Exprs
+Stmnts:
+    Stmnt
+    Stmnt Stmnts
 */
-class Exprs : public ASTNodeCodegen {
+class Stmnts : public ASTNodeCodegen {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static Exprs * parse(const Token *& tokenPtr);
+    static Stmnts * parse(const Token *& tokenPtr);
 };
 
-/* Expr */
-class ExprsSingle : public Exprs {
+/* Stmnt */
+class StmntsSingle : public Stmnts {
 public:
-    ExprsSingle(Expr & expr);
+    StmntsSingle(Stmnt & expr);
     
     virtual const Token & getStartToken() const override;
     
@@ -29,13 +29,13 @@ public:
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
-    Expr & mExpr;
+    Stmnt & mStmnt;
 };
 
-/* Expr Exprs */
-class ExprsMulti : public Exprs {
+/* Stmnt Stmnts */
+class StmntsMulti : public Stmnts {
 public:
-    ExprsMulti(Expr & leftExpr, Exprs & rightExprs);
+    StmntsMulti(Stmnt & leftStmnt, Stmnts & rightStmnts);
     
     virtual const Token & getStartToken() const override;
     
@@ -43,8 +43,8 @@ public:
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
-    Expr & mLeftExpr;
-    Exprs & mRightExprs;
+    Stmnt & mLeftStmnt;
+    Stmnts & mRightStmnts;
 };
 
 WC_END_NAMESPACE

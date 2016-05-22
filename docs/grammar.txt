@@ -2,13 +2,13 @@ Module:
     Scope <EOF>
 
 Scope:
-    Exprs
+    Stmnts
 
-Exprs:
-    Expr
-    Expr Exprs
+Stmnts:
+    Stmnt
+    Stmnt Stmnts
 
-Expr:
+Stmnt:
     PrintStmnt
     VarDecl
     AssignExpr

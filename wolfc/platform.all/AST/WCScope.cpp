@@ -1,34 +1,34 @@
 #include "WCScope.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCExprs.hpp"
+#include "WCStmnts.hpp"
 #include "WCStringUtils.hpp"
 
 WC_BEGIN_NAMESPACE
 
 bool Scope::peek(const Token * tokenPtr) {
-    return Exprs::peek(tokenPtr);
+    return Stmnts::peek(tokenPtr);
 }
 
 Scope * Scope::parse(const Token *& tokenPtr) {
-    Exprs * exprs = Exprs::parse(tokenPtr);
-    WC_GUARD(exprs, nullptr);
-    return new Scope(*exprs);
+    Stmnts * stmnts = Stmnts::parse(tokenPtr);
+    WC_GUARD(stmnts, nullptr);
+    return new Scope(*stmnts);
 }
 
-Scope::Scope(Exprs & exprs) : mExprs(exprs) {
-    mExprs.mParent = this;
+Scope::Scope(Stmnts & stmnts) : mStmnts(stmnts) {
+    mStmnts.mParent = this;
 }
 
 const Token & Scope::getStartToken() const {
-    return mExprs.getStartToken();
+    return mStmnts.getStartToken();
 }
 
 const Token & Scope::getEndToken() const {
-    return mExprs.getEndToken();
+    return mStmnts.getEndToken();
 }
 
 llvm::Value * Scope::generateCode(const CodegenCtx & cgCtx) {
-    return mExprs.generateCode(cgCtx);
+    return mStmnts.generateCode(cgCtx);
 }
 
 llvm::Value * Scope::getOrCreateVariable(const char32_t * variableName,

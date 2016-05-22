@@ -6,11 +6,11 @@
 
 WC_BEGIN_NAMESPACE
 
-class Exprs;
+class Stmnts;
 
 /*
 Scope:
-    Exprs
+    Stmnts
 */
 class Scope : public ASTNodeCodegen {
 public:
@@ -18,7 +18,7 @@ public:
     
     static Scope * parse(const Token *& tokenPtr);
     
-    Scope(Exprs & exprs);
+    Scope(Stmnts & stmnts);
     
     virtual const Token & getStartToken() const override;
     
@@ -33,7 +33,7 @@ public:
     /* Get a variable within this scope. Does not create if it does not exist. */
     llvm::Value * getVariable(const char32_t * variableName) const;
     
-    Exprs & mExprs;
+    Stmnts & mStmnts;
     std::map<const char32_t*, llvm::Value*, CStrComparator> mVariableValues;
 };
 
