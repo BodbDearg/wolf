@@ -1,4 +1,4 @@
-#include "WCPrintExpr.hpp"
+#include "WCPrintStmnt.hpp"
 #include "WCAssert.hpp"
 #include "WCBinaryExpr.hpp"
 #include "WCCodegenCtx.hpp"
@@ -12,14 +12,14 @@ WC_THIRD_PARTY_INCLUDES_END
 WC_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
-// PrintExpr
+// PrintStmnt
 //-----------------------------------------------------------------------------
 
-bool PrintExpr::peek(const Token * tokenPtr) {
+bool PrintStmnt::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kPrint;
 }
 
-PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
+PrintStmnt * PrintStmnt::parse(const Token *& tokenPtr) {
     if (tokenPtr->type != TokenType::kPrint) {
         parseError(*tokenPtr, "Expected keyword 'print'!");
         return nullptr;
@@ -50,7 +50,7 @@ PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
         // Consume closing ')' and return parsed expression
         const Token * closingParenTok = tokenPtr;
         ++tokenPtr;
-        return new PrintExprStrLit(*printTok, *closingParenTok, *strLit);
+        return new PrintStmntStrLit(*printTok, *closingParenTok, *strLit);
     }
     else if (BinaryExpr::peek(tokenPtr)) {
         // Print a binary expression: parse that
@@ -66,7 +66,7 @@ PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
         // Consume closing ')' and return parsed expression
         const Token * closingParenTok = tokenPtr;
         ++tokenPtr;
-        return new PrintExprBinaryExpr(*printTok, *closingParenTok, *binaryExpr);
+        return new PrintStmntBinaryExpr(*printTok, *closingParenTok, *binaryExpr);
     }
     else {
         parseError(*tokenPtr, "Unexpected tokens following 'print' and '('! Expect binary expression or string literal!");
@@ -77,33 +77,33 @@ PrintExpr * PrintExpr::parse(const Token *& tokenPtr) {
     return nullptr;
 }
 
-PrintExpr::PrintExpr(const Token & startToken, const Token & endToken) :
+PrintStmnt::PrintStmnt(const Token & startToken, const Token & endToken) :
     mStartToken(startToken),
     mEndToken(endToken)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-const Token & PrintExpr::getStartToken() const {
+const Token & PrintStmnt::getStartToken() const {
     return mStartToken;
 }
 
-const Token & PrintExpr::getEndToken() const {
+const Token & PrintStmnt::getEndToken() const {
     return mEndToken;
 }
 
 //-----------------------------------------------------------------------------
-// PrintExprStrLit
+// PrintStmntStrLit
 //-----------------------------------------------------------------------------
 
-PrintExprStrLit::PrintExprStrLit(const Token & startToken, const Token & endToken, StrLit & lit) :
-    PrintExpr(startToken, endToken),
+PrintStmntStrLit::PrintStmntStrLit(const Token & startToken, const Token & endToken, StrLit & lit) :
+    PrintStmnt(startToken, endToken),
     mLit(lit)
 {
     mLit.mParent = this;
 }
 
-llvm::Value * PrintExprStrLit::generateCode(const CodegenCtx & cgCtx) {
+llvm::Value * PrintStmntStrLit::generateCode(const CodegenCtx & cgCtx) {
     // Get printf
     llvm::Constant * printfFn = cgCtx.module.getFunction("printf");
     
@@ -128,17 +128,17 @@ llvm::Value * PrintExprStrLit::generateCode(const CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// PrintExprBinaryExpr
+// PrintStmntBinaryExpr
 //-----------------------------------------------------------------------------
 
-PrintExprBinaryExpr::PrintExprBinaryExpr(const Token & startToken, const Token & endToken, BinaryExpr & expr) :
-    PrintExpr(startToken, endToken),
+PrintStmntBinaryExpr::PrintStmntBinaryExpr(const Token & startToken, const Token & endToken, BinaryExpr & expr) :
+    PrintStmnt(startToken, endToken),
     mExpr(expr)
 {
     mExpr.mParent = this;
 }
 
-llvm::Value * PrintExprBinaryExpr::generateCode(const CodegenCtx & cgCtx) {
+llvm::Value * PrintStmntBinaryExpr::generateCode(const CodegenCtx & cgCtx) {
     // Get printf
     llvm::Constant * printfFn = cgCtx.module.getFunction("printf");
     

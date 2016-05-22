@@ -1,6 +1,6 @@
 *** String literals ***
 
-StringLit:
+StrLit:
     " DblQuotedStrChars "
 
 DblQuotedStrChars

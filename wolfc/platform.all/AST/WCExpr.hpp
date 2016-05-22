@@ -4,7 +4,7 @@
 
 WC_BEGIN_NAMESPACE
 
-class PrintExpr;
+class PrintStmnt;
 class AssignExpr;
 class VarDecl;
 
@@ -22,9 +22,9 @@ public:
 };
 
 /* ExprPrint */
-class ExprPrint : public Expr {
+class ExprPrintStmnt : public Expr {
 public:
-    ExprPrint(PrintExpr & expr);
+    ExprPrintStmnt(PrintStmnt & stmnt);
     
     virtual const Token & getStartToken() const override;
     
@@ -32,7 +32,7 @@ public:
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
-    PrintExpr & mExpr;
+    PrintStmnt & mStmnt;
 };
 
 /* ExprVarDecl */

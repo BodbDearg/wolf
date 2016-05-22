@@ -9,7 +9,7 @@ Exprs:
     Expr Exprs
 
 Expr:
-    PrintExpr
+    PrintStmnt
     VarDecl
     AssignExpr
 
@@ -20,8 +20,8 @@ AssignExpr:
     BinaryExpr
     BinaryExpr = AssignExpr
 
-PrintExpr
-    print ( StringLit )
+PrintStmnt
+    print ( StrLit )
     print ( BinaryExpr )
 
 BinaryExpr:

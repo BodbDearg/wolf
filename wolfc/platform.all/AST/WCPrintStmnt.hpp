@@ -8,17 +8,17 @@ class BinaryExpr;
 class StrLit;
 
 /*
-PrintExpr
+PrintStmnt
     print ( StringLit )
     print ( BinaryExpr )
 */
-class PrintExpr : public ASTNodeCodegen {
+class PrintStmnt : public ASTNodeCodegen {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static PrintExpr * parse(const Token *& tokenPtr);
+    static PrintStmnt * parse(const Token *& tokenPtr);
     
-    PrintExpr(const Token & startToken, const Token & endToken);
+    PrintStmnt(const Token & startToken, const Token & endToken);
     
     virtual const Token & getStartToken() const override;
     
@@ -29,9 +29,9 @@ public:
 };
 
 /* print ( StringLit ) */
-class PrintExprStrLit : public PrintExpr {
+class PrintStmntStrLit : public PrintStmnt {
 public:
-    PrintExprStrLit(const Token & startToken, const Token & endToken, StrLit & lit);
+    PrintStmntStrLit(const Token & startToken, const Token & endToken, StrLit & lit);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
@@ -39,9 +39,9 @@ public:
 };
 
 /* print ( BinaryExpr ) */
-class PrintExprBinaryExpr : public PrintExpr {
+class PrintStmntBinaryExpr : public PrintStmnt {
 public:
-    PrintExprBinaryExpr(const Token & startToken, const Token & endToken, BinaryExpr & expr);
+    PrintStmntBinaryExpr(const Token & startToken, const Token & endToken, BinaryExpr & expr);
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     

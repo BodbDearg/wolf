@@ -1,7 +1,7 @@
 #include "WCExpr.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCPrintExpr.hpp"
+#include "WCPrintStmnt.hpp"
 #include "WCVarDecl.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -11,17 +11,17 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool Expr::peek(const Token * tokenPtr) {
-    return  PrintExpr::peek(tokenPtr) ||
+    return  PrintStmnt::peek(tokenPtr) ||
             VarDecl::peek(tokenPtr) ||
             AssignExpr::peek(tokenPtr);
 }
     
 Expr * Expr::parse(const Token *& tokenPtr) {
     // Parse print expression if ahead
-    if (PrintExpr::peek(tokenPtr)) {
-        PrintExpr * printExpr = PrintExpr::parse(tokenPtr);
-        WC_GUARD(printExpr, nullptr);
-        return new ExprPrint(*printExpr);
+    if (PrintStmnt::peek(tokenPtr)) {
+        PrintStmnt * printStmnt = PrintStmnt::parse(tokenPtr);
+        WC_GUARD(printStmnt, nullptr);
+        return new ExprPrintStmnt(*printStmnt);
     }
     
     // Parse var decl if ahead
@@ -41,20 +41,20 @@ Expr * Expr::parse(const Token *& tokenPtr) {
 // ExprPrint
 //-----------------------------------------------------------------------------
 
-ExprPrint::ExprPrint(PrintExpr & expr) : mExpr(expr) {
-    mExpr.mParent = this;
+ExprPrintStmnt::ExprPrintStmnt(PrintStmnt & stmnt) : mStmnt(stmnt) {
+    mStmnt.mParent = this;
 }
 
-const Token & ExprPrint::getStartToken() const {
-    return mExpr.getStartToken();
+const Token & ExprPrintStmnt::getStartToken() const {
+    return mStmnt.getStartToken();
 }
 
-const Token & ExprPrint::getEndToken() const {
-    return mExpr.getEndToken();
+const Token & ExprPrintStmnt::getEndToken() const {
+    return mStmnt.getEndToken();
 }
 
-llvm::Value * ExprPrint::generateCode(const CodegenCtx & cgCtx) {
-    return mExpr.generateCode(cgCtx);
+llvm::Value * ExprPrintStmnt::generateCode(const CodegenCtx & cgCtx) {
+    return mStmnt.generateCode(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
