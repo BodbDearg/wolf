@@ -31,24 +31,21 @@ llvm::Value * Scope::generateCode(const CodegenCtx & cgCtx) {
     return mStmnts.generateCode(cgCtx);
 }
 
-llvm::Value * Scope::getOrCreateVariable(const char32_t * variableName,
+llvm::Value * Scope::getOrCreateVariable(const char * variableName,
                                          const CodegenCtx & cgCtx)
 {
     llvm::Value *& val = mVariableValues[variableName];
     
     if (!val) {
-        std::unique_ptr<char[]> varNameUtf8(StringUtils::convertUtf32ToUtf8(variableName,
-                                                                            StringUtils::strlen(variableName)));
-        
         val = cgCtx.irBuilder.CreateAlloca(llvm::Type::getInt64Ty(cgCtx.llvmCtx),
                                            nullptr,
-                                           std::string("alloc_ident_val:") + varNameUtf8.get());
+                                           std::string("alloc_ident_val:") + variableName);
     }
     
     return val;
 }
 
-llvm::Value * Scope::getVariable(const char32_t * variableName) const {
+llvm::Value * Scope::getVariable(const char * variableName) const {
     auto iter = mVariableValues.find(variableName);
     
     if (iter != mVariableValues.end()) {

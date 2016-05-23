@@ -4,6 +4,163 @@
 
 WC_BEGIN_NAMESPACE
 
+bool StringUtils::stringStartsWith(const char * s1, const char * s2) {
+    WC_ASSERT(s1);
+    WC_ASSERT(s2);
+    
+    while (true) {
+        // Grab the val of both chars at this position
+        char c1 = s1[0];
+        char c2 = s2[0];
+        
+        // See if not equal
+        if (c1 != c2) {
+            // If s2 has ended before s1 and they were equal so far then s2 starts with s1!
+            if (c2 == 0) {
+                return true;
+            }
+            
+            // Otherwise we found an inequality
+            return false;
+        }
+        
+        // If we reached the end of s2 and s1 then break out and return true
+        if (c2 == 0) {
+            break;
+        }
+        
+        ++s1;
+        ++s2;
+    }
+    
+    return true;    // s1 and s2 are same length and equal
+}
+
+bool StringUtils::parseUtf8Char(const char * utf8Str, char32_t & outputChar, size_t & outputNumEncodingBytes) {
+    WC_ASSERT(utf8Str);
+    uint8_t utf8Byte1 = static_cast<uint8_t>(*utf8Str);
+    
+    if (utf8Byte1 & 0x80) {
+        // Possible multi byte sequence detected: Bit pattern 1???????
+        if (utf8Byte1 & 0x40) {
+            // Two or more bytes encoding: get the 2nd byte
+            uint8_t utf8Byte2 = static_cast<uint8_t>(utf8Str[1]);
+            
+            if (utf8Byte2 == 0) {
+                // Error! Unexpected NULL character reached in utf8 sequence.
+                outputChar = 0;
+                outputNumEncodingBytes = 0;
+                return false;
+            }
+            
+            if (utf8Byte1 & 0x20) {
+                // Three or more bytes encoding: get the 3rd byte
+                uint8_t utf8Byte3 = static_cast<uint8_t>(utf8Str[2]);
+                
+                if (utf8Byte3 == 0) {
+                    // Error! Unexpected NULL character reached in utf8 sequence.
+                    outputChar = 0;
+                    outputNumEncodingBytes = 0;
+                    return false;
+                }
+                
+                if (utf8Byte1 & 0x10) {
+                    // Four or more bytes encoding: get the 4th byte
+                    uint8_t utf8Byte4 = static_cast<uint8_t>(utf8Str[3]);
+                    
+                    if (utf8Byte4 == 0) {
+                        // Error! Unexpected NULL character reached in utf8 sequence.
+                        outputChar = 0;
+                        outputNumEncodingBytes = 0;
+                        return false;
+                    }
+                    
+                    if (utf8Byte1 & 0x08) {
+                        // Five or more bytes encoding: get the 5th byte
+                        uint8_t utf8Byte5 = static_cast<uint8_t>(utf8Str[4]);
+                        
+                        if (utf8Byte5 == 0) {
+                            // Error! Unexpected NULL character reached in utf8 sequence.
+                            outputChar = 0;
+                            outputNumEncodingBytes = 0;
+                            return false;
+                        }
+                        
+                        if (utf8Byte1 & 0x04) {
+                            // Six byte encoding: get the 6th byte
+                            uint8_t utf8Byte6 = static_cast<uint8_t>(utf8Str[5]);
+                            
+                            if (utf8Byte6 == 0) {
+                                // Error! Unexpected NULL character reached in utf8 sequence.
+                                outputChar = 0;
+                                outputNumEncodingBytes = 0;
+                                return false;
+                            }
+                            
+                            uint32_t utf32Char = (utf8Byte1 & 0x01u) << 30;
+                            utf32Char |= (utf8Byte2 & 0x3Fu) << 24;
+                            utf32Char |= (utf8Byte3 & 0x3Fu) << 18;
+                            utf32Char |= (utf8Byte4 & 0x3Fu) << 12;
+                            utf32Char |= (utf8Byte5 & 0x3Fu) << 6;
+                            utf32Char |= (utf8Byte6 & 0x3Fu) << 6;
+                            outputChar = static_cast<char32_t>(utf32Char);
+                            outputNumEncodingBytes = 6;
+                        }
+                        else {
+                            // Five byte encoding:
+                            uint32_t utf32Char = (utf8Byte1 & 0x03u) << 24;
+                            utf32Char |= (utf8Byte2 & 0x3Fu) << 18;
+                            utf32Char |= (utf8Byte3 & 0x3Fu) << 12;
+                            utf32Char |= (utf8Byte4 & 0x3Fu) << 6;
+                            utf32Char |= (utf8Byte5 & 0x3Fu);
+                            outputChar = static_cast<char32_t>(utf32Char);
+                            outputNumEncodingBytes = 5;
+                        }
+                    }
+                    else {
+                        // Four byte encoding:
+                        uint32_t utf32Char = (utf8Byte1 & 0x07u) << 18;
+                        utf32Char |= (utf8Byte2 & 0x3Fu) << 12;
+                        utf32Char |= (utf8Byte3 & 0x3Fu) << 6;
+                        utf32Char |= (utf8Byte4 & 0x3Fu);
+                        outputChar = static_cast<char32_t>(utf32Char);
+                        outputNumEncodingBytes = 4;
+                    }
+                }
+                else {
+                    // Three byte encoding:
+                    uint32_t utf32Char = (utf8Byte1 & 0x0Fu) << 12;
+                    utf32Char |= (utf8Byte2 & 0x3Fu) << 6;
+                    utf32Char |= (utf8Byte3 & 0x3Fu);
+                    outputChar = static_cast<char32_t>(utf32Char);
+                    outputNumEncodingBytes = 3;
+                }
+            }
+            else {
+                // Two byte encoding:
+                uint32_t utf32Char = (utf8Byte1 & 0x1Fu) << 6;
+                utf32Char |= (utf8Byte2 & 0x3Fu);
+                outputChar = static_cast<char32_t>(utf32Char);
+                outputNumEncodingBytes = 2;
+            }
+        }
+        else {
+            // Bad leading byte for UTF8 - must have bit pattern 11?????? or the first two high order bits as '1'.
+            outputChar = 0;
+            outputNumEncodingBytes = 0;
+            return false;
+        }
+    }
+    else {
+        // Single byte character: Bit pattern 0???????
+        outputChar = static_cast<uint8_t>(utf8Byte1);
+        outputNumEncodingBytes = 1;
+    }
+    
+    // IF we get to here then we are successful
+    return true;
+}
+
 size_t StringUtils::strlen(const char32_t * utf32Str) {
     WC_ASSERT(utf32Str);
     size_t length = 0;
@@ -40,38 +197,6 @@ int32_t StringUtils::strcmp(const char32_t * s1, const char32_t * s2) {
     }
     
     return 0;
-}
-
-bool StringUtils::stringStartsWith(const char32_t * s1, const char32_t * s2) {
-    WC_ASSERT(s1);
-    WC_ASSERT(s2);
-    
-    while (true) {
-        // Grab the val of both chars at this position
-        char32_t c1 = s1[0];
-        char32_t c2 = s2[0];
-        
-        // See if not equal
-        if (c1 != c2) {
-            // If s2 has ended before s1 and they were equal so far then s2 starts with s1!
-            if (c2 == 0) {
-                return true;
-            }
-            
-            // Otherwise we found an inequality
-            return false;
-        }
-        
-        // If we reached the end of s2 and s1 then break out and return true
-        if (c2 == 0) {
-            break;
-        }
-        
-        ++s1;
-        ++s2;
-    }
-    
-    return true;    // s1 and s2 are same length and equal
 }
 
 char32_t * StringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf8Bytes) {
@@ -186,6 +311,8 @@ char32_t * StringUtils::convertUtf8ToUtf32(const char * utf8Str, size_t numUtf8B
                 }
             }
             else {
+                // TODO: should we just error out rather than trying to recover?!
+                
                 // Bad leading byte for UTF8 - must have bit pattern 11?????? or the first two high order bits as '1'.
                 // Skip this byte to try to recover:
                 ++utf8Str;

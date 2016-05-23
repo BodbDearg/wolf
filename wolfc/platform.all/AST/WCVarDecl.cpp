@@ -70,7 +70,7 @@ llvm::Value * VarDecl::generateCode(const CodegenCtx & cgCtx) {
     llvm::Value * leftValue = parentScope->getVariable(mIdent.mToken.data.strVal.ptr);
     
     if (leftValue) {
-        compileError("The variable '%s' has been redefined!", std::unique_ptr<char[]>(mIdent.getUtf8Name()).get());
+        compileError("The variable '%s' has been redefined!", mIdent.mToken.data.strVal.ptr);
         return nullptr;
     }
         

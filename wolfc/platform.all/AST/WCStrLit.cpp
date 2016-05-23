@@ -34,12 +34,7 @@ const Token & StrLit::getEndToken() const {
 }
 
 llvm::Value * StrLit::generateCode(const CodegenCtx & cgCtx) {
-    // TODO: how to handle encodings here?
-    // Convert to UTF8 for now...
-    std::unique_ptr<char[]> strUtf8(StringUtils::convertUtf32ToUtf8(mToken.data.strVal.ptr,
-                                                                    mToken.data.strVal.length));
-    
-    return cgCtx.irBuilder.CreateGlobalStringPtr(strUtf8.get(), "usr_string_lit");
+    return cgCtx.irBuilder.CreateGlobalStringPtr(mToken.data.strVal.ptr, "usr_string_lit");
 }
 
 WC_END_NAMESPACE

@@ -10,8 +10,8 @@ void ASTNode::parseError(const Token & srcToken, const char * msg, ...) {
     // Generic error info
     std::fprintf(stderr,
                  "Error! Parsing failed at line %zu, column %zu! Message:\n",
-                 srcToken.srcLine + 1,
-                 srcToken.srcCol + 1);
+                 srcToken.startLine + 1,
+                 srcToken.startCol + 1);
     
     // Specific error message
     std::va_list args;
@@ -52,10 +52,10 @@ void ASTNode::compileError(const char * msg, ...) {
     std::fprintf(stderr,
                  "Error! Compile failed for the code beginning at line %zu, column %zu and "
                  "ending at line %zu and column %zu! Message:\n",
-                 startToken.srcLine + 1,
-                 startToken.srcCol + 1,
-                 endToken.srcLine + 1,
-                 endToken.srcCol + 1 + endToken.srcLength);
+                 startToken.startLine + 1,
+                 startToken.startCol + 1,
+                 endToken.endLine + 1,
+                 endToken.endCol + 1);
     
     // Specific error info
     std::va_list args;

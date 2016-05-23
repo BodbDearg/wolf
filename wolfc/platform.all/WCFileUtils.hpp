@@ -6,11 +6,11 @@
 WC_BEGIN_NAMESPACE
 
 namespace FileUtils {
-    /* Reads a file encoded as utf8 as a null terminated utf8 c-string */
-    char * readUTF8TextFileAsUTF8String(const char * filePath, size_t & fileSizeInBytes);
+    /* Reads into a null terminated c-string. Returns the size of the file in the given param. */
+    char * readTextFileAsCString(const char * filePath, size_t & fileSizeInBytes);
     
-    /* Reads a file encoded as utf8 as a null terminated utf32 c-string */
-    char32_t * readUTF8TextFileAsUTF32String(const char * filePath);
+    /* Same as other read function, but without output file size given. */
+    char * readTextFileAsCString(const char * filePath);
 }
 
 WC_END_NAMESPACE

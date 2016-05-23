@@ -40,20 +40,16 @@ llvm::Value * Identifier::generateCode(const CodegenCtx & cgCtx) {
     Scope * parentScope = getParentScope();
     WC_GUARD_ASSERT(parentScope, nullptr);
     
-    // Convert identifier name to utf8
-    std::unique_ptr<char[]> identifierNameUtf8(StringUtils::convertUtf32ToUtf8(mToken.data.strVal.ptr,
-                                                                               mToken.data.strVal.length));
-    
     // Grab the variable
     llvm::Value * value = parentScope->getVariable(mToken.data.strVal.ptr);
     
     if (!value) {
-        compileError("No variable named '%s' in the current scope!", identifierNameUtf8.get());
+        compileError("No variable named '%s' in the current scope!", mToken.data.strVal.ptr);
         return nullptr;
     }
     
     // Create an instruction to load it
-    return cgCtx.irBuilder.CreateLoad(value, std::string("load_ident_val:") + identifierNameUtf8.get());
+    return cgCtx.irBuilder.CreateLoad(value, std::string("load_ident_val:") + mToken.data.strVal.ptr);
 }
 
 llvm::Value * Identifier::codegenAddrOf(const CodegenCtx & cgCtx) {
@@ -61,10 +57,6 @@ llvm::Value * Identifier::codegenAddrOf(const CodegenCtx & cgCtx) {
     Scope * parentScope = getParentScope();
     WC_GUARD_ASSERT(parentScope, nullptr);
     return parentScope->getVariable(mToken.data.strVal.ptr);
-}
-
-char * Identifier::getUtf8Name() const {
-    return StringUtils::convertUtf32ToUtf8(mToken.data.strVal.ptr, mToken.data.strVal.length);
 }
 
 WC_END_NAMESPACE

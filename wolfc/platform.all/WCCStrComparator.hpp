@@ -1,13 +1,13 @@
 #pragma once
 
 #include "WCMacros.hpp"
-#include "WCStringUtils.hpp"
+#include <cstring>
 
 WC_BEGIN_NAMESPACE
 
 struct CStrComparator {
-    bool operator()(const char32_t * s1, const char32_t * s2) const {
-        return StringUtils::strcmp(s1, s2) < static_cast<int32_t>(0);
+    bool operator()(const char * s1, const char * s2) const {
+        return std::strcmp(s1, s2) < 0;
     }
 };
 

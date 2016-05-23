@@ -16,7 +16,7 @@ int main(int argc, const char * argv[]) {
     }
     
     // Read the input file
-    std::unique_ptr<char32_t[]> inputSrc(wolfc::FileUtils::readUTF8TextFileAsUTF32String(argv[1]));
+    std::unique_ptr<char[]> inputSrc(wolfc::FileUtils::readTextFileAsCString(argv[1]));
     
     if (!inputSrc) {
         std::printf("Failed to read input Wolf source file '%s'!\n", argv[1]);

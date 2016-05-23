@@ -21,9 +21,6 @@ public:
 
     llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx);
     
-    /* Get the name in utf8 format. Callee is responsible for cleanup with delete[] */
-    char * getUtf8Name() const;
-    
     const Token & mToken;
 };
 

@@ -24,10 +24,10 @@ public:
     ~Lexer();
     
     /**
-     * Parse the given input source string and convert into a series of tokens.
+     * Parse the given input source string (encoded in UTF8 format) and convert into a series of tokens.
      * Returns false and saves an error message if this process fails.
      */
-    bool process(const char32_t * srcText);
+    bool process(const char * utf8Src);
     
     /* Give the token list for the lexer */
     const Token * getTokenList() const;
@@ -35,9 +35,13 @@ public:
 private:
     /* Struct holding lexer state, current source pointer and line/col info */
     struct LexerState {
-        const char32_t * srcPtr;
+        bool error;
+        const char * srcPtr;
         size_t srcLine;
         size_t srcCol;
+        char32_t currentChar;
+        size_t currentCharNumBytes;
+        bool currentCharIsNewline;
     };
     
     /* Result of parsing */
@@ -47,46 +51,51 @@ private:
         kFail       /* Parsing failed */
     };
     
-    /* Try to consume some whitespace. Return false if no whitespace was consumed. */
-    bool tryConsumeWhitespaceChar(char32_t currentChar);
+    /* Initialize the lexer state. */
+    bool initLexerState(const char * utf8Src);
     
-    /**
-     * Advance the lexer position by the given number of NON whitespace chars.
-     *
-     * Makes the following assumptions:
-     *  (1) The given number of characters exist in the source code text.
-     *  (2) The given number of characters are NOT whitespace, and treats them as so.
-     */
-    void consumeNumNonWhiteSpaceChars(size_t numChars);
+    /* Try to consume some whitespace. Return false if no whitespace was consumed. */
+    bool skipWhitespaceChar();
+    
+    /* Move onto the next character. */
+    bool moveOntoNextChar();
     
     /* Try to parse some basic tokens. */
-    ParseResult parseBasicTokens(char32_t currentChar);
+    ParseResult parseBasicTokens();
+    
+    /**
+     * Create a basic token (symbol etc.) of the given type and add it to the end of the token list.
+     * The given number of characters are consumed. If the parse fails then that is reflected in the return result.
+     */
+    ParseResult parseBasicToken(TokenType tokenType, size_t numCharsInToken);
     
     /* Try to parse a numeric literal. Return false if no numeric literal was parsed. */
-    ParseResult parseNumericLiteral(char32_t currentChar);
+    ParseResult parseNumericLiteral();
     
     /* Try to parse a double quoted string literal. Return false if no string literal was parsed. */
-    ParseResult parseDoubleQuotedStringLiteral(char32_t currentChar);
+    ParseResult parseDoubleQuotedStringLiteral();
     
     /* Try to parse keywords and literals. */
-    ParseResult parseKeywordsAndLiterals(char32_t currentChar);
+    ParseResult parseKeywordsAndLiterals();
     
     /* Increase the token list capacity to the given capacity. If smaller than old capacity, nothing happens. */
     void increaseTokenListCapacity(size_t newCapacity);
     
     /**
      * Allocate a token from the token list. 
-     * All fields in the token are initialized, source location info set and the type of the token
-     * set also. If the token is a literal, it is up to the callee to perform any additional 
-     * initialization that is required.
+     * All fields in the token are default initialized apart from token type.
+     * It is up to the callee to perform any other initialization that is required.
      */
-    Token & allocToken(TokenType tokenType, size_t tokenSrcLength);
+    Token & allocToken(TokenType tokenType);
+    
+    /* Create the EOF token and add it to the end of the token list */
+    void createEOFToken();
 
     /**
      * Emit a lexer error to stderror followed by a newline.
      * The given line and column information are emitted also.
      */
-    void error(const LexerState & srcLocation, const char * msg, ...);
+    void error(size_t srcLine, size_t srcCol, const char * msg, ...);
     
     /**
      * Emit a lexer error to stderror follwed by a newline.

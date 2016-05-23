@@ -19,7 +19,7 @@ Stmnts * Stmnts::parse(const Token *& tokenPtr) {
     WC_GUARD(stmnt, nullptr);
     
     if (Stmnts::peek(tokenPtr)) {
-        if (tokenPtr->srcLine <= startTok->srcLine) {
+        if (tokenPtr->startLine <= startTok->startLine) {
             // TODO: support semi colon for multiple expressions per line
             parseError(*tokenPtr, "Multiple expressions are not allowed on one line!");
             return nullptr;

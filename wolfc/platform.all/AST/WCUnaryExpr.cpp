@@ -56,8 +56,8 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
             if (currentToken->type != TokenType::kRParen) {
                 parseError(*currentToken,
                            "Expected closing ')' to match '(' at line %zu and column %zu!",
-                           lparenTok->srcLine,
-                           lparenTok->srcCol);
+                           lparenTok->startLine + 1,
+                           lparenTok->startCol + 1);
                 
                 return nullptr;
             }

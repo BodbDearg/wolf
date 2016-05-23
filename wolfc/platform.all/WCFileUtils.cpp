@@ -1,11 +1,10 @@
 #include "WCFileUtils.hpp"
-#include "WCStringUtils.hpp"
 #include "WCFinally.hpp"
 #include <cstdio>
 
 WC_BEGIN_NAMESPACE
 
-char * FileUtils::readUTF8TextFileAsUTF8String(const char * filePath, size_t & fileSizeInBytes) {
+char * FileUtils::readTextFileAsCString(const char * filePath, size_t & fileSizeInBytes) {
     // Open the file
     fileSizeInBytes = 0;
     std::FILE * file = std::fopen(filePath, "rb");
@@ -39,11 +38,9 @@ char * FileUtils::readUTF8TextFileAsUTF8String(const char * filePath, size_t & f
     return charBuffer;
 }
 
-char32_t * FileUtils::readUTF8TextFileAsUTF32String(const char * filePath) {
-    size_t fileSizeInBytes = 0;
-    std::unique_ptr<char[]> utf8Str(readUTF8TextFileAsUTF8String(filePath, fileSizeInBytes));
-    WC_GUARD(utf8Str, nullptr);
-    return StringUtils::convertUtf8ToUtf32(utf8Str.get(), fileSizeInBytes);
+char * FileUtils::readTextFileAsCString(const char * filePath) {
+    size_t unusedOutputFileSize = 0;
+    return readTextFileAsCString(filePath, unusedOutputFileSize);
 }
 
 WC_END_NAMESPACE

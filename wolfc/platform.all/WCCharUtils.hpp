@@ -7,26 +7,26 @@ WC_BEGIN_NAMESPACE
 
 /* Utilities for querying character classes. */
 namespace CharUtils {
-    /*Tells if a character is valid to be used in an identifier as the first character. */
+    /* Tells if a unicode character is valid to be used in an identifier as the first character. */
     bool isValidIdentifierStartChar(char32_t c);
     
-    /* Tells if a character is valid to be used in an identifier for characters other than the start. */
+    /* Tells if a unicode character is valid to be used in an identifier for characters other than the start. */
     bool isValidIdentifierMiddleChar(char32_t c);
     
-    /* Tell if a character is an alpha (regular letter) character. */
+    /* Tell if a unicode character is an alpha (regular letter) character. */
     bool isAlpha(char32_t c);
     
-    /* Tells if a character is an underscore */
+    /* Tells if a unicode character is an underscore */
     inline constexpr bool isUnderscore(char32_t c) {
         return c == '_';
     }
     
-    /* Tells if a character is 0-9 */
+    /* Tells if a unicode character is 0-9 */
     inline constexpr bool isDigit(char32_t c) {
         return c >= '0' && c <= '9';
     }
     
-    /* Tells if a character is a line separator */
+    /* Tells if a unicode character is a line separator */
     inline constexpr bool isLineSeparator(char32_t c) {
         // See: https://en.wikipedia.org/wiki/Newline
         switch (c) {
@@ -46,7 +46,7 @@ namespace CharUtils {
         return false;
     }
     
-    /* Tells if a character is a whitespace character */
+    /* Tells if a unicode character is a whitespace character */
     inline constexpr bool isWhitespace(char32_t c) {
         // See: https://en.wikipedia.org/wiki/Whitespace_character
         switch (c) {

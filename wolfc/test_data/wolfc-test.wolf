@@ -1,4 +1,3 @@
-
 print("Enter a fucking integer number 😫: ")
 var a = readnum()
 print("Your fucking number is 😩: ")
