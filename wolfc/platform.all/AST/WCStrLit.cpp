@@ -34,6 +34,7 @@ const Token & StrLit::getEndToken() const {
 }
 
 llvm::Value * StrLit::generateCode(const CodegenCtx & cgCtx) {
+    // TODO: need some sort of LUT for the module so we only have unique string instances
     return cgCtx.irBuilder.CreateGlobalStringPtr(mToken.data.strVal.ptr, "usr_string_lit");
 }
 
