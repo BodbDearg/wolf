@@ -24,6 +24,14 @@ PrintStmnt
     print ( StrLit )
     print ( BinaryExpr )
 
+OrExpr:
+	AndExpr
+	AndExpr or OrExpr
+
+AndExpr:
+	BinaryExpr
+	BinaryExpr and AndExpr
+
 BinaryExpr:
 	UnaryExpr
 	UnaryExpr + BinaryExpr
