@@ -41,6 +41,12 @@ enum class TokenType {
     /* var */
     kVar,
     
+    /* true */
+    kTrue,
+    
+    /* false */
+    kFalse,
+    
     /* TEMPORARY: print */
     kPrint,
     

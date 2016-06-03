@@ -1,4 +1,5 @@
 #include "WCPrimaryExpr.hpp"
+#include "WCBoolLit.hpp"
 #include "WCIdentifier.hpp"
 #include "WCIntLit.hpp"
 #include "WCReadnumExpr.hpp"
@@ -12,16 +13,21 @@ WC_BEGIN_NAMESPACE
 
 bool PrimaryExpr::peek(const Token * currentToken) {
     return  IntLit::peek(currentToken) ||
+            BoolLit::peek(currentToken) ||
             Identifier::peek(currentToken) ||
             ReadnumExpr::peek(currentToken);
 }
 
 PrimaryExpr * PrimaryExpr::parse(const Token *& currentToken) {
-    
     if (IntLit::peek(currentToken)) {
         IntLit * uintLit = IntLit::parse(currentToken);
         WC_GUARD(uintLit, nullptr);
         return new PrimaryExprIntLit(*uintLit);
+    }
+    else if (BoolLit::peek(currentToken)) {
+        BoolLit * boolLit = BoolLit::parse(currentToken);
+        WC_GUARD(boolLit, nullptr);
+        return new PrimaryExprBoolLit(*boolLit);
     }
     else if (Identifier::peek(currentToken)) {
         Identifier * identifier = Identifier::parse(currentToken);
@@ -63,6 +69,37 @@ bool PrimaryExprIntLit::isLValue() const {
 }
 
 llvm::Value * PrimaryExprIntLit::codegenAddrOf(const CodegenCtx & cgCtx) {
+    compileError("Can't take the address of an int literal expression!");
+    WC_UNUSED_PARAM(cgCtx);
+    return nullptr;
+}
+
+//-----------------------------------------------------------------------------
+// PrimaryExprBoolLit
+//-----------------------------------------------------------------------------
+
+PrimaryExprBoolLit::PrimaryExprBoolLit(BoolLit & lit) : mLit(lit) {
+    mLit.mParent = this;
+}
+
+const Token & PrimaryExprBoolLit::getStartToken() const {
+    return mLit.getStartToken();
+}
+
+const Token & PrimaryExprBoolLit::getEndToken() const {
+    return mLit.getEndToken();
+}
+
+llvm::Value * PrimaryExprBoolLit::generateCode(const CodegenCtx & cgCtx) {
+    return mLit.generateCode(cgCtx);
+}
+
+bool PrimaryExprBoolLit::isLValue() const {
+    return false;
+}
+
+llvm::Value * PrimaryExprBoolLit::codegenAddrOf(const CodegenCtx & cgCtx) {
+    compileError("Can't take the address of a bool literal expression!");
     WC_UNUSED_PARAM(cgCtx);
     return nullptr;
 }
@@ -120,6 +157,7 @@ bool PrimaryExprReadnum::isLValue() const {
 }
     
 llvm::Value * PrimaryExprReadnum::codegenAddrOf(const CodegenCtx & cgCtx) {
+    compileError("Can't take the address of a readnum expression!");
     WC_UNUSED_PARAM(cgCtx);
     return nullptr;
 }

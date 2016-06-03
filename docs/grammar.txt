@@ -46,7 +46,8 @@ UnaryExpr:
 	(BinaryExpr)
 
 PrimaryExpr:
-    IntLit
+	IntLit
+	BoolLit
     Identifier
     ReadnumExpr
 

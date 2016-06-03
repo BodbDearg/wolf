@@ -1,8 +1,6 @@
 #include "WCStrLit.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCStringUtils.hpp"
 #include "WCToken.hpp"
-#include <memory>
 
 WC_BEGIN_NAMESPACE
 
@@ -11,7 +9,7 @@ bool StrLit::peek(const Token * tokenPtr) {
 }
 
 StrLit * StrLit::parse(const Token *& tokenPtr) {
-    if (tokenPtr->type != TokenType::kStrLit) {
+    if (!peek(tokenPtr)) {
         parseError(*tokenPtr, "Expected string literal!");
         return nullptr;
     }

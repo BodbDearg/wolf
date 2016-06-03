@@ -447,7 +447,9 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
     
     if (parseKeyword("print", TokenType::kPrint) ||
         parseKeyword("var", TokenType::kVar) ||
-        parseKeyword("readnum", TokenType::kReadnum))
+        parseKeyword("readnum", TokenType::kReadnum) ||
+        parseKeyword("true", TokenType::kTrue) ||
+        parseKeyword("false", TokenType::kFalse))
     {
         return ParseResult::kSuccess;
     }

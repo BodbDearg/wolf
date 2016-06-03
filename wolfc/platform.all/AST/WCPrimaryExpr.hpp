@@ -4,13 +4,15 @@
 
 WC_BEGIN_NAMESPACE
 
-class IntLit;
+class BoolLit;
 class Identifier;
+class IntLit;
 class ReadnumExpr;
 
 /*
 PrimaryExpr:
-    IntLit
+	IntLit
+	BoolLit
     Identifier
     ReadnumExpr
 */
@@ -46,6 +48,24 @@ public:
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
     IntLit & mLit;
+};
+
+/* BoolLit */
+class PrimaryExprBoolLit : public PrimaryExpr {
+public:
+    PrimaryExprBoolLit(BoolLit & lit);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    
+    virtual bool isLValue() const override;
+    
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    BoolLit & mLit;
 };
 
 /* Identifier */
