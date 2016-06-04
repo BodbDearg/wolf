@@ -1,1 +1,7 @@
-print(1 + 2)
+print("Testing printing true: ")
+print(true)
+print("\n")
+print("Testing printing false: ")
+print(false)
+print("\n")
+print("Done! 😱\n")

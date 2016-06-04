@@ -1,4 +1,6 @@
 #include "WCBoolDataType.hpp"
+#include "WCAssert.hpp"
+#include "WCCodegenCtx.hpp"
 #include "WCPrintStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -16,11 +18,44 @@ llvm::Value * BoolDataType::genPrintStmntCode(const CodegenCtx & cgCtx,
                                               llvm::Constant & printfFn,
                                               llvm::Value & value) const
 {
-    WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(printfFn);
-    WC_UNUSED_PARAM(value);
-    parentPrintStmnt.compileError("Type 'bool' cannot be printed!");
-    return nullptr;
+    WC_UNUSED_PARAM(parentPrintStmnt);
+    
+    // Create the two blocks for true & false and a branch
+    llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
+
+    llvm::BasicBlock * trueBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "print:true", parentFn);
+    WC_GUARD_ASSERT(trueBB, nullptr);
+    llvm::BasicBlock * falseBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "print:false", parentFn);
+    WC_GUARD_ASSERT(falseBB, nullptr);
+    
+    // Generate the branch
+    llvm::Value * branch = cgCtx.irBuilder.CreateCondBr(&value, trueBB, falseBB);
+    WC_GUARD_ASSERT(branch, nullptr);
+    llvm::BasicBlock * continueBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "print:continue", parentFn);
+    WC_GUARD_ASSERT(continueBB, nullptr);
+    
+    // Generate code for print 'true' block
+    {
+        cgCtx.irBuilder.SetInsertPoint(trueBB);
+        llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("true", "print_fmt_str:bool:true");
+        WC_GUARD_ASSERT(fmtStr, nullptr);
+        WC_GUARD_ASSERT(cgCtx.irBuilder.CreateCall(&printfFn, fmtStr, "print_printf_call:bool:true"), nullptr);
+        WC_GUARD_ASSERT(cgCtx.irBuilder.CreateBr(continueBB), nullptr);
+    }
+    
+    // Generate code for print 'false' block
+    {
+        cgCtx.irBuilder.SetInsertPoint(falseBB);
+        llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("false", "print_fmt_str:bool:false");
+        WC_GUARD_ASSERT(fmtStr, nullptr);
+        WC_GUARD_ASSERT(cgCtx.irBuilder.CreateCall(&printfFn, fmtStr, "print_printf_call:bool:false"), nullptr);
+        WC_GUARD_ASSERT(cgCtx.irBuilder.CreateBr(continueBB), nullptr);
+    }
+    
+    // Restore the previous insert point
+    cgCtx.irBuilder.SetInsertPoint(continueBB);
+    return branch;
 }
 
 WC_END_NAMESPACE
