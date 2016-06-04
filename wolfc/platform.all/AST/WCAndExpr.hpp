@@ -4,19 +4,19 @@
 
 WC_BEGIN_NAMESPACE
 
+class BinaryExpr;
 class DataType;
-class OrExpr;
 
 /*
-AssignExpr:
-    OrExpr
-    OrExpr = AssignExpr
+AndExpr:
+	BinaryExpr
+	BinaryExpr and AndExpr
 */
-class AssignExpr : public ASTNodeCodegen {
+class AndExpr : public ASTNodeCodegen {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static AssignExpr * parse(const Token *& tokenPtr);
+    static AndExpr * parse(const Token *& tokenPtr);
     
     /**
      * Tell if this expression evaluates to an lvalue. lvalues are values that can be asssigned to.
@@ -31,10 +31,10 @@ public:
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) = 0;
 };
 
-/* OrExpr */
-class AssignExprNoAssign : public AssignExpr {
+/* BinaryExpr */
+class AndExprNoAnd : public AndExpr {
 public:
-    AssignExprNoAssign(OrExpr & expr);
+    AndExprNoAnd(BinaryExpr & expr);
     
     virtual const Token & getStartToken() const override;
     
@@ -48,13 +48,13 @@ public:
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
-    OrExpr & mExpr;
+    BinaryExpr & mExpr;
 };
 
-/* OrExpr = AssignExpr */
-class AssignExprAssign : public AssignExpr {
+/* BinaryExpr and AndExpr */
+class AndExprAnd : public AndExpr {
 public:
-    AssignExprAssign(OrExpr & leftExpr, AssignExpr & rightExpr);
+    AndExprAnd(BinaryExpr & leftExpr, AndExpr & rightExpr);
     
     virtual const Token & getStartToken() const override;
     
@@ -68,8 +68,8 @@ public:
 
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
-    OrExpr & mLeftExpr;
-    AssignExpr & mRightExpr;
+    BinaryExpr & mLeftExpr;
+    AndExpr & mRightExpr;
 };
 
 WC_END_NAMESPACE

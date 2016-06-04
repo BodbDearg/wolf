@@ -80,8 +80,8 @@ const DataType & PrimaryExprIntLit::getDataType() const {
 }
 
 llvm::Value * PrimaryExprIntLit::codegenAddrOf(const CodegenCtx & cgCtx) {
-    compileError("Can't take the address of an int literal expression!");
     WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
@@ -114,8 +114,8 @@ const DataType & PrimaryExprBoolLit::getDataType() const {
 }
 
 llvm::Value * PrimaryExprBoolLit::codegenAddrOf(const CodegenCtx & cgCtx) {
-    compileError("Can't take the address of a bool literal expression!");
     WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
@@ -148,8 +148,8 @@ const DataType & PrimaryExprStrLit::getDataType() const {
 }
 
 llvm::Value * PrimaryExprStrLit::codegenAddrOf(const CodegenCtx & cgCtx) {
-    compileError("Can't take the address of a string literal expression!");
     WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
@@ -214,8 +214,8 @@ const DataType & PrimaryExprReadnum::getDataType() const {
 }
 
 llvm::Value * PrimaryExprReadnum::codegenAddrOf(const CodegenCtx & cgCtx) {
-    compileError("Can't take the address of a readnum expression!");
     WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 

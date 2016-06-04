@@ -121,6 +121,7 @@ const DataType & BinaryExprTwoOps::getDataType() const {
 
 llvm::Value * BinaryExprTwoOps::codegenAddrOf(const CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 

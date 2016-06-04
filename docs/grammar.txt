@@ -20,8 +20,8 @@ VarDecl:
     var Identifier = AssignExpr
 
 AssignExpr:
-    BinaryExpr
-    BinaryExpr = AssignExpr
+    OrExpr
+    OrExpr = AssignExpr
 
 OrExpr:
 	AndExpr
@@ -42,7 +42,7 @@ UnaryExpr:
 	PrimaryExpr
 	-PrimaryExpr
 	+PrimaryExpr
-	(BinaryExpr)
+	(AssignExpr)
 
 PrimaryExpr:
 	IntLit

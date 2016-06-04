@@ -4,7 +4,7 @@
 
 WC_BEGIN_NAMESPACE
 
-class BinaryExpr;
+class AssignExpr;
 class DataType;
 class PrimaryExpr;
 
@@ -13,7 +13,7 @@ UnaryExpr:
 	PrimaryExpr
 	-PrimaryExpr
 	+PrimaryExpr
-	(BinaryExpr)
+	(AssignExpr)
 */
 class UnaryExpr : public ASTNodeCodegen {
 public:
@@ -57,7 +57,7 @@ public:
 /* -PrimaryExpr */
 class UnaryExprNegPrimary : public UnaryExpr {
 public:
-    UnaryExprNegPrimary(const Token & startToken, PrimaryExpr & expr);
+    UnaryExprNegPrimary(PrimaryExpr & expr, const Token & startToken);
     
     virtual const Token & getStartToken() const override;
     
@@ -71,14 +71,14 @@ public:
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
+    PrimaryExpr &   mExpr;    
     const Token &   mStartToken;
-    PrimaryExpr &   mExpr;
 };
 
 /* +PrimaryExpr */
 class UnaryExprPosPrimary : public UnaryExprPrimary {
 public:
-    UnaryExprPosPrimary(const Token & startToken, PrimaryExpr & expr);
+    UnaryExprPosPrimary(PrimaryExpr & expr, const Token & startToken);
     
     virtual const Token & getStartToken() const override;
     
@@ -95,10 +95,10 @@ public:
     const Token &   mStartToken;
 };
 
-/* (BinaryExpr) */
+/* (AssignExpr) */
 class UnaryExprParen : public UnaryExpr {
 public:
-    UnaryExprParen(const Token & startToken, const Token & endToken, BinaryExpr & expr);
+    UnaryExprParen(AssignExpr & expr, const Token & startToken, const Token & endToken);
     
     virtual const Token & getStartToken() const override;
     
@@ -112,9 +112,9 @@ public:
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
+    AssignExpr &    mExpr;
     const Token &   mStartToken;
     const Token &   mEndToken;
-    BinaryExpr &    mExpr;
 };
 
 WC_END_NAMESPACE

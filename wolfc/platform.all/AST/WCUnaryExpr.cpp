@@ -1,5 +1,5 @@
 #include "WCUnaryExpr.hpp"
-#include "WCBinaryExpr.hpp"
+#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
 #include "WCPrimaryExpr.hpp"
@@ -16,13 +16,14 @@ bool UnaryExpr::peek(const Token * currentToken) {
     /* 
     -PrimaryExpr
     +PrimaryExpr
-    (BinaryExpr)
     */
-    if (currentToken->type == TokenType::kMinus ||
-        currentToken->type == TokenType::kPlus ||
-        currentToken->type == TokenType::kLParen)
-    {
+    if (currentToken->type == TokenType::kMinus || currentToken->type == TokenType::kPlus) {
         return PrimaryExpr::peek(currentToken + 1);
+    }
+    
+    /* (AssignExpr) */
+    if (currentToken->type == TokenType::kLParen) {
+        return AssignExpr::peek(currentToken + 1);
     }
     
     /* PrimaryExpr */
@@ -37,7 +38,7 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
             ++currentToken;     // Skip '-'
             PrimaryExpr * expr = PrimaryExpr::parse(currentToken);
             WC_GUARD(expr, nullptr);
-            return new UnaryExprNegPrimary(*minusTok, *expr);
+            return new UnaryExprNegPrimary(*expr, *minusTok);
         }   break;
             
         /* +PrimaryExpr */
@@ -46,14 +47,14 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
             ++currentToken;     // Skip '+'
             PrimaryExpr * expr = PrimaryExpr::parse(currentToken);
             WC_GUARD(expr, nullptr);
-            return new UnaryExprPosPrimary(*plusTok, *expr);
+            return new UnaryExprPosPrimary(*expr, *plusTok);
         }   break;
             
-        /* (BinaryExpr) */
+        /* (AssignExpr) */
         case TokenType::kLParen: {
             const Token * lparenTok = currentToken;
             ++currentToken;     // Skip '('
-            BinaryExpr * expr = BinaryExpr::parse(currentToken);
+            AssignExpr * expr = AssignExpr::parse(currentToken);
             
             if (currentToken->type != TokenType::kRParen) {
                 parseError(*currentToken,
@@ -67,7 +68,7 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
             const Token * rparenTok = currentToken;
             ++currentToken;     // Skip ')'
             WC_GUARD(expr, nullptr);
-            return new UnaryExprParen(*lparenTok, *rparenTok, *expr);
+            return new UnaryExprParen(*expr, *lparenTok, *rparenTok);
         }   break;
             
         /* PrimaryExpr */
@@ -117,9 +118,9 @@ llvm::Value * UnaryExprPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
 // UnaryExprNegPrimary
 //-----------------------------------------------------------------------------
 
-UnaryExprNegPrimary::UnaryExprNegPrimary(const Token & startToken, PrimaryExpr & expr) :
-    mStartToken(startToken),
-    mExpr(expr)
+UnaryExprNegPrimary::UnaryExprNegPrimary(PrimaryExpr & expr, const Token & startToken) :
+    mExpr(expr),
+    mStartToken(startToken)
 {
     mExpr.mParent = this;
 }
@@ -160,7 +161,7 @@ llvm::Value * UnaryExprNegPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
 // UnaryExprPosPrimary
 //-----------------------------------------------------------------------------
 
-UnaryExprPosPrimary::UnaryExprPosPrimary(const Token & startToken, PrimaryExpr & expr) :
+UnaryExprPosPrimary::UnaryExprPosPrimary(PrimaryExpr & expr, const Token & startToken) :
     UnaryExprPrimary(expr),
     mStartToken(startToken)
 {
@@ -203,10 +204,10 @@ llvm::Value * UnaryExprPosPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
 // UnaryExprParen
 //-----------------------------------------------------------------------------
 
-UnaryExprParen::UnaryExprParen(const Token & startToken, const Token & endToken, BinaryExpr & expr) :
+UnaryExprParen::UnaryExprParen(AssignExpr & expr, const Token & startToken, const Token & endToken) :
+    mExpr(expr),
     mStartToken(startToken),
-    mEndToken(endToken),
-    mExpr(expr)
+    mEndToken(endToken)
 {
     mExpr.mParent = this;
 }

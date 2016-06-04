@@ -1,6 +1,6 @@
 #include "WCAssignExpr.hpp"
-#include "WCBinaryExpr.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCOrExpr.hpp"
 #include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -10,13 +10,13 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool AssignExpr::peek(const Token * tokenPtr) {
-    return BinaryExpr::peek(tokenPtr);
+    return OrExpr::peek(tokenPtr);
 }
 
 AssignExpr * AssignExpr::parse(const Token *& tokenPtr) {
-    // Parse the initial binary expression
-    BinaryExpr * binaryExpr = BinaryExpr::parse(tokenPtr);
-    WC_GUARD(binaryExpr, nullptr);
+    // Parse the initial expression
+    OrExpr * orExpr = OrExpr::parse(tokenPtr);
+    WC_GUARD(orExpr, nullptr);
     
     // See if there is a '=' for assignment
     if (tokenPtr->type == TokenType::kEquals) {
@@ -26,18 +26,18 @@ AssignExpr * AssignExpr::parse(const Token *& tokenPtr) {
         // Parse the following assign expression and create the AST node
         AssignExpr * assignExpr = AssignExpr::parse(tokenPtr);
         WC_GUARD(assignExpr, nullptr);
-        return new AssignExprAssign(*binaryExpr, *assignExpr);
+        return new AssignExprAssign(*orExpr, *assignExpr);
     }
 
     // Assign expression with no assign
-    return new AssignExprNoAssign(*binaryExpr);
+    return new AssignExprNoAssign(*orExpr);
 }
 
 //-----------------------------------------------------------------------------
 // AssignExprNoAssign
 //-----------------------------------------------------------------------------
 
-AssignExprNoAssign::AssignExprNoAssign(BinaryExpr & expr) : mExpr(expr) {
+AssignExprNoAssign::AssignExprNoAssign(OrExpr & expr) : mExpr(expr) {
     expr.mParent = this;
 }
 
@@ -69,7 +69,7 @@ llvm::Value * AssignExprNoAssign::codegenAddrOf(const CodegenCtx & cgCtx) {
 // AssignExprAssign
 //-----------------------------------------------------------------------------
 
-AssignExprAssign::AssignExprAssign(BinaryExpr & leftExpr, AssignExpr & rightExpr) :
+AssignExprAssign::AssignExprAssign(OrExpr & leftExpr, AssignExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
@@ -117,6 +117,7 @@ const DataType & AssignExprAssign::getDataType() const {
 
 llvm::Value * AssignExprAssign::codegenAddrOf(const CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
