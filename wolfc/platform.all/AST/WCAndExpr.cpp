@@ -1,7 +1,7 @@
 #include "WCAndExpr.hpp"
-#include "WCBinaryExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
+#include "WCNotExpr.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 
@@ -12,13 +12,13 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool AndExpr::peek(const Token * tokenPtr) {
-    return BinaryExpr::peek(tokenPtr);
+    return NotExpr::peek(tokenPtr);
 }
 
 AndExpr * AndExpr::parse(const Token *& tokenPtr) {
     // Parse the initial expression
-    BinaryExpr * binaryExpr = BinaryExpr::parse(tokenPtr);
-    WC_GUARD(binaryExpr, nullptr);
+    NotExpr * notExpr = NotExpr::parse(tokenPtr);
+    WC_GUARD(notExpr, nullptr);
     
     // See if there is an 'and' for logical and
     if (tokenPtr->type == TokenType::kAnd) {
@@ -28,18 +28,18 @@ AndExpr * AndExpr::parse(const Token *& tokenPtr) {
         // Parse the following and expression and create the AST node
         AndExpr * andExpr = AndExpr::parse(tokenPtr);
         WC_GUARD(andExpr, nullptr);
-        return new AndExprAnd(*binaryExpr, *andExpr);
+        return new AndExprAnd(*notExpr, *andExpr);
     }
 
     // And expression with no and
-    return new AndExprNoAnd(*binaryExpr);
+    return new AndExprNoAnd(*notExpr);
 }
 
 //-----------------------------------------------------------------------------
 // AndExprNoAnd
 //-----------------------------------------------------------------------------
 
-AndExprNoAnd::AndExprNoAnd(BinaryExpr & expr) : mExpr(expr) {
+AndExprNoAnd::AndExprNoAnd(NotExpr & expr) : mExpr(expr) {
     expr.mParent = this;
 }
 
@@ -71,7 +71,7 @@ llvm::Value * AndExprNoAnd::codegenAddrOf(const CodegenCtx & cgCtx) {
 // AndExprAnd
 //-----------------------------------------------------------------------------
 
-AndExprAnd::AndExprAnd(BinaryExpr & leftExpr, AndExpr & rightExpr) :
+AndExprAnd::AndExprAnd(NotExpr & leftExpr, AndExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {

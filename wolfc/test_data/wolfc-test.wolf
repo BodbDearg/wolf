@@ -1,5 +1,1 @@
-print("Testing: ")
-print(true and false or false or true and true)
-print("\n")
-
-print("Done! 😱\n")
+print(false and true or not not true)

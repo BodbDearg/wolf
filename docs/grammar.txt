@@ -28,8 +28,12 @@ OrExpr:
 	AndExpr or OrExpr
 
 AndExpr:
+	NotExpr
+	NotExpr and AndExpr
+
+NotExpr:
 	BinaryExpr
-	BinaryExpr and AndExpr
+	not NotExpr
 
 BinaryExpr:
 	UnaryExpr
