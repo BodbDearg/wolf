@@ -32,9 +32,9 @@ public:
 };
 
 /* AndExpr */
-class OrExprNoOr : public OrExpr {
+class OrExprNoOp : public OrExpr {
 public:
-    OrExprNoOr(AndExpr & expr);
+    OrExprNoOp(AndExpr & expr);
     
     virtual const Token & getStartToken() const override;
     

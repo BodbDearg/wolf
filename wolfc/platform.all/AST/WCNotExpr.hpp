@@ -4,12 +4,12 @@
 
 WC_BEGIN_NAMESPACE
 
-class BinaryExpr;
+class AddSubExpr;
 class DataType;
 
 /*
 NotExpr:
-	BinaryExpr
+	AddSubExpr
 	not NotExpr
 */
 class NotExpr : public ASTNodeCodegen {
@@ -31,10 +31,10 @@ public:
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) = 0;
 };
 
-/* BinaryExpr */
-class NotExprNoNot : public NotExpr {
+/* AddSubExpr */
+class NotExprNoOp : public NotExpr {
 public:
-    NotExprNoNot(BinaryExpr & expr);
+    NotExprNoOp(AddSubExpr & expr);
     
     virtual const Token & getStartToken() const override;
     
@@ -48,7 +48,7 @@ public:
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
-    BinaryExpr & mExpr;
+    AddSubExpr & mExpr;
 };
 
 /* not NotExpr */

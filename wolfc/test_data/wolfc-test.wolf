@@ -1,1 +1,1 @@
-print(false and true or not not true)
+print(4 + 2 / 2)

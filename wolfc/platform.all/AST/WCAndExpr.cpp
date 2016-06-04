@@ -31,39 +31,39 @@ AndExpr * AndExpr::parse(const Token *& tokenPtr) {
         return new AndExprAnd(*notExpr, *andExpr);
     }
 
-    // And expression with no and
-    return new AndExprNoAnd(*notExpr);
+    // Basic no-op expression
+    return new AndExprNoOp(*notExpr);
 }
 
 //-----------------------------------------------------------------------------
-// AndExprNoAnd
+// AndExprNoOp
 //-----------------------------------------------------------------------------
 
-AndExprNoAnd::AndExprNoAnd(NotExpr & expr) : mExpr(expr) {
+AndExprNoOp::AndExprNoOp(NotExpr & expr) : mExpr(expr) {
     expr.mParent = this;
 }
 
-const Token & AndExprNoAnd::getStartToken() const {
+const Token & AndExprNoOp::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & AndExprNoAnd::getEndToken() const {
+const Token & AndExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-llvm::Value * AndExprNoAnd::generateCode(const CodegenCtx & cgCtx) {
+llvm::Value * AndExprNoOp::generateCode(const CodegenCtx & cgCtx) {
     return mExpr.generateCode(cgCtx);
 }
 
-bool AndExprNoAnd::isLValue() const {
+bool AndExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & AndExprNoAnd::getDataType() const {
+const DataType & AndExprNoOp::getDataType() const {
     return mExpr.getDataType();
 }
 
-llvm::Value * AndExprNoAnd::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * AndExprNoOp::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 

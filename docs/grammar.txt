@@ -32,15 +32,18 @@ AndExpr:
 	NotExpr and AndExpr
 
 NotExpr:
-	BinaryExpr
+	AddSubExpr
 	not NotExpr
 
-BinaryExpr:
+AddSubExpr:
+	MulDivExpr
+	MulDivExpr + AddSubExpr
+	MulDivExpr - AddSubExpr
+
+MulDivExpr:
 	UnaryExpr
-	UnaryExpr + BinaryExpr
-	UnaryExpr - BinaryExpr
-	UnaryExpr / BinaryExpr
-	UnaryExpr * BinaryExpr
+	UnaryExpr * MulDivExpr
+	UnaryExpr / MulDivExpr
 
 UnaryExpr:
 	PrimaryExpr

@@ -1,5 +1,5 @@
 #include "WCNotExpr.hpp"
-#include "WCBinaryExpr.hpp"
+#include "WCAddSubExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
 #include "WCPrimitiveDataTypes.hpp"
@@ -12,7 +12,7 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool NotExpr::peek(const Token * tokenPtr) {
-    return tokenPtr->type == TokenType::kNot || BinaryExpr::peek(tokenPtr);
+    return tokenPtr->type == TokenType::kNot || AddSubExpr::peek(tokenPtr);
 }
 
 NotExpr * NotExpr::parse(const Token *& tokenPtr) {
@@ -25,48 +25,48 @@ NotExpr * NotExpr::parse(const Token *& tokenPtr) {
         ++tokenPtr;
         
         // Parse the not expression following
-        NotExpr * expr = NotExpr::parse(tokenPtr);
-        WC_GUARD(expr, nullptr);
+        NotExpr * notExpr = NotExpr::parse(tokenPtr);
+        WC_GUARD(notExpr, nullptr);
         
         // Alright, return the parsed expr
-        return new NotExprNot(*expr, *startToken);
+        return new NotExprNot(*notExpr, *startToken);
     }
     
-    // No 'not'. Just parse an ordinary binary expression
-    BinaryExpr * binaryExpr = BinaryExpr::parse(tokenPtr);
-    WC_GUARD(binaryExpr, nullptr);
-    return new NotExprNoNot(*binaryExpr);
+    // No 'not'. Just parse an ordinary no-op expression
+    AddSubExpr * addSubExpr = AddSubExpr::parse(tokenPtr);
+    WC_GUARD(addSubExpr, nullptr);
+    return new NotExprNoOp(*addSubExpr);
 }
 
 //-----------------------------------------------------------------------------
-// NotExprNoNot
+// NotExprNoOp
 //-----------------------------------------------------------------------------
 
-NotExprNoNot::NotExprNoNot(BinaryExpr & expr) : mExpr(expr) {
+NotExprNoOp::NotExprNoOp(AddSubExpr & expr) : mExpr(expr) {
     expr.mParent = this;
 }
 
-const Token & NotExprNoNot::getStartToken() const {
+const Token & NotExprNoOp::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & NotExprNoNot::getEndToken() const {
+const Token & NotExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-llvm::Value * NotExprNoNot::generateCode(const CodegenCtx & cgCtx) {
+llvm::Value * NotExprNoOp::generateCode(const CodegenCtx & cgCtx) {
     return mExpr.generateCode(cgCtx);
 }
 
-bool NotExprNoNot::isLValue() const {
+bool NotExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & NotExprNoNot::getDataType() const {
+const DataType & NotExprNoOp::getDataType() const {
     return mExpr.getDataType();
 }
 
-llvm::Value * NotExprNoNot::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * NotExprNoOp::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 

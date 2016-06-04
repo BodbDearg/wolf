@@ -4,7 +4,6 @@
 
 WC_BEGIN_NAMESPACE
 
-class BinaryExpr;
 class DataType;
 class StrLit;
 

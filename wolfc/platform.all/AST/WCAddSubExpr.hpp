@@ -5,21 +5,19 @@
 WC_BEGIN_NAMESPACE
 
 class DataType;
-class UnaryExpr;
+class MulDivExpr;
 
 /*
-BinaryExpr:
-	UnaryExpr
-	UnaryExpr + BinaryExpr
-	UnaryExpr - BinaryExpr
-	UnaryExpr / BinaryExpr
-	UnaryExpr * BinaryExpr
+AddSubExpr:
+	MulDivExpr
+	MulDivExpr + AddSubExpr
+	MulDivExpr - AddSubExpr
 */
-class BinaryExpr : public ASTNodeCodegen {
+class AddSubExpr : public ASTNodeCodegen {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static BinaryExpr * parse(const Token *& tokenPtr);
+    static AddSubExpr * parse(const Token *& tokenPtr);
     
     /**
      * Tell if this expression evaluates to an lvalue. lvalues are values that can be asssigned to.
@@ -34,16 +32,14 @@ public:
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) = 0;
 };
 
-/* 'UnaryExpression' */
-class BinaryExprUnary : public BinaryExpr {
+/* MulDivExpr */
+class AddSubExprNoOp : public AddSubExpr {
 public:
-    BinaryExprUnary(UnaryExpr & expr);
+    AddSubExprNoOp(MulDivExpr & expr);
     
     virtual const Token & getStartToken() const override;
     
     virtual const Token & getEndToken() const override;
-    
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     virtual bool isLValue() const override;
     
@@ -51,13 +47,15 @@ public:
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
-    UnaryExpr & mExpr;
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    
+    MulDivExpr & mExpr;
 };
 
-/* Base for a two operand binary expression */
-class BinaryExprTwoOps : public BinaryExpr {
+/* MulDivExpr + AddSubExpr */
+class AddSubExprAdd : public AddSubExpr {
 public:
-    BinaryExprTwoOps(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
+    AddSubExprAdd(MulDivExpr & leftExpr, AddSubExpr & rightExpr);
     
     virtual const Token & getStartToken() const override;
     
@@ -65,9 +63,7 @@ public:
     
     virtual bool isLValue() const override;
     
-    virtual const DataType & getDataType() const override;    
-    
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual const DataType & getDataType() const override;
     
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
@@ -75,40 +71,39 @@ public:
      */
     bool compileCheckBothExprsAreInt() const;
     
-    UnaryExpr & mLeftExpr;
-    BinaryExpr & mRightExpr;
-};
-
-/* 'UnaryExpression + BinaryExpression' */
-class BinaryExprAdd : public BinaryExprTwoOps {
-public:
-    BinaryExprAdd(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    
+    MulDivExpr & mLeftExpr;
+    AddSubExpr & mRightExpr;
 };
 
-/* 'UnaryExpression - BinaryExpression' */
-class BinaryExprSub : public BinaryExprTwoOps {
+/* MulDivExpr - AddSubExpr */
+class AddSubExprSub : public AddSubExpr {
 public:
-    BinaryExprSub(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
+    AddSubExprSub(MulDivExpr & leftExpr, AddSubExpr & rightExpr);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
+    virtual bool isLValue() const override;
+    
+    virtual const DataType & getDataType() const override;
+    
+    /**
+     * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
+     * return false for failure if that is the case.
+     */
+    bool compileCheckBothExprsAreInt() const;
+    
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
-};
-
-/* 'UnaryExpression * BinaryExpression' */
-class BinaryExprMul : public BinaryExprTwoOps {
-public:
-    BinaryExprMul(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
-};
-
-/* 'UnaryExpression / BinaryExpression' */
-class BinaryExprDiv : public BinaryExprTwoOps {
-public:
-    BinaryExprDiv(UnaryExpr & leftExpr, BinaryExpr & rightExpr);
-    
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    MulDivExpr & mLeftExpr;
+    AddSubExpr & mRightExpr;
 };
 
 WC_END_NAMESPACE
