@@ -13,16 +13,16 @@ Stmnt:
     VarDecl
     AssignExpr
 
+PrintStmnt
+    print ( StrLit )
+    print ( BinaryExpr )
+
 VarDecl:
     var Identifier = AssignExpr
 
 AssignExpr:
     BinaryExpr
     BinaryExpr = AssignExpr
-
-PrintStmnt
-    print ( StrLit )
-    print ( BinaryExpr )
 
 OrExpr:
 	AndExpr

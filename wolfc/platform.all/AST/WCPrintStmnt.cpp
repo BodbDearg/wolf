@@ -141,14 +141,6 @@ PrintStmntBinaryExpr::PrintStmntBinaryExpr(const Token & startToken, const Token
 }
 
 llvm::Value * PrintStmntBinaryExpr::generateCode(const CodegenCtx & cgCtx) {
-    // TODO: support more types
-    const DataType & exprType = mExpr.getDataType();
-    
-    if (!exprType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
-        compileError("Print statement only currently supports 'int' datatype, not '%s'!", exprType.name());
-        return nullptr;
-    }
-    
     // Get printf
     llvm::Constant * printfFn = cgCtx.module.getFunction("printf");
     
@@ -157,19 +149,23 @@ llvm::Value * PrintStmntBinaryExpr::generateCode(const CodegenCtx & cgCtx) {
         return nullptr;
     }
     
-    // Create a format string for printf
-    llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%zd", "print_stmnt_int_fmt_str");
-    
     // Evaluate the code for the argument to printf
-    llvm::Value * arg1Val = mExpr.generateCode(cgCtx);
+    llvm::Value * exprVal = mExpr.generateCode(cgCtx);
     
-    if (!arg1Val) {
+    if (!exprVal) {
         compileError("Codegen failed! Can't generate code for binary expression!");
         return nullptr;
     }
     
-    // Call printf!
-    return cgCtx.irBuilder.CreateCall(printfFn, { fmtStr, arg1Val }, "print_stmnt_printf_call");
+    // Generate the print statement code for this type:
+    const DataType & exprType = mExpr.getDataType();
+    llvm::Value * returnVal = exprType.genPrintStmntCode(cgCtx, *this, *printfFn, *exprVal);
+    
+    if (!returnVal) {
+        compileError("Failed to generate code for print statement!");
+    }
+    
+    return returnVal;
 }
 
 WC_END_NAMESPACE

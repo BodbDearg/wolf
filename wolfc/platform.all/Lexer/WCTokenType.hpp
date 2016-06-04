@@ -47,6 +47,12 @@ enum class TokenType {
     /* false */
     kFalse,
     
+    /* and */
+    kAnd,
+    
+    /* or */
+    kOr,
+    
     /* TEMPORARY: print */
     kPrint,
     
