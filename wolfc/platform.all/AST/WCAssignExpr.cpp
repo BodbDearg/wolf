@@ -104,7 +104,7 @@ llvm::Value * AssignExprAssign::generateCode(const CodegenCtx & cgCtx) {
     cgCtx.irBuilder.CreateStore(rightValue, leftValue);
     
     // The expression evalutes to the left expression, so return that
-    return leftValue;
+    return cgCtx.irBuilder.CreateLoad(leftValue);
 }
 
 bool AssignExprAssign::isLValue() const {

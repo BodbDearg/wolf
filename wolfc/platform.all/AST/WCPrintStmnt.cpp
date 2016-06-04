@@ -54,7 +54,7 @@ PrintStmnt::PrintStmnt(AssignExpr & expr, const Token & startToken, const Token 
     mStartToken(startToken),
     mEndToken(endToken)
 {
-    WC_EMPTY_FUNC_BODY();
+    mExpr.mParent = this;
 }
 
 const Token & PrintStmnt::getStartToken() const {
