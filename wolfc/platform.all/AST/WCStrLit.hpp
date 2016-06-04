@@ -4,6 +4,8 @@
 
 WC_BEGIN_NAMESPACE
 
+class DataType;
+
 /* Represents TokenType::kStrLit in the AST tree */
 class StrLit : public ASTNodeCodegen {
 public:
@@ -19,9 +21,8 @@ public:
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
-    // TODO: implement this
     /* Return the data type of this literal */
-    // const DataType & getDataType() const;
+    const DataType & getDataType() const;
     
     const Token & mToken;
 };

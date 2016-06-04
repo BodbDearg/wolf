@@ -9,11 +9,13 @@ class DataType;
 class Identifier;
 class IntLit;
 class ReadnumExpr;
+class StrLit;
 
 /*
 PrimaryExpr:
 	IntLit
 	BoolLit
+	StrLit
     Identifier
     ReadnumExpr
 */
@@ -76,10 +78,10 @@ public:
     BoolLit & mLit;
 };
 
-/* Identifier */
-class PrimaryExprIdentifier : public PrimaryExpr {
+/* StrLit */
+class PrimaryExprStrLit : public PrimaryExpr {
 public:
-    PrimaryExprIdentifier(Identifier & identifier);
+    PrimaryExprStrLit(StrLit & lit);
     
     virtual const Token & getStartToken() const override;
     
@@ -93,7 +95,27 @@ public:
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
-    Identifier & mIdentifier;
+    StrLit & mLit;
+};
+
+/* Identifier */
+class PrimaryExprIdentifier : public PrimaryExpr {
+public:
+    PrimaryExprIdentifier(Identifier & ident);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    
+    virtual bool isLValue() const override;
+    
+    virtual const DataType & getDataType() const override;
+    
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    Identifier & mIdent;
 };
 
 /* ReadnumExpr */

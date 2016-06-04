@@ -2,8 +2,8 @@
 #include "WCBoolLit.hpp"
 #include "WCIdentifier.hpp"
 #include "WCIntLit.hpp"
-#include "WCPrimitiveDataTypes.hpp"
 #include "WCReadnumExpr.hpp"
+#include "WCStrLit.hpp"
 #include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -15,6 +15,7 @@ WC_BEGIN_NAMESPACE
 bool PrimaryExpr::peek(const Token * currentToken) {
     return  IntLit::peek(currentToken) ||
             BoolLit::peek(currentToken) ||
+            StrLit::peek(currentToken) ||
             Identifier::peek(currentToken) ||
             ReadnumExpr::peek(currentToken);
 }
@@ -29,6 +30,11 @@ PrimaryExpr * PrimaryExpr::parse(const Token *& currentToken) {
         BoolLit * boolLit = BoolLit::parse(currentToken);
         WC_GUARD(boolLit, nullptr);
         return new PrimaryExprBoolLit(*boolLit);
+    }
+    else if (StrLit::peek(currentToken)) {
+        StrLit * strLit = StrLit::parse(currentToken);
+        WC_GUARD(strLit, nullptr);
+        return new PrimaryExprStrLit(*strLit);
     }
     else if (Identifier::peek(currentToken)) {
         Identifier * identifier = Identifier::parse(currentToken);
@@ -70,7 +76,7 @@ bool PrimaryExprIntLit::isLValue() const {
 }
 
 const DataType & PrimaryExprIntLit::getDataType() const {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
+    return mLit.getDataType();
 }
 
 llvm::Value * PrimaryExprIntLit::codegenAddrOf(const CodegenCtx & cgCtx) {
@@ -104,7 +110,7 @@ bool PrimaryExprBoolLit::isLValue() const {
 }
 
 const DataType & PrimaryExprBoolLit::getDataType() const {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
+    return mLit.getDataType();
 }
 
 llvm::Value * PrimaryExprBoolLit::codegenAddrOf(const CodegenCtx & cgCtx) {
@@ -114,23 +120,57 @@ llvm::Value * PrimaryExprBoolLit::codegenAddrOf(const CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
+// PrimaryExprStrLit
+//-----------------------------------------------------------------------------
+
+PrimaryExprStrLit::PrimaryExprStrLit(StrLit & lit) : mLit(lit) {
+    mLit.mParent = this;
+}
+
+const Token & PrimaryExprStrLit::getStartToken() const {
+    return mLit.getStartToken();
+}
+
+const Token & PrimaryExprStrLit::getEndToken() const {
+    return mLit.getEndToken();
+}
+
+llvm::Value * PrimaryExprStrLit::generateCode(const CodegenCtx & cgCtx) {
+    return mLit.generateCode(cgCtx);
+}
+
+bool PrimaryExprStrLit::isLValue() const {
+    return false;
+}
+
+const DataType & PrimaryExprStrLit::getDataType() const {
+    return mLit.getDataType();
+}
+
+llvm::Value * PrimaryExprStrLit::codegenAddrOf(const CodegenCtx & cgCtx) {
+    compileError("Can't take the address of a string literal expression!");
+    WC_UNUSED_PARAM(cgCtx);
+    return nullptr;
+}
+
+//-----------------------------------------------------------------------------
 // PrimaryExprIdentifier
 //-----------------------------------------------------------------------------
 
-PrimaryExprIdentifier::PrimaryExprIdentifier(Identifier & identifier) : mIdentifier(identifier) {
-    mIdentifier.mParent = this;
+PrimaryExprIdentifier::PrimaryExprIdentifier(Identifier & ident) : mIdent(ident) {
+    mIdent.mParent = this;
 }
 
 const Token & PrimaryExprIdentifier::getStartToken() const {
-    return mIdentifier.getStartToken();
+    return mIdent.getStartToken();
 }
 
 const Token & PrimaryExprIdentifier::getEndToken() const {
-    return mIdentifier.getEndToken();
+    return mIdent.getEndToken();
 }
 
 llvm::Value * PrimaryExprIdentifier::generateCode(const CodegenCtx & cgCtx) {
-    return mIdentifier.generateCode(cgCtx);
+    return mIdent.generateCode(cgCtx);
 }
 
 bool PrimaryExprIdentifier::isLValue() const {
@@ -138,12 +178,11 @@ bool PrimaryExprIdentifier::isLValue() const {
 }
 
 const DataType & PrimaryExprIdentifier::getDataType() const {
-    // TODO: support other types of variables (bool etc.)
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
+    return mIdent.getDataType();
 }
 
 llvm::Value * PrimaryExprIdentifier::codegenAddrOf(const CodegenCtx & cgCtx) {
-    return mIdentifier.codegenAddrOf(cgCtx);
+    return mIdent.codegenAddrOf(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -171,7 +210,7 @@ bool PrimaryExprReadnum::isLValue() const {
 }
 
 const DataType & PrimaryExprReadnum::getDataType() const {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
+    return mExpr.getDataType();
 }
 
 llvm::Value * PrimaryExprReadnum::codegenAddrOf(const CodegenCtx & cgCtx) {

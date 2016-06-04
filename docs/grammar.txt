@@ -14,8 +14,7 @@ Stmnt:
     AssignExpr
 
 PrintStmnt
-    print ( StrLit )
-    print ( BinaryExpr )
+    print ( AssignExpr )
 
 VarDecl:
     var Identifier = AssignExpr
@@ -48,6 +47,7 @@ UnaryExpr:
 PrimaryExpr:
 	IntLit
 	BoolLit
+	StrLit
     Identifier
     ReadnumExpr
 

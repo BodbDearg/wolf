@@ -18,6 +18,11 @@ namespace PrimitiveDataTypes {
         kInt,
         /* Boolean data type */
         kBool,
+        /**
+         * String constant data type
+         * TODO: will probably change once we have a string class and once we support pointers to chars.
+         */
+        kStr,
         /* The number of primitive data types */
         kNumTypes
     };

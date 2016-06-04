@@ -1,10 +1,8 @@
 #include "WCPrintStmnt.hpp"
 #include "WCAssert.hpp"
-#include "WCBinaryExpr.hpp"
+#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
-#include "WCPrimitiveDataTypes.hpp"
-#include "WCStrLit.hpp"
 #include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -12,10 +10,6 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
 WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
-
-//-----------------------------------------------------------------------------
-// PrintStmnt
-//-----------------------------------------------------------------------------
 
 bool PrintStmnt::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kPrint;
@@ -37,49 +31,26 @@ PrintStmnt * PrintStmnt::parse(const Token *& tokenPtr) {
     
     ++tokenPtr;     // Consume '('
     
-    // See what form of the syntax is ahead
-    if (StrLit::peek(tokenPtr)) {
-        // Print a string literal: parse that
-        StrLit * strLit = StrLit::parse(tokenPtr);
-        WC_GUARD_ASSERT(strLit, nullptr);
-        
-        // Expect ')' following that:
-        if (tokenPtr->type != TokenType::kRParen) {
-            parseError(*tokenPtr, "Expected closing ')' for 'print()' expression!");
-            return nullptr;
-        }
-        
-        // Consume closing ')' and return parsed expression
-        const Token * closingParenTok = tokenPtr;
-        ++tokenPtr;
-        return new PrintStmntStrLit(*printTok, *closingParenTok, *strLit);
-    }
-    else if (BinaryExpr::peek(tokenPtr)) {
-        // Print a binary expression: parse that
-        BinaryExpr * binaryExpr = BinaryExpr::parse(tokenPtr);
-        WC_GUARD_ASSERT(binaryExpr, nullptr);
-        
-        // Expect ')' following all that:
-        if (tokenPtr->type != TokenType::kRParen) {
-            parseError(*tokenPtr, "Expected closing ')' for 'print()' expression!");
-            return nullptr;
-        }
-        
-        // Consume closing ')' and return parsed expression
-        const Token * closingParenTok = tokenPtr;
-        ++tokenPtr;
-        return new PrintStmntBinaryExpr(*printTok, *closingParenTok, *binaryExpr);
-    }
-    else {
-        parseError(*tokenPtr, "Unexpected tokens following 'print' and '('! Expect binary expression or string literal!");
+    // Parse the inner expression
+    AssignExpr * assignExpr = AssignExpr::parse(tokenPtr);
+    WC_GUARD(assignExpr, nullptr);
+    
+    // Expect ')' following all that:
+    if (tokenPtr->type != TokenType::kRParen) {
+        parseError(*tokenPtr, "Expected closing ')' for 'print()' expression!");
         return nullptr;
     }
     
-    WC_RAISE_ASSERTION("This code should not be reached!");
-    return nullptr;
+    // Consume closing ')' and return parsed expression
+    const Token * closingParenTok = tokenPtr;
+    ++tokenPtr;
+    
+    // Create and return the print statement
+    return new PrintStmnt(*assignExpr, *printTok, *closingParenTok);
 }
 
-PrintStmnt::PrintStmnt(const Token & startToken, const Token & endToken) :
+PrintStmnt::PrintStmnt(AssignExpr & expr, const Token & startToken, const Token & endToken) :
+    mExpr(expr),
     mStartToken(startToken),
     mEndToken(endToken)
 {
@@ -94,53 +65,7 @@ const Token & PrintStmnt::getEndToken() const {
     return mEndToken;
 }
 
-//-----------------------------------------------------------------------------
-// PrintStmntStrLit
-//-----------------------------------------------------------------------------
-
-PrintStmntStrLit::PrintStmntStrLit(const Token & startToken, const Token & endToken, StrLit & lit) :
-    PrintStmnt(startToken, endToken),
-    mLit(lit)
-{
-    mLit.mParent = this;
-}
-
-llvm::Value * PrintStmntStrLit::generateCode(const CodegenCtx & cgCtx) {
-    // Get printf
-    llvm::Constant * printfFn = cgCtx.module.getFunction("printf");
-    
-    if (!printfFn) {
-        compileError("Codegen failed! Can't find 'printf' function!");
-        return nullptr;
-    }
-    
-    // Create a format string for printf
-    llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%s", "print_stmnt_str_fmt_str");
-    
-    // Evaluate the code for the argument to printf
-    llvm::Value * arg1Val = mLit.generateCode(cgCtx);
-    
-    if (!arg1Val) {
-        compileError("Codegen failed! Can't generate code for string literal!");
-        return nullptr;
-    }
-    
-    // Call printf!
-    return cgCtx.irBuilder.CreateCall(printfFn, { fmtStr, arg1Val }, "print_stmnt_printf_call");
-}
-
-//-----------------------------------------------------------------------------
-// PrintStmntBinaryExpr
-//-----------------------------------------------------------------------------
-
-PrintStmntBinaryExpr::PrintStmntBinaryExpr(const Token & startToken, const Token & endToken, BinaryExpr & expr) :
-    PrintStmnt(startToken, endToken),
-    mExpr(expr)
-{
-    mExpr.mParent = this;
-}
-
-llvm::Value * PrintStmntBinaryExpr::generateCode(const CodegenCtx & cgCtx) {
+llvm::Value * PrintStmnt::generateCode(const CodegenCtx & cgCtx) {
     // Get printf
     llvm::Constant * printfFn = cgCtx.module.getFunction("printf");
     
@@ -153,19 +78,11 @@ llvm::Value * PrintStmntBinaryExpr::generateCode(const CodegenCtx & cgCtx) {
     llvm::Value * exprVal = mExpr.generateCode(cgCtx);
     
     if (!exprVal) {
-        compileError("Codegen failed! Can't generate code for binary expression!");
+        compileError("Codegen failed! Can't generate code for inner expression value in print statement!");
         return nullptr;
     }
     
-    // Generate the print statement code for this type:
-    const DataType & exprType = mExpr.getDataType();
-    llvm::Value * returnVal = exprType.genPrintStmntCode(cgCtx, *this, *printfFn, *exprVal);
-    
-    if (!returnVal) {
-        compileError("Failed to generate code for print statement!");
-    }
-    
-    return returnVal;
+    return mExpr.getDataType().genPrintStmntCode(cgCtx, *this, *printfFn, *exprVal);
 }
 
 WC_END_NAMESPACE

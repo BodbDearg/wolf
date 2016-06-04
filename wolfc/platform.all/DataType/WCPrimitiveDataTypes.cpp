@@ -1,8 +1,9 @@
 #include "WCPrimitiveDataTypes.hpp"
+#include "WCBoolDataType.hpp"
+#include "WCIntDataType.hpp"
+#include "WCStrDataType.hpp"
 #include "WCUnknownDataType.hpp"
 #include "WCVoidDataType.hpp"
-#include "WCIntDataType.hpp"
-#include "WCBoolDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -11,6 +12,7 @@ static UnknownDataType     gUnknownDataType;
 static VoidDataType        gVoidDataType;
 static IntDataType         gIntDataType;
 static BoolDataType        gBoolDataType;
+static StrDataType          gStrDataType;
 
 DataType & PrimitiveDataTypes::get(Type type) {
     switch (type) {
@@ -18,6 +20,7 @@ DataType & PrimitiveDataTypes::get(Type type) {
         case Type::kVoid: return gVoidDataType;
         case Type::kInt: return gIntDataType;
         case Type::kBool: return gBoolDataType;
+        case Type::kStr: return gStrDataType;
             
         // This is not a valid value!
         case Type::kNumTypes:

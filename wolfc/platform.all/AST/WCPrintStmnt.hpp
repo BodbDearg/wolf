@@ -4,13 +4,11 @@
 
 WC_BEGIN_NAMESPACE
 
-class BinaryExpr;
-class StrLit;
+class AssignExpr;
 
 /*
 PrintStmnt
-    print ( StringLit )
-    print ( BinaryExpr )
+    print ( AssignExpr )
 */
 class PrintStmnt : public ASTNodeCodegen {
 public:
@@ -18,34 +16,18 @@ public:
     
     static PrintStmnt * parse(const Token *& tokenPtr);
     
-    PrintStmnt(const Token & startToken, const Token & endToken);
+    PrintStmnt(AssignExpr & expr, const Token & startToken, const Token & endToken);
     
     virtual const Token & getStartToken() const override;
     
     virtual const Token & getEndToken() const override;
     
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    
+    AssignExpr & mExpr;
     const Token & mStartToken;
     const Token & mEndToken;
-};
-
-/* print ( StringLit ) */
-class PrintStmntStrLit : public PrintStmnt {
-public:
-    PrintStmntStrLit(const Token & startToken, const Token & endToken, StrLit & lit);
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
-    
-    StrLit & mLit;
-};
-
-/* print ( BinaryExpr ) */
-class PrintStmntBinaryExpr : public PrintStmnt {
-public:
-    PrintStmntBinaryExpr(const Token & startToken, const Token & endToken, BinaryExpr & expr);
-    
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
-    
-    BinaryExpr & mExpr;
 };
 
 WC_END_NAMESPACE
