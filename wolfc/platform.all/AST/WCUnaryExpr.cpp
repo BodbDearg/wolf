@@ -1,7 +1,9 @@
 #include "WCUnaryExpr.hpp"
 #include "WCBinaryExpr.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCDataType.hpp"
 #include "WCPrimaryExpr.hpp"
+#include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -103,6 +105,10 @@ bool UnaryExprPrimary::isLValue() const {
     return mExpr.isLValue();
 }
 
+const DataType & UnaryExprPrimary::getDataType() const {
+    return mExpr.getDataType();
+}
+
 llvm::Value * UnaryExprPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
@@ -127,11 +133,23 @@ const Token & UnaryExprNegPrimary::getEndToken() const {
 }
 
 llvm::Value * UnaryExprNegPrimary::generateCode(const CodegenCtx & cgCtx) {
+    // TODO: support more types
+    const DataType & exprType = mExpr.getDataType();
+    
+    if (!exprType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+        compileError("Unary '-' operator only supports 'int' datatype, not '%s'!", exprType.name());
+        return nullptr;
+    }
+    
     return cgCtx.irBuilder.CreateNeg(mExpr.generateCode(cgCtx));
 }
 
 bool UnaryExprNegPrimary::isLValue() const {
     return false;
+}
+
+const DataType & UnaryExprNegPrimary::getDataType() const {
+    return mExpr.getDataType();
 }
 
 llvm::Value * UnaryExprNegPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
@@ -157,8 +175,24 @@ const Token & UnaryExprPosPrimary::getEndToken() const {
     return mExpr.getEndToken();
 }
 
+llvm::Value * UnaryExprPosPrimary::generateCode(const CodegenCtx & cgCtx) {
+    // TODO: support more types
+    const DataType & exprType = mExpr.getDataType();
+    
+    if (!exprType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+        compileError("Unary '+' operator only supports 'int' datatype, not '%s'!", exprType.name());
+        return nullptr;
+    }
+    
+    return UnaryExprPrimary::generateCode(cgCtx);
+}
+
 bool UnaryExprPosPrimary::isLValue() const {
     return false;
+}
+
+const DataType & UnaryExprPosPrimary::getDataType() const {
+    return mExpr.getDataType();
 }
 
 llvm::Value * UnaryExprPosPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
@@ -191,6 +225,10 @@ llvm::Value * UnaryExprParen::generateCode(const CodegenCtx & cgCtx) {
 
 bool UnaryExprParen::isLValue() const {
     return mExpr.isLValue();
+}
+
+const DataType & UnaryExprParen::getDataType() const {
+    return mExpr.getDataType();
 }
 
 llvm::Value * UnaryExprParen::codegenAddrOf(const CodegenCtx & cgCtx) {

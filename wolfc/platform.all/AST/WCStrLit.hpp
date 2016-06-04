@@ -19,6 +19,10 @@ public:
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
+    // TODO: implement this
+    /* Return the data type of this literal */
+    // const DataType & getDataType() const;
+    
     const Token & mToken;
 };
 

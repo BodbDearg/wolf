@@ -2,6 +2,7 @@
 #include "WCBoolLit.hpp"
 #include "WCIdentifier.hpp"
 #include "WCIntLit.hpp"
+#include "WCPrimitiveDataTypes.hpp"
 #include "WCReadnumExpr.hpp"
 #include "WCToken.hpp"
 
@@ -68,6 +69,10 @@ bool PrimaryExprIntLit::isLValue() const {
     return false;
 }
 
+const DataType & PrimaryExprIntLit::getDataType() const {
+    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
+}
+
 llvm::Value * PrimaryExprIntLit::codegenAddrOf(const CodegenCtx & cgCtx) {
     compileError("Can't take the address of an int literal expression!");
     WC_UNUSED_PARAM(cgCtx);
@@ -96,6 +101,10 @@ llvm::Value * PrimaryExprBoolLit::generateCode(const CodegenCtx & cgCtx) {
 
 bool PrimaryExprBoolLit::isLValue() const {
     return false;
+}
+
+const DataType & PrimaryExprBoolLit::getDataType() const {
+    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 
 llvm::Value * PrimaryExprBoolLit::codegenAddrOf(const CodegenCtx & cgCtx) {
@@ -128,6 +137,11 @@ bool PrimaryExprIdentifier::isLValue() const {
     return true;
 }
 
+const DataType & PrimaryExprIdentifier::getDataType() const {
+    // TODO: support other types of variables (bool etc.)
+    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
+}
+
 llvm::Value * PrimaryExprIdentifier::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mIdentifier.codegenAddrOf(cgCtx);
 }
@@ -155,7 +169,11 @@ llvm::Value * PrimaryExprReadnum::generateCode(const CodegenCtx & cgCtx) {
 bool PrimaryExprReadnum::isLValue() const {
     return false;
 }
-    
+
+const DataType & PrimaryExprReadnum::getDataType() const {
+    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
+}
+
 llvm::Value * PrimaryExprReadnum::codegenAddrOf(const CodegenCtx & cgCtx) {
     compileError("Can't take the address of a readnum expression!");
     WC_UNUSED_PARAM(cgCtx);

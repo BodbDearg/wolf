@@ -1,5 +1,6 @@
 #include "WCBoolLit.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -33,6 +34,10 @@ const Token & BoolLit::getEndToken() const {
 
 llvm::Value * BoolLit::generateCode(const CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.getInt1(mToken.type == TokenType::kTrue);
+}
+
+const DataType & BoolLit::getDataType() const {
+    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 
 WC_END_NAMESPACE

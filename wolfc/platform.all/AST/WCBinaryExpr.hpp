@@ -4,6 +4,7 @@
 
 WC_BEGIN_NAMESPACE
 
+class DataType;
 class UnaryExpr;
 
 /*
@@ -26,6 +27,9 @@ public:
      */
     virtual bool isLValue() const = 0;
     
+    /* Return the data type of this expression */
+    virtual const DataType & getDataType() const = 0;
+    
     /* Codegen the llvm value that represents the address of this expression. Only possible for lvalues! */
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) = 0;
 };
@@ -43,6 +47,8 @@ public:
     
     virtual bool isLValue() const override;
     
+    virtual const DataType & getDataType() const override;
+    
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
     UnaryExpr & mExpr;
@@ -59,7 +65,15 @@ public:
     
     virtual bool isLValue() const override;
     
+    virtual const DataType & getDataType() const override;    
+    
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    /**
+     * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
+     * return false for failure if that is the case.
+     */
+    bool compileCheckBothExprsAreInt() const;
     
     UnaryExpr & mLeftExpr;
     BinaryExpr & mRightExpr;

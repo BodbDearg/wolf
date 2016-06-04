@@ -1,7 +1,1 @@
-print("Enter a fucking integer number 😫: ")
-var a = readnum()
-print("Your fucking number is 😩: ")
-print(a)
-print("\nThat multplied by 2 is 😠: ")
-print(a * 2)
-print("\nNow fuck off 😡!\n")
+var blah = 1 + false

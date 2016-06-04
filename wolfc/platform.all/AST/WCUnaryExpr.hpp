@@ -5,6 +5,7 @@
 WC_BEGIN_NAMESPACE
 
 class BinaryExpr;
+class DataType;
 class PrimaryExpr;
 
 /*
@@ -26,6 +27,9 @@ public:
      */
     virtual bool isLValue() const = 0;
     
+    /* Return the data type of this expression */
+    virtual const DataType & getDataType() const = 0;
+    
     /* Codegen the llvm value that represents the address of this expression. Only possible for lvalues! */
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) = 0;
 };
@@ -42,6 +46,8 @@ public:
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     virtual bool isLValue() const override;
+    
+    virtual const DataType & getDataType() const override;
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
@@ -61,6 +67,8 @@ public:
     
     virtual bool isLValue() const override;
     
+    virtual const DataType & getDataType() const override;
+    
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
     const Token &   mStartToken;
@@ -76,7 +84,11 @@ public:
     
     virtual const Token & getEndToken() const override;
     
+    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    
     virtual bool isLValue() const override;
+    
+    virtual const DataType & getDataType() const override;
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
@@ -95,6 +107,8 @@ public:
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
     
     virtual bool isLValue() const override;
+    
+    virtual const DataType & getDataType() const override;
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     

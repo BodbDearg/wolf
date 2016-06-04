@@ -57,6 +57,10 @@ bool AssignExprNoAssign::isLValue() const {
     return mExpr.isLValue();
 }
 
+const DataType & AssignExprNoAssign::getDataType() const {
+    return mExpr.getDataType();
+}
+
 llvm::Value * AssignExprNoAssign::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
@@ -105,6 +109,10 @@ llvm::Value * AssignExprAssign::generateCode(const CodegenCtx & cgCtx) {
 
 bool AssignExprAssign::isLValue() const {
     return false;
+}
+
+const DataType & AssignExprAssign::getDataType() const {
+    return mLeftExpr.getDataType();
 }
 
 llvm::Value * AssignExprAssign::codegenAddrOf(const CodegenCtx & cgCtx) {

@@ -43,7 +43,7 @@ Scope * ASTNode::getParentScope() {
     return nullptr;
 }
 
-void ASTNode::compileError(const char * msg, ...) {
+void ASTNode::compileError(const char * msg, ...) const {
     // Get the start and end tokens:
     const Token & startToken = getStartToken();
     const Token & endToken = getEndToken();

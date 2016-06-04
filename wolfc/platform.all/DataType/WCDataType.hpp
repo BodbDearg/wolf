@@ -11,6 +11,9 @@ public:
     
     /* Give the name of the datatype, e.g 'int32' */
     virtual const char * name() const = 0;
+    
+    /* Tells if this data type matches another. */
+    virtual bool equals(const DataType & other) const = 0;
 };
 
 WC_END_NAMESPACE

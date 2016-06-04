@@ -8,6 +8,8 @@ WC_BEGIN_NAMESPACE
 class BoolDataType : public DataType {
 public:
     virtual const char * name() const override;
+    
+    virtual bool equals(const DataType & other) const override;
 };
 
 WC_END_NAMESPACE

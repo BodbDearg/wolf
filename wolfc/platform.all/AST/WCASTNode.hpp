@@ -33,7 +33,7 @@ public:
      * Emit a formatted error message followed by a newline to stderr for a compile error.
      * The line and column information for this node are output also.
      */
-    void compileError(const char * msg, ...);
+    void compileError(const char * msg, ...) const;
     
     /* The parent of this AST node. This should be set by the parent itself in the constructor. */
     ASTNode * mParent;

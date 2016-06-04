@@ -5,6 +5,7 @@
 WC_BEGIN_NAMESPACE
 
 class BinaryExpr;
+class DataType;
 class StrLit;
 
 /*
@@ -24,6 +25,9 @@ public:
     virtual const Token & getEndToken() const override;
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    
+    /* Return the data type of this literal */
+    const DataType & getDataType() const;
     
     const Token & mStartToken;
     const Token & mEndToken;

@@ -1,5 +1,6 @@
 #include "WCReadnumExpr.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -76,6 +77,10 @@ llvm::Value * ReadnumExpr::generateCode(const CodegenCtx & cgCtx) {
     
     // And return the stack var
     return cgCtx.irBuilder.CreateLoad(outputVar, "readnum_expr_load_temp_stack_var");
+}
+
+const DataType & ReadnumExpr::getDataType() const {
+    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
 }
 
 WC_END_NAMESPACE

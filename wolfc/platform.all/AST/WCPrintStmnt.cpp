@@ -2,6 +2,8 @@
 #include "WCAssert.hpp"
 #include "WCBinaryExpr.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCDataType.hpp"
+#include "WCPrimitiveDataTypes.hpp"
 #include "WCStrLit.hpp"
 #include "WCToken.hpp"
 
@@ -139,6 +141,14 @@ PrintStmntBinaryExpr::PrintStmntBinaryExpr(const Token & startToken, const Token
 }
 
 llvm::Value * PrintStmntBinaryExpr::generateCode(const CodegenCtx & cgCtx) {
+    // TODO: support more types
+    const DataType & exprType = mExpr.getDataType();
+    
+    if (!exprType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+        compileError("Print statement only currently supports 'int' datatype, not '%s'!", exprType.name());
+        return nullptr;
+    }
+    
     // Get printf
     llvm::Constant * printfFn = cgCtx.module.getFunction("printf");
     

@@ -1,7 +1,9 @@
 #include "WCVarDecl.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCDataType.hpp"
 #include "WCIdentifier.hpp"
+#include "WCPrimitiveDataTypes.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
 
@@ -58,6 +60,14 @@ const Token & VarDecl::getEndToken() const {
 }
 
 llvm::Value * VarDecl::generateCode(const CodegenCtx & cgCtx) {
+    // TODO: allow more than int
+    const DataType & exprType = mExpr.getDataType();
+    
+    if (!exprType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+        compileError("Var declaration must be assigned type 'int' not '%s'!", exprType.name());
+        return nullptr;
+    }
+    
     // Grab the parent scope
     Scope * parentScope = getParentScope();
     

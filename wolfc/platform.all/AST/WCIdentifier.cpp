@@ -1,10 +1,9 @@
 #include "WCIdentifier.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCPrimitiveDataTypes.hpp"
 #include "WCScope.hpp"
-#include "WCStringUtils.hpp"
 #include "WCToken.hpp"
-#include <memory>
 
 WC_BEGIN_NAMESPACE
 
@@ -57,6 +56,11 @@ llvm::Value * Identifier::codegenAddrOf(const CodegenCtx & cgCtx) {
     Scope * parentScope = getParentScope();
     WC_GUARD_ASSERT(parentScope, nullptr);
     return parentScope->getVariable(mToken.data.strVal.ptr);
+}
+
+const DataType & Identifier::getDataType() const {
+    // TODO: support types other than 'int'
+    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
 }
 
 WC_END_NAMESPACE

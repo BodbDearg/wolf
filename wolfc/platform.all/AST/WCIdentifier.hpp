@@ -4,6 +4,8 @@
 
 WC_BEGIN_NAMESPACE
 
+class DataType;
+
 /* Represents TokenType::kIdentifier in the AST tree */
 class Identifier : public ASTNodeCodegen {
 public:
@@ -20,6 +22,9 @@ public:
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
 
     llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx);
+    
+    /* Return the data type of this identifier */
+    const DataType & getDataType() const;
     
     const Token & mToken;
 };

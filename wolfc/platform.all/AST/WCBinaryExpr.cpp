@@ -1,6 +1,8 @@
 #include "WCBinaryExpr.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCDataType.hpp"
+#include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 #include "WCUnaryExpr.hpp"
 
@@ -80,6 +82,10 @@ bool BinaryExprUnary::isLValue() const {
     return mExpr.isLValue();
 }
 
+const DataType & BinaryExprUnary::getDataType() const {
+    return mExpr.getDataType();
+}
+
 llvm::Value * BinaryExprUnary::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
@@ -108,9 +114,36 @@ bool BinaryExprTwoOps::isLValue() const {
     return false;
 }
 
+const DataType & BinaryExprTwoOps::getDataType() const {
+    // TODO: handle auto type promotion
+    return mLeftExpr.getDataType();
+}
+
 llvm::Value * BinaryExprTwoOps::codegenAddrOf(const CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     return nullptr;
+}
+
+bool BinaryExprTwoOps::compileCheckBothExprsAreInt() const {
+    const DataType & leftType = mLeftExpr.getDataType();
+    
+    if (!leftType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+        compileError("Left type in binary expression must be 'int' for now and not '%s'!",
+                     leftType.name());
+        
+        return false;
+    }
+    
+    const DataType & rightType = mRightExpr.getDataType();
+    
+    if (!rightType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+        compileError("Right type in binary expression must be 'int' for now and not '%s'!",
+                     rightType.name());
+        
+        return false;
+    }
+    
+    return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -124,6 +157,12 @@ BinaryExprAdd::BinaryExprAdd(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
 }
 
 llvm::Value * BinaryExprAdd::generateCode(const CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    if (!compileCheckBothExprsAreInt()) {
+        return nullptr;
+    }
+    
+    // Generate code for the operation
     llvm::Value * left = mLeftExpr.generateCode(cgCtx);
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.generateCode(cgCtx);
@@ -142,6 +181,12 @@ BinaryExprSub::BinaryExprSub(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
 }
 
 llvm::Value * BinaryExprSub::generateCode(const CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    if (!compileCheckBothExprsAreInt()) {
+        return nullptr;
+    }
+    
+    // Generate code for the operation
     llvm::Value * left = mLeftExpr.generateCode(cgCtx);
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.generateCode(cgCtx);
@@ -160,6 +205,12 @@ BinaryExprMul::BinaryExprMul(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
 }
 
 llvm::Value * BinaryExprMul::generateCode(const CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    if (!compileCheckBothExprsAreInt()) {
+        return nullptr;
+    }
+    
+    // Generate code for the operation
     llvm::Value * left = mLeftExpr.generateCode(cgCtx);
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.generateCode(cgCtx);
@@ -178,6 +229,12 @@ BinaryExprDiv::BinaryExprDiv(UnaryExpr & leftExpr, BinaryExpr & rightExpr) :
 }
 
 llvm::Value * BinaryExprDiv::generateCode(const CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    if (!compileCheckBothExprsAreInt()) {
+        return nullptr;
+    }
+    
+    // Generate code for the operation
     llvm::Value * left = mLeftExpr.generateCode(cgCtx);
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.generateCode(cgCtx);

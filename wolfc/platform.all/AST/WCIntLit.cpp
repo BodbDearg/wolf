@@ -1,6 +1,7 @@
 #include "WCIntLit.hpp"
-#include "WCToken.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCPrimitiveDataTypes.hpp"
+#include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -33,6 +34,10 @@ const Token & IntLit::getEndToken() const {
 
 llvm::Value * IntLit::generateCode(const CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.getInt64(mToken.data.intVal);
+}
+
+const DataType & IntLit::getDataType() const {
+    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
 }
 
 WC_END_NAMESPACE

@@ -4,6 +4,8 @@
 
 WC_BEGIN_NAMESPACE
 
+class DataType;
+
 /* Represents TokenType::kIntLit in the AST tree */
 class IntLit : public ASTNodeCodegen {
 public:
@@ -18,6 +20,9 @@ public:
     virtual const Token & getEndToken() const override;
     
     virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    
+    /* Return the data type of this literal */
+    const DataType & getDataType() const;
     
     const Token & mToken;
 };
