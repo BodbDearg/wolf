@@ -13,7 +13,7 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool RelExpr::peek(const Token * tokenPtr) {
-    return RelExpr::peek(tokenPtr);
+    return AddSubExpr::peek(tokenPtr);
 }
 
 RelExpr * RelExpr::parse(const Token *& tokenPtr) {
@@ -116,6 +116,12 @@ const DataType & RelExprTwoOps::dataType() const {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 
+llvm::Value * RelExprTwoOps::codegenAddrOf(const CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of an expression that is not an lvalue!");
+    return nullptr;
+}
+
 bool RelExprTwoOps::compileCheckBothExprsAreInt() const {
     const DataType & leftType = mLeftExpr.dataType();
     
@@ -136,12 +142,6 @@ bool RelExprTwoOps::compileCheckBothExprsAreInt() const {
     }
     
     return true;
-}
-
-llvm::Value * RelExprTwoOps::codegenAddrOf(const CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
-    return nullptr;
 }
 
 //-----------------------------------------------------------------------------

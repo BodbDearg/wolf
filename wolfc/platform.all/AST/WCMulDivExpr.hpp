@@ -54,15 +54,15 @@ public:
     
     virtual const DataType & dataType() const override;
     
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
      * return false for failure if that is the case.
      */
-    bool compileCheckBothExprsAreInt() const;
-    
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
-    
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    bool compileCheckBothExprsAreInt() const;    
     
     UnaryExpr & mLeftExpr;
     MulDivExpr & mRightExpr;
@@ -81,15 +81,15 @@ public:
     
     virtual const DataType & dataType() const override;
     
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
      * return false for failure if that is the case.
      */
-    bool compileCheckBothExprsAreInt() const;
-    
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
-    
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    bool compileCheckBothExprsAreInt() const;    
     
     UnaryExpr & mLeftExpr;
     MulDivExpr & mRightExpr;

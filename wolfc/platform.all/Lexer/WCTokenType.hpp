@@ -31,6 +31,8 @@ enum class TokenType {
     kGreaterThan,
     /* '=' */
     kEquals,
+    /* '!' */
+    kExclamation,
     /* var */
     kVar,
     /* true */

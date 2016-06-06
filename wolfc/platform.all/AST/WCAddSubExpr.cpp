@@ -103,6 +103,26 @@ const DataType & AddSubExprAdd::dataType() const {
     return mLeftExpr.dataType();
 }
 
+llvm::Value * AddSubExprAdd::codegenAddrOf(const CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of an expression that is not an lvalue!");
+    return nullptr;
+}
+
+llvm::Value * AddSubExprAdd::codegenExprEval(const CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    if (!compileCheckBothExprsAreInt()) {
+        return nullptr;
+    }
+    
+    // Generate code for the operation
+    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return cgCtx.irBuilder.CreateAdd(left, right, "AddSubExprAdd_AddOp");
+}
+
 bool AddSubExprAdd::compileCheckBothExprsAreInt() const {
     const DataType & leftType = mLeftExpr.dataType();
     
@@ -123,26 +143,6 @@ bool AddSubExprAdd::compileCheckBothExprsAreInt() const {
     }
     
     return true;
-}
-
-llvm::Value * AddSubExprAdd::codegenAddrOf(const CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
-    return nullptr;
-}
-
-llvm::Value * AddSubExprAdd::codegenExprEval(const CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    if (!compileCheckBothExprsAreInt()) {
-        return nullptr;
-    }
-    
-    // Generate code for the operation
-    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateAdd(left, right, "AddSubExprAdd_AddOp");
 }
 
 //-----------------------------------------------------------------------------
@@ -174,6 +174,26 @@ const DataType & AddSubExprSub::dataType() const {
     return mLeftExpr.dataType();
 }
 
+llvm::Value * AddSubExprSub::codegenAddrOf(const CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of an expression that is not an lvalue!");
+    return nullptr;
+}
+
+llvm::Value * AddSubExprSub::codegenExprEval(const CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    if (!compileCheckBothExprsAreInt()) {
+        return nullptr;
+    }
+    
+    // Generate code for the operation
+    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return cgCtx.irBuilder.CreateSub(left, right, "AddSubExprSub_SubOp");
+}
+
 bool AddSubExprSub::compileCheckBothExprsAreInt() const {
     const DataType & leftType = mLeftExpr.dataType();
     
@@ -194,26 +214,6 @@ bool AddSubExprSub::compileCheckBothExprsAreInt() const {
     }
     
     return true;
-}
-
-llvm::Value * AddSubExprSub::codegenAddrOf(const CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
-    return nullptr;
-}
-
-llvm::Value * AddSubExprSub::codegenExprEval(const CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    if (!compileCheckBothExprsAreInt()) {
-        return nullptr;
-    }
-    
-    // Generate code for the operation
-    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateSub(left, right, "AddSubExprSub_SubOp");
 }
 
 WC_END_NAMESPACE

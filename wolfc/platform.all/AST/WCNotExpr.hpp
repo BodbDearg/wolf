@@ -5,12 +5,12 @@
 
 WC_BEGIN_NAMESPACE
 
-class AddSubExpr;
 class DataType;
+class EqExpr;
 
 /*
 NotExpr:
-	AddSubExpr
+	EqExpr
 	not NotExpr
 */
 class NotExpr : public ASTNode, public IExpr {
@@ -23,7 +23,7 @@ public:
 /* AddSubExpr */
 class NotExprNoOp : public NotExpr {
 public:
-    NotExprNoOp(AddSubExpr & expr);
+    NotExprNoOp(EqExpr & expr);
     
     virtual const Token & getStartToken() const override;
     
@@ -37,7 +37,7 @@ public:
     
     virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
     
-    AddSubExpr & mExpr;
+    EqExpr & mExpr;
 };
 
 /* not NotExpr */

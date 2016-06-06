@@ -1,5 +1,5 @@
 #include "WCNotExpr.hpp"
-#include "WCAddSubExpr.hpp"
+#include "WCEqExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
 #include "WCPrimitiveDataTypes.hpp"
@@ -12,7 +12,7 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool NotExpr::peek(const Token * tokenPtr) {
-    return tokenPtr->type == TokenType::kNot || AddSubExpr::peek(tokenPtr);
+    return tokenPtr->type == TokenType::kNot || EqExpr::peek(tokenPtr);
 }
 
 NotExpr * NotExpr::parse(const Token *& tokenPtr) {
@@ -33,7 +33,7 @@ NotExpr * NotExpr::parse(const Token *& tokenPtr) {
     }
     
     // No 'not'. Just parse an ordinary no-op expression
-    AddSubExpr * addSubExpr = AddSubExpr::parse(tokenPtr);
+    EqExpr * addSubExpr = EqExpr::parse(tokenPtr);
     WC_GUARD(addSubExpr, nullptr);
     return new NotExprNoOp(*addSubExpr);
 }
@@ -42,7 +42,7 @@ NotExpr * NotExpr::parse(const Token *& tokenPtr) {
 // NotExprNoOp
 //-----------------------------------------------------------------------------
 
-NotExprNoOp::NotExprNoOp(AddSubExpr & expr) : mExpr(expr) {
+NotExprNoOp::NotExprNoOp(EqExpr & expr) : mExpr(expr) {
     expr.mParent = this;
 }
 

@@ -103,6 +103,26 @@ const DataType & MulDivExprMul::dataType() const {
     return mLeftExpr.dataType();
 }
 
+llvm::Value * MulDivExprMul::codegenAddrOf(const CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of an expression that is not an lvalue!");
+    return nullptr;
+}
+
+llvm::Value * MulDivExprMul::codegenExprEval(const CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    if (!compileCheckBothExprsAreInt()) {
+        return nullptr;
+    }
+    
+    // Generate code for the operation
+    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return cgCtx.irBuilder.CreateMul(left, right, "MulDivExprMul_MulOp");
+}
+
 bool MulDivExprMul::compileCheckBothExprsAreInt() const {
     const DataType & leftType = mLeftExpr.dataType();
     
@@ -123,26 +143,6 @@ bool MulDivExprMul::compileCheckBothExprsAreInt() const {
     }
     
     return true;
-}
-
-llvm::Value * MulDivExprMul::codegenAddrOf(const CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
-    return nullptr;
-}
-
-llvm::Value * MulDivExprMul::codegenExprEval(const CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    if (!compileCheckBothExprsAreInt()) {
-        return nullptr;
-    }
-    
-    // Generate code for the operation
-    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateMul(left, right, "MulDivExprMul_MulOp");
 }
 
 //-----------------------------------------------------------------------------
@@ -174,6 +174,26 @@ const DataType & MulDivExprDiv::dataType() const {
     return mLeftExpr.dataType();
 }
 
+llvm::Value * MulDivExprDiv::codegenAddrOf(const CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of an expression that is not an lvalue!");
+    return nullptr;
+}
+
+llvm::Value * MulDivExprDiv::codegenExprEval(const CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    if (!compileCheckBothExprsAreInt()) {
+        return nullptr;
+    }
+    
+    // Generate code for the operation
+    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return cgCtx.irBuilder.CreateSDiv(left, right, "MulDivExprDiv_DivOp");
+}
+
 bool MulDivExprDiv::compileCheckBothExprsAreInt() const {
     const DataType & leftType = mLeftExpr.dataType();
     
@@ -194,26 +214,6 @@ bool MulDivExprDiv::compileCheckBothExprsAreInt() const {
     }
     
     return true;
-}
-
-llvm::Value * MulDivExprDiv::codegenAddrOf(const CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
-    return nullptr;
-}
-
-llvm::Value * MulDivExprDiv::codegenExprEval(const CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    if (!compileCheckBothExprsAreInt()) {
-        return nullptr;
-    }
-    
-    // Generate code for the operation
-    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateSDiv(left, right, "MulDivExprDiv_DivOp");
 }
 
 WC_END_NAMESPACE

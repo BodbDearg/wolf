@@ -6,27 +6,25 @@
 WC_BEGIN_NAMESPACE
 
 class DataType;
-class AddSubExpr;
+class RelExpr;
 
 /*
-RelExpr:
-	AddSubExpr
-	AddSubExpr < RelExpr
-	AddSubExpr <= RelExpr
-	AddSubExpr > RelExpr
-	AddSubExpr >= RelExpr
+EqExpr:
+	RelExpr
+	RelExpr == EqExpr
+	RelExpr != EqExpr
 */
-class RelExpr : public ASTNode, public IExpr {
+class EqExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static RelExpr * parse(const Token *& tokenPtr);
+    static EqExpr * parse(const Token *& tokenPtr);
 };
 
-/* AddSubExpr */
-class RelExprNoOp : public RelExpr {
+/* RelExpr */
+class EqExprNoOp : public EqExpr {
 public:
-    RelExprNoOp(AddSubExpr & expr);
+    EqExprNoOp(RelExpr & expr);
     
     virtual const Token & getStartToken() const override;
     
@@ -40,13 +38,13 @@ public:
     
     virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
     
-    AddSubExpr & mExpr;
+    RelExpr & mExpr;
 };
 
-/* Base for relational expressions with two operators. */
-class RelExprTwoOps : public RelExpr {
+/* Base for equality expressions with two operators. */
+class EqExprTwoOps : public EqExpr {
 public:
-    RelExprTwoOps(AddSubExpr & leftExpr, RelExpr & rightExpr);
+    EqExprTwoOps(RelExpr & leftExpr, EqExpr & rightExpr);
     
     virtual const Token & getStartToken() const override;
     
@@ -62,40 +60,24 @@ public:
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
      * return false for failure if that is the case.
      */
-    bool compileCheckBothExprsAreInt() const;
+    bool compileCheckBothExprsAreInt() const;    
     
-    AddSubExpr & mLeftExpr;
-    RelExpr & mRightExpr;
+    RelExpr & mLeftExpr;
+    EqExpr & mRightExpr;
 };
 
-/* AddSubExpr < RelExpr */
-class RelExprLT : public RelExprTwoOps {
+/* RelExpr == EqExpr */
+class EqExprEq : public EqExprTwoOps {
 public:
-    RelExprLT(AddSubExpr & leftExpr, RelExpr & rightExpr);
-    
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
-};
-
-/* AddSubExpr <= RelExpr */
-class RelExprLE : public RelExprTwoOps {
-public:
-    RelExprLE(AddSubExpr & leftExpr, RelExpr & rightExpr);
+    EqExprEq(RelExpr & leftExpr, EqExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
 };
 
-/* AddSubExpr > RelExpr */
-class RelExprGT : public RelExprTwoOps {
+/* RelExpr != EqExpr */
+class EqExprNeq : public EqExprTwoOps {
 public:
-    RelExprGT(AddSubExpr & leftExpr, RelExpr & rightExpr);
-    
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
-};
-
-/* AddSubExpr >= RelExpr */
-class RelExprGE : public RelExprTwoOps {
-public:
-    RelExprGE(AddSubExpr & leftExpr, RelExpr & rightExpr);
+    EqExprNeq(RelExpr & leftExpr, EqExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
 };
