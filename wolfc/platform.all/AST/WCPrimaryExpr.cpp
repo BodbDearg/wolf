@@ -67,22 +67,22 @@ const Token & PrimaryExprIntLit::getEndToken() const {
     return mLit.getEndToken();
 }
 
-llvm::Value * PrimaryExprIntLit::generateCode(const CodegenCtx & cgCtx) {
-    return mLit.generateCode(cgCtx);
-}
-
 bool PrimaryExprIntLit::isLValue() const {
     return false;
 }
 
-const DataType & PrimaryExprIntLit::getDataType() const {
-    return mLit.getDataType();
+const DataType & PrimaryExprIntLit::dataType() const {
+    return mLit.dataType();
 }
 
 llvm::Value * PrimaryExprIntLit::codegenAddrOf(const CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
+}
+
+llvm::Value * PrimaryExprIntLit::codegenExprEval(const CodegenCtx & cgCtx) {
+    return mLit.codegenExprEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -101,22 +101,22 @@ const Token & PrimaryExprBoolLit::getEndToken() const {
     return mLit.getEndToken();
 }
 
-llvm::Value * PrimaryExprBoolLit::generateCode(const CodegenCtx & cgCtx) {
-    return mLit.generateCode(cgCtx);
-}
-
 bool PrimaryExprBoolLit::isLValue() const {
     return false;
 }
 
-const DataType & PrimaryExprBoolLit::getDataType() const {
-    return mLit.getDataType();
+const DataType & PrimaryExprBoolLit::dataType() const {
+    return mLit.dataType();
 }
 
 llvm::Value * PrimaryExprBoolLit::codegenAddrOf(const CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
+}
+
+llvm::Value * PrimaryExprBoolLit::codegenExprEval(const CodegenCtx & cgCtx) {
+    return mLit.codegenExprEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -135,22 +135,22 @@ const Token & PrimaryExprStrLit::getEndToken() const {
     return mLit.getEndToken();
 }
 
-llvm::Value * PrimaryExprStrLit::generateCode(const CodegenCtx & cgCtx) {
-    return mLit.generateCode(cgCtx);
-}
-
 bool PrimaryExprStrLit::isLValue() const {
     return false;
 }
 
-const DataType & PrimaryExprStrLit::getDataType() const {
-    return mLit.getDataType();
+const DataType & PrimaryExprStrLit::dataType() const {
+    return mLit.dataType();
 }
 
 llvm::Value * PrimaryExprStrLit::codegenAddrOf(const CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
+}
+
+llvm::Value * PrimaryExprStrLit::codegenExprEval(const CodegenCtx & cgCtx) {
+    return mLit.codegenExprEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -169,20 +169,20 @@ const Token & PrimaryExprIdentifier::getEndToken() const {
     return mIdent.getEndToken();
 }
 
-llvm::Value * PrimaryExprIdentifier::generateCode(const CodegenCtx & cgCtx) {
-    return mIdent.generateCode(cgCtx);
-}
-
 bool PrimaryExprIdentifier::isLValue() const {
-    return true;
+    return mIdent.isLValue();
 }
 
-const DataType & PrimaryExprIdentifier::getDataType() const {
-    return mIdent.getDataType();
+const DataType & PrimaryExprIdentifier::dataType() const {
+    return mIdent.dataType();
 }
 
 llvm::Value * PrimaryExprIdentifier::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mIdent.codegenAddrOf(cgCtx);
+}
+
+llvm::Value * PrimaryExprIdentifier::codegenExprEval(const CodegenCtx & cgCtx) {
+    return mIdent.codegenExprEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -201,22 +201,22 @@ const Token & PrimaryExprReadnum::getEndToken() const {
     return mExpr.getEndToken();
 }
     
-llvm::Value * PrimaryExprReadnum::generateCode(const CodegenCtx & cgCtx) {
-    return mExpr.generateCode(cgCtx);
-}
-    
 bool PrimaryExprReadnum::isLValue() const {
     return false;
 }
 
-const DataType & PrimaryExprReadnum::getDataType() const {
-    return mExpr.getDataType();
+const DataType & PrimaryExprReadnum::dataType() const {
+    return mExpr.dataType();
 }
 
 llvm::Value * PrimaryExprReadnum::codegenAddrOf(const CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
+}
+
+llvm::Value * PrimaryExprReadnum::codegenExprEval(const CodegenCtx & cgCtx) {
+    return mExpr.codegenExprEval(cgCtx);
 }
 
 WC_END_NAMESPACE

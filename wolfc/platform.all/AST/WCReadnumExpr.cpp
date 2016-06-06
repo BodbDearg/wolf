@@ -55,7 +55,21 @@ const Token & ReadnumExpr::getEndToken() const {
     return mEndToken;
 }
 
-llvm::Value * ReadnumExpr::generateCode(const CodegenCtx & cgCtx) {
+bool ReadnumExpr::isLValue() const {
+    return false;
+}
+
+const DataType & ReadnumExpr::dataType() const {
+    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
+}
+
+llvm::Value * ReadnumExpr::codegenAddrOf(const CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of an expression that is not an lvalue!");
+    return nullptr;
+}
+
+llvm::Value * ReadnumExpr::codegenExprEval(const CodegenCtx & cgCtx) {
     // Get scanf
     llvm::Constant * scanfFn = cgCtx.module.getFunction("scanf");
     
@@ -77,10 +91,6 @@ llvm::Value * ReadnumExpr::generateCode(const CodegenCtx & cgCtx) {
     
     // And return the stack var
     return cgCtx.irBuilder.CreateLoad(outputVar, "readnum_expr_load_temp_stack_var");
-}
-
-const DataType & ReadnumExpr::getDataType() const {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
 }
 
 WC_END_NAMESPACE

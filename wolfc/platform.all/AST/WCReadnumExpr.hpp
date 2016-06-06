@@ -1,6 +1,7 @@
 #pragma once
 
-#include "WCASTNodeCodegen.hpp"
+#include "WCASTNode.hpp"
+#include "WCIExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -11,7 +12,7 @@ class StrLit;
 ReadnumExpr
     readnum ( )
 */
-class ReadnumExpr : public ASTNodeCodegen {
+class ReadnumExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     
@@ -23,10 +24,13 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    virtual bool isLValue() const override;
     
-    /* Return the data type of this literal */
-    const DataType & getDataType() const;
+    virtual const DataType & dataType() const override;
+    
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
     
     const Token & mStartToken;
     const Token & mEndToken;

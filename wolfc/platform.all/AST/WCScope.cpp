@@ -27,8 +27,8 @@ const Token & Scope::getEndToken() const {
     return mStmnts.getEndToken();
 }
 
-llvm::Value * Scope::generateCode(const CodegenCtx & cgCtx) {
-    return mStmnts.generateCode(cgCtx);
+bool Scope::codegenStmnt(const CodegenCtx & cgCtx) {
+    return mStmnts.codegenStmnt(cgCtx);
 }
 
 llvm::Value * Scope::getOrCreateVariable(const char * variableName,

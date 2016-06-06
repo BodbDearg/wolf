@@ -34,7 +34,23 @@ const Token & Identifier::getEndToken() const {
     return mToken;
 }
 
-llvm::Value * Identifier::generateCode(const CodegenCtx & cgCtx) {
+bool Identifier::isLValue() const {
+    return true;
+}
+
+const DataType & Identifier::dataType() const {
+    // TODO: support types other than 'int'
+    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
+}
+
+llvm::Value * Identifier::codegenAddrOf(const CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    Scope * parentScope = getParentScope();
+    WC_GUARD_ASSERT(parentScope, nullptr);
+    return parentScope->getVariable(mToken.data.strVal.ptr);
+}
+
+llvm::Value * Identifier::codegenExprEval(const CodegenCtx & cgCtx) {
     // Grab the parent scope, there should always be one
     Scope * parentScope = getParentScope();
     WC_GUARD_ASSERT(parentScope, nullptr);
@@ -49,18 +65,6 @@ llvm::Value * Identifier::generateCode(const CodegenCtx & cgCtx) {
     
     // Create an instruction to load it
     return cgCtx.irBuilder.CreateLoad(value, std::string("load_ident_val:") + mToken.data.strVal.ptr);
-}
-
-llvm::Value * Identifier::codegenAddrOf(const CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    Scope * parentScope = getParentScope();
-    WC_GUARD_ASSERT(parentScope, nullptr);
-    return parentScope->getVariable(mToken.data.strVal.ptr);
-}
-
-const DataType & Identifier::getDataType() const {
-    // TODO: support types other than 'int'
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
 }
 
 WC_END_NAMESPACE

@@ -59,13 +59,13 @@ const Token & VarDecl::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-llvm::Value * VarDecl::generateCode(const CodegenCtx & cgCtx) {
+bool VarDecl::codegenStmnt(const CodegenCtx & cgCtx) {
     // TODO: allow more than int
-    const DataType & exprType = mExpr.getDataType();
+    const DataType & exprType = mExpr.dataType();
     
     if (!exprType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
         compileError("Var declaration must be assigned type 'int' not '%s'!", exprType.name());
-        return nullptr;
+        return false;
     }
     
     // Grab the parent scope
@@ -73,7 +73,7 @@ llvm::Value * VarDecl::generateCode(const CodegenCtx & cgCtx) {
     
     if (!parentScope) {
         compileError("Can't codegen, no parent scope!");
-        return nullptr;
+        return false;
     }
     
     // Alloc room for the variable on left
@@ -81,22 +81,22 @@ llvm::Value * VarDecl::generateCode(const CodegenCtx & cgCtx) {
     
     if (leftValue) {
         compileError("The variable '%s' has been redefined!", mIdent.mToken.data.strVal.ptr);
-        return nullptr;
+        return false;
     }
         
     leftValue = parentScope->getOrCreateVariable(mIdent.mToken.data.strVal.ptr, cgCtx);
     
     if (!leftValue) {
         compileError("Can't codegen, unable to allocate room for variable!");
-        return nullptr;
+        return false;
     }
     
     // Now evaluate the right:
-    llvm::Value * rightValue = mExpr.generateCode(cgCtx);
-    WC_GUARD(rightValue, nullptr);
+    llvm::Value * rightValue = mExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightValue, false);
     
     // Generate store instruction:
-    return cgCtx.irBuilder.CreateStore(rightValue, leftValue);
+    return cgCtx.irBuilder.CreateStore(rightValue, leftValue) != nullptr;
 }
 
 WC_END_NAMESPACE

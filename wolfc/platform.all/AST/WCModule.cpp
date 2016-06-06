@@ -90,7 +90,7 @@ bool Module::generateCode() {
     irBuilder.SetInsertPoint(mainBlock);
     
     // Generate the code
-    if (!mScope->generateCode(CodegenCtx(mLLVMCtx, irBuilder, *mLLVMMod))) {
+    if (!mScope->codegenStmnt(CodegenCtx(mLLVMCtx, irBuilder, *mLLVMMod))) {
         return false;
     }
     

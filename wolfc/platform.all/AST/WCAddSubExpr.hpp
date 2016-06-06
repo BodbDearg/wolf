@@ -1,6 +1,7 @@
 #pragma once
 
-#include "WCASTNodeCodegen.hpp"
+#include "WCASTNode.hpp"
+#include "WCIExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -13,23 +14,11 @@ AddSubExpr:
 	MulDivExpr + AddSubExpr
 	MulDivExpr - AddSubExpr
 */
-class AddSubExpr : public ASTNodeCodegen {
+class AddSubExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     
     static AddSubExpr * parse(const Token *& tokenPtr);
-    
-    /**
-     * Tell if this expression evaluates to an lvalue. lvalues are values that can be asssigned to.
-     * See lvalues versus rvalues: https://msdn.microsoft.com/en-us/library/f90831hc.aspx
-     */
-    virtual bool isLValue() const = 0;
-    
-    /* Return the data type of this expression */
-    virtual const DataType & getDataType() const = 0;
-    
-    /* Codegen the llvm value that represents the address of this expression. Only possible for lvalues! */
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) = 0;
 };
 
 /* MulDivExpr */
@@ -43,11 +32,11 @@ public:
     
     virtual bool isLValue() const override;
     
-    virtual const DataType & getDataType() const override;
+    virtual const DataType & dataType() const override;
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
     
     MulDivExpr & mExpr;
 };
@@ -63,7 +52,7 @@ public:
     
     virtual bool isLValue() const override;
     
-    virtual const DataType & getDataType() const override;
+    virtual const DataType & dataType() const override;
     
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
@@ -73,7 +62,7 @@ public:
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
     
     MulDivExpr & mLeftExpr;
     AddSubExpr & mRightExpr;
@@ -90,7 +79,7 @@ public:
     
     virtual bool isLValue() const override;
     
-    virtual const DataType & getDataType() const override;
+    virtual const DataType & dataType() const override;
     
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
@@ -100,7 +89,7 @@ public:
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
     
     MulDivExpr & mLeftExpr;
     AddSubExpr & mRightExpr;

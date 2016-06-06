@@ -156,6 +156,8 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
         case '-': return parseBasicToken(TokenType::kMinus, 1);
         case '*': return parseBasicToken(TokenType::kAsterisk, 1);
         case '/': return parseBasicToken(TokenType::kSlash, 1);
+        case '<': return parseBasicToken(TokenType::kLessThan, 1);
+        case '>': return parseBasicToken(TokenType::kGreaterThan, 1);
         case '=': return parseBasicToken(TokenType::kEquals, 1);
             
         default:

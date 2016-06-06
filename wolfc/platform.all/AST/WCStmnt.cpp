@@ -53,8 +53,8 @@ const Token & StmntPrintStmnt::getEndToken() const {
     return mStmnt.getEndToken();
 }
 
-llvm::Value * StmntPrintStmnt::generateCode(const CodegenCtx & cgCtx) {
-    return mStmnt.generateCode(cgCtx);
+bool StmntPrintStmnt::codegenStmnt(const CodegenCtx & cgCtx) {
+    return mStmnt.codegenStmnt(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -73,8 +73,8 @@ const Token & StmntVarDecl::getEndToken() const {
     return mDecl.getEndToken();
 }
 
-llvm::Value * StmntVarDecl::generateCode(const CodegenCtx & cgCtx) {
-    return mDecl.generateCode(cgCtx);
+bool StmntVarDecl::codegenStmnt(const CodegenCtx & cgCtx) {
+    return mDecl.codegenStmnt(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -93,8 +93,8 @@ const Token & StmntAssignExpr::getEndToken() const {
     return mExpr.getEndToken();
 }
     
-llvm::Value * StmntAssignExpr::generateCode(const CodegenCtx & cgCtx) {
-    return mExpr.generateCode(cgCtx);
+bool StmntAssignExpr::codegenStmnt(const CodegenCtx & cgCtx) {
+    return mExpr.codegenExprEval(cgCtx) != nullptr;
 }
 
 WC_END_NAMESPACE

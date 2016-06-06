@@ -32,12 +32,22 @@ const Token & IntLit::getEndToken() const {
     return mToken;
 }
 
-llvm::Value * IntLit::generateCode(const CodegenCtx & cgCtx) {
-    return cgCtx.irBuilder.getInt64(mToken.data.intVal);
+bool IntLit::isLValue() const {
+    return false;
 }
 
-const DataType & IntLit::getDataType() const {
+const DataType & IntLit::dataType() const {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
+}
+
+llvm::Value * IntLit::codegenAddrOf(const CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of an expression that is not an lvalue!");
+    return nullptr;
+}
+
+llvm::Value * IntLit::codegenExprEval(const CodegenCtx & cgCtx) {
+    return cgCtx.irBuilder.getInt64(mToken.data.intVal);
 }
 
 WC_END_NAMESPACE

@@ -65,24 +65,24 @@ const Token & PrintStmnt::getEndToken() const {
     return mEndToken;
 }
 
-llvm::Value * PrintStmnt::generateCode(const CodegenCtx & cgCtx) {
+bool PrintStmnt::codegenStmnt(const CodegenCtx & cgCtx) {
     // Get printf
     llvm::Constant * printfFn = cgCtx.module.getFunction("printf");
     
     if (!printfFn) {
         compileError("Codegen failed! Can't find 'printf' function!");
-        return nullptr;
+        return false;
     }
     
     // Evaluate the code for the argument to printf
-    llvm::Value * exprVal = mExpr.generateCode(cgCtx);
+    llvm::Value * exprVal = mExpr.codegenExprEval(cgCtx);
     
     if (!exprVal) {
         compileError("Codegen failed! Can't generate code for inner expression value in print statement!");
-        return nullptr;
+        return false;
     }
     
-    return mExpr.getDataType().genPrintStmntCode(cgCtx, *this, *printfFn, *exprVal);
+    return mExpr.dataType().codegenPrintStmnt(cgCtx, *this, *printfFn, *exprVal);
 }
 
 WC_END_NAMESPACE

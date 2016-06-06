@@ -62,16 +62,16 @@ bool MulDivExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & MulDivExprNoOp::getDataType() const {
-    return mExpr.getDataType();
+const DataType & MulDivExprNoOp::dataType() const {
+    return mExpr.dataType();
 }
 
 llvm::Value * MulDivExprNoOp::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * MulDivExprNoOp::generateCode(const CodegenCtx & cgCtx) {
-    return mExpr.generateCode(cgCtx);
+llvm::Value * MulDivExprNoOp::codegenExprEval(const CodegenCtx & cgCtx) {
+    return mExpr.codegenExprEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -98,13 +98,13 @@ bool MulDivExprMul::isLValue() const {
     return false;
 }
 
-const DataType & MulDivExprMul::getDataType() const {
+const DataType & MulDivExprMul::dataType() const {
     // TODO: handle auto type promotion
-    return mLeftExpr.getDataType();
+    return mLeftExpr.dataType();
 }
 
 bool MulDivExprMul::compileCheckBothExprsAreInt() const {
-    const DataType & leftType = mLeftExpr.getDataType();
+    const DataType & leftType = mLeftExpr.dataType();
     
     if (!leftType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
         compileError("Left type in expression must be 'int' for now and not '%s'!",
@@ -113,7 +113,7 @@ bool MulDivExprMul::compileCheckBothExprsAreInt() const {
         return false;
     }
     
-    const DataType & rightType = mRightExpr.getDataType();
+    const DataType & rightType = mRightExpr.dataType();
     
     if (!rightType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
         compileError("Right type in expression must be 'int' for now and not '%s'!",
@@ -131,16 +131,16 @@ llvm::Value * MulDivExprMul::codegenAddrOf(const CodegenCtx & cgCtx) {
     return nullptr;
 }
 
-llvm::Value * MulDivExprMul::generateCode(const CodegenCtx & cgCtx) {
+llvm::Value * MulDivExprMul::codegenExprEval(const CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     if (!compileCheckBothExprsAreInt()) {
         return nullptr;
     }
     
     // Generate code for the operation
-    llvm::Value * left = mLeftExpr.generateCode(cgCtx);
+    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
     WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.generateCode(cgCtx);
+    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateMul(left, right, "MulDivExprMul_MulOp");
 }
@@ -169,13 +169,13 @@ bool MulDivExprDiv::isLValue() const {
     return false;
 }
 
-const DataType & MulDivExprDiv::getDataType() const {
+const DataType & MulDivExprDiv::dataType() const {
     // TODO: handle auto type promotion
-    return mLeftExpr.getDataType();
+    return mLeftExpr.dataType();
 }
 
 bool MulDivExprDiv::compileCheckBothExprsAreInt() const {
-    const DataType & leftType = mLeftExpr.getDataType();
+    const DataType & leftType = mLeftExpr.dataType();
     
     if (!leftType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
         compileError("Left type in expression must be 'int' for now and not '%s'!",
@@ -184,7 +184,7 @@ bool MulDivExprDiv::compileCheckBothExprsAreInt() const {
         return false;
     }
     
-    const DataType & rightType = mRightExpr.getDataType();
+    const DataType & rightType = mRightExpr.dataType();
     
     if (!rightType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
         compileError("Right type in expression must be 'int' for now and not '%s'!",
@@ -202,16 +202,16 @@ llvm::Value * MulDivExprDiv::codegenAddrOf(const CodegenCtx & cgCtx) {
     return nullptr;
 }
 
-llvm::Value * MulDivExprDiv::generateCode(const CodegenCtx & cgCtx) {
+llvm::Value * MulDivExprDiv::codegenExprEval(const CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     if (!compileCheckBothExprsAreInt()) {
         return nullptr;
     }
     
     // Generate code for the operation
-    llvm::Value * left = mLeftExpr.generateCode(cgCtx);
+    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
     WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.generateCode(cgCtx);
+    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateSDiv(left, right, "MulDivExprDiv_DivOp");
 }

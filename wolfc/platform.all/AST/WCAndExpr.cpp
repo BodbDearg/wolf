@@ -51,20 +51,20 @@ const Token & AndExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-llvm::Value * AndExprNoOp::generateCode(const CodegenCtx & cgCtx) {
-    return mExpr.generateCode(cgCtx);
-}
-
 bool AndExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & AndExprNoOp::getDataType() const {
-    return mExpr.getDataType();
+const DataType & AndExprNoOp::dataType() const {
+    return mExpr.dataType();
 }
 
 llvm::Value * AndExprNoOp::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
+}
+
+llvm::Value * AndExprNoOp::codegenExprEval(const CodegenCtx & cgCtx) {
+    return mExpr.codegenExprEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -87,45 +87,11 @@ const Token & AndExprAnd::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-llvm::Value * AndExprAnd::generateCode(const CodegenCtx & cgCtx) {
-    // TODO: add support for lazy evaluation
-    
-    // Grab the type for bool
-    const DataType & boolType = PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
-    
-    // Left side must evaluate to a boolean:
-    const DataType & leftType = mLeftExpr.getDataType();
-    
-    if (!leftType.equals(boolType)) {
-        compileError("Left side of logical 'and' expression must evaluate to 'bool', not '%s'!", leftType.name());
-        return nullptr;
-    }
-    
-    // Right side must evaluate to a boolean:
-    const DataType & rightType = mRightExpr.getDataType();
-    
-    if (!rightType.equals(boolType)) {
-        compileError("Right side of logical 'and' expression must evaluate to 'bool', not '%s'!", rightType.name());
-        return nullptr;
-    }
-
-    // Evaluate left side:
-    llvm::Value * leftValue = mLeftExpr.generateCode(cgCtx);
-    WC_GUARD(leftValue, nullptr);
-    
-    // Now evaluate the right:
-    llvm::Value * rightValue = mRightExpr.generateCode(cgCtx);
-    WC_GUARD(rightValue, nullptr);
-    
-    // Generate and return bitwise and instruction:
-    return cgCtx.irBuilder.CreateAnd(rightValue, leftValue);
-}
-
 bool AndExprAnd::isLValue() const {
     return false;
 }
 
-const DataType & AndExprAnd::getDataType() const {
+const DataType & AndExprAnd::dataType() const {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 
@@ -133,6 +99,40 @@ llvm::Value * AndExprAnd::codegenAddrOf(const CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
+}
+
+llvm::Value * AndExprAnd::codegenExprEval(const CodegenCtx & cgCtx) {
+    // TODO: add support for lazy evaluation
+    
+    // Grab the type for bool
+    const DataType & boolType = PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
+    
+    // Left side must evaluate to a boolean:
+    const DataType & leftType = mLeftExpr.dataType();
+    
+    if (!leftType.equals(boolType)) {
+        compileError("Left side of logical 'and' expression must evaluate to 'bool', not '%s'!", leftType.name());
+        return nullptr;
+    }
+    
+    // Right side must evaluate to a boolean:
+    const DataType & rightType = mRightExpr.dataType();
+    
+    if (!rightType.equals(boolType)) {
+        compileError("Right side of logical 'and' expression must evaluate to 'bool', not '%s'!", rightType.name());
+        return nullptr;
+    }
+
+    // Evaluate left side:
+    llvm::Value * leftValue = mLeftExpr.codegenExprEval(cgCtx);
+    WC_GUARD(leftValue, nullptr);
+    
+    // Now evaluate the right:
+    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightValue, nullptr);
+    
+    // Generate and return bitwise and instruction:
+    return cgCtx.irBuilder.CreateAnd(rightValue, leftValue);
 }
 
 WC_END_NAMESPACE

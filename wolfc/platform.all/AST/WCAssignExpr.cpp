@@ -49,20 +49,20 @@ const Token & AssignExprNoAssign::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-llvm::Value * AssignExprNoAssign::generateCode(const CodegenCtx & cgCtx) {
-    return mExpr.generateCode(cgCtx);
-}
-
 bool AssignExprNoAssign::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & AssignExprNoAssign::getDataType() const {
-    return mExpr.getDataType();
+const DataType & AssignExprNoAssign::dataType() const {
+    return mExpr.dataType();
 }
 
 llvm::Value * AssignExprNoAssign::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
+}
+
+llvm::Value * AssignExprNoAssign::codegenExprEval(const CodegenCtx & cgCtx) {
+    return mExpr.codegenExprEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -85,7 +85,21 @@ const Token & AssignExprAssign::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-llvm::Value * AssignExprAssign::generateCode(const CodegenCtx & cgCtx) {
+bool AssignExprAssign::isLValue() const {
+    return false;
+}
+
+const DataType & AssignExprAssign::dataType() const {
+    return mLeftExpr.dataType();
+}
+
+llvm::Value * AssignExprAssign::codegenAddrOf(const CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of an expression that is not an lvalue!");
+    return nullptr;
+}
+
+llvm::Value * AssignExprAssign::codegenExprEval(const CodegenCtx & cgCtx) {
     // Left side of expression must be an lvalue!
     if (!mLeftExpr.isLValue()) {
         compileError("Can't assign to an rvalue!");
@@ -97,7 +111,7 @@ llvm::Value * AssignExprAssign::generateCode(const CodegenCtx & cgCtx) {
     WC_GUARD(leftValue, nullptr);
     
     // Now evaluate the right:
-    llvm::Value * rightValue = mRightExpr.generateCode(cgCtx);
+    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(rightValue, nullptr);
     
     // Generate store instruction:
@@ -105,20 +119,6 @@ llvm::Value * AssignExprAssign::generateCode(const CodegenCtx & cgCtx) {
     
     // The expression evalutes to the left expression, so return that
     return cgCtx.irBuilder.CreateLoad(leftValue);
-}
-
-bool AssignExprAssign::isLValue() const {
-    return false;
-}
-
-const DataType & AssignExprAssign::getDataType() const {
-    return mLeftExpr.getDataType();
-}
-
-llvm::Value * AssignExprAssign::codegenAddrOf(const CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
-    return nullptr;
 }
 
 WC_END_NAMESPACE

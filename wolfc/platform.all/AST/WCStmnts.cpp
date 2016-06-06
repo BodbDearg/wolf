@@ -50,8 +50,8 @@ const Token & StmntsSingle::getEndToken() const {
     return mStmnt.getEndToken();
 }
 
-llvm::Value * StmntsSingle::generateCode(const CodegenCtx & cgCtx) {
-    return mStmnt.generateCode(cgCtx);
+bool StmntsSingle::codegenStmnt(const CodegenCtx & cgCtx) {
+    return mStmnt.codegenStmnt(cgCtx);
 };
 
 //-----------------------------------------------------------------------------
@@ -74,13 +74,10 @@ const Token & StmntsMulti::getEndToken() const {
     return mRightStmnts.getEndToken();
 }
 
-llvm::Value * StmntsMulti::generateCode(const CodegenCtx & cgCtx) {
-    // Generate the instructions for all these calls
-    WC_GUARD(mLeftStmnt.generateCode(cgCtx), nullptr);
-    WC_GUARD(mRightStmnts.generateCode(cgCtx), nullptr);
-    
-    // Return the last instruction generated
-    return &(*(cgCtx.irBuilder.GetInsertPoint()));
+bool StmntsMulti::codegenStmnt(const CodegenCtx & cgCtx) {
+    WC_GUARD(mLeftStmnt.codegenStmnt(cgCtx), false);
+    WC_GUARD(mRightStmnts.codegenStmnt(cgCtx), false);
+    return true;
 }
 
 WC_END_NAMESPACE

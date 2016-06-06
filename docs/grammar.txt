@@ -32,8 +32,20 @@ AndExpr:
 	NotExpr and AndExpr
 
 NotExpr:
-	AddSubExpr
+	EqExpr
 	not NotExpr
+
+EqExpr:
+	RelExpr
+	RelExpr == EqExpr
+	RelExpr != EqExpr
+
+RelExpr:
+	AddSubExpr
+	AddSubExpr < RelExpr
+	AddSubExpr <= RelExpr
+	AddSubExpr > RelExpr
+	AddSubExpr >= RelExpr
 
 AddSubExpr:
 	MulDivExpr

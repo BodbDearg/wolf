@@ -1,13 +1,14 @@
 #pragma once
 
-#include "WCASTNodeCodegen.hpp"
+#include "WCASTNode.hpp"
+#include "WCIExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
 class DataType;
 
 /* Represents TokenType::kIdentifier in the AST tree */
-class Identifier : public ASTNodeCodegen {
+class Identifier : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     
@@ -19,12 +20,13 @@ public:
 
     virtual const Token & getEndToken() const override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
-
-    llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx);
+    virtual bool isLValue() const override;
     
-    /* Return the data type of this identifier */
-    const DataType & getDataType() const;
+    virtual const DataType & dataType() const override;
+    
+    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
     
     const Token & mToken;
 };

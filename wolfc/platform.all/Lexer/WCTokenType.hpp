@@ -25,6 +25,10 @@ enum class TokenType {
     kAsterisk,
     /* '/' */
     kSlash,
+    /* '<' */
+    kLessThan,
+    /* '>' */
+    kGreaterThan,
     /* '=' */
     kEquals,
     /* var */

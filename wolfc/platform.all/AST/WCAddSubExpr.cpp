@@ -62,16 +62,16 @@ bool AddSubExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & AddSubExprNoOp::getDataType() const {
-    return mExpr.getDataType();
+const DataType & AddSubExprNoOp::dataType() const {
+    return mExpr.dataType();
 }
 
 llvm::Value * AddSubExprNoOp::codegenAddrOf(const CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * AddSubExprNoOp::generateCode(const CodegenCtx & cgCtx) {
-    return mExpr.generateCode(cgCtx);
+llvm::Value * AddSubExprNoOp::codegenExprEval(const CodegenCtx & cgCtx) {
+    return mExpr.codegenExprEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -98,13 +98,13 @@ bool AddSubExprAdd::isLValue() const {
     return false;
 }
 
-const DataType & AddSubExprAdd::getDataType() const {
+const DataType & AddSubExprAdd::dataType() const {
     // TODO: handle auto type promotion
-    return mLeftExpr.getDataType();
+    return mLeftExpr.dataType();
 }
 
 bool AddSubExprAdd::compileCheckBothExprsAreInt() const {
-    const DataType & leftType = mLeftExpr.getDataType();
+    const DataType & leftType = mLeftExpr.dataType();
     
     if (!leftType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
         compileError("Left type in expression must be 'int' for now and not '%s'!",
@@ -113,7 +113,7 @@ bool AddSubExprAdd::compileCheckBothExprsAreInt() const {
         return false;
     }
     
-    const DataType & rightType = mRightExpr.getDataType();
+    const DataType & rightType = mRightExpr.dataType();
     
     if (!rightType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
         compileError("Right type in expression must be 'int' for now and not '%s'!",
@@ -131,16 +131,16 @@ llvm::Value * AddSubExprAdd::codegenAddrOf(const CodegenCtx & cgCtx) {
     return nullptr;
 }
 
-llvm::Value * AddSubExprAdd::generateCode(const CodegenCtx & cgCtx) {
+llvm::Value * AddSubExprAdd::codegenExprEval(const CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     if (!compileCheckBothExprsAreInt()) {
         return nullptr;
     }
     
     // Generate code for the operation
-    llvm::Value * left = mLeftExpr.generateCode(cgCtx);
+    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
     WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.generateCode(cgCtx);
+    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateAdd(left, right, "AddSubExprAdd_AddOp");
 }
@@ -169,13 +169,13 @@ bool AddSubExprSub::isLValue() const {
     return false;
 }
 
-const DataType & AddSubExprSub::getDataType() const {
+const DataType & AddSubExprSub::dataType() const {
     // TODO: handle auto type promotion
-    return mLeftExpr.getDataType();
+    return mLeftExpr.dataType();
 }
 
 bool AddSubExprSub::compileCheckBothExprsAreInt() const {
-    const DataType & leftType = mLeftExpr.getDataType();
+    const DataType & leftType = mLeftExpr.dataType();
     
     if (!leftType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
         compileError("Left type in expression must be 'int' for now and not '%s'!",
@@ -184,7 +184,7 @@ bool AddSubExprSub::compileCheckBothExprsAreInt() const {
         return false;
     }
     
-    const DataType & rightType = mRightExpr.getDataType();
+    const DataType & rightType = mRightExpr.dataType();
     
     if (!rightType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
         compileError("Right type in expression must be 'int' for now and not '%s'!",
@@ -202,16 +202,16 @@ llvm::Value * AddSubExprSub::codegenAddrOf(const CodegenCtx & cgCtx) {
     return nullptr;
 }
 
-llvm::Value * AddSubExprSub::generateCode(const CodegenCtx & cgCtx) {
+llvm::Value * AddSubExprSub::codegenExprEval(const CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     if (!compileCheckBothExprsAreInt()) {
         return nullptr;
     }
     
     // Generate code for the operation
-    llvm::Value * left = mLeftExpr.generateCode(cgCtx);
+    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
     WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.generateCode(cgCtx);
+    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateSub(left, right, "AddSubExprSub_SubOp");
 }

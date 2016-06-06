@@ -1,6 +1,7 @@
 #pragma once
 
-#include "WCASTNodeCodegen.hpp"
+#include "WCASTNode.hpp"
+#include "WCIExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -19,23 +20,11 @@ PrimaryExpr:
     Identifier
     ReadnumExpr
 */
-class PrimaryExpr : public ASTNodeCodegen {
+class PrimaryExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * currentToken);
     
     static PrimaryExpr * parse(const Token *& currentToken);
-    
-    /**
-     * Tell if this expression evaluates to an lvalue. lvalues are values that can be asssigned to.
-     * See lvalues versus rvalues: https://msdn.microsoft.com/en-us/library/f90831hc.aspx
-     */
-    virtual bool isLValue() const = 0;
-    
-    /* Return the data type of this expression */
-    virtual const DataType & getDataType() const = 0;
-    
-    /* Codegen the llvm value that represents the address of this expression. Only possible for lvalues! */
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) = 0;
 };
 
 /* IntLit */
@@ -47,13 +36,13 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
-    
     virtual bool isLValue() const override;
     
-    virtual const DataType & getDataType() const override;
+    virtual const DataType & dataType() const override;
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
     
     IntLit & mLit;
 };
@@ -67,13 +56,13 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
-    
     virtual bool isLValue() const override;
     
-    virtual const DataType & getDataType() const override;
+    virtual const DataType & dataType() const override;
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
     
     BoolLit & mLit;
 };
@@ -87,13 +76,13 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
-    
     virtual bool isLValue() const override;
     
-    virtual const DataType & getDataType() const override;
+    virtual const DataType & dataType() const override;
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
     
     StrLit & mLit;
 };
@@ -107,13 +96,13 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
-    
     virtual bool isLValue() const override;
     
-    virtual const DataType & getDataType() const override;
+    virtual const DataType & dataType() const override;
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
     
     Identifier & mIdent;
 };
@@ -127,13 +116,13 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
-    
     virtual bool isLValue() const override;
     
-    virtual const DataType & getDataType() const override;
+    virtual const DataType & dataType() const override;
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
     
     ReadnumExpr & mExpr;
 };

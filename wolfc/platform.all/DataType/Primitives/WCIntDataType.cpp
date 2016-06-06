@@ -15,16 +15,16 @@ bool IntDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const IntDataType*>(&other) != nullptr;
 }
 
-llvm::Value * IntDataType::genPrintStmntCode(const CodegenCtx & cgCtx,
-                                             const PrintStmnt & parentPrintStmnt,
-                                             llvm::Constant & printfFn,
-                                             llvm::Value & value) const
+bool IntDataType::codegenPrintStmnt(const CodegenCtx & cgCtx,
+                                    const PrintStmnt & parentPrintStmnt,
+                                    llvm::Constant & printfFn,
+                                    llvm::Value & value) const
 {
     WC_UNUSED_PARAM(parentPrintStmnt);
     
     // Create a format string for printf and call
     llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%zd", "print_fmt_str:int");
-    return cgCtx.irBuilder.CreateCall(&printfFn, { fmtStr, &value }, "print_printf_call:int");
+    return cgCtx.irBuilder.CreateCall(&printfFn, { fmtStr, &value }, "print_printf_call:int") != nullptr;
 }
 
 WC_END_NAMESPACE

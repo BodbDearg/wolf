@@ -1,7 +1,8 @@
 #pragma once
 
-#include "WCASTNodeCodegen.hpp"
+#include "WCASTNode.hpp"
 #include "WCCStrComparator.hpp"
+#include "WCIStmnt.hpp"
 #include <map>
 
 WC_BEGIN_NAMESPACE
@@ -12,7 +13,7 @@ class Stmnts;
 Scope:
     Stmnts
 */
-class Scope : public ASTNodeCodegen {
+class Scope : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
@@ -24,7 +25,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
     
     /* Get or create a variable within this scope */
     llvm::Value * getOrCreateVariable(const char * variableName,

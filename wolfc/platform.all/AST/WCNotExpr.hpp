@@ -1,6 +1,7 @@
 #pragma once
 
-#include "WCASTNodeCodegen.hpp"
+#include "WCASTNode.hpp"
+#include "WCIExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -12,23 +13,11 @@ NotExpr:
 	AddSubExpr
 	not NotExpr
 */
-class NotExpr : public ASTNodeCodegen {
+class NotExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     
     static NotExpr * parse(const Token *& tokenPtr);
-    
-    /**
-     * Tell if this expression evaluates to an lvalue. lvalues are values that can be asssigned to.
-     * See lvalues versus rvalues: https://msdn.microsoft.com/en-us/library/f90831hc.aspx
-     */
-    virtual bool isLValue() const = 0;
-    
-    /* Return the data type of this expression */
-    virtual const DataType & getDataType() const = 0;
-    
-    /* Codegen the llvm value that represents the address of this expression. Only possible for lvalues! */
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) = 0;
 };
 
 /* AddSubExpr */
@@ -40,13 +29,13 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
-    
     virtual bool isLValue() const override;
     
-    virtual const DataType & getDataType() const override;
+    virtual const DataType & dataType() const override;
     
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
     
     AddSubExpr & mExpr;
 };
@@ -60,13 +49,13 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
-    
     virtual bool isLValue() const override;
     
-    virtual const DataType & getDataType() const override;
+    virtual const DataType & dataType() const override;
 
     virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
     
     NotExpr &       mExpr;
     const Token &   mStartToken;

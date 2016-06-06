@@ -1,6 +1,7 @@
 #pragma once
 
-#include "WCASTNodeCodegen.hpp"
+#include "WCASTNode.hpp"
+#include "WCIStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -10,7 +11,7 @@ class AssignExpr;
 PrintStmnt
     print ( AssignExpr )
 */
-class PrintStmnt : public ASTNodeCodegen {
+class PrintStmnt : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
@@ -22,7 +23,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
     
     AssignExpr & mExpr;
     const Token & mStartToken;

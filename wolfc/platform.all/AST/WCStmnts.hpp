@@ -1,6 +1,7 @@
 #pragma once
 
-#include "WCASTNodeCodegen.hpp"
+#include "WCASTNode.hpp"
+#include "WCIStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -11,7 +12,7 @@ Stmnts:
     Stmnt
     Stmnt Stmnts
 */
-class Stmnts : public ASTNodeCodegen {
+class Stmnts : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
@@ -27,7 +28,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
     
     Stmnt & mStmnt;
 };
@@ -41,7 +42,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual llvm::Value * generateCode(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
     
     Stmnt & mLeftStmnt;
     Stmnts & mRightStmnts;
