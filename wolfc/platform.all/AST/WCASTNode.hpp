@@ -30,7 +30,7 @@ public:
     Scope * getParentScope();
     
     /**
-     * Emit a formatted error message followed by a newline to stderr for a compile error.
+     * Emit a formatted compile error message followed by a newline to stderr for a compile error.
      * The line and column information for this node are output also.
      */
     void compileError(const char * msg, ...) const;

@@ -24,8 +24,8 @@ EqExpr * EqExpr::parse(const Token *& tokenPtr) {
     if (tokenPtr->type == TokenType::kEquals) {
         ++tokenPtr;     // Skip '='
         
-        #warning TODO: need a compile error here
         if (tokenPtr->type != TokenType::kEquals) {
+            parseError(*tokenPtr, "Expected another '=' following '='!");
             return nullptr;
         }
         
@@ -37,8 +37,8 @@ EqExpr * EqExpr::parse(const Token *& tokenPtr) {
     else if (tokenPtr->type == TokenType::kExclamation) {
         ++tokenPtr;     // Skip '!'
         
-        #warning TODO: need a compile error here
         if (tokenPtr->type != TokenType::kEquals) {
+            parseError(*tokenPtr, "Expected another '=' following '!'!");
             return nullptr;
         }
         
