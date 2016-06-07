@@ -25,13 +25,13 @@ public:
     static IfStmnt * parse(const Token *& tokenPtr);
     
     IfStmnt(AssignExpr & ifExpr,
-            Scope & innerScope,
+            Scope & thenScope,
             const Token & startToken);
     
     virtual const Token & getStartToken() const override;
     
     AssignExpr &            mIfExpr;
-    Scope &                 mInnerScope;
+    Scope &                 mThenScope;
     const Token &           mStartToken;
     llvm::BasicBlock *      mEndBasicBlock = nullptr;
 };
@@ -40,7 +40,7 @@ public:
 class IfStmntNoElse : public IfStmnt {
 public:
     IfStmntNoElse(AssignExpr & ifExpr,
-                  Scope & innerScope,
+                  Scope & thenScope,
                   const Token & startToken,
                   const Token & endToken);
     
@@ -55,15 +55,32 @@ public:
 class IfStmntElseIf : public IfStmnt {
 public:
     IfStmntElseIf(AssignExpr & ifExpr,
-                  Scope & innerScope,
-                  IfStmnt & outerIfStmnt,
+                  Scope & thenScope,
+                  IfStmnt & elseIfStmnt,
                   const Token & startToken);
     
     virtual const Token & getEndToken() const override;
     
     virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
     
-    IfStmnt & mOuterIfStmnt;
+    IfStmnt & mElseIfStmnt;
+};
+
+/* if AssignExpr then Scope else Scope end */
+class IfStmntElse : public IfStmnt {
+public:
+    IfStmntElse(AssignExpr & ifExpr,
+                Scope & thenScope,
+                Scope & elseScope,
+                const Token & startToken,
+                const Token & endToken);
+    
+    virtual const Token & getEndToken() const override;
+    
+    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    
+    Scope &         mElseScope;
+    const Token &   mEndToken;
 };
 
 WC_END_NAMESPACE

@@ -3,6 +3,6 @@ var num1 = readnum()
 
 if num1 < 10 then
 	print("The number was less than 10! 😩\n")
-else if num1 < 20 then
-	print("The number was less than 20! 👻\n")
+else
+	print("The number was greater than or equal to 10! 👻\n")
 end
