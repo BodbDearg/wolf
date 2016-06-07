@@ -1,6 +1,7 @@
 #include "WCStmnt.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCIfStmnt.hpp"
 #include "WCPrintStmnt.hpp"
 #include "WCVarDecl.hpp"
 
@@ -13,6 +14,7 @@ WC_BEGIN_NAMESPACE
 bool Stmnt::peek(const Token * tokenPtr) {
     return  PrintStmnt::peek(tokenPtr) ||
             VarDecl::peek(tokenPtr) ||
+            IfStmnt::peek(tokenPtr) ||
             AssignExpr::peek(tokenPtr);
 }
     
@@ -29,6 +31,13 @@ Stmnt * Stmnt::parse(const Token *& tokenPtr) {
         VarDecl * varDecl = VarDecl::parse(tokenPtr);
         WC_GUARD(varDecl, nullptr);
         return new StmntVarDecl(*varDecl);
+    }
+    
+    // Parse if statement if ahead
+    if (IfStmnt::peek(tokenPtr)) {
+        IfStmnt * ifStmnt = IfStmnt::parse(tokenPtr);
+        WC_GUARD(ifStmnt, nullptr);
+        return new StmntIfStmnt(*ifStmnt);
     }
     
     // Otherwise parse assign expression
@@ -55,6 +64,26 @@ const Token & StmntPrintStmnt::getEndToken() const {
 
 bool StmntPrintStmnt::codegenStmnt(const CodegenCtx & cgCtx) {
     return mStmnt.codegenStmnt(cgCtx);
+}
+
+//-----------------------------------------------------------------------------
+// StmntIfStmnt
+//-----------------------------------------------------------------------------
+
+StmntIfStmnt::StmntIfStmnt(IfStmnt & ifStmnt) : mIfStmnt(ifStmnt) {
+    mIfStmnt.mParent = this;
+}
+
+const Token & StmntIfStmnt::getStartToken() const {
+    return mIfStmnt.getStartToken();
+}
+
+const Token & StmntIfStmnt::getEndToken() const {
+    return mIfStmnt.getEndToken();
+}
+
+bool StmntIfStmnt::codegenStmnt(const CodegenCtx & cgCtx) {
+    return mIfStmnt.codegenStmnt(cgCtx);
 }
 
 //-----------------------------------------------------------------------------

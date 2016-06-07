@@ -45,6 +45,14 @@ enum class TokenType {
     kOr,
     /* not */
     kNot,
+    /* if */
+    kIf,
+    /* then */
+    kThen,
+    /* else */
+    kElse,
+    /* end */
+    kEnd,
     /* TEMPORARY: print */
     kPrint,
     /* TEMPORARY: readnum */
