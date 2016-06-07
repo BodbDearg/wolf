@@ -46,10 +46,18 @@ llvm::Value * Scope::getOrCreateVariable(const char * variableName,
 }
 
 llvm::Value * Scope::getVariable(const char * variableName) const {
+    // First search in this scope:
     auto iter = mVariableValues.find(variableName);
     
     if (iter != mVariableValues.end()) {
         return iter->second;
+    }
+    
+    // If that fails try a parent scope:
+    const Scope * parentScope = getParentScope();
+    
+    if (parentScope) {
+        return parentScope->getVariable(variableName);
     }
     
     return nullptr;

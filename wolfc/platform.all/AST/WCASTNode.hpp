@@ -29,6 +29,9 @@ public:
     /* Figure out what the parent scope AST node of this node is. */
     Scope * getParentScope();
     
+    /* Figure out what the parent scope AST node of this node is (const version). */
+    const Scope * getParentScope() const;
+    
     /**
      * Emit a formatted compile error message followed by a newline to stderr for a compile error.
      * The line and column information for this node are output also.

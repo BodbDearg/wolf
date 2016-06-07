@@ -1,8 +1,16 @@
-print("Enter a number, I will tell you if it is less than than 10 or 20😡: ")
+print("Enter a number, I will tell you all about it 😡: ")
 var num1 = readnum()
 
 if num1 < 10 then
-	print("The number was less than 10! 😩\n")
+	print("num < 10\n")
+
+	if num1 < 5 then
+		print("num < 5\n")
+	else if num1 >= 8 then
+		print("num >= 8\n")
+	else
+		print("num >= 5\n")
+	end
 else
-	print("The number was greater than or equal to 10! 👻\n")
+	print("num >= 10\n")
 end

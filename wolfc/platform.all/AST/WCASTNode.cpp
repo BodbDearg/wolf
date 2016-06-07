@@ -43,6 +43,20 @@ Scope * ASTNode::getParentScope() {
     return nullptr;
 }
 
+const Scope * ASTNode::getParentScope() const {
+    const Scope * parentScope = dynamic_cast<Scope*>(mParent);
+    
+    if (parentScope) {
+        return parentScope;
+    }
+    
+    if (mParent) {
+        return mParent->getParentScope();
+    }
+    
+    return nullptr;
+}
+
 void ASTNode::compileError(const char * msg, ...) const {
     // Get the start and end tokens:
     const Token & startToken = getStartToken();
