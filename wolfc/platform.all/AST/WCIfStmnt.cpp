@@ -43,16 +43,52 @@ IfStmnt * IfStmnt::parse(const Token *& tokenPtr) {
     Scope * innerScope = Scope::parse(tokenPtr);
     WC_GUARD(innerScope, nullptr);
     
-    // TOOD: parse other if variants
-    if (tokenPtr->type != TokenType::kEnd) {
-        parseError(*tokenPtr, "'end' expected to terminate 'if' block!");
-        return nullptr;
+    // See if an 'else' or 'else if' statement follows:
+    if (tokenPtr->type == TokenType::kElse) {
+        ++tokenPtr;     // Skip 'else'
+        
+        if (IfStmnt::peek(tokenPtr)) {
+            // 'If then else if' type statement: parse the following if:
+            IfStmnt * outerIfStmnt = IfStmnt::parse(tokenPtr);
+            WC_GUARD(outerIfStmnt, nullptr);
+            
+            // Join it all up:
+            return new IfStmntElseIf(*ifExpr, *innerScope, *outerIfStmnt, *startToken);
+        }
+        else {
+            // 'if then else' type stement: parse the scope for the 'else' blocK:
+            WC_RAISE_ASSERTION("NOT IMPLEMENTED");
+            return nullptr;
+        }
     }
-    
-    const Token * endToken = tokenPtr;
-    ++tokenPtr;                             // Skip 'end'
+    else {
+        // 'If then else' type statement: expect closing 'end'
+        if (tokenPtr->type != TokenType::kEnd) {
+            parseError(*tokenPtr, "'end' expected to terminate 'if' block!");
+            return nullptr;
+        }
+        
+        const Token * endToken = tokenPtr;
+        ++tokenPtr;                             // Skip 'end'
+        
+        return new IfStmntNoElse(*ifExpr, *innerScope, *startToken, *endToken);
+    }
+}
 
-    return new IfStmntNoElse(*ifExpr, *innerScope, *startToken, *endToken);
+IfStmnt::IfStmnt(AssignExpr & ifExpr,
+                 Scope & innerScope,
+                 const Token & startToken)
+:
+    mIfExpr(ifExpr),
+    mInnerScope(innerScope),
+    mStartToken(startToken)
+{
+    mIfExpr.mParent = this;
+    mInnerScope.mParent = this;
+}
+
+const Token & IfStmnt::getStartToken() const {
+    return mStartToken;
 }
 
 //-----------------------------------------------------------------------------
@@ -64,17 +100,10 @@ IfStmntNoElse::IfStmntNoElse(AssignExpr & ifExpr,
                              const Token & startToken,
                              const Token & endToken)
 :
-    mIfExpr(ifExpr),
-    mInnerScope(innerScope),
-    mStartToken(startToken),
+    IfStmnt(ifExpr, innerScope, startToken),
     mEndToken(endToken)
 {
-    mIfExpr.mParent = this;
-    mInnerScope.mParent = this;
-}
-
-const Token & IfStmntNoElse::getStartToken() const {
-    return mStartToken;
+    WC_EMPTY_FUNC_BODY();
 }
 
 const Token & IfStmntNoElse::getEndToken() const {
@@ -102,10 +131,14 @@ bool IfStmntNoElse::codegenStmnt(const CodegenCtx & cgCtx) {
     
     // Save the current insert block:
     llvm::BasicBlock * ifBB = cgCtx.irBuilder.GetInsertBlock();
+    WC_ASSERT(ifBB);
     
-    // Create the 'then' and 'end' blocks:
+    // Create the 'then' and 'end' basic blocks:
     llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "IfStmntNoElse:then", parentFn);
-    llvm::BasicBlock * endBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "if_end", parentFn);
+    WC_ASSERT(thenBB);
+    
+    mEndBasicBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "IfStmntNoElse:end", parentFn);
+    WC_ASSERT(mEndBasicBlock);
 
     // Codegen the 'then' block
     cgCtx.irBuilder.SetInsertPoint(thenBB);
@@ -114,15 +147,95 @@ bool IfStmntNoElse::codegenStmnt(const CodegenCtx & cgCtx) {
         return false;
     }
     
-    cgCtx.irBuilder.CreateBr(endBB);
+    cgCtx.irBuilder.CreateBr(mEndBasicBlock);
     
-    // Generate the branch
+    // Generate the branch for the if
     cgCtx.irBuilder.SetInsertPoint(ifBB);
-    llvm::Value * branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, endBB);
-    WC_GUARD_ASSERT(branch, false);
+    llvm::Value * branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, mEndBasicBlock);
+    WC_ASSERT(branch);
     
-    // Switch back to the end block:
-    cgCtx.irBuilder.SetInsertPoint(endBB);
+    // Switch back to inserting code at the end block:
+    cgCtx.irBuilder.SetInsertPoint(mEndBasicBlock);
+    
+    // All good!
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+// IfStmntElseIf
+//-----------------------------------------------------------------------------
+
+IfStmntElseIf::IfStmntElseIf(AssignExpr & ifExpr,
+                             Scope & innerScope,
+                             IfStmnt & outerIfStmnt,
+                             const Token & startToken)
+:
+    IfStmnt(ifExpr, innerScope, startToken),
+    mOuterIfStmnt(outerIfStmnt)
+{
+    mOuterIfStmnt.mParent = this;
+}
+
+const Token & IfStmntElseIf::getEndToken() const {
+    return mOuterIfStmnt.getEndToken();
+}
+
+bool IfStmntElseIf::codegenStmnt(const CodegenCtx & cgCtx) {
+    // The if expression must first evaluate to a bool!
+    const DataType & ifExprDataType = mIfExpr.dataType();
+    
+    if (!ifExprDataType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool))) {
+        compileError("Expression for if statement must evaluate to type 'bool', not '%s'!",
+                     ifExprDataType.name());
+        
+        return false;
+    }
+    
+    // Alright, generate the code for that:
+    llvm::Value * ifExprResult = mIfExpr.codegenExprEval(cgCtx);
+    WC_GUARD(ifExprResult, false);
+    
+    // Grab the parent function
+    llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
+    WC_ASSERT(parentFn);
+    
+    // Save the current insert block:
+    llvm::BasicBlock * ifBB = cgCtx.irBuilder.GetInsertBlock();
+    
+    // Create the 'then', 'outer if' and 'end' blocks:
+    llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "IfStmntElseIf:then", parentFn);
+    WC_ASSERT(thenBB);
+    
+    llvm::BasicBlock * outerIfBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "IfStmntElseIf:outerIf", parentFn);
+    WC_ASSERT(outerIfBB);
+    
+    // Codegen the 'then' block
+    cgCtx.irBuilder.SetInsertPoint(thenBB);
+    
+    if (!mInnerScope.codegenStmnt(cgCtx)) {
+        return false;
+    }
+    
+    // Codegen the 'outer if' block
+    cgCtx.irBuilder.SetInsertPoint(outerIfBB);
+    
+    if (!mOuterIfStmnt.codegenStmnt(cgCtx)) {
+        return false;
+    }
+    
+    // Expect the outer if to have an 'end' basic block. Tie the end of the 'then' block to that:
+    WC_ASSERT(mOuterIfStmnt.mEndBasicBlock);
+    cgCtx.irBuilder.SetInsertPoint(thenBB);
+    mEndBasicBlock = mOuterIfStmnt.mEndBasicBlock;
+    cgCtx.irBuilder.CreateBr(mEndBasicBlock);
+    
+    // Generate the branch for the if
+    cgCtx.irBuilder.SetInsertPoint(ifBB);
+    llvm::Value * branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, outerIfBB);
+    WC_ASSERT(branch);
+    
+    // Switch back to inserting code at the end block:
+    cgCtx.irBuilder.SetInsertPoint(mEndBasicBlock);
     
     // All good!
     return true;

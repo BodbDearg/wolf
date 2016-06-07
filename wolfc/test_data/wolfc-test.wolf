@@ -1,20 +1,8 @@
-print("Enter a number, I will tell you if it is less than than 10 😡: ")
+print("Enter a number, I will tell you if it is less than than 10 or 20😡: ")
 var num1 = readnum()
 
 if num1 < 10 then
 	print("The number was less than 10! 😩\n")
-	print("Lets try that again in a nested if()🤗: ")	
-	var num2 = readnum()
-
-	if num2 < 10 then
-		print("The number was less than 10! 🤔\n")
-	end
-
-	if num2 >= 10 then	
-		print("The number was NOT less than 10! 😚\n")
-	end
+else if num1 < 20 then
+	print("The number was less than 20! 👻\n")
 end
-
-if num1 >= 10 then
-	print("The number was NOT less than 10! 😜\n")
-end	

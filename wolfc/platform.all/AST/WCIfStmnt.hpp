@@ -3,6 +3,10 @@
 #include "WCASTNode.hpp"
 #include "WCIStmnt.hpp"
 
+namespace llvm {
+    class BasicBlock;
+}
+
 WC_BEGIN_NAMESPACE
 
 class DataType;
@@ -19,6 +23,17 @@ public:
     static bool peek(const Token * tokenPtr);
     
     static IfStmnt * parse(const Token *& tokenPtr);
+    
+    IfStmnt(AssignExpr & ifExpr,
+            Scope & innerScope,
+            const Token & startToken);
+    
+    virtual const Token & getStartToken() const override;
+    
+    AssignExpr &            mIfExpr;
+    Scope &                 mInnerScope;
+    const Token &           mStartToken;
+    llvm::BasicBlock *      mEndBasicBlock = nullptr;
 };
 
 /* if AssignExpr then Scope end */
@@ -29,16 +44,26 @@ public:
                   const Token & startToken,
                   const Token & endToken);
     
-    virtual const Token & getStartToken() const override;
+    virtual const Token & getEndToken() const override;
+    
+    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    
+    const Token & mEndToken;
+};
+
+/* if AssignExpr then Scope else IfStmnt */
+class IfStmntElseIf : public IfStmnt {
+public:
+    IfStmntElseIf(AssignExpr & ifExpr,
+                  Scope & innerScope,
+                  IfStmnt & outerIfStmnt,
+                  const Token & startToken);
     
     virtual const Token & getEndToken() const override;
     
     virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
     
-    AssignExpr &    mIfExpr;
-    Scope &         mInnerScope;
-    const Token &   mStartToken;
-    const Token &   mEndToken;
+    IfStmnt & mOuterIfStmnt;
 };
 
 WC_END_NAMESPACE
