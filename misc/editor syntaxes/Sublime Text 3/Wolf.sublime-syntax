@@ -29,6 +29,10 @@ contexts:
     - match: '\+|-|%|#|\*|\/|\^|==?|~=|<=?|>=?|(?<!\.)\.{2}(?!\.)'
       scope: keyword.operator.wolf
     - match: '(?<![^.]\.|:)\b(readnum|print)\b(?=[( {"''\[])'
-      scope: support.function.wolf    
-    - match: \b(and|or|not|elif|var|break|do|else|for|if|return|then|repeat|while|until|end|otherwise)\b
+      scope: support.function.wolf
+    - match: \b(and|or|not)\b
+      scope: keyword.logical.wolf
+    - match: \b(if|then|else|end|unless|break|next|do|for|return|loop|while|until)\b
+      scope: keyword.controlflow.wolf
+    - match: \b(var)\b
       scope: keyword.wolf
