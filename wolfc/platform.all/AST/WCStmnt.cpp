@@ -2,6 +2,7 @@
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCIfStmnt.hpp"
+#include "WCNopStmnt.hpp"
 #include "WCPrintStmnt.hpp"
 #include "WCVarDecl.hpp"
 
@@ -12,13 +13,21 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool Stmnt::peek(const Token * tokenPtr) {
-    return  PrintStmnt::peek(tokenPtr) ||
+    return  NopStmnt::peek(tokenPtr) ||
+            PrintStmnt::peek(tokenPtr) ||
             VarDecl::peek(tokenPtr) ||
             IfStmnt::peek(tokenPtr) ||
             AssignExpr::peek(tokenPtr);
 }
     
 Stmnt * Stmnt::parse(const Token *& tokenPtr) {
+    // Parse 'nop' statment if ahead
+    if (NopStmnt::peek(tokenPtr)) {
+        NopStmnt * nopStmnt = NopStmnt::parse(tokenPtr);
+        WC_GUARD(nopStmnt, nullptr);
+        return new StmntNop(*nopStmnt);
+    }
+    
     // Parse print expression if ahead
     if (PrintStmnt::peek(tokenPtr)) {
         PrintStmnt * printStmnt = PrintStmnt::parse(tokenPtr);
@@ -44,6 +53,26 @@ Stmnt * Stmnt::parse(const Token *& tokenPtr) {
     AssignExpr * assignExpr = AssignExpr::parse(tokenPtr);
     WC_GUARD(assignExpr, nullptr);
     return new StmntAssignExpr(*assignExpr);
+}
+
+//-----------------------------------------------------------------------------
+// StmntNoOp
+//-----------------------------------------------------------------------------
+
+StmntNop::StmntNop(NopStmnt & stmnt) : mStmnt(stmnt) {
+    mStmnt.mParent = this;
+}
+
+const Token & StmntNop::getStartToken() const {
+    return mStmnt.getStartToken();
+}
+
+const Token & StmntNop::getEndToken() const {
+    return mStmnt.getEndToken();
+}
+
+bool StmntNop::codegenStmnt(const CodegenCtx & cgCtx) {
+    return mStmnt.codegenStmnt(cgCtx);
 }
 
 //-----------------------------------------------------------------------------

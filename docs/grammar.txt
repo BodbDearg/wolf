@@ -9,12 +9,16 @@ Stmnts:
     Stmnt Stmnts
 
 Stmnt:
+	NoOpStmnt
     PrintStmnt
     VarDecl
     IfStmnt
     AssignExpr
 
-PrintStmnt
+NoOpStmnt:
+    nop
+
+PrintStmnt:
     print ( AssignExpr )
 
 VarDecl:
@@ -76,5 +80,5 @@ PrimaryExpr:
     Identifier
     ReadnumExpr
 
-ReadnumExpr
+ReadnumExpr:
     readnum ( )

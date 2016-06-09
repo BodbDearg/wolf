@@ -1,7 +1,7 @@
 %YAML 1.2
 ---
 # http://www.sublimetext.com/docs/3/syntax.html
-name: Wolf Programming Language (0.01)
+name: Wolf Programming Language (0.03)
 file_extensions:
   - wolf
 scope: wolf
@@ -32,7 +32,13 @@ contexts:
       scope: support.function.wolf
     - match: \b(and|or|not)\b
       scope: keyword.logical.wolf
-    - match: \b(if|then|else|end|unless|break|next|do|for|return|loop|while|until)\b
-      scope: keyword.controlflow.wolf
-    - match: \b(var)\b
-      scope: keyword.wolf
+    - match: \b(then|end|do)\b
+      scope: keyword.blockdelims.wolf
+    - match: \b(if|else|unless)\b
+      scope: keyword.controlflow.if.wolf
+    - match: \b(while|until|for)\b
+      scope: keyword.controlflow.loops.wolf
+    - match: \b(break|next|return)\b
+      scope: keyword.controlflow.modifiers.wolf
+    - match: \b(var|nop)\b
+      scope: keyword.misc.wolf

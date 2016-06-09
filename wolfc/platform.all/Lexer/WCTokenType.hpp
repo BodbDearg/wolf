@@ -53,6 +53,8 @@ enum class TokenType {
     kElse,
     /* end */
     kEnd,
+    /* nop */
+    kNop,
     /* TEMPORARY: print */
     kPrint,
     /* TEMPORARY: readnum */

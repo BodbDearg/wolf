@@ -2,15 +2,5 @@ print("Enter a number, I will tell you all about it 😡: ")
 var num1 = readnum()
 
 if num1 < 10 then
-	print("num < 10\n")
-
-	if num1 < 5 then
-		print("num < 5\n")
-	else if num1 >= 8 then
-		print("num >= 8\n")
-	else
-		print("num >= 5\n")
-	end
-else
-	print("num >= 10\n")
+	nop 
 end

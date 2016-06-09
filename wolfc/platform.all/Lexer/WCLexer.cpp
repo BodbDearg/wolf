@@ -459,7 +459,8 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         parseKeyword("if", TokenType::kIf) ||
         parseKeyword("then", TokenType::kThen) ||
         parseKeyword("else", TokenType::kElse) ||
-        parseKeyword("end", TokenType::kEnd))
+        parseKeyword("end", TokenType::kEnd) ||
+        parseKeyword("nop", TokenType::kNop))
     {
         return ParseResult::kSuccess;
     }
