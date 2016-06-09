@@ -131,6 +131,21 @@ bool IfStmnt::isIfExprInversed() const {
     return mStartToken.type == TokenType::kUnless;
 }
 
+llvm::Value * IfStmnt::codegenIfExpr(const CodegenCtx & cgCtx) const {
+    // Firstly validate that the if statement condition expression is a bool;
+    const DataType & ifExprDataType = mIfExpr.dataType();
+    
+    if (!ifExprDataType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool))) {
+        compileError("Condition for if statement must evaluate to type 'bool', not '%s'!",
+                     ifExprDataType.name());
+        
+        return nullptr;
+    }
+    
+    // Then generate the code
+    return mIfExpr.codegenExprEval(cgCtx);
+}
+
 //-----------------------------------------------------------------------------
 // IfStmntNoElse
 //-----------------------------------------------------------------------------
@@ -151,18 +166,8 @@ const Token & IfStmntNoElse::getEndToken() const {
 }
 
 bool IfStmntNoElse::codegenStmnt(const CodegenCtx & cgCtx) {
-    // The if expression must first evaluate to a bool!
-    const DataType & ifExprDataType = mIfExpr.dataType();
-    
-    if (!ifExprDataType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool))) {
-        compileError("Expression for if statement must evaluate to type 'bool', not '%s'!",
-                     ifExprDataType.name());
-        
-        return false;
-    }
-    
-    // Alright, generate the code for that:
-    llvm::Value * ifExprResult = mIfExpr.codegenExprEval(cgCtx);
+    // Generate the code for the if statement condition expression:
+    llvm::Value * ifExprResult = codegenIfExpr(cgCtx);
     WC_GUARD(ifExprResult, false);
     
     // Grab the parent function
@@ -203,8 +208,6 @@ bool IfStmntNoElse::codegenStmnt(const CodegenCtx & cgCtx) {
     
     // Switch back to inserting code at the end block:
     cgCtx.irBuilder.SetInsertPoint(mEndBasicBlock);
-    
-    // All good!
     return true;
 }
 
@@ -228,18 +231,8 @@ const Token & IfStmntElseIf::getEndToken() const {
 }
 
 bool IfStmntElseIf::codegenStmnt(const CodegenCtx & cgCtx) {
-    // The if expression must first evaluate to a bool!
-    const DataType & ifExprDataType = mIfExpr.dataType();
-    
-    if (!ifExprDataType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool))) {
-        compileError("Expression for if statement must evaluate to type 'bool', not '%s'!",
-                     ifExprDataType.name());
-        
-        return false;
-    }
-    
-    // Alright, generate the code for that:
-    llvm::Value * ifExprResult = mIfExpr.codegenExprEval(cgCtx);
+    // Generate the code for the if statement condition expression:
+    llvm::Value * ifExprResult = codegenIfExpr(cgCtx);
     WC_GUARD(ifExprResult, false);
     
     // Grab the parent function
@@ -248,6 +241,7 @@ bool IfStmntElseIf::codegenStmnt(const CodegenCtx & cgCtx) {
     
     // Save the current insert block:
     llvm::BasicBlock * ifBB = cgCtx.irBuilder.GetInsertBlock();
+    WC_ASSERT(ifBB);
     
     // Create the 'then' and 'outer if' blocks:
     llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "IfStmntElseIf:then", parentFn);
@@ -290,8 +284,6 @@ bool IfStmntElseIf::codegenStmnt(const CodegenCtx & cgCtx) {
     
     // Switch back to inserting code at the end block:
     cgCtx.irBuilder.SetInsertPoint(mEndBasicBlock);
-    
-    // All good!
     return true;
 }
 
@@ -317,18 +309,8 @@ const Token & IfStmntElse::getEndToken() const {
 }
     
 bool IfStmntElse::codegenStmnt(const CodegenCtx & cgCtx) {
-    // The if expression must first evaluate to a bool!
-    const DataType & ifExprDataType = mIfExpr.dataType();
-    
-    if (!ifExprDataType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool))) {
-        compileError("Expression for if statement must evaluate to type 'bool', not '%s'!",
-                     ifExprDataType.name());
-        
-        return false;
-    }
-    
-    // Alright, generate the code for that:
-    llvm::Value * ifExprResult = mIfExpr.codegenExprEval(cgCtx);
+    // Generate the code for the if statement condition expression:
+    llvm::Value * ifExprResult = codegenIfExpr(cgCtx);
     WC_GUARD(ifExprResult, false);
     
     // Grab the parent function
@@ -379,8 +361,6 @@ bool IfStmntElse::codegenStmnt(const CodegenCtx & cgCtx) {
     
     // Switch back to inserting code at the end block:
     cgCtx.irBuilder.SetInsertPoint(mEndBasicBlock);
-    
-    // All good!
     return true;
 }
 

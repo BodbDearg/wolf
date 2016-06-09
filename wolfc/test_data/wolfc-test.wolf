@@ -1,25 +1,17 @@
-print("Enter a number, I will tell you all about it 😡: ")
-var num1 = readnum()
+var continue = 1
 
-unless num1 < 10 
-	print("That was >= 10")
-	print("\n")
-or unless num1 >= 1
-	print("That was < 1")
-	print("\n")
-else 
-	print("That was < 10") 
-	print("\n")
+until continue <= 0
+	print("Enter a number, I will tell you all about it 😡: ")
+	var num1 = readnum()
+
+	unless num1 > 10
+		print("That was <= 10\n")
+	or if num1 >= 20
+		print("That was >= 20\n")
+	else
+		print("That was > 10 and < 20\n")
+	end
+
+	print("Continue? 👰 Enter 0 or less to exit 💆: ")
+	continue = readnum()
 end
-
-if num1 > 20 
-	print("That was > 20")
-	print("\n")
-end
-
-unless not num1 > 40 
-	print("That was > 40")
-	print("\n")
-end
-
-print("\n")

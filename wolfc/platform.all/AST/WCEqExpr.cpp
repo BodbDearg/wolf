@@ -21,28 +21,18 @@ EqExpr * EqExpr::parse(const Token *& tokenPtr) {
     WC_GUARD(relExpr, nullptr);
     
     // See what tokens follow:
-    if (tokenPtr->type == TokenType::kEquals) {
+    if (tokenPtr[0].type == TokenType::kEquals && tokenPtr[1].type == TokenType::kEquals) {
+        ++tokenPtr;     // Skip '='
         ++tokenPtr;     // Skip '='
         
-        if (tokenPtr->type != TokenType::kEquals) {
-            parseError(*tokenPtr, "Expected another '=' following '='!");
-            return nullptr;
-        }
-        
-        ++tokenPtr;     // Skip '='
         EqExpr * eqExpr = EqExpr::parse(tokenPtr);
         WC_GUARD(eqExpr, nullptr);
         return new EqExprEq(*relExpr, *eqExpr);
     }
-    else if (tokenPtr->type == TokenType::kExclamation) {
+    else if (tokenPtr[0].type == TokenType::kExclamation && tokenPtr[1].type == TokenType::kEquals) {
         ++tokenPtr;     // Skip '!'
-        
-        if (tokenPtr->type != TokenType::kEquals) {
-            parseError(*tokenPtr, "Expected another '=' following '!'!");
-            return nullptr;
-        }
-        
         ++tokenPtr;     // Skip '='
+        
         EqExpr * eqExpr = EqExpr::parse(tokenPtr);
         WC_GUARD(eqExpr, nullptr);
         return new EqExprNeq(*relExpr, *eqExpr);

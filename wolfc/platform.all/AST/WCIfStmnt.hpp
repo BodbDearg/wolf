@@ -36,6 +36,12 @@ public:
      */
     bool isIfExprInversed() const;
     
+    /**
+     * Generate the code for the if statment condition expression and return the value of that expression.
+     * Returns nullptr on failure.
+     */
+    llvm::Value * codegenIfExpr(const CodegenCtx & cgCtx) const;
+    
     AssignExpr &            mIfExpr;
     Scope &                 mThenScope;
     const Token &           mStartToken;

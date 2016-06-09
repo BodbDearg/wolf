@@ -11,6 +11,7 @@ class IfStmnt;
 class NopStmnt;
 class PrintStmnt;
 class VarDecl;
+class WhileStmnt;
 
 /*
 Stmnt:
@@ -18,6 +19,7 @@ Stmnt:
     PrintStmnt
     VarDecl
     IfStmnt
+    WhileStmnt
     AssignExpr
 */
 class Stmnt : public ASTNode, public IStmnt {
@@ -28,9 +30,9 @@ public:
 };
 
 /* NopStmnt */
-class StmntNop : public Stmnt {
+class StmntNopStmnt : public Stmnt {
 public:
-    StmntNop(NopStmnt & stmnt);
+    StmntNopStmnt(NopStmnt & stmnt);
     
     virtual const Token & getStartToken() const override;
     
@@ -67,6 +69,20 @@ public:
     virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
     
     IfStmnt & mIfStmnt;
+};
+
+/* WhileStmnt */
+class StmntWhileStmnt : public Stmnt {
+public:
+    StmntWhileStmnt(WhileStmnt & ifStmnt);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+
+    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    
+    WhileStmnt & mWhileStmnt;
 };
 
 /* VarDecl */

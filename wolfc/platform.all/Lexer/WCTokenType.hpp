@@ -55,6 +55,12 @@ enum class TokenType {
     kElse,
     /* end */
     kEnd,
+    /* while */
+    kWhile,
+    /* until */
+    kUntil,
+    /* do */
+    kDo,
     /* nop */
     kNop,
     /* TEMPORARY: print */

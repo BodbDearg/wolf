@@ -13,6 +13,7 @@ Stmnt:
     PrintStmnt
     VarDecl
     IfStmnt
+    WhileStmnt
     AssignExpr
 
 NoOpStmnt:
@@ -28,6 +29,9 @@ IfStmnt:
 	if|unless AssignExpr [then] Scope end
 	if|unless AssignExpr [then] Scope or IfStmnt
 	if|unless AssignExpr [then] Scope else Scope end
+
+WhileStmnt:
+	while|until AssignExpr [do] Scope end
 
 AssignExpr:
     OrExpr
