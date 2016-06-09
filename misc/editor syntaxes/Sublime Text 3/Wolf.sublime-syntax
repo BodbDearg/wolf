@@ -36,7 +36,7 @@ contexts:
       scope: keyword.blockdelims.wolf
     - match: \b(if|else|unless)\b
       scope: keyword.controlflow.if.wolf
-    - match: \b(while|until|for)\b
+    - match: \b(while|until|for|loop|repeat)\b
       scope: keyword.controlflow.loops.wolf
     - match: \b(break|next|return)\b
       scope: keyword.controlflow.modifiers.wolf
