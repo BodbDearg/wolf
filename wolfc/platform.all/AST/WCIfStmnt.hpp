@@ -34,7 +34,7 @@ public:
      * If true this is an 'unless' statement rather than 'if'. In that case
      * The block will execute if the condition is false. 
      */
-    bool isExprInversed() const;
+    bool isIfExprInversed() const;
     
     AssignExpr &            mIfExpr;
     Scope &                 mThenScope;

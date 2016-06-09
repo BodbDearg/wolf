@@ -127,7 +127,7 @@ const Token & IfStmnt::getStartToken() const {
     return mStartToken;
 }
 
-bool IfStmnt::isExprInversed() const {
+bool IfStmnt::isIfExprInversed() const {
     return mStartToken.type == TokenType::kUnless;
 }
 
@@ -192,7 +192,7 @@ bool IfStmntNoElse::codegenStmnt(const CodegenCtx & cgCtx) {
     cgCtx.irBuilder.SetInsertPoint(ifBB);
     llvm::Value * branch = nullptr;
     
-    if (isExprInversed()) {
+    if (isIfExprInversed()) {
         branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, mEndBasicBlock, thenBB);
     }
     else {
@@ -279,7 +279,7 @@ bool IfStmntElseIf::codegenStmnt(const CodegenCtx & cgCtx) {
     cgCtx.irBuilder.SetInsertPoint(ifBB);
     llvm::Value * branch = nullptr;
     
-    if (isExprInversed()) {
+    if (isIfExprInversed()) {
         branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, outerIfBB, thenBB);
     }
     else {
@@ -368,7 +368,7 @@ bool IfStmntElse::codegenStmnt(const CodegenCtx & cgCtx) {
     cgCtx.irBuilder.SetInsertPoint(ifBB);
     llvm::Value * branch = nullptr;
     
-    if (isExprInversed()) {
+    if (isIfExprInversed()) {
         branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, elseBB, thenBB);
     }
     else {
