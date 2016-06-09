@@ -1,6 +1,25 @@
 print("Enter a number, I will tell you all about it 😡: ")
 var num1 = readnum()
 
-if num1 < 10 then
-	nop 
+unless num1 < 10 
+	print("That was >= 10")
+	print("\n")
+or unless num1 >= 1
+	print("That was < 1")
+	print("\n")
+else 
+	print("That was < 10") 
+	print("\n")
 end
+
+if num1 > 20 
+	print("That was > 20")
+	print("\n")
+end
+
+unless not num1 > 40 
+	print("That was > 40")
+	print("\n")
+end
+
+print("\n")

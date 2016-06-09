@@ -14,17 +14,18 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool IfStmnt::peek(const Token * tokenPtr) {
-    return tokenPtr->type == TokenType::kIf;
+    TokenType tokenType = tokenPtr->type;
+    return tokenType == TokenType::kIf || tokenType == TokenType::kUnless;
 }
 
 IfStmnt * IfStmnt::parse(const Token *& tokenPtr) {
-    // Parse the initial 'if'
-    if (tokenPtr->type != TokenType::kIf) {
+    // Parse the initial 'if' or 'unless' keyword
+    if (!peek(tokenPtr)) {
         parseError(*tokenPtr, "If statement expected!");
         return nullptr;
     }
     
-    // Skip 'if' token and save location
+    // Skip the 'if' or 'unless' token and save location
     const Token * startToken = tokenPtr;
     ++tokenPtr;
     
@@ -32,54 +33,70 @@ IfStmnt * IfStmnt::parse(const Token *& tokenPtr) {
     AssignExpr * ifExpr = AssignExpr::parse(tokenPtr);
     WC_GUARD(ifExpr, nullptr);
     
-    // Expect 'then'
-    if (tokenPtr->type != TokenType::kThen) {
-        parseError(*tokenPtr, "Expect 'then' following if statement condition!");
-        return nullptr;
-    }
+    // See if there is a 'then' following. This keyword is optional, unless the 'then' scope is required
+    // to be on the same line as the enclosing if statement:
+    bool thenScopeRequiresNL = true;
     
-    // Skip 'then'
-    ++tokenPtr;
+    if (tokenPtr->type == TokenType::kThen) {
+        // Found a 'then' token, skip it. The 'then' scope is allowed to be on the same line
+        ++tokenPtr;
+        thenScopeRequiresNL = false;
+    }
     
     // Expect scope following:
     Scope * thenScope = Scope::parse(tokenPtr);
     WC_GUARD(thenScope, nullptr);
     
-    // See if an 'else' or 'else if' statement follows:
-    if (tokenPtr->type == TokenType::kElse) {
-        // Else or else if follows: skip 'else' token:
-        ++tokenPtr;
-        
-        // See if there is a further if following:
-        if (IfStmnt::peek(tokenPtr)) {
-            // 'if then else if' statement: parse the if statement following the 'else':
-            IfStmnt * outerIfStmnt = IfStmnt::parse(tokenPtr);
-            WC_GUARD(outerIfStmnt, nullptr);
+    // See if it violates newline rules:
+    if (thenScopeRequiresNL) {
+        if (thenScope->getStartToken().startLine == ifExpr->getEndToken().endLine) {
+            parseError(thenScope->getStartToken(), "Code following 'if' statement condition must be on a new line unless "
+                       "'then' is used after the condition.");
             
-            // Done, return the parsed statement:
-            return new IfStmntElseIf(*ifExpr, *thenScope, *outerIfStmnt, *startToken);
-        }
-        else {
-            // 'if then else' statement: parse the scope for the 'else' block:
-            Scope * elseScope = Scope::parse(tokenPtr);
-            WC_GUARD(elseScope, nullptr);
-            
-            // Else block should end on an 'end' token:
-            if (tokenPtr->type != TokenType::kEnd) {
-                parseError(*tokenPtr, "'end' expected to terminate 'else' block!");
-                return nullptr;
-            }
-            
-            // Skip 'end' token and save location
-            const Token * endToken = tokenPtr;
-            ++tokenPtr;
-            
-            // Done, return the parsed statement:
-            return new IfStmntElse(*ifExpr, *thenScope, *elseScope, *startToken, *endToken);
+            return nullptr;
         }
     }
+    
+    // 3 possibilities can follow:
+    //
+    // 1 - 'end', for a simple 'if' statement without any 'or if' or 'else'.
+    // 2 - 'or if' for an chained 'elseif' type statement
+    // 3 - 'else' for an 'if' statement with an else block
+    //
+    if (tokenPtr->type == TokenType::kElse) {
+        // (3) if statement with an else, skip the 'else' token.
+        ++tokenPtr;
+        
+        // Parse the scope for the 'else' block:
+        Scope * elseScope = Scope::parse(tokenPtr);
+        WC_GUARD(elseScope, nullptr);
+        
+        // Else block should be terminated by an 'end' token:
+        if (tokenPtr->type != TokenType::kEnd) {
+            parseError(*tokenPtr, "'end' expected to terminate 'else' block!");
+            return nullptr;
+        }
+        
+        // Skip 'end' token and save location
+        const Token * endToken = tokenPtr;
+        ++tokenPtr;
+        
+        // Done, return the parsed statement:
+        return new IfStmntElse(*ifExpr, *thenScope, *elseScope, *startToken, *endToken);
+    }
+    else if (tokenPtr->type == TokenType::kOr) {
+        // (2) if statement with an 'or if' chained if statement, skip the 'or' token.
+        ++tokenPtr;
+        
+        // Parse the if statement following the 'or':
+        IfStmnt * outerIfStmnt = IfStmnt::parse(tokenPtr);
+        WC_GUARD(outerIfStmnt, nullptr);
+        
+        // Done, return the parsed statement:
+        return new IfStmntElseIf(*ifExpr, *thenScope, *outerIfStmnt, *startToken);
+    }
     else {
-        // 'If then else' type statement: expect closing 'end'
+        // (1) 'if then' type statement: expect closing 'end'
         if (tokenPtr->type != TokenType::kEnd) {
             parseError(*tokenPtr, "'end' expected to terminate 'if' block!");
             return nullptr;
@@ -108,6 +125,10 @@ IfStmnt::IfStmnt(AssignExpr & ifExpr,
 
 const Token & IfStmnt::getStartToken() const {
     return mStartToken;
+}
+
+bool IfStmnt::isExprInversed() const {
+    return mStartToken.type == TokenType::kUnless;
 }
 
 //-----------------------------------------------------------------------------
@@ -169,7 +190,15 @@ bool IfStmntNoElse::codegenStmnt(const CodegenCtx & cgCtx) {
     
     // Generate the branch for the if
     cgCtx.irBuilder.SetInsertPoint(ifBB);
-    llvm::Value * branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, mEndBasicBlock);
+    llvm::Value * branch = nullptr;
+    
+    if (isExprInversed()) {
+        branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, mEndBasicBlock, thenBB);
+    }
+    else {
+        branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, mEndBasicBlock);
+    }
+    
     WC_ASSERT(branch);
     
     // Switch back to inserting code at the end block:
@@ -248,7 +277,15 @@ bool IfStmntElseIf::codegenStmnt(const CodegenCtx & cgCtx) {
     
     // Generate the branch for the if
     cgCtx.irBuilder.SetInsertPoint(ifBB);
-    llvm::Value * branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, outerIfBB);
+    llvm::Value * branch = nullptr;
+    
+    if (isExprInversed()) {
+        branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, outerIfBB, thenBB);
+    }
+    else {
+        branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, outerIfBB);
+    }
+    
     WC_ASSERT(branch);
     
     // Switch back to inserting code at the end block:
@@ -329,7 +366,15 @@ bool IfStmntElse::codegenStmnt(const CodegenCtx & cgCtx) {
     
     // Generate the branch for the if
     cgCtx.irBuilder.SetInsertPoint(ifBB);
-    llvm::Value * branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, elseBB);
+    llvm::Value * branch = nullptr;
+    
+    if (isExprInversed()) {
+        branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, elseBB, thenBB);
+    }
+    else {
+        branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, elseBB);
+    }
+    
     WC_ASSERT(branch);
     
     // Switch back to inserting code at the end block:

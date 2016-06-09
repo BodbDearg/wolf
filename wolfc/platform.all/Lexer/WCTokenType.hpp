@@ -47,6 +47,8 @@ enum class TokenType {
     kNot,
     /* if */
     kIf,
+    /* unless */
+    kUnless,
     /* then */
     kThen,
     /* else */

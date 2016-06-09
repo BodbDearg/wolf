@@ -14,9 +14,9 @@ class AssignExpr;
 
 /*
 IfStmnt:
-	if AssignExpr then Scope end
-	if AssignExpr then Scope else IfStmnt
-	if AssignExpr then Scope else Scope end
+	if|unless AssignExpr [then] Scope end
+	if|unless AssignExpr [then] Scope or IfStmnt
+	if|unless AssignExpr [then] Scope else Scope end
 */
 class IfStmnt : public ASTNode, public IStmnt {
 public:
@@ -29,6 +29,12 @@ public:
             const Token & startToken);
     
     virtual const Token & getStartToken() const override;
+    
+    /**
+     * If true this is an 'unless' statement rather than 'if'. In that case
+     * The block will execute if the condition is false. 
+     */
+    bool isExprInversed() const;
     
     AssignExpr &            mIfExpr;
     Scope &                 mThenScope;

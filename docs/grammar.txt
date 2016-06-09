@@ -25,9 +25,9 @@ VarDecl:
     var Identifier = AssignExpr
 
 IfStmnt:
-	if AssignExpr then Scope end
-	if AssignExpr then Scope else IfStmnt
-	if AssignExpr then Scope else Scope end
+	if|unless AssignExpr [then] Scope end
+	if|unless AssignExpr [then] Scope or IfStmnt
+	if|unless AssignExpr [then] Scope else Scope end
 
 AssignExpr:
     OrExpr
