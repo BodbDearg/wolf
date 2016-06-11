@@ -33,6 +33,10 @@ IfStmnt:
 WhileStmnt:
 	while|until AssignExpr [do] Scope end
 
+LoopStmnt:
+	loop Scope end
+	loop Scope repeat until|while AssignExpr
+
 AssignExpr:
     OrExpr
     OrExpr = AssignExpr
