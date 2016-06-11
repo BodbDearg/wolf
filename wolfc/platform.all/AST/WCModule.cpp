@@ -100,6 +100,8 @@ bool Module::generateCode() {
         }
         
         // Do deferred code generation for 'next', 'break' and 'return' statements:
+        llvm::BasicBlock * prevInsertBlock = irBuilder.GetInsertBlock();
+        
         while (!codegenCtx.deferredCodegenStmnts.empty()) {
             IDeferredCodegenStmnt * stmnt = codegenCtx.deferredCodegenStmnts.back();
             codegenCtx.deferredCodegenStmnts.pop_back();
@@ -108,6 +110,8 @@ bool Module::generateCode() {
                 return false;
             }
         }
+        
+        irBuilder.SetInsertPoint(prevInsertBlock);
     }
     
     // Return 0 for success

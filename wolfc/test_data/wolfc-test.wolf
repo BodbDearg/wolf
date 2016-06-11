@@ -1,7 +1,10 @@
 while true
 	print("Continue? 👰 Enter 0 or less to exit 💆: ")
 	var continue = readnum()
-	if continue <= 0 then break end
+
+	if continue <= 0 then 
+		break 
+	end
 end
 
 print("The end!\n")

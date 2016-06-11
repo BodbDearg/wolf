@@ -56,13 +56,9 @@ bool BreakStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     // Point the previous block to this new basic block:
     cgCtx.irBuilder.CreateBr(mBasicBlock);
     
-    // Create a basic block for the code following the break and make it the new insert point.
-    llvm::BasicBlock * endBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "BreakStmnt:end", parentFn);
-    WC_ASSERT(endBB);
-    cgCtx.irBuilder.SetInsertPoint(endBB);
-    
     // Must defer the rest of the code generation until later
     cgCtx.deferredCodegenStmnts.push_back(this);
+    cgCtx.irBuilder.SetInsertPoint(prevBB);
     return true;
 }
 
