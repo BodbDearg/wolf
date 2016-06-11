@@ -1,11 +1,7 @@
 #pragma once
 
 #include "WCASTNode.hpp"
-#include "WCIStmnt.hpp"
-
-namespace llvm {
-    class BasicBlock;
-}
+#include "WCILoopStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -16,7 +12,7 @@ class AssignExpr;
 WhileStmnt:
 	while|until AssignExpr [do] Scope end
 */
-class WhileStmnt : public ASTNode, public IStmnt {
+class WhileStmnt : public ASTNode, public ILoopStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
@@ -32,6 +28,10 @@ public:
     virtual const Token & getEndToken() const override;
     
     virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    
+    virtual llvm::BasicBlock * getStartBlock() override;
+    
+    virtual llvm::BasicBlock * getEndBlock() override;
     
     /**
      * If true this is an 'until' statement rather than 'while'. In that case

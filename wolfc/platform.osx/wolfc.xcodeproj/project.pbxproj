@@ -141,6 +141,8 @@
 		1F9293A21D0370D60068E51B /* WCIExpr.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WCIExpr.hpp; sourceTree = "<group>"; };
 		1FA2925F1D000B9C00B0F975 /* WCLinearAlloc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCLinearAlloc.hpp; sourceTree = "<group>"; };
 		1FA292601D000FF600B0F975 /* WCLinearAlloc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCLinearAlloc.cpp; sourceTree = "<group>"; };
+		1FABAE5F1D0C97930024983E /* WCILoopStmnt.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCILoopStmnt.hpp; sourceTree = "<group>"; };
+		1FABAE601D0CA4200024983E /* WCIDeferredCodegenStmnt.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCIDeferredCodegenStmnt.hpp; sourceTree = "<group>"; };
 		1FB5FF1E1CEAE5D900EA979F /* WCVarDecl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCVarDecl.cpp; sourceTree = "<group>"; };
 		1FB5FF1F1CEAE5D900EA979F /* WCVarDecl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCVarDecl.hpp; sourceTree = "<group>"; };
 		1FB764D11CEEDAE800729AF4 /* WCReadnumExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCReadnumExpr.cpp; sourceTree = "<group>"; };
@@ -210,11 +212,13 @@
 				1FCD4E0F1D016EAD0076E358 /* WCBoolLit.hpp */,
 				1FD459AF1D05414A00F01435 /* WCEqExpr.cpp */,
 				1FD459B01D05414A00F01435 /* WCEqExpr.hpp */,
+				1FABAE601D0CA4200024983E /* WCIDeferredCodegenStmnt.hpp */,
 				1F843D251CE97FE70065FB7A /* WCIdentifier.cpp */,
 				1F843D261CE97FE70065FB7A /* WCIdentifier.hpp */,
 				1F9293A21D0370D60068E51B /* WCIExpr.hpp */,
 				1F33B4011D0686C7009C668B /* WCIfStmnt.cpp */,
 				1F33B4021D0686C7009C668B /* WCIfStmnt.hpp */,
+				1FABAE5F1D0C97930024983E /* WCILoopStmnt.hpp */,
 				1FD4558C1CE2DC90005EB3C3 /* WCIntLit.cpp */,
 				1FD4558D1CE2DC90005EB3C3 /* WCIntLit.hpp */,
 				1FD459AE1D053A3A00F01435 /* WCIStmnt.hpp */,

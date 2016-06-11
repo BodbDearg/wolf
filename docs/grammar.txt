@@ -14,7 +14,9 @@ Stmnt:
     VarDecl
     IfStmnt
     WhileStmnt
-    AssignExpr
+### TODO ###    BreakStmnt
+### TODO ### 	NextStmnt
+	AssignExpr
 
 NoOpStmnt:
     nop
@@ -33,9 +35,17 @@ IfStmnt:
 WhileStmnt:
 	while|until AssignExpr [do] Scope end
 
-LoopStmnt:
-	loop Scope end
-	loop Scope repeat until|while AssignExpr
+### TODO ### LoopStmnt:
+### TODO ###	loop Scope end
+### TODO ###	loop Scope repeat while|until AssignExpr
+
+### TODO ###
+### TODO ### BreakStmnt:
+### TODO ###	break
+
+### TODO ###
+### TODO ### NextStmnt:
+### TODO ###	next
 
 AssignExpr:
     OrExpr

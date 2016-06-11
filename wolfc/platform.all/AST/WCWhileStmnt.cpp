@@ -93,23 +93,12 @@ const Token & WhileStmnt::getEndToken() const {
     return mEndToken;
 }
 
-bool WhileStmnt::isWhileExprInversed() const {
-    return mStartToken.type == TokenType::kUntil;
+llvm::BasicBlock * WhileStmnt::getStartBlock() {
+    return mWhileCondBB;
 }
 
-llvm::Value * WhileStmnt::codegenWhileExpr(const CodegenCtx & cgCtx) const {
-    // Firstly validate that the while statement condition expression is a bool;
-    const DataType & whileExprDataType = mWhileExpr.dataType();
-    
-    if (!whileExprDataType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool))) {
-        compileError("Condition for while statement must evaluate to type 'bool', not '%s'!",
-                     whileExprDataType.name());
-        
-        return nullptr;
-    }
-    
-    // Then generate the code
-    return mWhileExpr.codegenExprEval(cgCtx);
+llvm::BasicBlock * WhileStmnt::getEndBlock() {
+    return mEndBB;
 }
 
 bool WhileStmnt::codegenStmnt(const CodegenCtx & cgCtx) {
@@ -164,6 +153,25 @@ bool WhileStmnt::codegenStmnt(const CodegenCtx & cgCtx) {
     // Switch back to inserting code at the end block:
     cgCtx.irBuilder.SetInsertPoint(mEndBB);
     return true;
+}
+
+bool WhileStmnt::isWhileExprInversed() const {
+    return mStartToken.type == TokenType::kUntil;
+}
+
+llvm::Value * WhileStmnt::codegenWhileExpr(const CodegenCtx & cgCtx) const {
+    // Firstly validate that the while statement condition expression is a bool;
+    const DataType & whileExprDataType = mWhileExpr.dataType();
+    
+    if (!whileExprDataType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool))) {
+        compileError("Condition for while statement must evaluate to type 'bool', not '%s'!",
+                     whileExprDataType.name());
+        
+        return nullptr;
+    }
+    
+    // Then generate the code
+    return mWhileExpr.codegenExprEval(cgCtx);
 }
 
 WC_END_NAMESPACE
