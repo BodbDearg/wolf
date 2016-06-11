@@ -43,14 +43,14 @@ const DataType & Identifier::dataType() const {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
 }
 
-llvm::Value * Identifier::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * Identifier::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     Scope * parentScope = getParentScope();
     WC_GUARD_ASSERT(parentScope, nullptr);
     return parentScope->getVariable(mToken.data.strVal.ptr);
 }
 
-llvm::Value * Identifier::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * Identifier::codegenExprEval(CodegenCtx & cgCtx) {
     // Grab the parent scope, there should always be one
     Scope * parentScope = getParentScope();
     WC_GUARD_ASSERT(parentScope, nullptr);

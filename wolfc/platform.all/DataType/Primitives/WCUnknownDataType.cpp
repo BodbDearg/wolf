@@ -11,7 +11,7 @@ bool UnknownDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const UnknownDataType*>(&other) != nullptr;
 }
 
-bool UnknownDataType::codegenPrintStmnt(const CodegenCtx & cgCtx,
+bool UnknownDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                         const PrintStmnt & parentPrintStmnt,
                                         llvm::Constant & printfFn,
                                         llvm::Value & value) const

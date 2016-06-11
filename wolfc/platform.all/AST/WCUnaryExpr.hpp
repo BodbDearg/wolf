@@ -36,9 +36,9 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
     PrimaryExpr & mExpr;
 };
@@ -56,9 +56,9 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
     PrimaryExpr &   mExpr;    
     const Token &   mStartToken;
@@ -77,9 +77,9 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
     const Token &   mStartToken;
 };
@@ -97,9 +97,9 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
     AssignExpr &    mExpr;
     const Token &   mStartToken;

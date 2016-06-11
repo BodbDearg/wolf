@@ -62,11 +62,11 @@ const DataType & NotExprNoOp::dataType() const {
     return mExpr.dataType();
 }
 
-llvm::Value * NotExprNoOp::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * NotExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * NotExprNoOp::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * NotExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
@@ -97,13 +97,13 @@ const DataType & NotExprNot::dataType() const {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 
-llvm::Value * NotExprNot::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * NotExprNot::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
-llvm::Value * NotExprNot::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * NotExprNot::codegenExprEval(CodegenCtx & cgCtx) {
     // Grab the type for bool
     const DataType & boolType = PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
     

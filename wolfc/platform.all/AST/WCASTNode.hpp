@@ -32,6 +32,38 @@ public:
     /* Figure out what the parent scope AST node of this node is (const version). */
     const Scope * getParentScope() const;
     
+    /* Get the first parent node of a certain type */
+    template <class T>
+    T * firstParentOfType() {
+        if (mParent) {
+            T * nodeCast = dynamic_cast<T*>(mParent);
+            
+            if (nodeCast) {
+                return nodeCast;
+            }
+            
+            return mParent->firstParentOfType<T>();
+        }
+        
+        return nullptr;
+    }
+    
+    /* Get the first parent node of a certain type (const version). */
+    template <class T>
+    const T * firstParentOfType() const {
+        if (mParent) {
+            T * nodeCast = dynamic_cast<const T*>(mParent);
+            
+            if (nodeCast) {
+                return nodeCast;
+            }
+            
+            return mParent->firstParentOfType<T>();
+        }
+        
+        return nullptr;
+    }
+    
     /**
      * Emit a formatted compile error message followed by a newline to stderr for a compile error.
      * The line and column information for this node are output also.

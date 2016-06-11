@@ -63,13 +63,13 @@ const DataType & ReadnumExpr::dataType() const {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
 }
 
-llvm::Value * ReadnumExpr::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * ReadnumExpr::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
-llvm::Value * ReadnumExpr::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * ReadnumExpr::codegenExprEval(CodegenCtx & cgCtx) {
     // Get scanf
     llvm::Constant * scanfFn = cgCtx.module.getFunction("scanf");
     

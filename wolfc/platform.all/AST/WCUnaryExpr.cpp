@@ -106,11 +106,11 @@ const DataType & UnaryExprPrimary::dataType() const {
     return mExpr.dataType();
 }
 
-llvm::Value * UnaryExprPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * UnaryExprPrimary::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * UnaryExprPrimary::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * UnaryExprPrimary::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
@@ -141,11 +141,11 @@ const DataType & UnaryExprNegPrimary::dataType() const {
     return mExpr.dataType();
 }
 
-llvm::Value * UnaryExprNegPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * UnaryExprNegPrimary::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * UnaryExprNegPrimary::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * UnaryExprNegPrimary::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: support more types
     const DataType & exprType = mExpr.dataType();
     
@@ -184,11 +184,11 @@ const DataType & UnaryExprPosPrimary::dataType() const {
     return mExpr.dataType();
 }
 
-llvm::Value * UnaryExprPosPrimary::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * UnaryExprPosPrimary::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * UnaryExprPosPrimary::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * UnaryExprPosPrimary::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: support more types
     const DataType & exprType = mExpr.dataType();
     
@@ -228,11 +228,11 @@ const DataType & UnaryExprParen::dataType() const {
     return mExpr.dataType();
 }
 
-llvm::Value * UnaryExprParen::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * UnaryExprParen::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * UnaryExprParen::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * UnaryExprParen::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 

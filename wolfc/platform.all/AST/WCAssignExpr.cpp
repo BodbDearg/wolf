@@ -57,11 +57,11 @@ const DataType & AssignExprNoAssign::dataType() const {
     return mExpr.dataType();
 }
 
-llvm::Value * AssignExprNoAssign::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * AssignExprNoAssign::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * AssignExprNoAssign::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * AssignExprNoAssign::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
@@ -93,13 +93,13 @@ const DataType & AssignExprAssign::dataType() const {
     return mLeftExpr.dataType();
 }
 
-llvm::Value * AssignExprAssign::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * AssignExprAssign::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
-llvm::Value * AssignExprAssign::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * AssignExprAssign::codegenExprEval(CodegenCtx & cgCtx) {
     // Left side of expression must be an lvalue!
     if (!mLeftExpr.isLValue()) {
         compileError("Can't assign to an rvalue!");

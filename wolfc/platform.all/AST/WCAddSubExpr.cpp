@@ -66,11 +66,11 @@ const DataType & AddSubExprNoOp::dataType() const {
     return mExpr.dataType();
 }
 
-llvm::Value * AddSubExprNoOp::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * AddSubExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * AddSubExprNoOp::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * AddSubExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
@@ -103,13 +103,13 @@ const DataType & AddSubExprAdd::dataType() const {
     return mLeftExpr.dataType();
 }
 
-llvm::Value * AddSubExprAdd::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * AddSubExprAdd::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
-llvm::Value * AddSubExprAdd::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * AddSubExprAdd::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     if (!compileCheckBothExprsAreInt()) {
         return nullptr;
@@ -174,13 +174,13 @@ const DataType & AddSubExprSub::dataType() const {
     return mLeftExpr.dataType();
 }
 
-llvm::Value * AddSubExprSub::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * AddSubExprSub::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
-llvm::Value * AddSubExprSub::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * AddSubExprSub::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     if (!compileCheckBothExprsAreInt()) {
         return nullptr;

@@ -65,7 +65,7 @@ const Token & PrintStmnt::getEndToken() const {
     return mEndToken;
 }
 
-bool PrintStmnt::codegenStmnt(const CodegenCtx & cgCtx) {
+bool PrintStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     // Get printf
     llvm::Constant * printfFn = cgCtx.module.getFunction("printf");
     

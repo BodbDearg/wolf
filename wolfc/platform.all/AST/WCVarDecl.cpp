@@ -59,7 +59,7 @@ const Token & VarDecl::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool VarDecl::codegenStmnt(const CodegenCtx & cgCtx) {
+bool VarDecl::codegenStmnt(CodegenCtx & cgCtx) {
     // TODO: allow more than int
     const DataType & exprType = mExpr.dataType();
     

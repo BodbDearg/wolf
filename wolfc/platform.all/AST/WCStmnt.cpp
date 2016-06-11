@@ -1,5 +1,6 @@
 #include "WCStmnt.hpp"
 #include "WCAssignExpr.hpp"
+#include "WCBreakStmnt.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCIfStmnt.hpp"
 #include "WCNopStmnt.hpp"
@@ -19,6 +20,7 @@ bool Stmnt::peek(const Token * tokenPtr) {
             VarDecl::peek(tokenPtr) ||
             IfStmnt::peek(tokenPtr) ||
             WhileStmnt::peek(tokenPtr) ||
+            BreakStmnt::peek(tokenPtr) ||
             AssignExpr::peek(tokenPtr);
 }
     
@@ -58,6 +60,13 @@ Stmnt * Stmnt::parse(const Token *& tokenPtr) {
         return new StmntWhileStmnt(*whileStmnt);
     }
     
+    // Parse break statement if ahead
+    if (BreakStmnt::peek(tokenPtr)) {
+        BreakStmnt * breakStmnt = BreakStmnt::parse(tokenPtr);
+        WC_GUARD(breakStmnt, nullptr);
+        return new StmntBreakStmnt(*breakStmnt);
+    }
+    
     // Otherwise parse assign expression
     AssignExpr * assignExpr = AssignExpr::parse(tokenPtr);
     WC_GUARD(assignExpr, nullptr);
@@ -80,7 +89,7 @@ const Token & StmntNopStmnt::getEndToken() const {
     return mStmnt.getEndToken();
 }
 
-bool StmntNopStmnt::codegenStmnt(const CodegenCtx & cgCtx) {
+bool StmntNopStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     return mStmnt.codegenStmnt(cgCtx);
 }
 
@@ -100,7 +109,7 @@ const Token & StmntPrintStmnt::getEndToken() const {
     return mStmnt.getEndToken();
 }
 
-bool StmntPrintStmnt::codegenStmnt(const CodegenCtx & cgCtx) {
+bool StmntPrintStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     return mStmnt.codegenStmnt(cgCtx);
 }
 
@@ -120,7 +129,7 @@ const Token & StmntIfStmnt::getEndToken() const {
     return mIfStmnt.getEndToken();
 }
 
-bool StmntIfStmnt::codegenStmnt(const CodegenCtx & cgCtx) {
+bool StmntIfStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     return mIfStmnt.codegenStmnt(cgCtx);
 }
 
@@ -140,8 +149,28 @@ const Token & StmntWhileStmnt::getEndToken() const {
     return mWhileStmnt.getEndToken();
 }
 
-bool StmntWhileStmnt::codegenStmnt(const CodegenCtx & cgCtx) {
+bool StmntWhileStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     return mWhileStmnt.codegenStmnt(cgCtx);
+}
+
+//-----------------------------------------------------------------------------
+// StmntWhileStmnt
+//-----------------------------------------------------------------------------
+
+StmntBreakStmnt::StmntBreakStmnt(BreakStmnt & breakStmnt) : mBreakStmnt(breakStmnt) {
+    mBreakStmnt.mParent = this;
+}
+
+const Token & StmntBreakStmnt::getStartToken() const {
+    return mBreakStmnt.getStartToken();
+}
+
+const Token & StmntBreakStmnt::getEndToken() const {
+    return mBreakStmnt.getEndToken();
+}
+
+bool StmntBreakStmnt::codegenStmnt(CodegenCtx & cgCtx) {
+    return mBreakStmnt.codegenStmnt(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -160,7 +189,7 @@ const Token & StmntVarDecl::getEndToken() const {
     return mDecl.getEndToken();
 }
 
-bool StmntVarDecl::codegenStmnt(const CodegenCtx & cgCtx) {
+bool StmntVarDecl::codegenStmnt(CodegenCtx & cgCtx) {
     return mDecl.codegenStmnt(cgCtx);
 }
 
@@ -180,7 +209,7 @@ const Token & StmntAssignExpr::getEndToken() const {
     return mExpr.getEndToken();
 }
     
-bool StmntAssignExpr::codegenStmnt(const CodegenCtx & cgCtx) {
+bool StmntAssignExpr::codegenStmnt(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx) != nullptr;
 }
 

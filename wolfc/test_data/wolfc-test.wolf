@@ -1,17 +1,7 @@
-var continue = 1
-
-until continue <= 0
-	print("Enter a number, I will tell you all about it 😡: ")
-	var num1 = readnum()
-
-	unless num1 > 10
-		print("That was <= 10\n")
-	or if num1 >= 20
-		print("That was >= 20\n")
-	else
-		print("That was > 10 and < 20\n")
-	end
-
+while true
 	print("Continue? 👰 Enter 0 or less to exit 💆: ")
-	continue = readnum()
+	var continue = readnum()
+	if continue <= 0 then break end
 end
+
+print("The end!\n")

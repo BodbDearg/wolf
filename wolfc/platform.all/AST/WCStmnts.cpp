@@ -50,7 +50,7 @@ const Token & StmntsSingle::getEndToken() const {
     return mStmnt.getEndToken();
 }
 
-bool StmntsSingle::codegenStmnt(const CodegenCtx & cgCtx) {
+bool StmntsSingle::codegenStmnt(CodegenCtx & cgCtx) {
     return mStmnt.codegenStmnt(cgCtx);
 };
 
@@ -74,7 +74,7 @@ const Token & StmntsMulti::getEndToken() const {
     return mRightStmnts.getEndToken();
 }
 
-bool StmntsMulti::codegenStmnt(const CodegenCtx & cgCtx) {
+bool StmntsMulti::codegenStmnt(CodegenCtx & cgCtx) {
     WC_GUARD(mLeftStmnt.codegenStmnt(cgCtx), false);
     WC_GUARD(mRightStmnts.codegenStmnt(cgCtx), false);
     return true;

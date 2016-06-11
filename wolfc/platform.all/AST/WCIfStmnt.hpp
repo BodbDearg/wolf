@@ -40,7 +40,7 @@ public:
      * Generate the code for the if statment condition expression and return the value of that expression.
      * Returns nullptr on failure.
      */
-    llvm::Value * codegenIfExpr(const CodegenCtx & cgCtx) const;
+    llvm::Value * codegenIfExpr(CodegenCtx & cgCtx) const;
     
     AssignExpr &            mIfExpr;
     Scope &                 mThenScope;
@@ -58,7 +58,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
     const Token & mEndToken;
 };
@@ -73,7 +73,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
     IfStmnt & mElseIfStmnt;
 };
@@ -89,7 +89,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
     Scope &         mElseScope;
     const Token &   mEndToken;

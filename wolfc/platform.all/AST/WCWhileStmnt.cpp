@@ -101,7 +101,7 @@ llvm::BasicBlock * WhileStmnt::getEndBlock() {
     return mEndBB;
 }
 
-bool WhileStmnt::codegenStmnt(const CodegenCtx & cgCtx) {
+bool WhileStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     // Grab the parent function
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
     WC_GUARD_ASSERT(parentFn, false);
@@ -159,7 +159,7 @@ bool WhileStmnt::isWhileExprInversed() const {
     return mStartToken.type == TokenType::kUntil;
 }
 
-llvm::Value * WhileStmnt::codegenWhileExpr(const CodegenCtx & cgCtx) const {
+llvm::Value * WhileStmnt::codegenWhileExpr(CodegenCtx & cgCtx) const {
     // Firstly validate that the while statement condition expression is a bool;
     const DataType & whileExprDataType = mWhileExpr.dataType();
     

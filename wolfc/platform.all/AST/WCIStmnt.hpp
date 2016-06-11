@@ -19,7 +19,7 @@ public:
      * Generate the llvm code for this statement.
      * Returns true on success or false on failure.
      */
-    virtual bool codegenStmnt(const CodegenCtx & cgCtx) = 0;
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) = 0;
 };
 
 WC_END_NAMESPACE

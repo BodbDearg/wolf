@@ -8,7 +8,7 @@ WC_BEGIN_NAMESPACE
 class AssignExpr;
 
 /*
-PrintStmnt
+PrintStmnt:
     print ( AssignExpr )
 */
 class PrintStmnt : public ASTNode, public IStmnt {
@@ -23,7 +23,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
     AssignExpr & mExpr;
     const Token & mStartToken;

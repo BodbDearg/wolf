@@ -27,7 +27,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
     virtual llvm::BasicBlock * getStartBlock() override;
     
@@ -43,7 +43,7 @@ public:
      * Generate the code for the while statment condition expression and return the value of that expression.
      * Returns nullptr on failure.
      */
-    llvm::Value * codegenWhileExpr(const CodegenCtx & cgCtx) const;
+    llvm::Value * codegenWhileExpr(CodegenCtx & cgCtx) const;
     
     AssignExpr &            mWhileExpr;
     Scope &                 mBodyScope;

@@ -13,7 +13,7 @@ bool BoolDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const BoolDataType*>(&other) != nullptr;
 }
 
-bool BoolDataType::codegenPrintStmnt(const CodegenCtx & cgCtx,
+bool BoolDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                      const PrintStmnt & parentPrintStmnt,
                                      llvm::Constant & printfFn,
                                      llvm::Value & value) const

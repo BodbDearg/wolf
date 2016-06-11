@@ -59,11 +59,11 @@ const DataType & AndExprNoOp::dataType() const {
     return mExpr.dataType();
 }
 
-llvm::Value * AndExprNoOp::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * AndExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * AndExprNoOp::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * AndExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
@@ -95,13 +95,13 @@ const DataType & AndExprAnd::dataType() const {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 
-llvm::Value * AndExprAnd::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * AndExprAnd::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
-llvm::Value * AndExprAnd::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * AndExprAnd::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: add support for lazy evaluation
     
     // Grab the type for bool

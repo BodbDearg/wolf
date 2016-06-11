@@ -11,7 +11,7 @@ public:
     
     virtual bool equals(const DataType & other) const override;
     
-    virtual bool codegenPrintStmnt(const CodegenCtx & cgCtx,
+    virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
                                    const PrintStmnt & parentPrintStmnt,
                                    llvm::Constant & printfFn,
                                    llvm::Value & value) const override;

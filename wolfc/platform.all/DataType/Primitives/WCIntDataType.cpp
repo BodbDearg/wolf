@@ -15,7 +15,7 @@ bool IntDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const IntDataType*>(&other) != nullptr;
 }
 
-bool IntDataType::codegenPrintStmnt(const CodegenCtx & cgCtx,
+bool IntDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                     const PrintStmnt & parentPrintStmnt,
                                     llvm::Constant & printfFn,
                                     llvm::Value & value) const

@@ -40,13 +40,13 @@ const DataType & StrLit::dataType() const {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kStr);
 }
 
-llvm::Value * StrLit::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * StrLit::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
-llvm::Value * StrLit::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * StrLit::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: need some sort of LUT for the module so we only have unique string instances
     return cgCtx.irBuilder.CreateGlobalStringPtr(mToken.data.strVal.ptr, "usr_string_lit");
 }

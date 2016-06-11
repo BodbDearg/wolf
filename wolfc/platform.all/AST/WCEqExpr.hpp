@@ -34,9 +34,9 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
     RelExpr & mExpr;
 };
@@ -54,7 +54,7 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
@@ -71,7 +71,7 @@ class EqExprEq : public EqExprTwoOps {
 public:
     EqExprEq(RelExpr & leftExpr, EqExpr & rightExpr);
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
 /* RelExpr != EqExpr */
@@ -79,7 +79,7 @@ class EqExprNeq : public EqExprTwoOps {
 public:
     EqExprNeq(RelExpr & leftExpr, EqExpr & rightExpr);
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
 WC_END_NAMESPACE

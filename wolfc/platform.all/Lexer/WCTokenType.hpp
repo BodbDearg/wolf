@@ -61,6 +61,8 @@ enum class TokenType {
     kUntil,
     /* do */
     kDo,
+    /* break */
+    kBreak,
     /* nop */
     kNop,
     /* TEMPORARY: print */

@@ -75,13 +75,13 @@ const DataType & PrimaryExprIntLit::dataType() const {
     return mLit.dataType();
 }
 
-llvm::Value * PrimaryExprIntLit::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * PrimaryExprIntLit::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
-llvm::Value * PrimaryExprIntLit::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * PrimaryExprIntLit::codegenExprEval(CodegenCtx & cgCtx) {
     return mLit.codegenExprEval(cgCtx);
 }
 
@@ -109,13 +109,13 @@ const DataType & PrimaryExprBoolLit::dataType() const {
     return mLit.dataType();
 }
 
-llvm::Value * PrimaryExprBoolLit::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * PrimaryExprBoolLit::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
-llvm::Value * PrimaryExprBoolLit::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * PrimaryExprBoolLit::codegenExprEval(CodegenCtx & cgCtx) {
     return mLit.codegenExprEval(cgCtx);
 }
 
@@ -143,13 +143,13 @@ const DataType & PrimaryExprStrLit::dataType() const {
     return mLit.dataType();
 }
 
-llvm::Value * PrimaryExprStrLit::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * PrimaryExprStrLit::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
-llvm::Value * PrimaryExprStrLit::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * PrimaryExprStrLit::codegenExprEval(CodegenCtx & cgCtx) {
     return mLit.codegenExprEval(cgCtx);
 }
 
@@ -177,11 +177,11 @@ const DataType & PrimaryExprIdentifier::dataType() const {
     return mIdent.dataType();
 }
 
-llvm::Value * PrimaryExprIdentifier::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * PrimaryExprIdentifier::codegenAddrOf(CodegenCtx & cgCtx) {
     return mIdent.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * PrimaryExprIdentifier::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * PrimaryExprIdentifier::codegenExprEval(CodegenCtx & cgCtx) {
     return mIdent.codegenExprEval(cgCtx);
 }
 
@@ -209,13 +209,13 @@ const DataType & PrimaryExprReadnum::dataType() const {
     return mExpr.dataType();
 }
 
-llvm::Value * PrimaryExprReadnum::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * PrimaryExprReadnum::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
-llvm::Value * PrimaryExprReadnum::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * PrimaryExprReadnum::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 

@@ -66,11 +66,11 @@ const DataType & EqExprNoOp::dataType() const {
     return mExpr.dataType();
 }
 
-llvm::Value * EqExprNoOp::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * EqExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * EqExprNoOp::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * EqExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
@@ -102,7 +102,7 @@ const DataType & EqExprTwoOps::dataType() const {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 
-llvm::Value * EqExprTwoOps::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * EqExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
@@ -138,7 +138,7 @@ EqExprEq::EqExprEq(RelExpr & leftExpr, EqExpr & rightExpr) : EqExprTwoOps(leftEx
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * EqExprEq::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * EqExprEq::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     if (!compileCheckBothExprsAreInt()) {
         return nullptr;
@@ -160,7 +160,7 @@ EqExprNeq::EqExprNeq(RelExpr & leftExpr, EqExpr & rightExpr) : EqExprTwoOps(left
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * EqExprNeq::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * EqExprNeq::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     if (!compileCheckBothExprsAreInt()) {
         return nullptr;

@@ -40,13 +40,13 @@ const DataType & BoolLit::dataType() const {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 
-llvm::Value * BoolLit::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * BoolLit::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
-llvm::Value * BoolLit::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * BoolLit::codegenExprEval(CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.getInt1(mToken.type == TokenType::kTrue);
 }
 

@@ -131,7 +131,7 @@ bool IfStmnt::isIfExprInversed() const {
     return mStartToken.type == TokenType::kUnless;
 }
 
-llvm::Value * IfStmnt::codegenIfExpr(const CodegenCtx & cgCtx) const {
+llvm::Value * IfStmnt::codegenIfExpr(CodegenCtx & cgCtx) const {
     // Firstly validate that the if statement condition expression is a bool;
     const DataType & ifExprDataType = mIfExpr.dataType();
     
@@ -165,7 +165,7 @@ const Token & IfStmntNoElse::getEndToken() const {
     return mEndToken;
 }
 
-bool IfStmntNoElse::codegenStmnt(const CodegenCtx & cgCtx) {
+bool IfStmntNoElse::codegenStmnt(CodegenCtx & cgCtx) {
     // Generate the code for the if statement condition expression:
     llvm::Value * ifExprResult = codegenIfExpr(cgCtx);
     WC_GUARD(ifExprResult, false);
@@ -230,7 +230,7 @@ const Token & IfStmntElseIf::getEndToken() const {
     return mElseIfStmnt.getEndToken();
 }
 
-bool IfStmntElseIf::codegenStmnt(const CodegenCtx & cgCtx) {
+bool IfStmntElseIf::codegenStmnt(CodegenCtx & cgCtx) {
     // Generate the code for the if statement condition expression:
     llvm::Value * ifExprResult = codegenIfExpr(cgCtx);
     WC_GUARD(ifExprResult, false);
@@ -308,7 +308,7 @@ const Token & IfStmntElse::getEndToken() const {
     return mEndToken;
 }
     
-bool IfStmntElse::codegenStmnt(const CodegenCtx & cgCtx) {
+bool IfStmntElse::codegenStmnt(CodegenCtx & cgCtx) {
     // Generate the code for the if statement condition expression:
     llvm::Value * ifExprResult = codegenIfExpr(cgCtx);
     WC_GUARD(ifExprResult, false);

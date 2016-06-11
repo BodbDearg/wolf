@@ -40,9 +40,9 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
     IntLit & mLit;
 };
@@ -60,9 +60,9 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
     BoolLit & mLit;
 };
@@ -80,9 +80,9 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
     StrLit & mLit;
 };
@@ -100,9 +100,9 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
     Identifier & mIdent;
 };
@@ -120,9 +120,9 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
     ReadnumExpr & mExpr;
 };

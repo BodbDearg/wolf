@@ -80,11 +80,11 @@ const DataType & RelExprNoOp::dataType() const {
     return mExpr.dataType();
 }
 
-llvm::Value * RelExprNoOp::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * RelExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * RelExprNoOp::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * RelExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
@@ -116,7 +116,7 @@ const DataType & RelExprTwoOps::dataType() const {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 
-llvm::Value * RelExprTwoOps::codegenAddrOf(const CodegenCtx & cgCtx) {
+llvm::Value * RelExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
@@ -152,7 +152,7 @@ RelExprLT::RelExprLT(AddSubExpr & leftExpr, RelExpr & rightExpr) : RelExprTwoOps
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * RelExprLT::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * RelExprLT::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     if (!compileCheckBothExprsAreInt()) {
         return nullptr;
@@ -174,7 +174,7 @@ RelExprLE::RelExprLE(AddSubExpr & leftExpr, RelExpr & rightExpr) : RelExprTwoOps
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * RelExprLE::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * RelExprLE::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     if (!compileCheckBothExprsAreInt()) {
         return nullptr;
@@ -196,7 +196,7 @@ RelExprGT::RelExprGT(AddSubExpr & leftExpr, RelExpr & rightExpr) : RelExprTwoOps
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * RelExprGT::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * RelExprGT::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     if (!compileCheckBothExprsAreInt()) {
         return nullptr;
@@ -218,7 +218,7 @@ RelExprGE::RelExprGE(AddSubExpr & leftExpr, RelExpr & rightExpr) : RelExprTwoOps
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * RelExprGE::codegenExprEval(const CodegenCtx & cgCtx) {
+llvm::Value * RelExprGE::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     if (!compileCheckBothExprsAreInt()) {
         return nullptr;

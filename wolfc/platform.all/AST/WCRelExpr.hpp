@@ -36,9 +36,9 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
     AddSubExpr & mExpr;
 };
@@ -56,7 +56,7 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
@@ -73,7 +73,7 @@ class RelExprLT : public RelExprTwoOps {
 public:
     RelExprLT(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
 /* AddSubExpr <= RelExpr */
@@ -81,7 +81,7 @@ class RelExprLE : public RelExprTwoOps {
 public:
     RelExprLE(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
 /* AddSubExpr > RelExpr */
@@ -89,7 +89,7 @@ class RelExprGT : public RelExprTwoOps {
 public:
     RelExprGT(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
 /* AddSubExpr >= RelExpr */
@@ -97,7 +97,7 @@ class RelExprGE : public RelExprTwoOps {
 public:
     RelExprGE(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
 WC_END_NAMESPACE

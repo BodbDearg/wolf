@@ -6,6 +6,7 @@
 WC_BEGIN_NAMESPACE
 
 class AssignExpr;
+class BreakStmnt;
 class CodegenCtx;
 class IfStmnt;
 class NopStmnt;
@@ -20,6 +21,7 @@ Stmnt:
     VarDecl
     IfStmnt
     WhileStmnt
+    BreakStmnt
     AssignExpr
 */
 class Stmnt : public ASTNode, public IStmnt {
@@ -38,7 +40,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
     NopStmnt & mStmnt;
 };
@@ -52,7 +54,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
     PrintStmnt & mStmnt;
 };
@@ -66,7 +68,7 @@ public:
     
     virtual const Token & getEndToken() const override;
 
-    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
     IfStmnt & mIfStmnt;
 };
@@ -80,9 +82,23 @@ public:
     
     virtual const Token & getEndToken() const override;
 
-    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
     WhileStmnt & mWhileStmnt;
+};
+
+/* BreakStmnt */
+class StmntBreakStmnt : public Stmnt {
+public:
+    StmntBreakStmnt(BreakStmnt & breakStmnt);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
+    
+    BreakStmnt & mBreakStmnt;
 };
 
 /* VarDecl */
@@ -94,7 +110,7 @@ public:
     
     virtual const Token & getEndToken() const override;
 
-    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
     VarDecl & mDecl;
 };
@@ -108,7 +124,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual bool codegenStmnt(const CodegenCtx & cgCtx) override;
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
     AssignExpr & mExpr;
 };

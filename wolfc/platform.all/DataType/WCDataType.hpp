@@ -27,7 +27,7 @@ public:
      * Generate the code for a print statement for this type. The codegen context, printf function prototype, 
      * parent print statement and the value to be printed are passed in as params.
      */
-    virtual bool codegenPrintStmnt(const CodegenCtx & cgCtx,
+    virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
                                    const PrintStmnt & parentPrintStmnt,
                                    llvm::Constant & printfFn,
                                    llvm::Value & value) const = 0;

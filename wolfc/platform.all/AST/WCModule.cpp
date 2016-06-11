@@ -1,6 +1,7 @@
 #include "WCModule.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCIDeferredCodegenStmnt.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
 
@@ -90,8 +91,23 @@ bool Module::generateCode() {
     irBuilder.SetInsertPoint(mainBlock);
     
     // Generate the code
-    if (!mScope->codegenStmnt(CodegenCtx(mLLVMCtx, irBuilder, *mLLVMMod))) {
-        return false;
+    {
+        // Do basic forward code generation (most code is generated this way):
+        CodegenCtx codegenCtx(mLLVMCtx, irBuilder, *mLLVMMod);
+        
+        if (!mScope->codegenStmnt(codegenCtx)) {
+            return false;
+        }
+        
+        // Do deferred code generation for 'next', 'break' and 'return' statements:
+        while (!codegenCtx.deferredCodegenStmnts.empty()) {
+            IDeferredCodegenStmnt * stmnt = codegenCtx.deferredCodegenStmnts.back();
+            codegenCtx.deferredCodegenStmnts.pop_back();
+            
+            if (!stmnt->deferredCodegenStmnt(codegenCtx)) {
+                return false;
+            }
+        }
     }
     
     // Return 0 for success

@@ -464,6 +464,7 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         parseKeyword("while", TokenType::kWhile) ||
         parseKeyword("until", TokenType::kUntil) ||
         parseKeyword("do", TokenType::kDo) ||
+        parseKeyword("break", TokenType::kBreak) ||
         parseKeyword("nop", TokenType::kNop))
     {
         return ParseResult::kSuccess;

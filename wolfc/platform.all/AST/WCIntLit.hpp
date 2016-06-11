@@ -24,9 +24,9 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    virtual llvm::Value * codegenAddrOf(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
-    virtual llvm::Value * codegenExprEval(const CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
     const Token & mToken;
 };

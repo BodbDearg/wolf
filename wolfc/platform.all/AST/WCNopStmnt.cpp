@@ -36,7 +36,7 @@ const Token & NopStmnt::getEndToken() const {
     return mToken;
 }
 
-bool NopStmnt::codegenStmnt(const CodegenCtx & cgCtx) {
+bool NopStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     // Like it's name suggests 'nop' actually does nothing. Shock, horror!
     WC_UNUSED_PARAM(cgCtx);
     return true;

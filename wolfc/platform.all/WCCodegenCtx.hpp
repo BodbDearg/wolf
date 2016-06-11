@@ -1,6 +1,7 @@
 #pragma once
 
 #include "WCMacros.hpp"
+#include <vector>
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/IRBuilder.h>
@@ -46,7 +47,7 @@ struct CodegenCtx {
      * Deferred code generation is perfomed in LIFO (stack) order, with the last item in the 
      * list being generated first.
      */
-    std::vector<IDeferredCodegenStmnt*> deferredCogenStmnts;
+    std::vector<IDeferredCodegenStmnt*> deferredCodegenStmnts;
 };
 
 WC_END_NAMESPACE
