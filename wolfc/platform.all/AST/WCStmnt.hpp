@@ -9,6 +9,7 @@ class AssignExpr;
 class BreakStmnt;
 class CodegenCtx;
 class IfStmnt;
+class NextStmnt;
 class NopStmnt;
 class PrintStmnt;
 class VarDecl;
@@ -22,6 +23,7 @@ Stmnt:
     IfStmnt
     WhileStmnt
     BreakStmnt
+    NextStmnt
     AssignExpr
 */
 class Stmnt : public ASTNode, public IStmnt {
@@ -99,6 +101,20 @@ public:
     virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
     BreakStmnt & mBreakStmnt;
+};
+
+/* NextStmnt */
+class StmntNextStmnt : public Stmnt {
+public:
+    StmntNextStmnt(NextStmnt & nextStmnt);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
+    
+    NextStmnt & mNextStmnt;
 };
 
 /* VarDecl */

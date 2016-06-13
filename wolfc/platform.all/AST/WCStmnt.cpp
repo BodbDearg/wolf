@@ -3,6 +3,7 @@
 #include "WCBreakStmnt.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCIfStmnt.hpp"
+#include "WCNextStmnt.hpp"
 #include "WCNopStmnt.hpp"
 #include "WCPrintStmnt.hpp"
 #include "WCVarDecl.hpp"
@@ -21,6 +22,7 @@ bool Stmnt::peek(const Token * tokenPtr) {
             IfStmnt::peek(tokenPtr) ||
             WhileStmnt::peek(tokenPtr) ||
             BreakStmnt::peek(tokenPtr) ||
+            NextStmnt::peek(tokenPtr) ||
             AssignExpr::peek(tokenPtr);
 }
     
@@ -65,6 +67,13 @@ Stmnt * Stmnt::parse(const Token *& tokenPtr) {
         BreakStmnt * breakStmnt = BreakStmnt::parse(tokenPtr);
         WC_GUARD(breakStmnt, nullptr);
         return new StmntBreakStmnt(*breakStmnt);
+    }
+    
+    // Parse next statement if ahead
+    if (NextStmnt::peek(tokenPtr)) {
+        NextStmnt * nextStmnt = NextStmnt::parse(tokenPtr);
+        WC_GUARD(nextStmnt, nullptr);
+        return new StmntNextStmnt(*nextStmnt);
     }
     
     // Otherwise parse assign expression
@@ -154,7 +163,7 @@ bool StmntWhileStmnt::codegenStmnt(CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// StmntWhileStmnt
+// StmntBreakStmnt
 //-----------------------------------------------------------------------------
 
 StmntBreakStmnt::StmntBreakStmnt(BreakStmnt & breakStmnt) : mBreakStmnt(breakStmnt) {
@@ -171,6 +180,26 @@ const Token & StmntBreakStmnt::getEndToken() const {
 
 bool StmntBreakStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     return mBreakStmnt.codegenStmnt(cgCtx);
+}
+
+//-----------------------------------------------------------------------------
+// StmntNextStmnt
+//-----------------------------------------------------------------------------
+
+StmntNextStmnt::StmntNextStmnt(NextStmnt & nextStmnt) : mNextStmnt(nextStmnt) {
+    mNextStmnt.mParent = this;
+}
+
+const Token & StmntNextStmnt::getStartToken() const {
+    return mNextStmnt.getStartToken();
+}
+
+const Token & StmntNextStmnt::getEndToken() const {
+    return mNextStmnt.getEndToken();
+}
+
+bool StmntNextStmnt::codegenStmnt(CodegenCtx & cgCtx) {
+    return mNextStmnt.codegenStmnt(cgCtx);
 }
 
 //-----------------------------------------------------------------------------

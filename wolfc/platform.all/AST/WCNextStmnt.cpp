@@ -1,4 +1,4 @@
-#include "WCBreakStmnt.hpp"
+#include "WCNextStmnt.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
@@ -12,35 +12,35 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
-bool BreakStmnt::peek(const Token * tokenPtr) {
-    return tokenPtr[0].type == TokenType::kBreak;
+bool NextStmnt::peek(const Token * tokenPtr) {
+    return tokenPtr[0].type == TokenType::kNext;
 }
 
-BreakStmnt * BreakStmnt::parse(const Token *& tokenPtr) {
+NextStmnt * NextStmnt::parse(const Token *& tokenPtr) {
     if (!peek(tokenPtr)) {
-        parseError(*tokenPtr, "Expected break statement!");
+        parseError(*tokenPtr, "Expected next statement!");
         return nullptr;
     }
     
-    // Consume 'break' and return parsed statement
+    // Consume 'next' and return parsed statement
     const Token * breakTok = tokenPtr;
     ++tokenPtr;
-    return new BreakStmnt(*breakTok);
+    return new NextStmnt(*breakTok);
 }
 
-BreakStmnt::BreakStmnt(const Token & token) : mToken(token) {
+NextStmnt::NextStmnt(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY();
 }
 
-const Token & BreakStmnt::getStartToken() const {
+const Token & NextStmnt::getStartToken() const {
     return mToken;
 }
 
-const Token & BreakStmnt::getEndToken() const {
+const Token & NextStmnt::getEndToken() const {
     return mToken;
 }
 
-bool BreakStmnt::codegenStmnt(CodegenCtx & cgCtx) {
+bool NextStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     // Grab the parent function
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
     WC_ASSERT(parentFn);
@@ -50,7 +50,7 @@ bool BreakStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     WC_ASSERT(prevBB);
     
     // Create the basic block for this statement
-    mBasicBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "BreakStmnt:stmnt", parentFn);
+    mBasicBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "NextStmnt:stmnt", parentFn);
     WC_ASSERT(mBasicBlock);
     
     // Point the previous block to this new basic block:
@@ -62,18 +62,18 @@ bool BreakStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     return true;
 }
 
-bool BreakStmnt::deferredCodegenStmnt(CodegenCtx & cgCtx) {
+bool NextStmnt::deferredCodegenStmnt(CodegenCtx & cgCtx) {
     // Get the parent loop:
     ILoopStmnt * parentLoop = firstParentOfType<ILoopStmnt>();
     
     if (!parentLoop) {
-        compileError("'break' statement must have a parent loop! 'break' cannot be used outside of loops!");
+        compileError("'next' statement must have a parent loop! 'next' cannot be used outside of loops!");
         return false;
     }
     
-    // Generate the jump to the end of the parent loop:
+    // Generate the jump to the start of the parent loop:
     cgCtx.irBuilder.SetInsertPoint(mBasicBlock);
-    cgCtx.irBuilder.CreateBr(parentLoop->getEndBlock());
+    cgCtx.irBuilder.CreateBr(parentLoop->getStartBlock());
     return true;
 }
 

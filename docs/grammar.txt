@@ -15,7 +15,7 @@ Stmnt:
     IfStmnt
     WhileStmnt
 	BreakStmnt
-### TODO ### 	NextStmnt
+	NextStmnt
 	AssignExpr
 
 NoOpStmnt:
@@ -42,9 +42,8 @@ WhileStmnt:
 BreakStmnt:
 	break
 
-### TODO ###
-### TODO ### NextStmnt:
-### TODO ###	next
+NextStmnt:
+	next
 
 AssignExpr:
     OrExpr
