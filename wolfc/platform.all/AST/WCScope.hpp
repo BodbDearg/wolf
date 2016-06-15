@@ -2,11 +2,13 @@
 
 #include "WCASTNode.hpp"
 #include "WCCStrComparator.hpp"
+#include "WCDataValue.hpp"
 #include "WCIStmnt.hpp"
 #include <map>
 
 WC_BEGIN_NAMESPACE
 
+class DataType;
 class Stmnts;
 
 /*
@@ -27,15 +29,16 @@ public:
     
     virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
-    /* Get or create a variable within this scope */
-    llvm::Value * getOrCreateVariable(const char * variableName,
-                                      CodegenCtx & cgCtx);
+    /* Create a variable within this scope. If the variable already exists then creation fails and null is returned. */
+    const DataValue * createVariable(const char * variableName,
+                                     const DataType & dataType,
+                                     CodegenCtx & cgCtx);
     
     /* Get a variable within this scope. Does not create if it does not exist. */
-    llvm::Value * getVariable(const char * variableName) const;
+    const DataValue * getVariable(const char * variableName) const;
     
     Stmnts & mStmnts;
-    std::map<const char*, llvm::Value*, CStrComparator> mVariableValues;
+    std::map<const char*, DataValue, CStrComparator> mVariableValues;
 };
 
 WC_END_NAMESPACE

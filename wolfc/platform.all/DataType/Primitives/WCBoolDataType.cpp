@@ -13,6 +13,10 @@ bool BoolDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const BoolDataType*>(&other) != nullptr;
 }
 
+llvm::Type * BoolDataType::llvmType(CodegenCtx & cgCtx) const {
+    return llvm::Type::getInt1Ty(cgCtx.llvmCtx);
+}
+
 bool BoolDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                      const PrintStmnt & parentPrintStmnt,
                                      llvm::Constant & printfFn,

@@ -1,13 +1,15 @@
-while true
-	print("Continue? 👰 Enter 0 or less to exit 💆: ")
+var continue = true
+var message = "Continue? 👰 Enter 0 or less to exit 💆: "
+
+while continue
+	print(message)
 	var exit = readnum()
 
-	if exit > 0 then 
-		next
-	end
-
-	print("Exiting...\n")
-	break
+	if exit <= 0 then 
+		continue = false
+	else 
+		message = "Ah shite! 💩 Enter 0 or less to exit: "
+	end 
 end
 
 print("The end!\n")

@@ -4,6 +4,7 @@
 
 namespace llvm {
     class Constant;
+    class Type;
     class Value;
 }
 
@@ -22,6 +23,12 @@ public:
     
     /* Tells if this data type matches another. */
     virtual bool equals(const DataType & other) const = 0;
+    
+    /**
+     * Return the llvm type for this data type, or nullptr if there is no direct llvm type.
+     * Note: the code generation context is required to get this info.
+     */
+    virtual llvm::Type * llvmType(CodegenCtx & cgCtx) const = 0;
     
     /**
      * Generate the code for a print statement for this type. The codegen context, printf function prototype, 

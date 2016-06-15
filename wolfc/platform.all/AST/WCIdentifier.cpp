@@ -39,32 +39,58 @@ bool Identifier::isLValue() const {
 }
 
 const DataType & Identifier::dataType() const {
-    // TODO: support types other than 'int'
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
+    const DataValue * dataValue = lookupDataValue();
+    
+    if (dataValue) {
+        WC_ASSERT(dataValue->type);
+        return *dataValue->type;
+    }
+
+    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kUnknown);
 }
 
 llvm::Value * Identifier::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
-    Scope * parentScope = getParentScope();
-    WC_GUARD_ASSERT(parentScope, nullptr);
-    return parentScope->getVariable(mToken.data.strVal.ptr);
-}
-
-llvm::Value * Identifier::codegenExprEval(CodegenCtx & cgCtx) {
-    // Grab the parent scope, there should always be one
-    Scope * parentScope = getParentScope();
-    WC_GUARD_ASSERT(parentScope, nullptr);
     
-    // Grab the variable
-    llvm::Value * value = parentScope->getVariable(mToken.data.strVal.ptr);
+    // Grab the variable value
+    const DataValue * dataValue = lookupDataValue();
     
-    if (!value) {
-        compileError("No variable named '%s' in the current scope!", mToken.data.strVal.ptr);
+    if (!dataValue) {
+        compileError("Can't codegen address of variable '%s'! No such variable in current scope!", name());
         return nullptr;
     }
     
+    // Return it!
+    WC_ASSERT(dataValue->value);
+    return dataValue->value;
+}
+
+llvm::Value * Identifier::codegenExprEval(CodegenCtx & cgCtx) {
+    // Grab the variable value
+    const DataValue * dataValue = lookupDataValue();
+    
+    if (!dataValue) {
+        compileError("No variable named '%s' in the current scope! Unable to take it's value!", name());
+        return nullptr;
+    }
+    
+    // TODO: this won't work for anything other than non primitives
     // Create an instruction to load it
-    return cgCtx.irBuilder.CreateLoad(value, std::string("load_ident_val:") + mToken.data.strVal.ptr);
+    WC_ASSERT(dataValue->value);
+    return cgCtx.irBuilder.CreateLoad(dataValue->value, std::string("load_ident_val:") + name());
+}
+
+const char * Identifier::name() const {
+    return mToken.data.strVal.ptr;
+}
+
+const DataValue * Identifier::lookupDataValue() const {
+    // Grab the parent scope, there should always be one
+    const Scope * parentScope = getParentScope();
+    WC_GUARD_ASSERT(parentScope, nullptr);
+    
+    // Grab the variable value from the parent scope
+    return parentScope->getVariable(name());
 }
 
 WC_END_NAMESPACE

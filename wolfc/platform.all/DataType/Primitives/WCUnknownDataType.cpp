@@ -11,6 +11,11 @@ bool UnknownDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const UnknownDataType*>(&other) != nullptr;
 }
 
+llvm::Type * UnknownDataType::llvmType(CodegenCtx & cgCtx) const {
+    WC_UNUSED_PARAM(cgCtx);
+    return nullptr;
+}
+
 bool UnknownDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                         const PrintStmnt & parentPrintStmnt,
                                         llvm::Constant & printfFn,

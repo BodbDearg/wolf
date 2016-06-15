@@ -1,22 +1,23 @@
-Statements:
-    - No semicolon required.
-    - if ... then else if then ... else ... end
-    - if ... then return ...
-    - if ... then continue
-    - while .. do .. end
-    - do .. while ... end
+Language TODO:
+	- var x = Type(2)
+	- .. as 
+	- parsing float numbers
+	- parsing chars
+	- vars have types
+	- functions
+	- return
+    - next/break/return if
+    - scope ... end
+    - loop ... end
+    - loop ... repeat while/until ...
+
     - for .. do
         - Completely range based for
     - rfor .. do
-    - do ... while
-    - do ... end
-    - scope .. end
-    - return ..
-    - 'goto' NOT supported
 
-Variables:
-    - Initialized by default
+    - Variables must be initialized when declared
     - = void for no initialization
+    - = default for default init
 
 Modules:
     - Each translation unit compiles to a module stub

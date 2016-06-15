@@ -15,6 +15,10 @@ bool IntDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const IntDataType*>(&other) != nullptr;
 }
 
+llvm::Type * IntDataType::llvmType(CodegenCtx & cgCtx) const {
+    return llvm::Type::getInt64Ty(cgCtx.llvmCtx);
+}
+
 bool IntDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                     const PrintStmnt & parentPrintStmnt,
                                     llvm::Constant & printfFn,

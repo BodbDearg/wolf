@@ -1,5 +1,6 @@
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCDataType.hpp"
 #include "WCOrExpr.hpp"
 #include "WCToken.hpp"
 
@@ -103,6 +104,20 @@ llvm::Value * AssignExprAssign::codegenExprEval(CodegenCtx & cgCtx) {
     // Left side of expression must be an lvalue!
     if (!mLeftExpr.isLValue()) {
         compileError("Can't assign to an rvalue!");
+        return nullptr;
+    }
+    
+    // TODO: support auto type promotion and the lark
+    // The data type of the right must match the left
+    const DataType & leftDataType = mLeftExpr.dataType();
+    const DataType & rightDataType = mRightExpr.dataType();
+    
+    // TODO: print variable name here
+    if (!leftDataType.equals(rightDataType)) {
+        compileError("Can't assign expression of type '%s' to variable of type '%s'!",
+                     rightDataType.name(),
+                     leftDataType.name());
+        
         return nullptr;
     }
     

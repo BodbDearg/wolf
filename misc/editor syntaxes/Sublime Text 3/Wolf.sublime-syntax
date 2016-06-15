@@ -32,7 +32,7 @@ contexts:
       scope: support.function.wolf
     - match: \b(and|or|not)\b
       scope: keyword.logical.wolf
-    - match: \b(then|end|do)\b
+    - match: \b(then|end|do|scope)\b
       scope: keyword.blockdelims.wolf
     - match: \b(if|else|unless)\b
       scope: keyword.controlflow.if.wolf

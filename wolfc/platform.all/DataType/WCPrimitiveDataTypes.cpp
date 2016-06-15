@@ -8,11 +8,11 @@
 WC_BEGIN_NAMESPACE
 
 /* Instances of the types themselves! */
-static UnknownDataType     gUnknownDataType;
-static VoidDataType        gVoidDataType;
-static IntDataType         gIntDataType;
-static BoolDataType        gBoolDataType;
-static StrDataType          gStrDataType;
+static UnknownDataType  gUnknownDataType;
+static VoidDataType     gVoidDataType;
+static IntDataType      gIntDataType;
+static BoolDataType     gBoolDataType;
+static StrDataType      gStrDataType;
 
 DataType & PrimitiveDataTypes::get(Type type) {
     switch (type) {

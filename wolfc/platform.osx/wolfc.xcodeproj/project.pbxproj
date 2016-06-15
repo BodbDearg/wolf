@@ -90,6 +90,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1F02E3F11D11115D00E8892C /* WCDataValue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WCDataValue.hpp; sourceTree = "<group>"; };
 		1F231DAD1CE165AD0085E1C6 /* docs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = docs; path = ../../docs; sourceTree = "<group>"; };
 		1F231DB11CE1B2400085E1C6 /* WCASTNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCASTNode.hpp; sourceTree = "<group>"; };
 		1F231DB61CE1C0AF0085E1C6 /* WCUnaryExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCUnaryExpr.cpp; sourceTree = "<group>"; };
@@ -285,6 +286,7 @@
 				1FCD4E011D0160DB0076E358 /* Primitives */,
 				1FCD4DF21D0136360076E358 /* WCDataType.cpp */,
 				1FCD4DF31D0136360076E358 /* WCDataType.hpp */,
+				1F02E3F11D11115D00E8892C /* WCDataValue.hpp */,
 				1FCD4DF51D0157C50076E358 /* WCPrimitiveDataTypes.cpp */,
 				1FCD4DF61D0157C50076E358 /* WCPrimitiveDataTypes.hpp */,
 			);

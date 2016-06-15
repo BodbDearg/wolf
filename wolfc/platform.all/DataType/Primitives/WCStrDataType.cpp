@@ -15,6 +15,10 @@ bool StrDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const StrDataType*>(&other) != nullptr;
 }
 
+llvm::Type * StrDataType::llvmType(CodegenCtx & cgCtx) const {
+    return llvm::Type::getInt8PtrTy(cgCtx.llvmCtx);
+}
+
 bool StrDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                     const PrintStmnt & parentPrintStmnt,
                                     llvm::Constant & printfFn,
