@@ -2,6 +2,7 @@
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCPrimaryExpr.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
@@ -30,31 +31,31 @@ bool UnaryExpr::peek(const Token * currentToken) {
     return PrimaryExpr::peek(currentToken);
 }
 
-UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
+UnaryExpr * UnaryExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
     switch (currentToken->type) {
         /* -IntLit */
         case TokenType::kMinus: {
             const Token * minusTok = currentToken;
             ++currentToken;     // Skip '-'
-            PrimaryExpr * expr = PrimaryExpr::parse(currentToken);
+            PrimaryExpr * expr = PrimaryExpr::parse(currentToken, alloc);
             WC_GUARD(expr, nullptr);
-            return new UnaryExprNegPrimary(*expr, *minusTok);
+            return WC_NEW_AST_NODE(alloc, UnaryExprNegPrimary, *expr, *minusTok);
         }   break;
             
         /* +PrimaryExpr */
         case TokenType::kPlus: {
             const Token * plusTok = currentToken;
             ++currentToken;     // Skip '+'
-            PrimaryExpr * expr = PrimaryExpr::parse(currentToken);
+            PrimaryExpr * expr = PrimaryExpr::parse(currentToken, alloc);
             WC_GUARD(expr, nullptr);
-            return new UnaryExprPosPrimary(*expr, *plusTok);
+            return WC_NEW_AST_NODE(alloc, UnaryExprPosPrimary, *expr, *plusTok);
         }   break;
             
         /* (AssignExpr) */
         case TokenType::kLParen: {
             const Token * lparenTok = currentToken;
             ++currentToken;     // Skip '('
-            AssignExpr * expr = AssignExpr::parse(currentToken);
+            AssignExpr * expr = AssignExpr::parse(currentToken, alloc);
             
             if (currentToken->type != TokenType::kRParen) {
                 parseError(*currentToken,
@@ -68,14 +69,14 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken) {
             const Token * rparenTok = currentToken;
             ++currentToken;     // Skip ')'
             WC_GUARD(expr, nullptr);
-            return new UnaryExprParen(*expr, *lparenTok, *rparenTok);
+            return WC_NEW_AST_NODE(alloc, UnaryExprParen, *expr, *lparenTok, *rparenTok);
         }   break;
             
         /* PrimaryExpr */
         default: {
-            PrimaryExpr * expr = PrimaryExpr::parse(currentToken);
+            PrimaryExpr * expr = PrimaryExpr::parse(currentToken, alloc);
             WC_GUARD(expr, nullptr);
-            return new UnaryExprPrimary(*expr);
+            return WC_NEW_AST_NODE(alloc, UnaryExprPrimary, *expr);
         }   break;
     }
     

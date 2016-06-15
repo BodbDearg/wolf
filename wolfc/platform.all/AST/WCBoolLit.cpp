@@ -1,5 +1,6 @@
 #include "WCBoolLit.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 
@@ -9,13 +10,13 @@ bool BoolLit::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kTrue || tokenPtr->type == TokenType::kFalse;
 }
 
-BoolLit * BoolLit::parse(const Token *& tokenPtr) {
+BoolLit * BoolLit::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     if (!peek(tokenPtr)) {
         parseError(*tokenPtr, "Expected bool literal!");
         return nullptr;
     }
     
-    BoolLit * boolLit = new BoolLit(*tokenPtr);
+    BoolLit * boolLit = WC_NEW_AST_NODE(alloc, BoolLit, *tokenPtr);
     ++tokenPtr;
     return boolLit;
 }

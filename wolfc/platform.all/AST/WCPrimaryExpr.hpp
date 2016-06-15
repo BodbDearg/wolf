@@ -9,6 +9,7 @@ class BoolLit;
 class DataType;
 class Identifier;
 class IntLit;
+class LinearAlloc;
 class ReadnumExpr;
 class StrLit;
 
@@ -24,7 +25,7 @@ class PrimaryExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * currentToken);
     
-    static PrimaryExpr * parse(const Token *& currentToken);
+    static PrimaryExpr * parse(const Token *& currentToken, LinearAlloc & alloc);
 };
 
 /* IntLit */

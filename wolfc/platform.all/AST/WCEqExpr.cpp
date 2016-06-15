@@ -2,6 +2,7 @@
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCRelExpr.hpp"
 #include "WCToken.hpp"
@@ -16,8 +17,8 @@ bool EqExpr::peek(const Token * tokenPtr) {
     return RelExpr::peek(tokenPtr);
 }
 
-EqExpr * EqExpr::parse(const Token *& tokenPtr) {
-    RelExpr * relExpr = RelExpr::parse(tokenPtr);
+EqExpr * EqExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+    RelExpr * relExpr = RelExpr::parse(tokenPtr, alloc);
     WC_GUARD(relExpr, nullptr);
     
     // See what tokens follow:
@@ -25,21 +26,21 @@ EqExpr * EqExpr::parse(const Token *& tokenPtr) {
         ++tokenPtr;     // Skip '='
         ++tokenPtr;     // Skip '='
         
-        EqExpr * eqExpr = EqExpr::parse(tokenPtr);
+        EqExpr * eqExpr = EqExpr::parse(tokenPtr, alloc);
         WC_GUARD(eqExpr, nullptr);
-        return new EqExprEq(*relExpr, *eqExpr);
+        return WC_NEW_AST_NODE(alloc, EqExprEq, *relExpr, *eqExpr);
     }
     else if (tokenPtr[0].type == TokenType::kExclamation && tokenPtr[1].type == TokenType::kEquals) {
         ++tokenPtr;     // Skip '!'
         ++tokenPtr;     // Skip '='
         
-        EqExpr * eqExpr = EqExpr::parse(tokenPtr);
+        EqExpr * eqExpr = EqExpr::parse(tokenPtr, alloc);
         WC_GUARD(eqExpr, nullptr);
-        return new EqExprNeq(*relExpr, *eqExpr);
+        return WC_NEW_AST_NODE(alloc, EqExprNeq, *relExpr, *eqExpr);
     }
 
     // Basic no-op expression:
-    return new EqExprNoOp(*relExpr);
+    return WC_NEW_AST_NODE(alloc, EqExprNoOp, *relExpr);
 }
 
 //-----------------------------------------------------------------------------

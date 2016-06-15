@@ -6,6 +6,7 @@
 WC_BEGIN_NAMESPACE
 
 class DataType;
+class LinearAlloc;
 class StrLit;
 
 /*
@@ -16,7 +17,7 @@ class ReadnumExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static ReadnumExpr * parse(const Token *& tokenPtr);
+    static ReadnumExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     ReadnumExpr(const Token & startToken, const Token & endToken);
     

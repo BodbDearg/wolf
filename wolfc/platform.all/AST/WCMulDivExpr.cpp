@@ -2,6 +2,7 @@
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 #include "WCUnaryExpr.hpp"
@@ -16,8 +17,8 @@ bool MulDivExpr::peek(const Token * tokenPtr) {
     return UnaryExpr::peek(tokenPtr);
 }
 
-MulDivExpr * MulDivExpr::parse(const Token *& tokenPtr) {
-    UnaryExpr * unaryExpr = UnaryExpr::parse(tokenPtr);
+MulDivExpr * MulDivExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+    UnaryExpr * unaryExpr = UnaryExpr::parse(tokenPtr, alloc);
     WC_GUARD(unaryExpr, nullptr);
     
     // See if '*' or '/' following:
@@ -26,20 +27,20 @@ MulDivExpr * MulDivExpr::parse(const Token *& tokenPtr) {
         ++tokenPtr;
         
         // Parse following expr and return combined expr
-        MulDivExpr * mulDivExpr = MulDivExpr::parse(tokenPtr);
-        return new MulDivExprMul(*unaryExpr, *mulDivExpr);
+        MulDivExpr * mulDivExpr = MulDivExpr::parse(tokenPtr, alloc);
+        return WC_NEW_AST_NODE(alloc, MulDivExprMul, *unaryExpr, *mulDivExpr);
     }
     else if (tokenPtr->type == TokenType::kSlash) {
         // Div operation: Skip '/'
         ++tokenPtr;
         
         // Parse following expr and return combined expr
-        MulDivExpr * mulDivExpr = MulDivExpr::parse(tokenPtr);
-        return new MulDivExprDiv(*unaryExpr, *mulDivExpr);
+        MulDivExpr * mulDivExpr = MulDivExpr::parse(tokenPtr, alloc);
+        return WC_NEW_AST_NODE(alloc, MulDivExprDiv, *unaryExpr, *mulDivExpr);
     }
     
     // Basic no-op expression:
-    return new MulDivExprNoOp(*unaryExpr);
+    return WC_NEW_AST_NODE(alloc, MulDivExprNoOp, *unaryExpr);
 }
 
 //-----------------------------------------------------------------------------

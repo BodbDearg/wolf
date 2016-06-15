@@ -1,6 +1,7 @@
 #include "WCIdentifier.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
@@ -11,13 +12,13 @@ bool Identifier::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kIdentifier;
 }
 
-Identifier * Identifier::parse(const Token *& tokenPtr) {
+Identifier * Identifier::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     if (tokenPtr->type != TokenType::kIdentifier) {
         parseError(*tokenPtr, "Expected identifier!");
         return nullptr;
     }
     
-    Identifier * intLit = new Identifier(*tokenPtr);
+    Identifier * intLit = WC_NEW_AST_NODE(alloc, Identifier, *tokenPtr);
     ++tokenPtr;
     return intLit;
 }

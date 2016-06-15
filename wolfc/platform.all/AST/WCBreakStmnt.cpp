@@ -4,6 +4,7 @@
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
 #include "WCILoopStmnt.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -16,7 +17,7 @@ bool BreakStmnt::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kBreak;
 }
 
-BreakStmnt * BreakStmnt::parse(const Token *& tokenPtr) {
+BreakStmnt * BreakStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     if (!peek(tokenPtr)) {
         parseError(*tokenPtr, "Expected break statement!");
         return nullptr;
@@ -25,7 +26,7 @@ BreakStmnt * BreakStmnt::parse(const Token *& tokenPtr) {
     // Consume 'break' and return parsed statement
     const Token * breakTok = tokenPtr;
     ++tokenPtr;
-    return new BreakStmnt(*breakTok);
+    return WC_NEW_AST_NODE(alloc, BreakStmnt, *breakTok);
 }
 
 BreakStmnt::BreakStmnt(const Token & token) : mToken(token) {

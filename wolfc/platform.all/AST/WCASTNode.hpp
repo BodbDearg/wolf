@@ -7,6 +7,10 @@ WC_BEGIN_NAMESPACE
 class Scope;
 struct Token;
 
+/* Macro for allocating an AST tree node */
+#define WC_NEW_AST_NODE(allocator, NodeType, ...)\
+    new(alloc.allocSizeOf<NodeType>()) NodeType(__VA_ARGS__)
+
 /* Abstract base class for all AST nodes. */
 class ASTNode {
 public:

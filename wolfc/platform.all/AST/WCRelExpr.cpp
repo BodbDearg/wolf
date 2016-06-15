@@ -3,6 +3,7 @@
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 
@@ -16,8 +17,8 @@ bool RelExpr::peek(const Token * tokenPtr) {
     return AddSubExpr::peek(tokenPtr);
 }
 
-RelExpr * RelExpr::parse(const Token *& tokenPtr) {
-    AddSubExpr * addSubExpr = AddSubExpr::parse(tokenPtr);
+RelExpr * RelExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+    AddSubExpr * addSubExpr = AddSubExpr::parse(tokenPtr, alloc);
     WC_GUARD(addSubExpr, nullptr);
     
     // See what tokens follow:
@@ -25,35 +26,37 @@ RelExpr * RelExpr::parse(const Token *& tokenPtr) {
         ++tokenPtr;     // Skip '<'
         
         if (tokenPtr->type == TokenType::kEquals) {
-            ++tokenPtr;                                     // Skip '='
-            RelExpr * relExpr = RelExpr::parse(tokenPtr);
+            ++tokenPtr;     // Skip '='
+            
+            RelExpr * relExpr = RelExpr::parse(tokenPtr, alloc);
             WC_GUARD(relExpr, nullptr);
-            return new RelExprLE(*addSubExpr, *relExpr);
+            return WC_NEW_AST_NODE(alloc, RelExprLE, *addSubExpr, *relExpr);
         }
         else {
-            RelExpr * relExpr = RelExpr::parse(tokenPtr);
+            RelExpr * relExpr = RelExpr::parse(tokenPtr, alloc);
             WC_GUARD(relExpr, nullptr);
-            return new RelExprLT(*addSubExpr, *relExpr);
+            return WC_NEW_AST_NODE(alloc, RelExprLT, *addSubExpr, *relExpr);
         }
     }
     else if (tokenPtr->type == TokenType::kGreaterThan) {
         ++tokenPtr;     // Skip '>'
         
         if (tokenPtr->type == TokenType::kEquals) {
-            ++tokenPtr;                                     // Skip '='
-            RelExpr * relExpr = RelExpr::parse(tokenPtr);
+            ++tokenPtr;     // Skip '='
+            
+            RelExpr * relExpr = RelExpr::parse(tokenPtr, alloc);
             WC_GUARD(relExpr, nullptr);
-            return new RelExprGE(*addSubExpr, *relExpr);
+            return WC_NEW_AST_NODE(alloc, RelExprGE, *addSubExpr, *relExpr);
         }
         else {
-            RelExpr * relExpr = RelExpr::parse(tokenPtr);
+            RelExpr * relExpr = RelExpr::parse(tokenPtr, alloc);
             WC_GUARD(relExpr, nullptr);
-            return new RelExprGT(*addSubExpr, *relExpr);
+            return WC_NEW_AST_NODE(alloc, RelExprGT, *addSubExpr, *relExpr);
         }
     }
 
     // Basic no-op expression:
-    return new RelExprNoOp(*addSubExpr);
+    return WC_NEW_AST_NODE(alloc, RelExprNoOp, *addSubExpr);
 }
 
 //-----------------------------------------------------------------------------

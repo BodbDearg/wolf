@@ -18,6 +18,7 @@ class IDeferredCodegenStmnt;
 
 /* Struct holding the context for code generation */
 struct CodegenCtx {
+    /* Creates the codegen context from the given llvm objects */
     CodegenCtx(llvm::LLVMContext & llvmCtxIn,
                llvm::IRBuilder<> & irBuilderIn,
                llvm::Module & moduleIn)

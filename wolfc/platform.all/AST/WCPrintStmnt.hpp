@@ -6,6 +6,7 @@
 WC_BEGIN_NAMESPACE
 
 class AssignExpr;
+class LinearAlloc;
 
 /*
 PrintStmnt:
@@ -15,7 +16,7 @@ class PrintStmnt : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static PrintStmnt * parse(const Token *& tokenPtr);
+    static PrintStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     PrintStmnt(AssignExpr & expr, const Token & startToken, const Token & endToken);
     

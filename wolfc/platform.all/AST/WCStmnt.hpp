@@ -9,6 +9,7 @@ class AssignExpr;
 class BreakStmnt;
 class CodegenCtx;
 class IfStmnt;
+class LinearAlloc;
 class NextStmnt;
 class NopStmnt;
 class PrintStmnt;
@@ -30,7 +31,7 @@ class Stmnt : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static Stmnt * parse(const Token *& tokenPtr);
+    static Stmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
 /* NopStmnt */

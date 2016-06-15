@@ -6,6 +6,7 @@
 WC_BEGIN_NAMESPACE
 
 class DataType;
+class LinearAlloc;
 class MulDivExpr;
 
 /*
@@ -18,7 +19,7 @@ class AddSubExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static AddSubExpr * parse(const Token *& tokenPtr);
+    static AddSubExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
 /* MulDivExpr */

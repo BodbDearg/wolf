@@ -1,5 +1,6 @@
 #include "WCFileUtils.hpp"
 #include "WCLexer.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
 #include <memory>
 #include <cstdio>
@@ -7,6 +8,8 @@
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/LLVMContext.h>
 WC_THIRD_PARTY_INCLUDES_END
+
+using namespace wolfc;
 
 int main(int argc, const char * argv[]) {
     // Arg check
@@ -27,15 +30,28 @@ int main(int argc, const char * argv[]) {
     llvm::LLVMContext llvmContext;
     
     // Run it through the lexer
-    wolfc::Lexer lexer;
+    Lexer lexer;
     WC_GUARD(lexer.process(inputSrc.get()), -1);
     
-    // Generate the module and codegen
-    wolfc::Module module(llvmContext);
-    WC_GUARD(module.parseCode(lexer.getTokenList()), -1);
-    WC_GUARD(module.generateCode(), -1);
+    // Linear allocator that we can use
+    LinearAlloc linearAlloc(1024 * 1024,        /* 1 MB max alloc */
+                            1024 * 1024 * 16,   /* 16 MB block size */
+                            128,                /* Space in blocks array to reserve */
+                            1024 * 4);          /* Space in sys blocks array to reserve */
     
-    // Dump the code to stdout!
-    module.dumpIRCodeToStdout();
+    {
+        // Declare the module
+        Module module(llvmContext);
+        
+        // Parse the module
+        WC_GUARD(module.parseCode(lexer.getTokenList(), linearAlloc), -1);
+        
+        // Codegen the module
+        WC_GUARD(module.generateCode(), -1);
+        
+        // Dump the code to stdout!
+        module.dumpIRCodeToStdout();
+    }
+    
     return 0;
 }

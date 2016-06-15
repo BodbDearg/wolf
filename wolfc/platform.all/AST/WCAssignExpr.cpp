@@ -1,6 +1,7 @@
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCOrExpr.hpp"
 #include "WCToken.hpp"
 
@@ -14,9 +15,9 @@ bool AssignExpr::peek(const Token * tokenPtr) {
     return OrExpr::peek(tokenPtr);
 }
 
-AssignExpr * AssignExpr::parse(const Token *& tokenPtr) {
+AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the initial expression
-    OrExpr * orExpr = OrExpr::parse(tokenPtr);
+    OrExpr * orExpr = OrExpr::parse(tokenPtr, alloc);
     WC_GUARD(orExpr, nullptr);
     
     // See if there is a '=' for assignment
@@ -25,13 +26,13 @@ AssignExpr * AssignExpr::parse(const Token *& tokenPtr) {
         ++tokenPtr;
         
         // Parse the following assign expression and create the AST node
-        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr);
+        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(assignExpr, nullptr);
-        return new AssignExprAssign(*orExpr, *assignExpr);
+        return WC_NEW_AST_NODE(alloc, AssignExprAssign, *orExpr, *assignExpr);
     }
 
     // Assign expression with no assign
-    return new AssignExprNoAssign(*orExpr);
+    return WC_NEW_AST_NODE(alloc, AssignExprNoAssign, *orExpr);
 }
 
 //-----------------------------------------------------------------------------

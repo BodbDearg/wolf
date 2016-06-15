@@ -1,6 +1,7 @@
 #include "WCScope.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCStmnts.hpp"
 #include "WCStringUtils.hpp"
 
@@ -10,10 +11,10 @@ bool Scope::peek(const Token * tokenPtr) {
     return Stmnts::peek(tokenPtr);
 }
 
-Scope * Scope::parse(const Token *& tokenPtr) {
-    Stmnts * stmnts = Stmnts::parse(tokenPtr);
+Scope * Scope::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+    Stmnts * stmnts = Stmnts::parse(tokenPtr, alloc);
     WC_GUARD(stmnts, nullptr);
-    return new Scope(*stmnts);
+    return WC_NEW_AST_NODE(alloc, Scope, *stmnts);
 }
 
 Scope::Scope(Stmnts & stmnts) : mStmnts(stmnts) {

@@ -30,6 +30,12 @@ public:
     /* Allocate a chunk of memory */
     void * alloc(size_t numBytes);
     
+    /* Allocate the the size of a given type */
+    template <typename T>
+    void * allocSizeOf() {
+        return alloc(sizeof(T));
+    }
+    
 private:
     /* A memory block preallocated in the linear allocator */
     struct MemBlock {

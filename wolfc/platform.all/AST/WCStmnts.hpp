@@ -5,6 +5,7 @@
 
 WC_BEGIN_NAMESPACE
 
+class LinearAlloc;
 class Stmnt;
 
 /*
@@ -16,7 +17,7 @@ class Stmnts : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static Stmnts * parse(const Token *& tokenPtr);
+    static Stmnts * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
 /* Stmnt */

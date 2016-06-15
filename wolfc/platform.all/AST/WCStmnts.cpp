@@ -1,5 +1,6 @@
 #include "WCStmnts.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCStmnt.hpp"
 #include "WCToken.hpp"
 
@@ -13,9 +14,9 @@ bool Stmnts::peek(const Token * tokenPtr) {
     return Stmnt::peek(tokenPtr);
 }
     
-Stmnts * Stmnts::parse(const Token *& tokenPtr) {
+Stmnts * Stmnts::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     const Token * startTok = tokenPtr;
-    Stmnt * stmnt = Stmnt::parse(tokenPtr);
+    Stmnt * stmnt = Stmnt::parse(tokenPtr, alloc);
     WC_GUARD(stmnt, nullptr);
     
     if (Stmnts::peek(tokenPtr)) {
@@ -25,12 +26,12 @@ Stmnts * Stmnts::parse(const Token *& tokenPtr) {
             return nullptr;
         }
         
-        Stmnts * stmnts = Stmnts::parse(tokenPtr);
+        Stmnts * stmnts = Stmnts::parse(tokenPtr, alloc);
         WC_GUARD(stmnts, nullptr);
-        return new StmntsMulti(*stmnt, *stmnts);
+        return WC_NEW_AST_NODE(alloc, StmntsMulti, *stmnt, *stmnts);
     }
     else {
-        return new StmntsSingle(*stmnt);
+        return WC_NEW_AST_NODE(alloc, StmntsSingle, *stmnt);
     }
 }
 

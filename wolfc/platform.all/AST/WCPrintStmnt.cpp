@@ -3,6 +3,7 @@
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -15,7 +16,7 @@ bool PrintStmnt::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kPrint;
 }
 
-PrintStmnt * PrintStmnt::parse(const Token *& tokenPtr) {
+PrintStmnt * PrintStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     if (tokenPtr->type != TokenType::kPrint) {
         parseError(*tokenPtr, "Expected keyword 'print'!");
         return nullptr;
@@ -32,7 +33,7 @@ PrintStmnt * PrintStmnt::parse(const Token *& tokenPtr) {
     ++tokenPtr;     // Consume '('
     
     // Parse the inner expression
-    AssignExpr * assignExpr = AssignExpr::parse(tokenPtr);
+    AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
     WC_GUARD(assignExpr, nullptr);
     
     // Expect ')' following all that:
@@ -46,7 +47,7 @@ PrintStmnt * PrintStmnt::parse(const Token *& tokenPtr) {
     ++tokenPtr;
     
     // Create and return the print statement
-    return new PrintStmnt(*assignExpr, *printTok, *closingParenTok);
+    return WC_NEW_AST_NODE(alloc, PrintStmnt, *assignExpr, *printTok, *closingParenTok);
 }
 
 PrintStmnt::PrintStmnt(AssignExpr & expr, const Token & startToken, const Token & endToken) :

@@ -7,6 +7,7 @@ WC_BEGIN_NAMESPACE
 
 class DataType;
 class EqExpr;
+class LinearAlloc;
 
 /*
 NotExpr:
@@ -17,7 +18,7 @@ class NotExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static NotExpr * parse(const Token *& tokenPtr);
+    static NotExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
 /* AddSubExpr */

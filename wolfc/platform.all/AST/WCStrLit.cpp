@@ -1,5 +1,6 @@
 #include "WCStrLit.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 
@@ -9,13 +10,13 @@ bool StrLit::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kStrLit;
 }
 
-StrLit * StrLit::parse(const Token *& tokenPtr) {
+StrLit * StrLit::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     if (!peek(tokenPtr)) {
         parseError(*tokenPtr, "Expected string literal!");
         return nullptr;
     }
     
-    StrLit * intLit = new StrLit(*tokenPtr);
+    StrLit * intLit = WC_NEW_AST_NODE(alloc, StrLit, *tokenPtr);
     ++tokenPtr;
     return intLit;
 }

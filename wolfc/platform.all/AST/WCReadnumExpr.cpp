@@ -1,5 +1,6 @@
 #include "WCReadnumExpr.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 
@@ -13,7 +14,7 @@ bool ReadnumExpr::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kReadnum;
 }
 
-ReadnumExpr * ReadnumExpr::parse(const Token *& tokenPtr) {
+ReadnumExpr * ReadnumExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     if (tokenPtr->type != TokenType::kReadnum) {
         parseError(*tokenPtr, "Expected 'readnum' at begining of readnum expression!");
         return nullptr;
@@ -37,7 +38,7 @@ ReadnumExpr * ReadnumExpr::parse(const Token *& tokenPtr) {
     const Token * rparenTok = tokenPtr;
     ++tokenPtr;     // Consume ')'
     
-    return new ReadnumExpr(*readnumTok, *rparenTok);
+    return WC_NEW_AST_NODE(alloc, ReadnumExpr, *readnumTok, *rparenTok);
 }
 
 ReadnumExpr::ReadnumExpr(const Token & startToken, const Token & endToken) :

@@ -7,6 +7,7 @@ WC_BEGIN_NAMESPACE
 
 class AssignExpr;
 class Identifier;
+class LinearAlloc;
 
 /*
 VarDecl:
@@ -16,7 +17,7 @@ class VarDecl : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static VarDecl * parse(const Token *& tokenPtr);
+    static VarDecl * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     VarDecl(const Token & token, Identifier & ident, AssignExpr & expr);
     

@@ -7,6 +7,7 @@ WC_BEGIN_NAMESPACE
 
 class AssignExpr;
 class DataType;
+class LinearAlloc;
 class PrimaryExpr;
 
 /*
@@ -20,7 +21,7 @@ class UnaryExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * currentToken);
     
-    static UnaryExpr * parse(const Token *& currentToken);
+    static UnaryExpr * parse(const Token *& currentToken, LinearAlloc & alloc);
 };
 
 /* PrimaryExpr */

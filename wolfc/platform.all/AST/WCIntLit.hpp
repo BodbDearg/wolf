@@ -6,13 +6,14 @@
 WC_BEGIN_NAMESPACE
 
 class DataType;
+class LinearAlloc;
 
 /* Represents TokenType::kIntLit in the AST tree */
 class IntLit : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static IntLit * parse(const Token *& tokenPtr);
+    static IntLit * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     IntLit(const Token & token);
     

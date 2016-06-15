@@ -1,5 +1,6 @@
 #include "WCIntLit.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 
@@ -9,13 +10,13 @@ bool IntLit::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kIntLit;
 }
 
-IntLit * IntLit::parse(const Token *& tokenPtr) {
+IntLit * IntLit::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     if (!peek(tokenPtr)) {
         parseError(*tokenPtr, "Expected integer literal!");
         return nullptr;
     }
     
-    IntLit * intLit = new IntLit(*tokenPtr);
+    IntLit * intLit = WC_NEW_AST_NODE(alloc, IntLit, *tokenPtr);
     ++tokenPtr;
     return intLit;
 }

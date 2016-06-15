@@ -1,6 +1,7 @@
 #include "WCAndExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCOrExpr.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
@@ -15,9 +16,9 @@ bool OrExpr::peek(const Token * tokenPtr) {
     return AndExpr::peek(tokenPtr);
 }
 
-OrExpr * OrExpr::parse(const Token *& tokenPtr) {
+OrExpr * OrExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the initial expression
-    AndExpr * andExpr = AndExpr::parse(tokenPtr);
+    AndExpr * andExpr = AndExpr::parse(tokenPtr, alloc);
     WC_GUARD(andExpr, nullptr);
     
     // See if there is an 'or' for logical or
@@ -26,13 +27,13 @@ OrExpr * OrExpr::parse(const Token *& tokenPtr) {
         ++tokenPtr;
         
         // Parse the following and expression and create the AST node
-        OrExpr * orExpr = OrExpr::parse(tokenPtr);
+        OrExpr * orExpr = OrExpr::parse(tokenPtr, alloc);
         WC_GUARD(orExpr, nullptr);
-        return new OrExprOr(*andExpr, *orExpr);
+        return WC_NEW_AST_NODE(alloc, OrExprOr, *andExpr, *orExpr);
     }
 
     // Basic no-op expression
-    return new OrExprNoOp(*andExpr);
+    return WC_NEW_AST_NODE(alloc, OrExprNoOp, *andExpr);
 }
 
 //-----------------------------------------------------------------------------

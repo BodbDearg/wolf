@@ -1,4 +1,5 @@
 #include "WCNopStmnt.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -11,7 +12,7 @@ bool NopStmnt::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kNop;
 }
 
-NopStmnt * NopStmnt::parse(const Token *& tokenPtr) {
+NopStmnt * NopStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the initial 'nop'
     if (tokenPtr->type != TokenType::kNop) {
         parseError(*tokenPtr, "'nop' statement expected!");
@@ -21,7 +22,7 @@ NopStmnt * NopStmnt::parse(const Token *& tokenPtr) {
     // Consume and save the token and return the parsed statement
     const Token * startToken = tokenPtr;
     ++tokenPtr;
-    return new NopStmnt(*startToken);
+    return WC_NEW_AST_NODE(alloc, NopStmnt, *startToken);
 }
 
 NopStmnt::NopStmnt(const Token & token) : mToken(token) {

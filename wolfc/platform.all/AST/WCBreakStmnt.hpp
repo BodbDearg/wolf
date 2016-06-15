@@ -11,6 +11,8 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
+class LinearAlloc;
+
 /*
 BreakStmnt:
 	break
@@ -19,7 +21,7 @@ class BreakStmnt : public ASTNode, public IDeferredCodegenStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static BreakStmnt * parse(const Token *& tokenPtr);
+    static BreakStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     BreakStmnt(const Token & token);
     

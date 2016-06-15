@@ -5,6 +5,8 @@
 
 WC_BEGIN_NAMESPACE
 
+class LinearAlloc;
+
 /*
 NopStmnt:
     nop
@@ -13,7 +15,7 @@ class NopStmnt : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static NopStmnt * parse(const Token *& tokenPtr);
+    static NopStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     NopStmnt(const Token & token);
     

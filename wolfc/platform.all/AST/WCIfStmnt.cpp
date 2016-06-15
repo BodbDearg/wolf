@@ -3,6 +3,7 @@
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
@@ -18,7 +19,7 @@ bool IfStmnt::peek(const Token * tokenPtr) {
     return tokenType == TokenType::kIf || tokenType == TokenType::kUnless;
 }
 
-IfStmnt * IfStmnt::parse(const Token *& tokenPtr) {
+IfStmnt * IfStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the initial 'if' or 'unless' keyword
     if (!peek(tokenPtr)) {
         parseError(*tokenPtr, "If statement expected!");
@@ -30,7 +31,7 @@ IfStmnt * IfStmnt::parse(const Token *& tokenPtr) {
     ++tokenPtr;
     
     // Parse the if condition:
-    AssignExpr * ifExpr = AssignExpr::parse(tokenPtr);
+    AssignExpr * ifExpr = AssignExpr::parse(tokenPtr, alloc);
     WC_GUARD(ifExpr, nullptr);
     
     // See if there is a 'then' following. This keyword is optional, unless the 'then' scope is required
@@ -44,7 +45,7 @@ IfStmnt * IfStmnt::parse(const Token *& tokenPtr) {
     }
     
     // Expect scope following:
-    Scope * thenScope = Scope::parse(tokenPtr);
+    Scope * thenScope = Scope::parse(tokenPtr, alloc);
     WC_GUARD(thenScope, nullptr);
     
     // See if it violates newline rules:
@@ -68,7 +69,7 @@ IfStmnt * IfStmnt::parse(const Token *& tokenPtr) {
         ++tokenPtr;
         
         // Parse the scope for the 'else' block:
-        Scope * elseScope = Scope::parse(tokenPtr);
+        Scope * elseScope = Scope::parse(tokenPtr, alloc);
         WC_GUARD(elseScope, nullptr);
         
         // Else block should be terminated by an 'end' token:
@@ -82,18 +83,18 @@ IfStmnt * IfStmnt::parse(const Token *& tokenPtr) {
         ++tokenPtr;
         
         // Done, return the parsed statement:
-        return new IfStmntElse(*ifExpr, *thenScope, *elseScope, *startToken, *endToken);
+        return WC_NEW_AST_NODE(alloc, IfStmntElse, *ifExpr, *thenScope, *elseScope, *startToken, *endToken);
     }
     else if (tokenPtr->type == TokenType::kOr) {
         // (2) if statement with an 'or if' chained if statement, skip the 'or' token.
         ++tokenPtr;
         
         // Parse the if statement following the 'or':
-        IfStmnt * outerIfStmnt = IfStmnt::parse(tokenPtr);
+        IfStmnt * outerIfStmnt = IfStmnt::parse(tokenPtr, alloc);
         WC_GUARD(outerIfStmnt, nullptr);
         
         // Done, return the parsed statement:
-        return new IfStmntElseIf(*ifExpr, *thenScope, *outerIfStmnt, *startToken);
+        return WC_NEW_AST_NODE(alloc, IfStmntElseIf, *ifExpr, *thenScope, *outerIfStmnt, *startToken);
     }
     else {
         // (1) 'if then' type statement: expect closing 'end'
@@ -107,7 +108,7 @@ IfStmnt * IfStmnt::parse(const Token *& tokenPtr) {
         ++tokenPtr;
         
         // Done, return the parsed statement
-        return new IfStmntNoElse(*ifExpr, *thenScope, *startToken, *endToken);
+        return WC_NEW_AST_NODE(alloc, IfStmntNoElse, *ifExpr, *thenScope, *startToken, *endToken);
     }
 }
 

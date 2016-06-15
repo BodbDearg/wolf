@@ -6,6 +6,7 @@
 WC_BEGIN_NAMESPACE
 
 class DataType;
+class LinearAlloc;
 class RelExpr;
 
 /*
@@ -18,7 +19,7 @@ class EqExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static EqExpr * parse(const Token *& tokenPtr);
+    static EqExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
 /* RelExpr */

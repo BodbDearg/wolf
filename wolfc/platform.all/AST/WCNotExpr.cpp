@@ -1,7 +1,8 @@
 #include "WCNotExpr.hpp"
-#include "WCEqExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
+#include "WCEqExpr.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 
@@ -15,7 +16,7 @@ bool NotExpr::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kNot || EqExpr::peek(tokenPtr);
 }
 
-NotExpr * NotExpr::parse(const Token *& tokenPtr) {
+NotExpr * NotExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Save the first token:
     const Token * startToken = tokenPtr;
     
@@ -25,17 +26,17 @@ NotExpr * NotExpr::parse(const Token *& tokenPtr) {
         ++tokenPtr;
         
         // Parse the not expression following
-        NotExpr * notExpr = NotExpr::parse(tokenPtr);
+        NotExpr * notExpr = NotExpr::parse(tokenPtr, alloc);
         WC_GUARD(notExpr, nullptr);
         
         // Alright, return the parsed expr
-        return new NotExprNot(*notExpr, *startToken);
+        return WC_NEW_AST_NODE(alloc, NotExprNot, *notExpr, *startToken);
     }
     
     // No 'not'. Just parse an ordinary no-op expression
-    EqExpr * addSubExpr = EqExpr::parse(tokenPtr);
+    EqExpr * addSubExpr = EqExpr::parse(tokenPtr, alloc);
     WC_GUARD(addSubExpr, nullptr);
-    return new NotExprNoOp(*addSubExpr);
+    return WC_NEW_AST_NODE(alloc, NotExprNoOp, *addSubExpr);
 }
 
 //-----------------------------------------------------------------------------

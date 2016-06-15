@@ -11,6 +11,8 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
+class LinearAlloc;
+
 /*
 NextStmnt:
 	next
@@ -19,7 +21,7 @@ class NextStmnt : public ASTNode, public IDeferredCodegenStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static NextStmnt * parse(const Token *& tokenPtr);
+    static NextStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     NextStmnt(const Token & token);
     

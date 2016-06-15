@@ -2,6 +2,7 @@
 #include "WCBoolLit.hpp"
 #include "WCIdentifier.hpp"
 #include "WCIntLit.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCReadnumExpr.hpp"
 #include "WCStrLit.hpp"
 #include "WCToken.hpp"
@@ -20,31 +21,31 @@ bool PrimaryExpr::peek(const Token * currentToken) {
             ReadnumExpr::peek(currentToken);
 }
 
-PrimaryExpr * PrimaryExpr::parse(const Token *& currentToken) {
+PrimaryExpr * PrimaryExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
     if (IntLit::peek(currentToken)) {
-        IntLit * uintLit = IntLit::parse(currentToken);
+        IntLit * uintLit = IntLit::parse(currentToken, alloc);
         WC_GUARD(uintLit, nullptr);
-        return new PrimaryExprIntLit(*uintLit);
+        return WC_NEW_AST_NODE(alloc, PrimaryExprIntLit, *uintLit);
     }
     else if (BoolLit::peek(currentToken)) {
-        BoolLit * boolLit = BoolLit::parse(currentToken);
+        BoolLit * boolLit = BoolLit::parse(currentToken, alloc);
         WC_GUARD(boolLit, nullptr);
-        return new PrimaryExprBoolLit(*boolLit);
+        return WC_NEW_AST_NODE(alloc, PrimaryExprBoolLit, *boolLit);
     }
     else if (StrLit::peek(currentToken)) {
-        StrLit * strLit = StrLit::parse(currentToken);
+        StrLit * strLit = StrLit::parse(currentToken, alloc);
         WC_GUARD(strLit, nullptr);
-        return new PrimaryExprStrLit(*strLit);
+        return WC_NEW_AST_NODE(alloc, PrimaryExprStrLit, *strLit);
     }
     else if (Identifier::peek(currentToken)) {
-        Identifier * identifier = Identifier::parse(currentToken);
+        Identifier * identifier = Identifier::parse(currentToken, alloc);
         WC_GUARD(identifier, nullptr);
-        return new PrimaryExprIdentifier(*identifier);
+        return WC_NEW_AST_NODE(alloc, PrimaryExprIdentifier, *identifier);
     }
     else if (ReadnumExpr::peek(currentToken)) {
-        ReadnumExpr * expr = ReadnumExpr::parse(currentToken);
+        ReadnumExpr * expr = ReadnumExpr::parse(currentToken, alloc);
         WC_GUARD(expr, nullptr);
-        return new PrimaryExprReadnum(*expr);
+        return WC_NEW_AST_NODE(alloc, PrimaryExprReadnum, *expr);
     }
     
     parseError(*currentToken, "Expected primary expression!");

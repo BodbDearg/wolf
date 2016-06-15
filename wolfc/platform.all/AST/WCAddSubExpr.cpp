@@ -2,6 +2,7 @@
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCMulDivExpr.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
@@ -16,8 +17,8 @@ bool AddSubExpr::peek(const Token * tokenPtr) {
     return MulDivExpr::peek(tokenPtr);
 }
 
-AddSubExpr * AddSubExpr::parse(const Token *& tokenPtr) {
-    MulDivExpr * mulDivExpr = MulDivExpr::parse(tokenPtr);
+AddSubExpr * AddSubExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+    MulDivExpr * mulDivExpr = MulDivExpr::parse(tokenPtr, alloc);
     WC_GUARD(mulDivExpr, nullptr);
     
     // See if '+' or '-' following:
@@ -26,20 +27,20 @@ AddSubExpr * AddSubExpr::parse(const Token *& tokenPtr) {
         ++tokenPtr;
         
         // Parse following expr and return combined expr
-        AddSubExpr * addSubExpr = AddSubExpr::parse(tokenPtr);
-        return new AddSubExprAdd(*mulDivExpr, *addSubExpr);
+        AddSubExpr * addSubExpr = AddSubExpr::parse(tokenPtr, alloc);
+        return WC_NEW_AST_NODE(alloc, AddSubExprAdd, *mulDivExpr, *addSubExpr);
     }
     else if (tokenPtr->type == TokenType::kAsterisk) {
         // Sub operation: Skip '-'
         ++tokenPtr;
         
         // Parse following expr and return combined expr
-        AddSubExpr * addSubExpr = AddSubExpr::parse(tokenPtr);
-        return new AddSubExprSub(*mulDivExpr, *addSubExpr);
+        AddSubExpr * addSubExpr = AddSubExpr::parse(tokenPtr, alloc);
+        return WC_NEW_AST_NODE(alloc, AddSubExprSub, *mulDivExpr, *addSubExpr);
     }
     
     // Basic no-op expression:
-    return new AddSubExprNoOp(*mulDivExpr);
+    return WC_NEW_AST_NODE(alloc, AddSubExprNoOp, *mulDivExpr);
 }
 
 //-----------------------------------------------------------------------------

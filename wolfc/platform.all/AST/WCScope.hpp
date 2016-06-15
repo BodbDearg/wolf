@@ -9,6 +9,7 @@
 WC_BEGIN_NAMESPACE
 
 class DataType;
+class LinearAlloc;
 class Stmnts;
 
 /*
@@ -19,7 +20,7 @@ class Scope : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static Scope * parse(const Token *& tokenPtr);
+    static Scope * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     Scope(Stmnts & stmnts);
     

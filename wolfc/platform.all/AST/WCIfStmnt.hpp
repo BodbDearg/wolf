@@ -9,8 +9,9 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class DataType;
 class AssignExpr;
+class DataType;
+class LinearAlloc;
 
 /*
 IfStmnt:
@@ -22,7 +23,7 @@ class IfStmnt : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static IfStmnt * parse(const Token *& tokenPtr);
+    static IfStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     IfStmnt(AssignExpr & ifExpr,
             Scope & thenScope,

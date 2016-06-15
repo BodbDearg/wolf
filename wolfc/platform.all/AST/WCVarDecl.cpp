@@ -3,6 +3,7 @@
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
 #include "WCIdentifier.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
@@ -13,7 +14,7 @@ bool VarDecl::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kVar;
 }
 
-VarDecl * VarDecl::parse(const Token *& tokenPtr) {
+VarDecl * VarDecl::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse 'var' keyword
     if (tokenPtr->type != TokenType::kVar) {
         // TODO: add 'let' to docs here?
@@ -25,7 +26,7 @@ VarDecl * VarDecl::parse(const Token *& tokenPtr) {
     ++tokenPtr;     // Skip 'var'
     
     // Parse the identifier ahead
-    Identifier * ident = Identifier::parse(tokenPtr);
+    Identifier * ident = Identifier::parse(tokenPtr, alloc);
     WC_GUARD(ident, nullptr);
     
     // Parse the '='
@@ -37,9 +38,9 @@ VarDecl * VarDecl::parse(const Token *& tokenPtr) {
     ++tokenPtr;
     
     // Parse the assign expression and return result of parsing
-    AssignExpr * expr = AssignExpr::parse(tokenPtr);
+    AssignExpr * expr = AssignExpr::parse(tokenPtr, alloc);
     WC_GUARD(expr, nullptr);
-    return new VarDecl(*varToken, *ident, *expr);
+    return WC_NEW_AST_NODE(alloc, VarDecl, *varToken, *ident, *expr);
 }
 
 VarDecl::VarDecl(const Token & token, Identifier & ident, AssignExpr & expr) :

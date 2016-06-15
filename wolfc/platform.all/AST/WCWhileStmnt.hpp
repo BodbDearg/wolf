@@ -5,8 +5,9 @@
 
 WC_BEGIN_NAMESPACE
 
-class DataType;
 class AssignExpr;
+class DataType;
+class LinearAlloc;
 
 /*
 WhileStmnt:
@@ -16,7 +17,7 @@ class WhileStmnt : public ASTNode, public ILoopStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static WhileStmnt * parse(const Token *& tokenPtr);
+    static WhileStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     WhileStmnt(AssignExpr & whileExpr,
                Scope & bodyScope,

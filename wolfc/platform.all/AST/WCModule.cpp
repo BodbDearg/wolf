@@ -2,6 +2,7 @@
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCIDeferredCodegenStmnt.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
 
@@ -21,23 +22,23 @@ Module::~Module() {
 }
 
 const Token & Module::getStartToken() const {
-    WC_ASSERT(mScope.get());
+    WC_ASSERT(mScope);
     return mScope->getStartToken();
 }
 
 const Token & Module::getEndToken() const {
-    WC_ASSERT(mScope.get());
+    WC_ASSERT(mScope);
     return mScope->getEndToken();
 }
 
-bool Module::parseCode(const Token * tokenList) {
-    mScope.reset(Scope::parse(tokenList));
+bool Module::parseCode(const Token * tokenList, LinearAlloc & alloc) {
+    mScope = Scope::parse(tokenList, alloc);
     WC_GUARD(mScope, false);
     mScope->mParent = this;
     
     if (tokenList->type != TokenType::kEOF) {
         parseError(*tokenList, "Expected EOF after scope!");
-        mScope.reset();
+        mScope = nullptr;
         return false;
     }
     
@@ -53,6 +54,7 @@ bool Module::generateCode() {
         return false;
     }
     
+    // TODO: alloc this memory with the linear allocator
     // Create module
     mLLVMMod.reset(new llvm::Module("WolfTest", mLLVMCtx));
     

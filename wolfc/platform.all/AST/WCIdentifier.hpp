@@ -7,13 +7,14 @@ WC_BEGIN_NAMESPACE
 
 class DataType;
 class DataValue;
+class LinearAlloc;
 
 /* Represents TokenType::kIdentifier in the AST tree */
 class Identifier : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static Identifier * parse(const Token *& tokenPtr);
+    static Identifier * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     Identifier(const Token & token);
     

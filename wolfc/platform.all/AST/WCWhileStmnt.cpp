@@ -3,6 +3,7 @@
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
@@ -18,7 +19,7 @@ bool WhileStmnt::peek(const Token * tokenPtr) {
     return tokenType == TokenType::kWhile || tokenType == TokenType::kUntil;
 }
 
-WhileStmnt * WhileStmnt::parse(const Token *& tokenPtr) {
+WhileStmnt * WhileStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the initial 'while' or 'until' keyword
     if (!peek(tokenPtr)) {
         parseError(*tokenPtr, "While statement expected!");
@@ -30,7 +31,7 @@ WhileStmnt * WhileStmnt::parse(const Token *& tokenPtr) {
     ++tokenPtr;
     
     // Parse the while expression (while condition):
-    AssignExpr * whileExpr = AssignExpr::parse(tokenPtr);
+    AssignExpr * whileExpr = AssignExpr::parse(tokenPtr, alloc);
     WC_GUARD(whileExpr, nullptr);
     
     // See if there is a 'do' following. This keyword is optional, unless the body scope is required
@@ -44,7 +45,7 @@ WhileStmnt * WhileStmnt::parse(const Token *& tokenPtr) {
     }
     
     // Expect scope following:
-    Scope * bodyScope = Scope::parse(tokenPtr);
+    Scope * bodyScope = Scope::parse(tokenPtr, alloc);
     WC_GUARD(bodyScope, nullptr);
     
     // See if it violates newline rules:
@@ -68,7 +69,7 @@ WhileStmnt * WhileStmnt::parse(const Token *& tokenPtr) {
     ++tokenPtr;
     
     // Done: return the parsed statement
-    return new WhileStmnt(*whileExpr, *bodyScope, *startToken, *endToken);
+    return WC_NEW_AST_NODE(alloc, WhileStmnt, *whileExpr, *bodyScope, *startToken, *endToken);
 }
 
 WhileStmnt::WhileStmnt(AssignExpr & whileExpr,
