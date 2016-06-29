@@ -10,6 +10,7 @@ class BreakStmnt;
 class CodegenCtx;
 class IfStmnt;
 class LinearAlloc;
+class LoopStmnt;
 class NextStmnt;
 class NopStmnt;
 class PrintStmnt;
@@ -23,9 +24,10 @@ Stmnt:
     VarDecl
     IfStmnt
     WhileStmnt
-    BreakStmnt
-    NextStmnt
-    AssignExpr
+    LoopStmnt
+	BreakStmnt
+	NextStmnt
+	AssignExpr
 */
 class Stmnt : public ASTNode, public IStmnt {
 public:
@@ -88,6 +90,20 @@ public:
     virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
     WhileStmnt & mWhileStmnt;
+};
+
+/* WhileStmnt */
+class StmntLoopStmnt : public Stmnt {
+public:
+    StmntLoopStmnt(LoopStmnt & loopStmnt);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
+    
+    LoopStmnt & mLoopStmnt;
 };
 
 /* BreakStmnt */

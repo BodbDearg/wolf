@@ -4,6 +4,7 @@
 #include "WCCodegenCtx.hpp"
 #include "WCIfStmnt.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCLoopStmnt.hpp"
 #include "WCNextStmnt.hpp"
 #include "WCNopStmnt.hpp"
 #include "WCPrintStmnt.hpp"
@@ -13,7 +14,7 @@
 WC_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
-// Expr
+// Stmnt
 //-----------------------------------------------------------------------------
 
 bool Stmnt::peek(const Token * tokenPtr) {
@@ -22,6 +23,7 @@ bool Stmnt::peek(const Token * tokenPtr) {
             VarDecl::peek(tokenPtr) ||
             IfStmnt::peek(tokenPtr) ||
             WhileStmnt::peek(tokenPtr) ||
+            LoopStmnt::peek(tokenPtr) ||
             BreakStmnt::peek(tokenPtr) ||
             NextStmnt::peek(tokenPtr) ||
             AssignExpr::peek(tokenPtr);
@@ -61,6 +63,13 @@ Stmnt * Stmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         WhileStmnt * whileStmnt = WhileStmnt::parse(tokenPtr, alloc);
         WC_GUARD(whileStmnt, nullptr);
         return WC_NEW_AST_NODE(alloc, StmntWhileStmnt, *whileStmnt);
+    }
+    
+    // Parse loop statement if ahead
+    if (LoopStmnt::peek(tokenPtr)) {
+        LoopStmnt * loopStmnt = LoopStmnt::parse(tokenPtr, alloc);
+        WC_GUARD(loopStmnt, nullptr);
+        return WC_NEW_AST_NODE(alloc, StmntLoopStmnt, *loopStmnt);
     }
     
     // Parse break statement if ahead
@@ -161,6 +170,26 @@ const Token & StmntWhileStmnt::getEndToken() const {
 
 bool StmntWhileStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     return mWhileStmnt.codegenStmnt(cgCtx);
+}
+
+//-----------------------------------------------------------------------------
+// StmntLoopStmnt
+//-----------------------------------------------------------------------------
+
+StmntLoopStmnt::StmntLoopStmnt(LoopStmnt & loopStmnt) : mLoopStmnt(loopStmnt) {
+    mLoopStmnt.mParent = this;
+}
+
+const Token & StmntLoopStmnt::getStartToken() const {
+    return mLoopStmnt.getStartToken();
+}
+
+const Token & StmntLoopStmnt::getEndToken() const {
+    return mLoopStmnt.getEndToken();
+}
+
+bool StmntLoopStmnt::codegenStmnt(CodegenCtx & cgCtx) {
+    return mLoopStmnt.codegenStmnt(cgCtx);
 }
 
 //-----------------------------------------------------------------------------

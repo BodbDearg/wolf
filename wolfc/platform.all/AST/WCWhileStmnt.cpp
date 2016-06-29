@@ -107,10 +107,6 @@ bool WhileStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
     WC_GUARD_ASSERT(parentFn, false);
     
-    // Grab the block before the while block:
-    llvm::BasicBlock * preWhileCondBB = cgCtx.irBuilder.GetInsertBlock();
-    WC_ASSERT(preWhileCondBB);
-    
     // Create the 'while' basic block that does the condition check. Make the previous block branch to it:
     mWhileCondBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "WhileStmnt:while_cond", parentFn);
     WC_ASSERT(mWhileCondBB);
