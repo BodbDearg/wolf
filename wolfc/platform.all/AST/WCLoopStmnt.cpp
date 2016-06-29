@@ -86,11 +86,10 @@ bool LoopStmntNoCond::codegenStmnt(CodegenCtx & cgCtx) {
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
     WC_GUARD_ASSERT(parentFn, false);
     
-    // Create the block for the loop statement:
+    // Create the 'loop' main block.
+    // Note: also make the previous block branch to this block in order to properly terminate it.
     mStartBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "LoopStmntNoCond:block", parentFn);
     WC_ASSERT(mStartBB);
-    
-    // Make a branch to it to terminate the current block:
     cgCtx.irBuilder.CreateBr(mStartBB);
 
     // Codegen the 'body' block, this will go back up to the while condition block when done
