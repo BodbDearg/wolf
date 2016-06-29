@@ -3,7 +3,7 @@
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
-#include "WCILoopStmnt.hpp"
+#include "WCIRepeatableStmnt.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCToken.hpp"
 
@@ -64,17 +64,17 @@ bool BreakStmnt::codegenStmnt(CodegenCtx & cgCtx) {
 }
 
 bool BreakStmnt::deferredCodegenStmnt(CodegenCtx & cgCtx) {
-    // Get the parent loop:
-    ILoopStmnt * parentLoop = firstParentOfType<ILoopStmnt>();
+    // Get the parent repeatable statement:
+    IRepeatableStmnt * parentRepeatableStmnt = firstParentOfType<IRepeatableStmnt>();
     
-    if (!parentLoop) {
-        compileError("'break' statement must have a parent loop! 'break' cannot be used outside of loops!");
+    if (!parentRepeatableStmnt) {
+        compileError("'break' statement must have a parent repeatable block/loop! 'break' cannot be used outside of loops!");
         return false;
     }
     
     // Generate the jump to the end of the parent loop:
     cgCtx.irBuilder.SetInsertPoint(mBasicBlock);
-    cgCtx.irBuilder.CreateBr(parentLoop->getEndBlock());
+    cgCtx.irBuilder.CreateBr(parentRepeatableStmnt->getEndBlock());
     return true;
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "WCASTNode.hpp"
-#include "WCILoopStmnt.hpp"
+#include "WCIRepeatableStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -13,7 +13,7 @@ class LinearAlloc;
 WhileStmnt:
 	while|until AssignExpr [do] Scope end
 */
-class WhileStmnt : public ASTNode, public ILoopStmnt {
+class WhileStmnt : public ASTNode, public IRepeatableStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     

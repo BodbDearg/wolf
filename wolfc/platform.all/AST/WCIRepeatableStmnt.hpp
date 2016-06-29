@@ -9,9 +9,9 @@ namespace llvm {
 WC_BEGIN_NAMESPACE
 
 /* An interface that looping constructs (for/while/repeat etc.) must use */
-class ILoopStmnt : public IStmnt {
+class IRepeatableStmnt : public IStmnt {
 public:
-    virtual ~ILoopStmnt() = default;
+    virtual ~IRepeatableStmnt() = default;
     
     /**
      * Returns the block that must be jumped to in order for the loop to restart.
