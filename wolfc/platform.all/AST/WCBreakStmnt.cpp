@@ -72,9 +72,9 @@ bool BreakStmnt::deferredCodegenStmnt(CodegenCtx & cgCtx) {
         return false;
     }
     
-    // Generate the jump to the end of the parent loop:
+    // Generate the jump to past the end of the parent loop:
     cgCtx.irBuilder.SetInsertPoint(mBasicBlock);
-    cgCtx.irBuilder.CreateBr(parentRepeatableStmnt->getEndBlock());
+    cgCtx.irBuilder.CreateBr(parentRepeatableStmnt->getBreakStmntTargetBlock());
     return true;
 }
 

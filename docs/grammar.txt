@@ -38,7 +38,7 @@ WhileStmnt:
 
 LoopStmnt:
     loop Scope end
-### TODO ### loop Scope repeat while|until AssignExpr
+	loop Scope repeat while|until AssignExpr
 
 ### TODO ### ScopeStmnt:
 ### TODO ###	scope Scope end

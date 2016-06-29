@@ -14,16 +14,16 @@ public:
     virtual ~IRepeatableStmnt() = default;
     
     /**
-     * Returns the block that must be jumped to in order for the loop to restart.
+     * Returns the block that must be jumped to in order for the loop to skip to the next iteration.
      * This is the block that the 'next' statement will jump to.
      */
-    virtual llvm::BasicBlock * getStartBlock() = 0;
+    virtual llvm::BasicBlock * getNextStmntTargetBlock() = 0;
     
     /**
-     * Returns the block that must be jumped to in order for the loop to end.
+     * Returns the block that must be jumped to in order for the loop to be broken out of.
      * This is the block that the 'break' statement will jump to.
      */
-    virtual llvm::BasicBlock * getEndBlock() = 0;
+    virtual llvm::BasicBlock * getBreakStmntTargetBlock() = 0;
 };
 
 WC_END_NAMESPACE

@@ -82,6 +82,7 @@ WhileStmnt::WhileStmnt(AssignExpr & whileExpr,
     mStartToken(startToken),
     mEndToken(endToken)
 {
+    WC_ASSERT(mStartToken.type == TokenType::kWhile || mStartToken.type == TokenType::kUntil);
     mWhileExpr.mParent = this;
     mBodyScope.mParent = this;
 }
@@ -94,11 +95,11 @@ const Token & WhileStmnt::getEndToken() const {
     return mEndToken;
 }
 
-llvm::BasicBlock * WhileStmnt::getStartBlock() {
+llvm::BasicBlock * WhileStmnt::getNextStmntTargetBlock() {
     return mWhileCondBB;
 }
 
-llvm::BasicBlock * WhileStmnt::getEndBlock() {
+llvm::BasicBlock * WhileStmnt::getBreakStmntTargetBlock() {
     return mEndBB;
 }
 
@@ -148,7 +149,7 @@ bool WhileStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     
     WC_ASSERT(branch);
     
-    // Switch back to inserting code at the end block:
+    // Insert code after the end block from here on in
     cgCtx.irBuilder.SetInsertPoint(mEndBB);
     return true;
 }
@@ -158,7 +159,7 @@ bool WhileStmnt::isWhileExprInversed() const {
 }
 
 llvm::Value * WhileStmnt::codegenWhileExpr(CodegenCtx & cgCtx) const {
-    // Firstly validate that the while statement condition expression is a bool;
+    // Firstly validate that the while statement condition expression is a bool:
     const DataType & whileExprDataType = mWhileExpr.dataType();
     
     if (!whileExprDataType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool))) {

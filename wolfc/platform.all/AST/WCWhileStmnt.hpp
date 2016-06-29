@@ -30,13 +30,13 @@ public:
     
     virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
-    virtual llvm::BasicBlock * getStartBlock() override;
+    virtual llvm::BasicBlock * getNextStmntTargetBlock() override;
     
-    virtual llvm::BasicBlock * getEndBlock() override;
+    virtual llvm::BasicBlock * getBreakStmntTargetBlock() override;
     
     /**
      * If true this is an 'until' statement rather than 'while'. In that case
-     * The block will execute while the condition is false.
+     * The block will execute while the loop condition is false rather than true.
      */
     bool isWhileExprInversed() const;
     

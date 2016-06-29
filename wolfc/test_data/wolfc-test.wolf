@@ -1,9 +1,9 @@
+var num = 0
+
 loop
 	print("Hello, enter <= 0 to exit! 👻 : ")
-	var num = readnum()
-	if num <= 0 then 
-		break
-	end
-end
+	num = readnum()
+	print("This should never be reached")
+repeat until num <= 0
 
 print("Wasn't that nice?! 😍")

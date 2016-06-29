@@ -72,9 +72,9 @@ bool NextStmnt::deferredCodegenStmnt(CodegenCtx & cgCtx) {
         return false;
     }
     
-    // Generate the jump to the start of the parent loop:
+    // Generate the jump to the next iteration of the parent loop:
     cgCtx.irBuilder.SetInsertPoint(mBasicBlock);
-    cgCtx.irBuilder.CreateBr(parentRepeatableStmnt->getStartBlock());
+    cgCtx.irBuilder.CreateBr(parentRepeatableStmnt->getNextStmntTargetBlock());
     return true;
 }
 

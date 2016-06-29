@@ -67,6 +67,8 @@ enum class TokenType {
     kNext,
     /* loop */
     kLoop,
+    /* repeat */
+    kRepeat,
     /* nop */
     kNop,
     /* TEMPORARY: print */
