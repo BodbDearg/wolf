@@ -15,6 +15,7 @@ Stmnt:
     IfStmnt
     WhileStmnt
     LoopStmnt
+    ScopeStmnt
 	BreakStmnt
 	NextStmnt
 	AssignExpr
@@ -40,8 +41,8 @@ LoopStmnt:
     loop Scope end
 	loop Scope repeat while|until AssignExpr
 
-### TODO ### ScopeStmnt:
-### TODO ###	scope Scope end
+ScopeStmnt:
+	scope Scope end
 
 BreakStmnt:
 	break

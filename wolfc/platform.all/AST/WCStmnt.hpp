@@ -14,6 +14,7 @@ class LoopStmnt;
 class NextStmnt;
 class NopStmnt;
 class PrintStmnt;
+class ScopeStmnt;
 class VarDecl;
 class WhileStmnt;
 
@@ -25,6 +26,7 @@ Stmnt:
     IfStmnt
     WhileStmnt
     LoopStmnt
+    ScopeStmnt
 	BreakStmnt
 	NextStmnt
 	AssignExpr
@@ -92,7 +94,7 @@ public:
     WhileStmnt & mWhileStmnt;
 };
 
-/* WhileStmnt */
+/* LoopStmnt */
 class StmntLoopStmnt : public Stmnt {
 public:
     StmntLoopStmnt(LoopStmnt & loopStmnt);
@@ -104,6 +106,20 @@ public:
     virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
     
     LoopStmnt & mLoopStmnt;
+};
+
+/* ScopeStmnt */
+class StmntScopeStmnt : public Stmnt {
+public:
+    StmntScopeStmnt(ScopeStmnt & scopeStmnt);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+
+    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
+    
+    ScopeStmnt & mScopeStmnt;
 };
 
 /* BreakStmnt */

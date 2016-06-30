@@ -69,6 +69,8 @@ enum class TokenType {
     kLoop,
     /* repeat */
     kRepeat,
+    /* scope */
+    kScope,
     /* nop */
     kNop,
     /* TEMPORARY: print */

@@ -8,6 +8,7 @@
 #include "WCNextStmnt.hpp"
 #include "WCNopStmnt.hpp"
 #include "WCPrintStmnt.hpp"
+#include "WCScopeStmnt.hpp"
 #include "WCVarDecl.hpp"
 #include "WCWhileStmnt.hpp"
 
@@ -24,6 +25,7 @@ bool Stmnt::peek(const Token * tokenPtr) {
             IfStmnt::peek(tokenPtr) ||
             WhileStmnt::peek(tokenPtr) ||
             LoopStmnt::peek(tokenPtr) ||
+            ScopeStmnt::peek(tokenPtr) ||
             BreakStmnt::peek(tokenPtr) ||
             NextStmnt::peek(tokenPtr) ||
             AssignExpr::peek(tokenPtr);
@@ -77,6 +79,13 @@ Stmnt * Stmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         BreakStmnt * breakStmnt = BreakStmnt::parse(tokenPtr, alloc);
         WC_GUARD(breakStmnt, nullptr);
         return WC_NEW_AST_NODE(alloc, StmntBreakStmnt, *breakStmnt);
+    }
+    
+    // Parse scope statement if ahead
+    if (ScopeStmnt::peek(tokenPtr)) {
+        ScopeStmnt * scopeStmnt = ScopeStmnt::parse(tokenPtr, alloc);
+        WC_GUARD(scopeStmnt, nullptr);
+        return WC_NEW_AST_NODE(alloc, StmntScopeStmnt, *scopeStmnt);
     }
     
     // Parse next statement if ahead
@@ -190,6 +199,26 @@ const Token & StmntLoopStmnt::getEndToken() const {
 
 bool StmntLoopStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     return mLoopStmnt.codegenStmnt(cgCtx);
+}
+
+//-----------------------------------------------------------------------------
+// StmntScopeStmnt
+//-----------------------------------------------------------------------------
+
+StmntScopeStmnt::StmntScopeStmnt(ScopeStmnt & scopeStmnt) : mScopeStmnt(scopeStmnt) {
+    mScopeStmnt.mParent = this;
+}
+
+const Token & StmntScopeStmnt::getStartToken() const {
+    return mScopeStmnt.getStartToken();
+}
+
+const Token & StmntScopeStmnt::getEndToken() const {
+    return mScopeStmnt.getEndToken();
+}
+
+bool StmntScopeStmnt::codegenStmnt(CodegenCtx & cgCtx) {
+    return mScopeStmnt.codegenStmnt(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
