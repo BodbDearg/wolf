@@ -28,6 +28,7 @@ AddSubExpr * AddSubExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         
         // Parse following expr and return combined expr
         AddSubExpr * addSubExpr = AddSubExpr::parse(tokenPtr, alloc);
+        WC_GUARD(addSubExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, AddSubExprAdd, *mulDivExpr, *addSubExpr);
     }
     else if (tokenPtr->type == TokenType::kAsterisk) {
@@ -36,6 +37,7 @@ AddSubExpr * AddSubExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         
         // Parse following expr and return combined expr
         AddSubExpr * addSubExpr = AddSubExpr::parse(tokenPtr, alloc);
+        WC_GUARD(addSubExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, AddSubExprSub, *mulDivExpr, *addSubExpr);
     }
     

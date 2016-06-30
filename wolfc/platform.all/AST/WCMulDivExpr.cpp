@@ -28,6 +28,7 @@ MulDivExpr * MulDivExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         
         // Parse following expr and return combined expr
         MulDivExpr * mulDivExpr = MulDivExpr::parse(tokenPtr, alloc);
+        WC_GUARD(mulDivExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, MulDivExprMul, *unaryExpr, *mulDivExpr);
     }
     else if (tokenPtr->type == TokenType::kSlash) {
@@ -36,6 +37,7 @@ MulDivExpr * MulDivExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         
         // Parse following expr and return combined expr
         MulDivExpr * mulDivExpr = MulDivExpr::parse(tokenPtr, alloc);
+        WC_GUARD(mulDivExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, MulDivExprDiv, *unaryExpr, *mulDivExpr);
     }
     
