@@ -1,9 +1,22 @@
+; Initialize this to zero because we don't support uninitialzed vars yet
 var num = 0
 
+/; 
+Multi line comment Blah, blah 
+blah Blah blah blah Blah blah 
+;/
 loop
+	; Ask the user for input
+	; If input is <= 0 then we will exit 
 	print("Hello, enter <= 0 to exit! 👻 : ")
 	num = readnum()
+
+	; Continues to the next loop iteration
+	next
+
+	; This statement should never be reached!
 	print("This should never be reached")
 repeat until num <= 0
 
+; Nonsense
 print("Wasn't that nice?! 😍")

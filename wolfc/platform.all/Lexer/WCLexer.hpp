@@ -78,6 +78,12 @@ private:
     /* Try to parse keywords and literals. */
     ParseResult parseKeywordsAndLiterals();
     
+    /* Parse single line comments */
+    ParseResult parseSingleLineComments();
+    
+    /* Parse multi line comments */
+    ParseResult parseMultiLineComments();
+    
     /* Increase the token list capacity to the given capacity. If smaller than old capacity, nothing happens. */
     void increaseTokenListCapacity(size_t newCapacity);
     

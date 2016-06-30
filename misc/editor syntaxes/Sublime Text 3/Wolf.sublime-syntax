@@ -7,6 +7,10 @@ file_extensions:
 scope: wolf
 contexts:
   main:
+    - match: '/;'
+      push: multiline_comment    
+    - match: ';.*$'
+      scope: comment.singleline.wolf
     - match: '"'
       captures:
         0: punctuation.definition.string.begin.wolf
@@ -23,7 +27,7 @@ contexts:
         - match: '\\u\{[0-9a-fA-F]{,7}\}'
           scope: constant.character.escape.wolf
     - match: '(?<![\d.])\b0[xX][a-fA-F\d\.]+([pP][\-\+]?\d+)?|\b\d+(\.\d+)?([eE]-?\d+)?|\.\d+([eE]-?\d+)?'
-      scope: constant.numeric.wolf    
+      scope: constant.numeric.wolf   
     - match: '(?<![^.]\.|:)\b(false|true)\b|(?<![.])\.{3}(?!\.)'
       scope: constant.language.wolf
     - match: '\+|-|%|#|\*|\/|\^|==?|~=|<=?|>=?|(?<!\.)\.{2}(?!\.)'
@@ -42,3 +46,7 @@ contexts:
       scope: keyword.controlflow.modifiers.wolf
     - match: \b(var|nop)\b
       scope: keyword.misc.wolf
+  multiline_comment:
+    - meta_scope: comment.multiline.wolf
+    - match: ';/'
+      pop: true

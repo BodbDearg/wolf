@@ -60,6 +60,8 @@ bool Lexer::process(const char * utf8Src) {
         INVOKE_PARSE_FUNC(parseNumericLiteral);
         INVOKE_PARSE_FUNC(parseDoubleQuotedStringLiteral);
         INVOKE_PARSE_FUNC(parseKeywordsAndLiterals);
+        INVOKE_PARSE_FUNC(parseSingleLineComments);
+        INVOKE_PARSE_FUNC(parseMultiLineComments);
                                                
         // If we get to here then we have an error
         std::string charAsUtf8Str(mLexerState.srcPtr, mLexerState.currentCharNumBytes);
@@ -155,7 +157,18 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
         case '+': return parseBasicToken(TokenType::kPlus, 1);
         case '-': return parseBasicToken(TokenType::kMinus, 1);
         case '*': return parseBasicToken(TokenType::kAsterisk, 1);
-        case '/': return parseBasicToken(TokenType::kSlash, 1);
+        
+        case '/': {
+            // '/' can be followed immediately by ';', in which case it is a multi line comment opener
+            if (mLexerState.srcPtr[1] == ';') {
+                // Multi line comment: do not interpret the '/' as a token
+                return ParseResult::kNone;
+            }
+            else {
+                return parseBasicToken(TokenType::kSlash, 1);
+            }
+        }
+            
         case '<': return parseBasicToken(TokenType::kLessThan, 1);
         case '>': return parseBasicToken(TokenType::kGreaterThan, 1);
         case '=': return parseBasicToken(TokenType::kEquals, 1);
@@ -491,6 +504,48 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
     
     // All good!
     return ParseResult::kSuccess;
+}
+
+Lexer::ParseResult Lexer::parseSingleLineComments() {
+    // Check start character is the start of a single or multi line comment: ';'
+    WC_GUARD(mLexerState.currentChar == ';', ParseResult::kNone);
+    
+    // Keep skipping chars until a newline is encountered
+    while (moveOntoNextChar() && mLexerState.currentChar != 0) {
+        if (CharUtils::isLineSeparator(mLexerState.currentChar)) {
+            break;  // Newline reached: end of comment
+        }
+    }
+    
+    // Single line comments always succeed!
+    return ParseResult::kSuccess;
+}
+
+Lexer::ParseResult Lexer::parseMultiLineComments() {
+    // Multi line comments must start with '/;'
+    WC_GUARD(mLexerState.currentChar == '/', ParseResult::kNone);
+    
+    // Peek the next char after that, must be ';'
+    WC_GUARD(mLexerState.srcPtr[1] == ';', ParseResult::kNone);
+    
+    // Skip the first two chars
+    moveOntoNextChar();
+    
+    while (moveOntoNextChar() && mLexerState.currentChar != 0) {
+        // Look for the end two chars:
+        if (mLexerState.currentChar == ';' && mLexerState.srcPtr[1] == '/') {
+            // End of the multi line comment block, consume the closing '/'
+            moveOntoNextChar();
+            moveOntoNextChar();
+            
+            // Parsed successfully!
+            return ParseResult::kSuccess;
+        }
+    }
+    
+    // If we reached the end of file before the comment is terminated then that is an error
+    error("Unexpected EOF reached while parsing multi line comment! Did you forget the closing ';/' ?");
+    return ParseResult::kFail;
 }
 
 void Lexer::increaseTokenListCapacity(size_t newCapacity) {
