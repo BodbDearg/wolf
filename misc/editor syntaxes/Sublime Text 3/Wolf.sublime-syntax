@@ -44,8 +44,12 @@ contexts:
       scope: keyword.controlflow.loops.wolf
     - match: \b(break|next|return)\b
       scope: keyword.controlflow.modifiers.wolf
-    - match: \b(var|nop)\b
+    - match: \b(func)\b
+      scope: keyword.functions.wolf
+    - match: \b(var|nop|as)\b
       scope: keyword.misc.wolf
+    - match: \b(void|bool|int|uint|float|char|uchar)\b
+      scope: storage.type.wolf      
   multiline_comment:
     - meta_scope: comment.multiline.wolf
     - match: ';/'
