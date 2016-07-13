@@ -48,7 +48,7 @@ contexts:
       scope: keyword.functions.wolf
     - match: \b(var|nop|as)\b
       scope: keyword.misc.wolf
-    - match: \b(void|bool|int|uint|float|char|uchar)\b
+    - match: \b(void|bool|int|uint|float|char|uchar|string|ustring)\b
       scope: storage.type.wolf      
   multiline_comment:
     - meta_scope: comment.multiline.wolf

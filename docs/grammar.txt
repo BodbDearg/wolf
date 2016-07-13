@@ -96,6 +96,26 @@ UnaryExpr:
 	+PrimaryExpr
 	(AssignExpr)
 
+### TODO ### PostfixExpr:
+	### TODO ### PrimaryExpr
+	### TODO ### PrimaryExpr FunctionCall
+
+### TODO ### FunctionCall:
+	### TODO ### ()
+	### TODO ### (FunctionCallArgList)
+
+### TODO ### FunctionCallArgList:
+	### TODO ### FunctionCallArg
+	### TODO ### FunctionCallArg, FunctionCallArgList
+
+### TODO ### FunctionCallArg:
+	### TODO ### PrimitiveType Identifier
+
+### TODO ### PrimitiveType:
+	### TODO ### int
+	### TODO ### bool
+	### TODO ### string
+
 PrimaryExpr:
 	IntLit
 	BoolLit
