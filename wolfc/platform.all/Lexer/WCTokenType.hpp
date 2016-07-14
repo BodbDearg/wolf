@@ -73,6 +73,8 @@ enum class TokenType {
     kScope,
     /* nop */
     kNop,
+    /* func */
+    kFunc,
     /* TEMPORARY: print */
     kPrint,
     /* TEMPORARY: readnum */

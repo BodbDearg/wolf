@@ -12,6 +12,8 @@ class DataType;
 class LinearAlloc;
 class Stmnts;
 
+// TODO: not a statement, don't inherit from IStmnt
+
 /*
 Scope:
     Stmnts

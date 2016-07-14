@@ -1,15 +1,15 @@
 Module:
 	### TODO ### DeclDefs <EOF>
 
-### TODO ### DeclDefs:
-	### TODO ### DeclDef
-	### TODO ### DeclDef DeclDefs
+DeclDefs:
+	DeclDef
+	DeclDef DeclDefs
 
-### TODO ### DeclDef:
-	### TODO ### FunctionDef
+DeclDef:
+	Func
 
-### TODO ### FunctionDef:
-	### TODO ### func Identifier ( ) Scope end
+Func:
+	func Identifier ( ) Scope end
 
 Scope:
     Stmnts

@@ -482,7 +482,8 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         parseKeyword("loop", TokenType::kLoop) ||
         parseKeyword("repeat", TokenType::kRepeat) ||
         parseKeyword("scope", TokenType::kScope) ||
-        parseKeyword("nop", TokenType::kNop))
+        parseKeyword("nop", TokenType::kNop) ||
+        parseKeyword("func", TokenType::kFunc))
     {
         return ParseResult::kSuccess;
     }
