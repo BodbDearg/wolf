@@ -2,20 +2,22 @@
 Multi line comment Blah, blah 
 blah Blah blah blah Blah blah 
 ;/
-loop
-	; Ask the user for input
-	; If input is <= 0 then we will exit 
-	scope
-		print("Hello, enter <= 0 to exit! 👻 : ")
-		var num = readnum()
+func main()
+	loop
+		; Ask the user for input
+		; If input is <= 0 then we will exit 
+		scope
+			print("Hello, enter <= 0 to exit! 👻 : ")
+			var num = readnum()
 
-		if num <= 0
-			break
+			if num <= 0
+				break
+			end
 		end
+
+		print("You chose to continue!")
 	end
 
-	print("You chose to continue!")
+	; Nonsense
+	print("Wasn't that nice?! 😍")
 end
-
-; Nonsense
-print("Wasn't that nice?! 😍")

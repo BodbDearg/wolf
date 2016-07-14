@@ -10,12 +10,12 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
+class DeclDefs;
 class LinearAlloc;
-class Scope;
 
 /* 
 Module:
-    Scope <EOF>
+    DeclDefs <EOF>
 */
 class Module : public ASTNode {
 public:
@@ -27,7 +27,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    // FIXME: change this to return a new module, similar to other ASTNodes
+    // TODO: change this to return a new module, similar to other ASTNodes
     /* Parse the code for the module from the given token array */
     bool parseCode(const Token * tokenList, LinearAlloc & alloc);
     
@@ -42,7 +42,7 @@ public:
     
     llvm::LLVMContext &             mLLVMCtx;
     std::unique_ptr<llvm::Module>   mLLVMMod;
-    Scope *                         mScope = nullptr;
+    DeclDefs *                      mDeclDefs = nullptr;
 };
 
 WC_END_NAMESPACE

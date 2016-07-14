@@ -8,8 +8,9 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
 WC_THIRD_PARTY_INCLUDES_END
 
 namespace llvm {
-    class Module;
+    class BasicBlock;
     class LLVMContext;
+    class Module;
 }
 
 WC_BEGIN_NAMESPACE
@@ -30,6 +31,15 @@ struct CodegenCtx {
         WC_EMPTY_FUNC_BODY();
     }
     
+    /* Push the current codegen basic block to the stack and save for later popping. */
+    void pushInsertBlock();
+    
+    /**
+     * Pop a previous insert block from the stack.
+     * There MUST be an insert block on the stack, assumes this is the case (undefined behavior otherwise).
+     */
+    void popInsertBlock();
+    
     /* The llvm context. */
     llvm::LLVMContext & llvmCtx;
     
@@ -38,6 +48,9 @@ struct CodegenCtx {
     
     /* Reference to the llvm module being compiled. */
     llvm::Module & module;
+    
+    /* A stack of code insert blocks pushed/saved for later restoring. */
+    std::vector<llvm::BasicBlock*> insertBlockStack;
     
     /**
      * A stack of AST nodes that will have deferred code generation performed.

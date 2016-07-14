@@ -1,4 +1,6 @@
 #include "WCFunc.hpp"
+#include "WCCodegenCtx.hpp"
+#include "WCIDeferredCodegenStmnt.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCScope.hpp"
@@ -82,8 +84,48 @@ const Token & Func::getEndToken() const {
 }
 
 bool Func::codegen(CodegenCtx & cgCtx) {
-    // TODO
-    return false;
+    // TODO: check for duplicate function definitions
+    
+    // Create the function signature:
+    // TODO: support return types and arguments
+    // TODO: support varargs
+    llvm::FunctionType * fnType = llvm::FunctionType::get(llvm::Type::getVoidTy(cgCtx.llvmCtx), {}, false);
+    
+    // Create the function object itself
+    // TODO: support different linkage types
+    llvm::Function * fn = llvm::Function::Create(fnType,
+                                                 llvm::Function::ExternalLinkage,
+                                                 mIdentifier.name(),
+                                                 &cgCtx.module);
+    
+    // Create the function entry block and set it as the insert point for ir builder
+    llvm::BasicBlock * fnEntryBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "func_entry_block", fn);
+    cgCtx.irBuilder.SetInsertPoint(fnEntryBlock);
+    
+    // Do basic forward code generation (most code is generated this way):
+    if (!mScope.codegenStmnt(cgCtx)) {
+        return false;
+    }
+    
+    // Do deferred code generation for 'next', 'break' and 'return' statements.
+    // Note: need to push and pop current insert block because this process may modify insert block:
+    cgCtx.pushInsertBlock();
+    
+    while (!cgCtx.deferredCodegenStmnts.empty()) {
+        IDeferredCodegenStmnt * stmnt = cgCtx.deferredCodegenStmnts.back();
+        cgCtx.deferredCodegenStmnts.pop_back();
+        
+        if (!stmnt->deferredCodegenStmnt(cgCtx)) {
+            return false;
+        }
+    }
+    
+    cgCtx.popInsertBlock();
+    
+    // Create the return from the function
+    // TODO: Support returning values
+    cgCtx.irBuilder.CreateRetVoid();
+    return true;
 }
 
 WC_END_NAMESPACE

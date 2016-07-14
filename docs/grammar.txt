@@ -1,5 +1,5 @@
 Module:
-	### TODO ### DeclDefs <EOF>
+	DeclDefs <EOF>
 
 DeclDefs:
 	DeclDef

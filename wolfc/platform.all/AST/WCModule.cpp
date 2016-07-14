@@ -1,9 +1,7 @@
 #include "WCModule.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCIDeferredCodegenStmnt.hpp"
-#include "WCLinearAlloc.hpp"
-#include "WCScope.hpp"
+#include "WCDeclDefs.hpp"
 #include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -22,23 +20,23 @@ Module::~Module() {
 }
 
 const Token & Module::getStartToken() const {
-    WC_ASSERT(mScope);
-    return mScope->getStartToken();
+    WC_ASSERT(mDeclDefs);
+    return mDeclDefs->getStartToken();
 }
 
 const Token & Module::getEndToken() const {
-    WC_ASSERT(mScope);
-    return mScope->getEndToken();
+    WC_ASSERT(mDeclDefs);
+    return mDeclDefs->getEndToken();
 }
 
 bool Module::parseCode(const Token * tokenList, LinearAlloc & alloc) {
-    mScope = Scope::parse(tokenList, alloc);
-    WC_GUARD(mScope, false);
-    mScope->mParent = this;
+    mDeclDefs = DeclDefs::parse(tokenList, alloc);
+    WC_GUARD(mDeclDefs, false);
+    mDeclDefs->mParent = this;
     
     if (tokenList->type != TokenType::kEOF) {
-        parseError(*tokenList, "Expected EOF after scope!");
-        mScope = nullptr;
+        parseError(*tokenList, "Expected EOF at end of module code!");
+        mDeclDefs = nullptr;
         return false;
     }
     
@@ -49,7 +47,7 @@ bool Module::generateCode() {
     // Clear out previous code and check we parsed ok
     mLLVMMod.reset();
     
-    if (!mScope) {
+    if (!mDeclDefs) {
         compileError("Can't generate code, parsing was not successful!");
         return false;
     }
@@ -81,47 +79,13 @@ bool Module::generateCode() {
     
     mLLVMMod->getOrInsertFunction("scanf", scanfFnType);
     
-    // Create the function for main
-    llvm::FunctionType * mainFnType = llvm::FunctionType::get(llvm::Type::getVoidTy(mLLVMCtx), {}, false);
-    llvm::Function * mainFn = llvm::Function::Create(mainFnType,
-                                                     llvm::Function::ExternalLinkage,
-                                                     "main",
-                                                     mLLVMMod.get());
-    
-    // Create the block for main and set it as the insert point for ir builder
-    llvm::BasicBlock * mainBlock = llvm::BasicBlock::Create(mLLVMCtx, "main_fn_block", mainFn);
-    irBuilder.SetInsertPoint(mainBlock);
-    
-    // Generate the code
-    {
-        // Do basic forward code generation (most code is generated this way):
-        CodegenCtx codegenCtx(mLLVMCtx, irBuilder, *mLLVMMod);
-        
-        if (!mScope->codegenStmnt(codegenCtx)) {
-            return false;
-        }
-        
-        // Do deferred code generation for 'next', 'break' and 'return' statements:
-        llvm::BasicBlock * prevInsertBlock = irBuilder.GetInsertBlock();
-        
-        while (!codegenCtx.deferredCodegenStmnts.empty()) {
-            IDeferredCodegenStmnt * stmnt = codegenCtx.deferredCodegenStmnts.back();
-            codegenCtx.deferredCodegenStmnts.pop_back();
-            
-            if (!stmnt->deferredCodegenStmnt(codegenCtx)) {
-                return false;
-            }
-        }
-        
-        irBuilder.SetInsertPoint(prevInsertBlock);
-    }
-    
-    // Create the return from the function
-    irBuilder.CreateRetVoid();
-    return true;
+    // Create the codegen context and generate code for the entire module
+    CodegenCtx codegenCtx(mLLVMCtx, irBuilder, *mLLVMMod);
+    return mDeclDefs->codegen(codegenCtx);
 }
 
 bool Module::wasCodeGeneratedOk() {
+    // FIXME: this can be not null and still not be generated ok
     return mLLVMMod.get() != nullptr;
 }
 
