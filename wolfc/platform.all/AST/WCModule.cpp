@@ -82,7 +82,7 @@ bool Module::generateCode() {
     mLLVMMod->getOrInsertFunction("scanf", scanfFnType);
     
     // Create the function for main
-    llvm::FunctionType * mainFnType = llvm::FunctionType::get(llvm::Type::getInt32Ty(mLLVMCtx), {}, false);
+    llvm::FunctionType * mainFnType = llvm::FunctionType::get(llvm::Type::getVoidTy(mLLVMCtx), {}, false);
     llvm::Function * mainFn = llvm::Function::Create(mainFnType,
                                                      llvm::Function::ExternalLinkage,
                                                      "main",
@@ -116,8 +116,8 @@ bool Module::generateCode() {
         irBuilder.SetInsertPoint(prevInsertBlock);
     }
     
-    // Return 0 for success
-    irBuilder.CreateRet(llvm::ConstantInt::get(llvm::Type::getInt32Ty(mLLVMCtx), 0));
+    // Create the return from the function
+    irBuilder.CreateRetVoid();
     return true;
 }
 
