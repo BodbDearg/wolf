@@ -1,5 +1,15 @@
 Module:
-    Scope <EOF>
+	### TODO ### DeclDefs <EOF>
+
+### TODO ### DeclDefs:
+	### TODO ### DeclDef
+	### TODO ### DeclDef DeclDefs
+
+### TODO ### DeclDef:
+	### TODO ### FunctionDef
+
+### TODO ### FunctionDef:
+	### TODO ### func Identifier ( ) Scope end
 
 Scope:
     Stmnts
@@ -98,18 +108,15 @@ UnaryExpr:
 
 ### TODO ### PostfixExpr:
 	### TODO ### PrimaryExpr
-	### TODO ### PrimaryExpr FunctionCall
+	### TODO ### PrimaryExpr FuncInvocation
 
-### TODO ### FunctionCall:
+### TODO ### FuncInvocation:
 	### TODO ### ()
-	### TODO ### (FunctionCallArgList)
+	### TODO ### (FuncInvocationArgList)
 
-### TODO ### FunctionCallArgList:
-	### TODO ### FunctionCallArg
-	### TODO ### FunctionCallArg, FunctionCallArgList
-
-### TODO ### FunctionCallArg:
-	### TODO ### PrimitiveType Identifier
+### TODO ### FuncInvocationArgList:
+	### TODO ### AssignExpr
+	### TODO ### AssignExpr, FuncInvocationArgList
 
 ### TODO ### PrimitiveType:
 	### TODO ### int
