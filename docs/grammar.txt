@@ -110,8 +110,8 @@ PostfixExpr:
 	PrimaryExpr
 	PrimaryExpr FuncInvocation
 
-### TODO ### FuncInvocation:
-	### TODO ### ()
+FuncInvocation:
+	()
 	### TODO ### (FuncInvocationArgList)
 
 ### TODO ### FuncInvocationArgList:

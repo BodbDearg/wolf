@@ -186,6 +186,10 @@ llvm::Value * PrimaryExprIdentifier::codegenExprEval(CodegenCtx & cgCtx) {
     return mIdent.codegenExprEval(cgCtx);
 }
 
+const char * PrimaryExprIdentifier::name() const {
+    return mIdent.name();
+}
+
 //-----------------------------------------------------------------------------
 // PrimaryExprReadnum
 //-----------------------------------------------------------------------------

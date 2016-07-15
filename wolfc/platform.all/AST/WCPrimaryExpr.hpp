@@ -105,6 +105,8 @@ public:
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
+    const char * name() const;
+    
     Identifier & mIdent;
 };
 

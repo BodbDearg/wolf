@@ -1,23 +1,19 @@
 /; 
-Multi line comment Blah, blah 
-blah Blah blah blah Blah blah 
+This function does an input loop.
+This also tests multi line comments.
 ;/
-func main()
+func inputLoop()
+	; Keep asking the user for input
+	; If input is <= 0 then we will exit 
+	var num = 0
+
 	loop
-		; Ask the user for input
-		; If input is <= 0 then we will exit 
-		scope
-			print("Hello, enter <= 0 to exit! 👻 : ")
-			var num = readnum()
+		print("Hello, enter <= 0 to exit or anything else to see this again! 👻: ")
+		num = readnum()
+	repeat until num <= 0
+end
 
-			if num <= 0
-				break
-			end
-		end
-
-		print("You chose to continue!")
-	end
-
-	; Nonsense
-	print("Wasn't that nice?! 😍")
+func main()
+	inputLoop()
+	print("Wasn't that nice?! 😍\n")
 end
