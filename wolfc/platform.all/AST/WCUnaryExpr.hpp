@@ -8,13 +8,13 @@ WC_BEGIN_NAMESPACE
 class AssignExpr;
 class DataType;
 class LinearAlloc;
-class PrimaryExpr;
+class PostfixExpr;
 
 /*
 UnaryExpr:
-	PrimaryExpr
-	-PrimaryExpr
-	+PrimaryExpr
+	PostfixExpr
+	-PostfixExpr
+	+PostfixExpr
 	(AssignExpr)
 */
 class UnaryExpr : public ASTNode, public IExpr {
@@ -27,7 +27,7 @@ public:
 /* PrimaryExpr */
 class UnaryExprPrimary : public UnaryExpr {
 public:
-    UnaryExprPrimary(PrimaryExpr & expr);
+    UnaryExprPrimary(PostfixExpr & expr);
     
     virtual const Token & getStartToken() const override;
     
@@ -41,13 +41,13 @@ public:
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
-    PrimaryExpr & mExpr;
+    PostfixExpr & mExpr;
 };
 
 /* -PrimaryExpr */
-class UnaryExprNegPrimary : public UnaryExpr {
+class UnaryExprMinus : public UnaryExpr {
 public:
-    UnaryExprNegPrimary(PrimaryExpr & expr, const Token & startToken);
+    UnaryExprMinus(PostfixExpr & expr, const Token & startToken);
     
     virtual const Token & getStartToken() const override;
     
@@ -61,14 +61,14 @@ public:
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
-    PrimaryExpr &   mExpr;    
+    PostfixExpr &   mExpr;
     const Token &   mStartToken;
 };
 
 /* +PrimaryExpr */
-class UnaryExprPosPrimary : public UnaryExprPrimary {
+class UnaryExprPlus : public UnaryExprPrimary {
 public:
-    UnaryExprPosPrimary(PrimaryExpr & expr, const Token & startToken);
+    UnaryExprPlus(PostfixExpr & expr, const Token & startToken);
     
     virtual const Token & getStartToken() const override;
     

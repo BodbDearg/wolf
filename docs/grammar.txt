@@ -101,14 +101,14 @@ MulDivExpr:
 	UnaryExpr / MulDivExpr
 
 UnaryExpr:
-	PrimaryExpr
-	-PrimaryExpr
-	+PrimaryExpr
+	PostfixExpr
+	-PostfixExpr
+	+PostfixExpr
 	(AssignExpr)
 
-### TODO ### PostfixExpr:
-	### TODO ### PrimaryExpr
-	### TODO ### PrimaryExpr FuncInvocation
+PostfixExpr:
+	PrimaryExpr
+	PrimaryExpr FuncInvocation
 
 ### TODO ### FuncInvocation:
 	### TODO ### ()
