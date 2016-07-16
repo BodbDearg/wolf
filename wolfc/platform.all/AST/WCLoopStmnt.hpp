@@ -39,7 +39,7 @@ public:
     
     virtual llvm::BasicBlock * getBreakStmntTargetBlock() override;
     
-    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
+    virtual bool codegen(CodegenCtx & cgCtx) override;
     
     const Token &       mEndToken;
     llvm::BasicBlock *  mStartBB = nullptr;
@@ -62,7 +62,7 @@ public:
     
     virtual llvm::BasicBlock * getBreakStmntTargetBlock() override;
     
-    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
+    virtual bool codegen(CodegenCtx & cgCtx) override;
     
     /**
      * If true this is a loop 'until' statement rather than loop 'while'. In that case

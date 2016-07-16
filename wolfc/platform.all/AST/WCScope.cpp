@@ -29,8 +29,8 @@ const Token & Scope::getEndToken() const {
     return mStmnts.getEndToken();
 }
 
-bool Scope::codegenStmnt(CodegenCtx & cgCtx) {
-    return mStmnts.codegenStmnt(cgCtx);
+bool Scope::codegen(CodegenCtx & cgCtx) {
+    return mStmnts.codegen(cgCtx);
 }
 
 const DataValue * Scope::createVariable(const char * variableName,

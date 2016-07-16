@@ -103,7 +103,7 @@ llvm::BasicBlock * WhileStmnt::getBreakStmntTargetBlock() {
     return mEndBB;
 }
 
-bool WhileStmnt::codegenStmnt(CodegenCtx & cgCtx) {
+bool WhileStmnt::codegen(CodegenCtx & cgCtx) {
     // Grab the parent function
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
     WC_GUARD_ASSERT(parentFn, false);
@@ -126,7 +126,7 @@ bool WhileStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     // Codegen the 'body' block, this will go back up to the while condition block when done
     cgCtx.irBuilder.SetInsertPoint(bodyBB);
     
-    if (!mBodyScope.codegenStmnt(cgCtx)) {
+    if (!mBodyScope.codegen(cgCtx)) {
         return false;
     }
     

@@ -1,9 +1,6 @@
 #pragma once
 
-#pragma once
-
 #include "WCASTNode.hpp"
-#include "WCIDeferredCodegenStmnt.hpp"
 
 namespace llvm {
     class BasicBlock;
@@ -11,13 +8,14 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
+struct CodegenCtx;
 class LinearAlloc;
 
 /*
 BreakStmnt:
 	break
 */
-class BreakStmnt : public ASTNode, public IDeferredCodegenStmnt {
+class BreakStmnt : public ASTNode {
 public:
     static bool peek(const Token * tokenPtr);
     
@@ -29,9 +27,11 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
+    /* Do the basic forward codegen for the break statement. */
+    bool codegen(CodegenCtx & cgCtx);
     
-    virtual bool deferredCodegenStmnt(CodegenCtx & cgCtx) override;
+    /* Shouldn't be called directly. The break statement itself will schedule this. */
+    bool deferredCodegen(CodegenCtx & cgCtx);
     
     const Token &       mToken;
     llvm::BasicBlock * 	mBasicBlock = nullptr;

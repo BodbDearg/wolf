@@ -24,7 +24,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
+    virtual bool codegen(CodegenCtx & cgCtx) override;
     
     AssignExpr & mExpr;
     const Token & mStartToken;

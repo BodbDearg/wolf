@@ -109,7 +109,7 @@ llvm::BasicBlock * LoopStmntNoCond::getBreakStmntTargetBlock() {
     return mEndBB;
 }
 
-bool LoopStmntNoCond::codegenStmnt(CodegenCtx & cgCtx) {
+bool LoopStmntNoCond::codegen(CodegenCtx & cgCtx) {
     // Grab the parent function
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
     WC_GUARD_ASSERT(parentFn, false);
@@ -123,7 +123,7 @@ bool LoopStmntNoCond::codegenStmnt(CodegenCtx & cgCtx) {
     // Codegen the 'body' block, this will go back up to the start of itself when done
     cgCtx.irBuilder.SetInsertPoint(mStartBB);
     
-    if (!mBodyScope.codegenStmnt(cgCtx)) {
+    if (!mBodyScope.codegen(cgCtx)) {
         return false;
     }
     
@@ -168,7 +168,7 @@ llvm::BasicBlock * LoopStmntWithCond::getBreakStmntTargetBlock() {
     return mEndBB;
 }
 
-bool LoopStmntWithCond::codegenStmnt(CodegenCtx & cgCtx) {
+bool LoopStmntWithCond::codegen(CodegenCtx & cgCtx) {
     // Grab the parent function
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
     WC_GUARD_ASSERT(parentFn, false);
@@ -182,7 +182,7 @@ bool LoopStmntWithCond::codegenStmnt(CodegenCtx & cgCtx) {
     // Codegen the 'body' block, this will go back up to the start of itself when done
     cgCtx.irBuilder.SetInsertPoint(startBB);
     
-    if (!mBodyScope.codegenStmnt(cgCtx)) {
+    if (!mBodyScope.codegen(cgCtx)) {
         return false;
     }
     

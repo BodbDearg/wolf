@@ -166,7 +166,7 @@ const Token & IfStmntNoElse::getEndToken() const {
     return mEndToken;
 }
 
-bool IfStmntNoElse::codegenStmnt(CodegenCtx & cgCtx) {
+bool IfStmntNoElse::codegen(CodegenCtx & cgCtx) {
     // Generate the code for the if statement condition expression:
     llvm::Value * ifExprResult = codegenIfExpr(cgCtx);
     WC_GUARD(ifExprResult, false);
@@ -188,7 +188,7 @@ bool IfStmntNoElse::codegenStmnt(CodegenCtx & cgCtx) {
     // Codegen the 'then' block
     cgCtx.irBuilder.SetInsertPoint(thenBB);
     
-    if (!mThenScope.codegenStmnt(cgCtx)) {
+    if (!mThenScope.codegen(cgCtx)) {
         return false;
     }
     
@@ -231,7 +231,7 @@ const Token & IfStmntElseIf::getEndToken() const {
     return mElseIfStmnt.getEndToken();
 }
 
-bool IfStmntElseIf::codegenStmnt(CodegenCtx & cgCtx) {
+bool IfStmntElseIf::codegen(CodegenCtx & cgCtx) {
     // Generate the code for the if statement condition expression:
     llvm::Value * ifExprResult = codegenIfExpr(cgCtx);
     WC_GUARD(ifExprResult, false);
@@ -253,14 +253,14 @@ bool IfStmntElseIf::codegenStmnt(CodegenCtx & cgCtx) {
     // Codegen the 'then' block
     cgCtx.irBuilder.SetInsertPoint(thenBB);
     
-    if (!mThenScope.codegenStmnt(cgCtx)) {
+    if (!mThenScope.codegen(cgCtx)) {
         return false;
     }
     
     // Codegen the 'outer if' block
     cgCtx.irBuilder.SetInsertPoint(outerIfBB);
     
-    if (!mElseIfStmnt.codegenStmnt(cgCtx)) {
+    if (!mElseIfStmnt.codegen(cgCtx)) {
         return false;
     }
     
@@ -309,7 +309,7 @@ const Token & IfStmntElse::getEndToken() const {
     return mEndToken;
 }
     
-bool IfStmntElse::codegenStmnt(CodegenCtx & cgCtx) {
+bool IfStmntElse::codegen(CodegenCtx & cgCtx) {
     // Generate the code for the if statement condition expression:
     llvm::Value * ifExprResult = codegenIfExpr(cgCtx);
     WC_GUARD(ifExprResult, false);
@@ -332,7 +332,7 @@ bool IfStmntElse::codegenStmnt(CodegenCtx & cgCtx) {
     // Codegen the 'then' block
     cgCtx.irBuilder.SetInsertPoint(thenBB);
     
-    if (!mThenScope.codegenStmnt(cgCtx)) {
+    if (!mThenScope.codegen(cgCtx)) {
         return false;
     }
     
@@ -341,7 +341,7 @@ bool IfStmntElse::codegenStmnt(CodegenCtx & cgCtx) {
     // Codegen the 'else' block
     cgCtx.irBuilder.SetInsertPoint(elseBB);
     
-    if (!mElseScope.codegenStmnt(cgCtx)) {
+    if (!mElseScope.codegen(cgCtx)) {
         return false;
     }
     

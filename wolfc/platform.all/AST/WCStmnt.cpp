@@ -117,8 +117,8 @@ const Token & StmntNopStmnt::getEndToken() const {
     return mStmnt.getEndToken();
 }
 
-bool StmntNopStmnt::codegenStmnt(CodegenCtx & cgCtx) {
-    return mStmnt.codegenStmnt(cgCtx);
+bool StmntNopStmnt::codegen(CodegenCtx & cgCtx) {
+    return mStmnt.codegen(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -137,8 +137,8 @@ const Token & StmntPrintStmnt::getEndToken() const {
     return mStmnt.getEndToken();
 }
 
-bool StmntPrintStmnt::codegenStmnt(CodegenCtx & cgCtx) {
-    return mStmnt.codegenStmnt(cgCtx);
+bool StmntPrintStmnt::codegen(CodegenCtx & cgCtx) {
+    return mStmnt.codegen(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -157,8 +157,8 @@ const Token & StmntIfStmnt::getEndToken() const {
     return mIfStmnt.getEndToken();
 }
 
-bool StmntIfStmnt::codegenStmnt(CodegenCtx & cgCtx) {
-    return mIfStmnt.codegenStmnt(cgCtx);
+bool StmntIfStmnt::codegen(CodegenCtx & cgCtx) {
+    return mIfStmnt.codegen(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -177,8 +177,8 @@ const Token & StmntWhileStmnt::getEndToken() const {
     return mWhileStmnt.getEndToken();
 }
 
-bool StmntWhileStmnt::codegenStmnt(CodegenCtx & cgCtx) {
-    return mWhileStmnt.codegenStmnt(cgCtx);
+bool StmntWhileStmnt::codegen(CodegenCtx & cgCtx) {
+    return mWhileStmnt.codegen(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -197,8 +197,8 @@ const Token & StmntLoopStmnt::getEndToken() const {
     return mLoopStmnt.getEndToken();
 }
 
-bool StmntLoopStmnt::codegenStmnt(CodegenCtx & cgCtx) {
-    return mLoopStmnt.codegenStmnt(cgCtx);
+bool StmntLoopStmnt::codegen(CodegenCtx & cgCtx) {
+    return mLoopStmnt.codegen(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -217,8 +217,8 @@ const Token & StmntScopeStmnt::getEndToken() const {
     return mScopeStmnt.getEndToken();
 }
 
-bool StmntScopeStmnt::codegenStmnt(CodegenCtx & cgCtx) {
-    return mScopeStmnt.codegenStmnt(cgCtx);
+bool StmntScopeStmnt::codegen(CodegenCtx & cgCtx) {
+    return mScopeStmnt.codegen(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -237,8 +237,8 @@ const Token & StmntBreakStmnt::getEndToken() const {
     return mBreakStmnt.getEndToken();
 }
 
-bool StmntBreakStmnt::codegenStmnt(CodegenCtx & cgCtx) {
-    return mBreakStmnt.codegenStmnt(cgCtx);
+bool StmntBreakStmnt::codegen(CodegenCtx & cgCtx) {
+    return mBreakStmnt.codegen(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -257,8 +257,8 @@ const Token & StmntNextStmnt::getEndToken() const {
     return mNextStmnt.getEndToken();
 }
 
-bool StmntNextStmnt::codegenStmnt(CodegenCtx & cgCtx) {
-    return mNextStmnt.codegenStmnt(cgCtx);
+bool StmntNextStmnt::codegen(CodegenCtx & cgCtx) {
+    return mNextStmnt.codegen(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -277,8 +277,8 @@ const Token & StmntVarDecl::getEndToken() const {
     return mDecl.getEndToken();
 }
 
-bool StmntVarDecl::codegenStmnt(CodegenCtx & cgCtx) {
-    return mDecl.codegenStmnt(cgCtx);
+bool StmntVarDecl::codegen(CodegenCtx & cgCtx) {
+    return mDecl.codegen(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -297,7 +297,7 @@ const Token & StmntAssignExpr::getEndToken() const {
     return mExpr.getEndToken();
 }
     
-bool StmntAssignExpr::codegenStmnt(CodegenCtx & cgCtx) {
+bool StmntAssignExpr::codegen(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx) != nullptr;
 }
 

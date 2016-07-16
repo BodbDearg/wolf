@@ -41,7 +41,7 @@ const Token & NextStmnt::getEndToken() const {
     return mToken;
 }
 
-bool NextStmnt::codegenStmnt(CodegenCtx & cgCtx) {
+bool NextStmnt::codegen(CodegenCtx & cgCtx) {
     // Grab the parent function
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
     WC_ASSERT(parentFn);
@@ -55,13 +55,13 @@ bool NextStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     
     // Must defer the rest of the code generation until later
     cgCtx.deferredCodegenCallbacks.push_back([=](CodegenCtx & deferredCgCtx){
-        return deferredCodegenStmnt(deferredCgCtx);
+        return deferredCodegen(deferredCgCtx);
     });
     
     return true;
 }
 
-bool NextStmnt::deferredCodegenStmnt(CodegenCtx & cgCtx) {
+bool NextStmnt::deferredCodegen(CodegenCtx & cgCtx) {
     // Get the parent repeatable statement:
     IRepeatableStmnt * parentRepeatableStmnt = firstParentOfType<IRepeatableStmnt>();
     

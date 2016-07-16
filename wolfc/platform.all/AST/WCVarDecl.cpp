@@ -60,7 +60,7 @@ const Token & VarDecl::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool VarDecl::codegenStmnt(CodegenCtx & cgCtx) {
+bool VarDecl::codegen(CodegenCtx & cgCtx) {
     // Grab the parent scope
     Scope * parentScope = getParentScope();
     

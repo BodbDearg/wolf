@@ -30,7 +30,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
+    virtual bool codegen(CodegenCtx & cgCtx) override;
     
     /* Create a variable within this scope. If the variable already exists then creation fails and null is returned. */
     const DataValue * createVariable(const char * variableName,

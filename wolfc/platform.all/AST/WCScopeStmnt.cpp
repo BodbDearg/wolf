@@ -63,7 +63,7 @@ const Token & ScopeStmnt::getEndToken() const {
     return mEndToken;
 }
 
-bool ScopeStmnt::codegenStmnt(CodegenCtx & cgCtx) {
+bool ScopeStmnt::codegen(CodegenCtx & cgCtx) {
     // Grab the parent function
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
     WC_GUARD_ASSERT(parentFn, false);
@@ -77,7 +77,7 @@ bool ScopeStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     // Codegen the main body scope:
     cgCtx.irBuilder.SetInsertPoint(startBB);
     
-    if (!mBodyScope.codegenStmnt(cgCtx)) {
+    if (!mBodyScope.codegen(cgCtx)) {
         return false;
     }
     

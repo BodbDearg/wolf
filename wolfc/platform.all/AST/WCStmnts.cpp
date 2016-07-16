@@ -51,8 +51,8 @@ const Token & StmntsSingle::getEndToken() const {
     return mStmnt.getEndToken();
 }
 
-bool StmntsSingle::codegenStmnt(CodegenCtx & cgCtx) {
-    return mStmnt.codegenStmnt(cgCtx);
+bool StmntsSingle::codegen(CodegenCtx & cgCtx) {
+    return mStmnt.codegen(cgCtx);
 };
 
 //-----------------------------------------------------------------------------
@@ -75,9 +75,9 @@ const Token & StmntsMulti::getEndToken() const {
     return mRightStmnts.getEndToken();
 }
 
-bool StmntsMulti::codegenStmnt(CodegenCtx & cgCtx) {
-    WC_GUARD(mLeftStmnt.codegenStmnt(cgCtx), false);
-    WC_GUARD(mRightStmnts.codegenStmnt(cgCtx), false);
+bool StmntsMulti::codegen(CodegenCtx & cgCtx) {
+    WC_GUARD(mLeftStmnt.codegen(cgCtx), false);
+    WC_GUARD(mRightStmnts.codegen(cgCtx), false);
     return true;
 }
 

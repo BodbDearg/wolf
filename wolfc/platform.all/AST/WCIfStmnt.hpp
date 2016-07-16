@@ -59,7 +59,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
+    virtual bool codegen(CodegenCtx & cgCtx) override;
     
     const Token & mEndToken;
 };
@@ -74,7 +74,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
+    virtual bool codegen(CodegenCtx & cgCtx) override;
     
     IfStmnt & mElseIfStmnt;
 };
@@ -90,7 +90,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual bool codegenStmnt(CodegenCtx & cgCtx) override;
+    virtual bool codegen(CodegenCtx & cgCtx) override;
     
     Scope &         mElseScope;
     const Token &   mEndToken;

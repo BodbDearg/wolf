@@ -145,7 +145,7 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     cgCtx.irBuilder.SetInsertPoint(fnEntryBlock);
     
     // Do basic forward code generation (most code is generated this way):
-    if (!mScope.codegenStmnt(cgCtx)) {
+    if (!mScope.codegen(cgCtx)) {
         return false;
     }
     

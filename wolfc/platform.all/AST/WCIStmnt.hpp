@@ -15,11 +15,8 @@ class IStmnt {
 public:
     virtual ~IStmnt() = default;
     
-    /**
-     * Generate the llvm code for this statement.
-     * Returns true on success or false on failure.
-     */
-    virtual bool codegenStmnt(CodegenCtx & cgCtx) = 0;
+    /* Generate the llvm code for this statement. Returns true on success or false on failure. */
+    virtual bool codegen(CodegenCtx & cgCtx) = 0;
 };
 
 WC_END_NAMESPACE
