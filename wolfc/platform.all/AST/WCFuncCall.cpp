@@ -28,7 +28,7 @@ FuncCall * FuncCall::parse(const Token *& currentToken, LinearAlloc & alloc) {
         WC_GUARD(argList, nullptr);
     }
     
-    // Expect '('
+    // Expect ')'
     if (currentToken->type != TokenType::kRParen) {
         parseError(*currentToken, "Expected ')' !");
         return nullptr;
