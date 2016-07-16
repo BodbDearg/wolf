@@ -15,8 +15,8 @@ Func:
 	### TODO ### FuncArg
 	### TODO ### FuncArg , FuncArgList
 
-### TODO ### FuncArg:
-	### TODO ### PrimType Identifier
+FuncArg:
+	PrimitiveType Identifier
 
 PrimitiveType:
 	void|int|bool|string
