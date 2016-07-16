@@ -11,6 +11,14 @@ bool UnknownDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const UnknownDataType*>(&other) != nullptr;
 }
 
+bool UnknownDataType::isValid() const {
+    return false;   // The unknown data type is the only type which is not valid
+}
+
+bool UnknownDataType::isSized() const {
+    return false;
+}
+
 llvm::Type * UnknownDataType::llvmType(CodegenCtx & cgCtx) const {
     WC_UNUSED_PARAM(cgCtx);
     return nullptr;

@@ -461,11 +461,13 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         return true;
     };
     
-    if (parseKeyword("print", TokenType::kPrint) ||
-        parseKeyword("var", TokenType::kVar) ||
-        parseKeyword("readnum", TokenType::kReadnum) ||
-        parseKeyword("true", TokenType::kTrue) ||
+    if (parseKeyword("true", TokenType::kTrue) ||
         parseKeyword("false", TokenType::kFalse) ||
+        parseKeyword("void", TokenType::kVoid) ||
+        parseKeyword("int", TokenType::kInt) ||
+        parseKeyword("bool", TokenType::kBool) ||
+        parseKeyword("string", TokenType::kString) ||
+        parseKeyword("var", TokenType::kVar) ||
         parseKeyword("and", TokenType::kAnd) ||
         parseKeyword("or", TokenType::kOr) ||
         parseKeyword("not", TokenType::kNot) ||
@@ -483,7 +485,9 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         parseKeyword("repeat", TokenType::kRepeat) ||
         parseKeyword("scope", TokenType::kScope) ||
         parseKeyword("nop", TokenType::kNop) ||
-        parseKeyword("func", TokenType::kFunc))
+        parseKeyword("func", TokenType::kFunc)||
+        parseKeyword("print", TokenType::kPrint) ||
+        parseKeyword("readnum", TokenType::kReadnum))
     {
         return ParseResult::kSuccess;
     }

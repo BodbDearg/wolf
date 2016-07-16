@@ -24,6 +24,12 @@ public:
     /* Tells if this data type matches another. */
     virtual bool equals(const DataType & other) const = 0;
     
+    /* Tells if the data type is valid. Returns 'true' for all data types except 'unknown' */
+    virtual bool isValid() const;
+    
+    /* Utility. Tell if the data type occupies any space (size concept makes sense). */
+    virtual bool isSized() const = 0;
+    
     /**
      * Return the llvm type for this data type, or nullptr if there is no direct llvm type.
      * Note: the code generation context is required to get this info.

@@ -106,7 +106,10 @@ llvm::Value * PostfixExprFuncInvocation::codegenAddrOf(CodegenCtx & cgCtx) {
 }
 
 llvm::Value * PostfixExprFuncInvocation::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: support member function calls (some day)
+    // TODO: support member function calls on this object (some day)
+    // TODO: support member function calls on another object (some day)
+    // TODO: support lambda calls (some day)
+    // TODO: support built in functions on basic types (somenum.isNan() etc.)
     PrimaryExprIdentifier * funcNameIdentifier = dynamic_cast<PrimaryExprIdentifier*>(&mExpr);
     
     if (!funcNameIdentifier) {

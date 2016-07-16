@@ -2,6 +2,7 @@
 #include "WCBoolDataType.hpp"
 #include "WCIntDataType.hpp"
 #include "WCStrDataType.hpp"
+#include "WCToken.hpp"
 #include "WCUnknownDataType.hpp"
 #include "WCVoidDataType.hpp"
 
@@ -12,7 +13,7 @@ static UnknownDataType  gUnknownDataType;
 static VoidDataType     gVoidDataType;
 static IntDataType      gIntDataType;
 static BoolDataType     gBoolDataType;
-static StrDataType      gStrDataType;
+static StrDataType      gStrDataType;   // TODO: remove, this is a temporary data type
 
 DataType & PrimitiveDataTypes::get(Type type) {
     switch (type) {
@@ -24,6 +25,20 @@ DataType & PrimitiveDataTypes::get(Type type) {
             
         // This is not a valid value!
         case Type::kNumTypes:
+            break;
+    }
+    
+    return gUnknownDataType;
+}
+
+DataType & PrimitiveDataTypes::dataTypeForLangKeyword(TokenType tokenType) {
+    switch (tokenType) {
+        case TokenType::kVoid: return gVoidDataType;
+        case TokenType::kInt: return gIntDataType;
+        case TokenType::kBool: return gBoolDataType;
+        case TokenType::kString: return gStrDataType;
+            
+        default:
             break;
     }
     

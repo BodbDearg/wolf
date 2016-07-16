@@ -11,6 +11,10 @@ bool VoidDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const VoidDataType*>(&other) != nullptr;
 }
 
+bool VoidDataType::isSized() const {
+    return false;
+}
+
 llvm::Type * VoidDataType::llvmType(CodegenCtx & cgCtx) const {
     WC_UNUSED_PARAM(cgCtx);
     return nullptr;

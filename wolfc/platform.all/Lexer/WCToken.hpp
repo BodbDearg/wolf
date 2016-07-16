@@ -56,5 +56,4 @@ struct Token {
     } data;
 };
 
-
 WC_END_NAMESPACE

@@ -2,17 +2,35 @@
 
 /* Enum representing the type of token */
 enum class TokenType {
+    /*=========================================================================
+    | Special / other
+    =========================================================================*/
+    
     /* End of file token. Always the last token in a sequence */
     kEOF,
-    /* Unsigned integer literal, like '01203'. The value is stored in the 'data' field as 'intVal'. */
-    kIntLit,
-    /* String literal, like "Hello World". The value is store in the 'data' field as 'strVal'. */
-    kStrLit,
     /**
      * A name/idenifier component for variables, function and class names etc.
      * The identifeir name is stored in the 'data' field as 'strVal'.
      */
     kIdentifier,
+    
+    /*=========================================================================
+    | Literals
+    =========================================================================*/
+    
+    /* Unsigned integer literal, like '01203'. The value is stored in the 'data' field as 'intVal'. */
+    kIntLit,
+    /* String literal, like "Hello World". The value is store in the 'data' field as 'strVal'. */
+    kStrLit,
+    /* 'true' keyword/bool-literal */
+    kTrue,
+    /* 'false' keyword/bool-literal */
+    kFalse,
+    
+    /*=========================================================================
+    | Tokens and operators
+    =========================================================================*/
+    
     /* '(' */
     kLParen,
     /* ')' */
@@ -33,12 +51,26 @@ enum class TokenType {
     kEquals,
     /* '!' */
     kExclamation,
+
+    /*=========================================================================
+    | Language keywords: data types
+    =========================================================================*/
+    
+    /* 'void' */
+    kVoid,
+    /* 'int' */
+    kInt,
+    /* 'bool' */
+    kBool,
+    /* 'string' */  // TODO: this is a temporary data type, will eventually be a built-in class
+    kString,
+    
+    /*=========================================================================
+    | Language keywords: general
+    =========================================================================*/
+    
     /* var */
     kVar,
-    /* true */
-    kTrue,
-    /* false */
-    kFalse,
     /* and */
     kAnd,
     /* or */
@@ -75,8 +107,8 @@ enum class TokenType {
     kNop,
     /* func */
     kFunc,
-    /* TEMPORARY: print */
+    /* 'print' */   // TODO: this is a temporary keyword, remove eventually
     kPrint,
-    /* TEMPORARY: readnum */
+    /* 'readnum' */ // TODO: this is a temporary keyword, remove eventually
     kReadnum,
 };

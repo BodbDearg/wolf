@@ -1,10 +1,12 @@
 #pragma once
 
 #include "WCMacros.hpp"
+#include "WCTokenType.hpp"
 
 WC_BEGIN_NAMESPACE
 
 class DataType;
+struct Token;
 
 /* Provides access to built-in compiler primitive data types */
 namespace PrimitiveDataTypes {
@@ -29,6 +31,12 @@ namespace PrimitiveDataTypes {
     
     /* Get a primitive data type. Will return the 'unknown' data type if the enum passed in is not valid. */
     DataType & get(Type type);
+    
+    /**
+     * Get the primitive data type for a given language keyword, specified as a lexer token type.
+     * Returns the 'unknown' data type if the keyword does not correspond to a valid data type.
+     */
+    DataType & dataTypeForLangKeyword(TokenType tokenType);
 }
 
 WC_END_NAMESPACE

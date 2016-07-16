@@ -15,6 +15,10 @@ bool StrDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const StrDataType*>(&other) != nullptr;
 }
 
+bool StrDataType::isSized() const {
+    return true;
+}
+
 llvm::Type * StrDataType::llvmType(CodegenCtx & cgCtx) const {
     return llvm::Type::getInt8PtrTy(cgCtx.llvmCtx);
 }

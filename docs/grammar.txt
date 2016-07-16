@@ -9,7 +9,17 @@ DeclDef:
 	Func
 
 Func:
-	func Identifier ( ) Scope end
+	### TODO ### func Identifier ( [FuncArgList] ) Scope end
+
+### TODO ### FuncArgList:
+	### TODO ### FuncArg
+	### TODO ### FuncArg , FuncArgList
+
+### TODO ### FuncArg:
+	### TODO ### PrimType Identifier
+
+PrimitiveType:
+	void|int|bool|string
 
 Scope:
     Stmnts
@@ -56,11 +66,11 @@ ScopeStmnt:
 
 BreakStmnt:
 	break
-### TODO ### break if|unless AssignExpr
+	### TODO ### break if|unless AssignExpr
 
 NextStmnt:
 	next
-### TODO ### next if|unless AssignExpr
+	### TODO ### next if|unless AssignExpr
 
 AssignExpr:
     OrExpr
@@ -117,11 +127,6 @@ FuncInvocation:
 ### TODO ### FuncInvocationArgList:
 	### TODO ### AssignExpr
 	### TODO ### AssignExpr, FuncInvocationArgList
-
-### TODO ### PrimitiveType:
-	### TODO ### int
-	### TODO ### bool
-	### TODO ### string
 
 PrimaryExpr:
 	IntLit
