@@ -9,7 +9,7 @@ DeclDef:
 	Func
 
 Func:
-	### TODO ### func Identifier ( [FuncArgList] ) Scope end
+	func Identifier ( [FuncArgList] ) Scope end
 
 FuncArgList:
 	FuncArg

@@ -1,17 +1,24 @@
 #pragma once
 
 #include "WCASTNode.hpp"
+#include <vector>
+
+namespace llvm {
+    class Type;
+}
 
 WC_BEGIN_NAMESPACE
 
 class CodegenCtx;
+class FuncArg;
+class FuncArgList;
 class Identifier;
 class LinearAlloc;
 class Scope;
 
 /*
 Func:
-	func Identifier ( ) Scope end
+	func Identifier ( [FuncArgList] ) Scope end
 */
 class Func : public ASTNode {
 public:
@@ -21,6 +28,7 @@ public:
     
     Func(const Token & startToken,
          Identifier & identifier,
+         FuncArgList * argList,
          Scope & scope,
          const Token & endToken);
     
@@ -30,8 +38,17 @@ public:
     
     bool codegen(CodegenCtx & cgCtx);
     
+    /**
+     * Get a list of llvm argument types for this function and save in the given list.
+     * Returns false on failure and issues a compile error.
+     */
+    bool determineLLVMArgTypes(CodegenCtx & cgCtx,
+                               std::vector<FuncArg*> & funcArgs,
+                               std::vector<llvm::Type*> & outputArgTypes) const;
+    
     const Token &   mStartToken;
     Identifier &    mIdentifier;
+    FuncArgList *   mArgList;
     Scope &         mScope;
     const Token &   mEndToken;
 };

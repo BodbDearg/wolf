@@ -13,6 +13,10 @@ func inputLoop()
 	repeat until num <= 0
 end
 
+func adder(int n1, int n2)
+	nop
+end
+
 func main()
 	inputLoop()
 	print("Wasn't that nice?! 😍\n")

@@ -1,5 +1,9 @@
 #include "WCFunc.hpp"
+#include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCDataType.hpp"
+#include "WCFuncArg.hpp"
+#include "WCFuncArgList.hpp"
 #include "WCIDeferredCodegenStmnt.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
@@ -35,6 +39,14 @@ Func * Func::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     
     ++tokenPtr; // Skip '('
     
+    // See if an argument list follows:
+    FuncArgList * argList = nullptr;
+    
+    if (FuncArgList::peek(tokenPtr)) {
+        argList = FuncArgList::parse(tokenPtr, alloc);
+        WC_GUARD(argList, nullptr);
+    }
+    
     // Expect ')'
     if (tokenPtr->type != TokenType::kRParen) {
         parseError(*tokenPtr, "')' expected to close args list of function!");
@@ -58,20 +70,33 @@ Func * Func::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     ++tokenPtr;
     
     // Done: return the parsed function
-    return WC_NEW_AST_NODE(alloc, Func, *startToken, *identifier, *scope, *endToken);
+    return WC_NEW_AST_NODE(alloc,
+                           Func,
+                           *startToken,
+                           *identifier,
+                           argList,
+                           *scope,
+                           *endToken);
 }
 
 Func::Func(const Token & startToken,
            Identifier & identifier,
+           FuncArgList * argList,
            Scope & scope,
            const Token & endToken)
 :
     mStartToken(startToken),
     mIdentifier(identifier),
+    mArgList(argList),
     mScope(scope),
     mEndToken(endToken)
 {
     mIdentifier.mParent = this;
+    
+    if (mArgList) {
+        mArgList->mParent = this;
+    }
+    
     mScope.mParent = this;
 }
 
@@ -86,10 +111,26 @@ const Token & Func::getEndToken() const {
 bool Func::codegen(CodegenCtx & cgCtx) {
     // TODO: check for duplicate function definitions
     
+    // Get the list of function args
+    std::vector<FuncArg*> funcArgs;
+    
+    if (mArgList) {
+        funcArgs.reserve(mArgList->numArgs());
+        mArgList->getArgs(funcArgs);
+    }
+    
+    // TODO: check for duplicate args
+    
+    // Get the llvm types for the function arguments
+    std::vector<llvm::Type*> fnArgTypesLLVM;
+    WC_GUARD(determineLLVMArgTypes(cgCtx, funcArgs, fnArgTypesLLVM), false);
+    
     // Create the function signature:
-    // TODO: support return types and arguments
+    // TODO: support return types
     // TODO: support varargs
-    llvm::FunctionType * fnType = llvm::FunctionType::get(llvm::Type::getVoidTy(cgCtx.llvmCtx), {}, false);
+    llvm::FunctionType * fnType = llvm::FunctionType::get(llvm::Type::getVoidTy(cgCtx.llvmCtx),
+                                                          fnArgTypesLLVM,
+                                                          false);
     
     // Create the function object itself
     // TODO: support different linkage types
@@ -125,6 +166,36 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     // Create the return from the function
     // TODO: Support returning values
     cgCtx.irBuilder.CreateRetVoid();
+    return true;
+}
+
+bool Func::determineLLVMArgTypes(CodegenCtx & cgCtx,
+                                 std::vector<FuncArg*> & funcArgs,
+                                 std::vector<llvm::Type*> & outputArgTypes) const
+{
+    // Convert to their llvm types:
+    for (FuncArg * arg : funcArgs) {
+        WC_ASSERT(arg);
+        const DataType & argDataType = arg->dataType();
+        
+        // Only valid, sized args type are allowed:
+        if (argDataType.isSized()) {
+            llvm::Type * llvmType = argDataType.llvmType(cgCtx);
+            
+            if (!llvmType) {
+                compileError("Failed to determine the llvm type for argument '%s'!", arg->name());
+                return false;
+            }
+            
+            outputArgTypes.push_back(llvmType);
+        }
+        else {
+            compileError("Invalid data type specified for argument '%s'!", arg->name());
+            return false;
+        }
+    }
+    
+    // All good!
     return true;
 }
 
