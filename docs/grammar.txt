@@ -124,9 +124,9 @@ FuncCall:
 	()
 	### TODO ### (FuncInvocationArgList)
 
-### TODO ### FuncInvocationArgList:
-	### TODO ### AssignExpr
-	### TODO ### AssignExpr, FuncInvocationArgList
+FuncCallArgList:
+	AssignExpr
+	AssignExpr, FuncCallArgList
 
 PrimaryExpr:
 	IntLit

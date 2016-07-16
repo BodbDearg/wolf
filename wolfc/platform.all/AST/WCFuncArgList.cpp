@@ -1,8 +1,6 @@
 #include "WCFuncArgList.hpp"
-#include "WCCodegenCtx.hpp"
 #include "WCFuncArg.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCStmnt.hpp"
 #include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
