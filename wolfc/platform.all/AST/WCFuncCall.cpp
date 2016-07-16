@@ -1,18 +1,18 @@
-#include "WCFuncInvocation.hpp"
+#include "WCFuncCall.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
-// FuncInvocation
+// FuncCall
 //-----------------------------------------------------------------------------
 
-bool FuncInvocation::peek(const Token * currentToken) {
+bool FuncCall::peek(const Token * currentToken) {
     return currentToken->type == TokenType::kLParen;
 }
 
-FuncInvocation * FuncInvocation::parse(const Token *& currentToken, LinearAlloc & alloc) {
+FuncCall * FuncCall::parse(const Token *& currentToken, LinearAlloc & alloc) {
     // Must open with '('
     if (currentToken->type != TokenType::kLParen) {
         parseError(*currentToken, "Expected '(' !");
@@ -36,25 +36,25 @@ FuncInvocation * FuncInvocation::parse(const Token *& currentToken, LinearAlloc 
     // TODO: function calls with args
     
     // No args:
-    return WC_NEW_AST_NODE(alloc, FuncInvocationNoArgs, *startToken, *endToken);
+    return WC_NEW_AST_NODE(alloc, FuncCallNoArgs, *startToken, *endToken);
 }
 
 //-----------------------------------------------------------------------------
-// FuncInvocationNoArgs
+// FuncCallNoArgs
 //-----------------------------------------------------------------------------
 
-FuncInvocationNoArgs::FuncInvocationNoArgs(const Token & startToken, const Token & endToken) :
+FuncCallNoArgs::FuncCallNoArgs(const Token & startToken, const Token & endToken) :
     mStartToken(startToken),
     mEndToken(endToken)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-const Token & FuncInvocationNoArgs::getStartToken() const {
+const Token & FuncCallNoArgs::getStartToken() const {
     return mStartToken;
 }
 
-const Token & FuncInvocationNoArgs::getEndToken() const {
+const Token & FuncCallNoArgs::getEndToken() const {
     return mEndToken;
 }
 

@@ -118,9 +118,9 @@ UnaryExpr:
 
 PostfixExpr:
 	PrimaryExpr
-	PrimaryExpr FuncInvocation
+	PrimaryExpr FuncCall
 
-FuncInvocation:
+FuncCall:
 	()
 	### TODO ### (FuncInvocationArgList)
 

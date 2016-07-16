@@ -13,7 +13,7 @@ func inputLoop()
 	repeat until num <= 0
 end
 
-func adder(int n1, int n1)
+func adder(int n1, int n2)
 	nop
 end
 

@@ -8,20 +8,20 @@ class DataType;
 class LinearAlloc;
 
 /*
-FuncInvocation:
+FuncCall:
     ()
 */
-class FuncInvocation : public ASTNode {
+class FuncCall : public ASTNode {
 public:
     static bool peek(const Token * currentToken);
     
-    static FuncInvocation * parse(const Token *& currentToken, LinearAlloc & alloc);
+    static FuncCall * parse(const Token *& currentToken, LinearAlloc & alloc);
 };
 
 /* () */
-class FuncInvocationNoArgs : public FuncInvocation {
+class FuncCallNoArgs : public FuncCall {
 public:
-    FuncInvocationNoArgs(const Token & startToken, const Token & endToken);
+    FuncCallNoArgs(const Token & startToken, const Token & endToken);
     
     virtual const Token & getStartToken() const override;
     

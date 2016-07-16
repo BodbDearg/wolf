@@ -1,7 +1,7 @@
 #include "WCPostfixExpr.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCFuncInvocation.hpp"
+#include "WCFuncCall.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCPrimaryExpr.hpp"
@@ -27,11 +27,11 @@ PostfixExpr * PostfixExpr::parse(const Token *& currentToken, LinearAlloc & allo
     PrimaryExpr * expr = PrimaryExpr::parse(currentToken, alloc);
     WC_GUARD(expr, nullptr);
     
-    // See if function invocation follows:
-    if (FuncInvocation::peek(currentToken)) {
-        FuncInvocation * funcInvocation = FuncInvocation::parse(currentToken, alloc);
-        WC_GUARD(funcInvocation, nullptr);
-        return WC_NEW_AST_NODE(alloc, PostfixExprFuncInvocation, *expr, *funcInvocation);
+    // See if function call follows:
+    if (FuncCall::peek(currentToken)) {
+        FuncCall * funcCall = FuncCall::parse(currentToken, alloc);
+        WC_GUARD(funcCall, nullptr);
+        return WC_NEW_AST_NODE(alloc, PostfixExprFuncCall, *expr, *funcCall);
     }
     
     // No postfix, basic primary expression:
@@ -74,38 +74,38 @@ llvm::Value * PostfixExprNoPostfix::codegenExprEval(CodegenCtx & cgCtx) {
 // PostfixExprFuncInvocation
 //-----------------------------------------------------------------------------
 
-PostfixExprFuncInvocation::PostfixExprFuncInvocation(PrimaryExpr & expr, FuncInvocation & funcInvocation) :
+PostfixExprFuncCall::PostfixExprFuncCall(PrimaryExpr & expr, FuncCall & funcCall) :
     mExpr(expr),
-    mFuncInvocation(funcInvocation)
+    mFuncCall(funcCall)
 {
     mExpr.mParent = this;
-    mFuncInvocation.mParent = this;
+    mFuncCall.mParent = this;
 }
 
-const Token & PostfixExprFuncInvocation::getStartToken() const {
+const Token & PostfixExprFuncCall::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & PostfixExprFuncInvocation::getEndToken() const {
-    return mFuncInvocation.getEndToken();
+const Token & PostfixExprFuncCall::getEndToken() const {
+    return mFuncCall.getEndToken();
 }
 
-bool PostfixExprFuncInvocation::isLValue() const {
+bool PostfixExprFuncCall::isLValue() const {
     return false;
 }
 
-const DataType & PostfixExprFuncInvocation::dataType() const {
+const DataType & PostfixExprFuncCall::dataType() const {
     // TODO: support return types other than void
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kVoid);
 }
 
-llvm::Value * PostfixExprFuncInvocation::codegenAddrOf(CodegenCtx & cgCtx) {
+llvm::Value * PostfixExprFuncCall::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
 }
 
-llvm::Value * PostfixExprFuncInvocation::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * PostfixExprFuncCall::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: support member function calls on this object (some day)
     // TODO: support member function calls on another object (some day)
     // TODO: support lambda calls (some day)

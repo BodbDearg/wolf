@@ -6,9 +6,9 @@
 WC_BEGIN_NAMESPACE
 
 class DataType;
+class FuncCall;
 class LinearAlloc;
 class PrimaryExpr;
-class FuncInvocation;
 
 /*
 PostfixExpr:
@@ -42,10 +42,10 @@ public:
     PrimaryExpr & mExpr;
 };
 
-/* PrimaryExpr FuncInvocation */
-class PostfixExprFuncInvocation : public PostfixExpr {
+/* PrimaryExpr FuncCall */
+class PostfixExprFuncCall : public PostfixExpr {
 public:
-    PostfixExprFuncInvocation(PrimaryExpr & expr, FuncInvocation & funcInvocation);
+    PostfixExprFuncCall(PrimaryExpr & expr, FuncCall & funcInvocation);
     
     virtual const Token & getStartToken() const override;
     
@@ -59,8 +59,8 @@ public:
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
-    PrimaryExpr &       mExpr;
-    FuncInvocation &    mFuncInvocation;
+    PrimaryExpr &   mExpr;
+    FuncCall &      mFuncCall;
 };
 
 WC_END_NAMESPACE

@@ -66,7 +66,7 @@
 		1FCD4E0D1D0161A60076E358 /* WCIntDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD4E0B1D0161A60076E358 /* WCIntDataType.cpp */; };
 		1FCD4E101D016EAD0076E358 /* WCBoolLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD4E0E1D016EAD0076E358 /* WCBoolLit.cpp */; };
 		1FCF06FB1D38C51A00875428 /* WCPostfixExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCF06F91D38C51A00875428 /* WCPostfixExpr.cpp */; };
-		1FCF06FE1D38CB5A00875428 /* WCFuncInvocation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCF06FC1D38CB5A00875428 /* WCFuncInvocation.cpp */; };
+		1FCF06FE1D38CB5A00875428 /* WCFuncCall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCF06FC1D38CB5A00875428 /* WCFuncCall.cpp */; };
 		1FD4558E1CE2DC90005EB3C3 /* WCIntLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FD4558C1CE2DC90005EB3C3 /* WCIntLit.cpp */; };
 		1FD455911CE2F3BB005EB3C3 /* WCModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FD4558F1CE2F3BB005EB3C3 /* WCModule.cpp */; };
 		1FD459AD1D04D07300F01435 /* WCRelExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FD459AB1D04D07300F01435 /* WCRelExpr.cpp */; };
@@ -198,8 +198,8 @@
 		1FCD4E0F1D016EAD0076E358 /* WCBoolLit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCBoolLit.hpp; sourceTree = "<group>"; };
 		1FCF06F91D38C51A00875428 /* WCPostfixExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCPostfixExpr.cpp; sourceTree = "<group>"; };
 		1FCF06FA1D38C51A00875428 /* WCPostfixExpr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCPostfixExpr.hpp; sourceTree = "<group>"; };
-		1FCF06FC1D38CB5A00875428 /* WCFuncInvocation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCFuncInvocation.cpp; sourceTree = "<group>"; };
-		1FCF06FD1D38CB5A00875428 /* WCFuncInvocation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCFuncInvocation.hpp; sourceTree = "<group>"; };
+		1FCF06FC1D38CB5A00875428 /* WCFuncCall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCFuncCall.cpp; sourceTree = "<group>"; };
+		1FCF06FD1D38CB5A00875428 /* WCFuncCall.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCFuncCall.hpp; sourceTree = "<group>"; };
 		1FD4558C1CE2DC90005EB3C3 /* WCIntLit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCIntLit.cpp; sourceTree = "<group>"; };
 		1FD4558D1CE2DC90005EB3C3 /* WCIntLit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCIntLit.hpp; sourceTree = "<group>"; };
 		1FD4558F1CE2F3BB005EB3C3 /* WCModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCModule.cpp; sourceTree = "<group>"; };
@@ -263,8 +263,8 @@
 				1F19FB311D39FBAA002D0EB2 /* WCFuncArg.hpp */,
 				1F19FB331D3A02F3002D0EB2 /* WCFuncArgList.cpp */,
 				1F19FB341D3A02F3002D0EB2 /* WCFuncArgList.hpp */,
-				1FCF06FC1D38CB5A00875428 /* WCFuncInvocation.cpp */,
-				1FCF06FD1D38CB5A00875428 /* WCFuncInvocation.hpp */,
+				1FCF06FC1D38CB5A00875428 /* WCFuncCall.cpp */,
+				1FCF06FD1D38CB5A00875428 /* WCFuncCall.hpp */,
 				1FABAE601D0CA4200024983E /* WCIDeferredCodegenStmnt.hpp */,
 				1F843D251CE97FE70065FB7A /* WCIdentifier.cpp */,
 				1F843D261CE97FE70065FB7A /* WCIdentifier.hpp */,
@@ -528,7 +528,7 @@
 				1FCD4DF71D0157C50076E358 /* WCPrimitiveDataTypes.cpp in Sources */,
 				1F59D4DF1CE45F1100B095AC /* WCCharUtils.cpp in Sources */,
 				1F7F6BB71CE6A10C002E9FA4 /* WCStmnts.cpp in Sources */,
-				1FCF06FE1D38CB5A00875428 /* WCFuncInvocation.cpp in Sources */,
+				1FCF06FE1D38CB5A00875428 /* WCFuncCall.cpp in Sources */,
 				1FD455911CE2F3BB005EB3C3 /* WCModule.cpp in Sources */,
 				1F231DBA1CE1D3220085E1C6 /* WCASTNode.cpp in Sources */,
 				1FCF06FB1D38C51A00875428 /* WCPostfixExpr.cpp in Sources */,
