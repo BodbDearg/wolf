@@ -132,22 +132,36 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     llvm::FunctionType * fnType = llvm::FunctionType::get(llvm::Type::getVoidTy(cgCtx.llvmCtx),
                                                           fnArgTypesLLVM,
                                                           false);
+    WC_ASSERT(fnType);
     
     // Create the function object itself
     // TODO: support different linkage types
-    llvm::Function * fn = llvm::Function::Create(fnType,
-                                                 llvm::Function::ExternalLinkage,
-                                                 mIdentifier.name(),
-                                                 &cgCtx.module);
+    mLLVMFunc = llvm::Function::Create(fnType,
+                                       llvm::Function::ExternalLinkage,
+                                       mIdentifier.name(),
+                                       &cgCtx.module);
+    
+    WC_ASSERT(mLLVMFunc);
+    
+    // Request deferred codegen for the function body. Will generate the body code for all functions
+    // after the function definitions themselves have been parsed...
+    cgCtx.deferredCodegenCallbacks.push_back([=](CodegenCtx & deferredCgCtx){
+        return deferredCodegen(deferredCgCtx);
+    });
+    
+    return true;    // All good!
+}
+
+bool Func::deferredCodegen(CodegenCtx & cgCtx) {
+    // This should NOT be null by the time this is called!
+    WC_ASSERT(mLLVMFunc);
     
     // Create the function entry block and set it as the insert point for ir builder
-    llvm::BasicBlock * fnEntryBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "func_entry_block", fn);
+    llvm::BasicBlock * fnEntryBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "func_entry_block", mLLVMFunc);
     cgCtx.irBuilder.SetInsertPoint(fnEntryBlock);
     
-    // Do basic forward code generation (most code is generated this way):
-    if (!mScope.codegen(cgCtx)) {
-        return false;
-    }
+    // Generate code for the function body
+    WC_GUARD(mScope.codegen(cgCtx), false);
     
     // Create the return from the function
     // TODO: Support returning values

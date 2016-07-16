@@ -5,6 +5,7 @@
 
 namespace llvm {
     class Type;
+    class Function;
 }
 
 WC_BEGIN_NAMESPACE
@@ -36,8 +37,11 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    /* Generate the actual code of the function. */
+    /* Forward code generation for the function. Just declares the llvm function in the module. */
     bool codegen(CodegenCtx & cgCtx);
+    
+    /* Deferred code generation for the function. Generate the actual function body. */
+    bool deferredCodegen(CodegenCtx & cgCtx);
     
     /**
      * Checks for duplicate argument names in the given args list and issues a compile
@@ -53,11 +57,12 @@ public:
                                const std::vector<FuncArg*> & funcArgs,
                                std::vector<llvm::Type*> & outputArgTypes) const;
     
-    const Token &   mStartToken;
-    Identifier &    mIdentifier;
-    FuncArgList *   mArgList;
-    Scope &         mScope;
-    const Token &   mEndToken;
+    const Token &       mStartToken;
+    Identifier &        mIdentifier;
+    FuncArgList *       mArgList;
+    Scope &             mScope;
+    const Token &       mEndToken;
+    llvm::Function *    mLLVMFunc = nullptr;
 };
 
 WC_END_NAMESPACE
