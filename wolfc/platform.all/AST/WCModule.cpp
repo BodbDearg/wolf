@@ -79,9 +79,27 @@ bool Module::generateCode() {
     
     mLLVMMod->getOrInsertFunction("scanf", scanfFnType);
     
-    // Create the codegen context and generate code for the entire module
+    // Create the codegen context
     CodegenCtx codegenCtx(mLLVMCtx, irBuilder, *mLLVMMod);
-    return mDeclDefs->codegen(codegenCtx);
+    
+    // Do the immediate forward code generation
+    WC_GUARD(mDeclDefs->codegen(codegenCtx), false);
+    
+    // Now do any deferred code generation that needs to be done.
+    // There may be multiple passes here for this loop:
+    while (!codegenCtx.deferredCodegenCallbacks.empty()) {
+        // Make a copy of the list because deferred codegen can itself cause more deferred codegen.
+        // Also clear the list so the callbacks can start generating their own deferred logic:
+        auto deferredCodegenCallbacks = codegenCtx.deferredCodegenCallbacks;
+        codegenCtx.deferredCodegenCallbacks.clear();
+        
+        // Do deferred codegen:
+        for (const auto & callback : deferredCodegenCallbacks) {
+            WC_GUARD(callback(codegenCtx), false);
+        }
+    }
+
+    return true;    // Suceeded!
 }
 
 bool Module::wasCodeGeneratedOk() {

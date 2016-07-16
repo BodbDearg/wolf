@@ -10,7 +10,11 @@ func inputLoop()
 	loop
 		print("Hello, enter <= 0 to exit or anything else to see this again! 👻: ")
 		num = readnum()
-	repeat until num <= 0
+
+		if num <= 0
+			break
+		end
+	end
 end
 
 func adder(int n1, int n2)

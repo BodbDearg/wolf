@@ -47,7 +47,7 @@ bool NextStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     WC_ASSERT(parentFn);
     
     // Save current insert block:
-    cgCtx.pushInsertBlock();
+    cgCtx.pushInsertBlock();    // TODO: still needed?
     
     // Create the basic block for this statement
     mBasicBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "NextStmnt:stmnt", parentFn);
@@ -57,8 +57,12 @@ bool NextStmnt::codegenStmnt(CodegenCtx & cgCtx) {
     cgCtx.irBuilder.CreateBr(mBasicBlock);
     
     // Must defer the rest of the code generation until later
-    cgCtx.deferredCodegenStmnts.push_back(this);
-    cgCtx.popInsertBlock();
+    cgCtx.deferredCodegenCallbacks.push_back([=](CodegenCtx & deferredCgCtx){
+        return deferredCodegenStmnt(deferredCgCtx);
+    });
+    
+    // Restore previous block:
+    cgCtx.popInsertBlock();     // TODO: still needed?
     return true;
 }
 

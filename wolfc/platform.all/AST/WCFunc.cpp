@@ -4,7 +4,6 @@
 #include "WCDataType.hpp"
 #include "WCFuncArg.hpp"
 #include "WCFuncArgList.hpp"
-#include "WCIDeferredCodegenStmnt.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCScope.hpp"
@@ -149,21 +148,6 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     if (!mScope.codegenStmnt(cgCtx)) {
         return false;
     }
-    
-    // Do deferred code generation for 'next', 'break' and 'return' statements.
-    // Note: need to push and pop current insert block because this process may modify insert block:
-    cgCtx.pushInsertBlock();
-    
-    while (!cgCtx.deferredCodegenStmnts.empty()) {
-        IDeferredCodegenStmnt * stmnt = cgCtx.deferredCodegenStmnts.back();
-        cgCtx.deferredCodegenStmnts.pop_back();
-        
-        if (!stmnt->deferredCodegenStmnt(cgCtx)) {
-            return false;
-        }
-    }
-    
-    cgCtx.popInsertBlock();
     
     // Create the return from the function
     // TODO: Support returning values
