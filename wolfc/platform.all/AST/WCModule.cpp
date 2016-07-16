@@ -2,6 +2,7 @@
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDeclDefs.hpp"
+#include "WCFunc.hpp"
 #include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -110,6 +111,23 @@ bool Module::wasCodeGeneratedOk() {
 void Module::dumpIRCodeToStdout() {
     WC_GUARD_ASSERT(mLLVMMod.get());
     mLLVMMod->dump();
+}
+
+bool Module::registerFunc(Func & func) {
+    std::string funcName = func.name();
+    
+    if (getFunc(funcName)) {
+        return false;
+    }
+    
+    mFuncs[funcName] = &func;
+    return true;
+}
+
+Func * Module::getFunc(const std::string & name) const {
+    auto iter = mFuncs.find(name);
+    WC_GUARD(iter != mFuncs.end(), nullptr);
+    return iter->second;
 }
 
 WC_END_NAMESPACE

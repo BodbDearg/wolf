@@ -2,6 +2,7 @@
 
 #include "WCASTNode.hpp"
 #include <memory>
+#include <map>
 
 namespace llvm {
     class LLVMContext;
@@ -11,6 +12,7 @@ namespace llvm {
 WC_BEGIN_NAMESPACE
 
 class DeclDefs;
+class Func;
 class LinearAlloc;
 
 /* 
@@ -40,9 +42,21 @@ public:
     /* Dump the generated LLVM IR code to stdout */
     void dumpIRCodeToStdout();
     
+    /** 
+     * Register a given function with the module.
+     * Returns false on failure if the function is already registered. 
+     */
+    bool registerFunc(Func & func);
+    
+    /* Lookup a module function by name. Returns nullptr if not found. */
+    Func * getFunc(const std::string & name) const;
+    
     llvm::LLVMContext &             mLLVMCtx;
     std::unique_ptr<llvm::Module>   mLLVMMod;
     DeclDefs *                      mDeclDefs = nullptr;
+    
+    /* A list of registered functions in the module. Generated during the compile phase. */
+    std::map<std::string, Func*> mFuncs;
 };
 
 WC_END_NAMESPACE

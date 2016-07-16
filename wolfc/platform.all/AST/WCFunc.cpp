@@ -6,6 +6,7 @@
 #include "WCFuncArgList.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCModule.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
 #include <set>
@@ -108,8 +109,19 @@ const Token & Func::getEndToken() const {
     return mEndToken;
 }
 
+const char * Func::name() const {
+    return mIdentifier.name();
+}
+
 bool Func::codegen(CodegenCtx & cgCtx) {
-    // TODO: check for duplicate function definitions
+    // Register the function with the parent module.
+    Module * module = firstParentOfType<Module>();
+    WC_ASSERT(module);
+    
+    if (!module->registerFunc(*this)) {
+        compileError("Duplicate function named '%s' defined!", name());
+        return false;
+    }
     
     // Get the list of function args
     std::vector<FuncArg*> funcArgs;

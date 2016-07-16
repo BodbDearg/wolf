@@ -1,3 +1,8 @@
+func main()
+	inputLoop()
+	print("Wasn't that nice?! 😍\n")
+end
+
 /; 
 This function does an input loop.
 This also tests multi line comments.
@@ -21,7 +26,4 @@ func adder(int n1, int n2)
 	nop
 end
 
-func main()
-	inputLoop()
-	print("Wasn't that nice?! 😍\n")
-end
+

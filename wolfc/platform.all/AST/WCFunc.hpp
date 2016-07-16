@@ -37,6 +37,8 @@ public:
     
     virtual const Token & getEndToken() const override;
     
+    const char * name() const;
+    
     /* Forward code generation for the function. Just declares the llvm function in the module. */
     bool codegen(CodegenCtx & cgCtx);
     
