@@ -1,12 +1,9 @@
 #include "WCFuncCall.hpp"
+#include "WCFuncCallArgList.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
-
-//-----------------------------------------------------------------------------
-// FuncCall
-//-----------------------------------------------------------------------------
 
 bool FuncCall::peek(const Token * currentToken) {
     return currentToken->type == TokenType::kLParen;
@@ -23,6 +20,14 @@ FuncCall * FuncCall::parse(const Token *& currentToken, LinearAlloc & alloc) {
     const Token * startToken = currentToken;
     ++currentToken;
     
+    // See if there is an arg list:
+    FuncCallArgList * argList = nullptr;
+    
+    if (FuncCallArgList::peek(currentToken)) {
+        argList = FuncCallArgList::parse(currentToken, alloc);
+        WC_GUARD(argList, nullptr);
+    }
+    
     // Expect '('
     if (currentToken->type != TokenType::kRParen) {
         parseError(*currentToken, "Expected ')' !");
@@ -33,28 +38,25 @@ FuncCall * FuncCall::parse(const Token *& currentToken, LinearAlloc & alloc) {
     const Token * endToken = currentToken;
     ++currentToken;
     
-    // TODO: function calls with args
-    
     // No args:
-    return WC_NEW_AST_NODE(alloc, FuncCallNoArgs, *startToken, *endToken);
+    return WC_NEW_AST_NODE(alloc, FuncCall, *startToken, argList, *endToken);
 }
 
-//-----------------------------------------------------------------------------
-// FuncCallNoArgs
-//-----------------------------------------------------------------------------
-
-FuncCallNoArgs::FuncCallNoArgs(const Token & startToken, const Token & endToken) :
+FuncCall::FuncCall(const Token & startToken, FuncCallArgList * argList, const Token & endToken) :
     mStartToken(startToken),
+    mArgList(argList),
     mEndToken(endToken)
 {
-    WC_EMPTY_FUNC_BODY();
+    if (mArgList) {
+        mArgList->mParent = this;
+    }
 }
 
-const Token & FuncCallNoArgs::getStartToken() const {
+const Token & FuncCall::getStartToken() const {
     return mStartToken;
 }
 
-const Token & FuncCallNoArgs::getEndToken() const {
+const Token & FuncCall::getEndToken() const {
     return mEndToken;
 }
 

@@ -121,8 +121,7 @@ PostfixExpr:
 	PrimaryExpr FuncCall
 
 FuncCall:
-	()
-	### TODO ### (FuncInvocationArgList)
+	( [FuncCallArgList] )
 
 FuncCallArgList:
 	AssignExpr
