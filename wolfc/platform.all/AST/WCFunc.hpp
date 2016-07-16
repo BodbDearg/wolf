@@ -36,6 +36,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
+    /* Generate the actual code of the function. */
     bool codegen(CodegenCtx & cgCtx);
     
     /**
