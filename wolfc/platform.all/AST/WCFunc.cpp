@@ -9,6 +9,7 @@
 #include "WCLinearAlloc.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
+#include <set>
 
 WC_BEGIN_NAMESPACE
 
@@ -119,7 +120,8 @@ bool Func::codegen(CodegenCtx & cgCtx) {
         mArgList->getArgs(funcArgs);
     }
     
-    // TODO: check for duplicate args
+    // Check for duplicate argument names
+    WC_GUARD(compileCheckForDuplicateArgNames(funcArgs), false);
     
     // Get the llvm types for the function arguments
     std::vector<llvm::Type*> fnArgTypesLLVM;
@@ -169,11 +171,29 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     return true;
 }
 
+bool Func::compileCheckForDuplicateArgNames(const std::vector<FuncArg*> & funcArgs) const {
+    // TODO: handle args without names
+    std::set<std::string> argNames;
+    
+    for (FuncArg * arg : funcArgs) {
+        WC_ASSERT(arg);
+        std::string argName = arg->name();
+        
+        if (argNames.count(argName) > 0) {
+            compileError("Duplicate argument named '%s' in function argument list!", argName.c_str());
+            return false;
+        }
+        
+        argNames.insert(argName);
+    }
+    
+    return true;    // All good!
+}
+
 bool Func::determineLLVMArgTypes(CodegenCtx & cgCtx,
-                                 std::vector<FuncArg*> & funcArgs,
+                                 const std::vector<FuncArg*> & funcArgs,
                                  std::vector<llvm::Type*> & outputArgTypes) const
 {
-    // Convert to their llvm types:
     for (FuncArg * arg : funcArgs) {
         WC_ASSERT(arg);
         const DataType & argDataType = arg->dataType();
@@ -195,8 +215,7 @@ bool Func::determineLLVMArgTypes(CodegenCtx & cgCtx,
         }
     }
     
-    // All good!
-    return true;
+    return true;    // All good!
 }
 
 WC_END_NAMESPACE

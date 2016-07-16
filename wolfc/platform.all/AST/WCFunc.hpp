@@ -39,11 +39,17 @@ public:
     bool codegen(CodegenCtx & cgCtx);
     
     /**
+     * Checks for duplicate argument names in the given args list and issues a compile
+     * error if dupes are found. Returns false if the check fails.
+     */
+    bool compileCheckForDuplicateArgNames(const std::vector<FuncArg*> & funcArgs) const;
+    
+    /**
      * Get a list of llvm argument types for this function and save in the given list.
      * Returns false on failure and issues a compile error.
      */
     bool determineLLVMArgTypes(CodegenCtx & cgCtx,
-                               std::vector<FuncArg*> & funcArgs,
+                               const std::vector<FuncArg*> & funcArgs,
                                std::vector<llvm::Type*> & outputArgTypes) const;
     
     const Token &   mStartToken;
