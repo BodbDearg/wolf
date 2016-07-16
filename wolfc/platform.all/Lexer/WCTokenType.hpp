@@ -51,6 +51,8 @@ enum class TokenType {
     kEquals,
     /* '!' */
     kExclamation,
+    /* ',' */
+    kComma,
 
     /*=========================================================================
     | Language keywords: data types

@@ -11,9 +11,9 @@ DeclDef:
 Func:
 	### TODO ### func Identifier ( [FuncArgList] ) Scope end
 
-### TODO ### FuncArgList:
-	### TODO ### FuncArg
-	### TODO ### FuncArg , FuncArgList
+FuncArgList:
+	FuncArg
+	FuncArg , FuncArgList
 
 FuncArg:
 	PrimitiveType Identifier

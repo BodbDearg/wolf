@@ -173,6 +173,7 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
         case '>': return parseBasicToken(TokenType::kGreaterThan, 1);
         case '=': return parseBasicToken(TokenType::kEquals, 1);
         case '!': return parseBasicToken(TokenType::kExclamation, 1);
+        case ',': return parseBasicToken(TokenType::kComma, 1);
             
         default:
             break;
