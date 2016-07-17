@@ -114,11 +114,13 @@ const char * Func::name() const {
 }
 
 size_t Func::numArgs() const {
-    if (mArgList) {
-        return mArgList->numArgs();
-    }
-    
-    return 0;
+    WC_GUARD(mArgList, 0);
+    return mArgList->numArgs();
+}
+
+void Func::getArgs(std::vector<FuncArg*> & args) const {
+    WC_GUARD(mArgList);
+    mArgList->getArgs(args);
 }
 
 bool Func::codegen(CodegenCtx & cgCtx) {

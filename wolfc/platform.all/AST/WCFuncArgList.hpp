@@ -21,7 +21,7 @@ public:
     
     virtual size_t numArgs() const = 0;
     
-    virtual void getArgs(std::vector<FuncArg*> & args) = 0;
+    virtual void getArgs(std::vector<FuncArg*> & args) const = 0;
 };
 
 /* FuncArg */
@@ -35,7 +35,7 @@ public:
     
     virtual size_t numArgs() const override;
     
-    virtual void getArgs(std::vector<FuncArg*> & args) override;
+    virtual void getArgs(std::vector<FuncArg*> & args) const override;
     
     FuncArg & mArg;
 };
@@ -51,7 +51,7 @@ public:
     
     virtual size_t numArgs() const override;
     
-    virtual void getArgs(std::vector<FuncArg*> & args) override;
+    virtual void getArgs(std::vector<FuncArg*> & args) const override;
     
     FuncArg &       mArg;
     FuncArgList &   mArgList;

@@ -1,7 +1,10 @@
 #include "WCPostfixExpr.hpp"
 #include "WCAssert.hpp"
+#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCDataType.hpp"
 #include "WCFunc.hpp"
+#include "WCFuncArg.hpp"
 #include "WCFuncCall.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
@@ -132,18 +135,37 @@ llvm::Value * PostfixExprFuncCall::codegenExprEval(CodegenCtx & cgCtx) {
     }
     
     // Verify the number of arguments being given to the function is correct:
-    size_t funcNumArgs = func->numArgs();
-    size_t callNumArgs = mFuncCall.numArgs();
+    std::vector<FuncArg*> funcArgs;
+    func->getArgs(funcArgs);
     
-    if (funcNumArgs != callNumArgs) {
+    std::vector<AssignExpr*> callArgs;
+    mFuncCall.getArgs(callArgs);
+    size_t numFuncArgs = funcArgs.size();
+    
+    if (numFuncArgs != callArgs.size()) {
         compileError("Invalid number of argumenst for function call! Expected %zu instead of %zu!",
-                     funcNumArgs,
-                     callNumArgs);
+                     numFuncArgs,
+                     callArgs.size());
         
         return nullptr;
     }
     
-    // TODO: verify the type of the args is correct
+    // Verify the type of each argument is correct:
+    for (size_t i = 0; i < numFuncArgs; ++i) {
+        const DataType & funcArgDataType = funcArgs[i]->dataType();
+        const DataType & callArgDataType = callArgs[i]->dataType();
+        
+        // TODO: support auto promotion
+        if (!funcArgDataType.equals(callArgDataType)) {
+            compileError("Type for arg number '%zu' in function call is invalid! Expected '%s' "
+                         "but instead got '%s'!",
+                         i + 1,
+                         funcArgDataType.name(),
+                         callArgDataType.name());
+            
+            return nullptr;
+        }
+    }
     
     // Generate the code for the arguments list of the function call:
     WC_GUARD(mFuncCall.codegenArgsListExprs(cgCtx), nullptr);

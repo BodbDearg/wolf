@@ -62,11 +62,13 @@ const Token & FuncCall::getEndToken() const {
 }
 
 size_t FuncCall::numArgs() const {
-    if (mArgList) {
-        return mArgList->numArgs();
-    }
-    
-    return 0;
+    WC_GUARD(mArgList, 0);
+    return mArgList->numArgs();
+}
+
+void FuncCall::getArgs(std::vector<AssignExpr*> & args) const {
+    WC_GUARD(mArgList);
+    mArgList->getArgs(args);
 }
 
 bool FuncCall::codegenArgsListExprs(CodegenCtx & cgCtx) {

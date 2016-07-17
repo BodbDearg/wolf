@@ -55,7 +55,7 @@ size_t FuncCallArgListSingle::numArgs() const {
     return 1;
 }
 
-void FuncCallArgListSingle::getArgs(std::vector<AssignExpr*> & args) {
+void FuncCallArgListSingle::getArgs(std::vector<AssignExpr*> & args) const {
     args.push_back(&mExpr);
 }
 
@@ -83,7 +83,7 @@ size_t FuncCallArgListMulti::numArgs() const {
     return 1 + mArgList.numArgs();
 }
 
-void FuncCallArgListMulti::getArgs(std::vector<AssignExpr*> & args) {
+void FuncCallArgListMulti::getArgs(std::vector<AssignExpr*> & args) const {
     args.push_back(&mExpr);
     mArgList.getArgs(args);
 }

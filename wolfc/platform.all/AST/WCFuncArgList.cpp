@@ -55,7 +55,7 @@ size_t FuncArgListSingle::numArgs() const {
     return 1;
 }
 
-void FuncArgListSingle::getArgs(std::vector<FuncArg*> & args) {
+void FuncArgListSingle::getArgs(std::vector<FuncArg*> & args) const {
     args.push_back(&mArg);
 }
 
@@ -83,7 +83,7 @@ size_t FuncArgListMulti::numArgs() const {
     return 1 + mArgList.numArgs();
 }
 
-void FuncArgListMulti::getArgs(std::vector<FuncArg*> & args) {
+void FuncArgListMulti::getArgs(std::vector<FuncArg*> & args) const {
     args.push_back(&mArg);
     mArgList.getArgs(args);
 }

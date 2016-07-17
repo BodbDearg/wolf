@@ -41,6 +41,8 @@ public:
     
     size_t numArgs() const;
     
+    void getArgs(std::vector<FuncArg*> & args) const;
+    
     /* Forward code generation for the function. Just declares the llvm function in the module. */
     bool codegen(CodegenCtx & cgCtx);
     

@@ -21,7 +21,7 @@ public:
     
     virtual size_t numArgs() const = 0;
     
-    virtual void getArgs(std::vector<AssignExpr*> & args) = 0;
+    virtual void getArgs(std::vector<AssignExpr*> & args) const = 0;
 };
 
 /* AssignExpr */
@@ -35,7 +35,7 @@ public:
     
     virtual size_t numArgs() const override;
     
-    virtual void getArgs(std::vector<AssignExpr*> & args) override;
+    virtual void getArgs(std::vector<AssignExpr*> & args) const override;
     
     AssignExpr & mExpr;
 };
@@ -51,7 +51,7 @@ public:
     
     virtual size_t numArgs() const override;
     
-    virtual void getArgs(std::vector<AssignExpr*> & args) override;
+    virtual void getArgs(std::vector<AssignExpr*> & args) const override;
     
     AssignExpr &        mExpr;
     FuncCallArgList &   mArgList;
