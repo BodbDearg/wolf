@@ -1,6 +1,7 @@
 #include "WCReadnumExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCModule.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 
@@ -72,7 +73,7 @@ llvm::Value * ReadnumExpr::codegenAddrOf(CodegenCtx & cgCtx) {
 
 llvm::Value * ReadnumExpr::codegenExprEval(CodegenCtx & cgCtx) {
     // Get scanf
-    llvm::Constant * scanfFn = cgCtx.module.getFunction("scanf");
+    llvm::Constant * scanfFn = cgCtx.module.mLLVMModule->getFunction("scanf");
     
     if (!scanfFn) {
         compileError("Codegen failed! Can't find 'scanf' function!");

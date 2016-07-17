@@ -10,14 +10,12 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
 WC_THIRD_PARTY_INCLUDES_END
 
 namespace llvm {
-    class BasicBlock;
     class LLVMContext;
-    class Module;
 }
 
 WC_BEGIN_NAMESPACE
 
-class IDeferredCodegenStmnt;
+class Module;
 
 /* Struct holding the context for code generation */
 struct CodegenCtx {
@@ -31,7 +29,7 @@ struct CodegenCtx {
     /* Creates the codegen context from the given llvm objects */
     CodegenCtx(llvm::LLVMContext & llvmCtxIn,
                llvm::IRBuilder<> & irBuilderIn,
-               llvm::Module & moduleIn)
+               Module & moduleIn)
     :
         llvmCtx(llvmCtxIn),
         irBuilder(irBuilderIn),
@@ -55,8 +53,8 @@ struct CodegenCtx {
     /* The llvm IR builder object. Used for creating most instructions. */
     llvm::IRBuilder<> & irBuilder;
     
-    /* Reference to the llvm module being compiled. */
-    llvm::Module & module;
+    /* The AST node for the module. Also contains the llvm module object. */
+    Module & module;
     
     /* A stack of code insert blocks pushed/saved for later restoring. */
     std::vector<llvm::BasicBlock*> insertBlockStack;    // TODO: use the linear allocator for efficiency

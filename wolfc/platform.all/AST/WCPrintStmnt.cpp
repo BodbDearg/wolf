@@ -4,6 +4,7 @@
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCModule.hpp"
 #include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -68,7 +69,7 @@ const Token & PrintStmnt::getEndToken() const {
 
 bool PrintStmnt::codegen(CodegenCtx & cgCtx) {
     // Get printf
-    llvm::Constant * printfFn = cgCtx.module.getFunction("printf");
+    llvm::Constant * printfFn = cgCtx.module.mLLVMModule->getFunction("printf");
     
     if (!printfFn) {
         compileError("Codegen failed! Can't find 'printf' function!");

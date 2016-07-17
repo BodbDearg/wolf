@@ -46,7 +46,7 @@ bool Module::parseCode(const Token * tokenList, LinearAlloc & alloc) {
 
 bool Module::generateCode() {
     // Clear out previous code and check we parsed ok
-    mLLVMMod.reset();
+    mLLVMModule.reset();
     
     if (!mDeclDefs) {
         compileError("Can't generate code, parsing was not successful!");
@@ -55,7 +55,7 @@ bool Module::generateCode() {
     
     // TODO: alloc this memory with the linear allocator
     // Create module
-    mLLVMMod.reset(new llvm::Module("WolfTest", mLLVMCtx));
+    mLLVMModule.reset(new llvm::Module("WolfTest", mLLVMCtx));
     
     // The IR builder for the llvm compiler
     llvm::IRBuilder<> irBuilder(mLLVMCtx);
@@ -68,7 +68,7 @@ bool Module::generateCode() {
                                                                 },
                                                                 true);
     
-    mLLVMMod->getOrInsertFunction("printf", printfFnType);
+    mLLVMModule->getOrInsertFunction("printf", printfFnType);
     
     // Declare the c standard library function 'scanf'
     llvm::FunctionType * scanfFnType = llvm::FunctionType::get(llvm::Type::getInt32Ty(mLLVMCtx),
@@ -78,10 +78,10 @@ bool Module::generateCode() {
                                                                },
                                                                true);
     
-    mLLVMMod->getOrInsertFunction("scanf", scanfFnType);
+    mLLVMModule->getOrInsertFunction("scanf", scanfFnType);
     
     // Create the codegen context
-    CodegenCtx codegenCtx(mLLVMCtx, irBuilder, *mLLVMMod);
+    CodegenCtx codegenCtx(mLLVMCtx, irBuilder, *this);
     
     // Do the immediate forward code generation
     WC_GUARD(mDeclDefs->codegen(codegenCtx), false);
@@ -105,12 +105,12 @@ bool Module::generateCode() {
 
 bool Module::wasCodeGeneratedOk() {
     // FIXME: this can be not null and still not be generated ok
-    return mLLVMMod.get() != nullptr;
+    return mLLVMModule.get() != nullptr;
 }
 
 void Module::dumpIRCodeToStdout() {
-    WC_GUARD_ASSERT(mLLVMMod.get());
-    mLLVMMod->dump();
+    WC_GUARD_ASSERT(mLLVMModule.get());
+    mLLVMModule->dump();
 }
 
 bool Module::registerFunc(Func & func) {

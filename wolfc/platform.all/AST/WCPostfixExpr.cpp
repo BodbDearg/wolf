@@ -1,9 +1,11 @@
 #include "WCPostfixExpr.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCFunc.hpp"
 #include "WCFuncCall.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCModule.hpp"
 #include "WCPrimaryExpr.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
@@ -117,20 +119,21 @@ llvm::Value * PostfixExprFuncCall::codegenExprEval(CodegenCtx & cgCtx) {
         return nullptr;
     }
     
+    // Name of function to call:
     const char * funcName = funcNameIdentifier->name();
     WC_ASSERT(funcName);
     
     // Get the function to call:
-    llvm::Constant * func = cgCtx.module.getFunction(funcName);
+    Func * func = cgCtx.module.getFunc(funcName);
     
     if (!func) {
-        compileError("No such function to call: %s", funcName);
+        compileError("No such function named '%s' exists to call!", funcName);
         return nullptr;
     }
     
     // TODO: support passing arguments
     // Call it:
-    return cgCtx.irBuilder.CreateCall(func, {});
+    return cgCtx.irBuilder.CreateCall(func->mLLVMFunc, {});
 }
 
 WC_END_NAMESPACE

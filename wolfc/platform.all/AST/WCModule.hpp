@@ -52,7 +52,7 @@ public:
     Func * getFunc(const std::string & name) const;
     
     llvm::LLVMContext &             mLLVMCtx;
-    std::unique_ptr<llvm::Module>   mLLVMMod;
+    std::unique_ptr<llvm::Module>   mLLVMModule;
     DeclDefs *                      mDeclDefs = nullptr;
     
     /* A list of registered functions in the module. Generated during the compile phase. */

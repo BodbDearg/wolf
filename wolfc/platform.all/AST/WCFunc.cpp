@@ -151,7 +151,7 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     mLLVMFunc = llvm::Function::Create(fnType,
                                        llvm::Function::ExternalLinkage,
                                        mIdentifier.name(),
-                                       &cgCtx.module);
+                                       cgCtx.module.mLLVMModule.get());
     
     WC_ASSERT(mLLVMFunc);
     
