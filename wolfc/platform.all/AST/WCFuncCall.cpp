@@ -61,6 +61,14 @@ const Token & FuncCall::getEndToken() const {
     return mEndToken;
 }
 
+size_t FuncCall::numArgs() const {
+    if (mArgList) {
+        return mArgList->numArgs();
+    }
+    
+    return 0;
+}
+
 bool FuncCall::codegenArgsListExprs(CodegenCtx & cgCtx) {
     // If there is no args list then our job is easy, just return true for success
     WC_GUARD(mArgList, true);

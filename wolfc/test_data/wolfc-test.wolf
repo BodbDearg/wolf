@@ -22,7 +22,7 @@ func add(int n1, int n2)
 end
 
 func main()
-	add(1, 2)
+	add(1, 2, 2)
 	inputLoop()
 	print("Wasn't that nice?! 😍\n")
 end

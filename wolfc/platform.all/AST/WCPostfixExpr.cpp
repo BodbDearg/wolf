@@ -131,7 +131,18 @@ llvm::Value * PostfixExprFuncCall::codegenExprEval(CodegenCtx & cgCtx) {
         return nullptr;
     }
     
-    // TODO: verify the number of args is correct
+    // Verify the number of arguments being given to the function is correct:
+    size_t funcNumArgs = func->numArgs();
+    size_t callNumArgs = mFuncCall.numArgs();
+    
+    if (funcNumArgs != callNumArgs) {
+        compileError("Invalid number of argumenst for function call! Expected %zu instead of %zu!",
+                     funcNumArgs,
+                     callNumArgs);
+        
+        return nullptr;
+    }
+    
     // TODO: verify the type of the args is correct
     
     // Generate the code for the arguments list of the function call:

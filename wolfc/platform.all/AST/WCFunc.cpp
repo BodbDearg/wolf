@@ -113,6 +113,14 @@ const char * Func::name() const {
     return mIdentifier.name();
 }
 
+size_t Func::numArgs() const {
+    if (mArgList) {
+        return mArgList->numArgs();
+    }
+    
+    return 0;
+}
+
 bool Func::codegen(CodegenCtx & cgCtx) {
     // Register the function with the parent module.
     Module * module = firstParentOfType<Module>();

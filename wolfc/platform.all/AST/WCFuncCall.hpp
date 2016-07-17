@@ -29,6 +29,8 @@ public:
     
     virtual const Token & getEndToken() const override;
     
+    size_t numArgs() const;
+    
     /**
      * Generates the code for the argument list expressions and saves them as a list of 
      * llvm::Value objects on this object.
