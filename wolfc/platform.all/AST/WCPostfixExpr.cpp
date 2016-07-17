@@ -131,9 +131,14 @@ llvm::Value * PostfixExprFuncCall::codegenExprEval(CodegenCtx & cgCtx) {
         return nullptr;
     }
     
-    // TODO: support passing arguments
+    // TODO: verify the number of args is correct
+    // TODO: verify the type of the args is correct
+    
+    // Generate the code for the arguments list of the function call:
+    WC_GUARD(mFuncCall.codegenArgsListExprs(cgCtx), nullptr);
+    
     // Call it:
-    return cgCtx.irBuilder.CreateCall(func->mLLVMFunc, {});
+    return cgCtx.irBuilder.CreateCall(func->mLLVMFunc, mFuncCall.mArgListExprsValues);
 }
 
 WC_END_NAMESPACE

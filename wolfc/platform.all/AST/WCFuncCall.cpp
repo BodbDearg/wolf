@@ -1,4 +1,5 @@
 #include "WCFuncCall.hpp"
+#include "WCAssignExpr.hpp"
 #include "WCFuncCallArgList.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCToken.hpp"
@@ -58,6 +59,28 @@ const Token & FuncCall::getStartToken() const {
 
 const Token & FuncCall::getEndToken() const {
     return mEndToken;
+}
+
+bool FuncCall::codegenArgsListExprs(CodegenCtx & cgCtx) {
+    // If there is no args list then our job is easy, just return true for success
+    WC_GUARD(mArgList, true);
+    
+    // Get the list of expressions for the args list:
+    std::vector<AssignExpr*> args;
+    mArgList->getArgs(args);
+    mArgListExprsValues.reserve(args.size());
+    
+    // Evaluate the code for each arg:
+    for (AssignExpr * expr : args) {
+        // Generate the code, if it fails then bail
+        llvm::Value * argValue = expr->codegenExprEval(cgCtx);
+        WC_GUARD(argValue, false);
+        
+        // Save:
+        mArgListExprsValues.push_back(argValue);
+    }
+    
+    return true;    // All good!
 }
 
 WC_END_NAMESPACE

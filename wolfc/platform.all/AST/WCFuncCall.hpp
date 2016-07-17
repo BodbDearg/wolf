@@ -1,9 +1,15 @@
 #pragma once
 
 #include "WCASTNode.hpp"
+#include <vector>
+
+namespace llvm {
+    class Value;
+}
 
 WC_BEGIN_NAMESPACE
 
+class CodegenCtx;
 class FuncCallArgList;
 class LinearAlloc;
 
@@ -23,9 +29,18 @@ public:
     
     virtual const Token & getEndToken() const override;
     
+    /**
+     * Generates the code for the argument list expressions and saves them as a list of 
+     * llvm::Value objects on this object.
+     */
+    bool codegenArgsListExprs(CodegenCtx & cgCtx);
+    
     const Token &       mStartToken;
     FuncCallArgList *   mArgList;
     const Token &       mEndToken;
+    
+    /* The list of evaluated arg list expressions, created after code generation. */
+    std::vector<llvm::Value*> mArgListExprsValues;
 };
 
 WC_END_NAMESPACE
