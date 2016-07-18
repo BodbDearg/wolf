@@ -53,6 +53,8 @@ enum class TokenType {
     kExclamation,
     /* ',' */
     kComma,
+    /* -> */
+    kOpArrow,
 
     /*=========================================================================
     | Language keywords: data types

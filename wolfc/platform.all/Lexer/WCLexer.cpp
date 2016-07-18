@@ -155,7 +155,17 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
         case '(': return parseBasicToken(TokenType::kLParen, 1);
         case ')': return parseBasicToken(TokenType::kRParen, 1);
         case '+': return parseBasicToken(TokenType::kPlus, 1);
-        case '-': return parseBasicToken(TokenType::kMinus, 1);
+        
+        case '-': {
+            // '-' can be followed immediately by '>', in which case it is the arrow operator
+            if (mLexerState.srcPtr[1] == '>') {
+                return parseBasicToken(TokenType::kOpArrow, 2);
+            }
+            else {
+                return parseBasicToken(TokenType::kMinus, 1);
+            }
+        }
+            
         case '*': return parseBasicToken(TokenType::kAsterisk, 1);
         
         case '/': {
