@@ -1,6 +1,7 @@
 #include "WCIdentifier.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCFunc.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCScope.hpp"
@@ -75,10 +76,17 @@ llvm::Value * Identifier::codegenExprEval(CodegenCtx & cgCtx) {
         return nullptr;
     }
     
-    // TODO: this won't work for anything other than non primitives
-    // Create an instruction to load it
+    // TODO: this won't work for anything other than primitives
+    
+    // Create an instruction to load it, if required, and return that instead of the value:
     WC_ASSERT(dataValue->value);
-    return cgCtx.irBuilder.CreateLoad(dataValue->value, std::string("load_ident_val:") + name());
+    
+    if (dataValue->requiresLoad) {
+        return cgCtx.irBuilder.CreateLoad(dataValue->value, std::string("load_ident_val:") + name());
+    }
+    
+    // No load required, return directly:
+    return dataValue->value;
 }
 
 const char * Identifier::name() const {
@@ -86,12 +94,35 @@ const char * Identifier::name() const {
 }
 
 const DataValue * Identifier::lookupDataValue() const {
-    // Grab the parent scope, there should always be one
-    const Scope * parentScope = getParentScope();
-    WC_GUARD_ASSERT(parentScope, nullptr);
+    // See if there is a parent scope, if so then try to lookup the value within that
+    const char * identifierName = name();
     
-    // Grab the variable value from the parent scope
-    return parentScope->getVariable(name());
+    {
+        const Scope * parentScope = getParentScope();
+        
+        if (parentScope) {
+            const DataValue * dataValue = parentScope->getVariable(identifierName);
+            
+            if (dataValue) {
+                return dataValue;
+            }
+        }
+    }
+    
+    // Failing that check if there is a parent function and try to lookup the value within that:
+    {
+        const Func * parentFunc = firstParentOfType<Func>();
+        
+        if (parentFunc) {
+            const DataValue * dataValue = parentFunc->getArg(identifierName);
+            
+            if (dataValue) {
+                return dataValue;
+            }
+        }
+    }
+    
+    return nullptr;     // Failed to find the value!
 }
 
 WC_END_NAMESPACE

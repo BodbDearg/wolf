@@ -1,29 +1,23 @@
-/; 
-This function does an input loop.
-This also tests multi line comments.
-;/
-func inputLoop()
-	; Keep asking the user for input
-	; If input is <= 0 then we will exit 
-	var num = 0
-
-	loop
-		print("Hello, enter <= 0 to exit or anything else to see this again! 👻: ")
-		num = readnum()
-
-		if num <= 0
-			break
-		end
-	end
+func printresult(string term, int result)
+	print("The numbers ")
+	print(term)
+	print(" are: ")
+	print(result)
+	print("\n")
 end
 
-func add(int n1, int n2)
-	nop
+func addmul(int n1, int n2, int n3)
+	var result = n1 + n2
+	printresult("added", result)
+    mul(result, n3)
+end
+
+func mul(int n1, int n2)
+	var result = n1 * n2
+	printresult("multiplied", result)
 end
 
 func main()
-	add(1, false)
-	inputLoop()
-	print("Wasn't that nice?! 😍\n")
+	addmul(1, 2, 3)
+	print("FUCKING HELL 😍\n")
 end
-

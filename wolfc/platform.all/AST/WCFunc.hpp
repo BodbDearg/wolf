@@ -1,7 +1,10 @@
 #pragma once
 
 #include "WCASTNode.hpp"
+#include "WCCStrComparator.hpp"
+#include "WCDataValue.hpp"
 #include <vector>
+#include <map>
 
 namespace llvm {
     class Type;
@@ -43,6 +46,8 @@ public:
     
     void getArgs(std::vector<FuncArg*> & args) const;
     
+    const DataValue * getArg(const char * argName) const;
+    
     /* Forward code generation for the function. Just declares the llvm function in the module. */
     bool codegen(CodegenCtx & cgCtx);
     
@@ -68,7 +73,12 @@ public:
     FuncArgList *       mArgList;
     Scope &             mScope;
     const Token &       mEndToken;
-    llvm::Function *    mLLVMFunc = nullptr;
+    
+    /* The llvm function object for this function */
+    llvm::Function * mLLVMFunc = nullptr;
+    
+    /* The values for the parameters passed into the function. Generated during foward code generation. */
+    std::map<const char*, DataValue, CStrComparator> mArgValues;
 };
 
 WC_END_NAMESPACE

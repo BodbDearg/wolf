@@ -61,6 +61,7 @@ const DataValue * Scope::createVariable(const char * variableName,
     // Otherwise make it:
     DataValue & dataValue = mVariableValues[variableName];
     
+    dataValue.requiresLoad = true;
     dataValue.type = &dataType;
     dataValue.value = cgCtx.irBuilder.CreateAlloca(llvmType,
                                                    nullptr,
@@ -77,13 +78,14 @@ const DataValue * Scope::getVariable(const char * variableName) const {
         return &iter->second;
     }
     
-    // If that fails try a parent scope:
+    // If that fails try a parent scope, if it exists:
     const Scope * parentScope = getParentScope();
     
     if (parentScope) {
         return parentScope->getVariable(variableName);
     }
     
+    // Variable not found!
     return nullptr;
 }
 

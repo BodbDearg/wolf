@@ -56,7 +56,7 @@ public:
     template <class T>
     const T * firstParentOfType() const {
         if (mParent) {
-            T * nodeCast = dynamic_cast<const T*>(mParent);
+            const T * nodeCast = dynamic_cast<const T*>(mParent);
             
             if (nodeCast) {
                 return nodeCast;

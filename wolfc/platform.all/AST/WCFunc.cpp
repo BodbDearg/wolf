@@ -123,6 +123,12 @@ void Func::getArgs(std::vector<FuncArg*> & args) const {
     mArgList->getArgs(args);
 }
 
+const DataValue * Func::getArg(const char * argName) const {
+    auto iter = mArgValues.find(argName);
+    WC_GUARD(iter != mArgValues.end(), nullptr);
+    return &iter->second;
+}
+
 bool Func::codegen(CodegenCtx & cgCtx) {
     // Register the function with the parent module.
     Module * module = firstParentOfType<Module>();
@@ -164,6 +170,16 @@ bool Func::codegen(CodegenCtx & cgCtx) {
                                        cgCtx.module.mLLVMModule.get());
     
     WC_ASSERT(mLLVMFunc);
+    
+    // Save a list of the function arguments for later lookup by variables
+    auto & llvmArgList = mLLVMFunc->getArgumentList();
+    
+    for (auto & llvmArg : llvmArgList) {
+        size_t argNum = llvmArg.getArgNo();
+        WC_ASSERT(argNum < funcArgs.size());
+        FuncArg * funcArg = funcArgs[argNum];
+        mArgValues[funcArg->name()] = DataValue(&llvmArg, &funcArg->dataType(), false);
+    }
     
     // Request deferred codegen for the function body. Will generate the body code for all functions
     // after the function definitions themselves have been parsed...

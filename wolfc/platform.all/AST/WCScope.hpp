@@ -32,16 +32,22 @@ public:
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
-    /* Create a variable within this scope. If the variable already exists then creation fails and null is returned. */
+    /** 
+     * Create a variable within this scope.
+     * If the variable already exists then creation fails and null is returned. 
+     */
     const DataValue * createVariable(const char * variableName,
                                      const DataType & dataType,
                                      CodegenCtx & cgCtx);
     
-    /* Get a variable within this scope. Does not create if it does not exist. */
+    /**
+     * Get a variable within this scope or a parent scope. Does not create if it does not exist.
+     * Will search parent scopes if not found within this scope.
+     */
     const DataValue * getVariable(const char * variableName) const;
     
-    Stmnts & mStmnts;
-    std::map<const char*, DataValue, CStrComparator> mVariableValues;
+    Stmnts &                                            mStmnts;
+    std::map<const char*, DataValue, CStrComparator>    mVariableValues;
 };
 
 WC_END_NAMESPACE
