@@ -1,23 +1,8 @@
-func printresult(string term, int result)
-	print("The numbers ")
-	print(term)
-	print(" are: ")
-	print(result)
-	print("\n")
-end
-
-func addmul(int n1, int n2, int n3)
+func add(int n1, int n2) -> void
 	var result = n1 + n2
-	printresult("added", result)
-    mul(result, n3)
+	print(result)
 end
 
-func mul(int n1, int n2)
-	var result = n1 * n2
-	printresult("multiplied", result)
-end
-
-func main()
-	addmul(1, 2, 3)
-	print("FUCKING HELL 😍\n")
+func main() -> void
+	add(1, 2)
 end

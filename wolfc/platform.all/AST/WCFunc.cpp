@@ -7,6 +7,7 @@
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
+#include "WCPrimitiveType.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
 #include <set>
@@ -56,6 +57,20 @@ Func * Func::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     
     ++tokenPtr; // Skip ')'
     
+    // TODO: Support implicitly determining the return type. This eventually should be optional.
+    // Expect '->' following function params for return type
+    if (tokenPtr->type != TokenType::kOpArrow) {
+        parseError(*tokenPtr, "Expected '->' following function params to specify return type!");
+        return nullptr;
+    }
+    
+    ++tokenPtr; // Skip '->'
+    
+    // TODO: Support implicitly determining the return type. This eventually should be optional.
+    // Parse the return type:
+    PrimitiveType * returnType = PrimitiveType::parse(tokenPtr, alloc);
+    WC_GUARD(returnType, nullptr);
+    
     // Parse the inner function scope:
     Scope * scope = Scope::parse(tokenPtr, alloc);
     WC_GUARD(scope, nullptr);
@@ -76,6 +91,7 @@ Func * Func::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
                            *startToken,
                            *identifier,
                            argList,
+                           *returnType,
                            *scope,
                            *endToken);
 }
@@ -83,12 +99,14 @@ Func * Func::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 Func::Func(const Token & startToken,
            Identifier & identifier,
            FuncArgList * argList,
+           PrimitiveType & returnType,
            Scope & scope,
            const Token & endToken)
 :
     mStartToken(startToken),
     mIdentifier(identifier),
     mArgList(argList),
+    mReturnType(returnType),
     mScope(scope),
     mEndToken(endToken)
 {
@@ -130,6 +148,8 @@ const DataValue * Func::getArg(const char * argName) const {
 }
 
 bool Func::codegen(CodegenCtx & cgCtx) {
+    // TODO: verify all codepaths return a value if there is a return value
+    
     // Register the function with the parent module.
     Module * module = firstParentOfType<Module>();
     WC_ASSERT(module);

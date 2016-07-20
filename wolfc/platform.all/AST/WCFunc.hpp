@@ -18,11 +18,12 @@ class FuncArg;
 class FuncArgList;
 class Identifier;
 class LinearAlloc;
+class PrimitiveType;
 class Scope;
 
 /*
 Func:
-	func Identifier ( [FuncArgList] ) Scope end
+	func Identifier ( [FuncArgList] ) -> PrimitiveType Scope end
 */
 class Func : public ASTNode {
 public:
@@ -33,6 +34,7 @@ public:
     Func(const Token & startToken,
          Identifier & identifier,
          FuncArgList * argList,
+         PrimitiveType & returnType,
          Scope & scope,
          const Token & endToken);
     
@@ -73,6 +75,9 @@ public:
     FuncArgList *       mArgList;
     Scope &             mScope;
     const Token &       mEndToken;
+    
+    /* The return type for this function. */
+    PrimitiveType & mReturnType;
     
     /* The llvm function object for this function */
     llvm::Function * mLLVMFunc = nullptr;
