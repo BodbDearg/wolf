@@ -8,6 +8,7 @@
 #include "WCNextStmnt.hpp"
 #include "WCNopStmnt.hpp"
 #include "WCPrintStmnt.hpp"
+#include "WCReturnStmnt.hpp"
 #include "WCScopeStmnt.hpp"
 #include "WCVarDecl.hpp"
 #include "WCWhileStmnt.hpp"
@@ -28,6 +29,7 @@ bool Stmnt::peek(const Token * tokenPtr) {
             ScopeStmnt::peek(tokenPtr) ||
             BreakStmnt::peek(tokenPtr) ||
             NextStmnt::peek(tokenPtr) ||
+            ReturnStmnt::peek(tokenPtr) ||
             AssignExpr::peek(tokenPtr);
 }
     
@@ -93,6 +95,13 @@ Stmnt * Stmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         NextStmnt * nextStmnt = NextStmnt::parse(tokenPtr, alloc);
         WC_GUARD(nextStmnt, nullptr);
         return WC_NEW_AST_NODE(alloc, StmntNextStmnt, *nextStmnt);
+    }
+    
+    // Parse return statement if ahead
+    if (ReturnStmnt::peek(tokenPtr)) {
+        ReturnStmnt * returnStmnt = ReturnStmnt::parse(tokenPtr, alloc);
+        WC_GUARD(returnStmnt, nullptr);
+        return WC_NEW_AST_NODE(alloc, StmntReturnStmnt, *returnStmnt);
     }
     
     // Otherwise parse assign expression
@@ -259,6 +268,26 @@ const Token & StmntNextStmnt::getEndToken() const {
 
 bool StmntNextStmnt::codegen(CodegenCtx & cgCtx) {
     return mNextStmnt.codegen(cgCtx);
+}
+
+//-----------------------------------------------------------------------------
+// StmntReturnStmnt
+//-----------------------------------------------------------------------------
+
+StmntReturnStmnt::StmntReturnStmnt(ReturnStmnt & returnStmnt) : mReturnStmnt(returnStmnt) {
+    mReturnStmnt.mParent = this;
+}
+
+const Token & StmntReturnStmnt::getStartToken() const {
+    return mReturnStmnt.getStartToken();
+}
+
+const Token & StmntReturnStmnt::getEndToken() const {
+    return mReturnStmnt.getEndToken();
+}
+
+bool StmntReturnStmnt::codegen(CodegenCtx & cgCtx) {
+    return mReturnStmnt.codegen(cgCtx);
 }
 
 //-----------------------------------------------------------------------------

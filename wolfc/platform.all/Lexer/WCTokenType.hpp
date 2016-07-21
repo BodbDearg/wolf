@@ -109,6 +109,8 @@ enum class TokenType {
     kScope,
     /* nop */
     kNop,
+    /* return */
+    kReturn,
     /* func */
     kFunc,
     /* 'print' */   // TODO: this is a temporary keyword, remove eventually

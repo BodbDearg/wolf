@@ -11,6 +11,7 @@
 #include "WCModule.hpp"
 #include "WCPrimaryExpr.hpp"
 #include "WCPrimitiveDataTypes.hpp"
+#include "WCPrimitiveType.hpp"
 #include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -100,8 +101,13 @@ bool PostfixExprFuncCall::isLValue() const {
 }
 
 const DataType & PostfixExprFuncCall::dataType() const {
-    // TODO: support return types other than void
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kVoid);
+    Func * funcCalled = lookupFuncCalled();
+    
+    if (funcCalled) {
+        return funcCalled->mReturnType.dataType();
+    }
+    
+    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kUnknown);
 }
 
 llvm::Value * PostfixExprFuncCall::codegenAddrOf(CodegenCtx & cgCtx) {
@@ -111,20 +117,13 @@ llvm::Value * PostfixExprFuncCall::codegenAddrOf(CodegenCtx & cgCtx) {
 }
 
 llvm::Value * PostfixExprFuncCall::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: support member function calls on this object (some day)
-    // TODO: support member function calls on another object (some day)
-    // TODO: support lambda calls (some day)
-    // TODO: support built in functions on basic types (somenum.isNan() etc.)
-    PrimaryExprIdentifier * funcNameIdentifier = dynamic_cast<PrimaryExprIdentifier*>(&mExpr);
+    // Name of function to call:
+    const char * funcName = nameOfFuncCalled();
     
-    if (!funcNameIdentifier) {
+    if (!funcName) {
         compileError("Function to call must be specified by a single identifier!");
         return nullptr;
     }
-    
-    // Name of function to call:
-    const char * funcName = funcNameIdentifier->name();
-    WC_ASSERT(funcName);
     
     // Get the function to call:
     Func * func = cgCtx.module.getFunc(funcName);
@@ -172,6 +171,33 @@ llvm::Value * PostfixExprFuncCall::codegenExprEval(CodegenCtx & cgCtx) {
     
     // Call it:
     return cgCtx.irBuilder.CreateCall(func->mLLVMFunc, mFuncCall.mArgListExprsValues);
+}
+
+const char * PostfixExprFuncCall::nameOfFuncCalled() const {
+    // TODO: support member function calls on this object (some day)
+    // TODO: support member function calls on another object (some day)
+    // TODO: support lambda calls (some day)
+    // TODO: support built in functions on basic types (somenum.isNan() etc.)
+    PrimaryExprIdentifier * funcNameIdentifier = dynamic_cast<PrimaryExprIdentifier*>(&mExpr);
+    
+    if (!funcNameIdentifier) {
+        return nullptr;
+    }
+    
+    return funcNameIdentifier->name();
+}
+
+Func * PostfixExprFuncCall::lookupFuncCalled() const {
+    // TODO: can we avoid a string construct here?
+    
+    // Get the function name
+    const char * funcName = nameOfFuncCalled();
+    WC_GUARD(funcName, nullptr);
+    
+    // Lookup parent module - this should always exist
+    const Module * parentModule = firstParentOfType<Module>();
+    WC_ASSERT(parentModule);
+    return parentModule->getFunc(funcName);
 }
 
 WC_END_NAMESPACE

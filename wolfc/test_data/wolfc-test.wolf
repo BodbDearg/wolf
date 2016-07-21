@@ -1,8 +1,8 @@
-func add(int n1, int n2) -> void
-	var result = n1 + n2
-	print(result)
+func add(int n1, int n2) -> int
+	return n1 + n2
 end
 
-func main() -> void
-	add(1, 2)
+func main() -> int
+	print(add(1, 2))
+	return 0
 end

@@ -14,6 +14,7 @@ class LoopStmnt;
 class NextStmnt;
 class NopStmnt;
 class PrintStmnt;
+class ReturnStmnt;
 class ScopeStmnt;
 class VarDecl;
 class WhileStmnt;
@@ -29,6 +30,7 @@ Stmnt:
     ScopeStmnt
 	BreakStmnt
 	NextStmnt
+ 	ReturnStmnt
 	AssignExpr
 */
 class Stmnt : public ASTNode, public IStmnt {
@@ -148,6 +150,20 @@ public:
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
     NextStmnt & mNextStmnt;
+};
+
+/* ReturnStmnt */
+class StmntReturnStmnt : public Stmnt {
+public:
+    StmntReturnStmnt(ReturnStmnt & returnStmnt);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+
+    virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    ReturnStmnt & mReturnStmnt;
 };
 
 /* VarDecl */

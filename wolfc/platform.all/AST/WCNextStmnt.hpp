@@ -1,6 +1,7 @@
 #pragma once
 
 #include "WCASTNode.hpp"
+#include "WCIStmnt.hpp"
 
 namespace llvm {
     class BasicBlock;
@@ -15,7 +16,7 @@ class LinearAlloc;
 NextStmnt:
 	next
 */
-class NextStmnt : public ASTNode {
+class NextStmnt : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     
@@ -28,7 +29,7 @@ public:
     virtual const Token & getEndToken() const override;
     
     /* Do the basic forward codegen for the next statement. */
-    bool codegen(CodegenCtx & cgCtx);
+    virtual bool codegen(CodegenCtx & cgCtx) override;
     
     /* Shouldn't be called directly. The next statement itself will schedule this. */
     bool deferredCodegen(CodegenCtx & cgCtx);

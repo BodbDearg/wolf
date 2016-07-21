@@ -38,6 +38,7 @@ Stmnt:
     ScopeStmnt
 	BreakStmnt
 	NextStmnt
+	ReturnStmnt
 	AssignExpr
 
 NoOpStmnt:
@@ -71,6 +72,10 @@ BreakStmnt:
 NextStmnt:
 	next
 	### TODO ### next if|unless AssignExpr
+
+ReturnStmnt:
+	return
+	return AssignExpr
 
 AssignExpr:
     OrExpr

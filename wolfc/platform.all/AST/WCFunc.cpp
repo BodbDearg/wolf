@@ -230,7 +230,7 @@ bool Func::deferredCodegen(CodegenCtx & cgCtx) {
     // Create the implicit return statement if required.
     // This is only allowable for void returning functions, for other functions not returning void it is
     // a compile error not to return a valid value.
-    if (!cgCtx.irBuilder.GetInsertPoint()->isTerminator()) {
+    if (!cgCtx.irBuilder.GetInsertBlock()->getTerminator()) {
         if (mReturnType.dataType().isVoid()) {
             cgCtx.irBuilder.CreateRetVoid();
         }

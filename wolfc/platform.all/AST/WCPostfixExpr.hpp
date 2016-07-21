@@ -6,6 +6,7 @@
 WC_BEGIN_NAMESPACE
 
 class DataType;
+class Func;
 class FuncCall;
 class LinearAlloc;
 class PrimaryExpr;
@@ -58,6 +59,10 @@ public:
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    const char * nameOfFuncCalled() const;
+    
+    Func * lookupFuncCalled() const;
     
     PrimaryExpr &   mExpr;
     FuncCall &      mFuncCall;
