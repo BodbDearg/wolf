@@ -20,6 +20,10 @@ bool VoidDataType::isSized() const {
     return false;
 }
 
+bool VoidDataType::isVoid() const {
+    return true;
+}
+
 llvm::Type * VoidDataType::llvmType(CodegenCtx & cgCtx) const {
     return llvm::Type::getVoidTy(cgCtx.llvmCtx);
 }

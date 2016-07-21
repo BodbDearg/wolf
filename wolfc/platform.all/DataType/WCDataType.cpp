@@ -10,4 +10,12 @@ bool DataType::isValid() const {
     return true;    // True for all types except 'Unknown'
 }
 
+bool DataType::isUnknown() const {
+    return false;   // False for all types except 'Unknown'
+}
+
+bool DataType::isVoid() const {
+    return false;   // False for all types except 'void'
+}
+
 WC_END_NAMESPACE

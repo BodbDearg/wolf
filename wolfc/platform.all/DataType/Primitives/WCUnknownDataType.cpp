@@ -19,6 +19,10 @@ bool UnknownDataType::isSized() const {
     return false;
 }
 
+bool UnknownDataType::isUnknown() const {
+    return true;
+}
+
 llvm::Type * UnknownDataType::llvmType(CodegenCtx & cgCtx) const {
     WC_UNUSED_PARAM(cgCtx);
     return nullptr;

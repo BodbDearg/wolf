@@ -16,7 +16,9 @@ public:
     
     virtual bool isValid() const override;
     
-    virtual bool isSized() const override;    
+    virtual bool isSized() const override;
+    
+    virtual bool isUnknown() const override;
     
     virtual llvm::Type * llvmType(CodegenCtx & cgCtx) const override;
     

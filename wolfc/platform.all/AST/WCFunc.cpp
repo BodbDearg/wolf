@@ -227,10 +227,20 @@ bool Func::deferredCodegen(CodegenCtx & cgCtx) {
     // Generate code for the function body
     WC_GUARD(mScope.codegen(cgCtx), false);
     
-    // Create the return from the function
-    // TODO: Support returning values
-    cgCtx.irBuilder.CreateRetVoid();
-    return true;
+    // Create the implicit return statement if required.
+    // This is only allowable for void returning functions, for other functions not returning void it is
+    // a compile error not to return a valid value.
+    if (!cgCtx.irBuilder.GetInsertPoint()->isTerminator()) {
+        if (mReturnType.dataType().isVoid()) {
+            cgCtx.irBuilder.CreateRetVoid();
+        }
+        else {
+            compileError("Missing a return statement at end of non void function!");
+            return false;
+        }
+    }
+    
+    return true;    // Success!
 }
 
 bool Func::compileCheckForDuplicateArgNames(const std::vector<FuncArg*> & funcArgs) const {

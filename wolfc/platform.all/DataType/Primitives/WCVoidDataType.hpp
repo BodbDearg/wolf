@@ -14,7 +14,9 @@ public:
     
     virtual bool equals(const DataType & other) const override;
     
-    virtual bool isSized() const override;    
+    virtual bool isSized() const override;
+    
+    virtual bool isVoid() const override;
     
     virtual llvm::Type * llvmType(CodegenCtx & cgCtx) const override;
     

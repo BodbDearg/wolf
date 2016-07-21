@@ -30,6 +30,12 @@ public:
     /* Utility. Tell if the data type occupies any space (size concept makes sense). */
     virtual bool isSized() const = 0;
     
+    /* Utility. Tell if this data type is the unknown data type. */
+    virtual bool isUnknown() const;
+    
+    /* Utility. Tell if this data type is the 'void' data type. */
+    virtual bool isVoid() const;
+    
     /**
      * Return the llvm type for this data type, or nullptr if there is no direct llvm type.
      * Note: the code generation context is required to get this info.
