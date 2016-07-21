@@ -169,8 +169,15 @@ llvm::Value * PostfixExprFuncCall::codegenExprEval(CodegenCtx & cgCtx) {
     // Generate the code for the arguments list of the function call:
     WC_GUARD(mFuncCall.codegenArgsListExprs(cgCtx), nullptr);
     
-    // Call it:
-    return cgCtx.irBuilder.CreateCall(func->mLLVMFunc, mFuncCall.mArgListExprsValues);
+    // Call it: note if non void we have to give the value a name
+    if (func->returnDataType().isVoid()) {
+        return cgCtx.irBuilder.CreateCall(func->mLLVMFunc,
+                                          mFuncCall.mArgListExprsValues);
+    }
+    
+    return cgCtx.irBuilder.CreateCall(func->mLLVMFunc,
+                                      mFuncCall.mArgListExprsValues,
+                                      "PostfixExprFuncCall:ReturnVal");
 }
 
 const char * PostfixExprFuncCall::nameOfFuncCalled() const {

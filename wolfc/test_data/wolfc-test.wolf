@@ -1,8 +1,45 @@
-func add(int n1, int n2) -> int
-	return n1 + n2
+func add(int num1, int num2) -> int
+	return num1 + num2
+end
+
+func sub(int num1, int num2) -> int
+	return num1 - num2
+end
+
+func getNum() -> int
+	print("Enter a number: ")
+	return readnum()
+end
+
+func menuLoop()
+	loop
+		print("** Menu **\n")
+		print("1 - Add two numbers\n")
+		print("2 - Subtract two numbers\n")
+		print("3 - Quit\n")
+		var choice = readnum()
+
+		if choice == 3 
+			return 
+		end
+
+		var num1 = getNum()
+		var num2 = getNum()
+
+		if choice == 1
+			print("The numbers added are: ")
+			print(add(num1, num2))
+			print("\n")
+		else
+			print("The numbers subtracted are: ")
+			print(sub(num1, num2))
+			print("\n")
+		end
+	end
 end
 
 func main() -> int
-	print(add(1, 2))
+	menuLoop()
+	print("Fuck me that was amazing!🤑\n")
 	return 0
 end
