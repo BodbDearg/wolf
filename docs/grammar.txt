@@ -9,7 +9,7 @@ DeclDef:
 	Func
 
 Func:
-	func Identifier ( [FuncArgList] ) -> PrimitiveType Scope end
+	func Identifier ( [FuncArgList] ) [ -> PrimitiveType ] Scope end
 
 FuncArgList:
 	FuncArg

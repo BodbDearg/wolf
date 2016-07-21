@@ -7,6 +7,7 @@
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
+#include "WCPrimitiveDataTypes.hpp"
 #include "WCPrimitiveType.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
@@ -57,19 +58,18 @@ Func * Func::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     
     ++tokenPtr; // Skip ')'
     
-    // TODO: Support implicitly determining the return type. This eventually should be optional.
-    // Expect '->' following function params for return type
-    if (tokenPtr->type != TokenType::kOpArrow) {
-        parseError(*tokenPtr, "Expected '->' following function params to specify return type!");
-        return nullptr;
+    // See if a '->' follows for function explicit return type.
+    // If it is not present then a 'void' return type is assumed.
+    PrimitiveType * returnType = nullptr;
+    
+    if (tokenPtr->type == TokenType::kOpArrow) {
+        // Explicit return type, skip the '->' first
+        ++tokenPtr;
+        
+        // Now parse the return type, if that fails then bail
+        returnType = PrimitiveType::parse(tokenPtr, alloc);
+        WC_GUARD(returnType, nullptr);
     }
-    
-    ++tokenPtr; // Skip '->'
-    
-    // TODO: Support implicitly determining the return type. This eventually should be optional.
-    // Parse the return type:
-    PrimitiveType * returnType = PrimitiveType::parse(tokenPtr, alloc);
-    WC_GUARD(returnType, nullptr);
     
     // Parse the inner function scope:
     Scope * scope = Scope::parse(tokenPtr, alloc);
@@ -91,7 +91,7 @@ Func * Func::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
                            *startToken,
                            *identifier,
                            argList,
-                           *returnType,
+                           returnType,
                            *scope,
                            *endToken);
 }
@@ -99,7 +99,7 @@ Func * Func::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 Func::Func(const Token & startToken,
            Identifier & identifier,
            FuncArgList * argList,
-           PrimitiveType & returnType,
+           PrimitiveType * returnType,
            Scope & scope,
            const Token & endToken)
 :
@@ -147,6 +147,15 @@ const DataValue * Func::getArg(const char * argName) const {
     return &iter->second;
 }
 
+const DataType & Func::returnDataType() const {
+    if (mReturnType) {
+        return mReturnType->dataType();
+    }
+    
+    // If no return type is explicitly specified then 'void' is assumed
+    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kVoid);
+}
+
 bool Func::codegen(CodegenCtx & cgCtx) {
     // TODO: verify all codepaths return a value if there is a return value
     
@@ -175,16 +184,17 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     WC_GUARD(determineLLVMArgTypes(cgCtx, funcArgs, fnArgTypesLLVM), false);
     
     // Get the llvm type for the function return:
-    llvm::Type * fnRetTy = mReturnType.dataType().llvmType(cgCtx);
+    const DataType & fnRetTy = returnDataType();
+    llvm::Type * fnRetTyLLVM = fnRetTy.llvmType(cgCtx);
     
-    if (!fnRetTy) {
-        compileError("Unable to determine the llvm type of return type '%s'!", mReturnType.dataType().name());
+    if (!fnRetTyLLVM) {
+        compileError("Unable to determine the llvm type of return type '%s'!", fnRetTy.name());
         return false;
     }
     
     // Create the function signature:
     // TODO: support varargs
-    llvm::FunctionType * fnType = llvm::FunctionType::get(fnRetTy,
+    llvm::FunctionType * fnType = llvm::FunctionType::get(fnRetTyLLVM,
                                                           fnArgTypesLLVM,
                                                           false);
     WC_ASSERT(fnType);
@@ -231,7 +241,7 @@ bool Func::deferredCodegen(CodegenCtx & cgCtx) {
     // This is only allowable for void returning functions, for other functions not returning void it is
     // a compile error not to return a valid value.
     if (!cgCtx.irBuilder.GetInsertBlock()->getTerminator()) {
-        if (mReturnType.dataType().isVoid()) {
+        if (returnDataType().isVoid()) {
             cgCtx.irBuilder.CreateRetVoid();
         }
         else {

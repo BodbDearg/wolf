@@ -6,7 +6,6 @@
 #include "WCFunc.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
-#include "WCPrimitiveType.hpp"
 #include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -64,7 +63,7 @@ bool ReturnStmnt::verifyReturnTypeCorrect() const {
     
     // TODO: handle auto promotion of types here
     // Verify correctness:
-    const DataType & parentFnReturnTy = parentFunc->mReturnType.dataType();
+    const DataType & parentFnReturnTy = parentFunc->returnDataType();
     const DataType & returnTy = dataType();
     
     if (!returnTy.equals(parentFnReturnTy)) {

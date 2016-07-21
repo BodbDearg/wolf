@@ -31,7 +31,7 @@ AddSubExpr * AddSubExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         WC_GUARD(addSubExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, AddSubExprAdd, *mulDivExpr, *addSubExpr);
     }
-    else if (tokenPtr->type == TokenType::kAsterisk) {
+    else if (tokenPtr->type == TokenType::kMinus) {
         // Sub operation: Skip '-'
         ++tokenPtr;
         

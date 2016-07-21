@@ -104,7 +104,7 @@ const DataType & PostfixExprFuncCall::dataType() const {
     Func * funcCalled = lookupFuncCalled();
     
     if (funcCalled) {
-        return funcCalled->mReturnType.dataType();
+        return funcCalled->returnDataType();
     }
     
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kUnknown);

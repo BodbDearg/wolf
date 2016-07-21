@@ -23,7 +23,7 @@ class Scope;
 
 /*
 Func:
-	func Identifier ( [FuncArgList] ) -> PrimitiveType Scope end
+	func Identifier ( [FuncArgList] ) [ -> PrimitiveType ] Scope end
 */
 class Func : public ASTNode {
 public:
@@ -34,7 +34,7 @@ public:
     Func(const Token & startToken,
          Identifier & identifier,
          FuncArgList * argList,
-         PrimitiveType & returnType,
+         PrimitiveType * returnType,
          Scope & scope,
          const Token & endToken);
     
@@ -49,6 +49,8 @@ public:
     void getArgs(std::vector<FuncArg*> & args) const;
     
     const DataValue * getArg(const char * argName) const;
+    
+    const DataType & returnDataType() const;
     
     /* Forward code generation for the function. Just declares the llvm function in the module. */
     bool codegen(CodegenCtx & cgCtx);
@@ -76,8 +78,11 @@ public:
     Scope &             mScope;
     const Token &       mEndToken;
     
-    /* The return type for this function. */
-    PrimitiveType & mReturnType;
+    /**
+     * The explicitly specified return type for this function. 
+     * If this is null then void type is assumed.
+     */
+    PrimitiveType * mReturnType;
     
     /* The llvm function object for this function */
     llvm::Function * mLLVMFunc = nullptr;
