@@ -1,5 +1,10 @@
 #include "WCVoidDataType.hpp"
+#include "WCCodegenCtx.hpp"
 #include "WCPrintStmnt.hpp"
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <llvm/IR/Module.h>
+WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
@@ -16,8 +21,7 @@ bool VoidDataType::isSized() const {
 }
 
 llvm::Type * VoidDataType::llvmType(CodegenCtx & cgCtx) const {
-    WC_UNUSED_PARAM(cgCtx);
-    return nullptr;
+    return llvm::Type::getVoidTy(cgCtx.llvmCtx);
 }
 
 bool VoidDataType::codegenPrintStmnt(CodegenCtx & cgCtx,

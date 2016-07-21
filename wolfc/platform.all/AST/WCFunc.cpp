@@ -174,10 +174,17 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     std::vector<llvm::Type*> fnArgTypesLLVM;
     WC_GUARD(determineLLVMArgTypes(cgCtx, funcArgs, fnArgTypesLLVM), false);
     
+    // Get the llvm type for the function return:
+    llvm::Type * fnRetTy = mReturnType.dataType().llvmType(cgCtx);
+    
+    if (!fnRetTy) {
+        compileError("Unable to determine the llvm type of return type '%s'!", mReturnType.dataType().name());
+        return false;
+    }
+    
     // Create the function signature:
-    // TODO: support return types
     // TODO: support varargs
-    llvm::FunctionType * fnType = llvm::FunctionType::get(llvm::Type::getVoidTy(cgCtx.llvmCtx),
+    llvm::FunctionType * fnType = llvm::FunctionType::get(fnRetTy,
                                                           fnArgTypesLLVM,
                                                           false);
     WC_ASSERT(fnType);
@@ -188,7 +195,6 @@ bool Func::codegen(CodegenCtx & cgCtx) {
                                        llvm::Function::ExternalLinkage,
                                        mIdentifier.name(),
                                        cgCtx.module.mLLVMModule.get());
-    
     WC_ASSERT(mLLVMFunc);
     
     // Save a list of the function arguments for later lookup by variables
