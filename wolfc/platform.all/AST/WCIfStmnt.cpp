@@ -112,15 +112,21 @@ IfStmnt * IfStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 }
 
 IfStmnt::IfStmnt(AssignExpr & ifExpr,
-                 Scope & thenScope,
+                 IBasicCodegenNode & thenNode,
                  const Token & startToken)
 :
     mIfExpr(ifExpr),
-    mThenScope(thenScope),
+    mThenNode(thenNode),
     mStartToken(startToken)
 {
     mIfExpr.mParent = this;
-    mThenScope.mParent = this;
+    
+    // Need to do a tricky cast for this:
+    {
+        ASTNode * thenASTNode = dynamic_cast<ASTNode*>(&thenNode);
+        WC_ASSERT(thenASTNode);
+        thenASTNode->mParent = this;
+    }
 }
 
 const Token & IfStmnt::getStartToken() const {
@@ -151,11 +157,11 @@ llvm::Value * IfStmnt::codegenIfExpr(CodegenCtx & cgCtx) const {
 //-----------------------------------------------------------------------------
 
 IfStmntNoElse::IfStmntNoElse(AssignExpr & ifExpr,
-                             Scope & thenScope,
+                             IBasicCodegenNode & thenNode,
                              const Token & startToken,
                              const Token & endToken)
 :
-    IfStmnt(ifExpr, thenScope, startToken),
+    IfStmnt(ifExpr, thenNode, startToken),
     mEndToken(endToken)
 {
     WC_EMPTY_FUNC_BODY();
@@ -187,7 +193,7 @@ bool IfStmntNoElse::codegen(CodegenCtx & cgCtx) {
     // Codegen the 'then' block
     cgCtx.irBuilder.SetInsertPoint(thenBB);
     
-    if (!mThenScope.codegen(cgCtx)) {
+    if (!mThenNode.codegen(cgCtx)) {
         return false;
     }
     
@@ -216,11 +222,11 @@ bool IfStmntNoElse::codegen(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 
 IfStmntElseIf::IfStmntElseIf(AssignExpr & ifExpr,
-                             Scope & thenScope,
+                             IBasicCodegenNode & thenNode,
                              IfStmnt & outerIfStmnt,
                              const Token & startToken)
 :
-    IfStmnt(ifExpr, thenScope, startToken),
+    IfStmnt(ifExpr, thenNode, startToken),
     mElseIfStmnt(outerIfStmnt)
 {
     mElseIfStmnt.mParent = this;
@@ -252,7 +258,7 @@ bool IfStmntElseIf::codegen(CodegenCtx & cgCtx) {
     // Codegen the 'then' block
     cgCtx.irBuilder.SetInsertPoint(thenBB);
     
-    if (!mThenScope.codegen(cgCtx)) {
+    if (!mThenNode.codegen(cgCtx)) {
         return false;
     }
     
@@ -292,16 +298,19 @@ bool IfStmntElseIf::codegen(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 
 IfStmntElse::IfStmntElse(AssignExpr & ifExpr,
-                         Scope & thenScope,
-                         Scope & elseScope,
+                         IBasicCodegenNode & thenNode,
+                         IBasicCodegenNode & elseNode,
                          const Token & startToken,
                          const Token & endToken)
 :
-    IfStmnt(ifExpr, thenScope, startToken),
-    mElseScope(elseScope),
+    IfStmnt(ifExpr, thenNode, startToken),
+    mElseNode(elseNode),
     mEndToken(endToken)
 {
-    mElseScope.mParent = this;
+    // Need to do a tricky cast for this:
+    ASTNode * elseASTNode = dynamic_cast<ASTNode*>(&elseNode);
+    WC_ASSERT(elseASTNode);
+    elseASTNode->mParent = this;
 }
     
 const Token & IfStmntElse::getEndToken() const {
@@ -331,7 +340,7 @@ bool IfStmntElse::codegen(CodegenCtx & cgCtx) {
     // Codegen the 'then' block
     cgCtx.irBuilder.SetInsertPoint(thenBB);
     
-    if (!mThenScope.codegen(cgCtx)) {
+    if (!mThenNode.codegen(cgCtx)) {
         return false;
     }
     
@@ -340,7 +349,7 @@ bool IfStmntElse::codegen(CodegenCtx & cgCtx) {
     // Codegen the 'else' block
     cgCtx.irBuilder.SetInsertPoint(elseBB);
     
-    if (!mElseScope.codegen(cgCtx)) {
+    if (!mElseNode.codegen(cgCtx)) {
         return false;
     }
     

@@ -3,7 +3,7 @@
 #include "WCASTNode.hpp"
 #include "WCCStrComparator.hpp"
 #include "WCDataValue.hpp"
-#include "WCIStmnt.hpp"
+#include "WCIBasicCodegenNode.hpp"
 #include <map>
 
 WC_BEGIN_NAMESPACE
@@ -18,7 +18,7 @@ class Stmnts;
 Scope:
     Stmnts
 */
-class Scope : public ASTNode, public IStmnt {
+class Scope : public ASTNode, public IBasicCodegenNode {
 public:
     static bool peek(const Token * tokenPtr);
     
