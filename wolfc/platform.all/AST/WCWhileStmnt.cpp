@@ -4,7 +4,6 @@
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCPrimitiveDataTypes.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
 
@@ -162,7 +161,7 @@ llvm::Value * WhileStmnt::codegenWhileExpr(CodegenCtx & cgCtx) const {
     // Firstly validate that the while statement condition expression is a bool:
     const DataType & whileExprDataType = mWhileExpr.dataType();
     
-    if (!whileExprDataType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool))) {
+    if (!whileExprDataType.isBool()) {
         compileError("Condition for while statement must evaluate to type 'bool', not '%s'!",
                      whileExprDataType.name());
         

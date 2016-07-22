@@ -17,6 +17,10 @@ bool BoolDataType::isSized() const {
     return true;
 }
 
+bool BoolDataType::isBool() const {
+    return true;
+}
+
 llvm::Type * BoolDataType::llvmType(CodegenCtx & cgCtx) const {
     return llvm::Type::getInt1Ty(cgCtx.llvmCtx);
 }

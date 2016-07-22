@@ -4,7 +4,6 @@
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCPrimitiveDataTypes.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
 
@@ -136,7 +135,7 @@ llvm::Value * IfStmnt::codegenIfExpr(CodegenCtx & cgCtx) const {
     // Firstly validate that the if statement condition expression is a bool;
     const DataType & ifExprDataType = mIfExpr.dataType();
     
-    if (!ifExprDataType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool))) {
+    if (!ifExprDataType.isBool()) {
         compileError("Condition for if statement must evaluate to type 'bool', not '%s'!",
                      ifExprDataType.name());
         

@@ -13,6 +13,8 @@ public:
     
     virtual bool isSized() const override;
     
+    virtual bool isBool() const override;
+    
     virtual llvm::Type * llvmType(CodegenCtx & cgCtx) const override;
     
     virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,

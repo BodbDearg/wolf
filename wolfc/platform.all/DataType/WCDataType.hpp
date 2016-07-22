@@ -36,6 +36,9 @@ public:
     /* Utility. Tell if this data type is the 'void' data type. */
     virtual bool isVoid() const;
     
+    /* Utility. Tell if this data type is the 'bool' data type. */
+    virtual bool isBool() const;
+    
     /**
      * Return the llvm type for this data type, or nullptr if there is no direct llvm type.
      * Note: the code generation context is required to get this info.

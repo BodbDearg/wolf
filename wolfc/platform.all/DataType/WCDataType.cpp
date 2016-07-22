@@ -18,4 +18,8 @@ bool DataType::isVoid() const {
     return false;   // False for all types except 'void'
 }
 
+bool DataType::isBool() const {
+    return false;   // False for all types except 'bool'
+}
+
 WC_END_NAMESPACE
