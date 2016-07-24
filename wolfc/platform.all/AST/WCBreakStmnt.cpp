@@ -23,16 +23,17 @@ bool BreakStmnt::peek(const Token * tokenPtr) {
 }
 
 BreakStmnt * BreakStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+    // Check the basics
     if (!peek(tokenPtr)) {
         parseError(*tokenPtr, "Expected break statement!");
         return nullptr;
     }
     
-    // Consume 'break' and return parsed statement
+    // Consume 'break' and save token for later:
     const Token * breakTok = tokenPtr;
     ++tokenPtr;
     
-    // See whether if or unless follow, in which case the break statement is conditional:
+    // See whether 'if' or 'unless' follow, in which case the 'break' statement is conditional:
     if (tokenPtr->type == TokenType::kIf || tokenPtr->type == TokenType::kUnless) {
         // Parse the condition token:
         const Token * condTok = tokenPtr;
@@ -42,11 +43,11 @@ BreakStmnt * BreakStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         AssignExpr * condExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(condExpr, nullptr);
         
-        // Break with a condition:
+        // 'break' with a condition:
         return WC_NEW_AST_NODE(alloc, BreakStmntWithCond, *breakTok, *condTok, *condExpr);
     }
     
-    // Break without a condition:
+    // 'break' without a condition:
     return WC_NEW_AST_NODE(alloc, BreakStmntNoCond, *breakTok);
 }
 
@@ -90,7 +91,7 @@ bool BreakStmntNoCond::codegen(CodegenCtx & cgCtx) {
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
     WC_ASSERT(parentFn);
     
-    // Create the basic block for the break code
+    // Create the basic block for the 'break' code
     mBreakBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "BreakStmntNoCond:break", parentFn);
     WC_ASSERT(mBreakBlock);
     

@@ -28,7 +28,7 @@ public:
     
     virtual const Token & getStartToken() const override;
     
-    /* Shouldn't be called directly. The break statement itself will schedule this. */
+    /* Shouldn't be called directly. The statement itself will schedule this. */
     bool deferredCodegen(CodegenCtx & cgCtx);
     
     /* The 'break' token */
@@ -45,7 +45,7 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    /* Do the basic forward codegen for the break statement. */
+    /* Do the basic forward codegen for the statement. */
     virtual bool codegen(CodegenCtx & cgCtx) override;
 };
 
@@ -58,10 +58,10 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    /* Do the basic forward codegen for the break statement. */
+    /* Do the basic forward codegen for the statement. */
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
-    /* Tell if the if condition is inverted (unless) */
+    /* Tell if the 'if' condition for the statement is inverted (unless) */
     bool isIfCondInverted() const;
 
     /* This is either 'if' or 'unless' (inverted condition) */

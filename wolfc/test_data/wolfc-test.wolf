@@ -20,6 +20,9 @@ func menuLoop()
 		var choice = readnum()
 		break if choice == 3
 
+		print("Are you sure? Enter '1' to continue: ")
+		next unless readnum() == 1
+
 		var num1 = getNum()
 		var num2 = getNum()
 
