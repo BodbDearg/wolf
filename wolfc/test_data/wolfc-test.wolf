@@ -18,10 +18,7 @@ func menuLoop()
 		print("2 - Subtract two numbers\n")
 		print("3 - Quit\n")
 		var choice = readnum()
-
-		if choice == 3 
-			return 
-		end
+		break if choice == 3
 
 		var num1 = getNum()
 		var num2 = getNum()

@@ -3,13 +3,7 @@ Language TODO:
 	- .. as 
 	- parsing float numbers
 	- parsing chars
-	- vars have types
-	- functions
-	- return
     - next/break/return if
-    - scope ... end
-    - loop ... end
-    - loop ... repeat while/until ...
 
     - for .. do
         - Completely range based for
