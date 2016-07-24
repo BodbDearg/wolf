@@ -49,7 +49,7 @@ public:
     llvm::BasicBlock *      mEndBasicBlock = nullptr;
 };
 
-/* if AssignExpr then Scope end */
+/* if|unless AssignExpr [then] Scope end */
 class IfStmntNoElse : public IfStmnt {
 public:
     IfStmntNoElse(AssignExpr & ifExpr,
@@ -64,7 +64,7 @@ public:
     const Token & mEndToken;
 };
 
-/* if AssignExpr then Scope else IfStmnt */
+/* if|unless AssignExpr [then] Scope or IfStmnt */
 class IfStmntElseIf : public IfStmnt {
 public:
     IfStmntElseIf(AssignExpr & ifExpr,
@@ -79,7 +79,7 @@ public:
     IfStmnt & mElseIfStmnt;
 };
 
-/* if AssignExpr then Scope else Scope end */
+/* if|unless AssignExpr [then] Scope else Scope end */
 class IfStmntElse : public IfStmnt {
 public:
     IfStmntElse(AssignExpr & ifExpr,
