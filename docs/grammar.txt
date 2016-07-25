@@ -76,6 +76,8 @@ NextStmnt:
 ReturnStmnt:
 	return
 	return AssignExpr
+    return if|unless AssignExpr
+    return AssignExpr if|unless AssignExpr
 
 AssignExpr:
     OrExpr

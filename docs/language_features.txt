@@ -3,11 +3,13 @@ Language TODO:
 	- .. as 
 	- parsing float numbers
 	- parsing chars
-    - next/break/return if
 
     - for .. do
         - Completely range based for
     - rfor .. do
+    - break out of labeled loop
+    - continue to labeled loop
+    - 'in' expression
 
     - Variables must be initialized when declared
     - = void for no initialization

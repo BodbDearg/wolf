@@ -17,11 +17,14 @@ func menuLoop()
 		print("1 - Add two numbers\n")
 		print("2 - Subtract two numbers\n")
 		print("3 - Quit\n")
+
 		var choice = readnum()
 		break if choice == 3
-
-		print("Are you sure? Enter '1' to continue: ")
-		next unless readnum() == 1
+		
+		if choice < 1 or choice > 3
+			print("Invalid choice!\n")
+			next
+		end
 
 		var num1 = getNum()
 		var num2 = getNum()

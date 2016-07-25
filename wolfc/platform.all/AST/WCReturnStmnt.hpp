@@ -3,6 +3,10 @@
 #include "WCASTNode.hpp"
 #include "WCIStmnt.hpp"
 
+namespace llvm {
+    class BasicBlock;
+}
+
 WC_BEGIN_NAMESPACE
 
 struct CodegenCtx;
@@ -14,6 +18,8 @@ class LinearAlloc;
 ReturnStmnt:
 	return
 	return AssignExpr
+    return if|unless AssignExpr
+    return AssignExpr if|unless AssignExpr
 */
 class ReturnStmnt : public ASTNode, public IStmnt {
 public:
@@ -21,7 +27,7 @@ public:
     
     static ReturnStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
-    ReturnStmnt(const Token & startToken);
+    ReturnStmnt(const Token & returnToken);
     
     virtual const Token & getStartToken() const override;
     
@@ -34,13 +40,14 @@ public:
      */
     bool verifyReturnTypeCorrect() const;
     
-    const Token & mStartToken;
+    /* The token for 'return' */
+    const Token & mReturnToken;
 };
 
 /* return */
-class ReturnStmntVoid : public ReturnStmnt {
+class ReturnStmntNoCondVoid : public ReturnStmnt {
 public:
-    ReturnStmntVoid(const Token & startToken);
+    ReturnStmntNoCondVoid(const Token & returnToken);
     
     virtual const Token & getEndToken() const override;
     
@@ -50,9 +57,9 @@ public:
 };
 
 /* return AssignExpr */
-class ReturnStmntWithValue : public ReturnStmnt {
+class ReturnStmntNoCondWithValue : public ReturnStmnt {
 public:
-    ReturnStmntWithValue(const Token & startToken, AssignExpr & expr);
+    ReturnStmntNoCondWithValue(const Token & returnToken, AssignExpr & returnExpr);
     
     virtual const Token & getEndToken() const override;
     
@@ -60,7 +67,61 @@ public:
     
     virtual const DataType & dataType() const override;
     
-    AssignExpr & mExpr;
+    /* Expression for the value to return */
+    AssignExpr & mReturnExpr;
+};
+
+/* This is a base class for return statements with a condition */
+class ReturnStmntWithCondBase : public ReturnStmnt {
+public:
+    ReturnStmntWithCondBase(const Token & returnToken,
+                            const Token & condToken,
+                            AssignExpr & condExpr);
+    
+    virtual const Token & getEndToken() const override;
+    
+    /* Returns true if the condition for returning is inversed ('unless' instead of 'if') */
+    bool isCondExprInversed() const;
+
+    /* Is either 'if' or 'unless' */
+    const Token & mCondToken;
+    
+    /* Expression for the return condition */
+    AssignExpr & mCondExpr;
+    
+    /* The block that does the return statement logic */
+    llvm::BasicBlock * mReturnBlock = nullptr;
+    
+    /* The block that continues and doesn't return */
+    llvm::BasicBlock * mContinueBlock = nullptr;
+};
+
+/* return if|unless AssignExpr */
+class ReturnStmntWithCondVoid : public ReturnStmntWithCondBase {
+public:
+    ReturnStmntWithCondVoid(const Token & returnToken,
+                            const Token & condToken,
+                            AssignExpr & condExpr);
+    
+    virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    virtual const DataType & dataType() const override;
+};
+
+/* return AssignExpr if|unless AssignExpr */
+class ReturnStmntWithCondAndValue : public ReturnStmntWithCondBase {
+public:
+    ReturnStmntWithCondAndValue(const Token & returnToken,
+                                AssignExpr & returnExpr,
+                                const Token & condToken,
+                                AssignExpr & condExpr);
+    
+    virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    virtual const DataType & dataType() const override;
+
+    /* Expression for the value to return */
+    AssignExpr & mReturnExpr;
 };
 
 WC_END_NAMESPACE

@@ -178,7 +178,7 @@ bool IfStmntNoElse::codegen(CodegenCtx & cgCtx) {
     
     // Grab the parent function
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
-    WC_GUARD_ASSERT(parentFn, false);
+    WC_ASSERT(parentFn);
     
     // Save the current insert block:
     llvm::BasicBlock * ifBB = cgCtx.irBuilder.GetInsertBlock();

@@ -140,7 +140,9 @@ bool BreakStmntWithCond::codegen(CodegenCtx & cgCtx) {
     
     // The assign expression must evaluate to bool:
     if (!mCondExpr.dataType().isBool()) {
-        compileError("Condition for 'break' statement must evaluate to a bool!");
+        compileError("Condition for 'break' statement must evaluate to type 'bool', not '%s'!",
+                     mCondExpr.dataType().name());
+        
         return false;
     }
     
