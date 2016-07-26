@@ -41,6 +41,8 @@ public:
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    
     PostfixExpr & mExpr;
 };
 
@@ -60,6 +62,8 @@ public:
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     PostfixExpr &   mExpr;
     const Token &   mStartToken;
@@ -82,6 +86,8 @@ public:
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    
     const Token &   mStartToken;
 };
 
@@ -101,6 +107,8 @@ public:
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     AssignExpr &    mExpr;
     const Token &   mStartToken;

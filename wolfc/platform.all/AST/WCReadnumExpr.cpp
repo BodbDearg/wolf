@@ -95,4 +95,10 @@ llvm::Value * ReadnumExpr::codegenExprEval(CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateLoad(outputVar, "readnum_expr_load_temp_stack_var");
 }
 
+llvm::Constant * ReadnumExpr::codegenExprConstEval(CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Cannot evaluate a 'readnum' expression at compile time!");
+    return nullptr;
+}
+
 WC_END_NAMESPACE

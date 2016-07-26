@@ -30,6 +30,8 @@ public:
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    
     const char * name() const;
     
     const DataValue * lookupDataValue() const;

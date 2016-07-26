@@ -77,6 +77,10 @@ llvm::Value * MulDivExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
+llvm::Constant * MulDivExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mExpr.codegenExprConstEval(cgCtx);
+}
+
 //-----------------------------------------------------------------------------
 // MulDivExprMul
 //-----------------------------------------------------------------------------
@@ -124,6 +128,13 @@ llvm::Value * MulDivExprMul::codegenExprEval(CodegenCtx & cgCtx) {
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateMul(left, right, "MulDivExprMul_MulOp");
+}
+
+llvm::Constant * MulDivExprMul::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
 }
 
 bool MulDivExprMul::compileCheckBothExprsAreInt() const {
@@ -195,6 +206,13 @@ llvm::Value * MulDivExprDiv::codegenExprEval(CodegenCtx & cgCtx) {
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateSDiv(left, right, "MulDivExprDiv_DivOp");
+}
+
+llvm::Constant * MulDivExprDiv::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
 }
 
 bool MulDivExprDiv::compileCheckBothExprsAreInt() const {

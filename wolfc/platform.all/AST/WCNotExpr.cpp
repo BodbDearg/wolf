@@ -71,6 +71,10 @@ llvm::Value * NotExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
+llvm::Constant * NotExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mExpr.codegenExprConstEval(cgCtx);
+}
+
 //-----------------------------------------------------------------------------
 // NotExprNot
 //-----------------------------------------------------------------------------
@@ -122,6 +126,13 @@ llvm::Value * NotExprNot::codegenExprEval(CodegenCtx & cgCtx) {
     
     // Generate and return bitwise not instruction:
     return cgCtx.irBuilder.CreateNot(value);
+}
+
+llvm::Constant * NotExprNot::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
 }
 
 WC_END_NAMESPACE

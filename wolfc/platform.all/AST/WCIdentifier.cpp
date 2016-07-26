@@ -89,6 +89,13 @@ llvm::Value * Identifier::codegenExprEval(CodegenCtx & cgCtx) {
     return dataValue->value;
 }
 
+llvm::Constant * Identifier::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // TODO: relax restriction and allow referencing constant variables which have been defined
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Cannot reference the value of a variable in a constant expression!");
+    return nullptr;
+}
+
 const char * Identifier::name() const {
     return mToken.data.strVal.ptr;
 }

@@ -91,6 +91,10 @@ llvm::Value * RelExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
+llvm::Constant * RelExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mExpr.codegenExprConstEval(cgCtx);
+}
+
 //-----------------------------------------------------------------------------
 // RelExprTwoOps
 //-----------------------------------------------------------------------------
@@ -169,6 +173,13 @@ llvm::Value * RelExprLT::codegenExprEval(CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateICmpSLT(left, right, "RelExprLT_CmpOp");
 }
 
+llvm::Constant * RelExprLT::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
+}
+
 //-----------------------------------------------------------------------------
 // RelExprLE
 //-----------------------------------------------------------------------------
@@ -189,6 +200,13 @@ llvm::Value * RelExprLE::codegenExprEval(CodegenCtx & cgCtx) {
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateICmpSLE(left, right, "RelExprLE_CmpOp");
+}
+
+llvm::Constant * RelExprLE::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -213,6 +231,13 @@ llvm::Value * RelExprGT::codegenExprEval(CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateICmpSGT(left, right, "RelExprGT_CmpOp");
 }
 
+llvm::Constant * RelExprGT::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
+}
+
 //-----------------------------------------------------------------------------
 // RelExprGE
 //-----------------------------------------------------------------------------
@@ -233,6 +258,13 @@ llvm::Value * RelExprGE::codegenExprEval(CodegenCtx & cgCtx) {
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateICmpSGE(left, right, "RelExprGE_CmpOp");
+}
+
+llvm::Constant * RelExprGE::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
 }
 
 WC_END_NAMESPACE

@@ -52,4 +52,11 @@ llvm::Value * StrLit::codegenExprEval(CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateGlobalStringPtr(mToken.data.strVal.ptr, "usr_string_lit");
 }
 
+llvm::Constant * StrLit::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
+}
+
 WC_END_NAMESPACE

@@ -4,6 +4,10 @@
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <llvm/IR/Constants.h>
+WC_THIRD_PARTY_INCLUDES_END
+
 WC_BEGIN_NAMESPACE
 
 bool IntLit::peek(const Token * tokenPtr) {
@@ -49,6 +53,10 @@ llvm::Value * IntLit::codegenAddrOf(CodegenCtx & cgCtx) {
 
 llvm::Value * IntLit::codegenExprEval(CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.getInt64(mToken.data.intVal);
+}
+
+llvm::Constant * IntLit::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), mToken.data.intVal);
 }
 
 WC_END_NAMESPACE

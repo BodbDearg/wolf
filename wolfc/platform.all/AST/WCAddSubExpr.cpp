@@ -77,6 +77,10 @@ llvm::Value * AddSubExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
+llvm::Constant * AddSubExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mExpr.codegenExprConstEval(cgCtx);
+}
+
 //-----------------------------------------------------------------------------
 // AddSubExprAdd
 //-----------------------------------------------------------------------------
@@ -124,6 +128,13 @@ llvm::Value * AddSubExprAdd::codegenExprEval(CodegenCtx & cgCtx) {
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateAdd(left, right, "AddSubExprAdd_AddOp");
+}
+
+llvm::Constant * AddSubExprAdd::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
 }
 
 bool AddSubExprAdd::compileCheckBothExprsAreInt() const {
@@ -195,6 +206,13 @@ llvm::Value * AddSubExprSub::codegenExprEval(CodegenCtx & cgCtx) {
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateSub(left, right, "AddSubExprSub_SubOp");
+}
+
+llvm::Constant * AddSubExprSub::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
 }
 
 bool AddSubExprSub::compileCheckBothExprsAreInt() const {

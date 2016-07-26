@@ -69,7 +69,7 @@ const Token & PrimaryExprIntLit::getEndToken() const {
 }
 
 bool PrimaryExprIntLit::isLValue() const {
-    return false;
+    return mLit.isLValue();
 }
 
 const DataType & PrimaryExprIntLit::dataType() const {
@@ -77,13 +77,15 @@ const DataType & PrimaryExprIntLit::dataType() const {
 }
 
 llvm::Value * PrimaryExprIntLit::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
-    return nullptr;
+    return mLit.codegenAddrOf(cgCtx);
 }
 
 llvm::Value * PrimaryExprIntLit::codegenExprEval(CodegenCtx & cgCtx) {
     return mLit.codegenExprEval(cgCtx);
+}
+
+llvm::Constant * PrimaryExprIntLit::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mLit.codegenExprConstEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -103,7 +105,7 @@ const Token & PrimaryExprBoolLit::getEndToken() const {
 }
 
 bool PrimaryExprBoolLit::isLValue() const {
-    return false;
+    return mLit.isLValue();
 }
 
 const DataType & PrimaryExprBoolLit::dataType() const {
@@ -111,13 +113,15 @@ const DataType & PrimaryExprBoolLit::dataType() const {
 }
 
 llvm::Value * PrimaryExprBoolLit::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
-    return nullptr;
+    return mLit.codegenAddrOf(cgCtx);
 }
 
 llvm::Value * PrimaryExprBoolLit::codegenExprEval(CodegenCtx & cgCtx) {
     return mLit.codegenExprEval(cgCtx);
+}
+
+llvm::Constant * PrimaryExprBoolLit::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mLit.codegenExprConstEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -137,7 +141,7 @@ const Token & PrimaryExprStrLit::getEndToken() const {
 }
 
 bool PrimaryExprStrLit::isLValue() const {
-    return false;
+    return mLit.isLValue();
 }
 
 const DataType & PrimaryExprStrLit::dataType() const {
@@ -145,13 +149,15 @@ const DataType & PrimaryExprStrLit::dataType() const {
 }
 
 llvm::Value * PrimaryExprStrLit::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
-    return nullptr;
+    return mLit.codegenAddrOf(cgCtx);
 }
 
 llvm::Value * PrimaryExprStrLit::codegenExprEval(CodegenCtx & cgCtx) {
     return mLit.codegenExprEval(cgCtx);
+}
+
+llvm::Constant * PrimaryExprStrLit::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mLit.codegenExprConstEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
@@ -186,6 +192,10 @@ llvm::Value * PrimaryExprIdentifier::codegenExprEval(CodegenCtx & cgCtx) {
     return mIdent.codegenExprEval(cgCtx);
 }
 
+llvm::Constant * PrimaryExprIdentifier::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mIdent.codegenExprConstEval(cgCtx);
+}
+
 const char * PrimaryExprIdentifier::name() const {
     return mIdent.name();
 }
@@ -207,7 +217,7 @@ const Token & PrimaryExprReadnum::getEndToken() const {
 }
     
 bool PrimaryExprReadnum::isLValue() const {
-    return false;
+    return mExpr.isLValue();
 }
 
 const DataType & PrimaryExprReadnum::dataType() const {
@@ -215,13 +225,15 @@ const DataType & PrimaryExprReadnum::dataType() const {
 }
 
 llvm::Value * PrimaryExprReadnum::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
-    return nullptr;
+    return mExpr.codegenAddrOf(cgCtx);
 }
 
 llvm::Value * PrimaryExprReadnum::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
+}
+
+llvm::Constant * PrimaryExprReadnum::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mExpr.codegenExprConstEval(cgCtx);
 }
 
 WC_END_NAMESPACE

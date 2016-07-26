@@ -115,6 +115,10 @@ llvm::Value * UnaryExprPrimary::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
+llvm::Constant * UnaryExprPrimary::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mExpr.codegenExprConstEval(cgCtx);
+}
+
 //-----------------------------------------------------------------------------
 // UnaryExprMinus
 //-----------------------------------------------------------------------------
@@ -156,6 +160,13 @@ llvm::Value * UnaryExprMinus::codegenExprEval(CodegenCtx & cgCtx) {
     }
     
     return cgCtx.irBuilder.CreateNeg(mExpr.codegenExprEval(cgCtx));
+}
+
+llvm::Constant * UnaryExprMinus::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
 }
 
 //-----------------------------------------------------------------------------
@@ -201,6 +212,13 @@ llvm::Value * UnaryExprPlus::codegenExprEval(CodegenCtx & cgCtx) {
     return UnaryExprPrimary::codegenExprEval(cgCtx);
 }
 
+llvm::Constant * UnaryExprPlus::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
+}
+
 //-----------------------------------------------------------------------------
 // UnaryExprParen
 //-----------------------------------------------------------------------------
@@ -235,6 +253,10 @@ llvm::Value * UnaryExprParen::codegenAddrOf(CodegenCtx & cgCtx) {
 
 llvm::Value * UnaryExprParen::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
+}
+
+llvm::Constant * UnaryExprParen::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mExpr.codegenExprConstEval(cgCtx);
 }
 
 WC_END_NAMESPACE

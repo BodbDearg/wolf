@@ -41,6 +41,8 @@ public:
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    
     AddSubExpr & mExpr;
 };
 
@@ -75,6 +77,8 @@ public:
     RelExprLT(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
 /* AddSubExpr <= RelExpr */
@@ -83,6 +87,8 @@ public:
     RelExprLE(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
 /* AddSubExpr > RelExpr */
@@ -91,6 +97,8 @@ public:
     RelExprGT(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
 /* AddSubExpr >= RelExpr */
@@ -99,6 +107,8 @@ public:
     RelExprGE(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
 WC_END_NAMESPACE

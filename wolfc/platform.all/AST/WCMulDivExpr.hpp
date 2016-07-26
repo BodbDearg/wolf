@@ -39,6 +39,8 @@ public:
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    
     UnaryExpr & mExpr;
 };
 
@@ -58,6 +60,8 @@ public:
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
@@ -85,6 +89,8 @@ public:
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'

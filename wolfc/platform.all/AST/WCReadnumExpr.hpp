@@ -33,6 +33,8 @@ public:
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    
     const Token & mStartToken;
     const Token & mEndToken;
 };

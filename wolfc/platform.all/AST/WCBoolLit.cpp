@@ -4,6 +4,10 @@
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
 
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <llvm/IR/Constants.h>
+WC_THIRD_PARTY_INCLUDES_END
+
 WC_BEGIN_NAMESPACE
 
 bool BoolLit::peek(const Token * tokenPtr) {
@@ -49,6 +53,11 @@ llvm::Value * BoolLit::codegenAddrOf(CodegenCtx & cgCtx) {
 
 llvm::Value * BoolLit::codegenExprEval(CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.getInt1(mToken.type == TokenType::kTrue);
+}
+
+llvm::Constant * BoolLit::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return llvm::ConstantInt::get(llvm::Type::getInt1Ty(cgCtx.llvmCtx),
+                                  mToken.type == TokenType::kTrue ? 1 : 0);
 }
 
 WC_END_NAMESPACE

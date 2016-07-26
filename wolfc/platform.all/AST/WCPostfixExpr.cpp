@@ -76,6 +76,10 @@ llvm::Value * PostfixExprNoPostfix::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
+llvm::Constant * PostfixExprNoPostfix::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mExpr.codegenExprConstEval(cgCtx);
+}
+
 //-----------------------------------------------------------------------------
 // PostfixExprFuncInvocation
 //-----------------------------------------------------------------------------
@@ -178,6 +182,13 @@ llvm::Value * PostfixExprFuncCall::codegenExprEval(CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateCall(func->mLLVMFunc,
                                       mFuncCall.mArgListExprsValues,
                                       "PostfixExprFuncCall:ReturnVal");
+}
+
+llvm::Constant * PostfixExprFuncCall::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // TODO: some day, eventually, support compile time function evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Cannot call functions in a constant expression!");
+    return nullptr;
 }
 
 const char * PostfixExprFuncCall::nameOfFuncCalled() const {

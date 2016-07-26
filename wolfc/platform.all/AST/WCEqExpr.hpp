@@ -39,6 +39,8 @@ public:
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    
     RelExpr & mExpr;
 };
 
@@ -73,6 +75,8 @@ public:
     EqExprEq(RelExpr & leftExpr, EqExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
 /* RelExpr != EqExpr */
@@ -81,6 +85,8 @@ public:
     EqExprNeq(RelExpr & leftExpr, EqExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
 WC_END_NAMESPACE

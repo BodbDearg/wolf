@@ -45,6 +45,8 @@ public:
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    
     IntLit & mLit;
 };
 
@@ -64,6 +66,8 @@ public:
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     BoolLit & mLit;
 };
@@ -85,6 +89,8 @@ public:
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    
     StrLit & mLit;
 };
 
@@ -104,6 +110,8 @@ public:
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     const char * name() const;
     
@@ -126,6 +134,8 @@ public:
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     ReadnumExpr & mExpr;
 };

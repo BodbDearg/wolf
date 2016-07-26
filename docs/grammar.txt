@@ -7,6 +7,7 @@ DeclDefs:
 
 DeclDef:
 	Func
+	### TODO ### VarDecl
 
 Func:
 	func Identifier ( [FuncArgList] ) [ -> PrimitiveType ] Scope end

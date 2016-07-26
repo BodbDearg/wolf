@@ -68,6 +68,10 @@ llvm::Value * OrExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
+llvm::Constant * OrExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mExpr.codegenExprConstEval(cgCtx);
+}
+
 //-----------------------------------------------------------------------------
 // OrExprOr
 //-----------------------------------------------------------------------------
@@ -134,6 +138,13 @@ llvm::Value * OrExprOr::codegenExprEval(CodegenCtx & cgCtx) {
     
     // Generate and return bitwise and instruction:
     return cgCtx.irBuilder.CreateOr(rightValue, leftValue);
+}
+
+llvm::Constant * OrExprOr::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
 }
 
 WC_END_NAMESPACE

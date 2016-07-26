@@ -3,6 +3,7 @@
 #include "WCMacros.hpp"
 
 namespace llvm {
+    class Constant;
     class Value;
 }
 
@@ -32,10 +33,16 @@ public:
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) = 0;
     
     /**
-     * Generate the llvm code to evaluate this expression.
+     * Generate the llvm code to evaluate this expression at runtime.
      * The expression result is returned as an llvm value, or nullptr if there was a compile error.
      */
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) = 0;
+    
+    /**
+     * Generate the llvm code to evaluate this expression at compile time.
+     * Note that not all expressions will support this and may return nullptr if not suported.
+     */
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) = 0;
 };
 
 WC_END_NAMESPACE

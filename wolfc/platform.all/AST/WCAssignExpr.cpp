@@ -67,6 +67,10 @@ llvm::Value * AssignExprNoAssign::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
+llvm::Constant * AssignExprNoAssign::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mExpr.codegenExprConstEval(cgCtx);
+}
+
 //-----------------------------------------------------------------------------
 // AssignExprAssign
 //-----------------------------------------------------------------------------
@@ -135,6 +139,12 @@ llvm::Value * AssignExprAssign::codegenExprEval(CodegenCtx & cgCtx) {
     
     // The expression evalutes to the left expression, so return that
     return cgCtx.irBuilder.CreateLoad(leftValue);
+}
+
+llvm::Constant * AssignExprAssign::codegenExprConstEval(CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Assign is not allowed in a constant expression!");
+    return nullptr;
 }
 
 WC_END_NAMESPACE

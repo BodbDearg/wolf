@@ -75,6 +75,10 @@ llvm::Value * EqExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
+llvm::Constant * EqExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mExpr.codegenExprConstEval(cgCtx);
+}
+
 //-----------------------------------------------------------------------------
 // EqExprTwoOps
 //-----------------------------------------------------------------------------
@@ -153,6 +157,13 @@ llvm::Value * EqExprEq::codegenExprEval(CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateICmpEQ(left, right, "EqExprEq_CmpOp");
 }
 
+llvm::Constant * EqExprEq::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
+}
+
 //-----------------------------------------------------------------------------
 // EqExprNeq
 //-----------------------------------------------------------------------------
@@ -173,6 +184,13 @@ llvm::Value * EqExprNeq::codegenExprEval(CodegenCtx & cgCtx) {
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
     return cgCtx.irBuilder.CreateICmpNE(left, right, "EqExprNeq_CmpOp");
+}
+
+llvm::Constant * EqExprNeq::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning TODO: implement constant evaluation
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Constant evaluation supported yet for this tyoe of expression!");
+    return nullptr;
 }
 
 WC_END_NAMESPACE
