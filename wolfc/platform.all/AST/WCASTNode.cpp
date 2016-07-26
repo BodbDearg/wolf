@@ -1,6 +1,8 @@
 #include "WCASTNode.hpp"
-#include "WCToken.hpp"
+#include "WCFunc.hpp"
+#include "WCModule.hpp"
 #include "WCScope.hpp"
+#include "WCToken.hpp"
 #include <cstdio>
 #include <cstdarg>
 
@@ -30,31 +32,27 @@ ASTNode::~ASTNode() {
 }
 
 Scope * ASTNode::getParentScope() {
-    Scope * parentScope = dynamic_cast<Scope*>(mParent);
-    
-    if (parentScope) {
-        return parentScope;
-    }
-    
-    if (mParent) {
-        return mParent->getParentScope();
-    }
-    
-    return nullptr;
+    return firstParentOfType<Scope>();
 }
 
 const Scope * ASTNode::getParentScope() const {
-    const Scope * parentScope = dynamic_cast<Scope*>(mParent);
-    
-    if (parentScope) {
-        return parentScope;
-    }
-    
-    if (mParent) {
-        return mParent->getParentScope();
-    }
-    
-    return nullptr;
+    return firstParentOfType<Scope>();
+}
+
+Func * ASTNode::getParentFunc() {
+    return firstParentOfType<Func>();
+}
+
+const Func * ASTNode::getParentFunc() const {
+    return firstParentOfType<Func>();
+}
+
+Module * ASTNode::getParentModule() {
+    return firstParentOfType<Module>();
+}
+
+const Module * ASTNode::getParentModule() const {
+    return firstParentOfType<Module>();
 }
 
 void ASTNode::compileError(const char * msg, ...) const {

@@ -4,8 +4,10 @@
 
 WC_BEGIN_NAMESPACE
 
-class Scope;
 struct Token;
+class Func;
+class Module;
+class Scope;
 
 /* Macro for allocating an AST tree node */
 #define WC_NEW_AST_NODE(allocator, NodeType, ...)\
@@ -30,11 +32,23 @@ public:
     /* Return the token that the AST node ends at. */
     virtual const Token & getEndToken() const = 0;
     
-    /* Figure out what the parent scope AST node of this node is. */
+    /* Figure out what the parent scope of this node is. */
     Scope * getParentScope();
     
-    /* Figure out what the parent scope AST node of this node is (const version). */
+    /* Figure out what the parent scope of this node is (const version). */
     const Scope * getParentScope() const;
+    
+    /* Figure out what the parent function of this node is. */
+    Func * getParentFunc();
+    
+    /* Figure out what the parent function of this node is (const version). */
+    const Func * getParentFunc() const;
+    
+    /* Figure out what the parent module of this node is. */
+    Module * getParentModule();
+    
+    /* Figure out what the parent module of this node is (const version). */
+    const Module * getParentModule() const;
     
     /* Get the first parent node of a certain type */
     template <class T>

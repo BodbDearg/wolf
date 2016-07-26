@@ -8,6 +8,7 @@ WC_BEGIN_NAMESPACE
 class AssignExpr;
 class Identifier;
 class LinearAlloc;
+class Module;
 
 /*
 VarDecl:
@@ -26,6 +27,10 @@ public:
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    bool codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope);
+    
+    bool codegenAsGlobalVar(CodegenCtx & cgCtx);
     
     const Token &   mStartToken;
     Identifier &    mIdent;

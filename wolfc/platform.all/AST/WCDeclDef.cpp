@@ -1,6 +1,7 @@
 #include "WCDeclDef.hpp"
 #include "WCFunc.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCVarDecl.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -9,15 +10,22 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool DeclDef::peek(const Token * tokenPtr) {
-    return Func::peek(tokenPtr);
+    return Func::peek(tokenPtr) || VarDecl::peek(tokenPtr);
 }
 
 DeclDef * DeclDef::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    // See if function follows:
+    // Check for 'Func':
     if (Func::peek(tokenPtr)) {
         Func * func = Func::parse(tokenPtr, alloc);
         WC_GUARD(func, nullptr);
         return WC_NEW_AST_NODE(alloc, DeclDefFunc, *func);
+    }
+    
+    // Check for 'VarDecl':
+    if (VarDecl::peek(tokenPtr)) {
+        VarDecl * varDecl = VarDecl::parse(tokenPtr, alloc);
+        WC_GUARD(varDecl, nullptr);
+        return WC_NEW_AST_NODE(alloc, DeclDefVarDecl, *varDecl);
     }
     
     // Unknown stuff ahead
@@ -43,6 +51,26 @@ const Token & DeclDefFunc::getEndToken() const {
 
 bool DeclDefFunc::codegen(CodegenCtx & cgCtx) {
     return mFunc.codegen(cgCtx);
+}
+
+//-----------------------------------------------------------------------------
+// DeclDefVarDecl
+//-----------------------------------------------------------------------------
+
+DeclDefVarDecl::DeclDefVarDecl(VarDecl & varDecl) : mVarDecl(varDecl) {
+    mVarDecl.mParent = this;
+}
+
+const Token & DeclDefVarDecl::getStartToken() const {
+    return mVarDecl.getStartToken();
+}
+    
+const Token & DeclDefVarDecl::getEndToken() const {
+    return mVarDecl.getEndToken();
+}
+    
+bool DeclDefVarDecl::codegen(CodegenCtx & cgCtx) {
+    return mVarDecl.codegen(cgCtx);
 }
 
 WC_END_NAMESPACE

@@ -36,18 +36,18 @@ public:
      * Create a variable within this scope.
      * If the variable already exists then creation fails and null is returned. 
      */
-    const DataValue * createVariable(const char * variableName,
-                                     const DataType & dataType,
-                                     CodegenCtx & cgCtx);
+    const DataValue * createVar(const char * varName,
+                                const DataType & dataType,
+                                CodegenCtx & cgCtx);
     
-    /**
-     * Get a variable within this scope or a parent scope. Does not create if it does not exist.
-     * Will search parent scopes if not found within this scope.
-     */
-    const DataValue * getVariable(const char * variableName) const;
+    /* Get a variable within this scope. Returns null if not found within this scope. */
+    const DataValue * getVar(const char * varName) const;
     
-    Stmnts &                                            mStmnts;
-    std::map<const char*, DataValue, CStrComparator>    mVariableValues;
+    /* All the statements in the scope. */
+    Stmnts & mStmnts;
+    
+    /* A list of variables in the scope. Generated during code generation. */
+    std::map<const char*, DataValue, CStrComparator> mVarValues;
 };
 
 WC_END_NAMESPACE

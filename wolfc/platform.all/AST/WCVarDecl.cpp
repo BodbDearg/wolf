@@ -4,6 +4,7 @@
 #include "WCDataType.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCModule.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
@@ -61,20 +62,25 @@ const Token & VarDecl::getEndToken() const {
 }
 
 bool VarDecl::codegen(CodegenCtx & cgCtx) {
-    // Grab the parent scope
+    // See if this is a local or global var. If it is a local var then there will be a parent scope:
     Scope * parentScope = getParentScope();
     
-    if (!parentScope) {
-        compileError("Can't codegen, no parent scope!");
-        return false;
+    if (parentScope) {
+        return codegenAsLocalVar(cgCtx, *parentScope);     // Local variable!
     }
     
+    return codegenAsGlobalVar(cgCtx);
+}
+
+bool VarDecl::codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope) {
     // Create the variable. If this fails then the variable already exists:
     const DataType & exprType = mExpr.dataType();
-    const DataValue * leftValue = parentScope->createVariable(mIdent.mToken.data.strVal.ptr, exprType, cgCtx);
+    const DataValue * leftValue = parentScope.createVar(mIdent.mToken.data.strVal.ptr,
+                                                        exprType,
+                                                        cgCtx);
     
     if (!leftValue) {
-        compileError("The variable '%s' has been redefined!", mIdent.mToken.data.strVal.ptr);
+        compileError("The local variable '%s' has been redefined!", mIdent.mToken.data.strVal.ptr);
         return false;
     }
     
@@ -85,6 +91,26 @@ bool VarDecl::codegen(CodegenCtx & cgCtx) {
     // TODO: this won't work for non primitive types
     // Generate store instruction:
     return cgCtx.irBuilder.CreateStore(rightValue, leftValue->value) != nullptr;
+}
+
+bool VarDecl::codegenAsGlobalVar(CodegenCtx & cgCtx) {
+    // Now evaluate the right expression:
+    llvm::Constant * rightValue = mExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(rightValue, false);
+    
+    // Create the variable. If this fails then the variable already exists:
+    const DataType & exprType = mExpr.dataType();
+    const DataValue * leftValue = cgCtx.module.createVar(mIdent.mToken.data.strVal.ptr,
+                                                         exprType,
+                                                         rightValue,
+                                                         cgCtx);
+    
+    if (!leftValue) {
+        compileError("The global variable '%s' has been redefined!", mIdent.mToken.data.strVal.ptr);
+        return false;
+    }
+    
+    return true;    // All good!
 }
 
 WC_END_NAMESPACE

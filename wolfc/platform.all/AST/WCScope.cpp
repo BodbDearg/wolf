@@ -33,15 +33,15 @@ bool Scope::codegen(CodegenCtx & cgCtx) {
     return mStmnts.codegen(cgCtx);
 }
 
-const DataValue * Scope::createVariable(const char * variableName,
-                                        const DataType & dataType,
-                                        CodegenCtx & cgCtx)
+const DataValue * Scope::createVar(const char * varName,
+                                   const DataType & dataType,
+                                   CodegenCtx & cgCtx)
 {
     // If the variable already exists in this scope then creation fails:
     {
-        auto iter = mVariableValues.find(variableName);
+        auto iter = mVarValues.find(varName);
         
-        if (iter != mVariableValues.end()) {
+        if (iter != mVarValues.end()) {
             return nullptr;
         }
     }
@@ -52,29 +52,29 @@ const DataValue * Scope::createVariable(const char * variableName,
     
     if (!llvmType) {
         compileError("Variable '%s' of type '%s' is not an llvm primitive type! Cannot create a variable to hold it!",
-                     variableName,
+                     varName,
                      dataType.name());
         
         return nullptr;
     }
     
     // Otherwise make it:
-    DataValue & dataValue = mVariableValues[variableName];
+    DataValue & dataValue = mVarValues[varName];
     
     dataValue.requiresLoad = true;
     dataValue.type = &dataType;
     dataValue.value = cgCtx.irBuilder.CreateAlloca(llvmType,
                                                    nullptr,
-                                                   std::string("alloc_ident_val:") + variableName);
+                                                   std::string("alloc_ident_val:") + varName);
     
     return &dataValue;
 }
 
-const DataValue * Scope::getVariable(const char * variableName) const {
+const DataValue * Scope::getVar(const char * varName) const {
     // First search in this scope:
-    auto iter = mVariableValues.find(variableName);
+    auto iter = mVarValues.find(varName);
     
-    if (iter != mVariableValues.end()) {
+    if (iter != mVarValues.end()) {
         return &iter->second;
     }
     
@@ -82,11 +82,10 @@ const DataValue * Scope::getVariable(const char * variableName) const {
     const Scope * parentScope = getParentScope();
     
     if (parentScope) {
-        return parentScope->getVariable(variableName);
+        return parentScope->getVar(varName);
     }
     
-    // Variable not found!
-    return nullptr;
+    return nullptr;     // Variable not found!
 }
 
 WC_END_NAMESPACE

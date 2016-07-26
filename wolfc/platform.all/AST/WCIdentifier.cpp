@@ -3,6 +3,7 @@
 #include "WCCodegenCtx.hpp"
 #include "WCFunc.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCModule.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
@@ -101,24 +102,27 @@ const char * Identifier::name() const {
 }
 
 const DataValue * Identifier::lookupDataValue() const {
-    // See if there is a parent scope, if so then try to lookup the value within that
+    // See if there is a parent scope, if so then try to lookup the value within that and
+    // all parent scopes of that parent scope...
     const char * identifierName = name();
     
     {
         const Scope * parentScope = getParentScope();
         
-        if (parentScope) {
-            const DataValue * dataValue = parentScope->getVariable(identifierName);
+        while (parentScope) {
+            const DataValue * dataValue = parentScope->getVar(identifierName);
             
             if (dataValue) {
                 return dataValue;
             }
+            
+            parentScope = parentScope->getParentScope();
         }
     }
     
     // Failing that check if there is a parent function and try to lookup the value within that:
     {
-        const Func * parentFunc = firstParentOfType<Func>();
+        const Func * parentFunc = getParentFunc();
         
         if (parentFunc) {
             const DataValue * dataValue = parentFunc->getArg(identifierName);
@@ -129,7 +133,10 @@ const DataValue * Identifier::lookupDataValue() const {
         }
     }
     
-    return nullptr;     // Failed to find the value!
+    // Failing that get the parent module and try to lookup the value within that:
+    const Module * parentModule = getParentModule();
+    WC_ASSERT(parentModule);
+    return parentModule->getVar(identifierName);
 }
 
 WC_END_NAMESPACE

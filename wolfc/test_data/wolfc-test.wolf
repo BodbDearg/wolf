@@ -1,48 +1,13 @@
-func add(int num1, int num2) -> int
-	return num1 + num2
-end
-
-func sub(int num1, int num2) -> int
-	return num1 - num2
-end
-
-func getNum() -> int
-	print("Enter a number: ")
-	return readnum()
-end
-
-func menuLoop()
-	loop
-		print("** Menu **\n")
-		print("1 - Add two numbers\n")
-		print("2 - Subtract two numbers\n")
-		print("3 - Quit\n")
-
-		var choice = readnum()
-		break if choice == 3
-		
-		if choice < 1 or choice > 3
-			print("Invalid choice!\n")
-			next
-		end
-
-		var num1 = getNum()
-		var num2 = getNum()
-
-		if choice == 1
-			print("The numbers added are: ")
-			print(add(num1, num2))
-			print("\n")
-		else
-			print("The numbers subtracted are: ")
-			print(sub(num1, num2))
-			print("\n")
-		end
-	end
-end
+var i = 2
 
 func main() -> int
-	menuLoop()
-	print("Fuck me that was amazing!🤑\n")
+	print("The value of i is = ")
+	print(i)
+	print("\n")
+	print("Now enter a new value to assign to it: ")
+	i = readnum()
+	print("That by 2 is: ")
+	print(i * 2)
+	print("\nFucking amazing! 🙉\n")
 	return 0
 end
