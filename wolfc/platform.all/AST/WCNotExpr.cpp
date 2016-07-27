@@ -109,30 +109,34 @@ llvm::Value * NotExprNot::codegenAddrOf(CodegenCtx & cgCtx) {
 }
 
 llvm::Value * NotExprNot::codegenExprEval(CodegenCtx & cgCtx) {
-    // Grab the type for bool
-    const DataType & boolType = PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
-    
     // Expression must evaluate to a boolean:
-    const DataType & exprType = mExpr.dataType();
-    
-    if (!exprType.equals(boolType)) {
-        compileError("Expression following logical 'not' must evaluate to 'bool', not '%s'!", exprType.name());
-        return nullptr;
-    }
+    compileCheckExprIsBool();
 
-    // Evaluate the expression:
+    // Evaluate the expression and generate the code for the not instruction:
     llvm::Value * value = mExpr.codegenExprEval(cgCtx);
     WC_GUARD(value, nullptr);
-    
-    // Generate and return bitwise not instruction:
     return cgCtx.irBuilder.CreateNot(value);
 }
 
 llvm::Constant * NotExprNot::codegenExprConstEval(CodegenCtx & cgCtx) {
-    #warning TODO: implement constant evaluation
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Constant evaluation supported yet for this tyoe of expression!");
-    return nullptr;
+    // Expression must evaluate to a boolean:
+    compileCheckExprIsBool();
+    
+    // Evaluate the expression and generate the code for the not instruction:
+    llvm::Constant * value = mExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(value, nullptr);
+    return llvm::ConstantExpr::getNot(value);
+}
+
+bool NotExprNot::compileCheckExprIsBool() const {
+    const DataType & exprType = mExpr.dataType();
+    
+    if (!exprType.isBool()) {
+        compileError("Expression following logical 'not' must evaluate to 'bool', not '%s'!", exprType.name());
+        return false;
+    }
+    
+    return true;
 }
 
 WC_END_NAMESPACE

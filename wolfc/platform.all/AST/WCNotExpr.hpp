@@ -62,6 +62,12 @@ public:
     
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
+    /**
+     * TODO: this is a temp function for the moment. Issue a compile error if the expr is not of 'bool'
+     * Return false for failure if that is the case.
+     */
+    bool compileCheckExprIsBool() const;
+    
     NotExpr &       mExpr;
     const Token &   mStartToken;
 };
