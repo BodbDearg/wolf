@@ -159,14 +159,23 @@ llvm::Value * UnaryExprMinus::codegenExprEval(CodegenCtx & cgCtx) {
         return nullptr;
     }
     
-    return cgCtx.irBuilder.CreateNeg(mExpr.codegenExprEval(cgCtx));
+    llvm::Value * exprValue = mExpr.codegenExprEval(cgCtx);
+    WC_GUARD(exprValue, nullptr);
+    return cgCtx.irBuilder.CreateNeg(exprValue);
 }
 
 llvm::Constant * UnaryExprMinus::codegenExprConstEval(CodegenCtx & cgCtx) {
-    #warning TODO: implement constant evaluation
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Constant evaluation supported yet for this tyoe of expression!");
-    return nullptr;
+    // TODO: support more types
+    const DataType & exprType = mExpr.dataType();
+    
+    if (!exprType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+        compileError("Unary '-' operator only supports 'int' datatype, not '%s'!", exprType.name());
+        return nullptr;
+    }
+    
+    llvm::Constant * exprValue = mExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(exprValue, nullptr);
+    return llvm::ConstantExpr::getNeg(exprValue);
 }
 
 //-----------------------------------------------------------------------------
@@ -213,10 +222,15 @@ llvm::Value * UnaryExprPlus::codegenExprEval(CodegenCtx & cgCtx) {
 }
 
 llvm::Constant * UnaryExprPlus::codegenExprConstEval(CodegenCtx & cgCtx) {
-    #warning TODO: implement constant evaluation
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Constant evaluation supported yet for this tyoe of expression!");
-    return nullptr;
+    // TODO: support more types
+    const DataType & exprType = mExpr.dataType();
+    
+    if (!exprType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+        compileError("Unary '+' operator only supports 'int' datatype, not '%s'!", exprType.name());
+        return nullptr;
+    }
+    
+    return UnaryExprPrimary::codegenExprConstEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
