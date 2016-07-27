@@ -145,9 +145,7 @@ EqExprEq::EqExprEq(RelExpr & leftExpr, EqExpr & rightExpr) : EqExprTwoOps(leftEx
 
 llvm::Value * EqExprEq::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
-    if (!compileCheckBothExprsAreInt()) {
-        return nullptr;
-    }
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
     // Generate code for the operation
     llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
@@ -158,10 +156,15 @@ llvm::Value * EqExprEq::codegenExprEval(CodegenCtx & cgCtx) {
 }
 
 llvm::Constant * EqExprEq::codegenExprConstEval(CodegenCtx & cgCtx) {
-    #warning TODO: implement constant evaluation
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Constant evaluation supported yet for this tyoe of expression!");
-    return nullptr;
+    // TODO: handle auto type promotion and other non int types
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
+    
+    // Generate code for the operation
+    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_EQ, left, right);
 }
 
 //-----------------------------------------------------------------------------
@@ -174,9 +177,7 @@ EqExprNeq::EqExprNeq(RelExpr & leftExpr, EqExpr & rightExpr) : EqExprTwoOps(left
 
 llvm::Value * EqExprNeq::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
-    if (!compileCheckBothExprsAreInt()) {
-        return nullptr;
-    }
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
     // Generate code for the operation
     llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
@@ -187,10 +188,15 @@ llvm::Value * EqExprNeq::codegenExprEval(CodegenCtx & cgCtx) {
 }
 
 llvm::Constant * EqExprNeq::codegenExprConstEval(CodegenCtx & cgCtx) {
-    #warning TODO: implement constant evaluation
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Constant evaluation supported yet for this tyoe of expression!");
-    return nullptr;
+    // TODO: handle auto type promotion and other non int types
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
+    
+    // Generate code for the operation
+    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_NE, left, right);
 }
 
 WC_END_NAMESPACE
