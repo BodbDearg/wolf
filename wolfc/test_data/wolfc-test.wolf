@@ -1,4 +1,4 @@
-var i = false and false
+var i = true or false
 
 func main() -> int
 	print("The value of i is = ")

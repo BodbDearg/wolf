@@ -107,44 +107,47 @@ llvm::Value * OrExprOr::codegenAddrOf(CodegenCtx & cgCtx) {
 }
 
 llvm::Value * OrExprOr::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: add support for lazy evaluation
-    
-    // Grab the type for bool
-    const DataType & boolType = PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
-    
-    // Left side must evaluate to a boolean:
-    const DataType & leftType = mLeftExpr.dataType();
-    
-    if (!leftType.equals(boolType)) {
-        compileError("Left side of logical 'or' expression must evaluate to 'bool', not '%s'!", leftType.name());
-        return nullptr;
-    }
-    
-    // Right side must evaluate to a boolean:
-    const DataType & rightType = mRightExpr.dataType();
-    
-    if (!rightType.equals(boolType)) {
-        compileError("Right side of logical 'or' expression must evaluate to 'bool', not '%s'!", rightType.name());
-        return nullptr;
-    }
+    // Verify data types used by operator:
+    compileCheckBothExprsAreBool();
 
-    // Evaluate left side:
+    // TODO: add support for lazy evaluation
+    // Evaluate the sub expressions and create the instruction:
     llvm::Value * leftValue = mLeftExpr.codegenExprEval(cgCtx);
     WC_GUARD(leftValue, nullptr);
-    
-    // Now evaluate the right:
     llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(rightValue, nullptr);
-    
-    // Generate and return bitwise and instruction:
     return cgCtx.irBuilder.CreateOr(rightValue, leftValue);
 }
 
 llvm::Constant * OrExprOr::codegenExprConstEval(CodegenCtx & cgCtx) {
-    #warning TODO: implement constant evaluation
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Constant evaluation supported yet for this tyoe of expression!");
-    return nullptr;
+    // Verify data types used by operator:
+    compileCheckBothExprsAreBool();
+    
+    // TODO: add support for lazy evaluation
+    // Evaluate the sub expressions and create the instruction:
+    llvm::Constant * leftValue = mLeftExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(leftValue, nullptr);
+    llvm::Constant * rightValue = mRightExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(rightValue, nullptr);
+    return llvm::ConstantExpr::getOr(rightValue, leftValue);
+}
+
+bool OrExprOr::compileCheckBothExprsAreBool() const {
+    const DataType & leftType = mLeftExpr.dataType();
+    
+    if (!leftType.isBool()) {
+        compileError("Left side of logical 'or' expression must evaluate to 'bool', not '%s'!", leftType.name());
+        return false;
+    }
+    
+    const DataType & rightType = mRightExpr.dataType();
+    
+    if (!rightType.isBool()) {
+        compileError("Right side of logical 'or' expression must evaluate to 'bool', not '%s'!", rightType.name());
+        return false;
+    }
+    
+    return true;
 }
 
 WC_END_NAMESPACE
