@@ -176,9 +176,16 @@ llvm::Constant * TernaryExprWithCond::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Verify data types used by operator:
     compileCheckExprDataTypes();
     
-    #warning TODO: Handle constant evaluation of ternary expression
-    compileError("Can't do constant evaluation of ternary expression currently!");
-    return nullptr;
+    // Generate the code for the boolean condition:
+    llvm::Constant * condValue = mCondExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(condValue, nullptr);
+    
+    // See whether the value is true or false: use that to decide which sub expression to choose
+    if (condValue->isZeroValue()) {
+        return mFalseExpr.codegenExprConstEval(cgCtx);
+    }
+    
+    return mTrueExpr.codegenExprConstEval(cgCtx);
 }
 
 bool TernaryExprWithCond::compileCheckExprDataTypes() const {
