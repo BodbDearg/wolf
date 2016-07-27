@@ -41,7 +41,7 @@ AndExpr * AndExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 
 AndExprNoOp::AndExprNoOp(NotExpr & expr) : mExpr(expr) {
-    expr.mParent = this;
+    mExpr.mParent = this;
 }
 
 const Token & AndExprNoOp::getStartToken() const {

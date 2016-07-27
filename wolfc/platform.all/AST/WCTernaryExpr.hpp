@@ -5,26 +5,27 @@
 
 WC_BEGIN_NAMESPACE
 
+class AssignExpr;
 class DataType;
 class LinearAlloc;
-class TernaryExpr;
+class OrExpr;
 
 /*
-AssignExpr:
-    TernaryExpr
-    TernaryExpr = AssignExpr
+TernaryExpr:
+	OrExpr
+	OrExpr ? AssignExpr : AssignExpr
 */
-class AssignExpr : public ASTNode, public IExpr {
+class TernaryExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     
-    static AssignExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static TernaryExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
 /* OrExpr */
-class AssignExprNoAssign : public AssignExpr {
+class TernaryExprNoCond : public TernaryExpr {
 public:
-    AssignExprNoAssign(TernaryExpr & expr);
+    TernaryExprNoCond(OrExpr & expr);
     
     virtual const Token & getStartToken() const override;
     
@@ -40,13 +41,15 @@ public:
     
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    TernaryExpr & mExpr;
+    OrExpr & mExpr;
 };
 
-/* TernaryExpr = AssignExpr */
-class AssignExprAssign : public AssignExpr {
+/* OrExpr ? AssignExpr : AssignExpr */
+class TernaryExprWithCond : public TernaryExpr {
 public:
-    AssignExprAssign(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+    TernaryExprWithCond(OrExpr & condExpr,
+                        AssignExpr & trueExpr,
+                        AssignExpr & falseExpr);
     
     virtual const Token & getStartToken() const override;
     
@@ -62,8 +65,16 @@ public:
     
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    TernaryExpr &   mLeftExpr;
-    AssignExpr &    mRightExpr;
+    /**
+     * TODO: this is a temp function for the moment. Verify the types of the sub-expressions
+     * involved in this expression. The leftmost expression should be a bool and the two other value 
+     * expressions should equate to the same type.
+     */
+    bool compileCheckExprDataTypes() const;
+    
+    OrExpr &        mCondExpr;
+    AssignExpr &    mTrueExpr;
+    AssignExpr &    mFalseExpr;
 };
 
 WC_END_NAMESPACE

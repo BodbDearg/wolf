@@ -2,7 +2,7 @@
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCOrExpr.hpp"
+#include "WCTernaryExpr.hpp"
 #include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -12,13 +12,13 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool AssignExpr::peek(const Token * tokenPtr) {
-    return OrExpr::peek(tokenPtr);
+    return TernaryExpr::peek(tokenPtr);
 }
 
 AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the initial expression
-    OrExpr * orExpr = OrExpr::parse(tokenPtr, alloc);
-    WC_GUARD(orExpr, nullptr);
+    TernaryExpr * ternaryExpr = TernaryExpr::parse(tokenPtr, alloc);
+    WC_GUARD(ternaryExpr, nullptr);
     
     // See if there is a '=' for assignment
     if (tokenPtr->type == TokenType::kEquals) {
@@ -28,19 +28,19 @@ AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         // Parse the following assign expression and create the AST node
         AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(assignExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AssignExprAssign, *orExpr, *assignExpr);
+        return WC_NEW_AST_NODE(alloc, AssignExprAssign, *ternaryExpr, *assignExpr);
     }
 
     // Assign expression with no assign
-    return WC_NEW_AST_NODE(alloc, AssignExprNoAssign, *orExpr);
+    return WC_NEW_AST_NODE(alloc, AssignExprNoAssign, *ternaryExpr);
 }
 
 //-----------------------------------------------------------------------------
 // AssignExprNoAssign
 //-----------------------------------------------------------------------------
 
-AssignExprNoAssign::AssignExprNoAssign(OrExpr & expr) : mExpr(expr) {
-    expr.mParent = this;
+AssignExprNoAssign::AssignExprNoAssign(TernaryExpr & expr) : mExpr(expr) {
+    mExpr.mParent = this;
 }
 
 const Token & AssignExprNoAssign::getStartToken() const {
@@ -75,7 +75,7 @@ llvm::Constant * AssignExprNoAssign::codegenExprConstEval(CodegenCtx & cgCtx) {
 // AssignExprAssign
 //-----------------------------------------------------------------------------
 
-AssignExprAssign::AssignExprAssign(OrExpr & leftExpr, AssignExpr & rightExpr) :
+AssignExprAssign::AssignExprAssign(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {

@@ -44,7 +44,7 @@ NotExpr * NotExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 
 NotExprNoOp::NotExprNoOp(EqExpr & expr) : mExpr(expr) {
-    expr.mParent = this;
+    mExpr.mParent = this;
 }
 
 const Token & NotExprNoOp::getStartToken() const {

@@ -81,8 +81,12 @@ ReturnStmnt:
     return AssignExpr if|unless AssignExpr
 
 AssignExpr:
-    OrExpr
-    OrExpr = AssignExpr
+    TernaryExpr
+    TernaryExpr = AssignExpr
+
+TernaryExpr:
+	OrExpr
+	OrExpr ? AssignExpr : AssignExpr
 
 OrExpr:
 	AndExpr

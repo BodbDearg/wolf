@@ -41,7 +41,7 @@ OrExpr * OrExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 
 OrExprNoOp::OrExprNoOp(AndExpr & expr) : mExpr(expr) {
-    expr.mParent = this;
+    mExpr.mParent = this;
 }
 
 const Token & OrExprNoOp::getStartToken() const {

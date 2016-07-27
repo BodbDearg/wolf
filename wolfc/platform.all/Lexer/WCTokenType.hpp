@@ -55,6 +55,10 @@ enum class TokenType {
     kComma,
     /* -> */
     kOpArrow,
+    /* : */
+    kColon,
+    /* ? */
+    kQMark,
 
     /*=========================================================================
     | Language keywords: data types
