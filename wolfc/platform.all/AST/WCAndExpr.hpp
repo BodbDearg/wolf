@@ -62,6 +62,12 @@ public:
     
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
+    /**
+     * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'bool'
+     * Return false for failure if that is the case.
+     */
+    bool compileCheckBothExprsAreBool() const;
+    
     NotExpr & mLeftExpr;
     AndExpr & mRightExpr;
 };
