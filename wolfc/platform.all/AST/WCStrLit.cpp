@@ -1,8 +1,15 @@
 #include "WCStrLit.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCDataType.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCModule.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCToken.hpp"
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <llvm/IR/GlobalValue.h>
+    #include <llvm/IR/GlobalVariable.h>
+WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
@@ -49,14 +56,30 @@ llvm::Value * StrLit::codegenAddrOf(CodegenCtx & cgCtx) {
 
 llvm::Value * StrLit::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: need some sort of LUT for the module so we only have unique string instances
-    return cgCtx.irBuilder.CreateGlobalStringPtr(mToken.data.strVal.ptr, "usr_string_lit");
+    return cgCtx.irBuilder.CreateGlobalStringPtr(mToken.data.strVal.ptr, "StrLit");
 }
 
 llvm::Constant * StrLit::codegenExprConstEval(CodegenCtx & cgCtx) {
-    #warning TODO: implement constant evaluation
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Constant evaluation supported yet for this tyoe of expression!");
-    return nullptr;
+    // Create a constant for the string array:
+    llvm::Constant * strArray = llvm::ConstantDataArray::getString(cgCtx.llvmCtx, mToken.data.strVal.ptr);
+    
+    // TODO: memory management here - use the linear allocator
+    // TODO: need some sort of LUT for the module so we only have unique string instances
+    llvm::GlobalVariable * strGlobalVar = new llvm::GlobalVariable
+    (
+        *cgCtx.module.mLLVMModule.get(),
+        strArray->getType(),
+        true,                                           // Is constant
+        llvm::GlobalValue::PrivateLinkage,
+        strArray,                                       // Initializer
+        "StrLit"
+    );
+    
+    // Return a constant expression to get a pointer to the first element of the string
+    WC_GUARD(strArray, nullptr);
+    llvm::ConstantInt * firstIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), 0);
+    std::vector<llvm::Constant*> indices = { firstIndex, firstIndex };
+    return llvm::ConstantExpr::getGetElementPtr(strArray->getType(), strGlobalVar, indices);
 }
 
 WC_END_NAMESPACE

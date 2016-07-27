@@ -1,7 +1,9 @@
-var i = not false
+var i = "fuckit"
 
 func main() -> int
 	print("The value of i is = ")
+	print(i)
+	i = "Blah"
 	print(i)
 	print("\nFucking amazing! 🙉\n")
 	return 0
