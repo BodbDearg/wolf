@@ -131,10 +131,17 @@ llvm::Value * MulDivExprMul::codegenExprEval(CodegenCtx & cgCtx) {
 }
 
 llvm::Constant * MulDivExprMul::codegenExprConstEval(CodegenCtx & cgCtx) {
-    #warning TODO: implement constant evaluation
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Constant evaluation supported yet for this tyoe of expression!");
-    return nullptr;
+    // TODO: handle auto type promotion and other non int types
+    if (!compileCheckBothExprsAreInt()) {
+        return nullptr;
+    }
+    
+    // Generate code for the operation
+    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return llvm::ConstantExpr::getMul(left, right);
 }
 
 bool MulDivExprMul::compileCheckBothExprsAreInt() const {
@@ -209,10 +216,17 @@ llvm::Value * MulDivExprDiv::codegenExprEval(CodegenCtx & cgCtx) {
 }
 
 llvm::Constant * MulDivExprDiv::codegenExprConstEval(CodegenCtx & cgCtx) {
-    #warning TODO: implement constant evaluation
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Constant evaluation supported yet for this tyoe of expression!");
-    return nullptr;
+    // TODO: handle auto type promotion and other non int types
+    if (!compileCheckBothExprsAreInt()) {
+        return nullptr;
+    }
+    
+    // Generate code for the operation
+    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return llvm::ConstantExpr::getSDiv(left, right);
 }
 
 bool MulDivExprDiv::compileCheckBothExprsAreInt() const {

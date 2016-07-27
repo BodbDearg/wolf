@@ -1,13 +1,8 @@
-var i = 2
+var i = (2 / 2) + 1
 
 func main() -> int
 	print("The value of i is = ")
 	print(i)
-	print("\n")
-	print("Now enter a new value to assign to it: ")
-	i = readnum()
-	print("That by 2 is: ")
-	print(i * 2)
 	print("\nFucking amazing! 🙉\n")
 	return 0
 end
