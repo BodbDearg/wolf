@@ -8,8 +8,10 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
-const char * VoidDataType::name() const {
-    return "void";
+static const std::string kName = "void";
+
+const std::string & VoidDataType::name() const {
+    return kName;
 }
 
 bool VoidDataType::equals(const DataType & other) const {

@@ -155,7 +155,9 @@ llvm::Value * UnaryExprMinus::codegenExprEval(CodegenCtx & cgCtx) {
     const DataType & exprType = mExpr.dataType();
     
     if (!exprType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
-        compileError("Unary '-' operator only supports 'int' datatype, not '%s'!", exprType.name());
+        compileError("Unary '-' operator only supports 'int' datatype, not '%s'!",
+                     exprType.name().c_str());
+        
         return nullptr;
     }
     
@@ -169,7 +171,9 @@ llvm::Constant * UnaryExprMinus::codegenExprConstEval(CodegenCtx & cgCtx) {
     const DataType & exprType = mExpr.dataType();
     
     if (!exprType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
-        compileError("Unary '-' operator only supports 'int' datatype, not '%s'!", exprType.name());
+        compileError("Unary '-' operator only supports 'int' datatype, not '%s'!",
+                     exprType.name().c_str());
+        
         return nullptr;
     }
     
@@ -214,7 +218,9 @@ llvm::Value * UnaryExprPlus::codegenExprEval(CodegenCtx & cgCtx) {
     const DataType & exprType = mExpr.dataType();
     
     if (!exprType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
-        compileError("Unary '+' operator only supports 'int' datatype, not '%s'!", exprType.name());
+        compileError("Unary '+' operator only supports 'int' datatype, not '%s'!",
+                     exprType.name().c_str());
+        
         return nullptr;
     }
     
@@ -226,7 +232,9 @@ llvm::Constant * UnaryExprPlus::codegenExprConstEval(CodegenCtx & cgCtx) {
     const DataType & exprType = mExpr.dataType();
     
     if (!exprType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
-        compileError("Unary '+' operator only supports 'int' datatype, not '%s'!", exprType.name());
+        compileError("Unary '+' operator only supports 'int' datatype, not '%s'!",
+                     exprType.name().c_str());
+        
         return nullptr;
     }
     

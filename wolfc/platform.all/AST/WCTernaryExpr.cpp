@@ -7,9 +7,6 @@
 #include "WCOrExpr.hpp"
 #include "WCToken.hpp"
 
-#warning TODO: remove
-#include "WCModule.hpp"
-
 WC_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
@@ -192,7 +189,9 @@ bool TernaryExprWithCond::compileCheckExprDataTypes() const {
     const DataType & condType = mCondExpr.dataType();
     
     if (!condType.isBool()) {
-        compileError("Condition expression for ternary operator must be of type 'bool', not '%s'!", condType.name());
+        compileError("Condition expression for ternary operator must be of type 'bool', not '%s'!",
+                     condType.name().c_str());
+        
         return false;
     }
     
@@ -203,8 +202,8 @@ bool TernaryExprWithCond::compileCheckExprDataTypes() const {
         compileError("'true' sub-expression must be the same type as the 'false' sub expression in ternary operator! "
                      "The type for the 'true' sub-expression was '%s'. "
                      "The type for the 'false' sub-expression was '%s'.",
-                     trueType.name(),
-                     falseType.name());
+                     trueType.name().c_str(),
+                     falseType.name().c_str());
         
         return false;
     }

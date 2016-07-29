@@ -10,6 +10,10 @@ bool DataType::isValid() const {
     return true;    // True for all types except 'Unknown'
 }
 
+bool DataType::isSized() const {
+    return true;    // True for all types except 'Unknown' and 'Void'
+}
+
 bool DataType::isUnknown() const {
     return false;   // False for all types except 'Unknown'
 }

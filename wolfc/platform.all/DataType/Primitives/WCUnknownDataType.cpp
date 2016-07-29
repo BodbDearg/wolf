@@ -3,8 +3,10 @@
 
 WC_BEGIN_NAMESPACE
 
-const char * UnknownDataType::name() const {
-    return "unknown";
+static const std::string kName = "<?!unknown!?>";
+
+const std::string & UnknownDataType::name() const {
+    return kName;
 }
 
 bool UnknownDataType::equals(const DataType & other) const {

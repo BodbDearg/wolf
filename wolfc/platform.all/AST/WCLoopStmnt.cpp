@@ -224,7 +224,7 @@ llvm::Value * LoopStmntWithCond::codegenLoopCondExpr(CodegenCtx & cgCtx) const {
     
     if (!condExprDataType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool))) {
         compileError("Condition for loop statement must evaluate to type 'bool', not '%s'!",
-                     condExprDataType.name());
+                     condExprDataType.name().c_str());
         
         return nullptr;
     }

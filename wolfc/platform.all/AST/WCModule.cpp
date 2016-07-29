@@ -152,7 +152,7 @@ const DataValue * Module::createVar(const char * varName,
     if (!llvmType) {
         compileError("Variable '%s' of type '%s' is not an llvm primitive type! Cannot create a variable to hold it!",
                      varName,
-                     dataType.name());
+                     dataType.name().c_str());
         
         return nullptr;
     }

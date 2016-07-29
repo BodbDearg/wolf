@@ -163,8 +163,8 @@ llvm::Value * PostfixExprFuncCall::codegenExprEval(CodegenCtx & cgCtx) {
             compileError("Type for arg number '%zu' in function call is invalid! Expected '%s' "
                          "but instead got '%s'!",
                          i + 1,
-                         funcArgDataType.name(),
-                         callArgDataType.name());
+                         funcArgDataType.name().c_str(),
+                         callArgDataType.name().c_str());
             
             return nullptr;
         }

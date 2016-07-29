@@ -188,7 +188,9 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     llvm::Type * fnRetTyLLVM = fnRetTy.llvmType(cgCtx);
     
     if (!fnRetTyLLVM) {
-        compileError("Unable to determine the llvm type of return type '%s'!", fnRetTy.name());
+        compileError("Unable to determine the llvm type of return type '%s'!",
+                     fnRetTy.name().c_str());
+        
         return false;
     }
     

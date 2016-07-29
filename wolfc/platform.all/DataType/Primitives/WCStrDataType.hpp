@@ -10,11 +10,9 @@ WC_BEGIN_NAMESPACE
  */
 class StrDataType : public DataType {
 public:
-    virtual const char * name() const override;
+    virtual const std::string & name() const override;
     
     virtual bool equals(const DataType & other) const override;
-    
-    virtual bool isSized() const override;    
     
     virtual llvm::Type * llvmType(CodegenCtx & cgCtx) const override;
     

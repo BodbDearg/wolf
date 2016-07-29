@@ -7,16 +7,14 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
-const char * StrDataType::name() const {
-    return "string";
+static const std::string kName = "string";
+
+const std::string & StrDataType::name() const {
+    return kName;
 }
 
 bool StrDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const StrDataType*>(&other) != nullptr;
-}
-
-bool StrDataType::isSized() const {
-    return true;
 }
 
 llvm::Type * StrDataType::llvmType(CodegenCtx & cgCtx) const {

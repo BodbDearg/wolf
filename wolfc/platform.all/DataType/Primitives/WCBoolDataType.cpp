@@ -5,16 +5,14 @@
 
 WC_BEGIN_NAMESPACE
 
-const char * BoolDataType::name() const {
-    return "bool";
+static const std::string kName = "bool";
+
+const std::string & BoolDataType::name() const {
+    return kName;
 }
 
 bool BoolDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const BoolDataType*>(&other) != nullptr;
-}
-
-bool BoolDataType::isSized() const {
-    return true;
 }
 
 bool BoolDataType::isBool() const {

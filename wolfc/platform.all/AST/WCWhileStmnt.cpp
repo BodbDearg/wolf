@@ -163,7 +163,7 @@ llvm::Value * WhileStmnt::codegenWhileExpr(CodegenCtx & cgCtx) const {
     
     if (!whileExprDataType.isBool()) {
         compileError("Condition for while statement must evaluate to type 'bool', not '%s'!",
-                     whileExprDataType.name());
+                     whileExprDataType.name().c_str());
         
         return nullptr;
     }

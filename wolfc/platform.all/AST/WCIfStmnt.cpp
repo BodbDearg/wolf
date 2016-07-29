@@ -143,7 +143,7 @@ llvm::Value * IfStmnt::codegenIfExpr(CodegenCtx & cgCtx) const {
     
     if (!ifExprDataType.isBool()) {
         compileError("Condition for if statement must evaluate to type 'bool', not '%s'!",
-                     ifExprDataType.name());
+                     ifExprDataType.name().c_str());
         
         return nullptr;
     }

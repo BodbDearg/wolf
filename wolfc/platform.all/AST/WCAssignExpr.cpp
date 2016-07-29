@@ -120,8 +120,8 @@ llvm::Value * AssignExprAssign::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: print variable name here
     if (!leftDataType.equals(rightDataType)) {
         compileError("Can't assign expression of type '%s' to variable of type '%s'!",
-                     rightDataType.name(),
-                     leftDataType.name());
+                     rightDataType.name().c_str(),
+                     leftDataType.name().c_str());
         
         return nullptr;
     }

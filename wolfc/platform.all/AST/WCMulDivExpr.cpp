@@ -149,7 +149,7 @@ bool MulDivExprMul::compileCheckBothExprsAreInt() const {
     
     if (!leftType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
         compileError("Left type in expression must be 'int' for now and not '%s'!",
-                     leftType.name());
+                     leftType.name().c_str());
         
         return false;
     }
@@ -158,7 +158,7 @@ bool MulDivExprMul::compileCheckBothExprsAreInt() const {
     
     if (!rightType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
         compileError("Right type in expression must be 'int' for now and not '%s'!",
-                     rightType.name());
+                     rightType.name().c_str());
         
         return false;
     }
@@ -234,7 +234,7 @@ bool MulDivExprDiv::compileCheckBothExprsAreInt() const {
     
     if (!leftType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
         compileError("Left type in expression must be 'int' for now and not '%s'!",
-                     leftType.name());
+                     leftType.name().c_str());
         
         return false;
     }
@@ -243,7 +243,7 @@ bool MulDivExprDiv::compileCheckBothExprsAreInt() const {
     
     if (!rightType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
         compileError("Right type in expression must be 'int' for now and not '%s'!",
-                     rightType.name());
+                     rightType.name().c_str());
         
         return false;
     }

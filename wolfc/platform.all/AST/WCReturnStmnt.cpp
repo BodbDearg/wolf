@@ -113,9 +113,9 @@ bool ReturnStmnt::verifyReturnTypeCorrect() const {
     if (!returnTy.equals(parentFnReturnTy)) {
         compileError("Invalid return statement! Need to return type '%s' for function '%s' "
                      "instead of type '%s'!",
-                     parentFnReturnTy.name(),
+                     parentFnReturnTy.name().c_str(),
                      parentFunc->name(),
-                     returnTy.name());
+                     returnTy.name().c_str());
         
         return false;
     }
@@ -223,7 +223,7 @@ bool ReturnStmntWithCondVoid::codegen(CodegenCtx & cgCtx) {
     // The conditional expression for returning must be void
     if (!mCondExpr.dataType().isBool()) {
         compileError("Condition for 'return' statement must evaluate to type 'bool' not '%s'!",
-                     mCondExpr.dataType().name());
+                     mCondExpr.dataType().name().c_str());
         
         return false;
     }
@@ -289,7 +289,7 @@ bool ReturnStmntWithCondAndValue::codegen(CodegenCtx & cgCtx) {
     // The conditional expression for returning must be void
     if (!mCondExpr.dataType().isBool()) {
         compileError("Condition for 'return' statement must evaluate to type 'bool' not '%s'!",
-                     mCondExpr.dataType().name());
+                     mCondExpr.dataType().name().c_str());
         
         return false;
     }

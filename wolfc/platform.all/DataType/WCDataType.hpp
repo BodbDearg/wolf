@@ -1,6 +1,7 @@
 #pragma once
 
 #include "WCMacros.hpp"
+#include <string>
 
 namespace llvm {
     class Constant;
@@ -19,7 +20,7 @@ public:
     virtual ~DataType();
     
     /* Give the name of the datatype, e.g 'int32' */
-    virtual const char * name() const = 0;
+    virtual const std::string & name() const = 0;
     
     /* Tells if this data type matches another. */
     virtual bool equals(const DataType & other) const = 0;
@@ -27,8 +28,11 @@ public:
     /* Tells if the data type is valid. Returns 'true' for all data types except 'unknown' */
     virtual bool isValid() const;
     
-    /* Utility. Tell if the data type occupies any space (size concept makes sense). */
-    virtual bool isSized() const = 0;
+    /**
+     * Utility. Tell if the data type occupies any space (size concept makes sense).
+     * Most data types are sized, with the exception of the unknown data type and void.
+     */
+    virtual bool isSized() const;
     
     /* Utility. Tell if this data type is the unknown data type. */
     virtual bool isUnknown() const;

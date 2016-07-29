@@ -136,14 +136,18 @@ bool OrExprOr::compileCheckBothExprsAreBool() const {
     const DataType & leftType = mLeftExpr.dataType();
     
     if (!leftType.isBool()) {
-        compileError("Left side of logical 'or' expression must evaluate to 'bool', not '%s'!", leftType.name());
+        compileError("Left side of logical 'or' expression must evaluate to 'bool', not '%s'!",
+                     leftType.name().c_str());
+        
         return false;
     }
     
     const DataType & rightType = mRightExpr.dataType();
     
     if (!rightType.isBool()) {
-        compileError("Right side of logical 'or' expression must evaluate to 'bool', not '%s'!", rightType.name());
+        compileError("Right side of logical 'or' expression must evaluate to 'bool', not '%s'!",
+                     rightType.name().c_str());
+        
         return false;
     }
     

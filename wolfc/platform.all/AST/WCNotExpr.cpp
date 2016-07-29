@@ -132,7 +132,9 @@ bool NotExprNot::compileCheckExprIsBool() const {
     const DataType & exprType = mExpr.dataType();
     
     if (!exprType.isBool()) {
-        compileError("Expression following logical 'not' must evaluate to 'bool', not '%s'!", exprType.name());
+        compileError("Expression following logical 'not' must evaluate to 'bool', not '%s'!",
+                     exprType.name().c_str());
+        
         return false;
     }
     
