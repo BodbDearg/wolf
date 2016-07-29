@@ -35,6 +35,10 @@ enum class TokenType {
     kLParen,
     /* ')' */
     kRParen,
+    /* '[' */
+    kLBrack,
+    /* ']' */
+    kRBrack,
     /* '+' */
     kPlus,
     /* '-' */

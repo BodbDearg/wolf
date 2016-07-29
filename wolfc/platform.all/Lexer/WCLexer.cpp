@@ -154,6 +154,8 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
     switch (mLexerState.currentChar) {
         case '(': return parseBasicToken(TokenType::kLParen, 1);
         case ')': return parseBasicToken(TokenType::kRParen, 1);
+        case '[': return parseBasicToken(TokenType::kLBrack, 1);
+        case ']': return parseBasicToken(TokenType::kRBrack, 1);
         case '+': return parseBasicToken(TokenType::kPlus, 1);
         
         case '-': {
