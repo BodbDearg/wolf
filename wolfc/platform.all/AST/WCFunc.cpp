@@ -8,9 +8,9 @@
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
 #include "WCPrimitiveDataTypes.hpp"
-#include "WCPrimitiveType.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
+#include "WCType.hpp"
 #include <set>
 
 WC_BEGIN_NAMESPACE
@@ -60,14 +60,14 @@ Func * Func::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     
     // See if a '->' follows for function explicit return type.
     // If it is not present then a 'void' return type is assumed.
-    PrimitiveType * returnType = nullptr;
+    Type * returnType = nullptr;
     
     if (tokenPtr->type == TokenType::kOpArrow) {
         // Explicit return type, skip the '->' first
         ++tokenPtr;
         
         // Now parse the return type, if that fails then bail
-        returnType = PrimitiveType::parse(tokenPtr, alloc);
+        returnType = Type::parse(tokenPtr, alloc);
         WC_GUARD(returnType, nullptr);
     }
     
@@ -99,7 +99,7 @@ Func * Func::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 Func::Func(const Token & startToken,
            Identifier & identifier,
            FuncArgList * argList,
-           PrimitiveType * returnType,
+           Type * returnType,
            Scope & scope,
            const Token & endToken)
 :

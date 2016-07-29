@@ -7,7 +7,7 @@ WC_BEGIN_NAMESPACE
 class DataType;
 class Identifier;
 class LinearAlloc;
-class PrimitiveType;
+class Type;
 
 /*
 FuncArg:
@@ -19,7 +19,7 @@ public:
     
     static FuncArg * parse(const Token *& currentToken, LinearAlloc & alloc);
     
-    FuncArg(PrimitiveType & dataType, Identifier & identifier);
+    FuncArg(Type & dataType, Identifier & ident);
     
     virtual const Token & getStartToken() const override;
     
@@ -29,8 +29,8 @@ public:
     
     const char * name() const;
     
-    PrimitiveType &     mDataType;
-    Identifier &        mIdentifier;
+    Type &          mType;
+    Identifier &    mIdent;
 };
 
 WC_END_NAMESPACE

@@ -10,14 +10,18 @@ DeclDef:
 	VarDecl
 
 Func:
-	func Identifier ( [FuncArgList] ) [ -> PrimitiveType ] Scope end
+	func Identifier ( [FuncArgList] ) [ -> Type ] Scope end
 
 FuncArgList:
 	FuncArg
 	FuncArg , FuncArgList
 
 FuncArg:
-	PrimitiveType Identifier
+	Type Identifier
+
+Type:
+	PrimitiveType
+	Type [ AssignExpr ]
 
 PrimitiveType:
 	void|int|bool|string
