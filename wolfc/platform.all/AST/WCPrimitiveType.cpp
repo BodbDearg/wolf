@@ -37,8 +37,12 @@ const Token & PrimitiveType::getEndToken() const {
     return mToken;
 }
 
-const DataType & PrimitiveType::dataType() const {
+DataType & PrimitiveType::dataType() {
     return PrimitiveDataTypes::dataTypeForLangKeyword(mToken.type);
+}
+
+bool PrimitiveType::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    return dataType().codegen(cgCtx, callingNode);
 }
 
 WC_END_NAMESPACE

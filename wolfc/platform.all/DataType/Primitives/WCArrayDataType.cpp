@@ -8,7 +8,7 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
-ArrayDataType::ArrayDataType(DataType & innerType, size_t size, CodegenCtx & cgCtx) :
+ArrayDataType::ArrayDataType(DataType & innerType, size_t size) :
     mInnerType(innerType),
     mSize(size)
 {
@@ -26,13 +26,6 @@ ArrayDataType::ArrayDataType(DataType & innerType, size_t size, CodegenCtx & cgC
     }
     
     mName += ']';
-    
-    // Create the llvm type:
-    llvm::Type * innerLLVMType = innerType.llvmType(cgCtx);
-    
-    if (innerLLVMType) {
-        mLLVMType = llvm::ArrayType::get(innerLLVMType, mSize);
-    }
 }
 
 ArrayDataType::~ArrayDataType() {
@@ -61,9 +54,41 @@ bool ArrayDataType::equals(const DataType & other) const {
     return mInnerType.equals(otherArray->mInnerType);
 }
 
-llvm::Type * ArrayDataType::llvmType(CodegenCtx & cgCtx) const {
-    WC_UNUSED_PARAM(cgCtx);
-    return mLLVMType;
+bool ArrayDataType::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    // First generate the inner type:
+    WC_GUARD(mInnerType.codegen(cgCtx, callingNode), false);
+    
+    // The type must be sized in order to be code generated as an array type.
+    // It also must be 
+    if (!mInnerType.isSized()) {
+        callingNode.compileError("Can't generate array of type '%s' because the type has no size!",
+                                 mInnerType.name().c_str());
+        
+        return false;
+    }
+    
+    // Get the inner type llvm type, if we don't have that then bail:
+    llvm::Type * innerLLVMType = mInnerType.mLLVMType;
+    
+    if (!innerLLVMType) {
+        callingNode.compileError("Failed to generate the llvm representation for type '%s'!",
+                                 mInnerType.name().c_str());
+        
+        return false;
+    }
+    
+    // Alright, now create an array of that inner type
+    mLLVMType = llvm::ArrayType::get(innerLLVMType, mSize);
+    
+    if (!mLLVMType) {
+        callingNode.compileError("Failed to generate the llvm representation for type '%s'!",
+                                 name().c_str());
+        
+        return false;
+    }
+    
+    // All good!
+    return true;
 }
 
 bool ArrayDataType::codegenPrintStmnt(CodegenCtx & cgCtx,

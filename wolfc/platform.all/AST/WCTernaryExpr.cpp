@@ -72,7 +72,7 @@ bool TernaryExprNoCond::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & TernaryExprNoCond::dataType() const {
+DataType & TernaryExprNoCond::dataType() {
     return mExpr.dataType();
 }
 
@@ -117,7 +117,7 @@ bool TernaryExprWithCond::isLValue() const {
     return false;
 }
 
-const DataType & TernaryExprWithCond::dataType() const {
+DataType & TernaryExprWithCond::dataType() {
     // Assume the data type is that of the 'true' expression.
     // When we compile we will verify that the 'false' expression matches...
     return mTrueExpr.dataType();

@@ -46,11 +46,11 @@ public:
     
     size_t numArgs() const;
     
-    void getArgs(std::vector<FuncArg*> & args) const;
+    void getArgs(std::vector<FuncArg*> & args);
     
-    const DataValue * getArg(const char * argName) const;
+    DataValue * getArg(const char * argName);
     
-    const DataType & returnDataType() const;
+    DataType & returnDataType() const;
     
     /* Forward code generation for the function. Just declares the llvm function in the module. */
     bool codegen(CodegenCtx & cgCtx);
@@ -68,9 +68,8 @@ public:
      * Get a list of llvm argument types for this function and save in the given list.
      * Returns false on failure and issues a compile error.
      */
-    bool determineLLVMArgTypes(CodegenCtx & cgCtx,
-                               const std::vector<FuncArg*> & funcArgs,
-                               std::vector<llvm::Type*> & outputArgTypes) const;
+    bool getLLVMArgTypes(const std::vector<FuncArg*> & funcArgs,
+                         std::vector<llvm::Type*> & outputArgTypes) const;
     
     const Token &       mStartToken;
     Identifier &        mIdentifier;

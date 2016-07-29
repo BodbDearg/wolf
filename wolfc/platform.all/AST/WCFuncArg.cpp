@@ -43,12 +43,16 @@ const Token & FuncArg::getEndToken() const {
     return mIdent.getEndToken();
 }
 
-const DataType & FuncArg::dataType() const {
+DataType & FuncArg::dataType() {
     return mType.dataType();
 }
 
 const char * FuncArg::name() const {
     return mIdent.name();
+}
+
+bool FuncArg::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    return mType.codegen(cgCtx, callingNode);
 }
 
 WC_END_NAMESPACE

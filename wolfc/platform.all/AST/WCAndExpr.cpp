@@ -56,7 +56,7 @@ bool AndExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & AndExprNoOp::dataType() const {
+DataType & AndExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
@@ -96,7 +96,7 @@ bool AndExprAnd::isLValue() const {
     return false;
 }
 
-const DataType & AndExprAnd::dataType() const {
+DataType & AndExprAnd::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 

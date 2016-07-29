@@ -59,7 +59,7 @@ bool NotExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & NotExprNoOp::dataType() const {
+DataType & NotExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
@@ -98,7 +98,7 @@ bool NotExprNot::isLValue() const {
     return false;
 }
 
-const DataType & NotExprNot::dataType() const {
+DataType & NotExprNot::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 

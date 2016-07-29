@@ -11,6 +11,7 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
+class ASTNode;
 class CodegenCtx;
 class PrintStmnt;
 
@@ -44,10 +45,10 @@ public:
     virtual bool isBool() const;
     
     /**
-     * Return the llvm type for this data type, or nullptr if there is no direct llvm type.
-     * Note: the code generation context is required to get this info.
+     * Run code generation for this data type.
+     * Generates the llvm type for the data type and returns true if generation was successful.
      */
-    virtual llvm::Type * llvmType(CodegenCtx & cgCtx) const = 0;
+    virtual bool codegen(CodegenCtx & cgCtx, ASTNode & callingNode) = 0;
     
     /**
      * Generate the code for a print statement for this type. The codegen context, printf function prototype, 
@@ -57,6 +58,12 @@ public:
                                    const PrintStmnt & parentPrintStmnt,
                                    llvm::Constant & printfFn,
                                    llvm::Value & value) const = 0;
+    
+    /**
+     * The llvm type for the data type. This is filled in during code generation.
+     * Note: The unknown data type will not use anything for this field...
+     */
+    llvm::Type * mLLVMType = nullptr;
 };
 
 WC_END_NAMESPACE

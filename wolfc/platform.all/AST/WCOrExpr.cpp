@@ -56,7 +56,7 @@ bool OrExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & OrExprNoOp::dataType() const {
+DataType & OrExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
@@ -96,7 +96,7 @@ bool OrExprOr::isLValue() const {
     return false;
 }
 
-const DataType & OrExprOr::dataType() const {
+DataType & OrExprOr::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 

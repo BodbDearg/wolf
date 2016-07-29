@@ -1,4 +1,5 @@
 #include "WCStrDataType.hpp"
+#include "WCASTNode.hpp"
 #include "WCCodegenCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -17,8 +18,17 @@ bool StrDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const StrDataType*>(&other) != nullptr;
 }
 
-llvm::Type * StrDataType::llvmType(CodegenCtx & cgCtx) const {
-    return llvm::Type::getInt8PtrTy(cgCtx.llvmCtx);
+bool StrDataType::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    mLLVMType = llvm::Type::getInt8PtrTy(cgCtx.llvmCtx);
+    
+    if (!mLLVMType) {
+        callingNode.compileError("Failed to generate llvm type for data type '%s'!",
+                                 name().c_str());
+        
+        return false;
+    }
+    
+    return true;
 }
 
 bool StrDataType::codegenPrintStmnt(CodegenCtx & cgCtx,

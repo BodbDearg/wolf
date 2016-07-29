@@ -44,7 +44,7 @@ bool StrLit::isLValue() const {
     return false;
 }
 
-const DataType & StrLit::dataType() const {
+DataType & StrLit::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kStr);
 }
 

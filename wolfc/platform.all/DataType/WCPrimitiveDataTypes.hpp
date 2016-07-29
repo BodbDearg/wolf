@@ -8,6 +8,9 @@ WC_BEGIN_NAMESPACE
 class DataType;
 struct Token;
 
+// TODO: this central store needs to go now that we can modify types with compiles.
+// Won't work out once we try to thread out compiling multiple modules at once.
+
 /* Provides access to built-in compiler primitive data types */
 namespace PrimitiveDataTypes {
     /* Type of primitive data type */

@@ -55,7 +55,7 @@ bool AssignExprNoAssign::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & AssignExprNoAssign::dataType() const {
+DataType & AssignExprNoAssign::dataType() {
     return mExpr.dataType();
 }
 
@@ -95,7 +95,7 @@ bool AssignExprAssign::isLValue() const {
     return false;
 }
 
-const DataType & AssignExprAssign::dataType() const {
+DataType & AssignExprAssign::dataType() {
     return mLeftExpr.dataType();
 }
 

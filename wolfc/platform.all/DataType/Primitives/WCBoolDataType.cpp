@@ -1,5 +1,6 @@
 #include "WCBoolDataType.hpp"
 #include "WCAssert.hpp"
+#include "WCASTNode.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCPrintStmnt.hpp"
 
@@ -19,8 +20,17 @@ bool BoolDataType::isBool() const {
     return true;
 }
 
-llvm::Type * BoolDataType::llvmType(CodegenCtx & cgCtx) const {
-    return llvm::Type::getInt1Ty(cgCtx.llvmCtx);
+bool BoolDataType::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    mLLVMType = llvm::Type::getInt1Ty(cgCtx.llvmCtx);
+    
+    if (!mLLVMType) {
+        callingNode.compileError("Failed to generate llvm type for data type '%s'!",
+                                 name().c_str());
+        
+        return false;
+    }
+    
+    return true;
 }
 
 bool BoolDataType::codegenPrintStmnt(CodegenCtx & cgCtx,

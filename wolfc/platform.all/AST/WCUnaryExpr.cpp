@@ -103,7 +103,7 @@ bool UnaryExprPrimary::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & UnaryExprPrimary::dataType() const {
+DataType & UnaryExprPrimary::dataType() {
     return mExpr.dataType();
 }
 
@@ -142,7 +142,7 @@ bool UnaryExprMinus::isLValue() const {
     return false;
 }
 
-const DataType & UnaryExprMinus::dataType() const {
+DataType & UnaryExprMinus::dataType() {
     return mExpr.dataType();
 }
 
@@ -205,7 +205,7 @@ bool UnaryExprPlus::isLValue() const {
     return false;
 }
 
-const DataType & UnaryExprPlus::dataType() const {
+DataType & UnaryExprPlus::dataType() {
     return mExpr.dataType();
 }
 
@@ -265,7 +265,7 @@ bool UnaryExprParen::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & UnaryExprParen::dataType() const {
+DataType & UnaryExprParen::dataType() {
     return mExpr.dataType();
 }
 

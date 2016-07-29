@@ -41,14 +41,14 @@ bool Identifier::isLValue() const {
     return true;
 }
 
-const DataType & Identifier::dataType() const {
-    const DataValue * dataValue = lookupDataValue();
+DataType & Identifier::dataType() {
+    DataValue * dataValue = lookupDataValue();
     
     if (dataValue) {
         WC_ASSERT(dataValue->type);
         return *dataValue->type;
     }
-
+    
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kUnknown);
 }
 
@@ -101,16 +101,16 @@ const char * Identifier::name() const {
     return mToken.data.strVal.ptr;
 }
 
-const DataValue * Identifier::lookupDataValue() const {
+DataValue * Identifier::lookupDataValue() {
     // See if there is a parent scope, if so then try to lookup the value within that and
     // all parent scopes of that parent scope...
     const char * identifierName = name();
     
     {
-        const Scope * parentScope = getParentScope();
+        Scope * parentScope = getParentScope();
         
         while (parentScope) {
-            const DataValue * dataValue = parentScope->getVar(identifierName);
+            DataValue * dataValue = parentScope->getVar(identifierName);
             
             if (dataValue) {
                 return dataValue;
@@ -122,10 +122,10 @@ const DataValue * Identifier::lookupDataValue() const {
     
     // Failing that check if there is a parent function and try to lookup the value within that:
     {
-        const Func * parentFunc = getParentFunc();
+        Func * parentFunc = getParentFunc();
         
         if (parentFunc) {
-            const DataValue * dataValue = parentFunc->getArg(identifierName);
+            DataValue * dataValue = parentFunc->getArg(identifierName);
             
             if (dataValue) {
                 return dataValue;
@@ -134,7 +134,7 @@ const DataValue * Identifier::lookupDataValue() const {
     }
     
     // Failing that get the parent module and try to lookup the value within that:
-    const Module * parentModule = getParentModule();
+    Module * parentModule = getParentModule();
     WC_ASSERT(parentModule);
     return parentModule->getVar(identifierName);
 }

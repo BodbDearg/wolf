@@ -65,7 +65,7 @@ bool AddSubExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & AddSubExprNoOp::dataType() const {
+DataType & AddSubExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
@@ -105,7 +105,7 @@ bool AddSubExprAdd::isLValue() const {
     return false;
 }
 
-const DataType & AddSubExprAdd::dataType() const {
+DataType & AddSubExprAdd::dataType() {
     // TODO: handle auto type promotion
     return mLeftExpr.dataType();
 }
@@ -190,7 +190,7 @@ bool AddSubExprSub::isLValue() const {
     return false;
 }
 
-const DataType & AddSubExprSub::dataType() const {
+DataType & AddSubExprSub::dataType() {
     // TODO: handle auto type promotion
     return mLeftExpr.dataType();
 }

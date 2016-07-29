@@ -2,11 +2,9 @@
 #include "WCAssignExpr.hpp"
 #include "WCDataType.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCPrimitiveDataTypes.hpp"
 #include "WCPrimitiveType.hpp"
 #include "WCToken.hpp"
-
-#warning TODO: remove
-#include "WCPrimitiveDataTypes.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -78,8 +76,12 @@ const Token & TypePrimitive::getEndToken() const {
     return mType.getEndToken();
 }
 
-const DataType & TypePrimitive::dataType() const {
+DataType & TypePrimitive::dataType() {
     return mType.dataType();
+}
+
+bool TypePrimitive::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    return mType.codegen(cgCtx, callingNode);
 }
 
 //-----------------------------------------------------------------------------
@@ -103,9 +105,18 @@ const Token & TypeArray::getEndToken() const {
     return mEndBracket;
 }
 
-const DataType & TypeArray::dataType() const {
-    #warning TODO: fix this
+DataType & TypeArray::dataType() {
+    #warning TODO: return proper type for type array
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kUnknown);
+}
+
+bool TypeArray::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    // First codegen the element type:
+    WC_GUARD(mElemType.codegen(cgCtx, callingNode), false);
+    
+    #warning TODO: codegen a type array
+    callingNode.compileError("Not implemented!");
+    return false;
 }
 
 WC_END_NAMESPACE

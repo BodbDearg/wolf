@@ -33,9 +33,10 @@ bool Scope::codegen(CodegenCtx & cgCtx) {
     return mStmnts.codegen(cgCtx);
 }
 
-const DataValue * Scope::createVar(const char * varName,
-                                   const DataType & dataType,
-                                   CodegenCtx & cgCtx)
+DataValue * Scope::createVar(const char * varName,
+                             DataType & dataType,
+                             CodegenCtx & cgCtx,
+                             ASTNode & callingNode)
 {
     // If the variable already exists in this scope then creation fails:
     {
@@ -46,11 +47,11 @@ const DataValue * Scope::createVar(const char * varName,
         }
     }
     
-    // TODO: support more complex variable types other than llvm primitives
-    // The variable must have an llvm type:
-    llvm::Type * llvmType = dataType.llvmType(cgCtx);
+    // Compile the variable llvm type:
+    WC_GUARD(dataType.codegen(cgCtx, callingNode), nullptr);
     
-    if (!llvmType) {
+    // The variable must have an llvm type:
+    if (!dataType.mLLVMType) {
         compileError("Variable '%s' of type '%s' is not an llvm primitive type! Cannot create a variable to hold it!",
                      varName,
                      dataType.name().c_str());
@@ -58,19 +59,18 @@ const DataValue * Scope::createVar(const char * varName,
         return nullptr;
     }
     
-    // Otherwise make it:
+    // Make the data value:
     DataValue & dataValue = mVarValues[varName];
-    
     dataValue.requiresLoad = true;
     dataValue.type = &dataType;
-    dataValue.value = cgCtx.irBuilder.CreateAlloca(llvmType,
+    dataValue.value = cgCtx.irBuilder.CreateAlloca(dataType.mLLVMType,
                                                    nullptr,
                                                    std::string("alloc_ident_val:") + varName);
     
     return &dataValue;
 }
 
-const DataValue * Scope::getVar(const char * varName) const {
+DataValue * Scope::getVar(const char * varName) {
     // First search in this scope:
     auto iter = mVarValues.find(varName);
     
@@ -79,7 +79,7 @@ const DataValue * Scope::getVar(const char * varName) const {
     }
     
     // If that fails try a parent scope, if it exists:
-    const Scope * parentScope = getParentScope();
+    Scope * parentScope = getParentScope();
     
     if (parentScope) {
         return parentScope->getVar(varName);

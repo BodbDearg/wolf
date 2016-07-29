@@ -41,7 +41,7 @@ bool BoolLit::isLValue() const {
     return false;
 }
 
-const DataType & BoolLit::dataType() const {
+DataType & BoolLit::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 

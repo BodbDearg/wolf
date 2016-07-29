@@ -41,7 +41,7 @@ bool IntLit::isLValue() const {
     return false;
 }
 
-const DataType & IntLit::dataType() const {
+DataType & IntLit::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
 }
 

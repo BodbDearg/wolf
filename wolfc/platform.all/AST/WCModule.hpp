@@ -59,16 +59,17 @@ public:
      * Create a variable within this scope.
      * If the variable already exists then creation fails and null is returned.
      */
-    const DataValue * createVar(const char * varName,
-                                const DataType & dataType,
-                                llvm::Constant * initializer,
-                                CodegenCtx & cgCtx);
+    DataValue * createVar(const char * varName,
+                          DataType & dataType,
+                          llvm::Constant * initializer,
+                          CodegenCtx & cgCtx,
+                          ASTNode & callingNode);
     
     /**
      * Get a variable within this scope or a parent scope. Does not create if it does not exist.
      * Will search parent scopes if not found within this scope.
      */
-    const DataValue * getVar(const char * varName) const;
+    DataValue * getVar(const char * varName) const;
     
     /* The LLVM context */
     llvm::LLVMContext & mLLVMCtx;

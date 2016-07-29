@@ -9,7 +9,7 @@ WC_BEGIN_NAMESPACE
  */
 class ArrayDataType : public DataType {
 public:
-    ArrayDataType(DataType & innerType, size_t size, CodegenCtx & cgCtx);
+    ArrayDataType(DataType & innerType, size_t size);
     
     virtual ~ArrayDataType() override;
     
@@ -17,7 +17,7 @@ public:
     
     virtual bool equals(const DataType & other) const override;
     
-    virtual llvm::Type * llvmType(CodegenCtx & cgCtx) const override;
+    virtual bool codegen(CodegenCtx & cgCtx, ASTNode & callingNode) override;
     
     virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
                                    const PrintStmnt & parentPrintStmnt,
@@ -27,7 +27,6 @@ public:
     DataType &      mInnerType;
     size_t          mSize;
     std::string     mName;
-    llvm::Type *    mLLVMType = nullptr;
 };
 
 WC_END_NAMESPACE

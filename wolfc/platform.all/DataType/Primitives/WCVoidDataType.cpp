@@ -1,4 +1,5 @@
 #include "WCVoidDataType.hpp"
+#include "WCASTNode.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCPrintStmnt.hpp"
 
@@ -26,8 +27,17 @@ bool VoidDataType::isVoid() const {
     return true;
 }
 
-llvm::Type * VoidDataType::llvmType(CodegenCtx & cgCtx) const {
-    return llvm::Type::getVoidTy(cgCtx.llvmCtx);
+bool VoidDataType::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    mLLVMType = llvm::Type::getVoidTy(cgCtx.llvmCtx);
+    
+    if (!mLLVMType) {
+        callingNode.compileError("Failed to generate llvm type for data type '%s'!",
+                                 name().c_str());
+        
+        return false;
+    }
+    
+    return true;
 }
 
 bool VoidDataType::codegenPrintStmnt(CodegenCtx & cgCtx,

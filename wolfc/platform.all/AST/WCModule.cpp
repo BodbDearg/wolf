@@ -131,10 +131,11 @@ Func * Module::getFunc(const std::string & name) const {
     return iter->second;
 }
 
-const DataValue * Module::createVar(const char * varName,
-                                    const DataType & dataType,
-                                    llvm::Constant * initializer,
-                                    CodegenCtx & cgCtx)
+DataValue * Module::createVar(const char * varName,
+                              DataType & dataType,
+                              llvm::Constant * initializer,
+                              CodegenCtx & cgCtx,
+                              ASTNode & callingNode)
 {
     // If the variable already exists in this scope then creation fails:
     {
@@ -144,13 +145,13 @@ const DataValue * Module::createVar(const char * varName,
             return nullptr;
         }
     }
+
+    // Compile the variable llvm type:
+    WC_GUARD(dataType.codegen(cgCtx, callingNode), nullptr);
     
-    // TODO: support more complex variable types other than llvm primitives
     // The variable must have an llvm type:
-    llvm::Type * llvmType = dataType.llvmType(cgCtx);
-    
-    if (!llvmType) {
-        compileError("Variable '%s' of type '%s' is not an llvm primitive type! Cannot create a variable to hold it!",
+    if (!dataType.mLLVMType) {
+        compileError("Variable '%s' of type '%s' is not an llvm primitive type! Cannot create a global variable to hold it!",
                      varName,
                      dataType.name().c_str());
         
@@ -158,13 +159,13 @@ const DataValue * Module::createVar(const char * varName,
     }
     
     // TODO: don't use new here, use the linear allocator
-    // Otherwise make it:
+    // Make the data value:
     DataValue & dataValue = mVarValues[varName];
     
     dataValue.requiresLoad = true;
     dataValue.type = &dataType;
     dataValue.value = new llvm::GlobalVariable(*mLLVMModule.get(),
-                                               llvmType,
+                                               dataType.mLLVMType,
                                                false,                               // Not constant
                                                llvm::GlobalValue::PrivateLinkage,
                                                initializer,
@@ -173,11 +174,11 @@ const DataValue * Module::createVar(const char * varName,
     return &dataValue;
 }
 
-const DataValue * Module::getVar(const char * varName) const {
+DataValue * Module::getVar(const char * varName) const {
     auto iter = mVarValues.find(varName);
     
     if (iter != mVarValues.end()) {
-        return &iter->second;
+        return const_cast<DataValue*>(&iter->second);
     }
     
     return nullptr;     // Variable not found!

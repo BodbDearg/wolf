@@ -36,12 +36,13 @@ public:
      * Create a variable within this scope.
      * If the variable already exists then creation fails and null is returned. 
      */
-    const DataValue * createVar(const char * varName,
-                                const DataType & dataType,
-                                CodegenCtx & cgCtx);
+    DataValue * createVar(const char * varName,
+                          DataType & dataType,
+                          CodegenCtx & cgCtx,
+                          ASTNode & callingNode);
     
     /* Get a variable within this scope. Returns null if not found within this scope. */
-    const DataValue * getVar(const char * varName) const;
+    DataValue * getVar(const char * varName);
     
     /* All the statements in the scope. */
     Stmnts & mStmnts;

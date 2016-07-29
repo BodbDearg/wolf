@@ -96,7 +96,7 @@ const Token & ReturnStmnt::getStartToken() const {
     return mReturnToken;
 }
 
-bool ReturnStmnt::verifyReturnTypeCorrect() const {
+bool ReturnStmnt::verifyReturnTypeCorrect() {
     // Get the parent function:
     const Func * parentFunc = firstParentOfType<Func>();
     
@@ -107,8 +107,8 @@ bool ReturnStmnt::verifyReturnTypeCorrect() const {
     
     // TODO: handle auto promotion of types here
     // Verify correctness:
-    const DataType & parentFnReturnTy = parentFunc->returnDataType();
-    const DataType & returnTy = dataType();
+    DataType & parentFnReturnTy = parentFunc->returnDataType();
+    DataType & returnTy = dataType();
     
     if (!returnTy.equals(parentFnReturnTy)) {
         compileError("Invalid return statement! Need to return type '%s' for function '%s' "
@@ -136,6 +136,8 @@ const Token & ReturnStmntNoCondVoid::getEndToken() const {
 }
 
 bool ReturnStmntNoCondVoid::codegen(CodegenCtx & cgCtx) {
+    #warning TODO: codegen return type
+    
     // Verify the return type is correct firstly
     WC_GUARD(verifyReturnTypeCorrect(), false);
     
@@ -144,7 +146,7 @@ bool ReturnStmntNoCondVoid::codegen(CodegenCtx & cgCtx) {
     return true;
 }
 
-const DataType & ReturnStmntNoCondVoid::dataType() const {
+DataType & ReturnStmntNoCondVoid::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kVoid);
 }
 
@@ -164,6 +166,8 @@ const Token & ReturnStmntNoCondWithValue::getEndToken() const {
 }
 
 bool ReturnStmntNoCondWithValue::codegen(CodegenCtx & cgCtx) {
+    #warning TODO: codegen return type
+    
     // Verify the return type is correct firstly
     WC_GUARD(verifyReturnTypeCorrect(), false);
     
@@ -176,7 +180,7 @@ bool ReturnStmntNoCondWithValue::codegen(CodegenCtx & cgCtx) {
     return true;
 }
 
-const DataType & ReturnStmntNoCondWithValue::dataType() const {
+DataType & ReturnStmntNoCondWithValue::dataType() {
     return mReturnExpr.dataType();
 }
 
@@ -217,6 +221,8 @@ ReturnStmntWithCondVoid::ReturnStmntWithCondVoid(const Token & returnToken,
 }
     
 bool ReturnStmntWithCondVoid::codegen(CodegenCtx & cgCtx) {
+    #warning TODO: codegen return type
+    
     // Verify the return type is correct firstly
     WC_GUARD(verifyReturnTypeCorrect(), false);
     
@@ -261,7 +267,7 @@ bool ReturnStmntWithCondVoid::codegen(CodegenCtx & cgCtx) {
     return true;
 }
     
-const DataType & ReturnStmntWithCondVoid::dataType() const {
+DataType & ReturnStmntWithCondVoid::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kVoid);
 }
 
@@ -283,6 +289,8 @@ ReturnStmntWithCondAndValue::ReturnStmntWithCondAndValue(const Token & returnTok
 }
     
 bool ReturnStmntWithCondAndValue::codegen(CodegenCtx & cgCtx) {
+    #warning TODO: codegen return type
+    
     // Verify the return type is correct firstly
     WC_GUARD(verifyReturnTypeCorrect(), false);
     
@@ -333,7 +341,7 @@ bool ReturnStmntWithCondAndValue::codegen(CodegenCtx & cgCtx) {
     return true;
 }
     
-const DataType & ReturnStmntWithCondAndValue::dataType() const {
+DataType & ReturnStmntWithCondAndValue::dataType() {
     return mReturnExpr.dataType();
 }
 

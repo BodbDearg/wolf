@@ -4,6 +4,7 @@
 
 WC_BEGIN_NAMESPACE
 
+struct CodegenCtx;
 class AssignExpr;
 class DataType;
 class LinearAlloc;
@@ -20,7 +21,9 @@ public:
     
     static Type * parse(const Token *& currentToken, LinearAlloc & alloc);
     
-    virtual const DataType & dataType() const = 0;
+    virtual DataType & dataType() = 0;
+    
+    virtual bool codegen(CodegenCtx & cgCtx, ASTNode & callingNode) = 0;
 };
 
 /* PrimitiveType */
@@ -32,7 +35,9 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual const DataType & dataType() const override;
+    virtual DataType & dataType() override;
+    
+    virtual bool codegen(CodegenCtx & cgCtx, ASTNode & callingNode) override;
     
     PrimitiveType & mType;
 };
@@ -46,7 +51,9 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    virtual const DataType & dataType() const override;
+    virtual DataType & dataType() override;
+    
+    virtual bool codegen(CodegenCtx & cgCtx, ASTNode & callingNode) override;
     
     Type &          mElemType;
     AssignExpr &    mSizeExpr;

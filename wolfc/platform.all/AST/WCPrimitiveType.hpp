@@ -4,6 +4,7 @@
 
 WC_BEGIN_NAMESPACE
 
+struct CodegenCtx;
 class DataType;
 class LinearAlloc;
 
@@ -23,7 +24,9 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    const DataType & dataType() const;
+    DataType & dataType();
+    
+    bool codegen(CodegenCtx & cgCtx, ASTNode & callingNode);
     
     const Token & mToken;
 };

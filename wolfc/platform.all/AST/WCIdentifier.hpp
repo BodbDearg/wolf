@@ -24,7 +24,7 @@ public:
     
     virtual bool isLValue() const override;
     
-    virtual const DataType & dataType() const override;
+    virtual DataType & dataType() override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
@@ -34,7 +34,7 @@ public:
     
     const char * name() const;
     
-    const DataValue * lookupDataValue() const;
+    DataValue * lookupDataValue();
     
     const Token & mToken;
 };

@@ -24,7 +24,7 @@ public:
     virtual bool isLValue() const = 0;
     
     /* Return the data type that this expression results in after evaluation. */
-    virtual const DataType & dataType() const = 0;
+    virtual DataType & dataType() = 0;
     
     /**
      * Codegen the llvm value that represents the address of this expression. 

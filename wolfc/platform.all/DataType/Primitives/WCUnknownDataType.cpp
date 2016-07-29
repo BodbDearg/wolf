@@ -25,9 +25,11 @@ bool UnknownDataType::isUnknown() const {
     return true;
 }
 
-llvm::Type * UnknownDataType::llvmType(CodegenCtx & cgCtx) const {
+bool UnknownDataType::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    // No codegen to do for the unknown data type:
     WC_UNUSED_PARAM(cgCtx);
-    return nullptr;
+    WC_UNUSED_PARAM(callingNode);
+    return true;
 }
 
 bool UnknownDataType::codegenPrintStmnt(CodegenCtx & cgCtx,

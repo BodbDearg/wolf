@@ -64,7 +64,7 @@ bool PostfixExprNoPostfix::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & PostfixExprNoPostfix::dataType() const {
+DataType & PostfixExprNoPostfix::dataType() {
     return mExpr.dataType();
 }
 
@@ -104,7 +104,7 @@ bool PostfixExprFuncCall::isLValue() const {
     return false;
 }
 
-const DataType & PostfixExprFuncCall::dataType() const {
+DataType & PostfixExprFuncCall::dataType() {
     Func * funcCalled = lookupFuncCalled();
     
     if (funcCalled) {

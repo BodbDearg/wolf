@@ -33,7 +33,7 @@ public:
     
     virtual bool isLValue() const override;
     
-    virtual const DataType & dataType() const override;
+    virtual DataType & dataType() override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
@@ -55,7 +55,7 @@ public:
     
     virtual bool isLValue() const override;
     
-    virtual const DataType & dataType() const override;
+    virtual DataType & dataType() override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     

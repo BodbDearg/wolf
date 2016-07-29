@@ -20,7 +20,7 @@ struct DataValue {
         WC_EMPTY_FUNC_BODY();
     }
     
-    DataValue(llvm::Value * _value, const DataType * _type, bool _requiresLoad) :
+    DataValue(llvm::Value * _value, DataType * _type, bool _requiresLoad) :
         value(_value),
         type(_type),
         requiresLoad(_requiresLoad)
@@ -40,7 +40,7 @@ struct DataValue {
     llvm::Value * value;
     
     /* The data type object for this type */
-    const DataType * type;
+    DataType * type;
     
     /* If true the value requires a load first before being used. If not then it is already loaded */
     bool requiresLoad;

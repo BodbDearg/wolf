@@ -32,13 +32,13 @@ public:
     virtual const Token & getStartToken() const override;
     
     /* Gives the data type of the value returned */
-    virtual const DataType & dataType() const = 0;
+    virtual DataType & dataType() = 0;
     
     /**
      * Verifies the return type is correct for the containing function.
      * If incorrect returns false and emits a compile error.
      */
-    bool verifyReturnTypeCorrect() const;
+    bool verifyReturnTypeCorrect();
     
     /* The token for 'return' */
     const Token & mReturnToken;
@@ -53,7 +53,7 @@ public:
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
-    virtual const DataType & dataType() const override;
+    virtual DataType & dataType() override;
 };
 
 /* return AssignExpr */
@@ -65,7 +65,7 @@ public:
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
-    virtual const DataType & dataType() const override;
+    virtual DataType & dataType() override;
     
     /* Expression for the value to return */
     AssignExpr & mReturnExpr;
@@ -105,7 +105,7 @@ public:
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
-    virtual const DataType & dataType() const override;
+    virtual DataType & dataType() override;
 };
 
 /* return AssignExpr if|unless AssignExpr */
@@ -118,7 +118,7 @@ public:
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
-    virtual const DataType & dataType() const override;
+    virtual DataType & dataType() override;
 
     /* Expression for the value to return */
     AssignExpr & mReturnExpr;

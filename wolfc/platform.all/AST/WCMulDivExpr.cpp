@@ -65,7 +65,7 @@ bool MulDivExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & MulDivExprNoOp::dataType() const {
+DataType & MulDivExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
@@ -105,7 +105,7 @@ bool MulDivExprMul::isLValue() const {
     return false;
 }
 
-const DataType & MulDivExprMul::dataType() const {
+DataType & MulDivExprMul::dataType() {
     // TODO: handle auto type promotion
     return mLeftExpr.dataType();
 }
@@ -190,7 +190,7 @@ bool MulDivExprDiv::isLValue() const {
     return false;
 }
 
-const DataType & MulDivExprDiv::dataType() const {
+DataType & MulDivExprDiv::dataType() {
     // TODO: handle auto type promotion
     return mLeftExpr.dataType();
 }

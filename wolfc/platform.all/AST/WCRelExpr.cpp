@@ -79,7 +79,7 @@ bool RelExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & RelExprNoOp::dataType() const {
+DataType & RelExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
@@ -119,7 +119,7 @@ bool RelExprTwoOps::isLValue() const {
     return false;
 }
 
-const DataType & RelExprTwoOps::dataType() const {
+DataType & RelExprTwoOps::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 

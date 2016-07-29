@@ -72,7 +72,7 @@ bool PrimaryExprIntLit::isLValue() const {
     return mLit.isLValue();
 }
 
-const DataType & PrimaryExprIntLit::dataType() const {
+DataType & PrimaryExprIntLit::dataType() {
     return mLit.dataType();
 }
 
@@ -108,7 +108,7 @@ bool PrimaryExprBoolLit::isLValue() const {
     return mLit.isLValue();
 }
 
-const DataType & PrimaryExprBoolLit::dataType() const {
+DataType & PrimaryExprBoolLit::dataType() {
     return mLit.dataType();
 }
 
@@ -144,7 +144,7 @@ bool PrimaryExprStrLit::isLValue() const {
     return mLit.isLValue();
 }
 
-const DataType & PrimaryExprStrLit::dataType() const {
+DataType & PrimaryExprStrLit::dataType() {
     return mLit.dataType();
 }
 
@@ -180,7 +180,7 @@ bool PrimaryExprIdentifier::isLValue() const {
     return mIdent.isLValue();
 }
 
-const DataType & PrimaryExprIdentifier::dataType() const {
+DataType & PrimaryExprIdentifier::dataType() {
     return mIdent.dataType();
 }
 
@@ -220,7 +220,7 @@ bool PrimaryExprReadnum::isLValue() const {
     return mExpr.isLValue();
 }
 
-const DataType & PrimaryExprReadnum::dataType() const {
+DataType & PrimaryExprReadnum::dataType() {
     return mExpr.dataType();
 }
 

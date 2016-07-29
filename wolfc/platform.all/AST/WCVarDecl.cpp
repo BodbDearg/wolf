@@ -74,10 +74,11 @@ bool VarDecl::codegen(CodegenCtx & cgCtx) {
 
 bool VarDecl::codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope) {
     // Create the variable. If this fails then the variable already exists:
-    const DataType & exprType = mExpr.dataType();
+    DataType & exprType = mExpr.dataType();
     const DataValue * leftValue = parentScope.createVar(mIdent.mToken.data.strVal.ptr,
                                                         exprType,
-                                                        cgCtx);
+                                                        cgCtx,
+                                                        *this);
     
     if (!leftValue) {
         compileError("The local variable '%s' has been redefined!", mIdent.mToken.data.strVal.ptr);
@@ -99,11 +100,12 @@ bool VarDecl::codegenAsGlobalVar(CodegenCtx & cgCtx) {
     WC_GUARD(rightValue, false);
     
     // Create the variable. If this fails then the variable already exists:
-    const DataType & exprType = mExpr.dataType();
-    const DataValue * leftValue = cgCtx.module.createVar(mIdent.mToken.data.strVal.ptr,
-                                                         exprType,
-                                                         rightValue,
-                                                         cgCtx);
+    DataType & exprType = mExpr.dataType();
+    DataValue * leftValue = cgCtx.module.createVar(mIdent.mToken.data.strVal.ptr,
+                                                   exprType,
+                                                   rightValue,
+                                                   cgCtx,
+                                                   *this);
     
     if (!leftValue) {
         compileError("The global variable '%s' has been redefined!", mIdent.mToken.data.strVal.ptr);

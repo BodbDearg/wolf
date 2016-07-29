@@ -1,4 +1,5 @@
 #include "WCIntDataType.hpp"
+#include "WCASTNode.hpp"
 #include "WCCodegenCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -17,8 +18,17 @@ bool IntDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const IntDataType*>(&other) != nullptr;
 }
 
-llvm::Type * IntDataType::llvmType(CodegenCtx & cgCtx) const {
-    return llvm::Type::getInt64Ty(cgCtx.llvmCtx);
+bool IntDataType::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    mLLVMType = llvm::Type::getInt64Ty(cgCtx.llvmCtx);
+    
+    if (!mLLVMType) {
+        callingNode.compileError("Failed to generate llvm type for data type '%s'!",
+                                 name().c_str());
+        
+        return false;
+    }
+    
+    return true;
 }
 
 bool IntDataType::codegenPrintStmnt(CodegenCtx & cgCtx,

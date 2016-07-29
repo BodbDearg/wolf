@@ -136,18 +136,18 @@ size_t Func::numArgs() const {
     return mArgList->numArgs();
 }
 
-void Func::getArgs(std::vector<FuncArg*> & args) const {
+void Func::getArgs(std::vector<FuncArg*> & args) {
     WC_GUARD(mArgList);
     mArgList->getArgs(args);
 }
 
-const DataValue * Func::getArg(const char * argName) const {
+DataValue * Func::getArg(const char * argName) {
     auto iter = mArgValues.find(argName);
     WC_GUARD(iter != mArgValues.end(), nullptr);
     return &iter->second;
 }
 
-const DataType & Func::returnDataType() const {
+DataType & Func::returnDataType() const {
     if (mReturnType) {
         return mReturnType->dataType();
     }
@@ -179,15 +179,23 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     // Check for duplicate argument names
     WC_GUARD(compileCheckForDuplicateArgNames(funcArgs), false);
     
+    // Generate the code for each arg (llvm types):
+    for (FuncArg * arg : funcArgs) {
+        WC_GUARD(arg->codegen(cgCtx, *this), false);
+    }
+    
     // Get the llvm types for the function arguments
     std::vector<llvm::Type*> fnArgTypesLLVM;
-    WC_GUARD(determineLLVMArgTypes(cgCtx, funcArgs, fnArgTypesLLVM), false);
+    WC_GUARD(getLLVMArgTypes(funcArgs, fnArgTypesLLVM), false);
     
-    // Get the llvm type for the function return:
+    // Generate the llvm type for the function return, if we have one:
+    if (mReturnType) {
+        WC_GUARD(mReturnType->dataType().codegen(cgCtx, *this), nullptr);
+    }
+    
     const DataType & fnRetTy = returnDataType();
-    llvm::Type * fnRetTyLLVM = fnRetTy.llvmType(cgCtx);
     
-    if (!fnRetTyLLVM) {
+    if (!fnRetTy.mLLVMType) {
         compileError("Unable to determine the llvm type of return type '%s'!",
                      fnRetTy.name().c_str());
         
@@ -196,7 +204,7 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     
     // Create the function signature:
     // TODO: support varargs
-    llvm::FunctionType * fnType = llvm::FunctionType::get(fnRetTyLLVM,
+    llvm::FunctionType * fnType = llvm::FunctionType::get(fnRetTy.mLLVMType,
                                                           fnArgTypesLLVM,
                                                           false);
     WC_ASSERT(fnType);
@@ -274,27 +282,32 @@ bool Func::compileCheckForDuplicateArgNames(const std::vector<FuncArg*> & funcAr
     return true;    // All good!
 }
 
-bool Func::determineLLVMArgTypes(CodegenCtx & cgCtx,
-                                 const std::vector<FuncArg*> & funcArgs,
-                                 std::vector<llvm::Type*> & outputArgTypes) const
+bool Func::getLLVMArgTypes(const std::vector<FuncArg*> & funcArgs,
+                           std::vector<llvm::Type*> & outputArgTypes) const
 {
     for (FuncArg * arg : funcArgs) {
         WC_ASSERT(arg);
-        const DataType & argDataType = arg->dataType();
+        DataType & argDataType = arg->dataType();
         
         // Only valid, sized args type are allowed:
         if (argDataType.isSized()) {
-            llvm::Type * llvmType = argDataType.llvmType(cgCtx);
+            llvm::Type * llvmType = argDataType.mLLVMType;
             
             if (!llvmType) {
-                compileError("Failed to determine the llvm type for argument '%s'!", arg->name());
+                compileError("Failed to determine the llvm type for argument '%s' of type '%s'!",
+                             arg->name(),
+                             arg->dataType().name().c_str());
+                
                 return false;
             }
             
             outputArgTypes.push_back(llvmType);
         }
         else {
-            compileError("Invalid data type specified for argument '%s'!", arg->name());
+            compileError("Invalid data type specified for argument '%s' of type '%s'!",
+                         arg->name(),
+                         arg->dataType().name().c_str());
+            
             return false;
         }
     }
