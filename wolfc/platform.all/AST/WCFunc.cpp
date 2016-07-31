@@ -190,7 +190,7 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     
     // Generate the llvm type for the function return:
     DataType & fnRetTy = returnDataType();
-    WC_GUARD(fnRetTy.codegen(cgCtx, *this), nullptr);
+    WC_GUARD(fnRetTy.codegenLLVMType(cgCtx, *this), nullptr);
     
     if (!fnRetTy.mLLVMType) {
         compileError("Unable to determine the llvm type of return type '%s'!",

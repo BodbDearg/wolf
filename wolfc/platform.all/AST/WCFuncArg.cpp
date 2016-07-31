@@ -52,7 +52,7 @@ const char * FuncArg::name() const {
 }
 
 bool FuncArg::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
-    return mType.codegen(cgCtx, callingNode);
+    return mType.codegenLLVMType(cgCtx, callingNode);
 }
 
 WC_END_NAMESPACE

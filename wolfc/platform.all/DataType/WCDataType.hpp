@@ -48,7 +48,7 @@ public:
      * Run code generation for this data type.
      * Generates the llvm type for the data type and returns true if generation was successful.
      */
-    virtual bool codegen(CodegenCtx & cgCtx, ASTNode & callingNode) = 0;
+    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) = 0;
     
     /**
      * Generate the code for a print statement for this type. The codegen context, printf function prototype, 

@@ -23,7 +23,7 @@ public:
     
     virtual DataType & dataType() = 0;
     
-    virtual bool codegen(CodegenCtx & cgCtx, ASTNode & callingNode) = 0;
+    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) = 0;
 };
 
 /* PrimitiveType */
@@ -37,7 +37,7 @@ public:
     
     virtual DataType & dataType() override;
     
-    virtual bool codegen(CodegenCtx & cgCtx, ASTNode & callingNode) override;
+    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
     
     PrimitiveType & mType;
 };
@@ -53,7 +53,7 @@ public:
     
     virtual DataType & dataType() override;
     
-    virtual bool codegen(CodegenCtx & cgCtx, ASTNode & callingNode) override;
+    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
     
     Type &          mElemType;
     AssignExpr &    mSizeExpr;

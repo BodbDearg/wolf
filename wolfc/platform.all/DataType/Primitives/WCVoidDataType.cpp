@@ -27,7 +27,7 @@ bool VoidDataType::isVoid() const {
     return true;
 }
 
-bool VoidDataType::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+bool VoidDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     mLLVMType = llvm::Type::getVoidTy(cgCtx.llvmCtx);
     
     if (!mLLVMType) {

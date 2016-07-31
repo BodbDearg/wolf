@@ -85,8 +85,8 @@ DataType & TypePrimitive::dataType() {
     return mType.dataType();
 }
 
-bool TypePrimitive::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
-    return mType.codegen(cgCtx, callingNode);
+bool TypePrimitive::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    return mType.codegenLLVMType(cgCtx, callingNode);
 }
 
 //-----------------------------------------------------------------------------
@@ -120,9 +120,9 @@ DataType & TypeArray::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kUnknown);
 }
 
-bool TypeArray::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+bool TypeArray::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     // First codegen the element type:
-    WC_GUARD(mElemType.codegen(cgCtx, callingNode), false);
+    WC_GUARD(mElemType.codegenLLVMType(cgCtx, callingNode), false);
     
     // The element type must have a size:
     if (!mElemType.dataType().isSized()) {
@@ -165,7 +165,7 @@ bool TypeArray::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
     mDataType = new ArrayDataType(mElemType.dataType(), mArraySize);
     
     // Codegen the array data type so we can get the llvm type later:
-    WC_GUARD(mDataType->codegen(cgCtx, *this), false);
+    WC_GUARD(mDataType->codegenLLVMType(cgCtx, *this), false);
     
     // If we have reached here then we are all good!
     return true;

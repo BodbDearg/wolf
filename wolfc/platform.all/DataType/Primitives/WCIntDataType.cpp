@@ -18,7 +18,7 @@ bool IntDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const IntDataType*>(&other) != nullptr;
 }
 
-bool IntDataType::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+bool IntDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     mLLVMType = llvm::Type::getInt64Ty(cgCtx.llvmCtx);
     
     if (!mLLVMType) {

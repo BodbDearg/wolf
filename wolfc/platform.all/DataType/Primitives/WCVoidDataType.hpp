@@ -18,7 +18,7 @@ public:
     
     virtual bool isVoid() const override;
     
-    virtual bool codegen(CodegenCtx & cgCtx, ASTNode & callingNode) override;
+    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
     
     virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
                                    const PrintStmnt & parentPrintStmnt,

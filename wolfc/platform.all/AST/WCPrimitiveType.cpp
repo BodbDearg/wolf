@@ -41,8 +41,8 @@ DataType & PrimitiveType::dataType() {
     return PrimitiveDataTypes::dataTypeForLangKeyword(mToken.type);
 }
 
-bool PrimitiveType::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
-    return dataType().codegen(cgCtx, callingNode);
+bool PrimitiveType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    return dataType().codegenLLVMType(cgCtx, callingNode);
 }
 
 WC_END_NAMESPACE

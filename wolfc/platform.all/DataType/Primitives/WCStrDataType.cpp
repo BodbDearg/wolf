@@ -18,7 +18,7 @@ bool StrDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const StrDataType*>(&other) != nullptr;
 }
 
-bool StrDataType::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+bool StrDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     mLLVMType = llvm::Type::getInt8PtrTy(cgCtx.llvmCtx);
     
     if (!mLLVMType) {

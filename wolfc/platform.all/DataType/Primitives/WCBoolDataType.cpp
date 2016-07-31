@@ -20,7 +20,7 @@ bool BoolDataType::isBool() const {
     return true;
 }
 
-bool BoolDataType::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
+bool BoolDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     mLLVMType = llvm::Type::getInt1Ty(cgCtx.llvmCtx);
     
     if (!mLLVMType) {

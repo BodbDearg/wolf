@@ -80,7 +80,7 @@ llvm::Value * ArrayLit::codegenAddrOf(CodegenCtx & cgCtx) {
 
 llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
     // Generate the code for the element type:
-    WC_GUARD(codegenElementType(cgCtx), nullptr);
+    WC_GUARD(codegenLLVMType(cgCtx), nullptr);
     
     // Alloc room on the stack for the array:
     llvm::Type * arraySizeLLVMTy = llvm::Type::getInt64Ty(cgCtx.llvmCtx);
@@ -97,7 +97,7 @@ llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
 
 llvm::Constant * ArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Generate the code for the element type:
-    WC_GUARD(codegenElementType(cgCtx), nullptr);
+    WC_GUARD(codegenLLVMType(cgCtx), nullptr);
     
     /*
     //
@@ -107,7 +107,7 @@ llvm::Constant * ArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
     return nullptr;
 }
 
-bool ArrayLit::codegenElementType(CodegenCtx & cgCtx) {
+bool ArrayLit::codegenLLVMType(CodegenCtx & cgCtx) {
     // Element type checks:
     if (mElementType.isUnknown()) {
         compileError("Unable to determine element type for array! "
@@ -124,7 +124,7 @@ bool ArrayLit::codegenElementType(CodegenCtx & cgCtx) {
     }
 
     // Generate the code for the element:
-    WC_GUARD(mElementType.codegen(cgCtx, *this), nullptr);
+    WC_GUARD(mElementType.codegenLLVMType(cgCtx, *this), nullptr);
     
     // Verify all is good:
     if (!mElementType.mLLVMType) {

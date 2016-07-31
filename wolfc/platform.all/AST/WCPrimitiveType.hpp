@@ -26,7 +26,7 @@ public:
     
     DataType & dataType();
     
-    bool codegen(CodegenCtx & cgCtx, ASTNode & callingNode);
+    bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode);
     
     const Token & mToken;
 };
