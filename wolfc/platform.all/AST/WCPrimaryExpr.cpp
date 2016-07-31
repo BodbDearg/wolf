@@ -1,4 +1,5 @@
 #include "WCPrimaryExpr.hpp"
+#include "WCArrayLit.hpp"
 #include "WCBoolLit.hpp"
 #include "WCIdentifier.hpp"
 #include "WCIntLit.hpp"
@@ -36,6 +37,11 @@ PrimaryExpr * PrimaryExpr::parse(const Token *& currentToken, LinearAlloc & allo
         StrLit * strLit = StrLit::parse(currentToken, alloc);
         WC_GUARD(strLit, nullptr);
         return WC_NEW_AST_NODE(alloc, PrimaryExprStrLit, *strLit);
+    }
+    else if (ArrayLit::peek(currentToken)) {
+        ArrayLit * arrayLit = ArrayLit::parse(currentToken, alloc);
+        WC_GUARD(arrayLit, nullptr);
+        return WC_NEW_AST_NODE(alloc, PrimaryExprArrayLit, *arrayLit);
     }
     else if (Identifier::peek(currentToken)) {
         Identifier * identifier = Identifier::parse(currentToken, alloc);
@@ -157,6 +163,42 @@ llvm::Value * PrimaryExprStrLit::codegenExprEval(CodegenCtx & cgCtx) {
 }
 
 llvm::Constant * PrimaryExprStrLit::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mLit.codegenExprConstEval(cgCtx);
+}
+
+//-----------------------------------------------------------------------------
+// PrimaryExprArrayLit
+//-----------------------------------------------------------------------------
+
+PrimaryExprArrayLit::PrimaryExprArrayLit(ArrayLit & lit) : mLit(lit) {
+    mLit.mParent = this;
+}
+
+const Token & PrimaryExprArrayLit::getStartToken() const {
+    return mLit.getStartToken();
+}
+
+const Token & PrimaryExprArrayLit::getEndToken() const {
+    return mLit.getEndToken();
+}
+
+bool PrimaryExprArrayLit::isLValue() const {
+    return mLit.isLValue();
+}
+
+DataType & PrimaryExprArrayLit::dataType() {
+    return mLit.dataType();
+}
+
+llvm::Value * PrimaryExprArrayLit::codegenAddrOf(CodegenCtx & cgCtx) {
+    return mLit.codegenAddrOf(cgCtx);
+}
+
+llvm::Value * PrimaryExprArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
+    return mLit.codegenExprEval(cgCtx);
+}
+
+llvm::Constant * PrimaryExprArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mLit.codegenExprConstEval(cgCtx);
 }
 

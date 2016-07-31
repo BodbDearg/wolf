@@ -5,6 +5,7 @@
 
 WC_BEGIN_NAMESPACE
 
+class ArrayLit;
 class BoolLit;
 class DataType;
 class Identifier;
@@ -18,6 +19,7 @@ PrimaryExpr:
 	IntLit
 	BoolLit
 	StrLit
+    ArrayLit
     Identifier
     ReadnumExpr
 */
@@ -92,6 +94,28 @@ public:
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     StrLit & mLit;
+};
+
+/* ArrayLit */
+class PrimaryExprArrayLit : public PrimaryExpr {
+public:
+    PrimaryExprArrayLit(ArrayLit & lit);
+    
+    virtual const Token & getStartToken() const override;
+    
+    virtual const Token & getEndToken() const override;
+    
+    virtual bool isLValue() const override;
+    
+    virtual DataType & dataType() override;
+    
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    
+    ArrayLit & mLit;
 };
 
 /* Identifier */

@@ -141,22 +141,22 @@ FuncCall:
 
 FuncCallArgList:
 	AssignExpr
-	AssignExpr, FuncCallArgList
+	AssignExpr , FuncCallArgList
 
 PrimaryExpr:
 	IntLit
 	BoolLit
 	StrLit
+    ArrayLit
     Identifier
     ReadnumExpr
-    ### TODO ### ArrayLit
 
-### TODO ### ArrayLit:
-    ### TODO ### [ ArrayLitExprs ]
+ArrayLit:
+    [ ArrayLitExprs ]
 
-### TODO ### ArrayLitExprs:
-    ### TODO ### AssignExpr
-    ### TODO ### AssignExpr, ArrayLitExprs
+ArrayLitExprs:
+    AssignExpr
+    AssignExpr , ArrayLitExprs
 
 ReadnumExpr:
     readnum ( )

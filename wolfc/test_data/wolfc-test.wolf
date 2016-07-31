@@ -1,12 +1,7 @@
-func test(int[2][2] blah)
-	nop
+func test(int[0] blah)
+	var i = [ 1, 2, 3 ]
 end
 
 func main() -> int
-	loop 
-		print("Enter 0 to make me angry: ")
-		print(readnum() == 0 ? "ARGHHHH!! 😡\n" : "Ahhhh.... 🤗\n")
-	end
-
 	return 0
 end
