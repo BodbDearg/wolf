@@ -79,11 +79,8 @@ llvm::Value * ArrayLit::codegenAddrOf(CodegenCtx & cgCtx) {
 }
 
 llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
-    // Make sure the element type is okay:
-    WC_GUARD(compileCheckElementType(), nullptr);
-    
     // Generate the code for the element type:
-    WC_GUARD(mElementType.codegen(cgCtx, *this), nullptr);
+    WC_GUARD(codegenElementType(cgCtx), nullptr);
     
     // Alloc room on the stack for the array:
     llvm::Type * arraySizeLLVMTy = llvm::Type::getInt64Ty(cgCtx.llvmCtx);
@@ -99,22 +96,19 @@ llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
 }
 
 llvm::Constant * ArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
-    /*
-    // Make sure the element type is okay:
-    WC_GUARD(compileCheckElementType(), nullptr);
-    
     // Generate the code for the element type:
-    WC_GUARD(mElementType.codegen(cgCtx, *this), nullptr);
+    WC_GUARD(codegenElementType(cgCtx), nullptr);
     
+    /*
     //
-    
     return llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), mToken.data.intVal);
     */
     #warning TODO: array constant code generation
     return nullptr;
 }
 
-bool ArrayLit::compileCheckElementType() {
+bool ArrayLit::codegenElementType(CodegenCtx & cgCtx) {
+    // Element type checks:
     if (mElementType.isUnknown()) {
         compileError("Unable to determine element type for array! "
                      "Element type is ambiguous since different elements have different types!");
@@ -122,19 +116,23 @@ bool ArrayLit::compileCheckElementType() {
         return false;
     }
     
-    if (mElementType.isSized()) {
+    if (!mElementType.isSized()) {
         compileError("Invalid element type for array: '%s'! Array element types must be sized.",
                      mElementType.name().c_str());
         
         return false;
     }
+
+    // Generate the code for the element:
+    WC_GUARD(mElementType.codegen(cgCtx, *this), nullptr);
     
+    // Verify all is good:
     if (!mElementType.mLLVMType) {
         compileError("Invalid element type for array! Unable to determine the llvm type.");
         return false;
     }
     
-    return true;
+    return true;    // Success!
 }
 
 WC_END_NAMESPACE

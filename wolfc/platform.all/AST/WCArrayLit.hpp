@@ -38,10 +38,10 @@ public:
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     /**
-     * Check if the element type of the array is okay and issue a compile error if it is not.
-     * Returns false if the element type is not okay.
+     * Does the codegen for the element type. 
+     * Issues a compile error and returns false if failed.
      */
-    bool compileCheckElementType();
+    bool codegenElementType(CodegenCtx & cgCtx);
     
     const Token &       mLBrack;
     ArrayLitExprs &     mExprs;
