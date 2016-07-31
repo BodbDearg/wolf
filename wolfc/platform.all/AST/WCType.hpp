@@ -58,6 +58,15 @@ public:
     Type &          mElemType;
     AssignExpr &    mSizeExpr;
     const Token &   mEndBracket;
+    
+    /* The data type of the type array. This is generated during code generation. */
+    DataType * mDataType = nullptr;
+    
+    /* The size of the array. This is evaluated when compiling. */
+    size_t mArraySize = 0;
+    
+    /* True if the array size expression has been evaluated. */
+    bool mArraySizeEvaluated = false;
 };
 
 WC_END_NAMESPACE

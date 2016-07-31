@@ -1,4 +1,4 @@
-func test(int blah)
+func test(int[2][2] blah)
 	nop
 end
 

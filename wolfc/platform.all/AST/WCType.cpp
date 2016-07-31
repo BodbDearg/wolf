@@ -1,10 +1,15 @@
 #include "WCType.hpp"
+#include "WCArrayDataType.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCDataType.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
 #include "WCPrimitiveType.hpp"
 #include "WCToken.hpp"
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <llvm/IR/Constants.h>
+WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
@@ -106,7 +111,12 @@ const Token & TypeArray::getEndToken() const {
 }
 
 DataType & TypeArray::dataType() {
-    #warning TODO: return proper type for type array
+    // See if we have evaluated the data type yet, if so then return it:
+    if (mDataType) {
+        return *mDataType;
+    }
+    
+    // Don't know what our exact data type is yet:
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kUnknown);
 }
 
@@ -114,9 +124,51 @@ bool TypeArray::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
     // First codegen the element type:
     WC_GUARD(mElemType.codegen(cgCtx, callingNode), false);
     
-    #warning TODO: codegen a type array
-    callingNode.compileError("Not implemented!");
-    return false;
+    // The element type must have a size:
+    if (!mElemType.dataType().isSized()) {
+        compileError("Invalid element type for array: '%s'! Arrays can only contain valid sized elements.",
+                     mElemType.dataType().name().c_str());
+        
+        return false;
+    }
+    
+    // Next codegen the assign expression for the array size:
+    llvm::Constant * arraySize = mSizeExpr.codegenExprConstEval(cgCtx);
+    
+    // Okay, so the array size must be an integer:
+    if (llvm::ConstantInt * arraySizeAsInt = llvm::dyn_cast<llvm::ConstantInt>(arraySize)) {
+        if (arraySizeAsInt->isNegative()) {
+            compileError("Size expression for array must be a valid unsigned integer!");
+            return false;
+        }
+       
+        const auto & sizeAPInt = arraySizeAsInt->getValue();
+        
+        if (sizeAPInt.getNumWords() > 1) {
+            compileError("Array size is too big for array! Max supported size: %zu",
+                         UINT64_MAX);
+            
+            return false;
+        }
+        
+        // Save the array size:
+        mArraySize = sizeAPInt.getZExtValue();
+        mArraySizeEvaluated = true;
+    }
+    else {
+        compileError("Size expression for array must be a valid unsigned integer!");
+        return false;
+    }
+    
+    // TODO: what manages memory here?
+    // Now create a data type for the array:
+    mDataType = new ArrayDataType(mElemType.dataType(), mArraySize);
+    
+    // Codegen the array data type so we can get the llvm type later:
+    WC_GUARD(mDataType->codegen(cgCtx, *this), false);
+    
+    // If we have reached here then we are all good!
+    return true;
 }
 
 WC_END_NAMESPACE

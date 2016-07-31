@@ -188,12 +188,9 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     std::vector<llvm::Type*> fnArgTypesLLVM;
     WC_GUARD(getLLVMArgTypes(funcArgs, fnArgTypesLLVM), false);
     
-    // Generate the llvm type for the function return, if we have one:
-    if (mReturnType) {
-        WC_GUARD(mReturnType->dataType().codegen(cgCtx, *this), nullptr);
-    }
-    
-    const DataType & fnRetTy = returnDataType();
+    // Generate the llvm type for the function return:
+    DataType & fnRetTy = returnDataType();
+    WC_GUARD(fnRetTy.codegen(cgCtx, *this), nullptr);
     
     if (!fnRetTy.mLLVMType) {
         compileError("Unable to determine the llvm type of return type '%s'!",
