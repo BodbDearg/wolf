@@ -47,7 +47,7 @@ public:
     ArrayLitExprs &     mExprs;
     const Token &       mRBrack;
     size_t              mSize;
-    ArrayDataType       mElementType;
+    ArrayDataType       mDataType;
 };
 
 WC_END_NAMESPACE

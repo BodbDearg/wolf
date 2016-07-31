@@ -51,7 +51,7 @@ ArrayLit::ArrayLit(const Token & lBrack,
     mExprs(exprs),
     mRBrack(rBrack),
     mSize(exprs.numExprs()),
-    mElementType(exprs.getElementType(), mSize)
+    mDataType(exprs.getElementType(), mSize)
 {
     mExprs.mParent = this;
 }
@@ -69,7 +69,7 @@ bool ArrayLit::isLValue() const {
 }
 
 DataType & ArrayLit::dataType() {
-    return mExprs.getElementType();
+    return mDataType;
 }
 
 llvm::Value * ArrayLit::codegenAddrOf(CodegenCtx & cgCtx) {
@@ -85,7 +85,7 @@ llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
     // Alloc room on the stack for the array:
     llvm::Type * arraySizeLLVMTy = llvm::Type::getInt64Ty(cgCtx.llvmCtx);
     WC_ASSERT(arraySizeLLVMTy);
-    llvm::AllocaInst * allocInst = cgCtx.irBuilder.CreateAlloca(mElementType.mLLVMType,
+    llvm::AllocaInst * allocInst = cgCtx.irBuilder.CreateAlloca(mExprs.getElementType().mLLVMType,
                                                                 llvm::ConstantInt::get(arraySizeLLVMTy, mSize));
     
     // TODO: actually fill in the elements
@@ -109,25 +109,25 @@ llvm::Constant * ArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
 
 bool ArrayLit::codegenLLVMType(CodegenCtx & cgCtx) {
     // Element type checks:
-    if (mElementType.isUnknown()) {
+    if (mDataType.isUnknown()) {
         compileError("Unable to determine element type for array! "
                      "Element type is ambiguous since different elements have different types!");
         
         return false;
     }
     
-    if (!mElementType.isSized()) {
+    if (!mDataType.isSized()) {
         compileError("Invalid element type for array: '%s'! Array element types must be sized.",
-                     mElementType.name().c_str());
+                     mDataType.name().c_str());
         
         return false;
     }
 
     // Generate the code for the element:
-    WC_GUARD(mElementType.codegenLLVMType(cgCtx, *this), nullptr);
+    WC_GUARD(mDataType.codegenLLVMType(cgCtx, *this), nullptr);
     
     // Verify all is good:
-    if (!mElementType.mLLVMType) {
+    if (!mDataType.mLLVMType) {
         compileError("Invalid element type for array! Unable to determine the llvm type.");
         return false;
     }
