@@ -40,6 +40,16 @@ bool VoidDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     return true;
 }
 
+llvm::AllocaInst * VoidDataType::codegenAlloca(CodegenCtx & cgCtx,
+                                               ASTNode & callingNode,
+                                               const std::string & instLabel)
+{
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(instLabel);
+    callingNode.compileError("Can't allocate type '%s' on the stack!", name().c_str());
+    return nullptr;
+}
+
 bool VoidDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                      const PrintStmnt & parentPrintStmnt,
                                      llvm::Constant & printfFn,

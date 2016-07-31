@@ -4,6 +4,7 @@
 #include <string>
 
 namespace llvm {
+    class AllocaInst;
     class Constant;
     class Type;
     class Value;
@@ -49,6 +50,14 @@ public:
      * Generates the llvm type for the data type and returns true if generation was successful.
      */
     virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) = 0;
+    
+    /**
+     * Generate code to allocate space for this type on the stack.
+     * Returns the instruction for that when done.
+     */
+    virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,
+                                             ASTNode & callingNode,
+                                             const std::string & instLabel) = 0;
     
     /**
      * Generate the code for a print statement for this type. The codegen context, printf function prototype, 

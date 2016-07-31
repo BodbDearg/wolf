@@ -1,4 +1,5 @@
 #include "WCArrayDataType.hpp"
+#include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCPrintStmnt.hpp"
 
@@ -87,8 +88,19 @@ bool ArrayDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
         return false;
     }
     
-    // All good!
-    return true;
+    return true;    // All good!
+}
+
+llvm::AllocaInst * ArrayDataType::codegenAlloca(CodegenCtx & cgCtx,
+                                                ASTNode & callingNode,
+                                                const std::string & instLabel)
+{
+    WC_GUARD_ASSERT(mInnerType.mLLVMType, nullptr);
+    WC_UNUSED_PARAM(callingNode);
+    
+    return cgCtx.irBuilder.CreateAlloca(mInnerType.mLLVMType,
+                                        llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), mSize),
+                                        instLabel);
 }
 
 bool ArrayDataType::codegenPrintStmnt(CodegenCtx & cgCtx,

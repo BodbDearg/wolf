@@ -1,4 +1,5 @@
 #include "WCStrDataType.hpp"
+#include "WCAssert.hpp"
 #include "WCASTNode.hpp"
 #include "WCCodegenCtx.hpp"
 
@@ -29,6 +30,15 @@ bool StrDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     }
     
     return true;
+}
+
+llvm::AllocaInst * StrDataType::codegenAlloca(CodegenCtx & cgCtx,
+                                              ASTNode & callingNode,
+                                              const std::string & instLabel)
+{
+    WC_GUARD_ASSERT(mLLVMType, nullptr);
+    WC_UNUSED_PARAM(callingNode);
+    return cgCtx.irBuilder.CreateAlloca(mLLVMType, nullptr, instLabel);
 }
 
 bool StrDataType::codegenPrintStmnt(CodegenCtx & cgCtx,

@@ -63,9 +63,15 @@ DataValue * Scope::createVar(const char * varName,
     DataValue & dataValue = mVarValues[varName];
     dataValue.requiresLoad = true;
     dataValue.type = &dataType;
-    dataValue.value = cgCtx.irBuilder.CreateAlloca(dataType.mLLVMType,
-                                                   nullptr,
-                                                   std::string("alloc_ident_val:") + varName);
+    dataValue.value = dataType.codegenAlloca(cgCtx, *this, std::string("alloc_ident_val:") + varName);
+    
+    if (!dataValue.value) {
+        compileError("Failed to codegen a stack allocation for the variable '%s' of type '%s'!",
+                     varName,
+                     dataType.name().c_str());
+        
+        return nullptr;
+    }
     
     return &dataValue;
 }

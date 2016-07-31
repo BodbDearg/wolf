@@ -20,6 +20,10 @@ public:
     
     virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
     
+    virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,
+                                             ASTNode & callingNode,
+                                             const std::string & instLabel) override;
+    
     virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
                                    const PrintStmnt & parentPrintStmnt,
                                    llvm::Constant & printfFn,
