@@ -1,5 +1,5 @@
 func test()
-	[ 10, 20, 30 ]
+	var i = [ 10, 20, 30 ]
 end
 
 func main() -> int

@@ -59,6 +59,18 @@ DataType & AssignExprNoAssign::dataType() {
     return mExpr.dataType();
 }
 
+bool AssignExprNoAssign::requiresStorage() const {
+    return mExpr.requiresStorage();
+}
+
+llvm::Value * AssignExprNoAssign::getStorage() const {
+    return mExpr.getStorage();
+}
+
+void AssignExprNoAssign::setStorage(llvm::Value & storage) {
+    mExpr.setStorage(storage);
+}
+
 llvm::Value * AssignExprNoAssign::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }

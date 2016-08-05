@@ -67,6 +67,18 @@ DataType & EqExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
+bool EqExprNoOp::requiresStorage() const {
+    return mExpr.requiresStorage();
+}
+
+llvm::Value * EqExprNoOp::getStorage() const {
+    return mExpr.getStorage();
+}
+
+void EqExprNoOp::setStorage(llvm::Value & storage) {
+    return mExpr.setStorage(storage);
+}
+
 llvm::Value * EqExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }

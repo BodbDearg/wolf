@@ -76,6 +76,18 @@ DataType & TernaryExprNoCond::dataType() {
     return mExpr.dataType();
 }
 
+bool TernaryExprNoCond::requiresStorage() const {
+    return mExpr.requiresStorage();
+}
+
+llvm::Value * TernaryExprNoCond::getStorage() const {
+    return mExpr.getStorage();
+}
+
+void TernaryExprNoCond::setStorage(llvm::Value & storage) {
+    mExpr.setStorage(storage);
+}
+
 llvm::Value * TernaryExprNoCond::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }

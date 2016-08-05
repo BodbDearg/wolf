@@ -52,7 +52,8 @@ ArrayLit::ArrayLit(const Token & lBrack,
     mExprs(exprs),
     mRBrack(rBrack),
     mSize(exprs.numExprs()),
-    mDataType(exprs.getElementType(), mSize)
+    mDataType(exprs.getElementType(), mSize),
+    mStorage(nullptr)
 {
     mExprs.mParent = this;
 }
@@ -73,6 +74,19 @@ DataType & ArrayLit::dataType() {
     return mDataType;
 }
 
+bool ArrayLit::requiresStorage() const {
+    return true;
+}
+
+llvm::Value * ArrayLit::getStorage() const {
+    return mStorage;
+}
+
+void ArrayLit::setStorage(llvm::Value & storage) {
+    WC_ASSERT(!mStorage);
+    mStorage = &storage;
+}
+
 llvm::Value * ArrayLit::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
@@ -83,9 +97,12 @@ llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
     // Generate the code for the element type:
     WC_GUARD(codegenLLVMType(cgCtx), nullptr);
     
-    // Allocate stack space for the array:
-    llvm::AllocaInst * arrayValue = cgCtx.irBuilder.CreateAlloca(mDataType.mLLVMType);
-    WC_ASSERT(arrayValue);
+    // Allocate stack space for the array if we need to:
+    if (!mStorage) {
+        llvm::AllocaInst * storage = cgCtx.irBuilder.CreateAlloca(mDataType.mLLVMType);
+        WC_ASSERT(storage);
+        setStorage(*storage);
+    }
     
     // Evaluate the array element expressions:
     std::vector<AssignExpr*> exprs;
@@ -107,7 +124,7 @@ llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
         WC_ASSERT(zeroIndex);
         llvm::ConstantInt * arrayIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), i);
         WC_ASSERT(arrayIndex);
-        llvm::Value * arrayElemPtr = cgCtx.irBuilder.CreateGEP(arrayValue, { zeroIndex, arrayIndex });
+        llvm::Value * arrayElemPtr = cgCtx.irBuilder.CreateGEP(mStorage, { zeroIndex, arrayIndex });
         WC_ASSERT(arrayElemPtr);
         
         // TODO: this probably will not work for complex types and nested arrays
@@ -116,7 +133,7 @@ llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
         WC_ASSERT(storeResult);
     }
     
-    return arrayValue;
+    return mStorage;
 }
 
 llvm::Constant * ArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {

@@ -24,7 +24,7 @@ public:
     static UnaryExpr * parse(const Token *& currentToken, LinearAlloc & alloc);
 };
 
-/* PrimaryExpr */
+/* PostfixExpr */
 class UnaryExprPrimary : public UnaryExpr {
 public:
     UnaryExprPrimary(PostfixExpr & expr);
@@ -37,6 +37,12 @@ public:
     
     virtual DataType & dataType() override;
     
+    virtual bool requiresStorage() const override;
+    
+    virtual llvm::Value * getStorage() const override;
+    
+    virtual void setStorage(llvm::Value & storage) override;
+    
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
@@ -46,7 +52,7 @@ public:
     PostfixExpr & mExpr;
 };
 
-/* -PrimaryExpr */
+/* -PostfixExpr */
 class UnaryExprMinus : public UnaryExpr {
 public:
     UnaryExprMinus(PostfixExpr & expr, const Token & startToken);
@@ -69,7 +75,7 @@ public:
     const Token &   mStartToken;
 };
 
-/* +PrimaryExpr */
+/* +PostfixExpr */
 class UnaryExprPlus : public UnaryExprPrimary {
 public:
     UnaryExprPlus(PostfixExpr & expr, const Token & startToken);
@@ -103,6 +109,12 @@ public:
     virtual bool isLValue() const override;
     
     virtual DataType & dataType() override;
+    
+    virtual bool requiresStorage() const override;
+    
+    virtual llvm::Value * getStorage() const override;
+    
+    virtual void setStorage(llvm::Value & storage) override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     

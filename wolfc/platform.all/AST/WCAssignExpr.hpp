@@ -21,7 +21,7 @@ public:
     static AssignExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
-/* OrExpr */
+/* TernaryExpr */
 class AssignExprNoAssign : public AssignExpr {
 public:
     AssignExprNoAssign(TernaryExpr & expr);
@@ -33,6 +33,12 @@ public:
     virtual bool isLValue() const override;
     
     virtual DataType & dataType() override;
+    
+    virtual bool requiresStorage() const override;
+    
+    virtual llvm::Value * getStorage() const override;
+    
+    virtual void setStorage(llvm::Value & storage) override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     

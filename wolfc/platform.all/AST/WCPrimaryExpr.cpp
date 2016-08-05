@@ -190,6 +190,18 @@ DataType & PrimaryExprArrayLit::dataType() {
     return mLit.dataType();
 }
 
+bool PrimaryExprArrayLit::requiresStorage() const {
+    return mLit.requiresStorage();
+}
+
+llvm::Value * PrimaryExprArrayLit::getStorage() const {
+    return mLit.getStorage();
+}
+
+void PrimaryExprArrayLit::setStorage(llvm::Value & storage) {
+    mLit.setStorage(storage);
+}
+
 llvm::Value * PrimaryExprArrayLit::codegenAddrOf(CodegenCtx & cgCtx) {
     return mLit.codegenAddrOf(cgCtx);
 }

@@ -83,6 +83,18 @@ DataType & RelExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
+bool RelExprNoOp::requiresStorage() const {
+    return mExpr.requiresStorage();
+}
+
+llvm::Value * RelExprNoOp::getStorage() const {
+    return mExpr.getStorage();
+}
+
+void RelExprNoOp::setStorage(llvm::Value & storage) {
+    return mExpr.setStorage(storage);
+}
+
 llvm::Value * RelExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }

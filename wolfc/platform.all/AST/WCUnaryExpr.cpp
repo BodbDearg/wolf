@@ -107,6 +107,18 @@ DataType & UnaryExprPrimary::dataType() {
     return mExpr.dataType();
 }
 
+bool UnaryExprPrimary::requiresStorage() const {
+    return mExpr.requiresStorage();
+}
+
+llvm::Value * UnaryExprPrimary::getStorage() const {
+    return mExpr.getStorage();
+}
+
+void UnaryExprPrimary::setStorage(llvm::Value & storage) {
+    return mExpr.setStorage(storage);
+}
+
 llvm::Value * UnaryExprPrimary::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
@@ -267,6 +279,18 @@ bool UnaryExprParen::isLValue() const {
 
 DataType & UnaryExprParen::dataType() {
     return mExpr.dataType();
+}
+
+bool UnaryExprParen::requiresStorage() const {
+    return mExpr.requiresStorage();
+}
+
+llvm::Value * UnaryExprParen::getStorage() const {
+    return mExpr.getStorage();
+}
+
+void UnaryExprParen::setStorage(llvm::Value & storage) {
+    return mExpr.setStorage(storage);
 }
 
 llvm::Value * UnaryExprParen::codegenAddrOf(CodegenCtx & cgCtx) {

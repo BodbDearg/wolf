@@ -27,6 +27,35 @@ public:
     virtual DataType & dataType() = 0;
     
     /**
+     * If true then the expression requires a storage area to hold since it is
+     * not a simple primitive that can be held in a register.
+     * This will be true for arrays, structs and other aggregate types.
+     *
+     * For expressions that require storage they have one of two sources to 
+     * get their storage area from:
+     *
+     *  (1) Create it themselves on demand (usually on the stack) as the expression
+     *      is evaluated.
+     *  (2) Be assigned it by a variable declaration which has already reserved the
+     *      space to hold the variable.
+     */
+    virtual bool requiresStorage() const;
+    
+    /* Return the storage area of the expression, if any. */
+    virtual llvm::Value * getStorage() const;
+    
+    /**
+     * Set the storage area of the expression. 
+     * This should only be implemented for types where 'requiresStorage' is true.
+     * Variable declarations can use this to assign a storage area to complex types
+     * like array literals and so forth.
+     *
+     * Once set, the storage area should not be re-set. 
+     * This should be a once only operation!
+     */
+    virtual void setStorage(llvm::Value & storage);
+    
+    /**
      * Codegen the llvm value that represents the address of this expression. 
      * Note: this is only possible for lvalues! For rvalues this should return nullptr.
      */
