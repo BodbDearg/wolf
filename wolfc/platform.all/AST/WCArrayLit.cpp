@@ -112,8 +112,7 @@ llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
         
         // TODO: this probably will not work for complex types and nested arrays
         // Do the actual store to the array element.
-        llvm::Value * storeResult = cgCtx.irBuilder.CreateStore(exprValues[i], arrayElemPtr);
-        WC_ASSERT(storeResult);
+        WC_GUARD(cgCtx.irbCreateStore(*this, exprValues[i], arrayElemPtr), nullptr);
     }
     
     return arrayValue;
