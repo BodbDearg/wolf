@@ -15,7 +15,6 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class ASTNode;
 class Module;
 
 /* Struct holding the context for code generation */
@@ -47,11 +46,6 @@ struct CodegenCtx {
      * There MUST be an insert block on the stack, assumes this is the case (undefined behavior otherwise).
      */
     void popInsertBlock();
-    
-    /* IR builder wrapper: create a store instruction. Issue a compile error and return false if failed. */
-    bool irbCreateStore(ASTNode & callingNode,
-                        llvm::Value * val,
-                        llvm::Value * ptr);
     
     /* The llvm context. */
     llvm::LLVMContext & llvmCtx;

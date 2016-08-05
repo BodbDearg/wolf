@@ -134,11 +134,9 @@ llvm::Value * AssignExprAssign::codegenExprEval(CodegenCtx & cgCtx) {
     llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(rightValue, nullptr);
     
-    // TODO: this won't work for complex types
     // Generate store instruction:
-    WC_GUARD(cgCtx.irbCreateStore(*this, rightValue, leftValue), nullptr);
+    cgCtx.irBuilder.CreateStore(rightValue, leftValue);
     
-    // TODO: this won't work for complex types
     // The expression evalutes to the left expression, so return that
     return cgCtx.irBuilder.CreateLoad(leftValue);
 }

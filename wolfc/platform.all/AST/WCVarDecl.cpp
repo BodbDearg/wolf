@@ -91,7 +91,7 @@ bool VarDecl::codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope) {
     
     // TODO: this won't work for non primitive types
     // Generate store instruction:
-    return cgCtx.irbCreateStore(*this, rightValue, leftValue->value);
+    return cgCtx.irBuilder.CreateStore(rightValue, leftValue->value) != nullptr;
 }
 
 bool VarDecl::codegenAsGlobalVar(CodegenCtx & cgCtx) {
