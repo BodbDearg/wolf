@@ -1,6 +1,7 @@
 #include "WCArrayLit.hpp"
 #include "WCArrayLitExprs.hpp"
 #include "WCAssert.hpp"
+#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"
@@ -82,17 +83,40 @@ llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
     // Generate the code for the element type:
     WC_GUARD(codegenLLVMType(cgCtx), nullptr);
     
-    // Alloc room on the stack for the array:
-    llvm::Type * arraySizeLLVMTy = llvm::Type::getInt64Ty(cgCtx.llvmCtx);
-    WC_ASSERT(arraySizeLLVMTy);
-    llvm::AllocaInst * allocInst = cgCtx.irBuilder.CreateAlloca(mExprs.getElementType().mLLVMType,
-                                                                llvm::ConstantInt::get(arraySizeLLVMTy, mSize));
+    // Allocate stack space for the array:
+    llvm::AllocaInst * arrayValue = cgCtx.irBuilder.CreateAlloca(mDataType.mLLVMType);
+    WC_ASSERT(arrayValue);
     
-    // TODO: actually fill in the elements
-    #warning TODO: fill in array elements
+    // Evaluate the array element expressions:
+    std::vector<AssignExpr*> exprs;
+    mExprs.getExprs(exprs);
+    std::vector<llvm::Value*> exprValues;
+    exprValues.reserve(exprs.size());
     
-    // Return the array
-    return allocInst;
+    for (size_t i = 0; i < exprs.size(); ++i) {
+        // Codegen the expression:
+        llvm::Value * exprValue = exprs[i]->codegenExprEval(cgCtx);
+        WC_GUARD(exprValue, nullptr);
+        exprValues.push_back(exprValue);
+    }
+    
+    // Assign each of the element expressions to the array:
+    for (size_t i = 0; i < exprs.size(); ++i) {
+        // Figure out the pointer to the array element:
+        llvm::ConstantInt * zeroIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), 0);
+        WC_ASSERT(zeroIndex);
+        llvm::ConstantInt * arrayIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), i);
+        WC_ASSERT(arrayIndex);
+        llvm::Value * arrayElemPtr = cgCtx.irBuilder.CreateGEP(arrayValue, { zeroIndex, arrayIndex });
+        WC_ASSERT(arrayElemPtr);
+        
+        // TODO: this probably will not work for complex types and nested arrays
+        // Do the actual store to the array element.
+        llvm::Value * storeResult = cgCtx.irBuilder.CreateStore(exprValues[i], arrayElemPtr);
+        WC_ASSERT(storeResult);
+    }
+    
+    return arrayValue;
 }
 
 llvm::Constant * ArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
@@ -109,14 +133,14 @@ llvm::Constant * ArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
 
 bool ArrayLit::codegenLLVMType(CodegenCtx & cgCtx) {
     // Element type checks:
-    if (mDataType.isUnknown()) {
+    if (mDataType.mInnerType.isUnknown()) {
         compileError("Unable to determine element type for array! "
                      "Element type is ambiguous since different elements have different types!");
         
         return false;
     }
     
-    if (!mDataType.isSized()) {
+    if (!mDataType.mInnerType.isSized()) {
         compileError("Invalid element type for array: '%s'! Array element types must be sized.",
                      mDataType.name().c_str());
         

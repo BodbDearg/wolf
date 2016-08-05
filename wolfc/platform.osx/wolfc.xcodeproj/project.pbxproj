@@ -64,7 +64,7 @@
 		1FB5FF201CEAE5D900EA979F /* WCVarDecl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB5FF1E1CEAE5D900EA979F /* WCVarDecl.cpp */; };
 		1FB764D31CEEDAE800729AF4 /* WCReadnumExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB764D11CEEDAE800729AF4 /* WCReadnumExpr.cpp */; };
 		1FBDF9EA1D4E878100D7EC14 /* WCArrayLitExprs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FBDF9E81D4E878100D7EC14 /* WCArrayLitExprs.cpp */; };
-		1FBDF9ED1D4E8BC700D7EC14 /* WCArrayLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FBDF9EB1D4E8BC700D7EC14 /* WCArrayLit.cpp */; };
+		1FBDF9ED1D4E8BC700D7EC14 /* WCArrayLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FBDF9EB1D4E8BC700D7EC14 /* WCArrayLit.cpp */; settings = {COMPILER_FLAGS = "-fno-rtti"; }; };
 		1FCD4DF41D0136360076E358 /* WCDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD4DF21D0136360076E358 /* WCDataType.cpp */; };
 		1FCD4DF71D0157C50076E358 /* WCPrimitiveDataTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD4DF51D0157C50076E358 /* WCPrimitiveDataTypes.cpp */; };
 		1FCD4E081D0160DB0076E358 /* WCBoolDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD4E021D0160DB0076E358 /* WCBoolDataType.cpp */; };
