@@ -1,8 +1,9 @@
-func test()
+func test() -> int[3]
 	var i = [ 10, 20, 30 ]
+	return i
 end
 
 func main() -> int
-	test()
+	var v = test()
 	return 0
 end
