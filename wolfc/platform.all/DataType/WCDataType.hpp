@@ -49,10 +49,10 @@ public:
     virtual bool isArray() const;
     
     /**
-     * Run code generation for this data type.
+     * Run code generation for this data type (if required). If not required does nothing
      * Generates the llvm type for the data type and returns true if generation was successful.
      */
-    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) = 0;
+    bool codegenLLVMTypeIfRequired(CodegenCtx & cgCtx, ASTNode & callingNode);
     
     /**
      * Generate code to allocate space for this type on the stack.
@@ -72,10 +72,26 @@ public:
                                    llvm::Value & value) const = 0;
     
     /**
+     * Check that the LLVM type for this data type is defined and issue a compile error if not.
+     * Returns false if the LLVM type is not defined and true otherwise.
+     */
+    bool compileCheckLLVMTypeDefined(ASTNode & callingNode);
+    
+    /**
      * The llvm type for the data type. This is filled in during code generation.
      * Note: The unknown data type will not use anything for this field...
      */
     llvm::Type * mLLVMType = nullptr;
+    
+protected:
+    /**
+     * Run code generation for this data type.
+     * Generates the llvm type for the data type and returns true if generation was successful.
+     */
+    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) = 0;
+    
+    /* Issue a generic compile error for failing to generate the LLVM type for this data type. */
+    void issueGenericCodegenLLVMTypeError(ASTNode & callingNode);
 };
 
 WC_END_NAMESPACE

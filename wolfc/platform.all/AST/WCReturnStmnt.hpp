@@ -34,14 +34,18 @@ public:
     /* Gives the data type of the value returned */
     virtual DataType & dataType() = 0;
     
+    /* The token for 'return' */
+    const Token & mReturnToken;
+    
+protected:
+    /* Perform code generation and verification for the return data type */
+    bool codegenAndVerifyReturnDataType(CodegenCtx & cgCtx);
+    
     /**
      * Verifies the return type is correct for the containing function.
      * If incorrect returns false and emits a compile error.
      */
     bool verifyReturnTypeCorrect();
-    
-    /* The token for 'return' */
-    const Token & mReturnToken;
 };
 
 /* return */
@@ -89,6 +93,7 @@ public:
     /* Expression for the return condition */
     AssignExpr & mCondExpr;
     
+protected:
     /* The block that does the return statement logic */
     llvm::BasicBlock * mReturnBlock = nullptr;
     

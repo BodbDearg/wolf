@@ -96,6 +96,11 @@ const Token & ReturnStmnt::getStartToken() const {
     return mReturnToken;
 }
 
+bool ReturnStmnt::codegenAndVerifyReturnDataType(CodegenCtx & cgCtx) {
+    WC_GUARD(dataType().codegenLLVMTypeIfRequired(cgCtx, *this), false);
+    return verifyReturnTypeCorrect();
+}
+
 bool ReturnStmnt::verifyReturnTypeCorrect() {
     // Get the parent function:
     const Func * parentFunc = firstParentOfType<Func>();
@@ -120,7 +125,12 @@ bool ReturnStmnt::verifyReturnTypeCorrect() {
         return false;
     }
     
-    return true;    // All good!
+    // Both data types should have an LLVM type defined at this point
+    WC_GUARD(parentFnReturnTy.compileCheckLLVMTypeDefined(*this), false);
+    WC_GUARD(returnTy.compileCheckLLVMTypeDefined(*this), false);
+    
+    // All good!
+    return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -136,9 +146,8 @@ const Token & ReturnStmntNoCondVoid::getEndToken() const {
 }
 
 bool ReturnStmntNoCondVoid::codegen(CodegenCtx & cgCtx) {
-    #warning TODO: codegen return type
-    
-    // Verify the return type is correct firstly
+    // Codegen the return type (if required) and verify the return type is correct
+    WC_GUARD(dataType().codegenLLVMTypeIfRequired(cgCtx, *this), false);
     WC_GUARD(verifyReturnTypeCorrect(), false);
     
     // Generate the code for the return and return true for success
@@ -166,10 +175,8 @@ const Token & ReturnStmntNoCondWithValue::getEndToken() const {
 }
 
 bool ReturnStmntNoCondWithValue::codegen(CodegenCtx & cgCtx) {
-    #warning TODO: codegen return type
-    
-    // Verify the return type is correct firstly
-    WC_GUARD(verifyReturnTypeCorrect(), false);
+    // Codegen the return type and verify the return type is correct
+    WC_GUARD(codegenAndVerifyReturnDataType(cgCtx), false);
     
     // Codegen the assign expression for the return
     llvm::Value * returnExprResult = mReturnExpr.codegenExprEval(cgCtx);
@@ -221,10 +228,8 @@ ReturnStmntWithCondVoid::ReturnStmntWithCondVoid(const Token & returnToken,
 }
     
 bool ReturnStmntWithCondVoid::codegen(CodegenCtx & cgCtx) {
-    #warning TODO: codegen return type
-    
-    // Verify the return type is correct firstly
-    WC_GUARD(verifyReturnTypeCorrect(), false);
+    // Codegen the return type and verify the return type is correct
+    WC_GUARD(codegenAndVerifyReturnDataType(cgCtx), false);
     
     // The conditional expression for returning must be void
     if (!mCondExpr.dataType().isBool()) {
@@ -289,10 +294,8 @@ ReturnStmntWithCondAndValue::ReturnStmntWithCondAndValue(const Token & returnTok
 }
     
 bool ReturnStmntWithCondAndValue::codegen(CodegenCtx & cgCtx) {
-    #warning TODO: codegen return type
-    
-    // Verify the return type is correct firstly
-    WC_GUARD(verifyReturnTypeCorrect(), false);
+    // Codegen the return type and verify the return type is correct
+    WC_GUARD(codegenAndVerifyReturnDataType(cgCtx), false);
     
     // The conditional expression for returning must be void
     if (!mCondExpr.dataType().isBool()) {

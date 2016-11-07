@@ -165,7 +165,7 @@ bool ArrayLit::codegenLLVMType(CodegenCtx & cgCtx) {
     }
 
     // Generate the code for the element:
-    WC_GUARD(mDataType.codegenLLVMType(cgCtx, *this), nullptr);
+    WC_GUARD(mDataType.codegenLLVMTypeIfRequired(cgCtx, *this), nullptr);
     
     // Verify all is good:
     if (!mDataType.mLLVMType) {

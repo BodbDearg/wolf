@@ -11,8 +11,6 @@ public:
     
     virtual bool equals(const DataType & other) const override;
     
-    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
-    
     virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,
                                              ASTNode & callingNode,
                                              const std::string & instLabel) override;
@@ -21,6 +19,9 @@ public:
                                    const PrintStmnt & parentPrintStmnt,
                                    llvm::Constant & printfFn,
                                    llvm::Value & value) const override;
+    
+protected:
+    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
 };
 
 WC_END_NAMESPACE

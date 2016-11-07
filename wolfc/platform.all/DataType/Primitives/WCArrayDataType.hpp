@@ -17,8 +17,6 @@ public:
     
     virtual bool isArray() const override;
     
-    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
-    
     virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,
                                              ASTNode & callingNode,
                                              const std::string & instLabel) override;
@@ -31,6 +29,9 @@ public:
     DataType &      mInnerType;
     size_t          mSize;
     std::string     mName;
+    
+protected:
+    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
 };
 
 WC_END_NAMESPACE

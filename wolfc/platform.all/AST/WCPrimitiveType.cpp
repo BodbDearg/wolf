@@ -42,7 +42,7 @@ DataType & PrimitiveType::dataType() {
 }
 
 bool PrimitiveType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
-    return dataType().codegenLLVMType(cgCtx, callingNode);
+    return dataType().codegenLLVMTypeIfRequired(cgCtx, callingNode);
 }
 
 WC_END_NAMESPACE

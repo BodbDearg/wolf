@@ -19,19 +19,6 @@ bool StrDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const StrDataType*>(&other) != nullptr;
 }
 
-bool StrDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
-    mLLVMType = llvm::Type::getInt8PtrTy(cgCtx.llvmCtx);
-    
-    if (!mLLVMType) {
-        callingNode.compileError("Failed to generate llvm type for data type '%s'!",
-                                 name().c_str());
-        
-        return false;
-    }
-    
-    return true;
-}
-
 llvm::AllocaInst * StrDataType::codegenAlloca(CodegenCtx & cgCtx,
                                               ASTNode & callingNode,
                                               const std::string & instLabel)
@@ -51,6 +38,17 @@ bool StrDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
     // Create a format string for printf and call
     llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%s", "print_fmt_str:string");
     return cgCtx.irBuilder.CreateCall(&printfFn, { fmtStr, &value }, "print_printf_call:string") != nullptr;
+}
+
+bool StrDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    mLLVMType = llvm::Type::getInt8PtrTy(cgCtx.llvmCtx);
+    
+    if (!mLLVMType) {
+        issueGenericCodegenLLVMTypeError(callingNode);
+        return false;
+    }
+    
+    return true;
 }
 
 WC_END_NAMESPACE

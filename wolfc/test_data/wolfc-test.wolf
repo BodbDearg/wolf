@@ -1,11 +1,28 @@
+/;
 func test() -> int[3]
 	var i = [ 10, 20, 30 ]
 	i[2] = 25
 	return i
 end
+;/
 
-func main() -> int
+/;
+func blah()
+	print("HELLO")
+end
+;/
+
+func main()
+	/;
 	var v = test()
-	print(v[2])
-	return 0
+	var i = 0
+
+	; Prints 10 20 25
+	while i < 3
+		print(v[i])
+		print("\n")
+		i = i + 1
+	end
+	;/
+	return 1
 end

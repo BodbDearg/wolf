@@ -25,13 +25,6 @@ bool UnknownDataType::isUnknown() const {
     return true;
 }
 
-bool UnknownDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
-    // No codegen to do for the unknown data type:
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(callingNode);
-    return true;
-}
-
 llvm::AllocaInst * UnknownDataType::codegenAlloca(CodegenCtx & cgCtx,
                                                   ASTNode & callingNode,
                                                   const std::string & instLabel)
@@ -52,6 +45,14 @@ bool UnknownDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(value);
     parentPrintStmnt.compileError("Unknown datatype cannot be printed!");
     return false;
+}
+
+bool UnknownDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    // No codegen to do for the unknown data type:
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(callingNode);
+    callingNode.compileError("Cannot generate an llvm data type for the 'unknown' data type!", name().c_str());
+    return true;
 }
 
 WC_END_NAMESPACE

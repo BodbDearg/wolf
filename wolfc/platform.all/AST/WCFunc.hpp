@@ -55,6 +55,12 @@ public:
     /* Forward code generation for the function. Just declares the llvm function in the module. */
     bool codegen(CodegenCtx & cgCtx);
     
+    /**
+     * Codegen the return type for the function and return it. Returns nullptr and issues
+     * a compile error on failure.
+     */
+    llvm::Type * codegenLLVMReturnType(CodegenCtx & cgCtx);
+    
     /* Deferred code generation for the function. Generate the actual function body. */
     bool deferredCodegen(CodegenCtx & cgCtx);
     

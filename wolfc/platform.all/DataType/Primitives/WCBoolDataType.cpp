@@ -20,19 +20,6 @@ bool BoolDataType::isBool() const {
     return true;
 }
 
-bool BoolDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
-    mLLVMType = llvm::Type::getInt1Ty(cgCtx.llvmCtx);
-    
-    if (!mLLVMType) {
-        callingNode.compileError("Failed to generate llvm type for data type '%s'!",
-                                 name().c_str());
-        
-        return false;
-    }
-    
-    return true;
-}
-
 llvm::AllocaInst * BoolDataType::codegenAlloca(CodegenCtx & cgCtx,
                                                ASTNode & callingNode,
                                                const std::string & instLabel)
@@ -84,6 +71,17 @@ bool BoolDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
     
     // Restore the previous insert point
     cgCtx.irBuilder.SetInsertPoint(continueBB);
+    return true;
+}
+
+bool BoolDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    mLLVMType = llvm::Type::getInt1Ty(cgCtx.llvmCtx);
+    
+    if (!mLLVMType) {
+        issueGenericCodegenLLVMTypeError(callingNode);
+        return false;
+    }
+    
     return true;
 }
 

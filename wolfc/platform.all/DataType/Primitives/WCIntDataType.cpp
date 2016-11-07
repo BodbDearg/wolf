@@ -20,12 +20,12 @@ bool IntDataType::equals(const DataType & other) const {
 }
 
 bool IntDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    // Lazy out if already done
+    WC_GUARD(!mLLVMType, true);
     mLLVMType = llvm::Type::getInt64Ty(cgCtx.llvmCtx);
     
     if (!mLLVMType) {
-        callingNode.compileError("Failed to generate llvm type for data type '%s'!",
-                                 name().c_str());
-        
+        issueGenericCodegenLLVMTypeError(callingNode);
         return false;
     }
     

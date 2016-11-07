@@ -48,7 +48,7 @@ DataValue * Scope::createVar(const char * varName,
     }
     
     // Compile the variable llvm type:
-    WC_GUARD(dataType.codegenLLVMType(cgCtx, callingNode), nullptr);
+    WC_GUARD(dataType.codegenLLVMTypeIfRequired(cgCtx, callingNode), nullptr);
     
     // The variable must have an llvm type:
     if (!dataType.mLLVMType) {

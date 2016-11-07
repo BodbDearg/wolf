@@ -27,19 +27,6 @@ bool VoidDataType::isVoid() const {
     return true;
 }
 
-bool VoidDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
-    mLLVMType = llvm::Type::getVoidTy(cgCtx.llvmCtx);
-    
-    if (!mLLVMType) {
-        callingNode.compileError("Failed to generate llvm type for data type '%s'!",
-                                 name().c_str());
-        
-        return false;
-    }
-    
-    return true;
-}
-
 llvm::AllocaInst * VoidDataType::codegenAlloca(CodegenCtx & cgCtx,
                                                ASTNode & callingNode,
                                                const std::string & instLabel)
@@ -60,6 +47,17 @@ bool VoidDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(value);
     parentPrintStmnt.compileError("Type 'void' cannot be printed!");
     return false;
+}
+
+bool VoidDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    mLLVMType = llvm::Type::getVoidTy(cgCtx.llvmCtx);
+    
+    if (!mLLVMType) {
+        issueGenericCodegenLLVMTypeError(callingNode);
+        return false;
+    }
+    
+    return true;
 }
 
 WC_END_NAMESPACE

@@ -59,42 +59,6 @@ bool ArrayDataType::isArray() const {
     return true;
 }
 
-bool ArrayDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
-    // First generate the inner type:
-    WC_GUARD(mInnerType.codegenLLVMType(cgCtx, callingNode), false);
-    
-    // The type must be sized in order to be code generated as an array type.
-    // It also must be 
-    if (!mInnerType.isSized()) {
-        callingNode.compileError("Can't generate array of type '%s' because the type has no size!",
-                                 mInnerType.name().c_str());
-        
-        return false;
-    }
-    
-    // Get the inner type llvm type, if we don't have that then bail:
-    llvm::Type * innerLLVMType = mInnerType.mLLVMType;
-    
-    if (!innerLLVMType) {
-        callingNode.compileError("Failed to generate the llvm representation for type '%s'!",
-                                 mInnerType.name().c_str());
-        
-        return false;
-    }
-    
-    // Alright, now create an array of that inner type
-    mLLVMType = llvm::ArrayType::get(innerLLVMType, mSize);
-    
-    if (!mLLVMType) {
-        callingNode.compileError("Failed to generate the llvm representation for type '%s'!",
-                                 name().c_str());
-        
-        return false;
-    }
-    
-    return true;    // All good!
-}
-
 llvm::AllocaInst * ArrayDataType::codegenAlloca(CodegenCtx & cgCtx,
                                                 ASTNode & callingNode,
                                                 const std::string & instLabel)
@@ -115,6 +79,33 @@ bool ArrayDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(value);
     parentPrintStmnt.compileError("Type '%s' cannot be printed (yet)!", name().c_str());
     return false;
+}
+
+bool ArrayDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    // First generate the inner type:
+    WC_GUARD(mInnerType.codegenLLVMTypeIfRequired(cgCtx, callingNode), false);
+    
+    // The type must be sized in order to be code generated as an array type.
+    if (!mInnerType.isSized()) {
+        callingNode.compileError("Can't generate array of type '%s' because the type has no size!",
+                                 mInnerType.name().c_str());
+        
+        return false;
+    }
+    
+    // Get the inner type llvm type, expect that to exist at this point:
+    llvm::Type * innerLLVMType = mInnerType.mLLVMType;
+    WC_ASSERT(innerLLVMType);
+    
+    // Alright, now create an array of that inner type
+    mLLVMType = llvm::ArrayType::get(innerLLVMType, mSize);
+    
+    if (!mLLVMType) {
+        issueGenericCodegenLLVMTypeError(callingNode);
+        return false;
+    }
+    
+    return true;
 }
 
 WC_END_NAMESPACE

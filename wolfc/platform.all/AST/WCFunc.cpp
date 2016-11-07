@@ -188,23 +188,13 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     std::vector<llvm::Type*> fnArgTypesLLVM;
     WC_GUARD(getLLVMArgTypes(funcArgs, fnArgTypesLLVM), false);
     
-    // Generate the llvm type for the function return (if any):
-    if (mReturnType) {
-        WC_GUARD(mReturnType->codegenLLVMType(cgCtx, *this), nullptr);
-    }
-    
-    DataType & fnRetTy = returnDataType();
-    
-    if (!fnRetTy.mLLVMType) {
-        compileError("Unable to determine the llvm type of return type '%s'!",
-                     fnRetTy.name().c_str());
-        
-        return false;
-    }
+    // Generate the llvm type for the function return:
+    llvm::Type * fnRetType = codegenLLVMReturnType(cgCtx);
+    WC_GUARD(fnRetType, false);
     
     // Create the function signature:
     // TODO: support varargs
-    llvm::FunctionType * fnType = llvm::FunctionType::get(fnRetTy.mLLVMType,
+    llvm::FunctionType * fnType = llvm::FunctionType::get(fnRetType,
                                                           fnArgTypesLLVM,
                                                           false);
     WC_ASSERT(fnType);
@@ -234,6 +224,19 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     });
     
     return true;    // All good!
+}
+
+llvm::Type * Func::codegenLLVMReturnType(CodegenCtx & cgCtx) {
+    // See if there is an explicitly specified return type, if so then do codegen forn that
+    if (mReturnType) {
+        mReturnType->codegenLLVMType(cgCtx, *this);
+        return mReturnType->dataType().mLLVMType;
+    }
+    
+    // Otherwise codegen the implicit return type
+    DataType & dataType = returnDataType();
+    dataType.codegenLLVMTypeIfRequired(cgCtx, *this);
+    return dataType.mLLVMType;
 }
 
 bool Func::deferredCodegen(CodegenCtx & cgCtx) {

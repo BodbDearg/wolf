@@ -165,7 +165,7 @@ bool TypeArray::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     mDataType = new ArrayDataType(mElemType.dataType(), mArraySize);
     
     // Codegen the array data type so we can get the llvm type later:
-    WC_GUARD(mDataType->codegenLLVMType(cgCtx, *this), false);
+    WC_GUARD(mDataType->codegenLLVMTypeIfRequired(cgCtx, *this), false);
     
     // If we have reached here then we are all good!
     return true;
