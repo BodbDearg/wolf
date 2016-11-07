@@ -1,7 +1,10 @@
 #pragma once
 
+/* The name of the wolfc namespace */
+#define WC_NAMESPACE_NAME wolfc
+
 /* Begin namespace macro for the compiler. */
-#define WC_BEGIN_NAMESPACE namespace wolfc {
+#define WC_BEGIN_NAMESPACE namespace WC_NAMESPACE_NAME {
 
 /* End namespace macro for the compiler. */
 #define WC_END_NAMESPACE }
@@ -40,21 +43,6 @@
  */
 #define WC_GUARD_ASSERT(...)\
     WC_CALL_MACRO_OVERLOAD(__WC_GUARD_ASSERT_IMPL_, __VA_ARGS__)
-
-/* Make the debugger stop. */
-#ifdef _MSC_VER
-    #define WC_DEBUG_BREAK()\
-        do {\
-            DebugBreak();\
-        }   while (0)
-#else
-    #include <csignal>
-
-    #define WC_DEBUG_BREAK()\
-        do {\
-            raise(SIGINT);\
-        }   while (0)
-#endif
 
 /* Manual memory management. */
 #define WC_SAFE_DELETE_NULL(ptr)\

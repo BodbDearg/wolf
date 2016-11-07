@@ -4,6 +4,7 @@
 #include "WCTokenType.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <cstddef>
     #include <cstdint>
 WC_THIRD_PARTY_INCLUDES_END
 

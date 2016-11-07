@@ -1,9 +1,13 @@
 #pragma once
 
-#include <functional>
-#include <set>
-#include <map>
-#include <string>
+#include "WCMacros.hpp"
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <functional>
+    #include <set>
+    #include <map>
+    #include <string>
+WC_THIRD_PARTY_INCLUDES_END
 
 /* Default setting for whether logging is enabled or not */
 #ifndef WC_ENABLE_LOGGING

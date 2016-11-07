@@ -1,5 +1,6 @@
 #pragma once
 
+#include "WCDebugBreak.hpp"
 #include "WCLogger.hpp"
 
 /* Default setting for whether asserts are enabled or not */
