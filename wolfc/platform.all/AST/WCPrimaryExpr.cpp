@@ -18,6 +18,7 @@ bool PrimaryExpr::peek(const Token * currentToken) {
     return  IntLit::peek(currentToken) ||
             BoolLit::peek(currentToken) ||
             StrLit::peek(currentToken) ||
+            ArrayLit::peek(currentToken) ||
             Identifier::peek(currentToken) ||
             ReadnumExpr::peek(currentToken);
 }

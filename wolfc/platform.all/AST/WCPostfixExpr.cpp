@@ -318,7 +318,8 @@ llvm::Value * PostfixExprArrayLookup::codegenExprEval(CodegenCtx & cgCtx) {
 }
 
 llvm::Constant * PostfixExprArrayLookup::codegenExprConstEval(CodegenCtx & cgCtx) {
-    #warning codegen constEval
+    #warning TODO: array lookup constant code generation
+    WC_UNUSED_PARAM(cgCtx);
     return nullptr;
 }
 

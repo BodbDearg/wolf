@@ -133,7 +133,7 @@ llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
         WC_ASSERT(storeResult);
     }
     
-    return mStorage;
+    return cgCtx.irBuilder.CreateLoad(mStorage);
 }
 
 llvm::Constant * ArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
