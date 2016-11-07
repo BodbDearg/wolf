@@ -1,4 +1,6 @@
 #include "WCPostfixExpr.hpp"
+
+#include "WCArrayDataType.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
@@ -38,6 +40,32 @@ PostfixExpr * PostfixExpr::parse(const Token *& currentToken, LinearAlloc & allo
         FuncCall * funcCall = FuncCall::parse(currentToken, alloc);
         WC_GUARD(funcCall, nullptr);
         return WC_NEW_AST_NODE(alloc, PostfixExprFuncCall, *expr, *funcCall);
+    }
+    
+    // See if array lookup follows - '[' token:
+    if (currentToken->type == TokenType::kLBrack) {
+        // Skip '['
+        ++currentToken;
+        
+        // Parse the assign expression for the array index
+        AssignExpr * arrayIndexExpr = AssignExpr::parse(currentToken, alloc);
+        WC_GUARD(arrayIndexExpr, nullptr);
+        
+        // Expect a closing ']'
+        const Token & endToken = *currentToken;
+        
+        if (endToken.type != TokenType::kRBrack) {
+            parseError(endToken, "Expected a closing ']' for array lookup expression!");
+            return nullptr;
+        }
+        
+        // Consume the ']' and return the array lookup expression
+        ++currentToken;
+        return WC_NEW_AST_NODE(alloc,
+                               PostfixExprArrayLookup,
+                               *expr,
+                               *arrayIndexExpr,
+                               endToken);
     }
     
     // No postfix, basic primary expression:
@@ -228,6 +256,105 @@ Func * PostfixExprFuncCall::lookupFuncCalled() const {
     const Module * parentModule = firstParentOfType<Module>();
     WC_ASSERT(parentModule);
     return parentModule->getFunc(funcName);
+}
+
+//-----------------------------------------------------------------------------
+// PostfixExprArrayLookup
+//-----------------------------------------------------------------------------
+
+PostfixExprArrayLookup::PostfixExprArrayLookup(PrimaryExpr & arrayExpr,
+                                               AssignExpr & indexExpr,
+                                               const Token & endToken)
+:
+    mArrayExpr(arrayExpr),
+    mIndexExpr(indexExpr),
+    mEndToken(endToken)
+{
+    mArrayExpr.mParent = this;
+    mIndexExpr.mParent = this;
+}
+
+const Token & PostfixExprArrayLookup::getStartToken() const {
+    return mArrayExpr.getStartToken();
+}
+
+const Token & PostfixExprArrayLookup::getEndToken() const {
+    return mEndToken;
+}
+
+bool PostfixExprArrayLookup::isLValue() const {
+    return mArrayExpr.isLValue();
+}
+
+DataType & PostfixExprArrayLookup::dataType() {
+    // Expect the array expression to have the array data type.
+    // If it doesn't have this type then we don't know what the element type is..
+    const ArrayDataType * arrayDataType = dynamic_cast<ArrayDataType*>(&mArrayExpr.dataType());
+    WC_GUARD(arrayDataType, PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kUnknown));
+    
+    // Return the element data type
+    return arrayDataType->mInnerType;
+}
+
+llvm::Value * PostfixExprArrayLookup::codegenAddrOf(CodegenCtx & cgCtx) {
+    return codegenAddrOfArrayElem(cgCtx);
+}
+
+llvm::Value * PostfixExprArrayLookup::codegenExprEval(CodegenCtx & cgCtx) {
+    // Codegen the address of the array element
+    llvm::Value * arrayElemAddr = codegenAddrOfArrayElem(cgCtx);
+    WC_GUARD(arrayElemAddr, nullptr);
+
+    // Get the array datatype
+    ArrayDataType * arrayDataType = getArrayDataTypeOrIssueError();
+    WC_GUARD(arrayElemAddr, nullptr);
+    
+    // If the element type is not an array then load, otherwise return it
+    if (arrayDataType->mInnerType.isArray()) {
+        return arrayElemAddr;
+    }
+    
+    return cgCtx.irBuilder.CreateLoad(arrayElemAddr);
+}
+
+llvm::Constant * PostfixExprArrayLookup::codegenExprConstEval(CodegenCtx & cgCtx) {
+    #warning codegen constEval
+    return nullptr;
+}
+
+ArrayDataType * PostfixExprArrayLookup::getArrayDataTypeOrIssueError() {
+    ArrayDataType * arrayDataType = dynamic_cast<ArrayDataType*>(&mArrayExpr.dataType());
+    
+    if (!arrayDataType) {
+        compileError("Can't perform array indexing on an expression that is not an array!");
+        return nullptr;
+    }
+    
+    return arrayDataType;
+}
+
+llvm::Value * PostfixExprArrayLookup::codegenAddrOfArrayElem(CodegenCtx & cgCtx) {
+    // Make sure the array is actually an array...
+    // TODO: support this operator on custom types eventually
+    if (!mArrayExpr.dataType().isArray()) {
+        compileError("Can't perform array indexing on an expression that is not an array!");
+        return nullptr;
+    }
+    
+    // Codgen the address of the array first
+    llvm::Value * arrayAddr = mArrayExpr.codegenAddrOf(cgCtx);
+    WC_GUARD(arrayAddr, nullptr);
+    
+    // Codegen the expression for the array index
+    llvm::Value * indexValue = mIndexExpr.codegenExprEval(cgCtx);
+    WC_GUARD(indexValue, nullptr);
+    
+    // Get the value for the array address and return it:
+    llvm::ConstantInt * zeroIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), 0);
+    WC_ASSERT(zeroIndex);
+    llvm::Value * arrayAddress = cgCtx.irBuilder.CreateGEP(arrayAddr, { zeroIndex, indexValue });
+    WC_ASSERT(arrayAddress);
+    return arrayAddress;
 }
 
 WC_END_NAMESPACE

@@ -78,12 +78,7 @@ bool PrintStmnt::codegen(CodegenCtx & cgCtx) {
     
     // Evaluate the code for the argument to printf
     llvm::Value * exprVal = mExpr.codegenExprEval(cgCtx);
-    
-    if (!exprVal) {
-        compileError("Codegen failed! Can't generate code for inner expression value in print statement!");
-        return false;
-    }
-    
+    WC_GUARD(exprVal, false);
     return mExpr.dataType().codegenPrintStmnt(cgCtx, *this, *printfFn, *exprVal);
 }
 

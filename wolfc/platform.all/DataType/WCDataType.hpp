@@ -45,6 +45,9 @@ public:
     /* Utility. Tell if this data type is the 'bool' data type. */
     virtual bool isBool() const;
     
+    /* Utility. Tell if this data type is an array data type. */
+    virtual bool isArray() const;
+    
     /**
      * Run code generation for this data type.
      * Generates the llvm type for the data type and returns true if generation was successful.

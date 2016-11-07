@@ -55,6 +55,10 @@ bool ArrayDataType::equals(const DataType & other) const {
     return mInnerType.equals(otherArray->mInnerType);
 }
 
+bool ArrayDataType::isArray() const {
+    return true;
+}
+
 bool ArrayDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     // First generate the inner type:
     WC_GUARD(mInnerType.codegenLLVMType(cgCtx, callingNode), false);

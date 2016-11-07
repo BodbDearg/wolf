@@ -26,4 +26,8 @@ bool DataType::isBool() const {
     return false;   // False for all types except 'bool'
 }
 
+bool DataType::isArray() const {
+    return false;   // False for all types except 'array'
+}
+
 WC_END_NAMESPACE

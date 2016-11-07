@@ -135,6 +135,7 @@ UnaryExpr:
 PostfixExpr:
 	PrimaryExpr
 	PrimaryExpr FuncCall
+	PrimaryExpr [ AssignExpr ]
 
 FuncCall:
 	( [FuncCallArgList] )
