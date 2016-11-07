@@ -1,6 +1,10 @@
 #include "WCLinearAlloc.hpp"
+
 #include "WCAssert.hpp"
-#include <cstdlib>
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <cstdlib>
+WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 

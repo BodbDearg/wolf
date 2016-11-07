@@ -1,4 +1,5 @@
 #include "WCDeclDef.hpp"
+
 #include "WCFunc.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCVarDecl.hpp"

@@ -1,4 +1,5 @@
 #include "WCFuncArg.hpp"
+
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCToken.hpp"

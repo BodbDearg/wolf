@@ -1,12 +1,16 @@
 #include "WCLexer.hpp"
+
 #include "WCAssert.hpp"
 #include "WCCharUtils.hpp"
 #include "WCStringUtils.hpp"
 #include "WCToken.hpp"
-#include <memory>
-#include <cstdarg>
-#include <cstdio>
-#include <cstdlib>
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <memory>
+    #include <cstdarg>
+    #include <cstdio>
+    #include <cstdlib>
+WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 

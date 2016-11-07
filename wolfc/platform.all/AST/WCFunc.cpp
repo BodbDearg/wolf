@@ -1,4 +1,5 @@
 #include "WCFunc.hpp"
+
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDataType.hpp"
@@ -11,7 +12,10 @@
 #include "WCScope.hpp"
 #include "WCToken.hpp"
 #include "WCType.hpp"
-#include <set>
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <set>
+WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 

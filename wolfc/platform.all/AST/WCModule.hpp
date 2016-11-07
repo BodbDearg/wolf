@@ -3,8 +3,11 @@
 #include "WCASTNode.hpp"
 #include "WCCStrComparator.hpp"
 #include "WCDataValue.hpp"
-#include <memory>
-#include <map>
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <memory>
+    #include <map>
+WC_THIRD_PARTY_INCLUDES_END
 
 namespace llvm {
     class Constant;

@@ -1,4 +1,5 @@
 #include "WCPrimitiveDataTypes.hpp"
+
 #include "WCBoolDataType.hpp"
 #include "WCIntDataType.hpp"
 #include "WCStrDataType.hpp"

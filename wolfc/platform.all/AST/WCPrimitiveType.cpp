@@ -1,4 +1,5 @@
 #include "WCPrimitiveType.hpp"
+
 #include "WCDataType.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCPrimitiveDataTypes.hpp"

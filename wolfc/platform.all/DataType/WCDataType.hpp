@@ -1,7 +1,10 @@
 #pragma once
 
 #include "WCMacros.hpp"
-#include <string>
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <string>
+WC_THIRD_PARTY_INCLUDES_END
 
 namespace llvm {
     class AllocaInst;

@@ -1,7 +1,10 @@
 #pragma once
 
 #include "WCMacros.hpp"
-#include <vector>
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <vector>
+WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 

@@ -1,12 +1,12 @@
 #pragma once
 
 #include "WCMacros.hpp"
-#include <functional>
-#include <vector>
-#include <list>
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <functional>
+    #include <list>
     #include <llvm/IR/IRBuilder.h>
+    #include <vector>
 WC_THIRD_PARTY_INCLUDES_END
 
 namespace llvm {

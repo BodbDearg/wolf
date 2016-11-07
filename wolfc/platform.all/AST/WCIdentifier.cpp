@@ -1,4 +1,5 @@
 #include "WCIdentifier.hpp"
+
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCFunc.hpp"

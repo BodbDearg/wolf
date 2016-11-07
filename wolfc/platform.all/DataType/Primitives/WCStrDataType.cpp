@@ -1,4 +1,5 @@
 #include "WCStrDataType.hpp"
+
 #include "WCAssert.hpp"
 #include "WCASTNode.hpp"
 #include "WCCodegenCtx.hpp"

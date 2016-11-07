@@ -1,6 +1,10 @@
 #include "WCFileUtils.hpp"
+
 #include "WCFinally.hpp"
-#include <cstdio>
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <cstdio>
+WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 

@@ -2,11 +2,11 @@
 #include "WCLexer.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
-#include <memory>
-#include <cstdio>
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <cstdio>
     #include <llvm/IR/LLVMContext.h>
+    #include <memory>
 WC_THIRD_PARTY_INCLUDES_END
 
 using namespace wolfc;

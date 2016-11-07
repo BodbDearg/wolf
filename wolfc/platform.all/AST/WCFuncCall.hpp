@@ -1,7 +1,10 @@
 #pragma once
 
 #include "WCASTNode.hpp"
-#include <vector>
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <vector>
+WC_THIRD_PARTY_INCLUDES_END
 
 namespace llvm {
     class Value;

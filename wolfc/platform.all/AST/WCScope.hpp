@@ -4,7 +4,10 @@
 #include "WCCStrComparator.hpp"
 #include "WCDataValue.hpp"
 #include "WCIBasicCodegenNode.hpp"
-#include <map>
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <map>
+WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 

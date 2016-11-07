@@ -1,10 +1,14 @@
 #include "WCASTNode.hpp"
+
 #include "WCFunc.hpp"
 #include "WCModule.hpp"
 #include "WCScope.hpp"
 #include "WCToken.hpp"
-#include <cstdio>
-#include <cstdarg>
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <cstdio>
+    #include <cstdarg>
+WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 

@@ -1,8 +1,8 @@
 #pragma once
 
+#include "WCArrayDataType.hpp"
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
-#include "WCArrayDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 

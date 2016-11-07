@@ -1,4 +1,5 @@
 #include "WCBreakStmnt.hpp"
+
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
@@ -6,9 +7,9 @@
 #include "WCIRepeatableStmnt.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCToken.hpp"
-#include <functional>
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <functional>
     #include <llvm/IR/Module.h>
 WC_THIRD_PARTY_INCLUDES_END
 

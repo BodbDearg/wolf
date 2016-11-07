@@ -1,4 +1,5 @@
 #include "WCType.hpp"
+
 #include "WCArrayDataType.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCDataType.hpp"

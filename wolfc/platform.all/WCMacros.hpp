@@ -12,18 +12,13 @@
 
 /* Get rid of unused parameter warnings from the compiler. */
 #define WC_UNUSED_PARAM(param)\
-    \
     (void) param
 
 /* Generate code to disallow copying and assign for the named type. */
 #define WC_DISALLOW_COPY_AND_ASSIGN(ClassName)\
-    \
     ClassName(const ClassName & other) = delete;\
-    \
     ClassName & operator = (const ClassName & other) = delete;\
-    \
     ClassName(const ClassName && other) = delete;\
-    \
     ClassName && operator = (const ClassName && other) = delete;
 
 /**
@@ -37,7 +32,6 @@
  *     Neccessary for functions that Must return a value.
  */
 #define WC_GUARD(...)\
-    \
     WC_CALL_MACRO_OVERLOAD(__WC_GUARD_IMPL_, __VA_ARGS__)
 
 /** 
@@ -45,33 +39,25 @@
  * to false. Useful for creating sanity checks that assert in debug but fail gracefully in release.
  */
 #define WC_GUARD_ASSERT(...)\
-    \
     WC_CALL_MACRO_OVERLOAD(__WC_GUARD_ASSERT_IMPL_, __VA_ARGS__)
 
 /* Make the debugger stop. */
 #ifdef _MSC_VER
-    
     #define WC_DEBUG_BREAK()\
-        \
         do {\
             DebugBreak();\
         }   while (0)
-
 #else
-
     #include <csignal>
 
     #define WC_DEBUG_BREAK()\
-        \
         do {\
             raise(SIGINT);\
         }   while (0)
-
 #endif
 
 /* Manual memory management. */
 #define WC_SAFE_DELETE_NULL(ptr)\
-    \
     do {\
         if (ptr) {\
             delete ptr;\
@@ -80,7 +66,6 @@
     }   while (0)
 
 #define WC_SAFE_DELETE_ARRAY_NULL(arrayPtr)\
-    \
     do {\
         if (arrayPtr) {\
             delete[] arrayPtr;\
@@ -125,7 +110,6 @@
 
 /* Internal implementation stuff for the guard and guard assert macros. */
 #define __WC_GUARD_IMPL_1(BooleanExpression)\
-    \
     do {\
         if (!(BooleanExpression)) {\
             return;\
@@ -133,7 +117,6 @@
     } while (0)
 
 #define __WC_GUARD_IMPL_2(BooleanExpression, ReturnValueExpression)\
-    \
     do {\
         if (!(BooleanExpression)) {\
             return ReturnValueExpression;\
@@ -141,7 +124,6 @@
     } while (0)
 
 #define __WC_GUARD_ASSERT_IMPL_1(BooleanExpression)\
-    \
     do {\
         if (!(BooleanExpression)) {\
             WC_RAISE_ASSERTION("Guard condition evaluated to false!: " #BooleanExpression);\
@@ -150,7 +132,6 @@
     } while (0)
 
 #define __WC_GUARD_ASSERT_IMPL_2(BooleanExpression, ReturnValueExpression)\
-    \
     do {\
         if (!(BooleanExpression)) {\
             WC_RAISE_ASSERTION("Guard condition evaluated to false!: " #BooleanExpression);\

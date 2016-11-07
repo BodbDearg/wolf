@@ -18,25 +18,21 @@
 #ifdef WC_ENABLE_LOGGING
 
     #define WC_LOG(categoryString, formatString, ...)\
-        \
         do {\
             WCLogger::log(categoryString, formatString,  ##__VA_ARGS__);\
         }   while (0)
 
     #define WC_LOG_INFO(formatString, ...)\
-        \
         do {\
             WCLogger::logInfo(formatString,  ##__VA_ARGS__);\
         }   while (0)
 
     #define WC_LOG_WARNING(formatString, ...)\
-        \
         do {\
             WCLogger::logWarning(formatString,  ##__VA_ARGS__);\
         }   while (0)
 
     #define WC_LOG_ERROR(formatString, ...)\
-        \
         do {\
             WCLogger::logError(formatString,  ##__VA_ARGS__);\
         }   while (0)
@@ -53,10 +49,8 @@
 
 #ifdef WC_ENABLE_LOGGING
 
-class WCLogger
-{
+class WCLogger {
 public:
-    
     /* Type for a hook function which receives stuff to be logged. */
     typedef std::function<void (const char * loggedMessage)> LogHookFunction;
 
@@ -89,7 +83,6 @@ public:
     static void removeLogHook(const std::string & hookName);
     
 private:
-    
     /* Does the actual work of logging. */
     static void logImpl(const char * stringToLog, bool error);
     

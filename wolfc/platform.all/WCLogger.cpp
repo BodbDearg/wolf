@@ -3,7 +3,10 @@
 #ifdef WC_ENABLE_LOGGING
 
 #include "WCMacros.hpp"
-#include <array>
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <array>
+WC_THIRD_PARTY_INCLUDES_END
 
 static const unsigned kMessageBufferSize = 0xFFFF;
 static const unsigned kMaxMessageLength = kMessageBufferSize - 1;   // -1 for NULL terminator

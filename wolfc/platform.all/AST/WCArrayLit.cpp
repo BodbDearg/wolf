@@ -1,4 +1,5 @@
 #include "WCArrayLit.hpp"
+
 #include "WCArrayLitExprs.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"

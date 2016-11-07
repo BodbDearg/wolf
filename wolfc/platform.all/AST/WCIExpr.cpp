@@ -1,4 +1,5 @@
 #include "WCIExpr.hpp"
+
 #include "WCAssert.hpp"
 
 WC_BEGIN_NAMESPACE
