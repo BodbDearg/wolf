@@ -1,14 +1,13 @@
-var i = 0
+var blah = [ 15, 25, 35 ]
 
 func test() -> int[3]
-	return [ 10, 20, 30 ]
+	return blah
 end
 
 func main() -> int
 	var v = test()
 	var i = 0
 
-	; Prints 10 25 30
 	while i < 3
 		print(v[i])
 		print("\n")

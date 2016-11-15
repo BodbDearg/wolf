@@ -141,12 +141,22 @@ llvm::Constant * ArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Generate the code for the element type:
     WC_GUARD(codegenLLVMType(cgCtx), nullptr);
     
-    /*
-    //
-    return llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), mToken.data.intVal);
-    */
-    #warning TODO: array constant code generation
-    return nullptr;
+    // Get the sub expressions
+    std::vector<AssignExpr*> subExprs;
+    mExprs.getExprs(subExprs);
+    
+    // Alright Generate the code for each of the sub expressions
+    std::vector<llvm::Constant*> subexprConstants;
+    subexprConstants.reserve(subExprs.size());
+    
+    for (AssignExpr * subExpr : subExprs) {
+        llvm::Constant * subExprConstant = subExpr->codegenExprConstEval(cgCtx);
+        WC_GUARD(subExprConstant, nullptr);
+        subexprConstants.push_back(subExprConstant);
+    }
+    
+    // Now create a constant array and return
+    return llvm::ConstantArray::get(static_cast<llvm::ArrayType*>(mDataType.mLLVMType), subexprConstants);
 }
 
 bool ArrayLit::codegenLLVMType(CodegenCtx & cgCtx) {
