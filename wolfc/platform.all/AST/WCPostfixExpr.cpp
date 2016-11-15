@@ -307,7 +307,7 @@ llvm::Value * PostfixExprArrayLookup::codegenExprEval(CodegenCtx & cgCtx) {
 
     // Get the array datatype
     ArrayDataType * arrayDataType = getArrayDataTypeOrIssueError();
-    WC_GUARD(arrayElemAddr, nullptr);
+    WC_GUARD(arrayDataType, nullptr);
     
     // If the element type is not an array then load, otherwise return it
     if (arrayDataType->mInnerType.isArray()) {
@@ -318,9 +318,77 @@ llvm::Value * PostfixExprArrayLookup::codegenExprEval(CodegenCtx & cgCtx) {
 }
 
 llvm::Constant * PostfixExprArrayLookup::codegenExprConstEval(CodegenCtx & cgCtx) {
-    #warning TODO: array lookup constant code generation
-    WC_UNUSED_PARAM(cgCtx);
-    return nullptr;
+    // Make sure the array is actually an array...
+    // TODO: support this operator on custom types eventually
+    if (!mArrayExpr.dataType().isArray()) {
+        compileError("Can't perform array indexing on an expression that is not an array!");
+        return nullptr;
+    }
+    
+    // Codegen the array constant:
+    llvm::ConstantArray * arrayConstant = static_cast<llvm::ConstantArray*>(mArrayExpr.codegenExprConstEval(cgCtx));
+    WC_GUARD(arrayConstant, nullptr);
+    
+    // Codegen the index expression:
+    llvm::Constant * indexConstant = mIndexExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(indexConstant, nullptr);
+    
+    // Index expression must be an integer
+    if (!indexConstant->getType()->isIntegerTy()) {
+        mIndexExpr.compileError("Index expression for array lookup must be an integer! "
+                                "Can't index an array with non-integer types!");
+        
+        return nullptr;
+    }
+    
+    // Make sure the index expression fits in 64-bits
+    llvm::APInt indexAPInt = indexConstant->getUniqueInteger();
+    
+    if (indexAPInt.getActiveBits() > 64) {
+        mIndexExpr.compileError("Index expression for array lookup is too big! Does not fit in 64-bits! "
+                                "Number requires '%zu' bits to store!",
+                                uint64_t(indexAPInt.getActiveBits()));
+        
+        return nullptr;
+    }
+    
+    // Index expression cannot be negative
+    if (indexAPInt.isNegative()) {
+        mIndexExpr.compileError("Index expression for array lookup cannot be negative! "
+                                "Value given was: %zi",
+                                int64_t(indexAPInt.getSExtValue()));
+        
+        return nullptr;
+    }
+    
+    uint64_t index = indexAPInt.getZExtValue();
+    
+    // Okay, make sure the index is in bounds
+    if (index >= arrayConstant->getType()->getNumElements()) {
+        mIndexExpr.compileError("Index '%zu' is out of range for the array! "
+                                "Array size is: %zu",
+                                index,
+                                uint64_t(arrayConstant->getType()->getNumElements()));
+        
+        return nullptr;
+    }
+    
+    // Due to LLVM API restrictions we can only support as big as UINT_MAX here for an index because
+    // getExtractElement() takes this data type rather than uint64_t...
+    //
+    // It may be possible to lift this restriction in future, though I doubt this limitation will be
+    // much of an issue in practice. Who throws arrays >~ 4 billion elements at their compilers anyways?!
+    if (index > UINT_MAX) {
+        compileError("Array index '%zu' is too large! "
+                     "Can only support a max array index of '%zu' due to LLVM API restrictions!",
+                     index,
+                     uint64_t(UINT_MAX));
+        
+        return nullptr;
+    }
+    
+    // Right, now get the constant
+    return llvm::ConstantExpr::getExtractValue(arrayConstant, { static_cast<unsigned>(index) });
 }
 
 ArrayDataType * PostfixExprArrayLookup::getArrayDataTypeOrIssueError() {
@@ -349,6 +417,8 @@ llvm::Value * PostfixExprArrayLookup::codegenAddrOfArrayElem(CodegenCtx & cgCtx)
     // Codegen the expression for the array index
     llvm::Value * indexValue = mIndexExpr.codegenExprEval(cgCtx);
     WC_GUARD(indexValue, nullptr);
+    
+    #warning FIXME - type check the index here!
     
     // Get the value for the array address and return it:
     llvm::ConstantInt * zeroIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), 0);

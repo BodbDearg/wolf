@@ -1,18 +1,7 @@
-var blah = [ 15, 25, 35 ]
-
-func test() -> int[3]
-	return blah
-end
+var blah = [ 15, 25, 35 ][0]
 
 func main() -> int
-	var v = test()
-	var i = 0
-
-	while i < 3
-		print(v[i])
-		print("\n")
-		i = i + 1
-	end
-
+	print(blah)
+	print("\n")
 	return 0
 end
