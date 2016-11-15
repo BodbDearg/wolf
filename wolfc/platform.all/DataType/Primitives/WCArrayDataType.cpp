@@ -83,6 +83,12 @@ bool ArrayDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
 }
 
 bool ArrayDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
+    // If the type is unknown then give out
+    if (mInnerType.isUnknown()) {
+        callingNode.compileError("Unable to determine datatype for array! Datatype is ambiguous or unknown!");
+        return false;
+    }
+    
     // First generate the inner type:
     WC_GUARD(mInnerType.codegenLLVMTypeIfRequired(cgCtx, callingNode), false);
     
