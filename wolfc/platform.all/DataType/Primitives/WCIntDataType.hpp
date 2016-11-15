@@ -11,7 +11,7 @@ public:
     
     virtual bool equals(const DataType & other) const override;
     
-    virtual bool isBool() const override;
+    virtual bool isInteger() const override;
     
     virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,
                                              ASTNode & callingNode,
