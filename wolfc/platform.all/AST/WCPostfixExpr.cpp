@@ -325,6 +325,15 @@ llvm::Constant * PostfixExprArrayLookup::codegenExprConstEval(CodegenCtx & cgCtx
         return nullptr;
     }
     
+    // Index expression must be an integer
+    if (!mIndexExpr.dataType().isInteger()) {
+        mIndexExpr.compileError("Index expression for array lookup must be an integer not type '%s'! "
+                                "Can't index an array with non-integer types!",
+                                mIndexExpr.dataType().name().c_str());
+        
+        return nullptr;
+    }
+    
     // Codegen the array constant:
     llvm::ConstantArray * arrayConstant = static_cast<llvm::ConstantArray*>(mArrayExpr.codegenExprConstEval(cgCtx));
     WC_GUARD(arrayConstant, nullptr);
@@ -332,14 +341,6 @@ llvm::Constant * PostfixExprArrayLookup::codegenExprConstEval(CodegenCtx & cgCtx
     // Codegen the index expression:
     llvm::Constant * indexConstant = mIndexExpr.codegenExprConstEval(cgCtx);
     WC_GUARD(indexConstant, nullptr);
-    
-    // Index expression must be an integer
-    if (!indexConstant->getType()->isIntegerTy()) {
-        mIndexExpr.compileError("Index expression for array lookup must be an integer! "
-                                "Can't index an array with non-integer types!");
-        
-        return nullptr;
-    }
     
     // Make sure the index expression fits in 64-bits
     llvm::APInt indexAPInt = indexConstant->getUniqueInteger();
@@ -410,6 +411,15 @@ llvm::Value * PostfixExprArrayLookup::codegenAddrOfArrayElem(CodegenCtx & cgCtx)
         return nullptr;
     }
     
+    // Index expression must be an integer
+    if (!mIndexExpr.dataType().isInteger()) {
+        mIndexExpr.compileError("Index expression for array lookup must be an integer not type '%s'! "
+                                "Can't index an array with non-integer types!",
+                                mIndexExpr.dataType().name().c_str());
+        
+        return nullptr;
+    }
+    
     // Codgen the address of the array first
     llvm::Value * arrayAddr = mArrayExpr.codegenAddrOf(cgCtx);
     WC_GUARD(arrayAddr, nullptr);
@@ -417,8 +427,6 @@ llvm::Value * PostfixExprArrayLookup::codegenAddrOfArrayElem(CodegenCtx & cgCtx)
     // Codegen the expression for the array index
     llvm::Value * indexValue = mIndexExpr.codegenExprEval(cgCtx);
     WC_GUARD(indexValue, nullptr);
-    
-    #warning FIXME - type check the index here!
     
     // Get the value for the array address and return it:
     llvm::ConstantInt * zeroIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), 0);

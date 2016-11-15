@@ -48,6 +48,9 @@ public:
     /* Utility. Tell if this data type is the 'bool' data type. */
     virtual bool isBool() const;
     
+    /* Utility. Tell if this data type is an integer data type. */
+    virtual bool isInteger() const;
+    
     /* Utility. Tell if this data type is an array data type. */
     virtual bool isArray() const;
     

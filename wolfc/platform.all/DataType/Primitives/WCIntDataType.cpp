@@ -20,6 +20,10 @@ bool IntDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const IntDataType*>(&other) != nullptr;
 }
 
+bool IntDataType::isBool() const {
+    return true;
+}
+
 bool IntDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     // Lazy out if already done
     WC_GUARD(!mLLVMType, true);

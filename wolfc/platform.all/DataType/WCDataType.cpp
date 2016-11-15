@@ -28,6 +28,10 @@ bool DataType::isBool() const {
     return false;   // False for all types except 'bool'
 }
 
+bool DataType::isInteger() const {
+    return false;   // False by default for all types
+}
+
 bool DataType::isArray() const {
     return false;   // False for all types except 'array'
 }
