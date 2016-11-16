@@ -52,15 +52,15 @@ public:
     
     /* Get the first parent node of a certain type */
     template <class T>
-    T * firstParentOfType() {
-        if (mParent) {
-            T * nodeCast = dynamic_cast<T*>(mParent);
-            
-            if (nodeCast) {
+    inline T * firstParentOfType() {
+        ASTNode * parent = mParent;
+        
+        while (parent) {
+            if (T * nodeCast = dynamic_cast<T*>(parent)) {
                 return nodeCast;
             }
             
-            return mParent->firstParentOfType<T>();
+            parent = parent->mParent;
         }
         
         return nullptr;
@@ -68,15 +68,15 @@ public:
     
     /* Get the first parent node of a certain type (const version). */
     template <class T>
-    const T * firstParentOfType() const {
-        if (mParent) {
-            const T * nodeCast = dynamic_cast<const T*>(mParent);
-            
-            if (nodeCast) {
+    inline const T * firstParentOfType() const {
+        const ASTNode * parent = mParent;
+        
+        while (parent) {
+            if (const T * nodeCast = dynamic_cast<const T*>(parent)) {
                 return nodeCast;
             }
             
-            return mParent->firstParentOfType<T>();
+            parent = parent->mParent;
         }
         
         return nullptr;
