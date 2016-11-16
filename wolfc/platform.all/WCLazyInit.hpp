@@ -23,19 +23,19 @@ public:
         }
     }
     
-    inline T & operator * () const {
+    inline T & operator * () {
         WC_ASSERT(mWasInitialized);
-        return *reinterpret_cast<T*>(const_cast<uint8_t*>(mObjMem));
+        return *reinterpret_cast<T*>(mObjMem);
     }
     
-    inline T * operator->() const {
+    inline T * operator->() {
         WC_ASSERT(mWasInitialized);
-        return reinterpret_cast<T*>(const_cast<uint8_t*>(mObjMem));
+        return reinterpret_cast<T*>(mObjMem);
     }
     
-    inline T & get() const {
+    inline T & get() {
         WC_ASSERT(mWasInitialized);
-        return *reinterpret_cast<T*>(const_cast<uint8_t*>(mObjMem));
+        return *reinterpret_cast<T*>(mObjMem);
     }
     
     inline bool wasInitialized() const {

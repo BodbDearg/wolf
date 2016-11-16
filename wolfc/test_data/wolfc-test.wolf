@@ -1,7 +1,10 @@
-var blah = [ 15, 25, 35 ][0]
+; The card types
+var CARD_BLAH = 1
+
+var blah = [ CARD_BLAH ]
 
 func main() -> int
-	print(blah)
+	print(blah[0])
 	print("\n")
 	return 0
 end

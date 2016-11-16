@@ -53,7 +53,7 @@ ArrayLit::ArrayLit(const Token & lBrack,
     mExprs(exprs),
     mRBrack(rBrack),
     mSize(exprs.numExprs()),
-    mDataType(exprs.getElementType(), mSize),
+    mDataType(),
     mStorage(nullptr)
 {
     mExprs.mParent = this;
@@ -72,7 +72,11 @@ bool ArrayLit::isLValue() const {
 }
 
 DataType & ArrayLit::dataType() {
-    return mDataType;
+    if (!mDataType.wasInitialized()) {
+        mDataType.init(mExprs.getElementType(), mSize);
+    }
+    
+    return mDataType.get();
 }
 
 bool ArrayLit::requiresStorage() const {
@@ -100,7 +104,7 @@ llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
     
     // Allocate stack space for the array if we need to:
     if (!mStorage) {
-        llvm::AllocaInst * storage = cgCtx.irBuilder.CreateAlloca(mDataType.mLLVMType);
+        llvm::AllocaInst * storage = cgCtx.irBuilder.CreateAlloca(mDataType->mLLVMType);
         WC_ASSERT(storage);
         setStorage(*storage);
     }
@@ -156,30 +160,33 @@ llvm::Constant * ArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
     }
     
     // Now create a constant array and return
-    return llvm::ConstantArray::get(static_cast<llvm::ArrayType*>(mDataType.mLLVMType), subexprConstants);
+    return llvm::ConstantArray::get(static_cast<llvm::ArrayType*>(mDataType->mLLVMType), subexprConstants);
 }
 
 bool ArrayLit::codegenLLVMType(CodegenCtx & cgCtx) {
+    // Need to lazy init the data type
+    ArrayDataType & arrayDataType = static_cast<ArrayDataType&>(dataType());
+    
     // Element type checks:
-    if (mDataType.mInnerType.isUnknown()) {
+    if (arrayDataType.mInnerType.isUnknown()) {
         compileError("Unable to determine element type for array! "
                      "Element type is ambiguous since different elements have different types!");
         
         return false;
     }
     
-    if (!mDataType.mInnerType.isSized()) {
+    if (!arrayDataType.mInnerType.isSized()) {
         compileError("Invalid element type for array: '%s'! Array element types must be sized.",
-                     mDataType.name().c_str());
+                     arrayDataType.name().c_str());
         
         return false;
     }
 
     // Generate the code for the element:
-    WC_GUARD(mDataType.codegenLLVMTypeIfRequired(cgCtx, *this), nullptr);
+    WC_GUARD(arrayDataType.codegenLLVMTypeIfRequired(cgCtx, *this), nullptr);
     
     // Verify all is good:
-    if (!mDataType.mLLVMType) {
+    if (!arrayDataType.mLLVMType) {
         compileError("Invalid element type for array! Unable to determine the llvm type.");
         return false;
     }

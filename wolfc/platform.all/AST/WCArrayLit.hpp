@@ -3,6 +3,7 @@
 #include "WCArrayDataType.hpp"
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
+#include "WCLazyInit.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -49,12 +50,13 @@ public:
      */
     bool codegenLLVMType(CodegenCtx & cgCtx);
     
-    const Token &       mLBrack;
-    ArrayLitExprs &     mExprs;
-    const Token &       mRBrack;
-    size_t              mSize;
-    ArrayDataType       mDataType;
-    llvm::Value *       mStorage;
+private:
+    const Token &               mLBrack;
+    ArrayLitExprs &             mExprs;
+    const Token &               mRBrack;
+    size_t                      mSize;
+    LazyInit<ArrayDataType>     mDataType;
+    llvm::Value *               mStorage;
 };
 
 WC_END_NAMESPACE
