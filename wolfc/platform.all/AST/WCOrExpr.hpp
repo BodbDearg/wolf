@@ -22,7 +22,7 @@ public:
 };
 
 /* AndExpr */
-class OrExprNoOp : public OrExpr {
+class OrExprNoOp final : public OrExpr {
 public:
     OrExprNoOp(AndExpr & expr);
     
@@ -50,7 +50,7 @@ public:
 };
 
 /* AndExpr or OrExpr */
-class OrExprOr : public OrExpr {
+class OrExprOr final : public OrExpr {
 public:
     OrExprOr(AndExpr & leftExpr, OrExpr & rightExpr);
     

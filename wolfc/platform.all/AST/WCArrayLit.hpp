@@ -13,7 +13,7 @@ class LinearAlloc;
 ArrayLit:
     [ ArrayLitExprs ]
 */
-class ArrayLit : public ASTNode, public IExpr {
+class ArrayLit final : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     

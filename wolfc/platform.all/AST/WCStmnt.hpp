@@ -41,7 +41,7 @@ public:
 };
 
 /* NopStmnt */
-class StmntNopStmnt : public Stmnt {
+class StmntNopStmnt final : public Stmnt {
 public:
     StmntNopStmnt(NopStmnt & stmnt);
     
@@ -55,7 +55,7 @@ public:
 };
 
 /* PrintStmnt */
-class StmntPrintStmnt : public Stmnt {
+class StmntPrintStmnt final : public Stmnt {
 public:
     StmntPrintStmnt(PrintStmnt & stmnt);
     
@@ -69,7 +69,7 @@ public:
 };
 
 /* IfStmnt */
-class StmntIfStmnt : public Stmnt {
+class StmntIfStmnt final : public Stmnt {
 public:
     StmntIfStmnt(IfStmnt & ifStmnt);
     
@@ -83,7 +83,7 @@ public:
 };
 
 /* WhileStmnt */
-class StmntWhileStmnt : public Stmnt {
+class StmntWhileStmnt final : public Stmnt {
 public:
     StmntWhileStmnt(WhileStmnt & ifStmnt);
     
@@ -97,7 +97,7 @@ public:
 };
 
 /* LoopStmnt */
-class StmntLoopStmnt : public Stmnt {
+class StmntLoopStmnt final : public Stmnt {
 public:
     StmntLoopStmnt(LoopStmnt & loopStmnt);
     
@@ -111,7 +111,7 @@ public:
 };
 
 /* ScopeStmnt */
-class StmntScopeStmnt : public Stmnt {
+class StmntScopeStmnt final : public Stmnt {
 public:
     StmntScopeStmnt(ScopeStmnt & scopeStmnt);
     
@@ -125,7 +125,7 @@ public:
 };
 
 /* BreakStmnt */
-class StmntBreakStmnt : public Stmnt {
+class StmntBreakStmnt final : public Stmnt {
 public:
     StmntBreakStmnt(BreakStmnt & breakStmnt);
     
@@ -139,7 +139,7 @@ public:
 };
 
 /* NextStmnt */
-class StmntNextStmnt : public Stmnt {
+class StmntNextStmnt final : public Stmnt {
 public:
     StmntNextStmnt(NextStmnt & nextStmnt);
     
@@ -153,7 +153,7 @@ public:
 };
 
 /* ReturnStmnt */
-class StmntReturnStmnt : public Stmnt {
+class StmntReturnStmnt final : public Stmnt {
 public:
     StmntReturnStmnt(ReturnStmnt & returnStmnt);
     
@@ -167,7 +167,7 @@ public:
 };
 
 /* VarDecl */
-class StmntVarDecl : public Stmnt {
+class StmntVarDecl final : public Stmnt {
 public:
     StmntVarDecl(VarDecl & decl);
     
@@ -181,7 +181,7 @@ public:
 };
 
 /* AssignExpr */
-class StmntAssignExpr : public Stmnt {
+class StmntAssignExpr final : public Stmnt {
 public:
     StmntAssignExpr(AssignExpr & expr);
     

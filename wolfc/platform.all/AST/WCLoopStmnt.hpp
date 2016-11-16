@@ -20,7 +20,7 @@ public:
     
     LoopStmnt(Scope & bodyScope, const Token & startToken);
     
-    virtual const Token & getStartToken() const override;
+    virtual const Token & getStartToken() const final override;
     
     Scope &         mBodyScope;
     const Token &   mStartToken;
@@ -29,7 +29,7 @@ public:
 /*
 loop Scope end
 */
-class LoopStmntNoCond : public LoopStmnt {
+class LoopStmntNoCond final : public LoopStmnt {
 public:
     LoopStmntNoCond(Scope & bodyScope, const Token & startToken, const Token & endToken);
     
@@ -49,7 +49,7 @@ public:
 /*
 loop Scope repeat while|until AssignExpr
 */
-class LoopStmntWithCond : public LoopStmnt {
+class LoopStmntWithCond final : public LoopStmnt {
 public:
     LoopStmntWithCond(Scope & bodyScope,
                       const Token & startToken,

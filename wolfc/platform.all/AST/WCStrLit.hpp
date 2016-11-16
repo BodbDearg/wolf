@@ -9,7 +9,7 @@ class DataType;
 class LinearAlloc;
 
 /* Represents TokenType::kStrLit in the AST tree */
-class StrLit : public ASTNode, public IExpr {
+class StrLit final : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     

@@ -26,7 +26,7 @@ class LinearAlloc;
 Module:
     DeclDefs <EOF>
 */
-class Module : public ASTNode {
+class Module final : public ASTNode {
 public:
     Module(llvm::LLVMContext & llvmCtx);
     

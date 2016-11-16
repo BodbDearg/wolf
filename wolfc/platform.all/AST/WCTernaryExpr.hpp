@@ -23,7 +23,7 @@ public:
 };
 
 /* OrExpr */
-class TernaryExprNoCond : public TernaryExpr {
+class TernaryExprNoCond final : public TernaryExpr {
 public:
     TernaryExprNoCond(OrExpr & expr);
     
@@ -51,7 +51,7 @@ public:
 };
 
 /* OrExpr ? AssignExpr : AssignExpr */
-class TernaryExprWithCond : public TernaryExpr {
+class TernaryExprWithCond final : public TernaryExpr {
 public:
     TernaryExprWithCond(OrExpr & condExpr,
                         AssignExpr & trueExpr,

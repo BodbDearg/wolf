@@ -12,7 +12,7 @@ class Scope;
 ScopeStmnt:
 	scope Scope end
 */
-class ScopeStmnt : public ASTNode, public IStmnt {
+class ScopeStmnt final : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     

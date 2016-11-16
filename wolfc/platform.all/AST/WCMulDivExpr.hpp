@@ -23,7 +23,7 @@ public:
 };
 
 /* UnaryExpression */
-class MulDivExprNoOp : public MulDivExpr {
+class MulDivExprNoOp final : public MulDivExpr {
 public:
     MulDivExprNoOp(UnaryExpr & expr);
     
@@ -51,7 +51,7 @@ public:
 };
 
 /* UnaryExpr * MulDivExpr */
-class MulDivExprMul : public MulDivExpr {
+class MulDivExprMul final : public MulDivExpr {
 public:
     MulDivExprMul(UnaryExpr & leftExpr, MulDivExpr & rightExpr);
     
@@ -80,7 +80,7 @@ public:
 };
 
 /* UnaryExpr / MulDivExpr */
-class MulDivExprDiv : public MulDivExpr {
+class MulDivExprDiv final : public MulDivExpr {
 public:
     MulDivExprDiv(UnaryExpr & leftExpr, MulDivExpr & rightExpr);
     

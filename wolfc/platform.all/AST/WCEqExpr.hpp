@@ -23,7 +23,7 @@ public:
 };
 
 /* RelExpr */
-class EqExprNoOp : public EqExpr {
+class EqExprNoOp final : public EqExpr {
 public:
     EqExprNoOp(RelExpr & expr);
     
@@ -55,28 +55,28 @@ class EqExprTwoOps : public EqExpr {
 public:
     EqExprTwoOps(RelExpr & leftExpr, EqExpr & rightExpr);
     
-    virtual const Token & getStartToken() const override;
+    virtual const Token & getStartToken() const final override;
     
-    virtual const Token & getEndToken() const override;
+    virtual const Token & getEndToken() const final override;
     
-    virtual bool isLValue() const override;
+    virtual bool isLValue() const final override;
     
-    virtual DataType & dataType() override;
+    virtual DataType & dataType() final override;
     
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
      * return false for failure if that is the case.
      */
-    bool compileCheckBothExprsAreInt() const;    
+    bool compileCheckBothExprsAreInt() const;
     
     RelExpr & mLeftExpr;
     EqExpr & mRightExpr;
 };
 
 /* RelExpr == EqExpr */
-class EqExprEq : public EqExprTwoOps {
+class EqExprEq final : public EqExprTwoOps {
 public:
     EqExprEq(RelExpr & leftExpr, EqExpr & rightExpr);
     
@@ -86,7 +86,7 @@ public:
 };
 
 /* RelExpr != EqExpr */
-class EqExprNeq : public EqExprTwoOps {
+class EqExprNeq final : public EqExprTwoOps {
 public:
     EqExprNeq(RelExpr & leftExpr, EqExpr & rightExpr);
     

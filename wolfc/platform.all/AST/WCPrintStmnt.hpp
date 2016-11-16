@@ -12,7 +12,7 @@ class LinearAlloc;
 PrintStmnt:
     print ( AssignExpr )
 */
-class PrintStmnt : public ASTNode, public IStmnt {
+class PrintStmnt final : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     

@@ -14,7 +14,7 @@ class Type;
 FuncArg:
 	PrimitiveType Identifier
 */
-class FuncArg : public ASTNode {
+class FuncArg final : public ASTNode {
 public:
     static bool peek(const Token * currentToken);
     

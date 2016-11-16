@@ -28,7 +28,7 @@ public:
 };
 
 /* AssignExpr */
-class FuncCallArgListSingle : public FuncCallArgList {
+class FuncCallArgListSingle final : public FuncCallArgList {
 public:
     FuncCallArgListSingle(AssignExpr & expr);
     
@@ -44,7 +44,7 @@ public:
 };
 
 /* AssignExpr , FuncCallArgList */
-class FuncCallArgListMulti : public FuncCallArgList {
+class FuncCallArgListMulti final : public FuncCallArgList {
 public:
     FuncCallArgListMulti(AssignExpr & expr, FuncCallArgList & argList);
     

@@ -22,7 +22,7 @@ public:
 };
 
 /* EqExpr */
-class NotExprNoOp : public NotExpr {
+class NotExprNoOp final : public NotExpr {
 public:
     NotExprNoOp(EqExpr & expr);
     
@@ -50,7 +50,7 @@ public:
 };
 
 /* not EqExpr */
-class NotExprNot : public NotExpr {
+class NotExprNot final : public NotExpr {
 public:
     NotExprNot(NotExpr & expr, const Token & startToken);
     

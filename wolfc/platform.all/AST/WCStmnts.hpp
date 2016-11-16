@@ -21,7 +21,7 @@ public:
 };
 
 /* Stmnt */
-class StmntsSingle : public Stmnts {
+class StmntsSingle final : public Stmnts {
 public:
     StmntsSingle(Stmnt & expr);
     
@@ -35,7 +35,7 @@ public:
 };
 
 /* Stmnt Stmnts */
-class StmntsMulti : public Stmnts {
+class StmntsMulti final : public Stmnts {
 public:
     StmntsMulti(Stmnt & leftStmnt, Stmnts & rightStmnts);
     

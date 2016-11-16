@@ -13,7 +13,7 @@ class LinearAlloc;
 WhileStmnt:
 	while|until AssignExpr [do] Scope end
 */
-class WhileStmnt : public ASTNode, public IRepeatableStmnt {
+class WhileStmnt final : public ASTNode, public IRepeatableStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     

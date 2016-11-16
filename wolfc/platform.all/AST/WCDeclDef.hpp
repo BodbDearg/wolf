@@ -24,7 +24,7 @@ public:
 };
 
 /* Func */
-class DeclDefFunc : public DeclDef {
+class DeclDefFunc final : public DeclDef {
 public:
     DeclDefFunc(Func & declDef);
     
@@ -38,7 +38,7 @@ public:
 };
 
 /* VarDecl */
-class DeclDefVarDecl : public DeclDef {
+class DeclDefVarDecl final : public DeclDef {
 public:
     DeclDefVarDecl(VarDecl & varDecl);
     

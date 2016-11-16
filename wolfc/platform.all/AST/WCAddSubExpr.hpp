@@ -23,7 +23,7 @@ public:
 };
 
 /* MulDivExpr */
-class AddSubExprNoOp : public AddSubExpr {
+class AddSubExprNoOp final : public AddSubExpr {
 public:
     AddSubExprNoOp(MulDivExpr & expr);
     
@@ -51,7 +51,7 @@ public:
 };
 
 /* MulDivExpr + AddSubExpr */
-class AddSubExprAdd : public AddSubExpr {
+class AddSubExprAdd final : public AddSubExpr {
 public:
     AddSubExprAdd(MulDivExpr & leftExpr, AddSubExpr & rightExpr);
     
@@ -80,7 +80,7 @@ public:
 };
 
 /* MulDivExpr - AddSubExpr */
-class AddSubExprSub : public AddSubExpr {
+class AddSubExprSub final : public AddSubExpr {
 public:
     AddSubExprSub(MulDivExpr & leftExpr, AddSubExpr & rightExpr);
     

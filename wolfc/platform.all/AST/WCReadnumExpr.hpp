@@ -13,7 +13,7 @@ class StrLit;
 ReadnumExpr:
     readnum ( )
 */
-class ReadnumExpr : public ASTNode, public IExpr {
+class ReadnumExpr final : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     

@@ -22,7 +22,7 @@ public:
 };
 
 /* NotExpr */
-class AndExprNoOp : public AndExpr {
+class AndExprNoOp final : public AndExpr {
 public:
     AndExprNoOp(NotExpr & expr);
     
@@ -50,7 +50,7 @@ public:
 };
 
 /* NotExpr and AndExpr */
-class AndExprAnd : public AndExpr {
+class AndExprAnd final : public AndExpr {
 public:
     AndExprAnd(NotExpr & leftExpr, AndExpr & rightExpr);
     

@@ -11,7 +11,7 @@ class LinearAlloc;
 NopStmnt:
     nop
 */
-class NopStmnt : public ASTNode, public IStmnt {
+class NopStmnt final : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     

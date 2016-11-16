@@ -22,7 +22,7 @@ public:
 };
 
 /* TernaryExpr */
-class AssignExprNoAssign : public AssignExpr {
+class AssignExprNoAssign final : public AssignExpr {
 public:
     AssignExprNoAssign(TernaryExpr & expr);
     
@@ -50,7 +50,7 @@ public:
 };
 
 /* TernaryExpr = AssignExpr */
-class AssignExprAssign : public AssignExpr {
+class AssignExprAssign final : public AssignExpr {
 public:
     AssignExprAssign(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     

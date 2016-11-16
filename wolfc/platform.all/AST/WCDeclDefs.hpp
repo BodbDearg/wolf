@@ -23,7 +23,7 @@ public:
 };
 
 /* DeclDef */
-class DeclDefsSingle : public DeclDefs {
+class DeclDefsSingle final : public DeclDefs {
 public:
     DeclDefsSingle(DeclDef & declDef);
     
@@ -37,7 +37,7 @@ public:
 };
 
 /* DeclDef DeclDefs */
-class DeclDefsMulti : public DeclDefs {
+class DeclDefsMulti final : public DeclDefs {
 public:
     DeclDefsMulti(DeclDef & declDef, DeclDefs & declDefs);
     

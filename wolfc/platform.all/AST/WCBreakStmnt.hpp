@@ -39,7 +39,7 @@ public:
 };
 
 /* break */
-class BreakStmntNoCond : public BreakStmnt {
+class BreakStmntNoCond final : public BreakStmnt {
 public:
     BreakStmntNoCond(const Token & breakToken);
     
@@ -50,7 +50,7 @@ public:
 };
 
 /* break if|unless AssignExpr */
-class BreakStmntWithCond : public BreakStmnt {
+class BreakStmntWithCond final : public BreakStmnt {
 public:
     BreakStmntWithCond(const Token & breakToken,
                        const Token & condToken,

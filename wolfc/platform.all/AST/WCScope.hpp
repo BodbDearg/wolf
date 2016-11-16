@@ -21,7 +21,7 @@ class Stmnts;
 Scope:
     Stmnts
 */
-class Scope : public ASTNode, public IBasicCodegenNode {
+class Scope final : public ASTNode, public IBasicCodegenNode {
 public:
     static bool peek(const Token * tokenPtr);
     

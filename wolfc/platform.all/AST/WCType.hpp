@@ -31,7 +31,7 @@ public:
 };
 
 /* PrimitiveType */
-class TypePrimitive : public Type {
+class TypePrimitive final : public Type {
 public:
     TypePrimitive(PrimitiveType & type);
     
@@ -47,7 +47,7 @@ public:
 };
 
 /* Type [ AssignExpr ] */
-class TypeArray : public Type {
+class TypeArray final : public Type {
 public:
     TypeArray(Type & elemType, AssignExpr & sizeExpr, const Token & endBracket);
     

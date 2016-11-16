@@ -12,7 +12,7 @@ class LinearAlloc;
 PrimitiveType:
 	void|int|bool|string
 */
-class PrimitiveType : public ASTNode {
+class PrimitiveType final : public ASTNode {
 public:
     static bool peek(const Token * currentToken);
     

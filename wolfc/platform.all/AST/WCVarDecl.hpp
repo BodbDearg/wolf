@@ -14,7 +14,7 @@ class Module;
 VarDecl:
     var Identifier = AssignExpr
 */
-class VarDecl : public ASTNode, public IStmnt {
+class VarDecl final : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     

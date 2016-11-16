@@ -53,7 +53,7 @@ public:
 };
 
 /* -PostfixExpr */
-class UnaryExprMinus : public UnaryExpr {
+class UnaryExprMinus final : public UnaryExpr {
 public:
     UnaryExprMinus(PostfixExpr & expr, const Token & startToken);
     
@@ -76,7 +76,7 @@ public:
 };
 
 /* +PostfixExpr */
-class UnaryExprPlus : public UnaryExprPrimary {
+class UnaryExprPlus final : public UnaryExprPrimary {
 public:
     UnaryExprPlus(PostfixExpr & expr, const Token & startToken);
     
@@ -98,7 +98,7 @@ public:
 };
 
 /* (AssignExpr) */
-class UnaryExprParen : public UnaryExpr {
+class UnaryExprParen final : public UnaryExpr {
 public:
     UnaryExprParen(AssignExpr & expr, const Token & startToken, const Token & endToken);
     

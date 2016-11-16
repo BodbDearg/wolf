@@ -21,7 +21,7 @@ class LinearAlloc;
 FuncCall:
 	( [FuncCallArgList] )
 */
-class FuncCall : public ASTNode {
+class FuncCall final : public ASTNode {
 public:
     static bool peek(const Token * currentToken);
     

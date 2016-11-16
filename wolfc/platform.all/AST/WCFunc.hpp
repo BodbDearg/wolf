@@ -28,7 +28,7 @@ class Type;
 Func:
 	func Identifier ( [FuncArgList] ) [ -> Type ] Scope end
 */
-class Func : public ASTNode {
+class Func final : public ASTNode {
 public:
     static bool peek(const Token * tokenPtr);
     

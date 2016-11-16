@@ -27,7 +27,7 @@ public:
 };
 
 /* PrimaryExpr */
-class PostfixExprNoPostfix : public PostfixExpr {
+class PostfixExprNoPostfix final : public PostfixExpr {
 public:
     PostfixExprNoPostfix(PrimaryExpr & expr);
     
@@ -55,7 +55,7 @@ public:
 };
 
 /* PrimaryExpr FuncCall */
-class PostfixExprFuncCall : public PostfixExpr {
+class PostfixExprFuncCall final : public PostfixExpr {
 public:
     PostfixExprFuncCall(PrimaryExpr & expr, FuncCall & funcInvocation);
     
@@ -82,7 +82,7 @@ public:
 };
 
 /* PrimaryExpr [ AssignExpr ] */
-class PostfixExprArrayLookup : public PostfixExpr {
+class PostfixExprArrayLookup final : public PostfixExpr {
 public:
     PostfixExprArrayLookup(PrimaryExpr & arrayExpr,
                            AssignExpr & indexExpr,

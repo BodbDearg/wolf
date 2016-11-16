@@ -10,7 +10,7 @@ class DataValue;
 class LinearAlloc;
 
 /* Represents TokenType::kIdentifier in the AST tree */
-class Identifier : public ASTNode, public IExpr {
+class Identifier final : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
     

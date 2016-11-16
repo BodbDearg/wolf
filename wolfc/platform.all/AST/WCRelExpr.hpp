@@ -25,7 +25,7 @@ public:
 };
 
 /* AddSubExpr */
-class RelExprNoOp : public RelExpr {
+class RelExprNoOp final : public RelExpr {
 public:
     RelExprNoOp(AddSubExpr & expr);
     
@@ -57,15 +57,15 @@ class RelExprTwoOps : public RelExpr {
 public:
     RelExprTwoOps(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
-    virtual const Token & getStartToken() const override;
+    virtual const Token & getStartToken() const final override;
     
-    virtual const Token & getEndToken() const override;
+    virtual const Token & getEndToken() const final override;
     
-    virtual bool isLValue() const override;
+    virtual bool isLValue() const final override;
     
-    virtual DataType & dataType() override;
+    virtual DataType & dataType() final override;
     
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
@@ -78,7 +78,7 @@ public:
 };
 
 /* AddSubExpr < RelExpr */
-class RelExprLT : public RelExprTwoOps {
+class RelExprLT final : public RelExprTwoOps {
 public:
     RelExprLT(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
@@ -88,7 +88,7 @@ public:
 };
 
 /* AddSubExpr <= RelExpr */
-class RelExprLE : public RelExprTwoOps {
+class RelExprLE final : public RelExprTwoOps {
 public:
     RelExprLE(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
@@ -98,7 +98,7 @@ public:
 };
 
 /* AddSubExpr > RelExpr */
-class RelExprGT : public RelExprTwoOps {
+class RelExprGT final : public RelExprTwoOps {
 public:
     RelExprGT(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
@@ -108,7 +108,7 @@ public:
 };
 
 /* AddSubExpr >= RelExpr */
-class RelExprGE : public RelExprTwoOps {
+class RelExprGE final : public RelExprTwoOps {
 public:
     RelExprGE(AddSubExpr & leftExpr, RelExpr & rightExpr);
     

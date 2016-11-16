@@ -29,7 +29,7 @@ public:
     
     ReturnStmnt(const Token & returnToken);
     
-    virtual const Token & getStartToken() const override;
+    virtual const Token & getStartToken() const final override;
     
     /* Gives the data type of the value returned */
     virtual DataType & dataType() = 0;
@@ -49,7 +49,7 @@ protected:
 };
 
 /* return */
-class ReturnStmntNoCondVoid : public ReturnStmnt {
+class ReturnStmntNoCondVoid final : public ReturnStmnt {
 public:
     ReturnStmntNoCondVoid(const Token & returnToken);
     
@@ -61,7 +61,7 @@ public:
 };
 
 /* return AssignExpr */
-class ReturnStmntNoCondWithValue : public ReturnStmnt {
+class ReturnStmntNoCondWithValue final : public ReturnStmnt {
 public:
     ReturnStmntNoCondWithValue(const Token & returnToken, AssignExpr & returnExpr);
     
@@ -82,7 +82,7 @@ public:
                             const Token & condToken,
                             AssignExpr & condExpr);
     
-    virtual const Token & getEndToken() const override;
+    virtual const Token & getEndToken() const final override;
     
     /* Returns true if the condition for returning is inversed ('unless' instead of 'if') */
     bool isCondExprInversed() const;
@@ -102,7 +102,7 @@ protected:
 };
 
 /* return if|unless AssignExpr */
-class ReturnStmntWithCondVoid : public ReturnStmntWithCondBase {
+class ReturnStmntWithCondVoid final : public ReturnStmntWithCondBase {
 public:
     ReturnStmntWithCondVoid(const Token & returnToken,
                             const Token & condToken,
@@ -114,7 +114,7 @@ public:
 };
 
 /* return AssignExpr if|unless AssignExpr */
-class ReturnStmntWithCondAndValue : public ReturnStmntWithCondBase {
+class ReturnStmntWithCondAndValue final : public ReturnStmntWithCondBase {
 public:
     ReturnStmntWithCondAndValue(const Token & returnToken,
                                 AssignExpr & returnExpr,

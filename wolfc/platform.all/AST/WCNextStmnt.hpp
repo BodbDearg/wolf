@@ -26,7 +26,7 @@ public:
     
     NextStmnt(const Token & nextToken);
     
-    virtual const Token & getStartToken() const override;
+    virtual const Token & getStartToken() const final override;
     
     /* Shouldn't be called directly. The statement itself will schedule this. */
     bool deferredCodegen(CodegenCtx & cgCtx);
@@ -39,7 +39,7 @@ public:
 };
 
 /* next */
-class NextStmntNoCond : public NextStmnt {
+class NextStmntNoCond final : public NextStmnt {
 public:
     NextStmntNoCond(const Token & nextToken);
     
@@ -50,7 +50,7 @@ public:
 };
 
 /* next if|unless AssignExpr */
-class NextStmntWithCond : public NextStmnt {
+class NextStmntWithCond final : public NextStmnt {
 public:
     NextStmntWithCond(const Token & nextToken,
                       const Token & condToken,

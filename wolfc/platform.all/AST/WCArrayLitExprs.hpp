@@ -35,7 +35,7 @@ public:
 };
 
 /* AssignExpr */
-class ArrayLitExprsSingle : public ArrayLitExprs {
+class ArrayLitExprsSingle final : public ArrayLitExprs {
 public:
     ArrayLitExprsSingle(AssignExpr & expr);
     
@@ -53,7 +53,7 @@ public:
 };
 
 /* AssignExpr , ArrayLitExprs */
-class ArrayLitExprsMulti : public ArrayLitExprs {
+class ArrayLitExprsMulti final : public ArrayLitExprs {
 public:
     ArrayLitExprsMulti(AssignExpr & expr, ArrayLitExprs & exprsList);
     

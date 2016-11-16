@@ -31,7 +31,7 @@ public:
 };
 
 /* IntLit */
-class PrimaryExprIntLit : public PrimaryExpr {
+class PrimaryExprIntLit final : public PrimaryExpr {
 public:
     PrimaryExprIntLit(IntLit & lit);
     
@@ -53,7 +53,7 @@ public:
 };
 
 /* BoolLit */
-class PrimaryExprBoolLit : public PrimaryExpr {
+class PrimaryExprBoolLit final : public PrimaryExpr {
 public:
     PrimaryExprBoolLit(BoolLit & lit);
     
@@ -75,7 +75,7 @@ public:
 };
 
 /* StrLit */
-class PrimaryExprStrLit : public PrimaryExpr {
+class PrimaryExprStrLit final : public PrimaryExpr {
 public:
     PrimaryExprStrLit(StrLit & lit);
     
@@ -97,7 +97,7 @@ public:
 };
 
 /* ArrayLit */
-class PrimaryExprArrayLit : public PrimaryExpr {
+class PrimaryExprArrayLit final : public PrimaryExpr {
 public:
     PrimaryExprArrayLit(ArrayLit & lit);
     
@@ -125,7 +125,7 @@ public:
 };
 
 /* Identifier */
-class PrimaryExprIdentifier : public PrimaryExpr {
+class PrimaryExprIdentifier final : public PrimaryExpr {
 public:
     PrimaryExprIdentifier(Identifier & ident);
     
@@ -149,7 +149,7 @@ public:
 };
 
 /* ReadnumExpr */
-class PrimaryExprReadnum : public PrimaryExpr {
+class PrimaryExprReadnum final : public PrimaryExpr {
 public:
     PrimaryExprReadnum(ReadnumExpr & expr);
     

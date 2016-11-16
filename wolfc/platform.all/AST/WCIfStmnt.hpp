@@ -29,7 +29,7 @@ public:
             IBasicCodegenNode & thenNode,
             const Token & startToken);
     
-    virtual const Token & getStartToken() const override;
+    virtual const Token & getStartToken() const final override;
     
     /**
      * If true this is an 'unless' statement rather than 'if'. In that case
@@ -50,7 +50,7 @@ public:
 };
 
 /* if|unless AssignExpr [then] Scope end */
-class IfStmntNoElse : public IfStmnt {
+class IfStmntNoElse final : public IfStmnt {
 public:
     IfStmntNoElse(AssignExpr & ifExpr,
                   IBasicCodegenNode & thenNode,
@@ -65,7 +65,7 @@ public:
 };
 
 /* if|unless AssignExpr [then] Scope or IfStmnt */
-class IfStmntElseIf : public IfStmnt {
+class IfStmntElseIf final : public IfStmnt {
 public:
     IfStmntElseIf(AssignExpr & ifExpr,
                   IBasicCodegenNode & thenNode,
@@ -80,7 +80,7 @@ public:
 };
 
 /* if|unless AssignExpr [then] Scope else Scope end */
-class IfStmntElse : public IfStmnt {
+class IfStmntElse final : public IfStmnt {
 public:
     IfStmntElse(AssignExpr & ifExpr,
                 IBasicCodegenNode & thenNode,

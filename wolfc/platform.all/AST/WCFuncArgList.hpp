@@ -28,7 +28,7 @@ public:
 };
 
 /* FuncArg */
-class FuncArgListSingle : public FuncArgList {
+class FuncArgListSingle final : public FuncArgList {
 public:
     FuncArgListSingle(FuncArg & arg);
     
@@ -44,7 +44,7 @@ public:
 };
 
 /* FuncArg , FuncArgList */
-class FuncArgListMulti : public FuncArgList {
+class FuncArgListMulti final : public FuncArgList {
 public:
     FuncArgListMulti(FuncArg & arg, FuncArgList & argList);
     
