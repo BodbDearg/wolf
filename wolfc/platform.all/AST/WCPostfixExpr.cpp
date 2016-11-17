@@ -158,8 +158,8 @@ const Token & PostfixExprFuncCall::getEndToken() const {
     return mFuncCall.getEndToken();
 }
 
-    return false;
 bool PostfixExprFuncCall::isLValue() {
+    return false;
 }
 
 bool PostfixExprFuncCall::isConstExpr() {
