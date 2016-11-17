@@ -11,7 +11,7 @@ llvm::Value * IExpr::getStorage() const {
 void IExpr::setStorage(llvm::Value & storage) {
     // Not implemented for most types by default!
     WC_UNUSED_PARAM(storage);
-    WC_RAISE_ASSERTION("This type does not require storage, not implemented!");
+    WC_RAISE_ASSERTION("Attempted a call to 'setStorage' which is not implemented for this node type!");
 }
 
 WC_END_NAMESPACE
