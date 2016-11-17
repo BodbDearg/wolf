@@ -43,6 +43,7 @@ bool Identifier::isLValue() {
 }
 
 bool Identifier::isConstExpr() {
+    #warning What?
     // TODO: Implement this
     return false;
 }
