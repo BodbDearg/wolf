@@ -28,13 +28,8 @@ struct DataValue {
         WC_EMPTY_FUNC_BODY();
     }
     
-    DataValue(const DataValue & other) :
-        value(other.value),
-        type(other.type),
-        requiresLoad(other.requiresLoad)
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
+    DataValue(const DataValue & other) = default;
+    DataValue & operator = (const DataValue & other) = default;
     
     /* The llvm value representing the data */
     llvm::Value * value;
