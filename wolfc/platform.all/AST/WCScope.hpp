@@ -14,6 +14,7 @@ WC_BEGIN_NAMESPACE
 class DataType;
 class LinearAlloc;
 class Stmnts;
+class VarDecl;
 
 // TODO: not a statement, don't inherit from IStmnt
 
@@ -40,7 +41,7 @@ public:
     DataValue * createVar(const char * varName,
                           DataType & dataType,
                           CodegenCtx & cgCtx,
-                          ASTNode & callingNode);
+                          VarDecl & callingNode);
     
     /* Get a variable within this scope. Returns null if not found within this scope. */
     DataValue * getVar(const char * varName);

@@ -164,6 +164,7 @@ DataValue * Module::createVar(const char * varName,
     // Make the data value:
     DataValue & dataValue = mVarValues[varName];
     
+    dataValue.declaringNode = &callingNode;
     dataValue.requiresLoad = true;
     dataValue.type = &dataType;
     dataValue.value = new llvm::GlobalVariable(*mLLVMModule.get(),

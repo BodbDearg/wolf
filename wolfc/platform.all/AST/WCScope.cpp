@@ -5,6 +5,7 @@
 #include "WCLinearAlloc.hpp"
 #include "WCStmnts.hpp"
 #include "WCStringUtils.hpp"
+#include "WCVarDecl.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -37,7 +38,7 @@ bool Scope::codegen(CodegenCtx & cgCtx) {
 DataValue * Scope::createVar(const char * varName,
                              DataType & dataType,
                              CodegenCtx & cgCtx,
-                             ASTNode & callingNode)
+                             VarDecl & callingNode)
 {
     // If the variable already exists in this scope then creation fails:
     {
@@ -62,6 +63,7 @@ DataValue * Scope::createVar(const char * varName,
     
     // Make the data value:
     DataValue & dataValue = mVarValues[varName];
+    dataValue.declaringNode = &callingNode;
     dataValue.requiresLoad = true;
     dataValue.type = &dataType;
     dataValue.value = dataType.codegenAlloca(cgCtx, *this, std::string("alloc_ident_val:") + varName);

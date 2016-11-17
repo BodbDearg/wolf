@@ -97,9 +97,29 @@ llvm::Value * Identifier::codegenExprEval(CodegenCtx & cgCtx) {
 }
 
 llvm::Constant * Identifier::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: relax restriction and allow referencing constant variables which have been defined
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Cannot reference the value of a variable in a constant expression!");
+    
+    // Grab the variable value
+    const DataValue * dataValue = lookupDataValue();
+    
+    if (!dataValue) {
+        compileError("No constant named '%s' in the current scope! Unable to take it's value!", name());
+        return nullptr;
+    }
+    
+    // See if it evaluates to a global variable:
+    if (llvm::GlobalVariable * globalVar = llvm::dyn_cast<llvm::GlobalVariable>(dataValue->value)) {
+        // If must have a constant initializer for us to use it's value:
+        if (llvm::Constant * globalVarInitializer = globalVar->getInitializer()) {
+            return globalVarInitializer;
+        }
+    }
+    
+    // TODO: relax restriction and allow referencing constant variables which have been defined
+    compileError("The variable named '%s' cannot be referenced in a constant expression because "
+                 "it cannot be evaluated at compile time!",
+                 name());
+    
     return nullptr;
 }
 

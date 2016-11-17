@@ -8,11 +8,13 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
+class ASTNode;
 class DataType;
 
 /* Struct holding an LLVM value and it's corresponding data type */
 struct DataValue {
     DataValue() :
+        declaringNode(nullptr),
         value(nullptr),
         type(nullptr),
         requiresLoad(false)
@@ -20,7 +22,12 @@ struct DataValue {
         WC_EMPTY_FUNC_BODY();
     }
     
-    DataValue(llvm::Value * _value, DataType * _type, bool _requiresLoad) :
+    DataValue(ASTNode * _declaringNode,
+              llvm::Value * _value,
+              DataType * _type,
+              bool _requiresLoad)
+    :
+        declaringNode(_declaringNode),
         value(_value),
         type(_type),
         requiresLoad(_requiresLoad)
@@ -30,6 +37,9 @@ struct DataValue {
     
     DataValue(const DataValue & other) = default;
     DataValue & operator = (const DataValue & other) = default;
+    
+    /* The node that declared the data value */
+    ASTNode * declaringNode;
     
     /* The llvm value representing the data */
     llvm::Value * value;
