@@ -60,6 +60,10 @@ bool NotExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
+bool NotExprNoOp::isConstExpr() const {
+    return mExpr.isConstExpr();
+}
+
 DataType & NotExprNoOp::dataType() {
     return mExpr.dataType();
 }
@@ -109,6 +113,10 @@ const Token & NotExprNot::getEndToken() const {
 
 bool NotExprNot::isLValue() const {
     return false;
+}
+
+bool NotExprNot::isConstExpr() const {
+    return mExpr.isConstExpr();
 }
 
 DataType & NotExprNot::dataType() {

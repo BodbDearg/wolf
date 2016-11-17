@@ -8,13 +8,10 @@ WC_BEGIN_NAMESPACE
 class ArrayDataType : public DataType {
 public:
     ArrayDataType(DataType & innerType, size_t size);
-    
     virtual ~ArrayDataType() override;
     
     virtual const std::string & name() const override;
-    
     virtual bool equals(const DataType & other) const override;
-    
     virtual bool isArray() const override;
     
     virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,

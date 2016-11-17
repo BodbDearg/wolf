@@ -22,7 +22,6 @@ IfStmnt:
 class IfStmnt : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static IfStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     IfStmnt(AssignExpr & ifExpr,

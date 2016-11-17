@@ -71,6 +71,10 @@ bool ArrayLit::isLValue() const {
     return false;
 }
 
+bool ArrayLit::isConstExpr() const {
+    return mExprs.isConstExpr();
+}
+
 DataType & ArrayLit::dataType() {
     if (!mDataType.wasInitialized()) {
         mDataType.init(mExprs.getElementType(), mSize);

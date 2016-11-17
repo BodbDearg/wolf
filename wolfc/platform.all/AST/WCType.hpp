@@ -22,7 +22,6 @@ Type:
 class Type : public ASTNode {
 public:
     static bool peek(const Token * currentToken);
-    
     static Type * parse(const Token *& currentToken, LinearAlloc & alloc);
     
     virtual DataType & dataType() = 0;
@@ -36,7 +35,6 @@ public:
     TypePrimitive(PrimitiveType & type);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual DataType & dataType() override;
@@ -52,7 +50,6 @@ public:
     TypeArray(Type & elemType, AssignExpr & sizeExpr, const Token & endBracket);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual DataType & dataType() override;

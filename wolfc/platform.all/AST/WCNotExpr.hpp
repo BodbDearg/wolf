@@ -17,7 +17,6 @@ NotExpr:
 class NotExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static NotExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
@@ -27,23 +26,19 @@ public:
     NotExprNoOp(EqExpr & expr);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool isLValue() const override;
+    virtual bool isConstExpr() const override;
     
     virtual DataType & dataType() override;
     
     virtual bool requiresStorage() const override;
-    
     virtual llvm::Value * getStorage() const override;
-    
     virtual void setStorage(llvm::Value & storage) override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     EqExpr & mExpr;
@@ -55,27 +50,26 @@ public:
     NotExprNot(NotExpr & expr, const Token & startToken);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool isLValue() const override;
+    virtual bool isConstExpr() const override;
     
     virtual DataType & dataType() override;
 
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
+    NotExpr &       mExpr;
+    const Token &   mStartToken;
+
+private:
     /**
      * TODO: this is a temp function for the moment. Issue a compile error if the expr is not of 'bool'
      * Return false for failure if that is the case.
      */
     bool compileCheckExprIsBool() const;
-    
-    NotExpr &       mExpr;
-    const Token &   mStartToken;
 };
 
 WC_END_NAMESPACE

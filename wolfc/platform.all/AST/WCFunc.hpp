@@ -31,7 +31,6 @@ Func:
 class Func final : public ASTNode {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static Func * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     Func(const Token & startToken,
@@ -42,15 +41,12 @@ public:
          const Token & endToken);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     const char * name() const;
     
     size_t numArgs() const;
-    
     void getArgs(std::vector<FuncArg*> & args);
-    
     DataValue * getArg(const char * argName);
     
     DataType & returnDataType() const;

@@ -66,6 +66,10 @@ bool MulDivExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
+bool MulDivExprNoOp::isConstExpr() const {
+    return mExpr.isConstExpr();
+}
+
 DataType & MulDivExprNoOp::dataType() {
     return mExpr.dataType();
 }
@@ -116,6 +120,10 @@ const Token & MulDivExprMul::getEndToken() const {
 
 bool MulDivExprMul::isLValue() const {
     return false;
+}
+
+bool MulDivExprMul::isConstExpr() const {
+    return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
 DataType & MulDivExprMul::dataType() {
@@ -201,6 +209,10 @@ const Token & MulDivExprDiv::getEndToken() const {
 
 bool MulDivExprDiv::isLValue() const {
     return false;
+}
+
+bool MulDivExprDiv::isConstExpr() const {
+    return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
 DataType & MulDivExprDiv::dataType() {

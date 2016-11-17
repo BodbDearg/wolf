@@ -104,6 +104,10 @@ bool UnaryExprPrimary::isLValue() const {
     return mExpr.isLValue();
 }
 
+bool UnaryExprPrimary::isConstExpr() const {
+    return mExpr.isConstExpr();
+}
+
 DataType & UnaryExprPrimary::dataType() {
     return mExpr.dataType();
 }
@@ -153,6 +157,10 @@ const Token & UnaryExprMinus::getEndToken() const {
 
 bool UnaryExprMinus::isLValue() const {
     return false;
+}
+
+bool UnaryExprMinus::isConstExpr() const {
+    return mExpr.isConstExpr();
 }
 
 DataType & UnaryExprMinus::dataType() {
@@ -275,6 +283,10 @@ const Token & UnaryExprParen::getEndToken() const {
 }
 
 bool UnaryExprParen::isLValue() const {
+    return mExpr.isLValue();
+}
+
+bool UnaryExprParen::isConstExpr() const {
     return mExpr.isLValue();
 }
 

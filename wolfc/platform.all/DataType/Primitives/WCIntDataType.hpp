@@ -8,9 +8,7 @@ WC_BEGIN_NAMESPACE
 class IntDataType : public DataType {
 public:
     virtual const std::string & name() const override;
-    
     virtual bool equals(const DataType & other) const override;
-    
     virtual bool isInteger() const override;
     
     virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,

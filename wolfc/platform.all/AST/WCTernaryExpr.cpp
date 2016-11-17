@@ -73,6 +73,10 @@ bool TernaryExprNoCond::isLValue() const {
     return mExpr.isLValue();
 }
 
+bool TernaryExprNoCond::isConstExpr() const {
+    return mExpr.isConstExpr();
+}
+
 DataType & TernaryExprNoCond::dataType() {
     return mExpr.dataType();
 }
@@ -128,6 +132,12 @@ const Token & TernaryExprWithCond::getEndToken() const {
 
 bool TernaryExprWithCond::isLValue() const {
     return false;
+}
+
+bool TernaryExprWithCond::isConstExpr() const {
+    return  mCondExpr.isConstExpr() &&
+            mTrueExpr.isConstExpr() &&
+            mFalseExpr.isConstExpr();
 }
 
 DataType & TernaryExprWithCond::dataType() {

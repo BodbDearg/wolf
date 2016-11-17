@@ -15,13 +15,11 @@ PrimitiveType:
 class PrimitiveType final : public ASTNode {
 public:
     static bool peek(const Token * currentToken);
-    
     static PrimitiveType * parse(const Token *& currentToken, LinearAlloc & alloc);
     
     PrimitiveType(const Token & token);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     DataType & dataType();

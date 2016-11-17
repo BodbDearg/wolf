@@ -20,7 +20,6 @@ RelExpr:
 class RelExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static RelExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
@@ -30,23 +29,19 @@ public:
     RelExprNoOp(AddSubExpr & expr);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool isLValue() const override;
+    virtual bool isConstExpr() const override;
     
     virtual DataType & dataType() override;
     
     virtual bool requiresStorage() const override;
-    
     virtual llvm::Value * getStorage() const override;
-    
     virtual void setStorage(llvm::Value & storage) override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     AddSubExpr & mExpr;
@@ -58,23 +53,24 @@ public:
     RelExprTwoOps(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
     virtual const Token & getStartToken() const final override;
-    
     virtual const Token & getEndToken() const final override;
     
     virtual bool isLValue() const final override;
+    virtual bool isConstExpr() const final override;
     
     virtual DataType & dataType() final override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     
+    AddSubExpr & mLeftExpr;
+    RelExpr & mRightExpr;
+    
+protected:
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
      * Return false for failure if that is the case.
      */
     bool compileCheckBothExprsAreInt() const;
-    
-    AddSubExpr & mLeftExpr;
-    RelExpr & mRightExpr;
 };
 
 /* AddSubExpr < RelExpr */
@@ -83,7 +79,6 @@ public:
     RelExprLT(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
@@ -93,7 +88,6 @@ public:
     RelExprLE(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
@@ -103,7 +97,6 @@ public:
     RelExprGT(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
@@ -113,7 +106,6 @@ public:
     RelExprGE(AddSubExpr & leftExpr, RelExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 

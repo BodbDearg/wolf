@@ -92,6 +92,10 @@ bool PostfixExprNoPostfix::isLValue() const {
     return mExpr.isLValue();
 }
 
+bool PostfixExprNoPostfix::isConstExpr() const {
+    return mExpr.isConstExpr();
+}
+
 DataType & PostfixExprNoPostfix::dataType() {
     return mExpr.dataType();
 }
@@ -141,6 +145,11 @@ const Token & PostfixExprFuncCall::getEndToken() const {
 }
 
 bool PostfixExprFuncCall::isLValue() const {
+    return false;
+}
+
+bool PostfixExprFuncCall::isConstExpr() const {
+    // TODO: Someday support calling functions that can be evaluated at compile time
     return false;
 }
 
@@ -284,6 +293,10 @@ const Token & PostfixExprArrayLookup::getEndToken() const {
 
 bool PostfixExprArrayLookup::isLValue() const {
     return mArrayExpr.isLValue();
+}
+
+bool PostfixExprArrayLookup::isConstExpr() const {
+    return mArrayExpr.isConstExpr() && mIndexExpr.isConstExpr();
 }
 
 DataType & PostfixExprArrayLookup::dataType() {

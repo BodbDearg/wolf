@@ -62,6 +62,10 @@ bool ReadnumExpr::isLValue() const {
     return false;
 }
 
+bool ReadnumExpr::isConstExpr() const {
+    return false;
+}
+
 DataType & ReadnumExpr::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
 }

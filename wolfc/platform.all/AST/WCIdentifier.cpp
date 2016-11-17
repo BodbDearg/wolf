@@ -42,6 +42,11 @@ bool Identifier::isLValue() const {
     return true;
 }
 
+bool Identifier::isConstExpr() const {
+    // TODO: Implement this
+    return false;
+}
+
 DataType & Identifier::dataType() {
     DataValue * dataValue = lookupDataValue();
     

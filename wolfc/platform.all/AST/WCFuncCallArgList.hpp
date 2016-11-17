@@ -19,11 +19,9 @@ FuncCallArgList:
 class FuncCallArgList : public ASTNode {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static FuncCallArgList * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     virtual size_t numArgs() const = 0;
-    
     virtual void getArgs(std::vector<AssignExpr*> & args) const = 0;
 };
 
@@ -33,11 +31,9 @@ public:
     FuncCallArgListSingle(AssignExpr & expr);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual size_t numArgs() const override;
-    
     virtual void getArgs(std::vector<AssignExpr*> & args) const override;
     
     AssignExpr & mExpr;
@@ -49,11 +45,9 @@ public:
     FuncCallArgListMulti(AssignExpr & expr, FuncCallArgList & argList);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual size_t numArgs() const override;
-    
     virtual void getArgs(std::vector<AssignExpr*> & args) const override;
     
     AssignExpr &        mExpr;

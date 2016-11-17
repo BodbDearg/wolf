@@ -57,6 +57,10 @@ bool AndExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
+bool AndExprNoOp::isConstExpr() const {
+    return mExpr.isConstExpr();
+}
+
 DataType & AndExprNoOp::dataType() {
     return mExpr.dataType();
 }
@@ -107,6 +111,10 @@ const Token & AndExprAnd::getEndToken() const {
 
 bool AndExprAnd::isLValue() const {
     return false;
+}
+
+bool AndExprAnd::isConstExpr() const {
+    return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
 DataType & AndExprAnd::dataType() {

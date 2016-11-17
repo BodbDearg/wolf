@@ -54,6 +54,10 @@ const Token & ArrayLitExprsSingle::getEndToken() const {
     return mExpr.getEndToken();
 }
 
+bool ArrayLitExprsSingle::isConstExpr() const {
+    return mExpr.isConstExpr();
+}
+
 size_t ArrayLitExprsSingle::numExprs() const {
     return 1;
 }
@@ -84,6 +88,10 @@ const Token & ArrayLitExprsMulti::getStartToken() const {
 
 const Token & ArrayLitExprsMulti::getEndToken() const {
     return mExprsList.getEndToken();
+}
+
+bool ArrayLitExprsMulti::isConstExpr() const {
+    return mExpr.isConstExpr() && mExprsList.isConstExpr();
 }
 
 size_t ArrayLitExprsMulti::numExprs() const {

@@ -17,13 +17,11 @@ FuncArg:
 class FuncArg final : public ASTNode {
 public:
     static bool peek(const Token * currentToken);
-    
     static FuncArg * parse(const Token *& currentToken, LinearAlloc & alloc);
     
     FuncArg(Type & dataType, Identifier & ident);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     DataType & dataType();

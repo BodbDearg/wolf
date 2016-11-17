@@ -45,6 +45,10 @@ bool StrLit::isLValue() const {
     return false;
 }
 
+bool StrLit::isConstExpr() const {
+    return true;
+}
+
 DataType & StrLit::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kStr);
 }

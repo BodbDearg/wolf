@@ -20,11 +20,11 @@ ArrayLitExprs:
 class ArrayLitExprs : public ASTNode {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static ArrayLitExprs * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
-    virtual size_t numExprs() const = 0;
+    virtual bool isConstExpr() const = 0;
     
+    virtual size_t numExprs() const = 0;
     virtual void getExprs(std::vector<AssignExpr*> & exprs) const = 0;
     
     /**
@@ -40,11 +40,11 @@ public:
     ArrayLitExprsSingle(AssignExpr & expr);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
-    virtual size_t numExprs() const override;
+    virtual bool isConstExpr() const override;
     
+    virtual size_t numExprs() const override;
     virtual void getExprs(std::vector<AssignExpr*> & exprs) const override;
     
     virtual DataType & getElementType() const override;
@@ -58,11 +58,11 @@ public:
     ArrayLitExprsMulti(AssignExpr & expr, ArrayLitExprs & exprsList);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
-    virtual size_t numExprs() const override;
+    virtual bool isConstExpr() const override;
     
+    virtual size_t numExprs() const override;
     virtual void getExprs(std::vector<AssignExpr*> & exprs) const override;
     
     virtual DataType & getElementType() const override;

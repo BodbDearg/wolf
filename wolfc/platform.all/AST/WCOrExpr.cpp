@@ -57,6 +57,10 @@ bool OrExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
+bool OrExprNoOp::isConstExpr() const {
+    return mExpr.isConstExpr();
+}
+
 DataType & OrExprNoOp::dataType() {
     return mExpr.dataType();
 }
@@ -107,6 +111,10 @@ const Token & OrExprOr::getEndToken() const {
 
 bool OrExprOr::isLValue() const {
     return false;
+}
+
+bool OrExprOr::isConstExpr() const {
+    return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
 DataType & OrExprOr::dataType() {

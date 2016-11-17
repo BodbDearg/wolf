@@ -36,7 +36,6 @@ Stmnt:
 class Stmnt : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static Stmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
@@ -46,7 +45,6 @@ public:
     StmntNopStmnt(NopStmnt & stmnt);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
@@ -60,7 +58,6 @@ public:
     StmntPrintStmnt(PrintStmnt & stmnt);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
@@ -74,7 +71,6 @@ public:
     StmntIfStmnt(IfStmnt & ifStmnt);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
@@ -88,7 +84,6 @@ public:
     StmntWhileStmnt(WhileStmnt & ifStmnt);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
@@ -102,7 +97,6 @@ public:
     StmntLoopStmnt(LoopStmnt & loopStmnt);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
@@ -116,7 +110,6 @@ public:
     StmntScopeStmnt(ScopeStmnt & scopeStmnt);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
@@ -130,7 +123,6 @@ public:
     StmntBreakStmnt(BreakStmnt & breakStmnt);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
@@ -144,7 +136,6 @@ public:
     StmntNextStmnt(NextStmnt & nextStmnt);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
@@ -158,7 +149,6 @@ public:
     StmntReturnStmnt(ReturnStmnt & returnStmnt);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
@@ -172,7 +162,6 @@ public:
     StmntVarDecl(VarDecl & decl);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
@@ -186,7 +175,6 @@ public:
     StmntAssignExpr(AssignExpr & expr);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;

@@ -21,7 +21,6 @@ NextStmnt:
 class NextStmnt : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static NextStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     NextStmnt(const Token & nextToken);

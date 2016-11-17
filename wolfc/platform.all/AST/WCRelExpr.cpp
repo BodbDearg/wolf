@@ -80,6 +80,10 @@ bool RelExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
+bool RelExprNoOp::isConstExpr() const {
+    return mExpr.isConstExpr();
+}
+
 DataType & RelExprNoOp::dataType() {
     return mExpr.dataType();
 }
@@ -130,6 +134,10 @@ const Token & RelExprTwoOps::getEndToken() const {
 
 bool RelExprTwoOps::isLValue() const {
     return false;
+}
+
+bool RelExprTwoOps::isConstExpr() const {
+    return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
 DataType & RelExprTwoOps::dataType() {

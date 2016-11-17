@@ -66,6 +66,10 @@ bool AddSubExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
+bool AddSubExprNoOp::isConstExpr() const {
+    return mExpr.isConstExpr();
+}
+
 DataType & AddSubExprNoOp::dataType() {
     return mExpr.dataType();
 }
@@ -116,6 +120,10 @@ const Token & AddSubExprAdd::getEndToken() const {
 
 bool AddSubExprAdd::isLValue() const {
     return false;
+}
+
+bool AddSubExprAdd::isConstExpr() const {
+    return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
 DataType & AddSubExprAdd::dataType() {
@@ -201,6 +209,10 @@ const Token & AddSubExprSub::getEndToken() const {
 
 bool AddSubExprSub::isLValue() const {
     return false;
+}
+
+bool AddSubExprSub::isConstExpr() const {
+    return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
 DataType & AddSubExprSub::dataType() {

@@ -26,7 +26,6 @@ PrimaryExpr:
 class PrimaryExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * currentToken);
-    
     static PrimaryExpr * parse(const Token *& currentToken, LinearAlloc & alloc);
 };
 
@@ -36,17 +35,15 @@ public:
     PrimaryExprIntLit(IntLit & lit);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool isLValue() const override;
+    virtual bool isConstExpr() const override;
     
     virtual DataType & dataType() override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     IntLit & mLit;
@@ -58,17 +55,15 @@ public:
     PrimaryExprBoolLit(BoolLit & lit);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool isLValue() const override;
+    virtual bool isConstExpr() const override;    
     
     virtual DataType & dataType() override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     BoolLit & mLit;
@@ -80,17 +75,15 @@ public:
     PrimaryExprStrLit(StrLit & lit);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool isLValue() const override;
+    virtual bool isConstExpr() const override;
     
     virtual DataType & dataType() override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     StrLit & mLit;
@@ -102,23 +95,19 @@ public:
     PrimaryExprArrayLit(ArrayLit & lit);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool isLValue() const override;
+    virtual bool isConstExpr() const override;
     
     virtual DataType & dataType() override;
     
     virtual bool requiresStorage() const override;
-    
     virtual llvm::Value * getStorage() const override;
-    
     virtual void setStorage(llvm::Value & storage) override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     ArrayLit & mLit;
@@ -130,17 +119,15 @@ public:
     PrimaryExprIdentifier(Identifier & ident);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool isLValue() const override;
+    virtual bool isConstExpr() const override;
     
     virtual DataType & dataType() override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     const char * name() const;
@@ -154,17 +141,15 @@ public:
     PrimaryExprReadnum(ReadnumExpr & expr);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool isLValue() const override;
+    virtual bool isConstExpr() const override;
     
     virtual DataType & dataType() override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     ReadnumExpr & mExpr;

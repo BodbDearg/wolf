@@ -64,6 +64,10 @@ bool EqExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
+bool EqExprNoOp::isConstExpr() const {
+    return mExpr.isConstExpr();
+}
+
 DataType & EqExprNoOp::dataType() {
     return mExpr.dataType();
 }
@@ -114,6 +118,10 @@ const Token & EqExprTwoOps::getEndToken() const {
 
 bool EqExprTwoOps::isLValue() const {
     return false;
+}
+
+bool EqExprTwoOps::isConstExpr() const {
+    return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
 DataType & EqExprTwoOps::dataType() {

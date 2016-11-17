@@ -24,7 +24,6 @@ ReturnStmnt:
 class ReturnStmnt : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static ReturnStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     ReturnStmnt(const Token & returnToken);

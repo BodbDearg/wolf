@@ -24,17 +24,14 @@ FuncCall:
 class FuncCall final : public ASTNode {
 public:
     static bool peek(const Token * currentToken);
-    
     static FuncCall * parse(const Token *& currentToken, LinearAlloc & alloc);
     
     FuncCall(const Token & startToken, FuncCallArgList * argList, const Token & endToken);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     size_t numArgs() const;
-    
     void getArgs(std::vector<AssignExpr*> & args) const;
     
     /**

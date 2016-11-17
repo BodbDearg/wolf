@@ -15,13 +15,11 @@ ScopeStmnt:
 class ScopeStmnt final : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static ScopeStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     ScopeStmnt(const Token & startToken, Scope & bodyScope, const Token & endToken);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;

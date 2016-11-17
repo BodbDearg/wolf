@@ -23,6 +23,9 @@ public:
      */
     virtual bool isLValue() const = 0;
     
+    /* Tells if it's possible for this expression to be evaluated as a constant */
+    virtual bool isConstExpr() const = 0;
+    
     /* Return the data type that this expression results in after evaluation. */
     virtual DataType & dataType() = 0;
     

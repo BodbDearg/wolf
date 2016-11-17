@@ -17,7 +17,6 @@ OrExpr:
 class OrExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static OrExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
@@ -27,23 +26,19 @@ public:
     OrExprNoOp(AndExpr & expr);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool isLValue() const override;
+    virtual bool isConstExpr() const override;
     
     virtual DataType & dataType() override;
     
     virtual bool requiresStorage() const override;
-    
     virtual llvm::Value * getStorage() const override;
-    
     virtual void setStorage(llvm::Value & storage) override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     AndExpr & mExpr;
@@ -55,27 +50,26 @@ public:
     OrExprOr(AndExpr & leftExpr, OrExpr & rightExpr);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool isLValue() const override;
+    virtual bool isConstExpr() const override;
     
     virtual DataType & dataType() override;
 
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
+    AndExpr &   mLeftExpr;
+    OrExpr &    mRightExpr;
+    
+private:
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'bool'
      * Return false for failure if that is the case.
      */
     bool compileCheckBothExprsAreBool() const;
-    
-    AndExpr &   mLeftExpr;
-    OrExpr &    mRightExpr;
 };
 
 WC_END_NAMESPACE

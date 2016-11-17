@@ -24,13 +24,11 @@ Scope:
 class Scope final : public ASTNode, public IBasicCodegenNode {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static Scope * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     Scope(Stmnts & stmnts);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;

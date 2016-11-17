@@ -16,7 +16,6 @@ DeclDefs:
 class DeclDefs : public ASTNode {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static DeclDefs * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     virtual bool codegen(CodegenCtx & cgCtx) = 0;
@@ -28,7 +27,6 @@ public:
     DeclDefsSingle(DeclDef & declDef);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
@@ -42,7 +40,6 @@ public:
     DeclDefsMulti(DeclDef & declDef, DeclDefs & declDefs);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;

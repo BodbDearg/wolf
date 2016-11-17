@@ -15,13 +15,11 @@ PrintStmnt:
 class PrintStmnt final : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static PrintStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     PrintStmnt(AssignExpr & expr, const Token & startToken, const Token & endToken);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;

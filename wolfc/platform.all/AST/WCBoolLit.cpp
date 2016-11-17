@@ -42,6 +42,10 @@ bool BoolLit::isLValue() const {
     return false;
 }
 
+bool BoolLit::isConstExpr() const {
+    return true;
+}
+
 DataType & BoolLit::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }

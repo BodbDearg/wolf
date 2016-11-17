@@ -16,7 +16,6 @@ WhileStmnt:
 class WhileStmnt final : public ASTNode, public IRepeatableStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    
     static WhileStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     WhileStmnt(AssignExpr & whileExpr,
@@ -25,13 +24,11 @@ public:
                const Token & endToken);
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
     virtual llvm::BasicBlock * getNextStmntTargetBlock() override;
-    
     virtual llvm::BasicBlock * getBreakStmntTargetBlock() override;
     
     /**

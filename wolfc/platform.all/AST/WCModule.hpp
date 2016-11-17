@@ -33,7 +33,6 @@ public:
     ~Module();
     
     virtual const Token & getStartToken() const override;
-    
     virtual const Token & getEndToken() const override;
     
     // TODO: change this to return a new module, similar to other ASTNodes

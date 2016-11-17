@@ -42,6 +42,10 @@ bool IntLit::isLValue() const {
     return false;
 }
 
+bool IntLit::isConstExpr() const {
+    return true;
+}
+
 DataType & IntLit::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
 }
