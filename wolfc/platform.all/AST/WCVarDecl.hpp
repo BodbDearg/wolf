@@ -29,9 +29,11 @@ public:
     bool codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope);
     bool codegenAsGlobalVar(CodegenCtx & cgCtx);
     
-    const Token &   mStartToken;
-    Identifier &    mIdent;
-    AssignExpr &    mExpr;
+    Identifier & mIdent;
+    AssignExpr & mExpr;
+    
+private:
+    const Token & mStartToken;
 };
 
 WC_END_NAMESPACE

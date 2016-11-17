@@ -18,10 +18,11 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-struct CodegenCtx;
 class DeclDefs;
 class Func;
 class LinearAlloc;
+class VarDecl;
+struct CodegenCtx;
 
 /* 
 Module:
@@ -66,7 +67,7 @@ public:
                           DataType & dataType,
                           llvm::Constant * initializer,
                           CodegenCtx & cgCtx,
-                          ASTNode & callingNode);
+                          VarDecl & callingNode);
     
     /**
      * Get a variable within this scope or a parent scope. Does not create if it does not exist.

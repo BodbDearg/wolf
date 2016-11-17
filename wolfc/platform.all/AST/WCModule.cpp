@@ -6,6 +6,7 @@
 #include "WCDeclDefs.hpp"
 #include "WCFunc.hpp"
 #include "WCToken.hpp"
+#include "WCVarDecl.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
@@ -136,7 +137,7 @@ DataValue * Module::createVar(const char * varName,
                               DataType & dataType,
                               llvm::Constant * initializer,
                               CodegenCtx & cgCtx,
-                              ASTNode & callingNode)
+                              VarDecl & callingNode)
 {
     // If the variable already exists in this scope then creation fails:
     {
