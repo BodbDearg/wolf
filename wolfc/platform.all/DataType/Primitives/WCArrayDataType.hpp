@@ -5,7 +5,7 @@
 WC_BEGIN_NAMESPACE
 
 /* A data type that represents an array. */
-class ArrayDataType : public DataType {
+class ArrayDataType final : public DataType {
 public:
     ArrayDataType(DataType & innerType, size_t size);
     virtual ~ArrayDataType() override;

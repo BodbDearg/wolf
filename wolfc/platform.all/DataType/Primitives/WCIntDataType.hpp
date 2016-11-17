@@ -5,7 +5,7 @@
 WC_BEGIN_NAMESPACE
 
 /* Signed integer data type. */
-class IntDataType : public DataType {
+class IntDataType final : public DataType {
 public:
     virtual const std::string & name() const override;
     virtual bool equals(const DataType & other) const override;
