@@ -4,10 +4,6 @@
 
 WC_BEGIN_NAMESPACE
 
-bool IExpr::requiresStorage() const {
-    return false;       // False for all types by default
-}
-
 llvm::Value * IExpr::getStorage() const {
     return nullptr;     // None for most types by default
 }

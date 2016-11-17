@@ -64,10 +64,6 @@ DataType & AssignExprNoAssign::dataType() {
     return mExpr.dataType();
 }
 
-bool AssignExprNoAssign::requiresStorage() const {
-    return mExpr.requiresStorage();
-}
-
 llvm::Value * AssignExprNoAssign::getStorage() const {
     return mExpr.getStorage();
 }

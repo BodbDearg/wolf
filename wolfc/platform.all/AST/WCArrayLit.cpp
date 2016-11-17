@@ -83,10 +83,6 @@ DataType & ArrayLit::dataType() {
     return mDataType.get();
 }
 
-bool ArrayLit::requiresStorage() const {
-    return true;
-}
-
 llvm::Value * ArrayLit::getStorage() const {
     return mStorage;
 }

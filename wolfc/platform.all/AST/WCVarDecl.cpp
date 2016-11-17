@@ -87,7 +87,7 @@ bool VarDecl::codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope) {
     }
     
     // See if the right value requires storage, if so then use ours:
-    bool rightRequiresStorage = mExpr.requiresStorage();
+    bool rightRequiresStorage = exprType.requiresStorage();
     
     if (rightRequiresStorage) {
         mExpr.setStorage(*leftValue->value);

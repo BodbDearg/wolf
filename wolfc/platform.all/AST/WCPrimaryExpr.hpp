@@ -102,7 +102,6 @@ public:
     
     virtual DataType & dataType() override;
     
-    virtual bool requiresStorage() const override;
     virtual llvm::Value * getStorage() const override;
     virtual void setStorage(llvm::Value & storage) override;
     

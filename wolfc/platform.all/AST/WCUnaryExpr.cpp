@@ -112,10 +112,6 @@ DataType & UnaryExprPrimary::dataType() {
     return mExpr.dataType();
 }
 
-bool UnaryExprPrimary::requiresStorage() const {
-    return mExpr.requiresStorage();
-}
-
 llvm::Value * UnaryExprPrimary::getStorage() const {
     return mExpr.getStorage();
 }
@@ -292,10 +288,6 @@ bool UnaryExprParen::isConstExpr() {
 
 DataType & UnaryExprParen::dataType() {
     return mExpr.dataType();
-}
-
-bool UnaryExprParen::requiresStorage() const {
-    return mExpr.requiresStorage();
 }
 
 llvm::Value * UnaryExprParen::getStorage() const {

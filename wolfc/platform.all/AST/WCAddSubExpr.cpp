@@ -74,10 +74,6 @@ DataType & AddSubExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-bool AddSubExprNoOp::requiresStorage() const {
-    return mExpr.requiresStorage();
-}
-
 llvm::Value * AddSubExprNoOp::getStorage() const {
     return mExpr.getStorage();
 }

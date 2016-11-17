@@ -60,6 +60,10 @@ bool ArrayDataType::isArray() const {
     return true;
 }
 
+bool ArrayDataType::requiresStorage() const {
+    return true;
+}
+
 llvm::AllocaInst * ArrayDataType::codegenAlloca(CodegenCtx & cgCtx,
                                                 ASTNode & callingNode,
                                                 const std::string & instLabel)

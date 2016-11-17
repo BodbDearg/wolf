@@ -1,31 +1,9 @@
-var UNIT_X = [ 1, 0, 0 ]
-var UNIT_Y = [ 0, 1, 0 ]
-var UNIT_Z = [ 0, 0, 1 ]
-
-var IDENTITY_MATRIX = [ 
-	UNIT_X,
-	UNIT_Y,
-	UNIT_Z
-]
-
-func printMatrix()
-	var i = 0
-
-	while i < 3
-		var j = 0
-
-		while j < 3
-			print(IDENTITY_MATRIX[i][j])
-			print(",")
-			j = j + 1
-		end
-
-		print("\n")
-		i = i + 1
-	end	
+func fuck() -> int[3]
+	return [1, 2, 3]
 end
 
 func main() -> int
-	printMatrix()
+	var v = fuck()
+	print(v[1])
 	return 0
 end

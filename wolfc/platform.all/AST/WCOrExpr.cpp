@@ -65,10 +65,6 @@ DataType & OrExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-bool OrExprNoOp::requiresStorage() const {
-    return mExpr.requiresStorage();
-}
-
 llvm::Value * OrExprNoOp::getStorage() const {
     return mExpr.getStorage();
 }

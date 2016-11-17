@@ -68,10 +68,6 @@ DataType & NotExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-bool NotExprNoOp::requiresStorage() const {
-    return mExpr.requiresStorage();
-}
-
 llvm::Value * NotExprNoOp::getStorage() const {
     return mExpr.getStorage();
 }

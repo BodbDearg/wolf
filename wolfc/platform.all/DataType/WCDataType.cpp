@@ -36,6 +36,10 @@ bool DataType::isArray() const {
     return false;   // False for all types except 'array'
 }
 
+bool DataType::requiresStorage() const {
+    return false;   // False by default for all types
+}
+
 bool DataType::codegenLLVMTypeIfRequired(CodegenCtx & cgCtx, ASTNode & callingNode) {
     if (mLLVMType) {
         return true;

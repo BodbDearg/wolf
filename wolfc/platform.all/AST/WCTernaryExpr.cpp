@@ -81,10 +81,6 @@ DataType & TernaryExprNoCond::dataType() {
     return mExpr.dataType();
 }
 
-bool TernaryExprNoCond::requiresStorage() const {
-    return mExpr.requiresStorage();
-}
-
 llvm::Value * TernaryExprNoCond::getStorage() const {
     return mExpr.getStorage();
 }

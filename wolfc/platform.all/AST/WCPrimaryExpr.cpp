@@ -208,10 +208,6 @@ DataType & PrimaryExprArrayLit::dataType() {
     return mLit.dataType();
 }
 
-bool PrimaryExprArrayLit::requiresStorage() const {
-    return mLit.requiresStorage();
-}
-
 llvm::Value * PrimaryExprArrayLit::getStorage() const {
     return mLit.getStorage();
 }

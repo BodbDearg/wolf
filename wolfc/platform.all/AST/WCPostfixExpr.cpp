@@ -114,10 +114,6 @@ DataType & PostfixExprNoPostfix::dataType() {
     return mExpr.dataType();
 }
 
-bool PostfixExprNoPostfix::requiresStorage() const {
-    return mExpr.requiresStorage();
-}
-
 llvm::Value * PostfixExprNoPostfix::getStorage() const {
     return mExpr.getStorage();
 }

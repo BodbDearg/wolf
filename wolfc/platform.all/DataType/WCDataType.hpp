@@ -55,6 +55,13 @@ public:
     virtual bool isArray() const;
     
     /**
+     * If true then the data type requires a storage area to hold it's data since it is
+     * not a simple primitive that can be held in a register. This will be true for arrays, 
+     * structs and other aggregate types.
+     */
+    virtual bool requiresStorage() const;
+    
+    /**
      * Run code generation for this data type (if required). If not required does nothing
      * Generates the llvm type for the data type and returns true if generation was successful.
      */

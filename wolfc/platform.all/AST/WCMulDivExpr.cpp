@@ -74,10 +74,6 @@ DataType & MulDivExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-bool MulDivExprNoOp::requiresStorage() const {
-    return mExpr.requiresStorage();
-}
-
 llvm::Value * MulDivExprNoOp::getStorage() const {
     return mExpr.getStorage();
 }

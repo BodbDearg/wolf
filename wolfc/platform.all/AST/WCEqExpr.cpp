@@ -72,10 +72,6 @@ DataType & EqExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-bool EqExprNoOp::requiresStorage() const {
-    return mExpr.requiresStorage();
-}
-
 llvm::Value * EqExprNoOp::getStorage() const {
     return mExpr.getStorage();
 }

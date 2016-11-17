@@ -88,10 +88,6 @@ DataType & RelExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-bool RelExprNoOp::requiresStorage() const {
-    return mExpr.requiresStorage();
-}
-
 llvm::Value * RelExprNoOp::getStorage() const {
     return mExpr.getStorage();
 }
