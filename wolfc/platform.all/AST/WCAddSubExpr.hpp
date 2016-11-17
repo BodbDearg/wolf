@@ -45,29 +45,25 @@ public:
     MulDivExpr & mExpr;
 };
 
-#warning TODO: make common base class for add and subtract
-
-/* MulDivExpr + AddSubExpr */
-class AddSubExprAdd final : public AddSubExpr {
+/* Base class for an AddSubExpr with two operands */
+class AddSubExprTwoOps : public AddSubExpr {
 public:
-    AddSubExprAdd(MulDivExpr & leftExpr, AddSubExpr & rightExpr);
+    AddSubExprTwoOps(MulDivExpr & leftExpr, AddSubExpr & rightExpr);
     
-    virtual const Token & getStartToken() const override;
-    virtual const Token & getEndToken() const override;
+    virtual const Token & getStartToken() const final override;
+    virtual const Token & getEndToken() const final override;
     
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
+    virtual bool isLValue() const final override;
+    virtual bool isConstExpr() const final override;
     
-    virtual DataType & dataType() override;
+    virtual DataType & dataType() final override;
     
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     
     MulDivExpr & mLeftExpr;
     AddSubExpr & mRightExpr;
     
-private:
+protected:
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
      * return false for failure if that is the case.
@@ -75,32 +71,22 @@ private:
     bool compileCheckBothExprsAreInt() const;
 };
 
+/* MulDivExpr + AddSubExpr */
+class AddSubExprAdd final : public AddSubExprTwoOps {
+public:
+    AddSubExprAdd(MulDivExpr & leftExpr, AddSubExpr & rightExpr);
+    
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+};
+
 /* MulDivExpr - AddSubExpr */
-class AddSubExprSub final : public AddSubExpr {
+class AddSubExprSub final : public AddSubExprTwoOps {
 public:
     AddSubExprSub(MulDivExpr & leftExpr, AddSubExpr & rightExpr);
     
-    virtual const Token & getStartToken() const override;
-    virtual const Token & getEndToken() const override;
-    
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
-
-    virtual DataType & dataType() override;
-    
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-    
-    MulDivExpr & mLeftExpr;
-    AddSubExpr & mRightExpr;
-    
-private:
-    /**
-     * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
-     * return false for failure if that is the case.
-     */
-    bool compileCheckBothExprsAreInt() const;
 };
 
 WC_END_NAMESPACE

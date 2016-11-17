@@ -99,10 +99,10 @@ llvm::Constant * AddSubExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// AddSubExprAdd
+// AddSubExprTwoOps
 //-----------------------------------------------------------------------------
 
-AddSubExprAdd::AddSubExprAdd(MulDivExpr & leftExpr, AddSubExpr & rightExpr) :
+AddSubExprTwoOps::AddSubExprTwoOps(MulDivExpr & leftExpr, AddSubExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
@@ -110,31 +110,63 @@ AddSubExprAdd::AddSubExprAdd(MulDivExpr & leftExpr, AddSubExpr & rightExpr) :
     mRightExpr.mParent = this;
 }
 
-const Token & AddSubExprAdd::getStartToken() const {
+const Token & AddSubExprTwoOps::getStartToken() const {
     return mLeftExpr.getStartToken();
 }
 
-const Token & AddSubExprAdd::getEndToken() const {
+const Token & AddSubExprTwoOps::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-bool AddSubExprAdd::isLValue() const {
+bool AddSubExprTwoOps::isLValue() const {
     return false;
 }
 
-bool AddSubExprAdd::isConstExpr() const {
+bool AddSubExprTwoOps::isConstExpr() const {
     return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
-DataType & AddSubExprAdd::dataType() {
+DataType & AddSubExprTwoOps::dataType() {
     // TODO: handle auto type promotion
     return mLeftExpr.dataType();
 }
 
-llvm::Value * AddSubExprAdd::codegenAddrOf(CodegenCtx & cgCtx) {
+llvm::Value * AddSubExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
     return nullptr;
+}
+
+bool AddSubExprTwoOps::compileCheckBothExprsAreInt() const {
+    const DataType & leftType = mLeftExpr.dataType();
+    
+    if (!leftType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+        compileError("Left type in expression must be 'int' for now and not '%s'!",
+                     leftType.name().c_str());
+        
+        return false;
+    }
+    
+    const DataType & rightType = mRightExpr.dataType();
+    
+    if (!rightType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+        compileError("Right type in expression must be 'int' for now and not '%s'!",
+                     rightType.name().c_str());
+        
+        return false;
+    }
+    
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+// AddSubExprAdd
+//-----------------------------------------------------------------------------
+
+AddSubExprAdd::AddSubExprAdd(MulDivExpr & leftExpr, AddSubExpr & rightExpr) :
+    AddSubExprTwoOps(leftExpr, rightExpr)
+{
+    WC_EMPTY_FUNC_BODY();
 }
 
 llvm::Value * AddSubExprAdd::codegenExprEval(CodegenCtx & cgCtx) {
@@ -165,65 +197,14 @@ llvm::Constant * AddSubExprAdd::codegenExprConstEval(CodegenCtx & cgCtx) {
     return llvm::ConstantExpr::getAdd(left, right);
 }
 
-bool AddSubExprAdd::compileCheckBothExprsAreInt() const {
-    const DataType & leftType = mLeftExpr.dataType();
-    
-    if (!leftType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
-        compileError("Left type in expression must be 'int' for now and not '%s'!",
-                     leftType.name().c_str());
-        
-        return false;
-    }
-    
-    const DataType & rightType = mRightExpr.dataType();
-    
-    if (!rightType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
-        compileError("Right type in expression must be 'int' for now and not '%s'!",
-                     rightType.name().c_str());
-        
-        return false;
-    }
-    
-    return true;
-}
-
 //-----------------------------------------------------------------------------
 // AddSubExprSub
 //-----------------------------------------------------------------------------
 
 AddSubExprSub::AddSubExprSub(MulDivExpr & leftExpr, AddSubExpr & rightExpr) :
-    mLeftExpr(leftExpr),
-    mRightExpr(rightExpr)
+    AddSubExprTwoOps(leftExpr, rightExpr)
 {
-    mLeftExpr.mParent = this;
-    mRightExpr.mParent = this;
-}
-
-const Token & AddSubExprSub::getStartToken() const {
-    return mLeftExpr.getStartToken();
-}
-
-const Token & AddSubExprSub::getEndToken() const {
-    return mRightExpr.getEndToken();
-}
-
-bool AddSubExprSub::isLValue() const {
-    return false;
-}
-
-bool AddSubExprSub::isConstExpr() const {
-    return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
-}
-
-DataType & AddSubExprSub::dataType() {
-    // TODO: handle auto type promotion
-    return mLeftExpr.dataType();
-}
-
-llvm::Value * AddSubExprSub::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
-    return nullptr;
+    WC_EMPTY_FUNC_BODY();
 }
 
 llvm::Value * AddSubExprSub::codegenExprEval(CodegenCtx & cgCtx) {
@@ -252,28 +233,6 @@ llvm::Constant * AddSubExprSub::codegenExprConstEval(CodegenCtx & cgCtx) {
     llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
     WC_GUARD(right, nullptr);
     return llvm::ConstantExpr::getSub(left, right);
-}
-
-bool AddSubExprSub::compileCheckBothExprsAreInt() const {
-    const DataType & leftType = mLeftExpr.dataType();
-    
-    if (!leftType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
-        compileError("Left type in expression must be 'int' for now and not '%s'!",
-                     leftType.name().c_str());
-        
-        return false;
-    }
-    
-    const DataType & rightType = mRightExpr.dataType();
-    
-    if (!rightType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
-        compileError("Right type in expression must be 'int' for now and not '%s'!",
-                     rightType.name().c_str());
-        
-        return false;
-    }
-    
-    return true;
 }
 
 WC_END_NAMESPACE
