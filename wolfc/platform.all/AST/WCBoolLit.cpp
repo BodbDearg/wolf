@@ -38,11 +38,11 @@ const Token & BoolLit::getEndToken() const {
     return mToken;
 }
 
-bool BoolLit::isLValue() const {
+bool BoolLit::isLValue() {
     return false;
 }
 
-bool BoolLit::isConstExpr() const {
+bool BoolLit::isConstExpr() {
     return true;
 }
 

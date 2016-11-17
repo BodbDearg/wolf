@@ -33,8 +33,8 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
+    virtual bool isLValue() override;
+    virtual bool isConstExpr() override;
     
     virtual DataType & dataType() override;
     
@@ -57,8 +57,8 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
+    virtual bool isLValue() override;
+    virtual bool isConstExpr() override;
     
     virtual DataType & dataType() override;
     
@@ -85,8 +85,8 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
+    virtual bool isLValue() override;
+    virtual bool isConstExpr() override;
     
     virtual DataType & dataType() override;
     

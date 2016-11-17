@@ -67,11 +67,11 @@ const Token & ArrayLit::getEndToken() const {
     return mRBrack;
 }
 
-bool ArrayLit::isLValue() const {
-    return false;
+bool ArrayLit::isLValue() {
+    return true;
 }
 
-bool ArrayLit::isConstExpr() const {
+bool ArrayLit::isConstExpr() {
     return mExprs.isConstExpr();
 }
 

@@ -38,11 +38,11 @@ const Token & Identifier::getEndToken() const {
     return mToken;
 }
 
-bool Identifier::isLValue() const {
+bool Identifier::isLValue() {
     return true;
 }
 
-bool Identifier::isConstExpr() const {
+bool Identifier::isConstExpr() {
     // TODO: Implement this
     return false;
 }
@@ -61,6 +61,7 @@ DataType & Identifier::dataType() {
 llvm::Value * Identifier::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     
+    #warning Does this work for function arguments?
     // Grab the variable value
     const DataValue * dataValue = lookupDataValue();
     

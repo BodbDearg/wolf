@@ -41,11 +41,11 @@ const Token & StrLit::getEndToken() const {
     return mToken;
 }
 
-bool StrLit::isLValue() const {
+bool StrLit::isLValue() {
     return false;
 }
 
-bool StrLit::isConstExpr() const {
+bool StrLit::isConstExpr() {
     return true;
 }
 

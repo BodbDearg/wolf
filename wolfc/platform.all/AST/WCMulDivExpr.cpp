@@ -62,11 +62,11 @@ const Token & MulDivExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool MulDivExprNoOp::isLValue() const {
+bool MulDivExprNoOp::isLValue() {
     return mExpr.isLValue();
 }
 
-bool MulDivExprNoOp::isConstExpr() const {
+bool MulDivExprNoOp::isConstExpr() {
     return mExpr.isConstExpr();
 }
 
@@ -118,11 +118,11 @@ const Token & MulDivExprTwoOps::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-bool MulDivExprTwoOps::isLValue() const {
+bool MulDivExprTwoOps::isLValue() {
     return false;
 }
 
-bool MulDivExprTwoOps::isConstExpr() const {
+bool MulDivExprTwoOps::isConstExpr() {
     return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 

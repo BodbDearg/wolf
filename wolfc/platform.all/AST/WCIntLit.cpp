@@ -38,11 +38,11 @@ const Token & IntLit::getEndToken() const {
     return mToken;
 }
 
-bool IntLit::isLValue() const {
+bool IntLit::isLValue() {
     return false;
 }
 
-bool IntLit::isConstExpr() const {
+bool IntLit::isConstExpr() {
     return true;
 }
 

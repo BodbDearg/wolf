@@ -56,11 +56,11 @@ const Token & NotExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool NotExprNoOp::isLValue() const {
+bool NotExprNoOp::isLValue() {
     return mExpr.isLValue();
 }
 
-bool NotExprNoOp::isConstExpr() const {
+bool NotExprNoOp::isConstExpr() {
     return mExpr.isConstExpr();
 }
 
@@ -111,11 +111,11 @@ const Token & NotExprNot::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool NotExprNot::isLValue() const {
+bool NotExprNot::isLValue() {
     return false;
 }
 
-bool NotExprNot::isConstExpr() const {
+bool NotExprNot::isConstExpr() {
     return mExpr.isConstExpr();
 }
 

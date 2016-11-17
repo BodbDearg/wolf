@@ -58,11 +58,11 @@ const Token & ReadnumExpr::getEndToken() const {
     return mEndToken;
 }
 
-bool ReadnumExpr::isLValue() const {
+bool ReadnumExpr::isLValue() {
     return false;
 }
 
-bool ReadnumExpr::isConstExpr() const {
+bool ReadnumExpr::isConstExpr() {
     return false;
 }
 

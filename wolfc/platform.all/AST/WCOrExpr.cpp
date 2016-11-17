@@ -53,11 +53,11 @@ const Token & OrExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool OrExprNoOp::isLValue() const {
+bool OrExprNoOp::isLValue() {
     return mExpr.isLValue();
 }
 
-bool OrExprNoOp::isConstExpr() const {
+bool OrExprNoOp::isConstExpr() {
     return mExpr.isConstExpr();
 }
 
@@ -109,11 +109,11 @@ const Token & OrExprOr::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-bool OrExprOr::isLValue() const {
+bool OrExprOr::isLValue() {
     return false;
 }
 
-bool OrExprOr::isConstExpr() const {
+bool OrExprOr::isConstExpr() {
     return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 

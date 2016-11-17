@@ -76,11 +76,11 @@ const Token & PrimaryExprIntLit::getEndToken() const {
     return mLit.getEndToken();
 }
 
-bool PrimaryExprIntLit::isLValue() const {
+bool PrimaryExprIntLit::isLValue() {
     return mLit.isLValue();
 }
 
-bool PrimaryExprIntLit::isConstExpr() const {
+bool PrimaryExprIntLit::isConstExpr() {
     return mLit.isConstExpr();
 }
 
@@ -116,11 +116,11 @@ const Token & PrimaryExprBoolLit::getEndToken() const {
     return mLit.getEndToken();
 }
 
-bool PrimaryExprBoolLit::isLValue() const {
+bool PrimaryExprBoolLit::isLValue() {
     return mLit.isLValue();
 }
 
-bool PrimaryExprBoolLit::isConstExpr() const {
+bool PrimaryExprBoolLit::isConstExpr() {
     return mLit.isConstExpr();
 }
 
@@ -156,11 +156,11 @@ const Token & PrimaryExprStrLit::getEndToken() const {
     return mLit.getEndToken();
 }
 
-bool PrimaryExprStrLit::isLValue() const {
+bool PrimaryExprStrLit::isLValue() {
     return mLit.isLValue();
 }
 
-bool PrimaryExprStrLit::isConstExpr() const {
+bool PrimaryExprStrLit::isConstExpr() {
     return mLit.isConstExpr();
 }
 
@@ -196,11 +196,11 @@ const Token & PrimaryExprArrayLit::getEndToken() const {
     return mLit.getEndToken();
 }
 
-bool PrimaryExprArrayLit::isLValue() const {
+bool PrimaryExprArrayLit::isLValue() {
     return mLit.isLValue();
 }
 
-bool PrimaryExprArrayLit::isConstExpr() const {
+bool PrimaryExprArrayLit::isConstExpr() {
     return mLit.isConstExpr();
 }
 
@@ -248,11 +248,11 @@ const Token & PrimaryExprIdentifier::getEndToken() const {
     return mIdent.getEndToken();
 }
 
-bool PrimaryExprIdentifier::isLValue() const {
+bool PrimaryExprIdentifier::isLValue() {
     return mIdent.isLValue();
 }
 
-bool PrimaryExprIdentifier::isConstExpr() const {
+bool PrimaryExprIdentifier::isConstExpr() {
     return mIdent.isConstExpr();
 }
 
@@ -292,11 +292,11 @@ const Token & PrimaryExprReadnum::getEndToken() const {
     return mExpr.getEndToken();
 }
     
-bool PrimaryExprReadnum::isLValue() const {
+bool PrimaryExprReadnum::isLValue() {
     return mExpr.isLValue();
 }
 
-bool PrimaryExprReadnum::isConstExpr() const {
+bool PrimaryExprReadnum::isConstExpr() {
     return mExpr.isConstExpr();
 }
 

@@ -62,11 +62,11 @@ const Token & AddSubExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool AddSubExprNoOp::isLValue() const {
+bool AddSubExprNoOp::isLValue() {
     return mExpr.isLValue();
 }
 
-bool AddSubExprNoOp::isConstExpr() const {
+bool AddSubExprNoOp::isConstExpr() {
     return mExpr.isConstExpr();
 }
 
@@ -118,11 +118,11 @@ const Token & AddSubExprTwoOps::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-bool AddSubExprTwoOps::isLValue() const {
+bool AddSubExprTwoOps::isLValue() {
     return false;
 }
 
-bool AddSubExprTwoOps::isConstExpr() const {
+bool AddSubExprTwoOps::isConstExpr() {
     return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 

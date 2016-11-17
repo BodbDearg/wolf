@@ -52,11 +52,11 @@ const Token & AssignExprNoAssign::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool AssignExprNoAssign::isLValue() const {
+bool AssignExprNoAssign::isLValue() {
     return mExpr.isLValue();
 }
 
-bool AssignExprNoAssign::isConstExpr() const {
+bool AssignExprNoAssign::isConstExpr() {
     return mExpr.isConstExpr();
 }
 
@@ -108,11 +108,11 @@ const Token & AssignExprAssign::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-bool AssignExprAssign::isLValue() const {
+bool AssignExprAssign::isLValue() {
     return false;
 }
 
-bool AssignExprAssign::isConstExpr() const {
+bool AssignExprAssign::isConstExpr() {
     // TODO: eventually we could relax this perhaps and allow for full constant evaluation of a
     // function provided it does not rely on something that can externally vary.
     // For now however, you must use functional type programming if you want constant evaluation.

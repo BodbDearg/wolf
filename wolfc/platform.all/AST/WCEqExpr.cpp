@@ -60,11 +60,11 @@ const Token & EqExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool EqExprNoOp::isLValue() const {
+bool EqExprNoOp::isLValue() {
     return mExpr.isLValue();
 }
 
-bool EqExprNoOp::isConstExpr() const {
+bool EqExprNoOp::isConstExpr() {
     return mExpr.isConstExpr();
 }
 
@@ -116,11 +116,11 @@ const Token & EqExprTwoOps::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-bool EqExprTwoOps::isLValue() const {
+bool EqExprTwoOps::isLValue() {
     return false;
 }
 
-bool EqExprTwoOps::isConstExpr() const {
+bool EqExprTwoOps::isConstExpr() {
     return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
