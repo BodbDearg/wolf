@@ -1,5 +1,6 @@
 #pragma once
 
+#include "WCAssert.hpp"
 #include "WCASTNode.hpp"
 #include "WCCStrComparator.hpp"
 #include "WCDataValue.hpp"
@@ -73,9 +74,20 @@ public:
      */
     DataValue * getVar(const char * varName) const;
     
+    /* Get the LLVM module for this module */
+    inline llvm::Module * getLLVMModule() const {
+        return mLLVMModule.get();
+    }
+    
+    inline llvm::Module & getLLVMModuleRef() const {
+        WC_ASSERT(mLLVMModule.get());
+        return *mLLVMModule.get();
+    }
+    
     /* The LLVM context */
     llvm::LLVMContext & mLLVMCtx;
     
+private:
     /* The LLVM module */
     std::unique_ptr<llvm::Module> mLLVMModule;
     

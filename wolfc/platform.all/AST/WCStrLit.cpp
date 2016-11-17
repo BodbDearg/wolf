@@ -70,9 +70,8 @@ llvm::Constant * StrLit::codegenExprConstEval(CodegenCtx & cgCtx) {
     
     // TODO: memory management here - use the linear allocator
     // TODO: need some sort of LUT for the module so we only have unique string instances
-    llvm::GlobalVariable * strGlobalVar = new llvm::GlobalVariable
-    (
-        *cgCtx.module.mLLVMModule.get(),
+    llvm::GlobalVariable * strGlobalVar = new llvm::GlobalVariable(
+        cgCtx.module.getLLVMModuleRef(),
         strArray->getType(),
         true,                                           // Is constant
         llvm::GlobalValue::PrivateLinkage,

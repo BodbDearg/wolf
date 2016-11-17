@@ -70,7 +70,7 @@ const Token & PrintStmnt::getEndToken() const {
 
 bool PrintStmnt::codegen(CodegenCtx & cgCtx) {
     // Get printf
-    llvm::Constant * printfFn = cgCtx.module.mLLVMModule->getFunction("printf");
+    llvm::Constant * printfFn = cgCtx.module.getLLVMModuleRef().getFunction("printf");
     
     if (!printfFn) {
         compileError("Codegen failed! Can't find 'printf' function!");

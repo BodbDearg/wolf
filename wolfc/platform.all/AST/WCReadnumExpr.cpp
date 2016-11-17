@@ -78,7 +78,7 @@ llvm::Value * ReadnumExpr::codegenAddrOf(CodegenCtx & cgCtx) {
 
 llvm::Value * ReadnumExpr::codegenExprEval(CodegenCtx & cgCtx) {
     // Get scanf
-    llvm::Constant * scanfFn = cgCtx.module.mLLVMModule->getFunction("scanf");
+    llvm::Constant * scanfFn = cgCtx.module.getLLVMModuleRef().getFunction("scanf");
     
     if (!scanfFn) {
         compileError("Codegen failed! Can't find 'scanf' function!");

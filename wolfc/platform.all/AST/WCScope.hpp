@@ -48,6 +48,7 @@ public:
     /* All the statements in the scope. */
     Stmnts & mStmnts;
     
+private:
     /* A list of variables in the scope. Generated during code generation. */
     std::map<const char*, DataValue, CStrComparator> mVarValues;
 };
