@@ -45,29 +45,25 @@ public:
     UnaryExpr & mExpr;
 };
 
-#warning TODO: make common base class for mul and div
-
-/* UnaryExpr * MulDivExpr */
-class MulDivExprMul final : public MulDivExpr {
+/* Base class for an MulDivExpr with two operands */
+class MulDivExprTwoOps : public MulDivExpr {
 public:
-    MulDivExprMul(UnaryExpr & leftExpr, MulDivExpr & rightExpr);
+    MulDivExprTwoOps(UnaryExpr & leftExpr, MulDivExpr & rightExpr);
     
-    virtual const Token & getStartToken() const override;
-    virtual const Token & getEndToken() const override;
+    virtual const Token & getStartToken() const final override;
+    virtual const Token & getEndToken() const final override;
     
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
+    virtual bool isLValue() const final override;
+    virtual bool isConstExpr() const final override;
     
-    virtual DataType & dataType() override;
+    virtual DataType & dataType() final override;
     
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     
     UnaryExpr & mLeftExpr;
     MulDivExpr & mRightExpr;
     
-private:
+protected:
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
      * return false for failure if that is the case.
@@ -75,32 +71,22 @@ private:
     bool compileCheckBothExprsAreInt() const;
 };
 
-/* UnaryExpr / MulDivExpr */
-class MulDivExprDiv final : public MulDivExpr {
+/* UnaryExpr * MulDivExpr */
+class MulDivExprMul final : public MulDivExprTwoOps {
 public:
-    MulDivExprDiv(UnaryExpr & leftExpr, MulDivExpr & rightExpr);
-    
-    virtual const Token & getStartToken() const override;
-    virtual const Token & getEndToken() const override;
-    
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
-    
-    virtual DataType & dataType() override;
-    
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
+    MulDivExprMul(UnaryExpr & leftExpr, MulDivExpr & rightExpr);
+
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-    
-    UnaryExpr & mLeftExpr;
-    MulDivExpr & mRightExpr;
-    
-private:
-    /**
-     * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
-     * return false for failure if that is the case.
-     */
-    bool compileCheckBothExprsAreInt() const;
+};
+
+/* UnaryExpr / MulDivExpr */
+class MulDivExprDiv final : public MulDivExprTwoOps {
+public:
+    MulDivExprDiv(UnaryExpr & leftExpr, MulDivExpr & rightExpr);
+
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
 WC_END_NAMESPACE
