@@ -31,45 +31,59 @@ bool PostfixExpr::peek(const Token * currentToken) {
 }
 
 PostfixExpr * PostfixExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
-    // Parse the initial primary
+    // Parse the initial primary expression
     PrimaryExpr * expr = PrimaryExpr::parse(currentToken, alloc);
     WC_GUARD(expr, nullptr);
     
-    // See if function call follows:
-    if (FuncCall::peek(currentToken)) {
-        FuncCall * funcCall = FuncCall::parse(currentToken, alloc);
-        WC_GUARD(funcCall, nullptr);
-        return WC_NEW_AST_NODE(alloc, PostfixExprFuncCall, *expr, *funcCall);
-    }
+    // This is the outermost postfix expression
+    PostfixExpr * outerPostfixExpr = WC_NEW_AST_NODE(alloc, PostfixExprNoPostfix, *expr);
+    WC_ASSERT(outerPostfixExpr);
     
-    // See if array lookup follows - '[' token:
-    if (currentToken->type == TokenType::kLBrack) {
-        // Skip '['
-        ++currentToken;
-        
-        // Parse the assign expression for the array index
-        AssignExpr * arrayIndexExpr = AssignExpr::parse(currentToken, alloc);
-        WC_GUARD(arrayIndexExpr, nullptr);
-        
-        // Expect a closing ']'
-        const Token & endToken = *currentToken;
-        
-        if (endToken.type != TokenType::kRBrack) {
-            parseError(endToken, "Expected a closing ']' for array lookup expression!");
-            return nullptr;
+    // Continue parsing and wrapping until one of these conditions breaks
+    while (FuncCall::peek(currentToken) ||
+           currentToken->type == TokenType::kLBrack)
+    {
+        // See if function call follows:
+        if (FuncCall::peek(currentToken)) {
+            FuncCall * funcCall = FuncCall::parse(currentToken, alloc);
+            WC_GUARD(funcCall, nullptr);
+            outerPostfixExpr = WC_NEW_AST_NODE(alloc,
+                                               PostfixExprFuncCall,
+                                               *outerPostfixExpr,
+                                               *funcCall);
+            
+            WC_ASSERT(outerPostfixExpr);
         }
-        
-        // Consume the ']' and return the array lookup expression
-        ++currentToken;
-        return WC_NEW_AST_NODE(alloc,
-                               PostfixExprArrayLookup,
-                               *expr,
-                               *arrayIndexExpr,
-                               endToken);
+        else {
+            // Skip the '['. Expect '[' to be here based on previous if() failing - see while loop.
+            WC_ASSERT(currentToken->type == TokenType::kLBrack);
+            ++currentToken;
+            
+            // Parse the assign expression for the array index
+            AssignExpr * arrayIndexExpr = AssignExpr::parse(currentToken, alloc);
+            WC_GUARD(arrayIndexExpr, nullptr);
+            
+            // Expect a closing ']'
+            const Token & endToken = *currentToken;
+            
+            if (endToken.type != TokenType::kRBrack) {
+                parseError(endToken, "Expected a closing ']' for array lookup expression!");
+                return nullptr;
+            }
+            
+            // Consume the ']' and create the outer postfix expression
+            ++currentToken;
+            outerPostfixExpr = WC_NEW_AST_NODE(alloc,
+                                               PostfixExprArrayLookup,
+                                               *outerPostfixExpr,
+                                               *arrayIndexExpr,
+                                               endToken);
+            
+            WC_ASSERT(outerPostfixExpr);
+        }
     }
     
-    // No postfix, basic primary expression:
-    return WC_NEW_AST_NODE(alloc, PostfixExprNoPostfix, *expr);
+    return outerPostfixExpr;
 }
 
 //-----------------------------------------------------------------------------
@@ -128,7 +142,7 @@ llvm::Constant * PostfixExprNoPostfix::codegenExprConstEval(CodegenCtx & cgCtx) 
 // PostfixExprFuncInvocation
 //-----------------------------------------------------------------------------
 
-PostfixExprFuncCall::PostfixExprFuncCall(PrimaryExpr & expr, FuncCall & funcCall) :
+PostfixExprFuncCall::PostfixExprFuncCall(PostfixExpr & expr, FuncCall & funcCall) :
     mExpr(expr),
     mFuncCall(funcCall)
 {
@@ -245,13 +259,12 @@ const char * PostfixExprFuncCall::nameOfFuncCalled() const {
     // TODO: support member function calls on another object (some day)
     // TODO: support lambda calls (some day)
     // TODO: support built in functions on basic types (somenum.isNan() etc.)
-    PrimaryExprIdentifier * funcNameIdentifier = dynamic_cast<PrimaryExprIdentifier*>(&mExpr);
     
-    if (!funcNameIdentifier) {
-        return nullptr;
-    }
-    
-    return funcNameIdentifier->name();
+    PostfixExprNoPostfix * exprNoPostfix = dynamic_cast<PostfixExprNoPostfix*>(&mExpr);
+    WC_GUARD(exprNoPostfix, nullptr);
+    PrimaryExprIdentifier * exprIdent = dynamic_cast<PrimaryExprIdentifier*>(&exprNoPostfix->mExpr);
+    WC_GUARD(exprIdent, nullptr);
+    return exprIdent->name();
 }
 
 Func * PostfixExprFuncCall::lookupFuncCalled() const {
@@ -271,7 +284,7 @@ Func * PostfixExprFuncCall::lookupFuncCalled() const {
 // PostfixExprArrayLookup
 //-----------------------------------------------------------------------------
 
-PostfixExprArrayLookup::PostfixExprArrayLookup(PrimaryExpr & arrayExpr,
+PostfixExprArrayLookup::PostfixExprArrayLookup(PostfixExpr & arrayExpr,
                                                AssignExpr & indexExpr,
                                                const Token & endToken)
 :

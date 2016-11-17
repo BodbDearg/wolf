@@ -16,8 +16,8 @@ class PrimaryExpr;
 /*
 PostfixExpr:
 	PrimaryExpr
-	PrimaryExpr FuncCall
-    PrimaryExpr [ AssignExpr ]
+	PostfixExpr FuncCall
+	PostfixExpr [ AssignExpr ]
 */
 class PostfixExpr : public ASTNode, public IExpr {
 public:
@@ -49,10 +49,10 @@ public:
     PrimaryExpr & mExpr;
 };
 
-/* PrimaryExpr FuncCall */
+/* PostfixExpr FuncCall */
 class PostfixExprFuncCall final : public PostfixExpr {
 public:
-    PostfixExprFuncCall(PrimaryExpr & expr, FuncCall & funcInvocation);
+    PostfixExprFuncCall(PostfixExpr & expr, FuncCall & funcInvocation);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -66,7 +66,7 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    PrimaryExpr &   mExpr;
+    PostfixExpr &   mExpr;
     FuncCall &      mFuncCall;
     
 private:
@@ -75,10 +75,10 @@ private:
     Func * lookupFuncCalled() const;
 };
 
-/* PrimaryExpr [ AssignExpr ] */
+/* PostfixExpr [ AssignExpr ] */
 class PostfixExprArrayLookup final : public PostfixExpr {
 public:
-    PostfixExprArrayLookup(PrimaryExpr & arrayExpr,
+    PostfixExprArrayLookup(PostfixExpr & arrayExpr,
                            AssignExpr & indexExpr,
                            const Token & endToken);
     
@@ -94,7 +94,7 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    PrimaryExpr &   mArrayExpr;
+    PostfixExpr &   mArrayExpr;
     AssignExpr &    mIndexExpr;
     const Token &   mEndToken;
 
