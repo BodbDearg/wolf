@@ -114,14 +114,6 @@ DataType & PostfixExprNoPostfix::dataType() {
     return mExpr.dataType();
 }
 
-llvm::Value * PostfixExprNoPostfix::getStorage() const {
-    return mExpr.getStorage();
-}
-
-void PostfixExprNoPostfix::setStorage(llvm::Value & storage) {
-    mExpr.setStorage(storage);
-}
-
 llvm::Value * PostfixExprNoPostfix::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }

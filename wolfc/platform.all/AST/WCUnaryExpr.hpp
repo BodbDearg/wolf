@@ -36,9 +36,6 @@ public:
     
     virtual DataType & dataType() override;
     
-    virtual llvm::Value * getStorage() const override;
-    virtual void setStorage(llvm::Value & storage) override;
-    
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
@@ -98,9 +95,6 @@ public:
     virtual bool isConstExpr() override;
     
     virtual DataType & dataType() override;
-    
-    virtual llvm::Value * getStorage() const override;
-    virtual void setStorage(llvm::Value & storage) override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;

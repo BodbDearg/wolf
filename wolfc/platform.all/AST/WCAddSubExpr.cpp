@@ -74,14 +74,6 @@ DataType & AddSubExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-llvm::Value * AddSubExprNoOp::getStorage() const {
-    return mExpr.getStorage();
-}
-
-void AddSubExprNoOp::setStorage(llvm::Value & storage) {
-    return mExpr.setStorage(storage);
-}
-
 llvm::Value * AddSubExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }

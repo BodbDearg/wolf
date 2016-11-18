@@ -65,14 +65,6 @@ DataType & AndExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-llvm::Value * AndExprNoOp::getStorage() const {
-    return mExpr.getStorage();
-}
-
-void AndExprNoOp::setStorage(llvm::Value & storage) {
-    return mExpr.setStorage(storage);
-}
-
 llvm::Value * AndExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }

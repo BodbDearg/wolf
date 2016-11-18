@@ -74,14 +74,6 @@ DataType & MulDivExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-llvm::Value * MulDivExprNoOp::getStorage() const {
-    return mExpr.getStorage();
-}
-
-void MulDivExprNoOp::setStorage(llvm::Value & storage) {
-    return mExpr.setStorage(storage);
-}
-
 llvm::Value * MulDivExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }

@@ -83,15 +83,6 @@ DataType & ArrayLit::dataType() {
     return mDataType.get();
 }
 
-llvm::Value * ArrayLit::getStorage() const {
-    return mStorage;
-}
-
-void ArrayLit::setStorage(llvm::Value & storage) {
-    WC_ASSERT(!mStorage);
-    mStorage = &storage;
-}
-
 llvm::Value * ArrayLit::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an expression that is not an lvalue!");
@@ -102,12 +93,9 @@ llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
     // Generate the code for the element type:
     WC_GUARD(codegenLLVMType(cgCtx), nullptr);
     
-    // Allocate stack space for the array if we need to:
-    if (!mStorage) {
-        llvm::AllocaInst * storage = cgCtx.irBuilder.CreateAlloca(mDataType->mLLVMType);
-        WC_ASSERT(storage);
-        setStorage(*storage);
-    }
+    // Allocate stack space for the array:
+    mStorage = cgCtx.irBuilder.CreateAlloca(mDataType->mLLVMType);
+    WC_ASSERT(mStorage);
     
     // Evaluate the array element expressions:
     std::vector<AssignExpr*> exprs;

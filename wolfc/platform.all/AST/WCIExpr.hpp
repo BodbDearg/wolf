@@ -29,20 +29,6 @@ public:
     /* Return the data type that this expression results in after evaluation. */
     virtual DataType & dataType() = 0;
     
-    /* Return the storage area of the expression, if any. */
-    virtual llvm::Value * getStorage() const;
-    
-    /**
-     * Set the storage area of the expression. 
-     * This should only be implemented for types where 'requiresStorage' is true.
-     * Variable declarations can use this to assign a storage area to complex types
-     * like array literals and so forth.
-     *
-     * Once set, the storage area should not be re-set. 
-     * This should be a once only operation!
-     */
-    virtual void setStorage(llvm::Value & storage);
-    
     /**
      * Codegen the llvm value that represents the address of this expression. 
      * Note: this is only possible for lvalues! For rvalues this should return nullptr.
