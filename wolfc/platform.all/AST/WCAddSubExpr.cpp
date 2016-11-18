@@ -120,8 +120,9 @@ DataType & AddSubExprTwoOps::dataType() {
 }
 
 llvm::Value * AddSubExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
+    // TODO: would this be true in future for complex types?
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
+    compileError("Can't get the address of '+' or '-' operator result!");
     return nullptr;
 }
 

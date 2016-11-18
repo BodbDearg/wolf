@@ -17,7 +17,7 @@ bool BoolLit::peek(const Token * tokenPtr) {
 
 BoolLit * BoolLit::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     if (!peek(tokenPtr)) {
-        parseError(*tokenPtr, "Expected bool literal!");
+        parseError(*tokenPtr, "Expected 'bool' literal!");
         return nullptr;
     }
     
@@ -52,7 +52,7 @@ DataType & BoolLit::dataType() {
 
 llvm::Value * BoolLit::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
+    compileError("Can't take the address of 'bool' literal!");
     return nullptr;
 }
 

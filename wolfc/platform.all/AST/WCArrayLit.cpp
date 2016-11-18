@@ -84,8 +84,9 @@ DataType & ArrayLit::dataType() {
 }
 
 llvm::Value * ArrayLit::codegenAddrOf(CodegenCtx & cgCtx) {
+    #warning Array Literal: Shouldn't we be able to get the address of this?
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
+    compileError("Can't get the address of array literal!");
     return nullptr;
 }
 

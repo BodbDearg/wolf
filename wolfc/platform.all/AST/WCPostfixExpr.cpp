@@ -147,7 +147,9 @@ const Token & PostfixExprFuncCall::getEndToken() const {
 }
 
 bool PostfixExprFuncCall::isLValue() {
-    return false;
+    // Can treat arrays returned from a function as an l-value, which can be dereferenced,
+    // but not simple types that are stored in registers..
+    return dataType().requiresStorage();
 }
 
 bool PostfixExprFuncCall::isConstExpr() {
@@ -167,7 +169,7 @@ DataType & PostfixExprFuncCall::dataType() {
 
 llvm::Value * PostfixExprFuncCall::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
+    compileError("Can't get the address of function call result!");
     return nullptr;
 }
 

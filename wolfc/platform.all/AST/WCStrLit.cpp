@@ -55,7 +55,7 @@ DataType & StrLit::dataType() {
 
 llvm::Value * StrLit::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
+    compileError("Can't take the address of string literal!");
     return nullptr;
 }
 

@@ -134,7 +134,7 @@ DataType & RelExprTwoOps::dataType() {
 
 llvm::Value * RelExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
+    compileError("Can't take the address of relational operation result!");
     return nullptr;
 }
 

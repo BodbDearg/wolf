@@ -52,7 +52,7 @@ DataType & IntLit::dataType() {
 
 llvm::Value * IntLit::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an expression that is not an lvalue!");
+    compileError("Can't take the address of an 'int' literal!");
     return nullptr;
 }
 
