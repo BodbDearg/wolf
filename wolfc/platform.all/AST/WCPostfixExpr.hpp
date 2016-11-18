@@ -69,6 +69,9 @@ private:
     const char * nameOfFuncCalled() const;
     
     Func * lookupFuncCalled() const;
+    
+    llvm::Value * mAddrOfResult;
+    llvm::Value * mExprEvalResult;
 };
 
 /* PostfixExpr [ AssignExpr ] */

@@ -3,6 +3,7 @@ func fuck() -> int[3]
 end
 
 func main() -> int
-	print(fuck()[1])
+	var v = fuck()[2]
+	print(v)
 	return 0
 end

@@ -132,7 +132,9 @@ llvm::Constant * PostfixExprNoPostfix::codegenExprConstEval(CodegenCtx & cgCtx) 
 
 PostfixExprFuncCall::PostfixExprFuncCall(PostfixExpr & expr, FuncCall & funcCall) :
     mExpr(expr),
-    mFuncCall(funcCall)
+    mFuncCall(funcCall),
+    mAddrOfResult(nullptr),
+    mExprEvalResult(nullptr)
 {
     mExpr.mParent = this;
     mFuncCall.mParent = this;
@@ -169,11 +171,47 @@ DataType & PostfixExprFuncCall::dataType() {
 
 llvm::Value * PostfixExprFuncCall::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't get the address of function call result!");
-    return nullptr;
+    
+    // If already done then just return the previous calculated result
+    WC_GUARD(!mAddrOfResult, mAddrOfResult);
+    
+    // This is only possible if the data type requires storage
+    DataType & returnDataType = dataType();
+    
+    if (!returnDataType.requiresStorage()) {
+        compileError("Can't get the address of function call result!");
+        return nullptr;
+    }
+    
+    // Make sure the expression was evaluated
+    codegenExprEval(cgCtx);
+    
+    if (!mExprEvalResult) {
+        compileError("Internal compile error! Expected function call expression to have been "
+                     "evaluated before getting it's address!");
+        
+        return nullptr;
+    }
+    
+    // Codegen the return data type if required
+    WC_GUARD(returnDataType.codegenLLVMTypeIfRequired(cgCtx, *this), nullptr);
+    
+    // Create an alloc to hold the result of the function call.
+    // This will be what we return:
+    mAddrOfResult = cgCtx.irBuilder.CreateAlloca(returnDataType.mLLVMType);
+    WC_ASSERT(mAddrOfResult);
+    
+    // Store the function call result in
+    cgCtx.irBuilder.CreateStore(mExprEvalResult, mAddrOfResult);
+    
+    // Return the result
+    return mAddrOfResult;
 }
 
 llvm::Value * PostfixExprFuncCall::codegenExprEval(CodegenCtx & cgCtx) {
+    // If already done then just return the previous calculated result
+    WC_GUARD(!mExprEvalResult, mExprEvalResult);
+    
     // Name of function to call:
     const char * funcName = nameOfFuncCalled();
     
@@ -228,13 +266,16 @@ llvm::Value * PostfixExprFuncCall::codegenExprEval(CodegenCtx & cgCtx) {
     
     // Call it: note if non void we have to give the value a name
     if (func->returnDataType().isVoid()) {
-        return cgCtx.irBuilder.CreateCall(func->mLLVMFunc,
-                                          mFuncCall.mArgListExprsValues);
+        mExprEvalResult = cgCtx.irBuilder.CreateCall(func->mLLVMFunc,
+                                                     mFuncCall.mArgListExprsValues);
+    }
+    else {
+        mExprEvalResult = cgCtx.irBuilder.CreateCall(func->mLLVMFunc,
+                                                     mFuncCall.mArgListExprsValues,
+                                                     "PostfixExprFuncCall:ReturnVal");
     }
     
-    return cgCtx.irBuilder.CreateCall(func->mLLVMFunc,
-                                      mFuncCall.mArgListExprsValues,
-                                      "PostfixExprFuncCall:ReturnVal");
+    return mExprEvalResult;
 }
 
 llvm::Constant * PostfixExprFuncCall::codegenExprConstEval(CodegenCtx & cgCtx) {
