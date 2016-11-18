@@ -170,8 +170,6 @@ DataType & PostfixExprFuncCall::dataType() {
 }
 
 llvm::Value * PostfixExprFuncCall::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    
     // If already done then just return the previous calculated result
     WC_GUARD(!mAddrOfResult, mAddrOfResult);
     
@@ -185,13 +183,7 @@ llvm::Value * PostfixExprFuncCall::codegenAddrOf(CodegenCtx & cgCtx) {
     
     // Make sure the expression was evaluated
     codegenExprEval(cgCtx);
-    
-    if (!mExprEvalResult) {
-        compileError("Internal compile error! Expected function call expression to have been "
-                     "evaluated before getting it's address!");
-        
-        return nullptr;
-    }
+    WC_GUARD(mExprEvalResult, nullptr);
     
     // Codegen the return data type if required
     WC_GUARD(returnDataType.codegenLLVMTypeIfRequired(cgCtx, *this), nullptr);

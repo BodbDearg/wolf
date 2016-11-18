@@ -48,6 +48,9 @@ private:
     size_t                      mSize;
     LazyInit<ArrayDataType>     mDataType;
     llvm::Value *               mStorage;
+    llvm::Value *               mAddrOfResult;
+    llvm::Value *               mExprEvalResult;
+    llvm::Constant *            mExprConstEvalResult;
 };
 
 WC_END_NAMESPACE

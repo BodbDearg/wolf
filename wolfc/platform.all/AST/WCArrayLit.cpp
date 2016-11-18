@@ -54,7 +54,10 @@ ArrayLit::ArrayLit(const Token & lBrack,
     mRBrack(rBrack),
     mSize(exprs.numExprs()),
     mDataType(),
-    mStorage(nullptr)
+    mStorage(nullptr),
+    mAddrOfResult(nullptr),
+    mExprEvalResult(nullptr),
+    mExprConstEvalResult(nullptr)
 {
     mExprs.mParent = this;
 }
@@ -84,13 +87,29 @@ DataType & ArrayLit::dataType() {
 }
 
 llvm::Value * ArrayLit::codegenAddrOf(CodegenCtx & cgCtx) {
-    #warning Array Literal: Shouldn't we be able to get the address of this?
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't get the address of array literal!");
-    return nullptr;
+    // If already done then just return the previous calculated result
+    WC_GUARD(!mAddrOfResult, mAddrOfResult);
+    
+    // Make sure the expression was evaluated
+    codegenExprEval(cgCtx);
+    WC_GUARD(mExprEvalResult, nullptr);
+    
+    // Create an alloc to hold the result of the function call.
+    // This will be what we return:
+    mAddrOfResult = cgCtx.irBuilder.CreateAlloca(dataType().mLLVMType);
+    WC_ASSERT(mAddrOfResult);
+    
+    // Store the function call result in
+    cgCtx.irBuilder.CreateStore(mExprEvalResult, mAddrOfResult);
+    
+    // Return the result
+    return mAddrOfResult;
 }
 
 llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
+    // If already done then just return the previous calculated result
+    WC_GUARD(!mExprEvalResult, mExprEvalResult);
+    
     // Generate the code for the element type:
     WC_GUARD(codegenLLVMType(cgCtx), nullptr);
     
@@ -127,10 +146,14 @@ llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
         WC_ASSERT(storeResult);
     }
     
-    return cgCtx.irBuilder.CreateLoad(mStorage);
+    mExprEvalResult = cgCtx.irBuilder.CreateLoad(mStorage);
+    return mExprEvalResult;
 }
 
 llvm::Constant * ArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // If already done then just return the previous calculated result
+    WC_GUARD(!mExprConstEvalResult, mExprConstEvalResult);
+    
     // Generate the code for the element type:
     WC_GUARD(codegenLLVMType(cgCtx), nullptr);
     
@@ -149,7 +172,8 @@ llvm::Constant * ArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
     }
     
     // Now create a constant array and return
-    return llvm::ConstantArray::get(static_cast<llvm::ArrayType*>(mDataType->mLLVMType), subexprConstants);
+    mExprConstEvalResult = llvm::ConstantArray::get(static_cast<llvm::ArrayType*>(mDataType->mLLVMType), subexprConstants);
+    return mExprConstEvalResult;
 }
 
 bool ArrayLit::codegenLLVMType(CodegenCtx & cgCtx) {
