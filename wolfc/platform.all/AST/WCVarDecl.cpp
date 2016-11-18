@@ -86,25 +86,10 @@ bool VarDecl::codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope) {
         return false;
     }
     
-    // See if the right value requires storage, if so then use ours:
-    bool rightRequiresStorage = exprType.requiresStorage();
-    
-    if (rightRequiresStorage) {
-        mExpr.setStorage(*leftValue->value);
-    }
-    
     // Now evaluate the right:
     llvm::Value * rightValue = mExpr.codegenExprEval(cgCtx);
     WC_GUARD(rightValue, false);
-    
-    // If the variable type requires storage then evaluating the expression will result in
-    // it assigning itself to that storage. In that case we don't need to do a store.
-    // See if that is the case here:
-    if (rightRequiresStorage) {
-        return true;    // Don't need to do a store, just return true for success!
-    }
-    
-    // TODO: this won't work for non primitive types
+
     // Generate store instruction:
     return cgCtx.irBuilder.CreateStore(rightValue, leftValue->value) != nullptr;
 }
