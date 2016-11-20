@@ -1,1 +1,9 @@
-# Nothing here yet...
+# Build folder(s)
+wolfc/platform.win/x64/
+
+# Project user data
+wolfc/platform.win/.vs/
+
+# Other user data 
+wolfc/platform.win/wolfc.VC.VC.opendb
+wolfc/platform.win/wolfc.VC.db
