@@ -1,8 +1,8 @@
 #include "WCArrayDataType.hpp"
 
+#include "AST/WCPrintStmnt.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCPrintStmnt.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>

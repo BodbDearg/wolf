@@ -1,8 +1,8 @@
 #pragma once
 
+#include "DataType/WCDataValue.hpp"
 #include "WCASTNode.hpp"
 #include "WCCStrComparator.hpp"
-#include "WCDataValue.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <vector>
@@ -16,13 +16,13 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class CodegenCtx;
 class FuncArg;
 class FuncArgList;
 class Identifier;
 class LinearAlloc;
 class Scope;
 class Type;
+struct CodegenCtx;
 
 /*
 Func:

@@ -1,12 +1,12 @@
 #include "WCType.hpp"
 
-#include "WCArrayDataType.hpp"
+#include "AST/WCPrimitiveType.hpp"
+#include "DataType/Primitives/WCArrayDataType.hpp"
+#include "DataType/WCDataType.hpp"
+#include "DataType/WCPrimitiveDataTypes.hpp"
+#include "Lexer/WCToken.hpp"
 #include "WCAssignExpr.hpp"
-#include "WCDataType.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCPrimitiveDataTypes.hpp"
-#include "WCPrimitiveType.hpp"
-#include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Constants.h>

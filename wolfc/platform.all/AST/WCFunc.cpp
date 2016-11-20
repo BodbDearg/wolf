@@ -1,16 +1,16 @@
 #include "WCFunc.hpp"
 
+#include "DataType/WCDataType.hpp"
+#include "DataType/WCPrimitiveDataTypes.hpp"
+#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCDataType.hpp"
 #include "WCFuncArg.hpp"
 #include "WCFuncArgList.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
-#include "WCPrimitiveDataTypes.hpp"
 #include "WCScope.hpp"
-#include "WCToken.hpp"
 #include "WCType.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN

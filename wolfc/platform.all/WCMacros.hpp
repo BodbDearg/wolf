@@ -78,6 +78,10 @@
         _Pragma("clang diagnostic ignored \"-Wshadow\"")\
         _Pragma("clang diagnostic ignored \"-Wdocumentation\"")\
         _Pragma("clang diagnostic ignored \"-Winconsistent-missing-override\"")
+#elif defined(_MSC_VER)
+    // MS Visual C++
+    #define WC_THIRD_PARTY_INCLUDES_BEGIN\
+        __pragma(warning(push, 0))
 #else
     // Unhandled compiler
     #define WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -91,9 +95,25 @@
     // Clang
     #define WC_THIRD_PARTY_INCLUDES_END\
         _Pragma("clang diagnostic pop")
+#elif defined(_MSC_VER)
+    // MS Visual C++
+    #define WC_THIRD_PARTY_INCLUDES_END\
+        __pragma(warning(pop))
 #else
     // Unhandled compiler
     #define WC_THIRD_PARTY_INCLUDES_END
+#endif
+
+/**
+ * Macro for a function that is 'constexpr' only for compilers which have advanced 
+ * 'constexpr' support Such as clang.
+ */
+#ifdef __clang__
+    // Clang
+    #define WC_CONSTEXPR_ADV constexpr
+#else
+    // Other compiler 
+    #define WC_CONSTEXPR_ADV
 #endif
 
 /* Internal implementation stuff for the guard and guard assert macros. */

@@ -30,7 +30,7 @@ namespace CharUtils {
     }
     
     /* Tells if a unicode character is a line separator */
-    inline constexpr bool isLineSeparator(char32_t c) {
+    inline WC_CONSTEXPR_ADV bool isLineSeparator(char32_t c) {
         // See: https://en.wikipedia.org/wiki/Newline
         switch (c) {
             case 0x000A:        // Line Feed (LF)
@@ -50,7 +50,7 @@ namespace CharUtils {
     }
     
     /* Tells if a unicode character is a whitespace character */
-    inline constexpr bool isWhitespace(char32_t c) {
+    inline WC_CONSTEXPR_ADV bool isWhitespace(char32_t c) {
         // See: https://en.wikipedia.org/wiki/Whitespace_character
         switch (c) {
             case 0x0009:        // Horizontal tab (HT)

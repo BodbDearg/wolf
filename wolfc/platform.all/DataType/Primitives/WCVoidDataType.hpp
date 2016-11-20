@@ -1,6 +1,6 @@
 #pragma once
 
-#include "WCDataType.hpp"
+#include "DataType/WCDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 

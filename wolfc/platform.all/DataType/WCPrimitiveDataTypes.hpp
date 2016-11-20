@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Lexer/WCTokenType.hpp"
 #include "WCMacros.hpp"
-#include "WCTokenType.hpp"
 
 WC_BEGIN_NAMESPACE
 

@@ -1,9 +1,9 @@
 #include "WCBoolDataType.hpp"
 
+#include "AST/WCASTNode.hpp"
+#include "AST/WCPrintStmnt.hpp"
 #include "WCAssert.hpp"
-#include "WCASTNode.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCPrintStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
 

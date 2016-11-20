@@ -1,7 +1,7 @@
 #include "WCStrDataType.hpp"
 
+#include "AST/WCASTNode.hpp"
 #include "WCAssert.hpp"
-#include "WCASTNode.hpp"
 #include "WCCodegenCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN

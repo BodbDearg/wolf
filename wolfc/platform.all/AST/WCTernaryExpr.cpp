@@ -1,12 +1,12 @@
 #include "WCTernaryExpr.hpp"
 
+#include "DataType/WCDataType.hpp"
+#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCDataType.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCOrExpr.hpp"
-#include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
 

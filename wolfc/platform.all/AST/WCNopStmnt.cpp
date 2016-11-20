@@ -1,7 +1,7 @@
 #include "WCNopStmnt.hpp"
 
+#include "Lexer/WCToken.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
 

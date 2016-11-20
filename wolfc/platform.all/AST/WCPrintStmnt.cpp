@@ -1,12 +1,12 @@
 #include "WCPrintStmnt.hpp"
 
+#include "DataType/WCDataType.hpp"
+#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCDataType.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
-#include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>

@@ -1,11 +1,11 @@
 #include "WCAndExpr.hpp"
 
+#include "DataType/WCDataType.hpp"
+#include "DataType/WCPrimitiveDataTypes.hpp"
+#include "Lexer/WCToken.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCDataType.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCOrExpr.hpp"
-#include "WCPrimitiveDataTypes.hpp"
-#include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
 

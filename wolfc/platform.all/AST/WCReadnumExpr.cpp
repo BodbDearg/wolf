@@ -1,10 +1,10 @@
 #include "WCReadnumExpr.hpp"
 
+#include "DataType/WCPrimitiveDataTypes.hpp"
+#include "Lexer/WCToken.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
-#include "WCPrimitiveDataTypes.hpp"
-#include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>

@@ -1,7 +1,7 @@
 #include "WCScope.hpp"
 
+#include "DataType/WCDataType.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCDataType.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCStmnts.hpp"
 #include "WCStringUtils.hpp"

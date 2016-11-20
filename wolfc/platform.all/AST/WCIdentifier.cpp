@@ -1,13 +1,13 @@
 #include "WCIdentifier.hpp"
 
+#include "DataType/WCPrimitiveDataTypes.hpp"
+#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCFunc.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
-#include "WCPrimitiveDataTypes.hpp"
 #include "WCScope.hpp"
-#include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
 

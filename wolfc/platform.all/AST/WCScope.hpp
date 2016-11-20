@@ -1,8 +1,8 @@
 #pragma once
 
+#include "DataType/WCDataValue.hpp"
 #include "WCASTNode.hpp"
 #include "WCCStrComparator.hpp"
-#include "WCDataValue.hpp"
 #include "WCIBasicCodegenNode.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN

@@ -1,5 +1,6 @@
 #include "WCPrimaryExpr.hpp"
 
+#include "Lexer/WCToken.hpp"
 #include "WCArrayLit.hpp"
 #include "WCBoolLit.hpp"
 #include "WCIdentifier.hpp"
@@ -7,7 +8,6 @@
 #include "WCLinearAlloc.hpp"
 #include "WCReadnumExpr.hpp"
 #include "WCStrLit.hpp"
-#include "WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
 

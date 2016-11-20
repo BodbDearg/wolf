@@ -1,9 +1,9 @@
 #pragma once
 
+#include "DataType/WCDataValue.hpp"
 #include "WCAssert.hpp"
 #include "WCASTNode.hpp"
 #include "WCCStrComparator.hpp"
-#include "WCDataValue.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <memory>

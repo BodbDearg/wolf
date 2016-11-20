@@ -1,6 +1,6 @@
 #include "WCDataType.hpp"
 
-#include "WCASTNode.hpp"
+#include "AST/WCASTNode.hpp"
 
 WC_BEGIN_NAMESPACE
 

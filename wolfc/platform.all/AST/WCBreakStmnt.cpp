@@ -1,12 +1,12 @@
 #include "WCBreakStmnt.hpp"
 
+#include "DataType/WCDataType.hpp"
+#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCDataType.hpp"
 #include "WCIRepeatableStmnt.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <functional>

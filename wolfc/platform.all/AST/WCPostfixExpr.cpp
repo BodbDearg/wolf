@@ -1,10 +1,12 @@
 #include "WCPostfixExpr.hpp"
 
-#include "WCArrayDataType.hpp"
+#include "DataType/Primitives/WCArrayDataType.hpp"
+#include "DataType/WCDataType.hpp"
+#include "DataType/WCPrimitiveDataTypes.hpp"
+#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCDataType.hpp"
 #include "WCFunc.hpp"
 #include "WCFuncArg.hpp"
 #include "WCFuncCall.hpp"
@@ -12,9 +14,7 @@
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
 #include "WCPrimaryExpr.hpp"
-#include "WCPrimitiveDataTypes.hpp"
 #include "WCPrimitiveType.hpp"
-#include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>

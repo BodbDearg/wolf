@@ -1,8 +1,8 @@
 #include "WCFuncArg.hpp"
 
+#include "Lexer/WCToken.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCToken.hpp"
 #include "WCType.hpp"
 
 WC_BEGIN_NAMESPACE

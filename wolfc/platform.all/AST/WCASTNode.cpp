@@ -1,9 +1,9 @@
 #include "WCASTNode.hpp"
 
+#include "Lexer/WCToken.hpp"
 #include "WCFunc.hpp"
 #include "WCModule.hpp"
 #include "WCScope.hpp"
-#include "WCToken.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <cstdio>

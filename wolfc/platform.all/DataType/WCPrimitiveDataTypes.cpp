@@ -1,11 +1,11 @@
 #include "WCPrimitiveDataTypes.hpp"
 
-#include "WCBoolDataType.hpp"
-#include "WCIntDataType.hpp"
-#include "WCStrDataType.hpp"
-#include "WCToken.hpp"
-#include "WCUnknownDataType.hpp"
-#include "WCVoidDataType.hpp"
+#include "DataType/Primitives/WCBoolDataType.hpp"
+#include "DataType/Primitives/WCIntDataType.hpp"
+#include "DataType/Primitives/WCStrDataType.hpp"
+#include "DataType/Primitives/WCUnknownDataType.hpp"
+#include "DataType/Primitives/WCVoidDataType.hpp"
+#include "Lexer/WCToken.hpp"
 
 WC_BEGIN_NAMESPACE
 

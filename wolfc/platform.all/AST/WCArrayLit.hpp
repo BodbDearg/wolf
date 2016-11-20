@@ -1,7 +1,7 @@
 #pragma once
 
-#include "WCArrayDataType.hpp"
-#include "WCASTNode.hpp"
+#include "AST/WCASTNode.hpp"
+#include "DataType/Primitives/WCArrayDataType.hpp"
 #include "WCIExpr.hpp"
 #include "WCLazyInit.hpp"
 

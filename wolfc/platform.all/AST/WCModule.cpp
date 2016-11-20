@@ -1,11 +1,11 @@
 #include "WCModule.hpp"
 
+#include "DataType/WCDataType.hpp"
+#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCDataType.hpp"
 #include "WCDeclDefs.hpp"
 #include "WCFunc.hpp"
-#include "WCToken.hpp"
 #include "WCVarDecl.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
