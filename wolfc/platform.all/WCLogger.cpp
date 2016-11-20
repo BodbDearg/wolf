@@ -6,6 +6,7 @@
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <array>
+    #include <cstdarg>
 WC_THIRD_PARTY_INCLUDES_END
 
 static const unsigned kMessageBufferSize = 0xFFFF;

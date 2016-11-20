@@ -1,19 +1,21 @@
 #include "WCDebugBreak.hpp"
 
 // Includes for Clang impl
-#ifndef _MSC_VER
+#ifdef _MSC_VER
+    #include <Windows.h>
+#else
+    // Clang and other compilers
     #include <csignal>
 #endif
 
 WC_BEGIN_NAMESPACE
 
 void debugBreak() {
-    // Two compilers supported currently : MSVC and Clang
     #ifdef _MSC_VER
-        // MSVC impl
+        // Visual C++ impl
         DebugBreak();
     #else
-        // Clang impl
+        // Clang and other compilers
         raise(SIGINT);
     #endif
 }

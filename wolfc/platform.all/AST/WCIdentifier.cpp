@@ -43,8 +43,7 @@ bool Identifier::isLValue() {
 }
 
 bool Identifier::isConstExpr() {
-    #warning What?
-    // TODO: Implement this
+    // FIXME: Implement this
     return false;
 }
 
@@ -62,7 +61,7 @@ DataType & Identifier::dataType() {
 llvm::Value * Identifier::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     
-    #warning Does this work for function arguments?
+    // FIXME: Does this work for function arguments?
     // Grab the variable value
     const DataValue * dataValue = lookupDataValue();
     

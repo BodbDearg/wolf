@@ -135,7 +135,7 @@ DataType & TernaryExprWithCond::dataType() {
 }
 
 llvm::Value * TernaryExprWithCond::codegenAddrOf(CodegenCtx & cgCtx) {
-    #warning Address of ternary expr: surely we should be able to do this?
+    // FIXME: Address of ternary expr: surely we should be able to do this?
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of ternary expression result!");
     return nullptr;
