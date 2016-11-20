@@ -9,8 +9,8 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class CodegenCtx;
 class DataType;
+struct CodegenCtx;
 
 /* An interface that all expressions must implement. */
 class IExpr {

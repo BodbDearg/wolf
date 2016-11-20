@@ -13,9 +13,9 @@ namespace llvm {
 WC_BEGIN_NAMESPACE
 
 class AssignExpr;
-class CodegenCtx;
 class FuncCallArgList;
 class LinearAlloc;
+struct CodegenCtx;
 
 /*
 FuncCall:

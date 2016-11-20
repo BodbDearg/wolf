@@ -4,7 +4,7 @@
 
 WC_BEGIN_NAMESPACE
 
-class CodegenCtx;
+struct CodegenCtx;
 
 /* An interface that all statements must implement. */
 class IStmnt : public IBasicCodegenNode {

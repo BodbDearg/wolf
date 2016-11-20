@@ -4,9 +4,9 @@
 
 WC_BEGIN_NAMESPACE
 
-class CodegenCtx;
 class DeclDef;
 class LinearAlloc;
+struct CodegenCtx;
 
 /*
 DeclDefs:

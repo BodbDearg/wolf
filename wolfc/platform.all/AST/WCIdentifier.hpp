@@ -6,8 +6,8 @@
 WC_BEGIN_NAMESPACE
 
 class DataType;
-class DataValue;
 class LinearAlloc;
+struct DataValue;
 
 /* Represents TokenType::kIdentifier in the AST tree */
 class Identifier final : public ASTNode, public IExpr {

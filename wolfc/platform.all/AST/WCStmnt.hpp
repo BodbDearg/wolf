@@ -7,7 +7,6 @@ WC_BEGIN_NAMESPACE
 
 class AssignExpr;
 class BreakStmnt;
-class CodegenCtx;
 class IfStmnt;
 class LinearAlloc;
 class LoopStmnt;
@@ -18,6 +17,7 @@ class ReturnStmnt;
 class ScopeStmnt;
 class VarDecl;
 class WhileStmnt;
+struct CodegenCtx;
 
 /*
 Stmnt:

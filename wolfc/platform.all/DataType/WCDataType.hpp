@@ -16,8 +16,8 @@ namespace llvm {
 WC_BEGIN_NAMESPACE
 
 class ASTNode;
-class CodegenCtx;
 class PrintStmnt;
+struct CodegenCtx;
 
 /* Base class for a data type */
 class DataType {

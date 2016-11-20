@@ -8,7 +8,7 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class CodegenCtx;
+struct CodegenCtx;
 
 /**
  * A node that implements a basic codegen method. 
