@@ -7,14 +7,20 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <cstdio>
     #include <llvm/IR/LLVMContext.h>
     #include <memory>
+
+    #ifdef _MSC_VER
+        #include <Windows.h>
+    #endif
 WC_THIRD_PARTY_INCLUDES_END
 
 using namespace wolfc;
 
-static void msvcDebugPressEnterToContinue() {
-    #if _MSC_VER
-        std::printf("Press enter to continue...\n");
-        getchar();
+static void msvcPauseForDebugger() {
+    #ifdef _MSC_VER
+        if (IsDebuggerPresent()) {
+            printf("Press enter to continue...");
+            getchar();
+        }
     #endif
 }
 
@@ -22,7 +28,7 @@ int main(int argc, const char * argv[]) {
     // Arg check
     if (argc != 2) {
         std::printf("Usage: %s <Input Wolf File>\n", argv[0]);
-        msvcDebugPressEnterToContinue();
+        msvcPauseForDebugger();
         return -1;
     }
     
@@ -59,6 +65,6 @@ int main(int argc, const char * argv[]) {
         module.dumpIRCodeToStdout();
     }
     
-    msvcDebugPressEnterToContinue();
+    msvcPauseForDebugger();
     return 0;
 }
