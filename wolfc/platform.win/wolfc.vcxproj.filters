@@ -1,17 +1,418 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
+    <Filter Include="platform.all">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="platform.all\AST">
+      <UniqueIdentifier>{4139a0f2-4758-4e43-ae98-b62cb9ca483e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="platform.all\Lexer">
+      <UniqueIdentifier>{09149ca0-aa42-4362-b591-29f83b7c1dc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="platform.all\DataType">
+      <UniqueIdentifier>{5ae50de5-1ab9-43ef-94d1-bd3fec65af25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform.all\DataType\Primitives">
+      <UniqueIdentifier>{771f6e78-48dc-4974-bc47-b00798580dbe}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\platform.all\main.cpp">
+      <Filter>platform.all</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\WCCharUtils.cpp">
+      <Filter>platform.all</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\WCCodegenCtx.cpp">
+      <Filter>platform.all</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\WCDebugBreak.cpp">
+      <Filter>platform.all</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\WCFileUtils.cpp">
+      <Filter>platform.all</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\WCLinearAlloc.cpp">
+      <Filter>platform.all</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\WCLogger.cpp">
+      <Filter>platform.all</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\WCStringUtils.cpp">
+      <Filter>platform.all</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCAddSubExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCAndExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCArrayLit.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCArrayLitExprs.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCAssignExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCASTNode.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCBoolLit.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCBreakStmnt.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCDeclDef.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCDeclDefs.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCEqExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCFunc.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCFuncArg.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCFuncArgList.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCFuncCall.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCFuncCallArgList.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCIdentifier.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCIfStmnt.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCIntLit.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCLoopStmnt.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCModule.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCMulDivExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCNextStmnt.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCNopStmnt.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCNotExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCOrExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCPostfixExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCPrimaryExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCPrimitiveType.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCPrintStmnt.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCReadnumExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCRelExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCReturnStmnt.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCScope.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCScopeStmnt.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCStmnt.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCStmnts.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCStrLit.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCTernaryExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCType.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCUnaryExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCVarDecl.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCWhileStmnt.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Lexer\WCLexer.cpp">
+      <Filter>platform.all\Lexer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\DataType\WCDataType.cpp">
+      <Filter>platform.all\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\DataType\WCPrimitiveDataTypes.cpp">
+      <Filter>platform.all\DataType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\DataType\Primitives\WCArrayDataType.cpp">
+      <Filter>platform.all\DataType\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\DataType\Primitives\WCBoolDataType.cpp">
+      <Filter>platform.all\DataType\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\DataType\Primitives\WCIntDataType.cpp">
+      <Filter>platform.all\DataType\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\DataType\Primitives\WCStrDataType.cpp">
+      <Filter>platform.all\DataType\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\DataType\Primitives\WCUnknownDataType.cpp">
+      <Filter>platform.all\DataType\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\DataType\Primitives\WCVoidDataType.cpp">
+      <Filter>platform.all\DataType\Primitives</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\platform.all\WCAssert.hpp">
+      <Filter>platform.all</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\WCCharUtils.hpp">
+      <Filter>platform.all</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\WCCodegenCtx.hpp">
+      <Filter>platform.all</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\WCCStrComparator.hpp">
+      <Filter>platform.all</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\WCDebugBreak.hpp">
+      <Filter>platform.all</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\WCFileUtils.hpp">
+      <Filter>platform.all</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\WCFinally.hpp">
+      <Filter>platform.all</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\WCLazyInit.hpp">
+      <Filter>platform.all</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\WCLinearAlloc.hpp">
+      <Filter>platform.all</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\WCLogger.hpp">
+      <Filter>platform.all</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\WCMacros.hpp">
+      <Filter>platform.all</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\WCStringUtils.hpp">
+      <Filter>platform.all</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCAddSubExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCAndExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCArrayLit.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCArrayLitExprs.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCAssignExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCASTNode.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCBoolLit.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCBreakStmnt.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCDeclDef.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCDeclDefs.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCEqExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCFunc.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCFuncArg.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCFuncArgList.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCFuncCall.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCFuncCallArgList.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCIBasicCodegenNode.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCIdentifier.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCIExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCIfStmnt.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCIntLit.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCIRepeatableStmnt.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCIStmnt.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCLoopStmnt.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCModule.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCMulDivExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCNextStmnt.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCNopStmnt.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCNotExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCOrExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCPostfixExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCPrimaryExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCPrimitiveType.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCPrintStmnt.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCReadnumExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCRelExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCReturnStmnt.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCScope.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCScopeStmnt.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCStmnt.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCStmnts.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCStrLit.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCTernaryExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCType.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCUnaryExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCVarDecl.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCWhileStmnt.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Lexer\WCLexer.hpp">
+      <Filter>platform.all\Lexer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Lexer\WCToken.hpp">
+      <Filter>platform.all\Lexer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Lexer\WCTokenType.hpp">
+      <Filter>platform.all\Lexer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\WCDataType.hpp">
+      <Filter>platform.all\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\WCDataValue.hpp">
+      <Filter>platform.all\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\WCPrimitiveDataTypes.hpp">
+      <Filter>platform.all\DataType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\Primitives\WCArrayDataType.hpp">
+      <Filter>platform.all\DataType\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\Primitives\WCBoolDataType.hpp">
+      <Filter>platform.all\DataType\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\Primitives\WCIntDataType.hpp">
+      <Filter>platform.all\DataType\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\Primitives\WCStrDataType.hpp">
+      <Filter>platform.all\DataType\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\Primitives\WCUnknownDataType.hpp">
+      <Filter>platform.all\DataType\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\Primitives\WCVoidDataType.hpp">
+      <Filter>platform.all\DataType\Primitives</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

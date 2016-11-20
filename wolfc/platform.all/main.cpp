@@ -1,7 +1,7 @@
+#include "AST/WCModule.hpp"
+#include "Lexer/WCLexer.hpp"
 #include "WCFileUtils.hpp"
-#include "WCLexer.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCModule.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <cstdio>
@@ -43,10 +43,8 @@ int main(int argc, const char * argv[]) {
         // Declare the module
         Module module(llvmContext);
         
-        // Parse the module
+        // Parse and codegen the module
         WC_GUARD(module.parseCode(lexer.getTokenList(), linearAlloc), -1);
-        
-        // Codegen the module
         WC_GUARD(module.generateCode(), -1);
         
         // Dump the code to stdout!
