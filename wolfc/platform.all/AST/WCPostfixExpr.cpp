@@ -453,29 +453,33 @@ ArrayDataType * PostfixExprArrayLookup::getArrayDataTypeOrIssueError() {
 }
 
 llvm::Value * PostfixExprArrayLookup::codegenAddrOfArrayElem(CodegenCtx & cgCtx) {
-    // Make sure the array is actually an array...
+    
     // TODO: support this operator on custom types eventually
+    
+    // Codgen the address of the array first
+    llvm::Value * arrayAddr = mArrayExpr.codegenAddrOf(cgCtx);
+    WC_GUARD(arrayAddr, nullptr);
+
+    // Make sure the array is actually an array...
+    // Note: we do this after codegen since that will catch more meaningful error info (like unknown var names)
     if (!mArrayExpr.dataType().isArray()) {
         compileError("Can't perform array indexing on an expression that is not an array!");
         return nullptr;
     }
     
-    // Index expression must be an integer
-    if (!mIndexExpr.dataType().isInteger()) {
-        mIndexExpr.compileError("Index expression for array lookup must be an integer not type '%s'! "
-                                "Can't index an array with non-integer types!",
-                                mIndexExpr.dataType().name().c_str());
-        
-        return nullptr;
-    }
-    
-    // Codgen the address of the array first
-    llvm::Value * arrayAddr = mArrayExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(arrayAddr, nullptr);
-    
     // Codegen the expression for the array index
     llvm::Value * indexValue = mIndexExpr.codegenExprEval(cgCtx);
     WC_GUARD(indexValue, nullptr);
+
+    // Index expression must be an integer
+    // Note: we do this after codegen since that will catch more meaningful error info (like unknown var names)
+    if (!mIndexExpr.dataType().isInteger()) {
+        mIndexExpr.compileError("Index expression for array lookup must be an integer not type '%s'! "
+            "Can't index an array with non-integer types!",
+            mIndexExpr.dataType().name().c_str());
+
+        return nullptr;
+    }
     
     // Get the value for the array address and return it:
     llvm::ConstantInt * zeroIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), 0);
