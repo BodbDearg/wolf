@@ -70,9 +70,21 @@ llvm::Value * Identifier::codegenAddrOf(CodegenCtx & cgCtx) {
         return nullptr;
     }
     
-    // Return it!
-    WC_ASSERT(dataValue->value);
-    return dataValue->value;
+    // Get the LLVM value and see if it is a pointer.
+    // If we already have a pointer then we don't need to do anything else to get the address.
+    llvm::Value * llvmValue = dataValue->value;
+    WC_ASSERT(llvmValue);
+
+    if (llvmValue->getType()->isPointerTy()) {
+        return llvmValue;
+    }
+    
+    // Issue an error
+    compileError("Can't codegen address of variable '%s'! "
+                 "Dealing with an LLVM type that can't be converted to an address!", 
+                 name());
+
+    return nullptr;
 }
 
 llvm::Value * Identifier::codegenExprEval(CodegenCtx & cgCtx) {
