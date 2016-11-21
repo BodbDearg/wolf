@@ -1,7 +1,10 @@
-func main() -> int
-	var v = [1, 2, 3][2]
+func blah(int[3] numbers)
 	print("The number is: ")
-	print(v)
+	print(v[2])
 	print("\n")
+end
+
+func main() -> int
+	blah([1, 2, 3])
 	return 0
 end
