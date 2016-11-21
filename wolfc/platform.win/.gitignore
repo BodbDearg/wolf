@@ -1,0 +1,11 @@
+# Build folder(s)
+x64/
+wolfc-test/
+
+# Project user data
+.vs/
+
+# Other user data 
+wolfc.VC.VC.opendb
+wolfc.VC.db
+wolfc.vcxproj.user
