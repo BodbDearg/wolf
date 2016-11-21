@@ -1,5 +1,7 @@
 func main() -> int
 	var v = [1, 2, 3][2]
+	print("The number is: ")
 	print(v)
+	print("\n")
 	return 0
 end
