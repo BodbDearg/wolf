@@ -1,10 +1,14 @@
 @REM ** Setting up build paths ** 
+
 @SET VS_DIR=C:\Program Files (x86)\Microsoft Visual Studio 14.0
 @SET MSVC_DIR=%VS_DIR%\VC
-@SET WIN_SDK_DIR=C:\Program Files (x86)\Windows Kits\10\Lib\10.0.14393.0\um\x64
-@SET INCLUDE=%MSVC_DIR%\INCLUDE;%MSVC_DIR%\VC\ATLMFC\INCLUDE;C:\Program Files (x86)\Windows Kits\10\include\10.0.14393.0\ucrt;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.14393.0\shared;C:\Program Files (x86)\Windows Kits\10\include\10.0.14393.0\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.14393.0\winrt;
-@SET LIB=%MSVC_DIR%\LIB\AMD64;%MSVC_DIR%\ATLMFC\LIB;C:\Program Files (x86)\Windows Kits\10\lib\10.0.14393.0\ucrt\x64;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\lib\um\x64;C:\Program Files (x86)\Windows Kits\10\lib\10.0.14393.0\um\x64;
-@SET LIBPATH=C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\LIB;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\ATLMFC\LIB;C:\Program Files (x86)\Windows Kits\10\UnionMetadata;C:\Program Files (x86)\Windows Kits\10\References;C:\Program Files (x86)\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\References\CommonConfiguration\neutral;
+@SET WIN_SDK_DIR=C:\Program Files (x86)\Windows Kits\10\Lib\10.0.14393.0
+
+@SET MSVC_LIB_DIR=%MSVC_DIR%\LIB\AMD64
+@SET WIN_LIB_DIR=%WIN_SDK_DIR%\um\x64
+@SET CRT_LIB_DIR=%WIN_SDK_DIR%\ucrt\x64
+
+@SET LIB=%MSVC_LIB_DIR%;%WIN_LIB_DIR%;%CRT_LIB_DIR%
 
 @REM ** Make the output folder if it does not exist ** 
 @IF NOT EXIST "wolfc-test" (
