@@ -292,12 +292,14 @@ bool Func::compileCheckForDuplicateArgNames(const std::vector<FuncArg*> & funcAr
 bool Func::getLLVMArgTypes(const std::vector<FuncArg*> & funcArgs,
                            std::vector<llvm::Type*> & outputArgTypes) const
 {
+    // Process all of the argument data types
     for (FuncArg * arg : funcArgs) {
         WC_ASSERT(arg);
         DataType & argDataType = arg->dataType();
         
         // Only valid, sized args type are allowed:
         if (argDataType.isSized()) {
+            // Make sure it has a valid llvm type
             llvm::Type * llvmType = argDataType.mLLVMType;
             
             if (!llvmType) {
@@ -307,10 +309,20 @@ bool Func::getLLVMArgTypes(const std::vector<FuncArg*> & funcArgs,
                 
                 return false;
             }
-            
-            outputArgTypes.push_back(llvmType);
+
+            // If the data type requires storage then we must make a copy of it on the 
+            // stack and pass it by pointer.
+            if (argDataType.requiresStorage()) {
+                llvm::Type * ptrToLLVMType = llvmType->getPointerTo();
+                WC_ASSERT(ptrToLLVMType);
+                outputArgTypes.push_back(ptrToLLVMType);
+            }
+            else {
+                outputArgTypes.push_back(llvmType);
+            }
         }
         else {
+            // Type is not sized (e.g 'void')
             compileError("Invalid data type specified for argument '%s' of type '%s'!",
                          arg->name(),
                          arg->dataType().name().c_str());

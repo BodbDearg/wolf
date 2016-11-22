@@ -1,7 +1,10 @@
 #include "WCFuncCall.hpp"
 
+#include "DataType/WCDataType.hpp"
 #include "Lexer/WCToken.hpp"
+#include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
+#include "WCCodegenCtx.hpp"
 #include "WCFuncCallArgList.hpp"
 #include "WCLinearAlloc.hpp"
 
@@ -86,9 +89,28 @@ bool FuncCall::codegenArgsListExprs(CodegenCtx & cgCtx) {
         // Generate the code, if it fails then bail
         llvm::Value * argValue = expr->codegenExprEval(cgCtx);
         WC_GUARD(argValue, false);
-        
-        // Save:
-        mArgListExprsValues.push_back(argValue);
+
+        // If the argument value requires storage then we need to make our own copy of it
+        // prior to passing into the function. We also pass the pointer to the argument in
+        // this case and not the raw value itself:
+        DataType & exprDataType = expr->dataType();
+
+        if (exprDataType.requiresStorage()) {
+            // Value requires stack storage: need to alloc stack storage for it
+            llvm::Value * argStackValue = cgCtx.irBuilder.CreateAlloca(argValue->getType());
+            WC_ASSERT(argStackValue);
+
+            // Store the value in this slot:
+            llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(argValue, argStackValue);
+            WC_ASSERT(storeInst);
+
+            // The arg stack value is what gets passed in:
+            mArgListExprsValues.push_back(argStackValue);
+        }
+        else {
+            // Value does not require stack storage. Just pass normally:
+            mArgListExprsValues.push_back(argValue);
+        }
     }
     
     return true;    // All good!
