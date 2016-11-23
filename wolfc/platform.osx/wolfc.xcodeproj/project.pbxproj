@@ -754,7 +754,10 @@
 					__STDC_CONSTANT_MACROS,
 					__STDC_LIMIT_MACROS,
 				);
-				HEADER_SEARCH_PATHS = /usr/local/include;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					../platform.all,
+				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_LDFLAGS = (
 					"-lLLVMCore",
@@ -776,7 +779,10 @@
 					__STDC_CONSTANT_MACROS,
 					__STDC_LIMIT_MACROS,
 				);
-				HEADER_SEARCH_PATHS = /usr/local/include;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					../platform.all,
+				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_LDFLAGS = (
 					"-lLLVMCore",
