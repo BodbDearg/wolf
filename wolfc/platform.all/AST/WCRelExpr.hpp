@@ -58,8 +58,8 @@ public:
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     
-    AddSubExpr & mLeftExpr;
-    RelExpr & mRightExpr;
+    AddSubExpr &    mLeftExpr;
+    RelExpr &       mRightExpr;
     
 protected:
     /**

@@ -3,10 +3,10 @@
 #include "DataType/WCDataType.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
-#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
+#include "WCTernaryExpr.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
@@ -34,9 +34,9 @@ PrintStmnt * PrintStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     
     ++tokenPtr;     // Consume '('
     
-    // Parse the inner expression
-    AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
-    WC_GUARD(assignExpr, nullptr);
+    // Parse the expression to print
+    TernaryExpr * exprToPrint = TernaryExpr::parse(tokenPtr, alloc);
+    WC_GUARD(exprToPrint, nullptr);
     
     // Expect ')' following all that:
     if (tokenPtr->type != TokenType::kRParen) {
@@ -49,10 +49,10 @@ PrintStmnt * PrintStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     ++tokenPtr;
     
     // Create and return the print statement
-    return WC_NEW_AST_NODE(alloc, PrintStmnt, *assignExpr, *printTok, *closingParenTok);
+    return WC_NEW_AST_NODE(alloc, PrintStmnt, *exprToPrint, *printTok, *closingParenTok);
 }
 
-PrintStmnt::PrintStmnt(AssignExpr & expr, const Token & startToken, const Token & endToken) :
+PrintStmnt::PrintStmnt(TernaryExpr & expr, const Token & startToken, const Token & endToken) :
     mExpr(expr),
     mStartToken(startToken),
     mEndToken(endToken)

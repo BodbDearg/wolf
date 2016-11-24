@@ -12,9 +12,9 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class AssignExpr;
 class FuncCallArgList;
 class LinearAlloc;
+class TernaryExpr;
 struct CodegenCtx;
 
 /*
@@ -32,7 +32,7 @@ public:
     virtual const Token & getEndToken() const override;
     
     size_t numArgs() const;
-    void getArgs(std::vector<AssignExpr*> & args) const;
+    void getArgs(std::vector<TernaryExpr*> & args) const;
     
     /**
      * Generates the code for the argument list expressions and saves them as a list of 

@@ -5,8 +5,8 @@
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
-#include "WCAssignExpr.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCTernaryExpr.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Constants.h>
@@ -32,13 +32,13 @@ Type * Type::parse(const Token *& currentToken, LinearAlloc & alloc) {
     
     // Continue parsing until we see no array etc. tokens ahead:
     while (true) {
-        // See if array specifier ahead: [ AssignExpr ]
+        // See if array specifier ahead: [ TernaryExpr ]
         if (currentToken->type == TokenType::kLBrack) {
             // Skip the '['
             ++currentToken;
             
-            // Parse the inner assign expression for the array size:
-            AssignExpr * arraySizeExpr = AssignExpr::parse(currentToken, alloc);
+            // Parse the inner expression for the array size:
+            TernaryExpr * arraySizeExpr = TernaryExpr::parse(currentToken, alloc);
             WC_GUARD(arraySizeExpr, nullptr);
             
             // Expect a ']' next:
@@ -94,7 +94,7 @@ bool TypePrimitive::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
 // TypeArray
 //-----------------------------------------------------------------------------
 
-TypeArray::TypeArray(Type & elemType, AssignExpr & sizeExpr, const Token & endBracket) :
+TypeArray::TypeArray(Type & elemType, TernaryExpr & sizeExpr, const Token & endBracket) :
     mElemType(elemType),
     mSizeExpr(sizeExpr),
     mEndBracket(endBracket)

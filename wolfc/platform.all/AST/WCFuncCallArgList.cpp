@@ -1,8 +1,8 @@
 #include "WCFuncCallArgList.hpp"
 
 #include "Lexer/WCToken.hpp"
-#include "WCAssignExpr.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCTernaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -11,12 +11,12 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool FuncCallArgList::peek(const Token * tokenPtr) {
-    return AssignExpr::peek(tokenPtr);
+    return TernaryExpr::peek(tokenPtr);
 }
     
 FuncCallArgList * FuncCallArgList::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the first arg expression
-    AssignExpr * expr = AssignExpr::parse(tokenPtr, alloc);
+    TernaryExpr * expr = TernaryExpr::parse(tokenPtr, alloc);
     WC_GUARD(expr, nullptr);
     
     // See if a comma follows (more args)
@@ -40,7 +40,7 @@ FuncCallArgList * FuncCallArgList::parse(const Token *& tokenPtr, LinearAlloc & 
 // FuncCallArgListSingle
 //-----------------------------------------------------------------------------
 
-FuncCallArgListSingle::FuncCallArgListSingle(AssignExpr & expr) : mExpr(expr) {
+FuncCallArgListSingle::FuncCallArgListSingle(TernaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
@@ -56,7 +56,7 @@ size_t FuncCallArgListSingle::numArgs() const {
     return 1;
 }
 
-void FuncCallArgListSingle::getArgs(std::vector<AssignExpr*> & args) const {
+void FuncCallArgListSingle::getArgs(std::vector<TernaryExpr*> & args) const {
     args.push_back(&mExpr);
 }
 
@@ -64,7 +64,7 @@ void FuncCallArgListSingle::getArgs(std::vector<AssignExpr*> & args) const {
 // FuncCallArgListMulti
 //-----------------------------------------------------------------------------
 
-FuncCallArgListMulti::FuncCallArgListMulti(AssignExpr & expr, FuncCallArgList & argList) :
+FuncCallArgListMulti::FuncCallArgListMulti(TernaryExpr & expr, FuncCallArgList & argList) :
     mExpr(expr),
     mArgList(argList)
 {
@@ -84,7 +84,7 @@ size_t FuncCallArgListMulti::numArgs() const {
     return 1 + mArgList.numArgs();
 }
 
-void FuncCallArgListMulti::getArgs(std::vector<AssignExpr*> & args) const {
+void FuncCallArgListMulti::getArgs(std::vector<TernaryExpr*> & args) const {
     args.push_back(&mExpr);
     mArgList.getArgs(args);
 }

@@ -5,12 +5,13 @@
 
 WC_BEGIN_NAMESPACE
 
-class AssignExpr;
 class LinearAlloc;
+class TernaryExpr;
 
 /*
 LoopStmnt:
     loop Scope end
+	loop Scope repeat while|until TernaryExpr
 */
 class LoopStmnt : public ASTNode, public IRepeatableStmnt {
 public:
@@ -25,9 +26,7 @@ public:
     const Token &   mStartToken;
 };
 
-/*
-loop Scope end
-*/
+/* loop Scope end */
 class LoopStmntNoCond final : public LoopStmnt {
 public:
     LoopStmntNoCond(Scope & bodyScope, const Token & startToken, const Token & endToken);
@@ -44,15 +43,13 @@ public:
     llvm::BasicBlock *  mEndBB = nullptr;
 };
 
-/*
-loop Scope repeat while|until AssignExpr
-*/
+/* loop Scope repeat while|until TernaryExpr */
 class LoopStmntWithCond final : public LoopStmnt {
 public:
     LoopStmntWithCond(Scope & bodyScope,
                       const Token & startToken,
                       const Token & condTypeToken,
-                      AssignExpr & loopCondExpr);
+                      TernaryExpr & loopCondExpr);
     
     virtual const Token & getEndToken() const override;
     
@@ -74,7 +71,7 @@ public:
     llvm::Value * codegenLoopCondExpr(CodegenCtx & cgCtx) const;
     
     const Token &       mCondTypeToken;
-    AssignExpr &        mLoopCondExpr;
+    TernaryExpr &       mLoopCondExpr;
     llvm::BasicBlock *  mLoopCondBB = nullptr;
     llvm::BasicBlock *  mEndBB = nullptr;
 };

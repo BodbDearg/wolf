@@ -5,21 +5,21 @@
 
 WC_BEGIN_NAMESPACE
 
-class AssignExpr;
 class Identifier;
 class LinearAlloc;
 class Module;
+class TernaryExpr;
 
 /*
 VarDecl:
-    var Identifier = AssignExpr
+    var Identifier = TernaryExpr
 */
 class VarDecl final : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     static VarDecl * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
-    VarDecl(const Token & token, Identifier & ident, AssignExpr & expr);
+    VarDecl(const Token & token, Identifier & ident, TernaryExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -29,8 +29,8 @@ public:
     bool codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope);
     bool codegenAsGlobalVar(CodegenCtx & cgCtx);
     
-    Identifier & mIdent;
-    AssignExpr & mExpr;
+    Identifier &    mIdent;
+    TernaryExpr &   mExpr;
     
 private:
     const Token & mStartToken;

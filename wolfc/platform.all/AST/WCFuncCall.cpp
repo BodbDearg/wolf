@@ -3,10 +3,10 @@
 #include "DataType/WCDataType.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
-#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCFuncCallArgList.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCTernaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -70,7 +70,7 @@ size_t FuncCall::numArgs() const {
     return mArgList->numArgs();
 }
 
-void FuncCall::getArgs(std::vector<AssignExpr*> & args) const {
+void FuncCall::getArgs(std::vector<TernaryExpr*> & args) const {
     WC_GUARD(mArgList);
     mArgList->getArgs(args);
 }
@@ -80,12 +80,12 @@ bool FuncCall::codegenArgsListExprs(CodegenCtx & cgCtx) {
     WC_GUARD(mArgList, true);
     
     // Get the list of expressions for the args list:
-    std::vector<AssignExpr*> args;
+    std::vector<TernaryExpr*> args;
     mArgList->getArgs(args);
     mArgListExprsValues.reserve(args.size());
     
     // Evaluate the code for each arg:
-    for (AssignExpr * expr : args) {
+    for (TernaryExpr * expr : args) {
         // Generate the code, if it fails then bail
         llvm::Value * argValue = expr->codegenExprEval(cgCtx);
         WC_GUARD(argValue, false);

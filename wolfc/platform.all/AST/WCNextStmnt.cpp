@@ -3,10 +3,10 @@
 #include "DataType/WCDataType.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
-#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCIRepeatableStmnt.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCTernaryExpr.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
@@ -39,8 +39,8 @@ NextStmnt * NextStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         const Token * condTok = tokenPtr;
         ++tokenPtr;
         
-        // Parse the condition assign expression:
-        AssignExpr * condExpr = AssignExpr::parse(tokenPtr, alloc);
+        // Parse the condition expression:
+        TernaryExpr * condExpr = TernaryExpr::parse(tokenPtr, alloc);
         WC_GUARD(condExpr, nullptr);
         
         // 'next' with a condition:
@@ -112,7 +112,7 @@ bool NextStmntNoCond::codegen(CodegenCtx & cgCtx) {
 
 NextStmntWithCond::NextStmntWithCond(const Token & nextToken,
                                      const Token & condToken,
-                                     AssignExpr & condExpr)
+                                     TernaryExpr & condExpr)
 :
     NextStmnt(nextToken),
     mCondToken(condToken),

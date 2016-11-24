@@ -8,16 +8,16 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
-struct CodegenCtx;
-class AssignExpr;
 class DataType;
 class LinearAlloc;
 class PrimitiveType;
+class TernaryExpr;
+struct CodegenCtx;
 
 /*
 Type:
 	PrimitiveType
-	Type [ AssignExpr ]
+	Type [ TernaryExpr ]
 */
 class Type : public ASTNode {
 public:
@@ -44,10 +44,10 @@ public:
     PrimitiveType & mType;
 };
 
-/* Type [ AssignExpr ] */
+/* Type [ TernaryExpr ] */
 class TypeArray final : public Type {
 public:
-    TypeArray(Type & elemType, AssignExpr & sizeExpr, const Token & endBracket);
+    TypeArray(Type & elemType, TernaryExpr & sizeExpr, const Token & endBracket);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -57,7 +57,7 @@ public:
     virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
     
     Type &          mElemType;
-    AssignExpr &    mSizeExpr;
+    TernaryExpr &   mSizeExpr;
     const Token &   mEndBracket;
     
     /* The data type of the type array. This is generated during code generation. */

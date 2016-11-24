@@ -4,7 +4,6 @@
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
-#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCScope.hpp"

@@ -9,14 +9,14 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-struct CodegenCtx;
-class AssignExpr;
 class LinearAlloc;
+class TernaryExpr;
+struct CodegenCtx;
 
 /*
 NextStmnt:
 	next
-	next if|unless AssignExpr
+	next if|unless TernaryExpr
 */
 class NextStmnt : public ASTNode, public IStmnt {
 public:
@@ -48,12 +48,12 @@ public:
     virtual bool codegen(CodegenCtx & cgCtx) override;
 };
 
-/* next if|unless AssignExpr */
+/* next if|unless TernaryExpr */
 class NextStmntWithCond final : public NextStmnt {
 public:
     NextStmntWithCond(const Token & nextToken,
                       const Token & condToken,
-                      AssignExpr & condExpr);
+                      TernaryExpr & condExpr);
     
     virtual const Token & getEndToken() const override;
     
@@ -67,7 +67,7 @@ public:
     const Token & mCondToken;
 
     /* The condition expression itself */
-    AssignExpr & mCondExpr;
+    TernaryExpr & mCondExpr;
     
     /* Basic block for the 'continue' code */
     llvm::BasicBlock * mContinueBlock = nullptr;

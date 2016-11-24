@@ -5,20 +5,20 @@
 
 WC_BEGIN_NAMESPACE
 
-class AssignExpr;
 class DataType;
 class LinearAlloc;
+class TernaryExpr;
 
 /*
 WhileStmnt:
-	while|until AssignExpr [do] Scope end
+	while|until TernaryExpr [do] Scope end
 */
 class WhileStmnt final : public ASTNode, public IRepeatableStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     static WhileStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
-    WhileStmnt(AssignExpr & whileExpr,
+    WhileStmnt(TernaryExpr & whileExpr,
                Scope & bodyScope,
                const Token & startToken,
                const Token & endToken);
@@ -43,12 +43,12 @@ public:
      */
     llvm::Value * codegenWhileExpr(CodegenCtx & cgCtx) const;
     
-    AssignExpr &            mWhileExpr;
-    Scope &                 mBodyScope;
-    const Token &           mStartToken;
-    const Token &           mEndToken;
-    llvm::BasicBlock *      mWhileCondBB = nullptr;
-    llvm::BasicBlock *      mEndBB = nullptr;
+    TernaryExpr &       mWhileExpr;
+    Scope &             mBodyScope;
+    const Token &       mStartToken;
+    const Token &       mEndToken;
+    llvm::BasicBlock *  mWhileCondBB = nullptr;
+    llvm::BasicBlock *  mEndBB = nullptr;
 };
 
 WC_END_NAMESPACE

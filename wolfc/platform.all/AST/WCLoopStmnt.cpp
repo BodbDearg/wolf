@@ -4,10 +4,10 @@
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
-#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCScope.hpp"
+#include "WCTernaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -48,8 +48,8 @@ LoopStmnt * LoopStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
             return nullptr;
         }
         
-        // Now expect an assign expression as the condition
-        AssignExpr * loopCondExpr = AssignExpr::parse(tokenPtr, alloc);
+        // Now expect an expression as the condition
+        TernaryExpr * loopCondExpr = TernaryExpr::parse(tokenPtr, alloc);
         WC_GUARD(loopCondExpr, nullptr);
         
         // All done, return the parsed expression:
@@ -147,7 +147,7 @@ bool LoopStmntNoCond::codegen(CodegenCtx & cgCtx) {
 LoopStmntWithCond::LoopStmntWithCond(Scope & bodyScope,
                                      const Token & startToken,
                                      const Token & condTypeToken,
-                                     AssignExpr & loopCondExpr)
+                                     TernaryExpr & loopCondExpr)
 :
     LoopStmnt(bodyScope, startToken),
     mCondTypeToken(condTypeToken),

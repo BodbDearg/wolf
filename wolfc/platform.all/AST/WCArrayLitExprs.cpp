@@ -3,8 +3,8 @@
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
-#include "WCAssignExpr.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCTernaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -13,12 +13,12 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool ArrayLitExprs::peek(const Token * tokenPtr) {
-    return AssignExpr::peek(tokenPtr);
+    return TernaryExpr::peek(tokenPtr);
 }
     
 ArrayLitExprs * ArrayLitExprs::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the first expression
-    AssignExpr * expr = AssignExpr::parse(tokenPtr, alloc);
+    TernaryExpr * expr = TernaryExpr::parse(tokenPtr, alloc);
     WC_GUARD(expr, nullptr);
     
     // See if a comma follows (more args)
@@ -42,7 +42,7 @@ ArrayLitExprs * ArrayLitExprs::parse(const Token *& tokenPtr, LinearAlloc & allo
 // ArrayLitExprsSingle
 //-----------------------------------------------------------------------------
 
-ArrayLitExprsSingle::ArrayLitExprsSingle(AssignExpr & expr) : mExpr(expr) {
+ArrayLitExprsSingle::ArrayLitExprsSingle(TernaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
@@ -62,7 +62,7 @@ size_t ArrayLitExprsSingle::numExprs() const {
     return 1;
 }
 
-void ArrayLitExprsSingle::getExprs(std::vector<AssignExpr*> & exprs) const {
+void ArrayLitExprsSingle::getExprs(std::vector<TernaryExpr*> & exprs) const {
     exprs.push_back(&mExpr);
 }
 
@@ -74,7 +74,7 @@ DataType & ArrayLitExprsSingle::getElementType() const {
 // ArrayLitExprsMulti
 //-----------------------------------------------------------------------------
 
-ArrayLitExprsMulti::ArrayLitExprsMulti(AssignExpr & expr, ArrayLitExprs & exprsList) :
+ArrayLitExprsMulti::ArrayLitExprsMulti(TernaryExpr & expr, ArrayLitExprs & exprsList) :
     mExpr(expr),
     mExprsList(exprsList)
 {
@@ -98,7 +98,7 @@ size_t ArrayLitExprsMulti::numExprs() const {
     return 1 + mExprsList.numExprs();
 }
 
-void ArrayLitExprsMulti::getExprs(std::vector<AssignExpr*> & exprs) const {
+void ArrayLitExprsMulti::getExprs(std::vector<TernaryExpr*> & exprs) const {
     exprs.push_back(&mExpr);
     mExprsList.getExprs(exprs);
 }
