@@ -21,9 +21,9 @@ public:
 };
 
 /* TernaryExpr */
-class OpStmntExpr final : public OpStmnt {
+class OpStmntNoAssign final : public OpStmnt {
 public:
-    OpStmntExpr(TernaryExpr & expr);
+    OpStmntNoAssign(TernaryExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
