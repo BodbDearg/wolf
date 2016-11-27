@@ -1,3 +1,6 @@
+@REM ** Clear the screen when starting ** 
+@CLS
+
 @REM ** Setting up build paths ** 
 
 @SET VS_DIR=C:\Program Files (x86)\Microsoft Visual Studio 14.0
@@ -56,4 +59,3 @@
 "wolfc-test\wolfc-test"
 @ECHO Program exited with status %ERRORLEVEL%.
 @PAUSE
-@CLS
