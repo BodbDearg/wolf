@@ -16,11 +16,11 @@
 )
 
 @REM ** Run the compiler ** 
-@"x64\Debug\wolfc.exe" "..\test_data\wolfc-test.wolf" 2>"wolfc-test\wolfc-test.ll"
+@"x64\Debug\wolfc.exe" "..\test_data\wolfc-test.wolf" 1> "wolfc-test\wolfc-test.ll" 2>&1
 
 @IF %ERRORLEVEL% NEQ 0 (
 	@echo wolfc compile failed! Error details follow:
-	@MORE "wolfc_test\wolf-test.ll"
+	@MORE "wolfc-test\wolfc-test.ll"
 	@PAUSE
 	@EXIT /B %ERRORLEVEL%
 )
