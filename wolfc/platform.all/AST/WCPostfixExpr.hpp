@@ -16,6 +16,8 @@ class PrimaryExpr;
 /*
 PostfixExpr:
 	PrimaryExpr
+	PrimaryExpr ++
+	PrimaryExpr --
 	PostfixExpr FuncCall
 	PostfixExpr [ AssignExpr ]
 */
@@ -43,6 +45,49 @@ public:
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     PrimaryExpr & mExpr;
+};
+
+/* Base class for increment/decrement postfix expressions */
+class PostfixExprIncDecBase : public PostfixExpr {
+public:
+    PostfixExprIncDecBase(PrimaryExpr & expr, const Token & endToken);
+
+    virtual const Token & getStartToken() const final override;
+    virtual const Token & getEndToken() const final override;
+
+    virtual bool isLValue() final override;
+    virtual bool isConstExpr() final override;
+
+    virtual DataType & dataType() final override;
+
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) final override;
+
+    PrimaryExpr & mExpr;
+    const Token & mEndToken;
+
+protected:
+    /**
+     * TODO: this is a temp function for the moment. Issue a compile error if expr is not of type 'int';
+     * return false for failure if that is the case.
+     */
+    bool compileCheckExprIsInt() const;
+};
+
+/* PrimaryExpr ++ */
+class PostfixExprInc final : public PostfixExprIncDecBase {
+public:
+    PostfixExprInc(PrimaryExpr & expr, const Token & endToken);
+
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+};
+
+/* PrimaryExpr -- */
+class PostfixExprDec final : public PostfixExprIncDecBase {
+public:
+    PostfixExprDec(PrimaryExpr & expr, const Token & endToken);
+
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
 /* PostfixExpr FuncCall */

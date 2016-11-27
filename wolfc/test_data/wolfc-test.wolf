@@ -4,23 +4,11 @@ func printNum(int num)
 	print("\n")
 end
 
-func testModArrayArgs(int[3] numbers)
-	printNum(numbers[1])
-	numbers[1] = 6	
-	printNum(numbers[1])
-	numbers = [4, 5, 6]
-	printNum(numbers[1])
-end
-
-func testReturnArray() -> int[3]
-	return [4, 5, 6]
-end
-
 func main() -> int
-	var numbers = [1, 2, 3]
-	testModArrayArgs(numbers)
-	printNum(numbers[1])
-	numbers = testReturnArray()
-	printNum(numbers[1])
+	var v = 1
+	v++
+	printNum(v)
+	v--
+	printNum(v)
 	return 0
 end

@@ -34,10 +34,52 @@ PostfixExpr * PostfixExpr::parse(const Token *& currentToken, LinearAlloc & allo
     // Parse the initial primary expression
     PrimaryExpr * expr = PrimaryExpr::parse(currentToken, alloc);
     WC_GUARD(expr, nullptr);
-    
-    // This is the outermost postfix expression
-    PostfixExpr * outerPostfixExpr = WC_NEW_AST_NODE(alloc, PostfixExprNoPostfix, *expr);
-    WC_ASSERT(outerPostfixExpr);
+
+    // Save the outermost postfix expression here:
+    PostfixExpr * outerPostfixExpr = nullptr;
+
+    // See if '++' or '--' follow:
+    if (currentToken->type == TokenType::kPlus) {
+        // Looks like we want '++': Consume the first '+'
+        ++currentToken;
+
+        // There should be another '+' here:
+        if (currentToken->type != TokenType::kPlus) {
+            parseError(*currentToken, "Expected another '+' for increment operator!");
+            return nullptr;
+        }
+
+        // Save and consume second '+'
+        const Token * endToken = currentToken;
+        ++currentToken;
+
+        // Create outer postfix expr
+        outerPostfixExpr = WC_NEW_AST_NODE(alloc, PostfixExprInc, *expr, *endToken);
+        WC_ASSERT(outerPostfixExpr);
+    }
+    else if (currentToken->type == TokenType::kMinus) {
+        // Looks like we want '--': Consume the first '-'
+        ++currentToken;
+
+        // There should be another '-' here:
+        if (currentToken->type != TokenType::kMinus) {
+            parseError(*currentToken, "Expected another '-' for decrement operator!");
+            return nullptr;
+        }
+
+        // Save and consume second '-'
+        const Token * endToken = currentToken;
+        ++currentToken;
+
+        // Create outer postfix expr
+        outerPostfixExpr = WC_NEW_AST_NODE(alloc, PostfixExprDec, *expr, *endToken);
+        WC_ASSERT(outerPostfixExpr);
+    }
+    else {
+        // Basic postfix outer expression with no increment or decrement
+        outerPostfixExpr = WC_NEW_AST_NODE(alloc, PostfixExprNoPostfix, *expr);
+        WC_ASSERT(outerPostfixExpr);
+    }
     
     // Continue parsing and wrapping until one of these conditions breaks
     while (FuncCall::peek(currentToken) ||
@@ -127,7 +169,131 @@ llvm::Constant * PostfixExprNoPostfix::codegenExprConstEval(CodegenCtx & cgCtx) 
 }
 
 //-----------------------------------------------------------------------------
-// PostfixExprFuncInvocation
+// PostfixExprIncDecBase
+//-----------------------------------------------------------------------------
+
+PostfixExprIncDecBase::PostfixExprIncDecBase(PrimaryExpr & expr, const Token & endToken) : 
+    mExpr(expr),
+    mEndToken(endToken)
+{
+    mExpr.mParent = this;
+}
+
+const Token & PostfixExprIncDecBase::getStartToken() const {
+    return mExpr.getStartToken();
+}
+
+const Token & PostfixExprIncDecBase::getEndToken() const {
+    return mEndToken;
+}
+
+bool PostfixExprIncDecBase::isLValue() {
+    return false;
+}
+
+bool PostfixExprIncDecBase::isConstExpr() {
+    // Not allowed to use in constant expressions
+    // TODO: can this be relaxed in future for functions that can be evaluated at compile time?
+    return false;
+}
+
+DataType & PostfixExprIncDecBase::dataType() {
+    // Unlike C/C++ increment and decrement expressions do not return a value. This removes the need for prefix/postfix 
+    // increment and prevents them from being used in a confusing way in expressions.
+    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kVoid);
+}
+
+llvm::Value * PostfixExprIncDecBase::codegenAddrOf(CodegenCtx & cgCtx) {
+    compileError("Cant codegen the address of an increment or decrement statement!");
+    return nullptr;
+}
+
+llvm::Constant * PostfixExprIncDecBase::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // Not allowed to use in constant expressions
+    // TODO: can this be relaxed in future for functions that can be evaluated at compile time?
+    compileError("Increment and decrement operators cannot be used in constant expressions!");
+    return nullptr;
+}
+
+bool PostfixExprIncDecBase::compileCheckExprIsInt() const {
+    const DataType & type = mExpr.dataType();
+
+    if (!type.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+        compileError("Data type operated on by increment/decrement operator must be 'int' for now and not '%s'!",
+                     type.name().c_str());
+
+        return false;
+    }
+}
+
+//-----------------------------------------------------------------------------
+// PostfixExprInc
+//-----------------------------------------------------------------------------
+
+PostfixExprInc::PostfixExprInc(PrimaryExpr & expr, const Token & endToken) : 
+    PostfixExprIncDecBase(expr, endToken)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+llvm::Value * PostfixExprInc::codegenExprEval(CodegenCtx & cgCtx) {
+    // Get the address of the expression
+    llvm::Value * exprAddr = mExpr.codegenAddrOf(cgCtx);
+    WC_GUARD(exprAddr, nullptr);
+
+    // Load it's current value
+    llvm::Value * exprOldValue = cgCtx.irBuilder.CreateLoad(exprAddr, "PostfixExprInc:Load");
+    WC_ASSERT(exprOldValue);
+
+    // This is the value to increment by
+    llvm::Value * incBy = cgCtx.irBuilder.getInt64(1);
+    WC_ASSERT(incBy);
+
+    // Do the increment:
+    llvm::Value * exprNewValue = cgCtx.irBuilder.CreateAdd(exprOldValue, incBy, "PostfixExprInc:Add");
+    WC_ASSERT(exprNewValue);
+
+    // Save out the result
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(exprNewValue, exprAddr);
+    WC_ASSERT(storeInst);
+    return storeInst;
+}
+
+//-----------------------------------------------------------------------------
+// PostfixExprDec
+//-----------------------------------------------------------------------------
+
+PostfixExprDec::PostfixExprDec(PrimaryExpr & expr, const Token & endToken) :
+    PostfixExprIncDecBase(expr, endToken)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+llvm::Value * PostfixExprDec::codegenExprEval(CodegenCtx & cgCtx) {
+    // Get the address of the expression
+    llvm::Value * exprAddr = mExpr.codegenAddrOf(cgCtx);
+    WC_GUARD(exprAddr, nullptr);
+
+    // Load it's current value
+    llvm::Value * exprOldValue = cgCtx.irBuilder.CreateLoad(exprAddr, "PostfixExprDec:Load");
+    WC_ASSERT(exprOldValue);
+
+    // This is the value to decrement by
+    llvm::Value * decBy = cgCtx.irBuilder.getInt64(1);
+    WC_ASSERT(decBy);
+
+    // Do the increment:
+    llvm::Value * exprNewValue = cgCtx.irBuilder.CreateSub(exprOldValue, decBy, "PostfixExprDec:Sub");
+    WC_ASSERT(exprNewValue);
+
+    // Save out the result
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(exprNewValue, exprAddr);
+    WC_ASSERT(storeInst);
+    return storeInst;
+}
+
+//-----------------------------------------------------------------------------
+// PostfixExprFuncCall
 //-----------------------------------------------------------------------------
 
 PostfixExprFuncCall::PostfixExprFuncCall(PostfixExpr & expr, FuncCall & funcCall) :

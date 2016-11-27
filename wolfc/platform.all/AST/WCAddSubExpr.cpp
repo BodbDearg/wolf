@@ -22,8 +22,8 @@ AddSubExpr * AddSubExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     MulDivExpr * mulDivExpr = MulDivExpr::parse(tokenPtr, alloc);
     WC_GUARD(mulDivExpr, nullptr);
     
-    // See if '+' or '-' following:
-    if (tokenPtr->type == TokenType::kPlus) {
+    // See if '+' or '-' operation following:
+    if (tokenPtr->type == TokenType::kPlus && AddSubExpr::peek(tokenPtr + 1)) {
         // Add operation: Skip '+'
         ++tokenPtr;
         
@@ -32,7 +32,7 @@ AddSubExpr * AddSubExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         WC_GUARD(addSubExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, AddSubExprAdd, *mulDivExpr, *addSubExpr);
     }
-    else if (tokenPtr->type == TokenType::kMinus) {
+    else if (tokenPtr->type == TokenType::kMinus && AddSubExpr::peek(tokenPtr + 1)) {
         // Sub operation: Skip '-'
         ++tokenPtr;
         
