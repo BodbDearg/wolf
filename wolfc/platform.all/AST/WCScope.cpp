@@ -45,6 +45,7 @@ DataValue * Scope::createVar(const char * varName,
         auto iter = mVarValues.find(varName);
         
         if (iter != mVarValues.end()) {
+            compileError("Attempting to redeclare variable '%s' in this scope!", varName);
             return nullptr;
         }
     }
@@ -67,15 +68,8 @@ DataValue * Scope::createVar(const char * varName,
     dataValue.requiresLoad = true;
     dataValue.type = &dataType;
     dataValue.value = dataType.codegenAlloca(cgCtx, *this, std::string("alloc_ident_val:") + varName);
-    
-    if (!dataValue.value) {
-        compileError("Failed to codegen a stack allocation for the variable '%s' of type '%s'!",
-                     varName,
-                     dataType.name().c_str());
-        
-        return nullptr;
-    }
-    
+    WC_GUARD(dataValue.value, nullptr);
+
     return &dataValue;
 }
 

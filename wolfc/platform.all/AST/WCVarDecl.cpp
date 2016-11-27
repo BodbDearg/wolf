@@ -80,11 +80,7 @@ bool VarDecl::codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope) {
                                                   exprType,
                                                   cgCtx,
                                                   *this);
-    
-    if (!leftValue) {
-        compileError("The local variable '%s' has been redefined!", mIdent.mToken.data.strVal.ptr);
-        return false;
-    }
+    WC_GUARD(leftValue, nullptr);
     
     // Now evaluate the right:
     llvm::Value * rightValue = mExpr.codegenExprEval(cgCtx);
