@@ -402,25 +402,25 @@ llvm::Value * PostfixExprFuncCall::codegenExprEval(CodegenCtx & cgCtx) {
         return nullptr;
     }
     
+    // Generate the code for the arguments list of the function call:
+    WC_GUARD(mFuncCall.codegenArgsListExprs(cgCtx), nullptr);
+
     // Verify the type of each argument is correct:
     for (size_t i = 0; i < numFuncArgs; ++i) {
         const DataType & funcArgDataType = funcArgs[i]->dataType();
         const DataType & callArgDataType = callArgs[i]->dataType();
-        
+
         // TODO: support auto promotion
         if (!funcArgDataType.equals(callArgDataType)) {
             compileError("Type for arg number '%zu' in function call is invalid! Expected '%s' "
-                         "but instead got '%s'!",
-                         i + 1,
-                         funcArgDataType.name().c_str(),
-                         callArgDataType.name().c_str());
-            
+                "but instead got '%s'!",
+                i + 1,
+                funcArgDataType.name().c_str(),
+                callArgDataType.name().c_str());
+
             return nullptr;
         }
     }
-    
-    // Generate the code for the arguments list of the function call:
-    WC_GUARD(mFuncCall.codegenArgsListExprs(cgCtx), nullptr);
     
     // Call it: note if non void we have to give the value a name
     if (func->returnDataType().isVoid()) {
