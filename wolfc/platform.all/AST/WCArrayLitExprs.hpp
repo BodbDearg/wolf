@@ -8,14 +8,14 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
+class AssignExpr;
 class DataType;
 class LinearAlloc;
-class TernaryExpr;
 
 /*
 ArrayLitExprs:
-    TernaryExpr
-    TernaryExpr , ArrayLitExprs
+    AssignExpr
+    AssignExpr , ArrayLitExprs
 */
 class ArrayLitExprs : public ASTNode {
 public:
@@ -25,7 +25,7 @@ public:
     virtual bool isConstExpr() const = 0;
     
     virtual size_t numExprs() const = 0;
-    virtual void getExprs(std::vector<TernaryExpr*> & exprs) const = 0;
+    virtual void getExprs(std::vector<AssignExpr*> & exprs) const = 0;
     
     /**
      * Return the element type for each element. Will return the 'unknown' type if we can't
@@ -34,10 +34,10 @@ public:
     virtual DataType & getElementType() const = 0;
 };
 
-/* TernaryExpr */
+/* AssignExpr */
 class ArrayLitExprsSingle final : public ArrayLitExprs {
 public:
-    ArrayLitExprsSingle(TernaryExpr & expr);
+    ArrayLitExprsSingle(AssignExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -45,17 +45,17 @@ public:
     virtual bool isConstExpr() const override;
     
     virtual size_t numExprs() const override;
-    virtual void getExprs(std::vector<TernaryExpr*> & exprs) const override;
+    virtual void getExprs(std::vector<AssignExpr*> & exprs) const override;
     
     virtual DataType & getElementType() const override;
     
-    TernaryExpr & mExpr;
+    AssignExpr & mExpr;
 };
 
-/* TernaryExpr , ArrayLitExprs */
+/* AssignExpr , ArrayLitExprs */
 class ArrayLitExprsMulti final : public ArrayLitExprs {
 public:
-    ArrayLitExprsMulti(TernaryExpr & expr, ArrayLitExprs & exprsList);
+    ArrayLitExprsMulti(AssignExpr & expr, ArrayLitExprs & exprsList);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -63,11 +63,11 @@ public:
     virtual bool isConstExpr() const override;
     
     virtual size_t numExprs() const override;
-    virtual void getExprs(std::vector<TernaryExpr*> & exprs) const override;
+    virtual void getExprs(std::vector<AssignExpr*> & exprs) const override;
     
     virtual DataType & getElementType() const override;
     
-    TernaryExpr &       mExpr;
+    AssignExpr &        mExpr;
     ArrayLitExprs &     mExprsList;
 };
 

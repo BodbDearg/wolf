@@ -3,10 +3,10 @@
 #include "DataType/WCDataType.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
+#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCOrExpr.hpp"
-#include "WCTernaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -29,7 +29,7 @@ TernaryExpr * TernaryExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         ++tokenPtr;
         
         // Now parse the 'true' expression:
-        TernaryExpr * trueExpr = TernaryExpr::parse(tokenPtr, alloc);
+        AssignExpr * trueExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(trueExpr, nullptr);
         
         // Expect a colon to separate 'true' from false:
@@ -42,7 +42,7 @@ TernaryExpr * TernaryExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         ++tokenPtr;
         
         // Now parse the 'false' expression:
-        TernaryExpr * falseExpr = TernaryExpr::parse(tokenPtr, alloc);
+        AssignExpr * falseExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(falseExpr, nullptr);
         
         // All done: return the parsed node:
@@ -98,8 +98,8 @@ llvm::Constant * TernaryExprNoCond::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 
 TernaryExprWithCond::TernaryExprWithCond(OrExpr & condExpr,
-                                         TernaryExpr & trueExpr,
-                                         TernaryExpr & falseExpr)
+                                         AssignExpr & trueExpr,
+                                         AssignExpr & falseExpr)
 :
     mCondExpr(condExpr),
     mTrueExpr(trueExpr),

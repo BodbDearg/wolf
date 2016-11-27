@@ -9,22 +9,22 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
+class AssignExpr;
 class DataType;
 class LinearAlloc;
-class TernaryExpr;
 
 /*
 IfStmnt:
-	if|unless TernaryExpr [then] Scope end
-	if|unless TernaryExpr [then] Scope or IfStmnt
-	if|unless TernaryExpr [then] Scope else Scope end
+	if|unless AssignExpr [then] Scope end
+	if|unless AssignExpr [then] Scope or IfStmnt
+	if|unless AssignExpr [then] Scope else Scope end
 */
 class IfStmnt : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
     static IfStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
-    IfStmnt(TernaryExpr & ifExpr,
+    IfStmnt(AssignExpr & ifExpr,
             IBasicCodegenNode & thenNode,
             const Token & startToken);
     
@@ -42,16 +42,16 @@ public:
      */
     llvm::Value * codegenIfExpr(CodegenCtx & cgCtx) const;
     
-    TernaryExpr &           mIfExpr;
+    AssignExpr &            mIfExpr;
     IBasicCodegenNode &     mThenNode;
     const Token &           mStartToken;
     llvm::BasicBlock *      mEndBasicBlock = nullptr;
 };
 
-/* if|unless TernaryExpr [then] Scope end */
+/* if|unless AssignExpr [then] Scope end */
 class IfStmntNoElse final : public IfStmnt {
 public:
-    IfStmntNoElse(TernaryExpr & ifExpr,
+    IfStmntNoElse(AssignExpr & ifExpr,
                   IBasicCodegenNode & thenNode,
                   const Token & startToken,
                   const Token & endToken);
@@ -63,10 +63,10 @@ public:
     const Token & mEndToken;
 };
 
-/* if|unless TernaryExpr [then] Scope or IfStmnt */
+/* if|unless AssignExpr [then] Scope or IfStmnt */
 class IfStmntElseIf final : public IfStmnt {
 public:
-    IfStmntElseIf(TernaryExpr & ifExpr,
+    IfStmntElseIf(AssignExpr & ifExpr,
                   IBasicCodegenNode & thenNode,
                   IfStmnt & elseIfStmnt,
                   const Token & startToken);
@@ -78,10 +78,10 @@ public:
     IfStmnt & mElseIfStmnt;
 };
 
-/* if|unless TernaryExpr [then] Scope else Scope end */
+/* if|unless AssignExpr [then] Scope else Scope end */
 class IfStmntElse final : public IfStmnt {
 public:
-    IfStmntElse(TernaryExpr & ifExpr,
+    IfStmntElse(AssignExpr & ifExpr,
                 IBasicCodegenNode & thenNode,
                 IBasicCodegenNode & elseNode,
                 const Token & startToken,

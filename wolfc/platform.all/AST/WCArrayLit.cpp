@@ -4,9 +4,9 @@
 #include "Lexer/WCToken.hpp"
 #include "WCArrayLitExprs.hpp"
 #include "WCAssert.hpp"
+#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCTernaryExpr.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Constants.h>
@@ -118,7 +118,7 @@ llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
     WC_ASSERT(mStorage);
     
     // Evaluate the array element expressions:
-    std::vector<TernaryExpr*> exprs;
+    std::vector<AssignExpr*> exprs;
     mExprs.getExprs(exprs);
     std::vector<llvm::Value*> exprValues;
     exprValues.reserve(exprs.size());
@@ -158,14 +158,14 @@ llvm::Constant * ArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
     WC_GUARD(codegenLLVMType(cgCtx), nullptr);
     
     // Get the sub expressions
-    std::vector<TernaryExpr*> subExprs;
+    std::vector<AssignExpr*> subExprs;
     mExprs.getExprs(subExprs);
     
     // Alright Generate the code for each of the sub expressions
     std::vector<llvm::Constant*> subexprConstants;
     subexprConstants.reserve(subExprs.size());
     
-    for (TernaryExpr * subExpr : subExprs) {
+    for (AssignExpr * subExpr : subExprs) {
         llvm::Constant * subExprConstant = subExpr->codegenExprConstEval(cgCtx);
         WC_GUARD(subExprConstant, nullptr);
         subexprConstants.push_back(subExprConstant);

@@ -4,10 +4,10 @@
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
+#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCFunc.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCTernaryExpr.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
@@ -44,8 +44,8 @@ ReturnStmnt * ReturnStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         const Token * condToken = tokenPtr;
         ++tokenPtr;
         
-        // Parse the expression that follows:
-        TernaryExpr * condExpr = TernaryExpr::parse(tokenPtr, alloc);
+        // Parse the assign expression that follows:
+        AssignExpr * condExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(condExpr, nullptr);
         
         // Conditional 'return' without a value:
@@ -57,9 +57,9 @@ ReturnStmnt * ReturnStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     }
     
     // See if assign expression follows:
-    if (TernaryExpr::peek(tokenPtr)) {
-        // Parse the expression for the return value:
-        TernaryExpr * returnExpr = TernaryExpr::parse(tokenPtr, alloc);
+    if (AssignExpr::peek(tokenPtr)) {
+        // Parse the assign expression for the return value:
+        AssignExpr * returnExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(returnExpr, nullptr);
         
         // See if a condition token follows:
@@ -68,8 +68,8 @@ ReturnStmnt * ReturnStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
             const Token * condToken = tokenPtr;
             ++tokenPtr;
             
-            // Parse the expression that follows:
-            TernaryExpr * condExpr = TernaryExpr::parse(tokenPtr, alloc);
+            // Parse the assign expression that follows:
+            AssignExpr * condExpr = AssignExpr::parse(tokenPtr, alloc);
             WC_GUARD(condExpr, nullptr);
             
             // Conditional 'return' with a value:
@@ -164,7 +164,7 @@ DataType & ReturnStmntNoCondVoid::dataType() {
 // ReturnStmntNoCondWithValue
 //-----------------------------------------------------------------------------
 
-ReturnStmntNoCondWithValue::ReturnStmntNoCondWithValue(const Token & returnToken, TernaryExpr & returnExpr) :
+ReturnStmntNoCondWithValue::ReturnStmntNoCondWithValue(const Token & returnToken, AssignExpr & returnExpr) :
     ReturnStmnt(returnToken),
     mReturnExpr(returnExpr)
 {
@@ -198,7 +198,7 @@ DataType & ReturnStmntNoCondWithValue::dataType() {
 
 ReturnStmntWithCondBase::ReturnStmntWithCondBase(const Token & returnToken,
                                                  const Token & condToken,
-                                                 TernaryExpr & condExpr)
+                                                 AssignExpr & condExpr)
 :
     ReturnStmnt(returnToken),
     mCondToken(condToken),
@@ -221,7 +221,7 @@ bool ReturnStmntWithCondBase::isCondExprInversed() const {
 
 ReturnStmntWithCondVoid::ReturnStmntWithCondVoid(const Token & returnToken,
                                                  const Token & condToken,
-                                                 TernaryExpr & condExpr)
+                                                 AssignExpr & condExpr)
 :
     ReturnStmntWithCondBase(returnToken, condToken, condExpr)
 {
@@ -282,9 +282,9 @@ DataType & ReturnStmntWithCondVoid::dataType() {
 //-----------------------------------------------------------------------------
 
 ReturnStmntWithCondAndValue::ReturnStmntWithCondAndValue(const Token & returnToken,
-                                                         TernaryExpr & returnExpr,
+                                                         AssignExpr & returnExpr,
                                                          const Token & condToken,
-                                                         TernaryExpr & condExpr)
+                                                         AssignExpr & condExpr)
 :
     ReturnStmntWithCondBase(returnToken,
                             condToken,

@@ -5,15 +5,15 @@
 
 WC_BEGIN_NAMESPACE
 
+class AssignExpr;
 class DataType;
 class LinearAlloc;
 class OrExpr;
-class TernaryExpr;
 
 /*
 TernaryExpr:
 	OrExpr
-	OrExpr ? TernaryExpr : TernaryExpr
+	OrExpr ? AssignExpr : AssignExpr
 */
 class TernaryExpr : public ASTNode, public IExpr {
 public:
@@ -41,12 +41,12 @@ public:
     OrExpr & mExpr;
 };
 
-/* OrExpr ? TernaryExpr : TernaryExpr */
+/* OrExpr ? AssignExpr : AssignExpr */
 class TernaryExprWithCond final : public TernaryExpr {
 public:
     TernaryExprWithCond(OrExpr & condExpr,
-                        TernaryExpr & trueExpr,
-                        TernaryExpr & falseExpr);
+                        AssignExpr & trueExpr,
+                        AssignExpr & falseExpr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -68,8 +68,8 @@ public:
     bool compileCheckExprDataTypes() const;
     
     OrExpr &        mCondExpr;
-    TernaryExpr &   mTrueExpr;
-    TernaryExpr &   mFalseExpr;
+    AssignExpr &    mTrueExpr;
+    AssignExpr &    mFalseExpr;
 };
 
 WC_END_NAMESPACE

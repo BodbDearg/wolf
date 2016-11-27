@@ -3,12 +3,12 @@
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
+#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
 #include "WCScope.hpp"
-#include "WCTernaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -40,12 +40,12 @@ VarDecl * VarDecl::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     ++tokenPtr;
     
     // Parse the assign expression and return result of parsing
-    TernaryExpr * expr = TernaryExpr::parse(tokenPtr, alloc);
+    AssignExpr * expr = AssignExpr::parse(tokenPtr, alloc);
     WC_GUARD(expr, nullptr);
     return WC_NEW_AST_NODE(alloc, VarDecl, *varToken, *ident, *expr);
 }
 
-VarDecl::VarDecl(const Token & token, Identifier & ident, TernaryExpr & expr) :
+VarDecl::VarDecl(const Token & token, Identifier & ident, AssignExpr & expr) :
     mStartToken(token),
     mIdent(ident),
     mExpr(expr)

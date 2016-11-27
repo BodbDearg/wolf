@@ -76,11 +76,11 @@ public:
     bool getLLVMArgTypes(const std::vector<FuncArg*> & funcArgs,
                          std::vector<llvm::Type*> & outputArgTypes) const;
     
-    const Token &   mStartToken;
-    Identifier &    mIdentifier;
-    FuncArgList *   mArgList;
-    Scope &         mScope;
-    const Token &   mEndToken;
+    const Token &       mStartToken;
+    Identifier &        mIdentifier;
+    FuncArgList *       mArgList;
+    Scope &             mScope;
+    const Token &       mEndToken;
     
     /**
      * The explicitly specified return type for this function. 

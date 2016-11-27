@@ -6,18 +6,18 @@
 WC_BEGIN_NAMESPACE
 
 class ArrayDataType;
+class AssignExpr;
 class DataType;
 class Func;
 class FuncCall;
 class LinearAlloc;
 class PrimaryExpr;
-class TernaryExpr;
 
 /*
 PostfixExpr:
 	PrimaryExpr
 	PostfixExpr FuncCall
-	PostfixExpr [ TernaryExpr ]
+	PostfixExpr [ AssignExpr ]
 */
 class PostfixExpr : public ASTNode, public IExpr {
 public:
@@ -74,11 +74,11 @@ private:
     llvm::Value * mExprEvalResult;
 };
 
-/* PostfixExpr [ TernaryExpr ] */
+/* PostfixExpr [ AssignExpr ] */
 class PostfixExprArrayLookup final : public PostfixExpr {
 public:
     PostfixExprArrayLookup(PostfixExpr & arrayExpr,
-                           TernaryExpr & indexExpr,
+                           AssignExpr & indexExpr,
                            const Token & endToken);
     
     virtual const Token & getStartToken() const override;
@@ -93,9 +93,9 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    PostfixExpr & mArrayExpr;
-    TernaryExpr & mIndexExpr;
-    const Token & mEndToken;
+    PostfixExpr &   mArrayExpr;
+    AssignExpr &    mIndexExpr;
+    const Token &   mEndToken;
 
 private:
     /* Gets the array data type for the array expression. Issues a compile error on failure. */

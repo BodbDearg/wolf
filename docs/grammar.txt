@@ -21,7 +21,7 @@ FuncArg:
 
 Type:
 	PrimitiveType
-	Type [ TernaryExpr ]
+	Type [ AssignExpr ]
 
 PrimitiveType:
 	void|int|bool|string
@@ -50,39 +50,39 @@ NoOpStmnt:
     nop
 
 PrintStmnt:
-    print ( TernaryExpr )
+    print ( AssignExpr )
 
 VarDecl:
-    var Identifier = TernaryExpr
+    var Identifier = AssignExpr
 
 IfStmnt:
-	if|unless TernaryExpr [then] Scope end
-	if|unless TernaryExpr [then] Scope or IfStmnt
-	if|unless TernaryExpr [then] Scope else Scope end
+	if|unless AssignExpr [then] Scope end
+	if|unless AssignExpr [then] Scope or IfStmnt
+	if|unless AssignExpr [then] Scope else Scope end
 
 WhileStmnt:
-	while|until TernaryExpr [do] Scope end
+	while|until AssignExpr [do] Scope end
 
 LoopStmnt:
     loop Scope end
-	loop Scope repeat while|until TernaryExpr
+	loop Scope repeat while|until AssignExpr
 
 ScopeStmnt:
 	scope Scope end
 
 BreakStmnt:
 	break
-	break if|unless TernaryExpr
+	break if|unless AssignExpr
 
 NextStmnt:
 	next
-	next if|unless TernaryExpr
+	next if|unless AssignExpr
 
 ReturnStmnt:
 	return
-	return TernaryExpr
-    return if|unless TernaryExpr
-    return TernaryExpr if|unless TernaryExpr
+	return AssignExpr
+    return if|unless AssignExpr
+    return AssignExpr if|unless AssignExpr
 
 AssignExpr:
     TernaryExpr
@@ -90,7 +90,7 @@ AssignExpr:
 
 TernaryExpr:
 	OrExpr
-	OrExpr ? TernaryExpr : TernaryExpr
+	OrExpr ? AssignExpr : AssignExpr
 
 OrExpr:
 	AndExpr
@@ -128,21 +128,21 @@ MulDivExpr:
 
 UnaryExpr:
 	PostfixExpr
-	- PostfixExpr
-	+ PostfixExpr
-	( TernaryExpr )
+	-PostfixExpr
+	+PostfixExpr
+	(AssignExpr)
 
 PostfixExpr:
 	PrimaryExpr
 	PostfixExpr FuncCall
-	PostfixExpr [ TernaryExpr ]
+	PostfixExpr [ AssignExpr ]
 
 FuncCall:
 	( [FuncCallArgList] )
 
 FuncCallArgList:
-	TernaryExpr
-	TernaryExpr , FuncCallArgList
+	AssignExpr
+	AssignExpr , FuncCallArgList
 
 PrimaryExpr:
 	IntLit
@@ -156,8 +156,8 @@ ArrayLit:
     [ ArrayLitExprs ]
 
 ArrayLitExprs:
-    TernaryExpr
-    TernaryExpr , ArrayLitExprs
+    AssignExpr
+    AssignExpr , ArrayLitExprs
 
 ReadnumExpr:
     readnum ( )

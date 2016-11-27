@@ -8,13 +8,13 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
+class AssignExpr;
 class LinearAlloc;
-class TernaryExpr;
 
 /*
 FuncCallArgList:
-	TernaryExpr
-	TernaryExpr, FuncCallArgList
+	AssignExpr
+	AssignExpr, FuncCallArgList
 */
 class FuncCallArgList : public ASTNode {
 public:
@@ -22,35 +22,35 @@ public:
     static FuncCallArgList * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     virtual size_t numArgs() const = 0;
-    virtual void getArgs(std::vector<TernaryExpr*> & args) const = 0;
+    virtual void getArgs(std::vector<AssignExpr*> & args) const = 0;
 };
 
-/* TernaryExpr */
+/* AssignExpr */
 class FuncCallArgListSingle final : public FuncCallArgList {
 public:
-    FuncCallArgListSingle(TernaryExpr & expr);
+    FuncCallArgListSingle(AssignExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
     virtual size_t numArgs() const override;
-    virtual void getArgs(std::vector<TernaryExpr*> & args) const override;
+    virtual void getArgs(std::vector<AssignExpr*> & args) const override;
     
-    TernaryExpr & mExpr;
+    AssignExpr & mExpr;
 };
 
-/* TernaryExpr , FuncCallArgList */
+/* AssignExpr , FuncCallArgList */
 class FuncCallArgListMulti final : public FuncCallArgList {
 public:
-    FuncCallArgListMulti(TernaryExpr & expr, FuncCallArgList & argList);
+    FuncCallArgListMulti(AssignExpr & expr, FuncCallArgList & argList);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
     virtual size_t numArgs() const override;
-    virtual void getArgs(std::vector<TernaryExpr*> & args) const override;
+    virtual void getArgs(std::vector<AssignExpr*> & args) const override;
     
-    TernaryExpr &       mExpr;
+    AssignExpr &        mExpr;
     FuncCallArgList &   mArgList;
 };
 

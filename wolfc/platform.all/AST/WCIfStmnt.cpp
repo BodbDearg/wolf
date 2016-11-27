@@ -3,10 +3,10 @@
 #include "DataType/WCDataType.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
+#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCScope.hpp"
-#include "WCTernaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -31,7 +31,7 @@ IfStmnt * IfStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     ++tokenPtr;
     
     // Parse the if condition:
-    TernaryExpr * ifExpr = TernaryExpr::parse(tokenPtr, alloc);
+    AssignExpr * ifExpr = AssignExpr::parse(tokenPtr, alloc);
     WC_GUARD(ifExpr, nullptr);
     
     // See if there is a 'then' following. This keyword is optional, unless the 'then' scope is required
@@ -112,7 +112,7 @@ IfStmnt * IfStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     }
 }
 
-IfStmnt::IfStmnt(TernaryExpr & ifExpr,
+IfStmnt::IfStmnt(AssignExpr & ifExpr,
                  IBasicCodegenNode & thenNode,
                  const Token & startToken)
 :
@@ -157,7 +157,7 @@ llvm::Value * IfStmnt::codegenIfExpr(CodegenCtx & cgCtx) const {
 // IfStmntNoElse
 //-----------------------------------------------------------------------------
 
-IfStmntNoElse::IfStmntNoElse(TernaryExpr & ifExpr,
+IfStmntNoElse::IfStmntNoElse(AssignExpr & ifExpr,
                              IBasicCodegenNode & thenNode,
                              const Token & startToken,
                              const Token & endToken)
@@ -222,7 +222,7 @@ bool IfStmntNoElse::codegen(CodegenCtx & cgCtx) {
 // IfStmntElseIf
 //-----------------------------------------------------------------------------
 
-IfStmntElseIf::IfStmntElseIf(TernaryExpr & ifExpr,
+IfStmntElseIf::IfStmntElseIf(AssignExpr & ifExpr,
                              IBasicCodegenNode & thenNode,
                              IfStmnt & outerIfStmnt,
                              const Token & startToken)
@@ -298,7 +298,7 @@ bool IfStmntElseIf::codegen(CodegenCtx & cgCtx) {
 // IfStmntElse
 //-----------------------------------------------------------------------------
 
-IfStmntElse::IfStmntElse(TernaryExpr & ifExpr,
+IfStmntElse::IfStmntElse(AssignExpr & ifExpr,
                          IBasicCodegenNode & thenNode,
                          IBasicCodegenNode & elseNode,
                          const Token & startToken,

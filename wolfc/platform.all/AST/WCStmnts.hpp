@@ -42,8 +42,8 @@ public:
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
-    Stmnt &     mLeftStmnt;
-    Stmnts &    mRightStmnts;
+    Stmnt & mLeftStmnt;
+    Stmnts & mRightStmnts;
 };
 
 WC_END_NAMESPACE

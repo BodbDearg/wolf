@@ -9,17 +9,17 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
+struct CodegenCtx;
+class AssignExpr;
 class DataType;
 class LinearAlloc;
-class TernaryExpr;
-struct CodegenCtx;
 
 /*
 ReturnStmnt:
 	return
-	return TernaryExpr
-    return if|unless TernaryExpr
-    return TernaryExpr if|unless TernaryExpr
+	return AssignExpr
+    return if|unless AssignExpr
+    return AssignExpr if|unless AssignExpr
 */
 class ReturnStmnt : public ASTNode, public IStmnt {
 public:
@@ -59,10 +59,10 @@ public:
     virtual DataType & dataType() override;
 };
 
-/* return TernaryExpr */
+/* return AssignExpr */
 class ReturnStmntNoCondWithValue final : public ReturnStmnt {
 public:
-    ReturnStmntNoCondWithValue(const Token & returnToken, TernaryExpr & returnExpr);
+    ReturnStmntNoCondWithValue(const Token & returnToken, AssignExpr & returnExpr);
     
     virtual const Token & getEndToken() const override;
     
@@ -71,7 +71,7 @@ public:
     virtual DataType & dataType() override;
     
     /* Expression for the value to return */
-    TernaryExpr & mReturnExpr;
+    AssignExpr & mReturnExpr;
 };
 
 /* This is a base class for return statements with a condition */
@@ -79,7 +79,7 @@ class ReturnStmntWithCondBase : public ReturnStmnt {
 public:
     ReturnStmntWithCondBase(const Token & returnToken,
                             const Token & condToken,
-                            TernaryExpr & condExpr);
+                            AssignExpr & condExpr);
     
     virtual const Token & getEndToken() const final override;
     
@@ -90,7 +90,7 @@ public:
     const Token & mCondToken;
     
     /* Expression for the return condition */
-    TernaryExpr & mCondExpr;
+    AssignExpr & mCondExpr;
     
 protected:
     /* The block that does the return statement logic */
@@ -100,32 +100,32 @@ protected:
     llvm::BasicBlock * mContinueBlock = nullptr;
 };
 
-/* return if|unless TernaryExpr */
+/* return if|unless AssignExpr */
 class ReturnStmntWithCondVoid final : public ReturnStmntWithCondBase {
 public:
     ReturnStmntWithCondVoid(const Token & returnToken,
                             const Token & condToken,
-                            TernaryExpr & condExpr);
+                            AssignExpr & condExpr);
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
     virtual DataType & dataType() override;
 };
 
-/* return TernaryExpr if|unless TernaryExpr */
+/* return AssignExpr if|unless AssignExpr */
 class ReturnStmntWithCondAndValue final : public ReturnStmntWithCondBase {
 public:
     ReturnStmntWithCondAndValue(const Token & returnToken,
-                                TernaryExpr & returnExpr,
+                                AssignExpr & returnExpr,
                                 const Token & condToken,
-                                TernaryExpr & condExpr);
+                                AssignExpr & condExpr);
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
     virtual DataType & dataType() override;
 
     /* Expression for the value to return */
-    TernaryExpr & mReturnExpr;
+    AssignExpr & mReturnExpr;
 };
 
 WC_END_NAMESPACE

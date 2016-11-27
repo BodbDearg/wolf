@@ -5,6 +5,7 @@
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
+#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCFunc.hpp"
 #include "WCFuncArg.hpp"
@@ -14,7 +15,6 @@
 #include "WCModule.hpp"
 #include "WCPrimaryExpr.hpp"
 #include "WCPrimitiveType.hpp"
-#include "WCTernaryExpr.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
@@ -59,8 +59,8 @@ PostfixExpr * PostfixExpr::parse(const Token *& currentToken, LinearAlloc & allo
             WC_ASSERT(currentToken->type == TokenType::kLBrack);
             ++currentToken;
             
-            // Parse the expression for the array index
-            TernaryExpr * arrayIndexExpr = TernaryExpr::parse(currentToken, alloc);
+            // Parse the assign expression for the array index
+            AssignExpr * arrayIndexExpr = AssignExpr::parse(currentToken, alloc);
             WC_GUARD(arrayIndexExpr, nullptr);
             
             // Expect a closing ']'
@@ -224,7 +224,7 @@ llvm::Value * PostfixExprFuncCall::codegenExprEval(CodegenCtx & cgCtx) {
     std::vector<FuncArg*> funcArgs;
     func->getArgs(funcArgs);
     
-    std::vector<TernaryExpr*> callArgs;
+    std::vector<AssignExpr*> callArgs;
     mFuncCall.getArgs(callArgs);
     size_t numFuncArgs = funcArgs.size();
     
@@ -308,7 +308,7 @@ Func * PostfixExprFuncCall::lookupFuncCalled() const {
 //-----------------------------------------------------------------------------
 
 PostfixExprArrayLookup::PostfixExprArrayLookup(PostfixExpr & arrayExpr,
-                                               TernaryExpr & indexExpr,
+                                               AssignExpr & indexExpr,
                                                const Token & endToken)
 :
     mArrayExpr(arrayExpr),

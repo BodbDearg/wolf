@@ -3,10 +3,10 @@
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
+#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCPostfixExpr.hpp"
-#include "WCTernaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -16,25 +16,25 @@ WC_BEGIN_NAMESPACE
 
 bool UnaryExpr::peek(const Token * currentToken) {
     /* 
-    - PostfixExpr
-    + PostfixExpr
+    -PostfixExpr
+    +PostfixExpr
     */
     if (currentToken->type == TokenType::kMinus || currentToken->type == TokenType::kPlus) {
         return PostfixExpr::peek(currentToken + 1);
     }
     
-    /* ( TernaryExpr ) */
+    /* (AssignExpr) */
     if (currentToken->type == TokenType::kLParen) {
-        return TernaryExpr::peek(currentToken + 1);
+        return AssignExpr::peek(currentToken + 1);
     }
     
-    /* PostfixExpr */
+    /* PrimaryExpr */
     return PostfixExpr::peek(currentToken);
 }
 
 UnaryExpr * UnaryExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
     switch (currentToken->type) {
-        /* - PostfixExpr */
+        /* -PostfixExpr */
         case TokenType::kMinus: {
             const Token * minusTok = currentToken;
             ++currentToken;     // Skip '-'
@@ -43,7 +43,7 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
             return WC_NEW_AST_NODE(alloc, UnaryExprMinus, *expr, *minusTok);
         }   break;
             
-        /* + PostfixExpr */
+        /* +PostfixExpr */
         case TokenType::kPlus: {
             const Token * plusTok = currentToken;
             ++currentToken;     // Skip '+'
@@ -52,11 +52,11 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
             return WC_NEW_AST_NODE(alloc, UnaryExprPlus, *expr, *plusTok);
         }   break;
             
-        /* ( TernaryExpr ) */
+        /* (AssignExpr) */
         case TokenType::kLParen: {
             const Token * lparenTok = currentToken;
             ++currentToken;     // Skip '('
-            TernaryExpr * expr = TernaryExpr::parse(currentToken, alloc);
+            AssignExpr * expr = AssignExpr::parse(currentToken, alloc);
             
             if (currentToken->type != TokenType::kRParen) {
                 parseError(*currentToken,
@@ -254,7 +254,7 @@ llvm::Constant * UnaryExprPlus::codegenExprConstEval(CodegenCtx & cgCtx) {
 // UnaryExprParen
 //-----------------------------------------------------------------------------
 
-UnaryExprParen::UnaryExprParen(TernaryExpr & expr, const Token & startToken, const Token & endToken) :
+UnaryExprParen::UnaryExprParen(AssignExpr & expr, const Token & startToken, const Token & endToken) :
     mExpr(expr),
     mStartToken(startToken),
     mEndToken(endToken)

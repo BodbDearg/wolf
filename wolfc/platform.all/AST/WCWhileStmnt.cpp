@@ -3,10 +3,10 @@
 #include "DataType/WCDataType.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
+#include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCScope.hpp"
-#include "WCTernaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -31,7 +31,7 @@ WhileStmnt * WhileStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     ++tokenPtr;
     
     // Parse the while expression (while condition):
-    TernaryExpr * whileExpr = TernaryExpr::parse(tokenPtr, alloc);
+    AssignExpr * whileExpr = AssignExpr::parse(tokenPtr, alloc);
     WC_GUARD(whileExpr, nullptr);
     
     // See if there is a 'do' following. This keyword is optional, unless the body scope is required
@@ -72,7 +72,7 @@ WhileStmnt * WhileStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     return WC_NEW_AST_NODE(alloc, WhileStmnt, *whileExpr, *bodyScope, *startToken, *endToken);
 }
 
-WhileStmnt::WhileStmnt(TernaryExpr & whileExpr,
+WhileStmnt::WhileStmnt(AssignExpr & whileExpr,
                        Scope & bodyScope,
                        const Token & startToken,
                        const Token & endToken)
