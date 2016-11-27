@@ -33,27 +33,27 @@ OpStmnt * OpStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         return WC_NEW_AST_NODE(alloc, OpStmntAssign, *leftExpr, *rightExpr);
     }
 
-    // Assign statement with no assign
-    return WC_NEW_AST_NODE(alloc, OpStmntNoAssign, *leftExpr);
+    // Op statement that is just a basic expression
+    return WC_NEW_AST_NODE(alloc, OpStmntExpr, *leftExpr);
 }
 
 //-----------------------------------------------------------------------------
-// OpStmntNoAssign
+// OpStmntExpr
 //-----------------------------------------------------------------------------
 
-OpStmntNoAssign::OpStmntNoAssign(TernaryExpr & expr) : mExpr(expr) {
+OpStmntExpr::OpStmntExpr(TernaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-const Token & OpStmntNoAssign::getStartToken() const {
+const Token & OpStmntExpr::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & OpStmntNoAssign::getEndToken() const {
+const Token & OpStmntExpr::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool OpStmntNoAssign::codegen(CodegenCtx & cgCtx) {
+bool OpStmntExpr::codegen(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx) != nullptr;
 }
 
