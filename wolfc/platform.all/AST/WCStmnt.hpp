@@ -5,7 +5,7 @@
 
 WC_BEGIN_NAMESPACE
 
-class AssignStmnt;
+class AssignExpr;
 class BreakStmnt;
 class IfStmnt;
 class LinearAlloc;
@@ -30,8 +30,8 @@ Stmnt:
     ScopeStmnt
 	BreakStmnt
 	NextStmnt
-	ReturnStmnt
- 	AssignStmnt
+ 	ReturnStmnt
+	AssignExpr
 */
 class Stmnt : public ASTNode, public IStmnt {
 public:
@@ -169,17 +169,17 @@ public:
     VarDecl & mDecl;
 };
 
-/* AssignStmnt */
-class StmntAssignStmnt final : public Stmnt {
+/* AssignExpr */
+class StmntAssignExpr final : public Stmnt {
 public:
-    StmntAssignStmnt(AssignStmnt & expr);
+    StmntAssignExpr(AssignExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
-    AssignStmnt & mStmnt;
+    AssignExpr & mExpr;
 };
 
 WC_END_NAMESPACE

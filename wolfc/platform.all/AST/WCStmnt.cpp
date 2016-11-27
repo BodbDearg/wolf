@@ -1,6 +1,6 @@
 #include "WCStmnt.hpp"
 
-#include "WCAssignStmnt.hpp"
+#include "WCAssignExpr.hpp"
 #include "WCBreakStmnt.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCIfStmnt.hpp"
@@ -31,7 +31,7 @@ bool Stmnt::peek(const Token * tokenPtr) {
             BreakStmnt::peek(tokenPtr) ||
             NextStmnt::peek(tokenPtr) ||
             ReturnStmnt::peek(tokenPtr) ||
-            AssignStmnt::peek(tokenPtr);
+            AssignExpr::peek(tokenPtr);
 }
     
 Stmnt * Stmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
@@ -105,10 +105,10 @@ Stmnt * Stmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         return WC_NEW_AST_NODE(alloc, StmntReturnStmnt, *returnStmnt);
     }
     
-    // Otherwise parse assign statement
-    AssignStmnt * assignStmnt = AssignStmnt::parse(tokenPtr, alloc);
-    WC_GUARD(assignStmnt, nullptr);
-    return WC_NEW_AST_NODE(alloc, StmntAssignStmnt, *assignStmnt);
+    // Otherwise parse assign expression
+    AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
+    WC_GUARD(assignExpr, nullptr);
+    return WC_NEW_AST_NODE(alloc, StmntAssignExpr, *assignExpr);
 }
 
 //-----------------------------------------------------------------------------
@@ -312,23 +312,23 @@ bool StmntVarDecl::codegen(CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// StmntAssignStmnt
+// StmntAssignExpr
 //-----------------------------------------------------------------------------
 
-StmntAssignStmnt::StmntAssignStmnt(AssignStmnt & expr) : mStmnt(expr) {
-    mStmnt.mParent = this;
+StmntAssignExpr::StmntAssignExpr(AssignExpr & expr) : mExpr(expr) {
+    mExpr.mParent = this;
 }
 
-const Token & StmntAssignStmnt::getStartToken() const {
-    return mStmnt.getStartToken();
+const Token & StmntAssignExpr::getStartToken() const {
+    return mExpr.getStartToken();
 }
 
-const Token & StmntAssignStmnt::getEndToken() const {
-    return mStmnt.getEndToken();
+const Token & StmntAssignExpr::getEndToken() const {
+    return mExpr.getEndToken();
 }
     
-bool StmntAssignStmnt::codegen(CodegenCtx & cgCtx) {
-    return mStmnt.codegen(cgCtx);
+bool StmntAssignExpr::codegen(CodegenCtx & cgCtx) {
+    return mExpr.codegenExprEval(cgCtx) != nullptr;
 }
 
 WC_END_NAMESPACE
