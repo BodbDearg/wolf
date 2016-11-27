@@ -44,7 +44,7 @@ Stmnt:
 	BreakStmnt
 	NextStmnt
 	ReturnStmnt
-	OpStmnt
+	AssignStmnt	
 
 NoOpStmnt:
     nop
@@ -84,7 +84,7 @@ ReturnStmnt:
     return if|unless TernaryExpr
     return TernaryExpr if|unless TernaryExpr
 
-OpStmnt:
+AssignStmnt:
 	TernaryExpr
 	TernaryExpr = TernaryExpr
 

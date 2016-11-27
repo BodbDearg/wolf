@@ -1,6 +1,6 @@
 #include "WCStmnt.hpp"
 
-#include "WCOpStmnt.hpp"
+#include "WCAssignStmnt.hpp"
 #include "WCBreakStmnt.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCIfStmnt.hpp"
@@ -31,7 +31,7 @@ bool Stmnt::peek(const Token * tokenPtr) {
             BreakStmnt::peek(tokenPtr) ||
             NextStmnt::peek(tokenPtr) ||
             ReturnStmnt::peek(tokenPtr) ||
-            OpStmnt::peek(tokenPtr);
+            AssignStmnt::peek(tokenPtr);
 }
     
 Stmnt * Stmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
@@ -106,9 +106,9 @@ Stmnt * Stmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     }
     
     // Otherwise parse assign statement
-    OpStmnt * assignStmnt = OpStmnt::parse(tokenPtr, alloc);
+    AssignStmnt * assignStmnt = AssignStmnt::parse(tokenPtr, alloc);
     WC_GUARD(assignStmnt, nullptr);
-    return WC_NEW_AST_NODE(alloc, StmntOpStmnt, *assignStmnt);
+    return WC_NEW_AST_NODE(alloc, StmntAssignStmnt, *assignStmnt);
 }
 
 //-----------------------------------------------------------------------------
@@ -312,22 +312,22 @@ bool StmntVarDecl::codegen(CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// StmntOpStmnt
+// StmntAssignStmnt
 //-----------------------------------------------------------------------------
 
-StmntOpStmnt::StmntOpStmnt(OpStmnt & expr) : mStmnt(expr) {
+StmntAssignStmnt::StmntAssignStmnt(AssignStmnt & expr) : mStmnt(expr) {
     mStmnt.mParent = this;
 }
 
-const Token & StmntOpStmnt::getStartToken() const {
+const Token & StmntAssignStmnt::getStartToken() const {
     return mStmnt.getStartToken();
 }
 
-const Token & StmntOpStmnt::getEndToken() const {
+const Token & StmntAssignStmnt::getEndToken() const {
     return mStmnt.getEndToken();
 }
     
-bool StmntOpStmnt::codegen(CodegenCtx & cgCtx) {
+bool StmntAssignStmnt::codegen(CodegenCtx & cgCtx) {
     return mStmnt.codegen(cgCtx);
 }
 

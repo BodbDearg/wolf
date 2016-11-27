@@ -10,20 +10,20 @@ class LinearAlloc;
 class TernaryExpr;
 
 /*
-OpStmnt:
+AssignStmnt:
     TernaryExpr
     TernaryExpr = TernaryExpr
 */
-class OpStmnt : public ASTNode, public IStmnt {
+class AssignStmnt : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    static OpStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static AssignStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
 /* TernaryExpr */
-class OpStmntNoAssign final : public OpStmnt {
+class AssignStmntNoAssign final : public AssignStmnt {
 public:
-    OpStmntNoAssign(TernaryExpr & expr);
+    AssignStmntNoAssign(TernaryExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -34,9 +34,9 @@ public:
 };
 
 /* TernaryExpr = TernaryExpr */
-class OpStmntAssign final : public OpStmnt {
+class AssignStmntAssign final : public AssignStmnt {
 public:
-    OpStmntAssign(TernaryExpr & leftExpr, TernaryExpr & rightExpr);
+    AssignStmntAssign(TernaryExpr & leftExpr, TernaryExpr & rightExpr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
