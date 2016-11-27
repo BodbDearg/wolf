@@ -81,7 +81,8 @@
 #elif defined(_MSC_VER)
     // MS Visual C++
     #define WC_THIRD_PARTY_INCLUDES_BEGIN\
-        __pragma(warning(push, 0))
+        __pragma(warning(push, 0))\
+        __pragma(warning(disable : 4996))
 #else
     // Unhandled compiler
     #define WC_THIRD_PARTY_INCLUDES_BEGIN

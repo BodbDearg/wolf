@@ -5,10 +5,18 @@ func printNum(int num)
 end
 
 func main() -> int
-	var v = 1
-	v++
-	printNum(v)
-	v--
-	printNum(v)
+	var a = 1
+	a += 2
+	printNum(a)
+	a -= 2
+	printNum(a)
+	a *= 3
+	printNum(a)
+	a /= 3
+	printNum(a)
+	a++
+	printNum(a)
+	a--
+	printNum(a)
 	return 0
 end

@@ -13,6 +13,10 @@ class TernaryExpr;
 AssignExpr:
     TernaryExpr
     TernaryExpr = AssignExpr
+    TernaryExpr += AssignExpr
+    TernaryExpr -= AssignExpr
+    TernaryExpr *= AssignExpr
+    TernaryExpr /= AssignExpr
 */
 class AssignExpr : public ASTNode, public IExpr {
 public:
@@ -40,25 +44,71 @@ public:
     TernaryExpr & mExpr;
 };
 
+/* Base class for assign expressions actually do an assign */
+class AssignExprAssignBase : public AssignExpr {
+public:
+    AssignExprAssignBase(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+
+    virtual const Token & getStartToken() const final override;
+    virtual const Token & getEndToken() const final override;
+
+    virtual bool isLValue() final override;
+    virtual bool isConstExpr() final override;
+
+    virtual DataType & dataType() final override;
+
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) final override;
+
+    TernaryExpr &   mLeftExpr;
+    AssignExpr &    mRightExpr;
+
+protected:
+    /**
+     * Does basic checks at compile time to make sure the assign can be performed.
+     * Returns false and issues a compile error if the assign is illegal.
+     */
+     bool compileCheckAssignIsLegal();
+};
+
 /* TernaryExpr = AssignExpr */
-class AssignExprAssign final : public AssignExpr {
+class AssignExprAssign final : public AssignExprAssignBase {
 public:
     AssignExprAssign(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
-    virtual const Token & getStartToken() const override;
-    virtual const Token & getEndToken() const override;
-    
-    virtual bool isLValue() override;
-    virtual bool isConstExpr() override;
-    
-    virtual DataType & dataType() override;
-
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-    
-    TernaryExpr &   mLeftExpr;
-    AssignExpr &    mRightExpr;
+};
+
+/* TernaryExpr += AssignExpr */
+class AssignExprAssignAdd final : public AssignExprAssignBase {
+public:
+    AssignExprAssignAdd(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+};
+
+/* TernaryExpr -= AssignExpr */
+class AssignExprAssignSub final : public AssignExprAssignBase {
+public:
+    AssignExprAssignSub(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+};
+
+/* TernaryExpr *= AssignExpr */
+class AssignExprAssignMul final : public AssignExprAssignBase {
+public:
+    AssignExprAssignMul(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+};
+
+/* TernaryExpr /= AssignExpr */
+class AssignExprAssignDiv final : public AssignExprAssignBase {
+public:
+    AssignExprAssignDiv(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
 WC_END_NAMESPACE

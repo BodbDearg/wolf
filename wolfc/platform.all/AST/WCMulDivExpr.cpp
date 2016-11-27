@@ -23,7 +23,7 @@ MulDivExpr * MulDivExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     WC_GUARD(unaryExpr, nullptr);
     
     // See if '*' or '/' following:
-    if (tokenPtr->type == TokenType::kAsterisk) {
+    if (tokenPtr->type == TokenType::kAsterisk && MulDivExpr::peek(tokenPtr + 1)) {
         // Mul operation: Skip '*'
         ++tokenPtr;
         
@@ -32,7 +32,7 @@ MulDivExpr * MulDivExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         WC_GUARD(mulDivExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, MulDivExprMul, *unaryExpr, *mulDivExpr);
     }
-    else if (tokenPtr->type == TokenType::kSlash) {
+    else if (tokenPtr->type == TokenType::kSlash && MulDivExpr::peek(tokenPtr + 1)) {
         // Div operation: Skip '/'
         ++tokenPtr;
         

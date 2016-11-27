@@ -39,17 +39,11 @@ PostfixExpr * PostfixExpr::parse(const Token *& currentToken, LinearAlloc & allo
     PostfixExpr * outerPostfixExpr = nullptr;
 
     // See if '++' or '--' follow:
-    if (currentToken->type == TokenType::kPlus) {
-        // Looks like we want '++': Consume the first '+'
+    if (currentToken->type == TokenType::kPlus &&
+        currentToken[1].type == TokenType::kPlus) 
+    {
+        // Consume the '++' tokens and save the last
         ++currentToken;
-
-        // There should be another '+' here:
-        if (currentToken->type != TokenType::kPlus) {
-            parseError(*currentToken, "Expected another '+' for increment operator!");
-            return nullptr;
-        }
-
-        // Save and consume second '+'
         const Token * endToken = currentToken;
         ++currentToken;
 
@@ -57,17 +51,11 @@ PostfixExpr * PostfixExpr::parse(const Token *& currentToken, LinearAlloc & allo
         outerPostfixExpr = WC_NEW_AST_NODE(alloc, PostfixExprInc, *expr, *endToken);
         WC_ASSERT(outerPostfixExpr);
     }
-    else if (currentToken->type == TokenType::kMinus) {
-        // Looks like we want '--': Consume the first '-'
+    else if (currentToken->type == TokenType::kMinus &&
+             currentToken[1].type == TokenType::kMinus) 
+    {
+        // Consume the '--' tokens and save the last
         ++currentToken;
-
-        // There should be another '-' here:
-        if (currentToken->type != TokenType::kMinus) {
-            parseError(*currentToken, "Expected another '-' for decrement operator!");
-            return nullptr;
-        }
-
-        // Save and consume second '-'
         const Token * endToken = currentToken;
         ++currentToken;
 
@@ -224,6 +212,8 @@ bool PostfixExprIncDecBase::compileCheckExprIsInt() const {
 
         return false;
     }
+
+    return true;
 }
 
 //-----------------------------------------------------------------------------
