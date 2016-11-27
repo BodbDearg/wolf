@@ -1,4 +1,4 @@
-#include "WCAssignStmnt.hpp"
+#include "WCOpStmnt.hpp"
 
 #include "DataType/WCDataType.hpp"
 #include "Lexer/WCToken.hpp"
@@ -10,14 +10,14 @@
 WC_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
-// AssignStmnt
+// OpStmnt
 //-----------------------------------------------------------------------------
 
-bool AssignStmnt::peek(const Token * tokenPtr) {
+bool OpStmnt::peek(const Token * tokenPtr) {
     return TernaryExpr::peek(tokenPtr);
 }
 
-AssignStmnt * AssignStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+OpStmnt * OpStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the left expression
     TernaryExpr * leftExpr = TernaryExpr::parse(tokenPtr, alloc);
     WC_GUARD(leftExpr, nullptr);
@@ -30,38 +30,38 @@ AssignStmnt * AssignStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         // Parse the following expression and create the AST node
         TernaryExpr * rightExpr = TernaryExpr::parse(tokenPtr, alloc);
         WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AssignStmntAssign, *leftExpr, *rightExpr);
+        return WC_NEW_AST_NODE(alloc, OpStmntAssign, *leftExpr, *rightExpr);
     }
 
     // Assign statement with no assign
-    return WC_NEW_AST_NODE(alloc, AssignStmntNoAssign, *leftExpr);
+    return WC_NEW_AST_NODE(alloc, OpStmntNoAssign, *leftExpr);
 }
 
 //-----------------------------------------------------------------------------
-// AssignStmntNoAssign
+// OpStmntNoAssign
 //-----------------------------------------------------------------------------
 
-AssignStmntNoAssign::AssignStmntNoAssign(TernaryExpr & expr) : mExpr(expr) {
+OpStmntNoAssign::OpStmntNoAssign(TernaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-const Token & AssignStmntNoAssign::getStartToken() const {
+const Token & OpStmntNoAssign::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & AssignStmntNoAssign::getEndToken() const {
+const Token & OpStmntNoAssign::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool AssignStmntNoAssign::codegen(CodegenCtx & cgCtx) {
+bool OpStmntNoAssign::codegen(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx) != nullptr;
 }
 
 //-----------------------------------------------------------------------------
-// AssignStmntAssign
+// OpStmntAssign
 //-----------------------------------------------------------------------------
 
-AssignStmntAssign::AssignStmntAssign(TernaryExpr & leftExpr, TernaryExpr & rightExpr) :
+OpStmntAssign::OpStmntAssign(TernaryExpr & leftExpr, TernaryExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
@@ -69,15 +69,15 @@ AssignStmntAssign::AssignStmntAssign(TernaryExpr & leftExpr, TernaryExpr & right
     mRightExpr.mParent = this;
 }
 
-const Token & AssignStmntAssign::getStartToken() const {
+const Token & OpStmntAssign::getStartToken() const {
     return mLeftExpr.getStartToken();
 }
 
-const Token & AssignStmntAssign::getEndToken() const {
+const Token & OpStmntAssign::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-bool AssignStmntAssign::codegen(CodegenCtx & cgCtx) {
+bool OpStmntAssign::codegen(CodegenCtx & cgCtx) {
     // Left side of expression must be an lvalue!
     if (!mLeftExpr.isLValue()) {
         compileError("Can't assign to an rvalue! Must assign to a valid variable!");

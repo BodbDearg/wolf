@@ -1,3 +1,2 @@
-- Remove AssignExpr and make it a statement instead. Assign should not return a result.
 - Increment/decrement statement
-- Assign arithmetic staments
+- Assign arithmetic staments (+=,-= etc.)
