@@ -79,7 +79,7 @@ bool Module::generateCode() {
         llvm::ArrayRef<llvm::Type*>{
             llvm::Type::getInt8Ty(mLLVMCtx)->getPointerTo()
         },
-        false);
+        true);
     
     mLLVMModule->getOrInsertFunction("scanf", scanfFnType);
     
