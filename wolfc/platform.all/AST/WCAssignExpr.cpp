@@ -24,7 +24,7 @@ AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 
     // See if we might have a '+=' or '-=' etc. or a plain assign ('=') ahead:
     if (tokenPtr->type == TokenType::kPlus && 
-        tokenPtr[1].type == TokenType::kEquals) 
+        tokenPtr[1].type == TokenType::kEquals)
     {
         // '+=' assign expression. Skip the '+='
         ++tokenPtr;
