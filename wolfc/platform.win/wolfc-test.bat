@@ -19,7 +19,9 @@
 )
 
 @REM ** Run the compiler ** 
-@"x64\Debug\wolfc.exe" "..\test_data\wolfc-test.wolf" 1> "wolfc-test\wolfc-test.ll" 2>&1
+@"x64\Debug\wolfc.exe" ^
+	"..\test_data\wolfc-test.wolf" ^
+	1> "wolfc-test\wolfc-test.ll" 2>&1
 
 @IF %ERRORLEVEL% NEQ 0 (
 	@echo wolfc compile failed! Error details follow:
@@ -29,7 +31,11 @@
 )
 
 @REM ** Convert IR code to assembly code ** 
-@llc -march=x86-64 -x86-asm-syntax=intel -o "wolfc-test\wolfc-test.s" "wolfc-test\wolfc-test.ll"
+@llc ^
+	-march=x86-64 ^
+	-x86-asm-syntax=intel ^
+	-o "wolfc-test\wolfc-test.s" ^
+	"wolfc-test\wolfc-test.ll"
 
 @IF %ERRORLEVEL% NEQ 0 (
 	@echo Converting IR to assembly code failed!
@@ -38,7 +44,11 @@
 )
 
 @REM ** Assemble assembly code to an object file **
-@llvm-mc -arch=x86-64 -filetype=obj -assemble "wolfc-test\wolfc-test.s" -o="wolfc-test\wolfc-test.o"
+@llvm-mc ^
+	-arch=x86-64 ^
+	-filetype=obj ^
+	-assemble "wolfc-test\wolfc-test.s" ^
+	-o="wolfc-test\wolfc-test.o"
 
 @IF %ERRORLEVEL% NEQ 0 (
 	@echo Assembling to object file failed!
@@ -47,7 +57,11 @@
 )
 
 @REM ** Link the object file **
-@lld-link /subsystem:console /defaultlib:libcmtd.lib /out:"wolfc-test\wolfc-test.exe" "wolfc-test\wolfc-test.o"
+@lld-link ^
+	/subsystem:console ^
+	/defaultlib:libcmtd.lib ^
+	/defaultlib:legacy_stdio_definitions.lib ^
+	/out:"wolfc-test\wolfc-test.exe" "wolfc-test\wolfc-test.o"
 
 @IF %ERRORLEVEL% NEQ 0 (
 	@echo Linking failed!
