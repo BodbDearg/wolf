@@ -57,7 +57,10 @@ private:
     bool initLexerState(const char * utf8Src);
     
     /* Try to consume some whitespace. Return false if no whitespace was consumed. */
-    bool skipWhitespaceChar();
+    bool trySkipWhitespaceChar();
+
+    /* Attempt to skip multiple whitespace chars ahead. Stops when no more are found. */
+    void skipAnyWhitespaceCharsAhead();
     
     /* Move onto the next character. */
     bool moveOntoNextChar();
@@ -95,6 +98,9 @@ private:
      * It is up to the callee to perform any other initialization that is required.
      */
     Token & allocToken(TokenType tokenType);
+
+    /* Pop the top token off the token list. Expects that there is at least one token allocated. */
+    void popToken();
     
     /* Create the EOF token and add it to the end of the token list */
     void createEOFToken();

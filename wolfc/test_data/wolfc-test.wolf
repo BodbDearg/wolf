@@ -1,3 +1,11 @@
+func printHeader()
+	print(
+		"*** TEST PROGRAM FOR WOLF ***\n"
+		"These strings should be folded together!\n"
+		"\n"
+	)
+end
+
 func printNum(int num)
 	print("The number is: ")
 	print(num)
@@ -5,6 +13,7 @@ func printNum(int num)
 end
 
 func main() -> int
+	printHeader()
 	var a = 1
 	a += 2
 	printNum(a)

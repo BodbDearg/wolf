@@ -37,7 +37,7 @@ bool Lexer::process(const char * utf8Src) {
     // Continue until there is no source left
     while (!mLexerState.error && mLexerState.currentChar != 0) {
         // Skip all whitespace before parsing something interesting
-        if (skipWhitespaceChar()) {
+        if (trySkipWhitespaceChar()) {
             continue;
         }
         
@@ -104,7 +104,7 @@ bool Lexer::initLexerState(const char * utf8Src) {
     return true;
 }
 
-bool Lexer::skipWhitespaceChar() {
+bool Lexer::trySkipWhitespaceChar() {
     // Must be a whitespace char to consume at least one!
     char32_t currentChar = mLexerState.currentChar;
     WC_GUARD(CharUtils::isWhitespace(currentChar), false);
@@ -114,6 +114,14 @@ bool Lexer::skipWhitespaceChar() {
     
     // Parsed a whitespace:
     return true;
+}
+
+void Lexer::skipAnyWhitespaceCharsAhead() {
+    while (!mLexerState.error && mLexerState.currentChar != 0) {
+        if (!trySkipWhitespaceChar()) {
+            break;
+        }
+    }
 }
 
 bool Lexer::moveOntoNextChar() {
@@ -328,7 +336,7 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral() {
     tok.endCol = tokEndCol;
     
     // Now decode the actual string data into the literal.
-    // TODO: what manages this memory?
+    // FIXME: what manages this memory?
     tok.data.strVal.ptr = new char[strBufferSize];
     char * decodedStrPtr = tok.data.strVal.ptr;
     
@@ -407,6 +415,60 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral() {
     
     // Null terminate the decoded string when done
     tok.data.strVal.ptr[tok.data.strVal.size] = 0;
+
+    // Try to parse another string: if we find multiple string literals in succession
+    // then join them together (similar to C/C++)
+    skipAnyWhitespaceCharsAhead();
+    ParseResult nextStringParseResult = parseDoubleQuotedStringLiteral();
+
+    if (nextStringParseResult != ParseResult::kNone) {
+        // Another string literal follows, see if that was parsed ok:
+        if (nextStringParseResult == ParseResult::kSuccess) {
+            // Get the length of the next string literal:
+            Token & nextTok = mTokenList[mTokenCount - 1];
+            auto & nextTokStrVal = nextTok.data.strVal;
+            size_t nextStrLen = nextTokStrVal.size;
+
+            // If the next string is zero length then just pop the token for it and return this string:
+            if (nextStrLen == 0) {
+                // Zero length string ahead, just pop it to consume it
+                popToken();
+            }
+            else {
+                // Alright, we want to concatenate the strings from the two sources:
+                auto & curTokStrVal = tok.data.strVal;
+                size_t curStrLen = tok.data.strVal.size;
+                size_t concatStrSize = curStrLen + nextStrLen + 1;
+
+                // FIXME: what manages this memory?
+                // Concatenate the two strings:
+                char * concatStrPtr = new char[concatStrSize];
+                
+                {
+                    char * curConcatStrPtr = concatStrPtr;
+                    std::memcpy(curConcatStrPtr, curTokStrVal.ptr, curStrLen);
+                    curConcatStrPtr += curStrLen;
+                    std::memcpy(curConcatStrPtr, nextTokStrVal.ptr, nextStrLen);
+                    curConcatStrPtr += nextStrLen;
+                    *curConcatStrPtr = 0;
+                }
+
+                // FIXME: how to free the old memory?
+                // Now save the newly concatenated string details on the CURRENT string
+                curTokStrVal.ptr = concatStrPtr;
+                curTokStrVal.size = concatStrSize;
+
+                // Done with the next token, pop it off the stack
+                popToken();
+            }
+        }
+        else {
+            // Failed to parse the following string literal. Therefore parsing of this string fails too:
+            return ParseResult::kFail;
+        }
+    }
+
+    // Succeeded in parsing this string!
     return ParseResult::kSuccess;
 }
 
@@ -600,6 +662,18 @@ Token & Lexer::allocToken(TokenType tokenType)
     // Increment token count in use and return
     ++mTokenCount;
     return *token;
+}
+
+void Lexer::popToken() {
+    WC_ASSERT(mTokenCount > 0);
+
+#if DEBUG == 1
+    // Debug only: pop the token off this debug list
+    mDebugTokenList.pop_back();
+#endif  // #if DEBUG == 1
+    
+    // TODO: cleanup token data here?
+    --mTokenCount;
 }
 
 void Lexer::createEOFToken() {
