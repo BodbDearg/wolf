@@ -17,6 +17,7 @@ AssignExpr:
     TernaryExpr -= AssignExpr
     TernaryExpr *= AssignExpr
     TernaryExpr /= AssignExpr
+    TernaryExpr %= AssignExpr
 */
 class AssignExpr : public ASTNode, public IExpr {
 public:
@@ -107,6 +108,14 @@ public:
 class AssignExprAssignDiv final : public AssignExprAssignBase {
 public:
     AssignExprAssignDiv(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+};
+
+/* TernaryExpr %= AssignExpr */
+class AssignExprAssignMod final : public AssignExprAssignBase {
+public:
+    AssignExprAssignMod(TernaryExpr & leftExpr, AssignExpr & rightExpr);
 
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };

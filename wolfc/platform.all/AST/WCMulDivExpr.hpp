@@ -14,6 +14,7 @@ MulDivExpr:
 	UnaryExpr
 	UnaryExpr * MulDivExpr
 	UnaryExpr / MulDivExpr
+	UnaryExpr % MulDivExpr
 */
 class MulDivExpr : public ASTNode, public IExpr {
 public:
@@ -80,6 +81,15 @@ public:
 class MulDivExprDiv final : public MulDivExprTwoOps {
 public:
     MulDivExprDiv(UnaryExpr & leftExpr, MulDivExpr & rightExpr);
+
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+};
+
+/* UnaryExpr % MulDivExpr */
+class MulDivExprMod final : public MulDivExprTwoOps {
+public:
+    MulDivExprMod(UnaryExpr & leftExpr, MulDivExpr & rightExpr);
 
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;

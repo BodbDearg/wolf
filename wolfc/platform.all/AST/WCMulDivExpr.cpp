@@ -41,6 +41,15 @@ MulDivExpr * MulDivExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         WC_GUARD(mulDivExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, MulDivExprDiv, *unaryExpr, *mulDivExpr);
     }
+    else if (tokenPtr->type == TokenType::kPercent && MulDivExpr::peek(tokenPtr + 1)) {
+        // Modulo operation: Skip '%'
+        ++tokenPtr;
+
+        // Parse following expr and return combined expr
+        MulDivExpr * mulDivExpr = MulDivExpr::parse(tokenPtr, alloc);
+        WC_GUARD(mulDivExpr, nullptr);
+        return WC_NEW_AST_NODE(alloc, MulDivExprMod, *unaryExpr, *mulDivExpr);
+    }
     
     // Basic no-op expression:
     return WC_NEW_AST_NODE(alloc, MulDivExprNoOp, *unaryExpr);
@@ -222,5 +231,44 @@ llvm::Constant * MulDivExprDiv::codegenExprConstEval(CodegenCtx & cgCtx) {
     WC_GUARD(right, nullptr);
     return llvm::ConstantExpr::getSDiv(left, right);
 }
+
+//-----------------------------------------------------------------------------
+// MulDivExprMod
+//-----------------------------------------------------------------------------
+
+MulDivExprMod::MulDivExprMod(UnaryExpr & leftExpr, MulDivExpr & rightExpr) :
+    MulDivExprTwoOps(leftExpr, rightExpr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+llvm::Value * MulDivExprMod::codegenExprEval(CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    if (!compileCheckBothExprsAreInt()) {
+        return nullptr;
+    }
+
+    // Generate code for the operation
+    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return cgCtx.irBuilder.CreateSRem(left, right, "MulDivExprMod_ModOp");
+}
+
+llvm::Constant * MulDivExprMod::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    if (!compileCheckBothExprsAreInt()) {
+        return nullptr;
+    }
+
+    // Generate code for the operation
+    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return llvm::ConstantExpr::getSRem(left, right);
+}
+
 
 WC_END_NAMESPACE

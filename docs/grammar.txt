@@ -91,6 +91,7 @@ AssignExpr:
     TernaryExpr -= AssignExpr
     TernaryExpr *= AssignExpr
     TernaryExpr /= AssignExpr
+    TernaryExpr %= AssignExpr
 
 TernaryExpr:
 	OrExpr
@@ -129,6 +130,7 @@ MulDivExpr:
 	UnaryExpr
 	UnaryExpr * MulDivExpr
 	UnaryExpr / MulDivExpr
+	UnaryExpr % MulDivExpr
 
 UnaryExpr:
 	PostfixExpr

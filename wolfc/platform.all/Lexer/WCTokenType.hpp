@@ -43,6 +43,8 @@ enum class TokenType {
     kPlus,
     /* '-' */
     kMinus,
+    /* % */
+    kPercent,
     /* '*' */
     kAsterisk,
     /* '/' */

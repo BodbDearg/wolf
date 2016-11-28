@@ -179,7 +179,8 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
                 return parseBasicToken(TokenType::kMinus, 1);
             }
         }
-            
+        
+        case '%': return parseBasicToken(TokenType::kPercent, 1);
         case '*': return parseBasicToken(TokenType::kAsterisk, 1);
         
         case '/': {

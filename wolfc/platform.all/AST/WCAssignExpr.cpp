@@ -71,6 +71,18 @@ AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         WC_GUARD(assignExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, AssignExprAssignDiv, *ternaryExpr, *assignExpr);
     }
+    else if (tokenPtr->type == TokenType::kPercent &&
+             tokenPtr[1].type == TokenType::kEquals)
+    {
+        // '%=' assign expression. Skip the '%='
+        ++tokenPtr;
+        ++tokenPtr;
+
+        // Parse the following assign expression and create the AST node
+        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
+        WC_GUARD(assignExpr, nullptr);
+        return WC_NEW_AST_NODE(alloc, AssignExprAssignMod, *ternaryExpr, *assignExpr);
+    }
     else if (tokenPtr->type == TokenType::kEquals) {
         // Assign expression with simple '=' assign and no op. Skip the '='
         ++tokenPtr;
@@ -350,6 +362,38 @@ llvm::Value * AssignExprAssignDiv::codegenExprEval(CodegenCtx & cgCtx) {
 
     // Do the operation and store the result on the left
     llvm::Value * newValue = cgCtx.irBuilder.CreateSDiv(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    WC_ASSERT(storeInst);
+
+    // The expression evalutes to the left expression, which now has the value of the 
+    // new value, so return that...
+    return newValue;
+}
+
+//-----------------------------------------------------------------------------
+// AssignExprAssignMod
+//-----------------------------------------------------------------------------
+
+AssignExprAssignMod::AssignExprAssignMod(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
+    AssignExprAssignBase(leftExpr, rightExpr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+llvm::Value * AssignExprAssignMod::codegenExprEval(CodegenCtx & cgCtx) {
+    // Basic compile checks:
+    WC_GUARD(compileCheckAssignIsLegal(), false);
+
+    // Evaluate left value and right side value
+    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
+    WC_GUARD(leftAddr, nullptr);
+    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
+    WC_ASSERT(leftValue);
+    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightValue, nullptr);
+
+    // Do the operation and store the result on the left
+    llvm::Value * newValue = cgCtx.irBuilder.CreateSRem(leftValue, rightValue);
     llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
     WC_ASSERT(storeInst);
 
