@@ -192,6 +192,7 @@ DataType & PostfixExprIncDecBase::dataType() {
 }
 
 llvm::Value * PostfixExprIncDecBase::codegenAddrOf(CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
     compileError("Cant codegen the address of an increment or decrement statement!");
     return nullptr;
 }
@@ -199,6 +200,7 @@ llvm::Value * PostfixExprIncDecBase::codegenAddrOf(CodegenCtx & cgCtx) {
 llvm::Constant * PostfixExprIncDecBase::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Not allowed to use in constant expressions
     // TODO: can this be relaxed in future for functions that can be evaluated at compile time?
+    WC_UNUSED_PARAM(cgCtx);
     compileError("Increment and decrement operators cannot be used in constant expressions!");
     return nullptr;
 }

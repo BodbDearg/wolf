@@ -225,7 +225,7 @@ AssignExprAssign::AssignExprAssign(TernaryExpr & leftExpr, AssignExpr & rightExp
 
 llvm::Value * AssignExprAssign::codegenExprEval(CodegenCtx & cgCtx) {
     // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), false);
+    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
     
     // Evaluate left address and right side value
     llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
@@ -254,7 +254,7 @@ AssignExprAssignAdd::AssignExprAssignAdd(TernaryExpr & leftExpr, AssignExpr & ri
 
 llvm::Value * AssignExprAssignAdd::codegenExprEval(CodegenCtx & cgCtx) {
     // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), false);
+    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
 
     // Evaluate left value and right side value
     llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
@@ -286,7 +286,7 @@ AssignExprAssignSub::AssignExprAssignSub(TernaryExpr & leftExpr, AssignExpr & ri
 
 llvm::Value * AssignExprAssignSub::codegenExprEval(CodegenCtx & cgCtx) {
     // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), false);
+    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
 
     // Evaluate left value and right side value
     llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
@@ -318,7 +318,7 @@ AssignExprAssignMul::AssignExprAssignMul(TernaryExpr & leftExpr, AssignExpr & ri
 
 llvm::Value * AssignExprAssignMul::codegenExprEval(CodegenCtx & cgCtx) {
     // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), false);
+    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
 
     // Evaluate left value and right side value
     llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
@@ -350,7 +350,7 @@ AssignExprAssignDiv::AssignExprAssignDiv(TernaryExpr & leftExpr, AssignExpr & ri
 
 llvm::Value * AssignExprAssignDiv::codegenExprEval(CodegenCtx & cgCtx) {
     // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), false);
+    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
 
     // Evaluate left value and right side value
     llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
@@ -382,7 +382,7 @@ AssignExprAssignMod::AssignExprAssignMod(TernaryExpr & leftExpr, AssignExpr & ri
 
 llvm::Value * AssignExprAssignMod::codegenExprEval(CodegenCtx & cgCtx) {
     // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), false);
+    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
 
     // Evaluate left value and right side value
     llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
