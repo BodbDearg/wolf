@@ -184,6 +184,7 @@
     <ClCompile Include="..\platform.all\AST\WCPrimaryExpr.cpp" />
     <ClCompile Include="..\platform.all\AST\WCPrimitiveType.cpp" />
     <ClCompile Include="..\platform.all\AST\WCPrintStmnt.cpp" />
+    <ClCompile Include="..\platform.all\AST\WCRandExpr.cpp" />
     <ClCompile Include="..\platform.all\AST\WCReadnumExpr.cpp" />
     <ClCompile Include="..\platform.all\AST\WCRelExpr.cpp" />
     <ClCompile Include="..\platform.all\AST\WCReturnStmnt.cpp" />
@@ -193,6 +194,7 @@
     <ClCompile Include="..\platform.all\AST\WCStmnts.cpp" />
     <ClCompile Include="..\platform.all\AST\WCStrLit.cpp" />
     <ClCompile Include="..\platform.all\AST\WCTernaryExpr.cpp" />
+    <ClCompile Include="..\platform.all\AST\WCTimeExpr.cpp" />
     <ClCompile Include="..\platform.all\AST\WCType.cpp" />
     <ClCompile Include="..\platform.all\AST\WCUnaryExpr.cpp" />
     <ClCompile Include="..\platform.all\AST\WCVarDecl.cpp" />
@@ -250,6 +252,7 @@
     <ClInclude Include="..\platform.all\AST\WCPrimaryExpr.hpp" />
     <ClInclude Include="..\platform.all\AST\WCPrimitiveType.hpp" />
     <ClInclude Include="..\platform.all\AST\WCPrintStmnt.hpp" />
+    <ClInclude Include="..\platform.all\AST\WCRandExpr.hpp" />
     <ClInclude Include="..\platform.all\AST\WCReadnumExpr.hpp" />
     <ClInclude Include="..\platform.all\AST\WCRelExpr.hpp" />
     <ClInclude Include="..\platform.all\AST\WCReturnStmnt.hpp" />
@@ -259,6 +262,7 @@
     <ClInclude Include="..\platform.all\AST\WCStmnts.hpp" />
     <ClInclude Include="..\platform.all\AST\WCStrLit.hpp" />
     <ClInclude Include="..\platform.all\AST\WCTernaryExpr.hpp" />
+    <ClInclude Include="..\platform.all\AST\WCTimeExpr.hpp" />
     <ClInclude Include="..\platform.all\AST\WCType.hpp" />
     <ClInclude Include="..\platform.all\AST\WCUnaryExpr.hpp" />
     <ClInclude Include="..\platform.all\AST\WCVarDecl.hpp" />

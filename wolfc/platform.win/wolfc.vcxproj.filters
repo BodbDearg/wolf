@@ -199,6 +199,12 @@
     <ClCompile Include="..\platform.all\DataType\Primitives\WCVoidDataType.cpp">
       <Filter>platform.all\DataType\Primitives</Filter>
     </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCRandExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCTimeExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\platform.all\WCAssert.hpp">
@@ -413,6 +419,12 @@
     </ClInclude>
     <ClInclude Include="..\platform.all\DataType\Primitives\WCVoidDataType.hpp">
       <Filter>platform.all\DataType\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCRandExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCTimeExpr.hpp">
+      <Filter>platform.all\AST</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
