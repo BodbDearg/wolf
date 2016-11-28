@@ -47,7 +47,7 @@ ReadnumExpr::ReadnumExpr(const Token & startToken, const Token & endToken) :
     mStartToken(startToken),
     mEndToken(endToken)
 {
-    
+    WC_EMPTY_FUNC_BODY();
 }
 
 const Token & ReadnumExpr::getStartToken() const {
@@ -94,7 +94,11 @@ llvm::Value * ReadnumExpr::codegenExprEval(CodegenCtx & cgCtx) {
                                                            "ReadnumExpr:tmp_stack_var");
     
     // Create the call to scanf!
-    cgCtx.irBuilder.CreateCall(scanfFn, { fmtStr, outputVar }, "ReadnumExpr:scanf_call");
+    llvm::Value * callInst = cgCtx.irBuilder.CreateCall(scanfFn,
+                                                        { fmtStr, outputVar },
+                                                        "ReadnumExpr:scanf_call");
+    
+    WC_ASSERT(callInst);
     
     // And return the stack var
     return cgCtx.irBuilder.CreateLoad(outputVar, "ReadnumExpr:load_tmp_stack_var");

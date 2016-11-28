@@ -11,6 +11,7 @@ class DataType;
 class Identifier;
 class IntLit;
 class LinearAlloc;
+class RandExpr;
 class ReadnumExpr;
 class StrLit;
 class TimeExpr;
@@ -24,6 +25,7 @@ PrimaryExpr:
     Identifier
     ReadnumExpr
     TimeExpr
+    RandExpr
 */
 class PrimaryExpr : public ASTNode, public IExpr {
 public:
@@ -171,6 +173,26 @@ public:
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     TimeExpr & mExpr;
+};
+
+/* RandExpr */
+class PrimaryExprRandExpr final : public PrimaryExpr {
+public:
+    PrimaryExprRandExpr(RandExpr & expr);
+    
+    virtual const Token & getStartToken() const override;
+    virtual const Token & getEndToken() const override;
+    
+    virtual bool isLValue() override;
+    virtual bool isConstExpr() override;
+    
+    virtual DataType & dataType() override;
+    
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    
+    RandExpr & mExpr;
 };
 
 WC_END_NAMESPACE

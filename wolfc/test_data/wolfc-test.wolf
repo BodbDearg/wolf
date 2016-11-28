@@ -5,6 +5,17 @@ func printNum(int num)
 end
 
 func main() -> int
-	printNum(time())
+	; Get the RNG seed
+	var seed = time()
+	print("The seed is: ")
+	print(seed)
+	print("\n")
+	
+	srand(seed)
+
+	printNum(rand() % 10)
+	printNum(rand() % 10)
+	printNum(rand() % 10)
+
 	return 0
 end

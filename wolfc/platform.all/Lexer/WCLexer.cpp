@@ -568,8 +568,10 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         parseKeyword("scope", TokenType::kScope) ||
         parseKeyword("nop", TokenType::kNop) ||
         parseKeyword("return", TokenType::kReturn) ||
-        parseKeyword("func", TokenType::kFunc)||
-        parseKeyword("time", TokenType::kTime)||
+        parseKeyword("func", TokenType::kFunc) ||
+        parseKeyword("time", TokenType::kTime) ||
+        parseKeyword("rand", TokenType::kRand) ||
+        parseKeyword("srand", TokenType::kSRand) ||
         parseKeyword("print", TokenType::kPrint) ||
         parseKeyword("readnum", TokenType::kReadnum))
     {

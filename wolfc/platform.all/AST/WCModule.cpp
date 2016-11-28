@@ -64,31 +64,52 @@ bool Module::generateCode() {
     llvm::IRBuilder<> irBuilder(mLLVMCtx);
     
     // Declare the c standard library function 'printf'
-    llvm::FunctionType * printfFnType = llvm::FunctionType::get(llvm::Type::getInt32Ty(mLLVMCtx),
-                                                                llvm::ArrayRef<llvm::Type*>{
-                                                                    llvm::Type::getInt8Ty(mLLVMCtx)->getPointerTo(),
-                                                                },
-                                                                true);
+    llvm::FunctionType * printfFnType = llvm::FunctionType::get(
+        llvm::Type::getInt32Ty(mLLVMCtx),
+        llvm::ArrayRef<llvm::Type*>{
+            llvm::Type::getInt8Ty(mLLVMCtx)->getPointerTo()
+        },
+        true);
     
     mLLVMModule->getOrInsertFunction("printf", printfFnType);
     
     // Declare the c standard library function 'scanf'
-    llvm::FunctionType * scanfFnType = llvm::FunctionType::get(llvm::Type::getInt32Ty(mLLVMCtx),
-                                                               llvm::ArrayRef<llvm::Type*>{
-                                                                   llvm::Type::getInt8Ty(mLLVMCtx)->getPointerTo(),
-                                                               },
-                                                               true);
+    llvm::FunctionType * scanfFnType = llvm::FunctionType::get(
+        llvm::Type::getInt32Ty(mLLVMCtx),
+        llvm::ArrayRef<llvm::Type*>{
+            llvm::Type::getInt8Ty(mLLVMCtx)->getPointerTo()
+        },
+        false);
     
     mLLVMModule->getOrInsertFunction("scanf", scanfFnType);
     
     // Declare the c standard library function 'time'
-    llvm::FunctionType * timeFnType = llvm::FunctionType::get(llvm::Type::getInt64Ty(mLLVMCtx),
-                                                              llvm::ArrayRef<llvm::Type*>{
-                                                                   llvm::Type::getInt64Ty(mLLVMCtx)->getPointerTo(),
-                                                              },
-                                                              true);
+    llvm::FunctionType * timeFnType = llvm::FunctionType::get(
+        llvm::Type::getInt64Ty(mLLVMCtx),
+        llvm::ArrayRef<llvm::Type*>{
+            llvm::Type::getInt64Ty(mLLVMCtx)->getPointerTo(),
+        },
+        false);
     
     mLLVMModule->getOrInsertFunction("time", timeFnType);
+    
+    // Declare the c standard library function 'rand'
+    llvm::FunctionType * randFnType = llvm::FunctionType::get(
+        llvm::Type::getInt32Ty(mLLVMCtx),
+        llvm::ArrayRef<llvm::Type*>{},
+        false);
+    
+    mLLVMModule->getOrInsertFunction("rand", randFnType);
+    
+    // Declare the c standard library function 'srand'
+    llvm::FunctionType * srandFnType = llvm::FunctionType::get(
+        llvm::Type::getVoidTy(mLLVMCtx),
+        llvm::ArrayRef<llvm::Type*>{
+            llvm::Type::getInt32Ty(mLLVMCtx),
+        },
+        false);
+    
+    mLLVMModule->getOrInsertFunction("srand", srandFnType);
     
     // Create the codegen context
     CodegenCtx codegenCtx(mLLVMCtx, irBuilder, *this);

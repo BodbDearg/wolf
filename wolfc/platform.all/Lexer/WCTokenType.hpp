@@ -125,6 +125,10 @@ enum class TokenType {
     kFunc,
     /* 'time' */   // TODO: this is a temporary keyword, remove eventually
     kTime,
+    /* 'rand' */   // TODO: this is a temporary keyword, remove eventually
+    kRand,
+    /* 'srand' */   // TODO: this is a temporary keyword, remove eventually
+    kSRand,
     /* 'print' */   // TODO: this is a temporary keyword, remove eventually
     kPrint,
     /* 'readnum' */ // TODO: this is a temporary keyword, remove eventually

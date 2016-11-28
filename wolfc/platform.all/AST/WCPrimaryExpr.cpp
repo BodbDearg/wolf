@@ -6,6 +6,7 @@
 #include "WCIdentifier.hpp"
 #include "WCIntLit.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCRandExpr.hpp"
 #include "WCReadnumExpr.hpp"
 #include "WCStrLit.hpp"
 #include "WCTimeExpr.hpp"
@@ -23,7 +24,8 @@ bool PrimaryExpr::peek(const Token * currentToken) {
             ArrayLit::peek(currentToken) ||
             Identifier::peek(currentToken) ||
             ReadnumExpr::peek(currentToken) ||
-            TimeExpr::peek(currentToken);
+            TimeExpr::peek(currentToken) ||
+            RandExpr::peek(currentToken);
 }
 
 PrimaryExpr * PrimaryExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
@@ -61,6 +63,11 @@ PrimaryExpr * PrimaryExpr::parse(const Token *& currentToken, LinearAlloc & allo
         TimeExpr * expr = TimeExpr::parse(currentToken, alloc);
         WC_GUARD(expr, nullptr);
         return WC_NEW_AST_NODE(alloc, PrimaryExprTime, *expr);
+    }
+    else if (RandExpr::peek(currentToken)) {
+        RandExpr * expr = RandExpr::parse(currentToken, alloc);
+        WC_GUARD(expr, nullptr);
+        return WC_NEW_AST_NODE(alloc, PrimaryExprRandExpr, *expr);
     }
     
     parseError(*currentToken, "Expected primary expression!");
@@ -348,6 +355,46 @@ llvm::Value * PrimaryExprTime::codegenExprEval(CodegenCtx & cgCtx) {
 }
 
 llvm::Constant * PrimaryExprTime::codegenExprConstEval(CodegenCtx & cgCtx) {
+    return mExpr.codegenExprConstEval(cgCtx);
+}
+
+//-----------------------------------------------------------------------------
+// PrimaryRandExpr
+//-----------------------------------------------------------------------------
+
+PrimaryExprRandExpr::PrimaryExprRandExpr(RandExpr & expr) : mExpr(expr) {
+    mExpr.mParent = this;
+}
+
+const Token & PrimaryExprRandExpr::getStartToken() const {
+    return mExpr.getStartToken();
+}
+
+const Token & PrimaryExprRandExpr::getEndToken() const {
+    return mExpr.getEndToken();
+}
+
+bool PrimaryExprRandExpr::isLValue() {
+    return mExpr.isLValue();
+}
+
+bool PrimaryExprRandExpr::isConstExpr() {
+    return mExpr.isConstExpr();
+}
+
+DataType & PrimaryExprRandExpr::dataType() {
+    return mExpr.dataType();
+}
+
+llvm::Value * PrimaryExprRandExpr::codegenAddrOf(CodegenCtx & cgCtx) {
+    return mExpr.codegenAddrOf(cgCtx);
+}
+
+llvm::Value * PrimaryExprRandExpr::codegenExprEval(CodegenCtx & cgCtx) {
+    return mExpr.codegenExprEval(cgCtx);
+}
+
+llvm::Constant * PrimaryExprRandExpr::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
 
