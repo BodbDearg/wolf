@@ -126,11 +126,11 @@ end
 ;==================================================================================================
 ; Main program entry point
 ;==================================================================================================
-
-; Main program entry point
 func main() -> int
 	; Seed the random number generator to the current time (in seconds) and begin the menu loop
 	srand(time())
 	menu_displayMain()
+
+	; Program executed successfully, return 0 to indicate that
 	return 0
 end
