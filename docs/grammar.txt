@@ -159,7 +159,7 @@ PrimaryExpr:
     ArrayLit
     Identifier
     ReadnumExpr
-    *** TODO: TimeExpr
+    TimeExpr
     *** TODO: RandExpr
 
 ArrayLit:
@@ -172,8 +172,8 @@ ArrayLitExprs:
 ReadnumExpr:
     readnum ( )
 
-*** TODO: TimeExpr:
-	*** TODO: time ( )
+TimeExpr:
+	time ( )
 
 *** TODO: RandExpr:
 	*** TODO: srand ( AssignExpr )

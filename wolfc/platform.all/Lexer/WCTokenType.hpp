@@ -123,6 +123,8 @@ enum class TokenType {
     kReturn,
     /* func */
     kFunc,
+    /* 'time' */   // TODO: this is a temporary keyword, remove eventually
+    kTime,
     /* 'print' */   // TODO: this is a temporary keyword, remove eventually
     kPrint,
     /* 'readnum' */ // TODO: this is a temporary keyword, remove eventually

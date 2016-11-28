@@ -32,7 +32,7 @@ contexts:
       scope: constant.language.wolf
     - match: '\+|-|%|#|\*|\/|\^|==?|~=|<=?|>=?|(?<!\.)\.{2}(?!\.)'
       scope: keyword.operator.wolf
-    - match: '(?<![^.]\.|:)\b(readnum|print)\b(?=[( {"''\[])'
+    - match: '(?<![^.]\.|:)\b(time|readnum|print)\b(?=[( {"''\[])'
       scope: support.function.wolf
     - match: \b(and|or|not)\b
       scope: keyword.logical.wolf

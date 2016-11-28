@@ -18,7 +18,7 @@ bool ReadnumExpr::peek(const Token * tokenPtr) {
 
 ReadnumExpr * ReadnumExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     if (tokenPtr->type != TokenType::kReadnum) {
-        parseError(*tokenPtr, "Expected 'readnum' at begining of readnum expression!");
+        parseError(*tokenPtr, "Expected 'readnum' at begining of readnum() expression!");
         return nullptr;
     }
     
@@ -72,12 +72,12 @@ DataType & ReadnumExpr::dataType() {
 
 llvm::Value * ReadnumExpr::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of a 'readnum' expression result!");
+    compileError("Can't take the address of a 'readnum()' expression result!");
     return nullptr;
 }
 
 llvm::Value * ReadnumExpr::codegenExprEval(CodegenCtx & cgCtx) {
-    // Get scanf
+    // Get 'scanf' C function
     llvm::Constant * scanfFn = cgCtx.module.getLLVMModuleRef().getFunction("scanf");
     
     if (!scanfFn) {
@@ -102,7 +102,7 @@ llvm::Value * ReadnumExpr::codegenExprEval(CodegenCtx & cgCtx) {
 
 llvm::Constant * ReadnumExpr::codegenExprConstEval(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Cannot evaluate a 'readnum' expression at compile time!");
+    compileError("Cannot evaluate a 'readnum()' expression at compile time!");
     return nullptr;
 }
 

@@ -65,8 +65,7 @@ bool Module::generateCode() {
     
     // Declare the c standard library function 'printf'
     llvm::FunctionType * printfFnType = llvm::FunctionType::get(llvm::Type::getInt32Ty(mLLVMCtx),
-                                                                llvm::ArrayRef<llvm::Type*>
-                                                                {
+                                                                llvm::ArrayRef<llvm::Type*>{
                                                                     llvm::Type::getInt8Ty(mLLVMCtx)->getPointerTo(),
                                                                 },
                                                                 true);
@@ -75,13 +74,21 @@ bool Module::generateCode() {
     
     // Declare the c standard library function 'scanf'
     llvm::FunctionType * scanfFnType = llvm::FunctionType::get(llvm::Type::getInt32Ty(mLLVMCtx),
-                                                               llvm::ArrayRef<llvm::Type*>
-                                                               {
+                                                               llvm::ArrayRef<llvm::Type*>{
                                                                    llvm::Type::getInt8Ty(mLLVMCtx)->getPointerTo(),
                                                                },
                                                                true);
     
     mLLVMModule->getOrInsertFunction("scanf", scanfFnType);
+    
+    // Declare the c standard library function 'time'
+    llvm::FunctionType * timeFnType = llvm::FunctionType::get(llvm::Type::getInt64Ty(mLLVMCtx),
+                                                              llvm::ArrayRef<llvm::Type*>{
+                                                                   llvm::Type::getInt64Ty(mLLVMCtx)->getPointerTo(),
+                                                              },
+                                                              true);
+    
+    mLLVMModule->getOrInsertFunction("time", timeFnType);
     
     // Create the codegen context
     CodegenCtx codegenCtx(mLLVMCtx, irBuilder, *this);

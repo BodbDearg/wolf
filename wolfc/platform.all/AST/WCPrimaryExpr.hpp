@@ -13,6 +13,7 @@ class IntLit;
 class LinearAlloc;
 class ReadnumExpr;
 class StrLit;
+class TimeExpr;
 
 /*
 PrimaryExpr:
@@ -22,6 +23,7 @@ PrimaryExpr:
     ArrayLit
     Identifier
     ReadnumExpr
+    TimeExpr
 */
 class PrimaryExpr : public ASTNode, public IExpr {
 public:
@@ -149,6 +151,26 @@ public:
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     ReadnumExpr & mExpr;
+};
+
+/* TimeExpr */
+class PrimaryExprTime final : public PrimaryExpr {
+public:
+    PrimaryExprTime(TimeExpr & expr);
+    
+    virtual const Token & getStartToken() const override;
+    virtual const Token & getEndToken() const override;
+    
+    virtual bool isLValue() override;
+    virtual bool isConstExpr() override;
+    
+    virtual DataType & dataType() override;
+    
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    
+    TimeExpr & mExpr;
 };
 
 WC_END_NAMESPACE

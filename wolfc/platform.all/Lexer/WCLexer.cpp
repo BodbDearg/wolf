@@ -569,6 +569,7 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         parseKeyword("nop", TokenType::kNop) ||
         parseKeyword("return", TokenType::kReturn) ||
         parseKeyword("func", TokenType::kFunc)||
+        parseKeyword("time", TokenType::kTime)||
         parseKeyword("print", TokenType::kPrint) ||
         parseKeyword("readnum", TokenType::kReadnum))
     {

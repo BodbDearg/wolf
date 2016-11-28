@@ -20,7 +20,7 @@ bool PrintStmnt::peek(const Token * tokenPtr) {
 
 PrintStmnt * PrintStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     if (tokenPtr->type != TokenType::kPrint) {
-        parseError(*tokenPtr, "Expected keyword 'print'!");
+        parseError(*tokenPtr, "Expected keyword 'print' for 'print()' statement!");
         return nullptr;
     }
     
@@ -40,7 +40,7 @@ PrintStmnt * PrintStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     
     // Expect ')' following all that:
     if (tokenPtr->type != TokenType::kRParen) {
-        parseError(*tokenPtr, "Expected closing ')' for 'print()' expression!");
+        parseError(*tokenPtr, "Expected closing ')' for 'print()' statement!");
         return nullptr;
     }
     

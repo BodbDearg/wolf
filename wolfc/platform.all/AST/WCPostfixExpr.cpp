@@ -214,7 +214,7 @@ bool PostfixExprIncDecBase::compileCheckExprIsInt() const {
 
         return false;
     }
-
+    
     return true;
 }
 

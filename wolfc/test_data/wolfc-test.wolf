@@ -5,12 +5,6 @@ func printNum(int num)
 end
 
 func main() -> int
-	var a = 5
-	a = a % 3
-	printNum(a)
-	a *= 6
-	printNum(a)
-	a %= 9
-	printNum(a)
+	printNum(time())
 	return 0
 end
