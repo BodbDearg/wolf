@@ -22,15 +22,23 @@ OrExpr * OrExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     AndExpr * andExpr = AndExpr::parse(tokenPtr, alloc);
     WC_GUARD(andExpr, nullptr);
     
-    // See if there is an 'or' for logical or
+    // See if there is an 'or' for logical or:
     if (tokenPtr->type == TokenType::kOr) {
-        // Or expression with or. Skip the 'or'
-        ++tokenPtr;
+        TokenType nextTokType = tokenPtr[1].type;
+
+        // Note: do not parse if we find 'or if' or 'or unless' since those are block
+        // terminators for a 'if / or if / else' chain
+        if (nextTokType != TokenType::kIf &&
+            nextTokType != TokenType::kUnless)
+        {
+            // Or expression with or. Skip the 'or'
+            ++tokenPtr;
         
-        // Parse the following and expression and create the AST node
-        OrExpr * orExpr = OrExpr::parse(tokenPtr, alloc);
-        WC_GUARD(orExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, OrExprOr, *andExpr, *orExpr);
+            // Parse the following and expression and create the AST node
+            OrExpr * orExpr = OrExpr::parse(tokenPtr, alloc);
+            WC_GUARD(orExpr, nullptr);
+            return WC_NEW_AST_NODE(alloc, OrExprOr, *andExpr, *orExpr);
+        }
     }
 
     // Basic no-op expression

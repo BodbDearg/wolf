@@ -1,21 +1,100 @@
-func printNum(int num)
-	print("The number is: ")
-	print(num)
+;==================================================================================================
+; Utility functions
+;==================================================================================================
+func println(string text)
+	print(text)
 	print("\n")
 end
 
+;==================================================================================================
+; Player related stuff
+;==================================================================================================
+
+; Current money in chips player has set aside
+var gPlayerChips = 0
+
+;==================================================================================================
+; Menu related stuff 
+;==================================================================================================
+
+; Continue displaying the main menu?
+var gDisplayMenu = true
+
+func menu_drawTitleBar(string titleText)
+    println("")
+    println("*************************************************")
+    println(titleText)
+    println("*************************************************")
+    println("")
+end
+
+; Displays the main menu and reads menu choices
+func menu_displayMain()
+	while gDisplayMenu
+		; Display the menu
+		menu_drawTitleBar("BLACKJACK - MAIN MENU")
+
+		print("Chips available to play: ")
+		print(gPlayerChips)
+		print("\n\n")
+
+		print("1 - New game (normal)\n"
+              "2 - New game (advanced)\n"
+              "3 - Exchange money for chips\n"
+              "4 - Statistics\n"
+              "5 - quit\n"
+              "\n"
+              "Input choice and press enter: ")
+
+		; Ask the player for input
+		var choice = readnum()
+
+		if choice == 1
+			println("NOT IMPLEMENTED YET!!")
+		or if choice == 2
+			println("NOT IMPLEMENTED YET!!")
+		or if choice == 3
+			println("NOT IMPLEMENTED YET!!")
+		or if choice == 4
+			println("NOT IMPLEMENTED YET!!")
+		or if choice == 5
+			gDisplayMenu = false
+		else
+			println("Invalid menu choice, try again!")
+		end
+	end
+
+	/;
+    while (gDisplayMenu) {
+        MenuDrawTitleBar("BLACKJACK - MAIN MENU");
+        
+        printf(
+            "Chips available to play: %u\n"
+            "\n"
+            "1 - New game (normal)\n"
+            "2 - New game (advanced)\n"
+            "3 - Exchange money for chips\n"
+            "4 - Statistics\n"
+            "q - quit\n"
+            "\n"
+            "Input choice and press enter: ",
+            gPlayerChips
+        );
+        
+        // Do chosen menu action:
+        MenuDoActions(InputReadMenuChoice(MAIN_MENU_CHOICES));
+    }
+    ;/
+end
+
+;==================================================================================================
+; Main program entry point
+;==================================================================================================
+
+; Main program entry point
 func main() -> int
-	; Get the RNG seed
-	var seed = time()
-	print("The seed is: ")
-	print(seed)
-	print("\n")
-	
-	srand(seed)
-
-	printNum(rand() % 10)
-	printNum(rand() % 10)
-	printNum(rand() % 10)
-
+	; Seed the random number generator to the current time (in seconds) and begin the menu loop
+	srand(time())
+	menu_displayMain()
 	return 0
 end
