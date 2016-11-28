@@ -6,11 +6,34 @@ func println(string text)
 	print("\n")
 end
 
+func nextln()
+	print("\n")
+end
+
+func doEnterNumToContinue()
+	println("Enter a number to continue...")
+	readnum()
+end
+
+;==================================================================================================
+; General game stuff
+;==================================================================================================
+
+; Minimum bet that can be made
+var GAME_MIN_BET = 20
+
+;==================================================================================================
+; Game stat stuff
+;==================================================================================================
+
+; Total amount of money the player has put into this game by exchanging money for chips
+var gGameStatMoneyInput = 0
+
 ;==================================================================================================
 ; Player related stuff
 ;==================================================================================================
 
-; Current money in chips player has set aside
+; Current balance of chips the player has. 1 chip = 1 EUR
 var gPlayerChips = 0
 
 ;==================================================================================================
@@ -21,11 +44,46 @@ var gPlayerChips = 0
 var gDisplayMenu = true
 
 func menu_drawTitleBar(string titleText)
-    println("")
+    nextln()
     println("*************************************************")
     println(titleText)
     println("*************************************************")
-    println("")
+    nextln()
+end
+
+; Ask the player to add money to the player's count
+func menu_getMoney()
+    ; Ask for money amount
+    menu_drawTitleBar("BUY GAME CHIPS")
+    
+    println("Please input an amount to be exchanged for chips.")
+	println("One Euro corresponds to one game chip.")
+	println("Enter '0' or less to abort.")
+
+    print("Minium play amount is: EUR ")
+	print(GAME_MIN_BET)
+	nextln()
+
+	print("Current amount of chips: ")
+	print(gPlayerChips)
+	nextln()
+
+	print("Enter amount to exchange (EUR): ")
+    
+    ; Read the amount to exchange and add to player balance,
+    ; if <= 0 then it means the player cancelled
+    var exchangeAmount = readnum()
+    return if exchangeAmount <= 0
+
+    ; Add to the player's balance of chips and the total amount of money input
+    gPlayerChips += exchangeAmount
+    gGameStatMoneyInput += exchangeAmount
+
+    ; Display the new total to the user
+    print("New amount of chips: ")
+    print(gPlayerChips)
+    nextln()
+    doEnterNumToContinue()
 end
 
 ; Displays the main menu and reads menu choices
@@ -54,7 +112,7 @@ func menu_displayMain()
 		or if choice == 2
 			println("NOT IMPLEMENTED YET!!")
 		or if choice == 3
-			println("NOT IMPLEMENTED YET!!")
+			menu_getMoney()
 		or if choice == 4
 			println("NOT IMPLEMENTED YET!!")
 		or if choice == 5
@@ -63,28 +121,6 @@ func menu_displayMain()
 			println("Invalid menu choice, try again!")
 		end
 	end
-
-	/;
-    while (gDisplayMenu) {
-        MenuDrawTitleBar("BLACKJACK - MAIN MENU");
-        
-        printf(
-            "Chips available to play: %u\n"
-            "\n"
-            "1 - New game (normal)\n"
-            "2 - New game (advanced)\n"
-            "3 - Exchange money for chips\n"
-            "4 - Statistics\n"
-            "q - quit\n"
-            "\n"
-            "Input choice and press enter: ",
-            gPlayerChips
-        );
-        
-        // Do chosen menu action:
-        MenuDoActions(InputReadMenuChoice(MAIN_MENU_CHOICES));
-    }
-    ;/
 end
 
 ;==================================================================================================
