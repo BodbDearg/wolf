@@ -26,8 +26,12 @@ var GAME_MIN_BET = 20
 ; Game stat stuff
 ;==================================================================================================
 
-; Total amount of money the player has put into this game by exchanging money for chips
-var gGameStatMoneyInput = 0
+var gGameStatGamesWon = 0		; Number of games the player has won
+var gGameStatGamesLost = 0		; Number of games the player has lost
+var gGameStatGamesDrew = 0		; Number of games the player drew
+var gGameStatMoneyInput = 0		; Total amount of money the player has put into this game
+var gGameStatMoneyGained = 0	; Total amount gained on bets
+var gGameStatMoneyLost = 0		; Total amount lost on bets
 
 ;==================================================================================================
 ; Player related stuff
@@ -49,6 +53,70 @@ func menu_drawTitleBar(string titleText)
     println(titleText)
     println("*************************************************")
     nextln()
+end
+
+; Display statistics
+func menu_displayStatistics()
+    menu_drawTitleBar("GAME STATISTICS")
+     
+    ; Calculate the total games played
+    var totalGamesPlayed = gGameStatGamesWon
+    totalGamesPlayed += gGameStatGamesLost
+    totalGamesPlayed += gGameStatGamesDrew
+     
+    ; Calculate total gained / lost
+    var netEarnings = gGameStatMoneyGained - gGameStatMoneyLost
+     
+    ; Calculate how many chips the player currently has as a percentage of how much they have bought. 
+    ; This gives an earning metric of sorts...
+    ; If money input is currently zero then set as 100, don't divide by zero!
+    var percentOfChipsBought = 0
+    
+    if gGameStatMoneyInput > 0
+        ; Have input some money. Calculate percentage as normal
+        percentOfChipsBought = (gPlayerChips * 100) / gGameStatMoneyInput
+    else
+        ; No money input- leave percent of original chips left as 100%
+        percentOfChipsBought = 100
+    end
+     
+    ; Display the actual stats
+    println("--- STATISTICS ---")
+    nextln()
+
+	print("Games played: ")
+	print(totalGamesPlayed)
+	nextln()
+	print("Games won: ")
+	print(gGameStatGamesWon)
+	nextln()
+	print("Games lost: ")
+	print(gGameStatGamesLost)
+	nextln()
+	print("Games drawn: ")
+	print(gGameStatGamesDrew)
+	nextln()
+	nextln()
+
+	print("Chips bought: ")
+	print(gGameStatMoneyInput)
+	nextln()
+	print("Chips gained: ")
+	print(gGameStatMoneyGained)
+	nextln()
+	print("Chips lost: ")
+	print(gGameStatMoneyLost)
+	nextln()
+	nextln()
+
+	print("Net earnings / loss: ")
+	print(netEarnings)
+	nextln()
+	print("% of chips bought left: ")
+	print(percentOfChipsBought)
+	nextln()
+    
+    doEnterNumToContinue()
 end
 
 ; Ask the player to add money to the player's count
@@ -114,7 +182,7 @@ func menu_displayMain()
 		or if choice == 3
 			menu_getMoney()
 		or if choice == 4
-			println("NOT IMPLEMENTED YET!!")
+			menu_displayStatistics()
 		or if choice == 5
 			gDisplayMenu = false
 		else
