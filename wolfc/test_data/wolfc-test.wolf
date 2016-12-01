@@ -2,17 +2,17 @@
 ; Utility functions
 ;==================================================================================================
 func println(string text)
-	print(text)
-	print("\n")
+    print(text)
+    print("\n")
 end
 
 func nextln()
-	print("\n")
+    print("\n")
 end
 
 func doEnterNumToContinue()
-	println("Enter a number to continue...")
-	readnum()
+    println("Enter a number to continue...")
+    readnum()
 end
 
 ;==================================================================================================
@@ -26,12 +26,12 @@ var GAME_MIN_BET = 20
 ; Game stat stuff
 ;==================================================================================================
 
-var gGameStatGamesWon = 0		; Number of games the player has won
-var gGameStatGamesLost = 0		; Number of games the player has lost
-var gGameStatGamesDrew = 0		; Number of games the player drew
-var gGameStatMoneyInput = 0		; Total amount of money the player has put into this game
-var gGameStatMoneyGained = 0	; Total amount gained on bets
-var gGameStatMoneyLost = 0		; Total amount lost on bets
+var gGameStatGamesWon = 0       ; Number of games the player has won
+var gGameStatGamesLost = 0      ; Number of games the player has lost
+var gGameStatGamesDrew = 0      ; Number of games the player drew
+var gGameStatMoneyInput = 0     ; Total amount of money the player has put into this game
+var gGameStatMoneyGained = 0    ; Total amount gained on bets
+var gGameStatMoneyLost = 0      ; Total amount lost on bets
 
 ;==================================================================================================
 ; Player related stuff
@@ -63,10 +63,10 @@ func menu_displayStatistics()
     var totalGamesPlayed = gGameStatGamesWon
     totalGamesPlayed += gGameStatGamesLost
     totalGamesPlayed += gGameStatGamesDrew
-     
+
     ; Calculate total gained / lost
     var netEarnings = gGameStatMoneyGained - gGameStatMoneyLost
-     
+
     ; Calculate how many chips the player currently has as a percentage of how much they have bought. 
     ; This gives an earning metric of sorts...
     ; If money input is currently zero then set as 100, don't divide by zero!
@@ -84,37 +84,37 @@ func menu_displayStatistics()
     println("--- STATISTICS ---")
     nextln()
 
-	print("Games played: ")
-	print(totalGamesPlayed)
-	nextln()
-	print("Games won: ")
-	print(gGameStatGamesWon)
-	nextln()
-	print("Games lost: ")
-	print(gGameStatGamesLost)
-	nextln()
-	print("Games drawn: ")
-	print(gGameStatGamesDrew)
-	nextln()
-	nextln()
+    print("Games played: ")
+    print(totalGamesPlayed)
+    nextln()
+    print("Games won: ")
+    print(gGameStatGamesWon)
+    nextln()
+    print("Games lost: ")
+    print(gGameStatGamesLost)
+    nextln()
+    print("Games drawn: ")
+    print(gGameStatGamesDrew)
+    nextln()
+    nextln()
 
-	print("Chips bought: ")
-	print(gGameStatMoneyInput)
-	nextln()
-	print("Chips gained: ")
-	print(gGameStatMoneyGained)
-	nextln()
-	print("Chips lost: ")
-	print(gGameStatMoneyLost)
-	nextln()
-	nextln()
+    print("Chips bought: ")
+    print(gGameStatMoneyInput)
+    nextln()
+    print("Chips gained: ")
+    print(gGameStatMoneyGained)
+    nextln()
+    print("Chips lost: ")
+    print(gGameStatMoneyLost)
+    nextln()
+    nextln()
 
-	print("Net earnings / loss: ")
-	print(netEarnings)
-	nextln()
-	print("% of chips bought left: ")
-	print(percentOfChipsBought)
-	nextln()
+    print("Net earnings / loss: ")
+    print(netEarnings)
+    nextln()
+    print("% of chips bought left: ")
+    print(percentOfChipsBought)
+    nextln()
     
     doEnterNumToContinue()
 end
@@ -125,18 +125,18 @@ func menu_getMoney()
     menu_drawTitleBar("BUY GAME CHIPS")
     
     println("Please input an amount to be exchanged for chips.")
-	println("One Euro corresponds to one game chip.")
-	println("Enter '0' or less to abort.")
+    println("One Euro corresponds to one game chip.")
+    println("Enter '0' or less to abort.")
 
     print("Minium play amount is: EUR ")
-	print(GAME_MIN_BET)
-	nextln()
+    print(GAME_MIN_BET)
+    nextln()
 
-	print("Current amount of chips: ")
-	print(gPlayerChips)
-	nextln()
+    print("Current amount of chips: ")
+    print(gPlayerChips)
+    nextln()
 
-	print("Enter amount to exchange (EUR): ")
+    print("Enter amount to exchange (EUR): ")
     
     ; Read the amount to exchange and add to player balance,
     ; if <= 0 then it means the player cancelled
@@ -156,15 +156,15 @@ end
 
 ; Displays the main menu and reads menu choices
 func menu_displayMain()
-	while gDisplayMenu
-		; Display the menu
-		menu_drawTitleBar("BLACKJACK - MAIN MENU")
+    while gDisplayMenu
+        ; Display the menu
+        menu_drawTitleBar("BLACKJACK - MAIN MENU")
 
-		print("Chips available to play: ")
-		print(gPlayerChips)
-		print("\n\n")
+        print("Chips available to play: ")
+        print(gPlayerChips)
+        print("\n\n")
 
-		print("1 - New game (normal)\n"
+        print("1 - New game (normal)\n"
               "2 - New game (advanced)\n"
               "3 - Exchange money for chips\n"
               "4 - Statistics\n"
@@ -172,33 +172,33 @@ func menu_displayMain()
               "\n"
               "Input choice and press enter: ")
 
-		; Ask the player for input
-		var choice = readnum()
+        ; Ask the player for input
+        var choice = readnum()
 
-		if choice == 1
-			println("NOT IMPLEMENTED YET!!")
-		or if choice == 2
-			println("NOT IMPLEMENTED YET!!")
-		or if choice == 3
-			menu_getMoney()
-		or if choice == 4
-			menu_displayStatistics()
-		or if choice == 5
-			gDisplayMenu = false
-		else
-			println("Invalid menu choice, try again!")
-		end
-	end
+        if choice == 1
+            println("NOT IMPLEMENTED YET!!")
+        or if choice == 2
+            println("NOT IMPLEMENTED YET!!")
+        or if choice == 3
+            menu_getMoney()
+        or if choice == 4
+            menu_displayStatistics()
+        or if choice == 5
+            gDisplayMenu = false
+        else
+            println("Invalid menu choice, try again!")
+        end
+    end
 end
 
 ;==================================================================================================
 ; Main program entry point
 ;==================================================================================================
 func main() -> int
-	; Seed the random number generator to the current time (in seconds) and begin the menu loop
-	srand(time())
-	menu_displayMain()
+    ; Seed the random number generator to the current time (in seconds) and begin the menu loop
+    srand(time())
+    menu_displayMain()
 
-	; Program executed successfully, return 0 to indicate that
-	return 0
+    ; Program executed successfully, return 0 to indicate that
+    return 0
 end
