@@ -2,6 +2,7 @@
 
 #include "WCDebugBreak.hpp"
 #include "WCLogger.hpp"
+#include "WCMacros.hpp"
 
 /* Default setting for whether asserts are enabled or not */
 #ifndef WC_ASSERT_ENABLED
@@ -52,3 +53,27 @@
 #else
     #define WC_RAISE_ASSERTION(formatString, ...)
 #endif
+
+/** 
+ * The same as WC_GUARD, but will raise an assertion (if assertions are enabled) when the expression evaluates
+ * to false. Useful for creating sanity checks that assert in debug but fail gracefully in release.
+ */
+#define WC_GUARD_ASSERT(...)\
+    WC_CALL_MACRO_OVERLOAD(__WC_GUARD_ASSERT_IMPL_, __VA_ARGS__)
+
+/* Internal implementation stuff for the guard assert macro */
+#define __WC_GUARD_ASSERT_IMPL_1(BooleanExpression)\
+    do {\
+        if (!(BooleanExpression)) {\
+            WC_RAISE_ASSERTION("Guard condition evaluated to false!: " #BooleanExpression);\
+            return;\
+        }\
+    } while (0)
+
+#define __WC_GUARD_ASSERT_IMPL_2(BooleanExpression, ReturnValueExpression)\
+    do {\
+        if (!(BooleanExpression)) {\
+            WC_RAISE_ASSERTION("Guard condition evaluated to false!: " #BooleanExpression);\
+            return ReturnValueExpression;\
+        }\
+    } while (0)

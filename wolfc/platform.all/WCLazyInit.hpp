@@ -1,7 +1,6 @@
 #pragma once
 
 #include "WCAssert.hpp"
-#include "WCMacros.hpp"
 
 WC_BEGIN_NAMESPACE
 

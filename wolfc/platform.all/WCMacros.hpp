@@ -37,13 +37,6 @@
 #define WC_GUARD(...)\
     WC_CALL_MACRO_OVERLOAD(__WC_GUARD_IMPL_, __VA_ARGS__)
 
-/** 
- * The same as WC_GUARD, but will raise an assertion (if assertions are enabled) when the expression evaluates
- * to false. Useful for creating sanity checks that assert in debug but fail gracefully in release.
- */
-#define WC_GUARD_ASSERT(...)\
-    WC_CALL_MACRO_OVERLOAD(__WC_GUARD_ASSERT_IMPL_, __VA_ARGS__)
-
 /* Manual memory management. */
 #define WC_SAFE_DELETE_NULL(ptr)\
     do {\
@@ -128,22 +121,6 @@
 #define __WC_GUARD_IMPL_2(BooleanExpression, ReturnValueExpression)\
     do {\
         if (!(BooleanExpression)) {\
-            return ReturnValueExpression;\
-        }\
-    } while (0)
-
-#define __WC_GUARD_ASSERT_IMPL_1(BooleanExpression)\
-    do {\
-        if (!(BooleanExpression)) {\
-            WC_RAISE_ASSERTION("Guard condition evaluated to false!: " #BooleanExpression);\
-            return;\
-        }\
-    } while (0)
-
-#define __WC_GUARD_ASSERT_IMPL_2(BooleanExpression, ReturnValueExpression)\
-    do {\
-        if (!(BooleanExpression)) {\
-            WC_RAISE_ASSERTION("Guard condition evaluated to false!: " #BooleanExpression);\
             return ReturnValueExpression;\
         }\
     } while (0)

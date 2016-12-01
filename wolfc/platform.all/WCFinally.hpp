@@ -1,7 +1,6 @@
 #pragma once
 
 #include "WCAssert.hpp"
-#include "WCMacros.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <functional>
