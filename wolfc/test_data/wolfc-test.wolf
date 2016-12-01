@@ -10,6 +10,16 @@ func nextln()
     print("\n")
 end
 
+func printPrefixTxtAndAmtLn(string text, int amount)
+    print(text)
+    print(amount)
+    nextln()
+end
+
+;--------------------------------------------------------------------------------------------------
+; This utility slows down things and asks the user to input a number (any number) before proceeding
+; with the rest of the program. Useful for pausing after new information is shown.
+;--------------------------------------------------------------------------------------------------
 func doEnterNumToContinue()
     println("Enter a number to continue...")
     readnum()
@@ -19,8 +29,7 @@ end
 ; General game stuff
 ;==================================================================================================
 
-; Minimum bet that can be made
-var GAME_MIN_BET = 20
+var GAME_MIN_BET = 20   ; Minimum bet that can be made
 
 ;==================================================================================================
 ; Game stat stuff
@@ -37,16 +46,17 @@ var gGameStatMoneyLost = 0      ; Total amount lost on bets
 ; Player related stuff
 ;==================================================================================================
 
-; Current balance of chips the player has. 1 chip = 1 EUR
-var gPlayerChips = 0
+var gPlayerChips = 0        ; Current balance of chips the player has. 1 chip = 1 EUR
 
 ;==================================================================================================
 ; Menu related stuff 
 ;==================================================================================================
 
-; Continue displaying the main menu?
-var gDisplayMenu = true
+var gDisplayMenu = true     ; Continue displaying the main menu?
 
+;--------------------------------------------------------------------------------------------------
+; Draws a title bar for the menu
+;--------------------------------------------------------------------------------------------------
 func menu_drawTitleBar(string titleText)
     nextln()
     println("*************************************************")
@@ -55,7 +65,9 @@ func menu_drawTitleBar(string titleText)
     nextln()
 end
 
+;--------------------------------------------------------------------------------------------------
 ; Display statistics
+;--------------------------------------------------------------------------------------------------
 func menu_displayStatistics()
     menu_drawTitleBar("GAME STATISTICS")
      
@@ -71,7 +83,7 @@ func menu_displayStatistics()
     ; This gives an earning metric of sorts...
     ; If money input is currently zero then set as 100, don't divide by zero!
     var percentOfChipsBought = 0
-    
+
     if gGameStatMoneyInput > 0
         ; Have input some money. Calculate percentage as normal
         percentOfChipsBought = (gPlayerChips * 100) / gGameStatMoneyInput
@@ -84,42 +96,41 @@ func menu_displayStatistics()
     println("--- STATISTICS ---")
     nextln()
 
-    print("Games played: ")
-    print(totalGamesPlayed)
-    nextln()
-    print("Games won: ")
-    print(gGameStatGamesWon)
-    nextln()
-    print("Games lost: ")
-    print(gGameStatGamesLost)
-    nextln()
-    print("Games drawn: ")
-    print(gGameStatGamesDrew)
-    nextln()
+    printPrefixTxtAndAmtLn("Games played: ", totalGamesPlayed)
+    printPrefixTxtAndAmtLn("Games won: ", gGameStatGamesWon)
+    printPrefixTxtAndAmtLn("Games lost: ", gGameStatGamesLost)
+    printPrefixTxtAndAmtLn("Games drawn: ", gGameStatGamesDrew)
     nextln()
 
-    print("Chips bought: ")
-    print(gGameStatMoneyInput)
-    nextln()
-    print("Chips gained: ")
-    print(gGameStatMoneyGained)
-    nextln()
-    print("Chips lost: ")
-    print(gGameStatMoneyLost)
-    nextln()
+    printPrefixTxtAndAmtLn("Chips bought: ", gGameStatMoneyInput)
+    printPrefixTxtAndAmtLn("Chips gained: ", gGameStatMoneyGained)
+    printPrefixTxtAndAmtLn("Chips lost: ", gGameStatMoneyLost)
     nextln()
 
-    print("Net earnings / loss: ")
-    print(netEarnings)
-    nextln()
-    print("% of chips bought left: ")
-    print(percentOfChipsBought)
+    printPrefixTxtAndAmtLn("Net earnings / loss: ", netEarnings)
+    printPrefixTxtAndAmtLn("% of chips bought left: ", percentOfChipsBought)
     nextln()
     
     doEnterNumToContinue()
 end
 
+;--------------------------------------------------------------------------------------------------
+; Display a warning when the player doesn't have enough to play
+;--------------------------------------------------------------------------------------------------
+func menu_displayMoneyWarning()
+    menu_drawTitleBar("INSUFFICIENT FUNDS")
+
+    println("You do not have enough chips to play.")
+    println("Please purchase more chips in order to play.")
+    printPrefixTxtAndAmtLn("Minimum number of chips needed is: ", GAME_MIN_BET)
+    printPrefixTxtAndAmtLn("Amount of chips you have: ", gPlayerChips)
+    
+    doEnterNumToContinue()
+end
+
+;--------------------------------------------------------------------------------------------------
 ; Ask the player to add money to the player's count
+;--------------------------------------------------------------------------------------------------
 func menu_getMoney()
     ; Ask for money amount
     menu_drawTitleBar("BUY GAME CHIPS")
@@ -128,16 +139,11 @@ func menu_getMoney()
     println("One Euro corresponds to one game chip.")
     println("Enter '0' or less to abort.")
 
-    print("Minium play amount is: EUR ")
-    print(GAME_MIN_BET)
-    nextln()
-
-    print("Current amount of chips: ")
-    print(gPlayerChips)
-    nextln()
+    printPrefixTxtAndAmtLn("Minium play amount is: EUR ", GAME_MIN_BET)
+    printPrefixTxtAndAmtLn("Current amount of chips: ", gPlayerChips)
 
     print("Enter amount to exchange (EUR): ")
-    
+
     ; Read the amount to exchange and add to player balance,
     ; if <= 0 then it means the player cancelled
     var exchangeAmount = readnum()
@@ -148,13 +154,58 @@ func menu_getMoney()
     gGameStatMoneyInput += exchangeAmount
 
     ; Display the new total to the user
-    print("New amount of chips: ")
-    print(gPlayerChips)
-    nextln()
+    printPrefixTxtAndAmtLn("New amount of chips: ", gPlayerChips)
     doEnterNumToContinue()
 end
 
-; Displays the main menu and reads menu choices
+;--------------------------------------------------------------------------------------------------
+; Ask the player for the bet amount to start the game.
+; If the correct amount is entered then the game starts.
+;--------------------------------------------------------------------------------------------------
+func menu_getBet()
+    ; Continue looping one of several conditions occurs:
+    ;   1 - The player decides to quit (enters 0 or less)
+    ;   2 - The player no longer has enough cash for minimum bet amount
+    ;   3 - The player does not want another game           
+    loop
+        ; Ask for the bet amount
+        menu_drawTitleBar("ENTER BET AMOUNT")
+        
+        println("Please enter bet amount for this game.")
+        println("Enter 0 or less to return back to the main menu.")
+        nextln()
+
+        printPrefixTxtAndAmtLn("Minimum bet: ", GAME_MIN_BET)
+        printPrefixTxtAndAmtLn("Chips available: ", gPlayerChips)
+         
+        ; Get the bet amount
+        var betAmount = readnum()
+
+        ; If bet amount is <= then the user wants to quit
+        break if betAmount <= 0
+
+        ; If the user doesn't enter enough for the minimum bet then 
+        ; display a warning and loop around to ask again
+        /;
+        if betAmount < GAME_MIN_BET
+            ; TODO
+            ; MenuDisplayBetWarning(betAmount)
+            nop
+        end;/
+
+        ; Begin the game loop with the bet amount
+        ; TODO
+        ; GameInitGame(betAmount);
+
+        ; Quit out unless the user wants to play again
+        ; TODO
+        ; break unless MenuAskAnotherGame()
+    end
+end
+
+;--------------------------------------------------------------------------------------------------
+; Displays the main menu and reads menu choices.
+;--------------------------------------------------------------------------------------------------
 func menu_displayMain()
     while gDisplayMenu
         ; Display the menu
@@ -175,8 +226,24 @@ func menu_displayMain()
         ; Ask the player for input
         var choice = readnum()
 
-        if choice == 1
-            println("NOT IMPLEMENTED YET!!")
+        if choice == 1 or choice == 2
+            ; User wants to play a game. Make sure we have the minimum bet amount first:
+            if gPlayerChips < GAME_MIN_BET
+                menu_displayMoneyWarning()
+            else
+                ; Have enough to play, set the game mode:
+                ;if choice == 1
+                    ; TODO
+                    ; GameSetGameType(GAME_TYPE_NORMAL)
+                ;else
+                    ; TODO
+                    ; GameSetGameType(GAME_TYPE_ADVANCED)
+                ;end
+                ;
+
+                ; Ask the player for the bet and start the game
+                menu_getBet()
+            end
         or if choice == 2
             println("NOT IMPLEMENTED YET!!")
         or if choice == 3
