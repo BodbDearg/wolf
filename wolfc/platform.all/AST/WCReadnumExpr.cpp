@@ -85,6 +85,14 @@ llvm::Value * ReadnumExpr::codegenExprEval(CodegenCtx & cgCtx) {
         return nullptr;
     }
     
+    // Get 'getchar' C function
+    llvm::Constant * getcharFn = cgCtx.module.getLLVMModuleRef().getFunction("getchar");
+    
+    if (!getcharFn) {
+        compileError("Codegen failed! Can't find 'getchar' function!");
+        return nullptr;
+    }
+    
     // Create a format string for scanf
     llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%zd", "ReadnumExpr:fmt_str");
     
@@ -94,11 +102,18 @@ llvm::Value * ReadnumExpr::codegenExprEval(CodegenCtx & cgCtx) {
                                                            "ReadnumExpr:tmp_stack_var");
     
     // Create the call to scanf!
-    llvm::Value * callInst = cgCtx.irBuilder.CreateCall(scanfFn,
-                                                        { fmtStr, outputVar },
-                                                        "ReadnumExpr:scanf_call");
+    llvm::Value * callInst1 = cgCtx.irBuilder.CreateCall(scanfFn,
+                                                         { fmtStr, outputVar },
+                                                         "ReadnumExpr:scanf_call");
     
-    WC_ASSERT(callInst);
+    WC_ASSERT(callInst1);
+    
+    // Consume the following return character
+    llvm::Value * callInst2 = cgCtx.irBuilder.CreateCall(getcharFn,
+                                                         {},
+                                                         "ReadnumExpr:getchar_call");
+    
+    WC_ASSERT(callInst2);
     
     // And return the stack var
     return cgCtx.irBuilder.CreateLoad(outputVar, "ReadnumExpr:load_tmp_stack_var");

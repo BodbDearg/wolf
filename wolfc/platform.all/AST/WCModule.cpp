@@ -88,6 +88,16 @@ bool Module::generateCode() {
     }
     
     {
+        // Declare the c standard library function 'getchar'
+        llvm::FunctionType * getcharFnType = llvm::FunctionType::get(
+            llvm::Type::getInt32Ty(mLLVMCtx),
+            llvm::ArrayRef<llvm::Type*>{},
+            false);
+    
+        mLLVMModule->getOrInsertFunction("getchar", getcharFnType);
+    }
+    
+    {
         // Declare the c standard library function 'time'
         llvm::FunctionType * timeFnType = llvm::FunctionType::get(
             llvm::Type::getInt64Ty(mLLVMCtx),
