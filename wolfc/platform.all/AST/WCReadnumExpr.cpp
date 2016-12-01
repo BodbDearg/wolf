@@ -95,28 +95,29 @@ llvm::Value * ReadnumExpr::codegenExprEval(CodegenCtx & cgCtx) {
     
     // Create a format string for scanf
     llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%zd", "ReadnumExpr:fmt_str");
+    WC_ASSERT(fmtStr);
     
     // Create a stack var to hold the output:
     llvm::Value * outputVar = cgCtx.irBuilder.CreateAlloca(cgCtx.irBuilder.getInt64Ty(),
                                                            nullptr,
                                                            "ReadnumExpr:tmp_stack_var");
     
-    // Create the call to scanf!
-    llvm::Value * callInst1 = cgCtx.irBuilder.CreateCall(scanfFn,
-                                                         { fmtStr, outputVar },
-                                                         "ReadnumExpr:scanf_call");
+    WC_ASSERT(outputVar);
     
-    WC_ASSERT(callInst1);
+    // Create the call to scanf!
+    WC_ASSERTED_OP(cgCtx.irBuilder.CreateCall(scanfFn,
+                                              { fmtStr, outputVar },
+                                              "ReadnumExpr:scanf_call"));
     
     // Consume the following return character
-    llvm::Value * callInst2 = cgCtx.irBuilder.CreateCall(getcharFn,
-                                                         {},
-                                                         "ReadnumExpr:getchar_call");
-    
-    WC_ASSERT(callInst2);
+    WC_ASSERTED_OP(cgCtx.irBuilder.CreateCall(getcharFn,
+                                              {},
+                                              "ReadnumExpr:getchar_call"));
     
     // And return the stack var
-    return cgCtx.irBuilder.CreateLoad(outputVar, "ReadnumExpr:load_tmp_stack_var");
+    llvm::Value * returnValue = cgCtx.irBuilder.CreateLoad(outputVar, "ReadnumExpr:load_tmp_stack_var");
+    WC_ASSERT(returnValue);
+    return returnValue;
 }
 
 llvm::Constant * ReadnumExpr::codegenExprConstEval(CodegenCtx & cgCtx) {
