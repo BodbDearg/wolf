@@ -186,9 +186,13 @@ bool IfStmntNoElse::codegen(CodegenCtx & cgCtx) {
     WC_ASSERT(ifBB);
     
     // Create the 'then' and 'end' basic blocks:
-    llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "IfStmntNoElse:then", parentFn);
+    ASTNode & thenASTNode = dynamic_cast<ASTNode&>(mThenNode);
+    std::string thenBBLbl = makeLLVMLabelForTok("IfStmntNoElse:then", thenASTNode.getStartToken());
+    llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, thenBBLbl, parentFn);
     WC_ASSERT(thenBB);
-    mEndBasicBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "IfStmntNoElse:end", parentFn);
+    
+    std::string endBBLbl = makeLLVMLabelForTok("IfStmntNoElse:end", getEndToken());
+    mEndBasicBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, endBBLbl, parentFn);
     WC_ASSERT(mEndBasicBlock);
 
     // Codegen the 'then' block
@@ -251,9 +255,13 @@ bool IfStmntElseIf::codegen(CodegenCtx & cgCtx) {
     WC_ASSERT(ifBB);
     
     // Create the 'then' and 'outer if' blocks:
-    llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "IfStmntElseIf:then", parentFn);
+    ASTNode & thenASTNode = dynamic_cast<ASTNode&>(mThenNode);
+    std::string thenBBLbl = makeLLVMLabelForTok("IfStmntElseIf:then", thenASTNode.getStartToken());
+    llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, thenBBLbl, parentFn);
     WC_ASSERT(thenBB);
-    llvm::BasicBlock * outerIfBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "IfStmntElseIf:outer_if", parentFn);
+    
+    std::string outerIfBBLbl = makeLLVMLabelForTok("IfStmntElseIf:outer_if", mElseIfStmnt.getStartToken());
+    llvm::BasicBlock * outerIfBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, outerIfBBLbl, parentFn);
     WC_ASSERT(outerIfBB);
     
     // Codegen the 'then' block
@@ -331,11 +339,18 @@ bool IfStmntElse::codegen(CodegenCtx & cgCtx) {
     llvm::BasicBlock * ifBB = cgCtx.irBuilder.GetInsertBlock();
     
     // Create the 'then', 'else' and 'end' blocks:
-    llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "IfStmntElse:then", parentFn);
+    ASTNode & thenASTNode = dynamic_cast<ASTNode&>(mThenNode);
+    std::string thenBBLbl = makeLLVMLabelForTok("IfStmntElse:then", thenASTNode.getStartToken());
+    llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, thenBBLbl, parentFn);
     WC_ASSERT(thenBB);
-    llvm::BasicBlock * elseBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "IfStmntElse:else", parentFn);
+    
+    ASTNode & elseASTNode = dynamic_cast<ASTNode&>(mElseNode);
+    std::string elseBBLbl = makeLLVMLabelForTok("IfStmntElse:else", elseASTNode.getStartToken());
+    llvm::BasicBlock * elseBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, elseBBLbl, parentFn);
     WC_ASSERT(elseBB);
-    mEndBasicBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "IfStmntElse:end", parentFn);
+    
+    std::string endBBLbl = makeLLVMLabelForTok("IfStmntElse:end", getEndToken());
+    mEndBasicBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, endBBLbl, parentFn);
     WC_ASSERT(mEndBasicBlock);
     
     // Codegen the 'then' block

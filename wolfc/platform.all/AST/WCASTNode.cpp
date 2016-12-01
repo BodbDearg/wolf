@@ -81,4 +81,14 @@ void ASTNode::compileError(const char * msg, ...) const {
     std::fprintf(stderr, "\n");
 }
 
+std::string ASTNode::makeLLVMLabelForTok(const char * labelText, const Token & token) {
+    WC_ASSERT(labelText);
+    std::string label = labelText;
+    label += "@l";
+    label += std::to_string(token.startLine + 1);
+    label += ", ch";
+    label += std::to_string(token.startCol + 1);
+    return label;
+}
+
 WC_END_NAMESPACE
