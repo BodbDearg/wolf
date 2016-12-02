@@ -254,15 +254,11 @@ bool IfStmntElseIf::codegen(CodegenCtx & cgCtx) {
     llvm::BasicBlock * ifBB = cgCtx.irBuilder.GetInsertBlock();
     WC_ASSERT(ifBB);
     
-    // Create the 'then' and 'outer if' blocks:
+    // Create the 'then' basic blocks:
     ASTNode & thenASTNode = dynamic_cast<ASTNode&>(mThenNode);
     std::string thenBBLbl = makeLLVMLabelForTok("IfStmntElseIf:then", thenASTNode.getStartToken());
     llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, thenBBLbl, parentFn);
     WC_ASSERT(thenBB);
-    
-    std::string outerIfBBLbl = makeLLVMLabelForTok("IfStmntElseIf:outer_if", mElseIfStmnt.getStartToken());
-    llvm::BasicBlock * outerIfBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, outerIfBBLbl, parentFn);
-    WC_ASSERT(outerIfBB);
     
     // Codegen the 'then' block
     cgCtx.irBuilder.SetInsertPoint(thenBB);
@@ -270,6 +266,11 @@ bool IfStmntElseIf::codegen(CodegenCtx & cgCtx) {
     if (!mThenNode.codegen(cgCtx)) {
         return false;
     }
+    
+    // Create the 'outer if' basic block:
+    std::string outerIfBBLbl = makeLLVMLabelForTok("IfStmntElseIf:outer_if", mElseIfStmnt.getStartToken());
+    llvm::BasicBlock * outerIfBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, outerIfBBLbl, parentFn);
+    WC_ASSERT(outerIfBB);
     
     // Codegen the 'outer if' block
     cgCtx.irBuilder.SetInsertPoint(outerIfBB);
