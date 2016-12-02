@@ -3,10 +3,6 @@
 #include "WCASTNode.hpp"
 #include "WCIStmnt.hpp"
 
-namespace llvm {
-    class BasicBlock;
-}
-
 WC_BEGIN_NAMESPACE
 
 class AssignExpr;
@@ -45,7 +41,6 @@ public:
     AssignExpr &            mIfExpr;
     IBasicCodegenNode &     mThenNode;
     const Token &           mStartToken;
-    llvm::BasicBlock *      mEndBasicBlock = nullptr;
 };
 
 /* if|unless AssignExpr [then] Scope end */

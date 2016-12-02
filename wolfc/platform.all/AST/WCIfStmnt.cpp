@@ -181,44 +181,48 @@ bool IfStmntNoElse::codegen(CodegenCtx & cgCtx) {
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
     WC_ASSERT(parentFn);
     
-    // Save the current insert block:
-    llvm::BasicBlock * ifBB = cgCtx.irBuilder.GetInsertBlock();
-    WC_ASSERT(ifBB);
+    // Save basic block that the 'if' branch will go into:
+    llvm::BasicBlock * ifBranchBB = cgCtx.irBuilder.GetInsertBlock();
+    WC_ASSERT(ifBranchBB);
     
-    // Create the 'then' and 'end' basic blocks:
+    // Create the start basic block for the 'then' scope:
     ASTNode & thenASTNode = dynamic_cast<ASTNode&>(mThenNode);
     std::string thenBBLbl = makeLLVMLabelForTok("IfStmntNoElse:then", thenASTNode.getStartToken());
     llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, thenBBLbl, parentFn);
     WC_ASSERT(thenBB);
-    
-    std::string endBBLbl = makeLLVMLabelForTok("IfStmntNoElse:end", getEndToken());
-    mEndBasicBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, endBBLbl, parentFn);
-    WC_ASSERT(mEndBasicBlock);
 
-    // Codegen the 'then' block
+    // Codegen the 'then' scope
     cgCtx.irBuilder.SetInsertPoint(thenBB);
+    WC_GUARD(mThenNode.codegen(cgCtx), false);
     
-    if (!mThenNode.codegen(cgCtx)) {
-        return false;
-    }
+    // Get the current block, this is the end block for the 'then' scope:
+    llvm::BasicBlock * thenEndBB = cgCtx.irBuilder.GetInsertBlock();
+    WC_ASSERT(thenEndBB);
     
-    cgCtx.irBuilder.CreateBr(mEndBasicBlock);
+    // Create the end basic block for the if statement:
+    std::string endBBLbl = makeLLVMLabelForTok("IfStmntNoElse:end", getEndToken());
+    llvm::BasicBlock * endBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, endBBLbl, parentFn);
+    WC_ASSERT(endBB);
     
-    // Generate the branch for the if
-    cgCtx.irBuilder.SetInsertPoint(ifBB);
-    llvm::Value * branch = nullptr;
+    // Generate the branch for the if statement
+    cgCtx.irBuilder.SetInsertPoint(ifBranchBB);
     
     if (isIfExprInversed()) {
-        branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, mEndBasicBlock, thenBB);
+        WC_ASSERTED_OP(cgCtx.irBuilder.CreateCondBr(ifExprResult, endBB, thenBB));
     }
     else {
-        branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, mEndBasicBlock);
+        WC_ASSERTED_OP(cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, endBB));
     }
     
-    WC_ASSERT(branch);
+    // Tie the end of the 'then' scope to the end of this if statement,
+    // that is if it is not already terminated:
+    if (!thenEndBB->getTerminator()) {
+        cgCtx.irBuilder.SetInsertPoint(thenEndBB);
+        cgCtx.irBuilder.CreateBr(endBB);
+    }
     
-    // Switch back to inserting code at the end block:
-    cgCtx.irBuilder.SetInsertPoint(mEndBasicBlock);
+    // Insert future code past the end of this if statement
+    cgCtx.irBuilder.SetInsertPoint(endBB);
     return true;
 }
 
@@ -250,56 +254,68 @@ bool IfStmntElseIf::codegen(CodegenCtx & cgCtx) {
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
     WC_ASSERT(parentFn);
     
-    // Save the current insert block:
-    llvm::BasicBlock * ifBB = cgCtx.irBuilder.GetInsertBlock();
-    WC_ASSERT(ifBB);
+    // Save basic block that the 'if' branch will go into:
+    llvm::BasicBlock * ifBranchBB = cgCtx.irBuilder.GetInsertBlock();
+    WC_ASSERT(ifBranchBB);
     
-    // Create the 'then' basic blocks:
+    // Create the start basic block for the 'then' scope:
     ASTNode & thenASTNode = dynamic_cast<ASTNode&>(mThenNode);
     std::string thenBBLbl = makeLLVMLabelForTok("IfStmntElseIf:then", thenASTNode.getStartToken());
     llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, thenBBLbl, parentFn);
     WC_ASSERT(thenBB);
     
-    // Codegen the 'then' block
+    // Codegen the 'then' scope
     cgCtx.irBuilder.SetInsertPoint(thenBB);
+    WC_GUARD(mThenNode.codegen(cgCtx), false);
     
-    if (!mThenNode.codegen(cgCtx)) {
-        return false;
-    }
+    // Get the current block, this is the end block for the 'then' scope:
+    llvm::BasicBlock * thenEndBB = cgCtx.irBuilder.GetInsertBlock();
+    WC_ASSERT(thenEndBB);
     
-    // Create the 'outer if' basic block:
+    // Create the start basic block for the 'outer if' scope:
     std::string outerIfBBLbl = makeLLVMLabelForTok("IfStmntElseIf:outer_if", mElseIfStmnt.getStartToken());
     llvm::BasicBlock * outerIfBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, outerIfBBLbl, parentFn);
     WC_ASSERT(outerIfBB);
     
-    // Codegen the 'outer if' block
+    // Codegen the 'outer if' scope
     cgCtx.irBuilder.SetInsertPoint(outerIfBB);
+    WC_GUARD(mElseIfStmnt.codegen(cgCtx), false);
     
-    if (!mElseIfStmnt.codegen(cgCtx)) {
-        return false;
-    }
+    // Get the current block, this is the end block for the 'outer if' scope:
+    llvm::BasicBlock * outerIfEndBB = cgCtx.irBuilder.GetInsertBlock();
+    WC_ASSERT(outerIfEndBB);
     
-    // Expect the outer if to have an 'end' basic block. Tie the end of this if's 'then' block to that:
-    WC_ASSERT(mElseIfStmnt.mEndBasicBlock);
-    cgCtx.irBuilder.SetInsertPoint(thenBB);
-    mEndBasicBlock = mElseIfStmnt.mEndBasicBlock;
-    cgCtx.irBuilder.CreateBr(mEndBasicBlock);
+    // Create the end basic block for the if statement:
+    std::string endBBLbl = makeLLVMLabelForTok("IfStmntElseIf:end", getEndToken());
+    llvm::BasicBlock * endBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, endBBLbl, parentFn);
+    WC_ASSERT(endBB);
     
-    // Generate the branch for the if
-    cgCtx.irBuilder.SetInsertPoint(ifBB);
-    llvm::Value * branch = nullptr;
+    // Generate the branch for the if statement
+    cgCtx.irBuilder.SetInsertPoint(ifBranchBB);
     
     if (isIfExprInversed()) {
-        branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, outerIfBB, thenBB);
+        WC_ASSERTED_OP(cgCtx.irBuilder.CreateCondBr(ifExprResult, outerIfBB, thenBB));
     }
     else {
-        branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, outerIfBB);
+        WC_ASSERTED_OP(cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, outerIfBB));
     }
     
-    WC_ASSERT(branch);
+    // Tie the end of the 'then' scope to the end of this if statement,
+    // that is if it is not already terminated:
+    if (!thenEndBB->getTerminator()) {
+        cgCtx.irBuilder.SetInsertPoint(thenEndBB);
+        cgCtx.irBuilder.CreateBr(endBB);
+    }
     
-    // Switch back to inserting code at the end block:
-    cgCtx.irBuilder.SetInsertPoint(mEndBasicBlock);
+    // Tie the end of the 'outer if' scope to the end of this if statement,
+    // that is if it is not already terminated:
+    if (!outerIfEndBB->getTerminator()) {
+        cgCtx.irBuilder.SetInsertPoint(outerIfEndBB);
+        cgCtx.irBuilder.CreateBr(endBB);
+    }
+    
+    // Insert future code past the end of this if statement
+    cgCtx.irBuilder.SetInsertPoint(endBB);
     return true;
 }
 
@@ -336,57 +352,69 @@ bool IfStmntElse::codegen(CodegenCtx & cgCtx) {
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
     WC_ASSERT(parentFn);
     
-    // Save the current insert block:
-    llvm::BasicBlock * ifBB = cgCtx.irBuilder.GetInsertBlock();
+    // Save basic block that the 'if' branch will go into:
+    llvm::BasicBlock * ifBranchBB = cgCtx.irBuilder.GetInsertBlock();
+    WC_ASSERT(ifBranchBB);
     
-    // Create the 'then', 'else' and 'end' blocks:
+    // Create the start basic block for the 'then' scope:
     ASTNode & thenASTNode = dynamic_cast<ASTNode&>(mThenNode);
     std::string thenBBLbl = makeLLVMLabelForTok("IfStmntElse:then", thenASTNode.getStartToken());
     llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, thenBBLbl, parentFn);
     WC_ASSERT(thenBB);
     
+    // Codegen the 'then' scope
+    cgCtx.irBuilder.SetInsertPoint(thenBB);
+    WC_GUARD(mThenNode.codegen(cgCtx), false);
+
+    // Get the current block, this is the end block for the 'then' scope:
+    llvm::BasicBlock * thenEndBB = cgCtx.irBuilder.GetInsertBlock();
+    WC_ASSERT(thenEndBB);
+    
+    // Create the start basic block for the 'else' scope:
     ASTNode & elseASTNode = dynamic_cast<ASTNode&>(mElseNode);
     std::string elseBBLbl = makeLLVMLabelForTok("IfStmntElse:else", elseASTNode.getStartToken());
     llvm::BasicBlock * elseBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, elseBBLbl, parentFn);
     WC_ASSERT(elseBB);
     
-    std::string endBBLbl = makeLLVMLabelForTok("IfStmntElse:end", getEndToken());
-    mEndBasicBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, endBBLbl, parentFn);
-    WC_ASSERT(mEndBasicBlock);
-    
-    // Codegen the 'then' block
-    cgCtx.irBuilder.SetInsertPoint(thenBB);
-    
-    if (!mThenNode.codegen(cgCtx)) {
-        return false;
-    }
-    
-    cgCtx.irBuilder.CreateBr(mEndBasicBlock);
-    
-    // Codegen the 'else' block
+    // Codegen the 'else' scope
     cgCtx.irBuilder.SetInsertPoint(elseBB);
+    WC_GUARD(mElseNode.codegen(cgCtx), false);
     
-    if (!mElseNode.codegen(cgCtx)) {
-        return false;
-    }
+    // Get the current block, this is the end block for the 'else' scope:
+    llvm::BasicBlock * elseEndBB = cgCtx.irBuilder.GetInsertBlock();
+    WC_ASSERT(elseEndBB);
     
-    cgCtx.irBuilder.CreateBr(mEndBasicBlock);
+    // Create the end basic block for the if statement:
+    std::string endBBLbl = makeLLVMLabelForTok("IfStmntElse:end", getEndToken());
+    llvm::BasicBlock * endBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, endBBLbl, parentFn);
+    WC_ASSERT(endBB);
     
-    // Generate the branch for the if
-    cgCtx.irBuilder.SetInsertPoint(ifBB);
-    llvm::Value * branch = nullptr;
+    // Generate the branch for the if statement
+    cgCtx.irBuilder.SetInsertPoint(ifBranchBB);
     
     if (isIfExprInversed()) {
-        branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, elseBB, thenBB);
+        WC_ASSERTED_OP(cgCtx.irBuilder.CreateCondBr(ifExprResult, elseBB, thenBB));
     }
     else {
-        branch = cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, elseBB);
+        WC_ASSERTED_OP(cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, elseBB));
     }
     
-    WC_ASSERT(branch);
+    // Tie the end of the 'then' scope to the end of this if statement,
+    // that is if it is not already terminated:
+    if (!thenEndBB->getTerminator()) {
+        cgCtx.irBuilder.SetInsertPoint(thenEndBB);
+        cgCtx.irBuilder.CreateBr(endBB);
+    }
     
-    // Switch back to inserting code at the end block:
-    cgCtx.irBuilder.SetInsertPoint(mEndBasicBlock);
+    // Tie the end of the 'else' scope to the end of this if statement,
+    // that is if it is not already terminated:
+    if (!elseEndBB->getTerminator()) {
+        cgCtx.irBuilder.SetInsertPoint(elseEndBB);
+        cgCtx.irBuilder.CreateBr(endBB);
+    }
+    
+    // Insert future code past the end of this if statement
+    cgCtx.irBuilder.SetInsertPoint(endBB);
     return true;
 }
 
