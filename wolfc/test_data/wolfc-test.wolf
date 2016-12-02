@@ -142,6 +142,81 @@ func card_drawCard() -> int
     return drawnCard
 end
 
+; Gets the best value of a player's / dealer's hand
+func card_getSuitValue(int[5] suitOfCards) -> int
+    ; Get how many cards are actually in the suit first
+    var suitLength = card_getSuitLength(suitOfCards)
+    
+    ; Calculate suit value- counting aces's initially as having a value of 1
+    ; Aces are wildcards that can either be '1' or '11'
+    var suitValue = 0
+
+    scope
+        var cardNum = 0
+
+        while cardNum < suitLength
+            var card = suitOfCards[cardNum]
+
+            if card == CARD_ACE 
+                suitValue += 1 
+            or if card == CARD_2 
+                suitValue += 2 
+            or if card == CARD_3 
+                suitValue += 3 
+            or if card == CARD_4 
+                suitValue += 4 
+            or if card == CARD_5 
+                suitValue += 5 
+            or if card == CARD_6 
+                suitValue += 6 
+            or if card == CARD_7 
+                suitValue += 7
+            or if card == CARD_8 
+                suitValue += 8 
+            or if card == CARD_9
+                suitValue += 9 
+            or if card == CARD_10 
+                suitValue += 10 
+            or if card == CARD_KING 
+                suitValue += 10 
+            or if card == CARD_QUEEN 
+                suitValue += 10 
+            or if card == CARD_JACK 
+                suitValue += 10 
+            end
+
+            cardNum++
+        end
+    end
+    
+    ; Now cycle through the suit again, this time add 10 to the value if an
+    ; ace is encountered and it doesn't cause the overall value to go over 21.
+    scope
+        var cardNum = 0
+
+        while cardNum < suitLength
+            ; Grab the current card and ignore if not an ace
+            var card = suitOfCards[cardNum]
+            
+            if card == CARD_ACE
+                ; Came across an ace:
+                ; Check if counting the ace as an 11 causes the suit value to go over 21.
+                ; If not: add 10 to the value of the suit (note, we've already '1' for this cards value)
+                if suitValue + 10 <= GAME_BLACKJACK_SUIT_VALUE
+                    ; Counting the ace as 11 does not cause suit to go bust. 
+                    ; Add 10 to the value to count it as such
+                    suitValue += 10
+                end
+            end
+
+            cardNum++
+        end
+    end
+    
+    ; Return the suit's best value
+    return suitValue
+end
+
 ;==================================================================================================
 ; General game stuff
 ;==================================================================================================
@@ -173,8 +248,11 @@ var GAMEACTION_STAND = 2
 var GAMEACTION_DOUBLEDOWN = 4   ; Player only action
 var GAMEACTION_FORFEIT = 8      ; Player only action
 
-; The current game type
+; The current type of game (GAME_TYPE_XXX constants)
 var gGameCurrentGameType = GAME_TYPE_NORMAL
+
+; Who won the last game (GAME_WINNER_XXX constants)
+var gGameWinner = GAME_WINNER_NONE
 
 ; Starts up the game
 func game_startGame(int betAmount)
@@ -195,7 +273,32 @@ func game_startGame(int betAmount)
     player_actionHit()
      
     ; Begin the main game loop
-    ; GameDoGameLoop()
+    game_doGameLoop()
+end
+
+; Does the main game loop
+func game_doGameLoop()
+    ; Play out the player's hand first.
+    until player_handFinished()
+        break
+        ; TODO
+        ; PlayerFindAvailableActions();       // Find the available actions to the player
+        ; GameScreenDrawGameScreen();         // Draw the Game screen
+        ; PlayerDoActions();                  // Ask the player for next action
+    end
+    
+    ; TODO
+    /;
+    ; Play out the dealers hand
+    until dealer_handFinished()
+        ; Do the dealer's actions. Note: not updating screen till the end since this is almost instant
+        dealer_doActions()
+    end
+    ;/
+    
+    ; TODO
+    ; Game now over- call the end game function
+    ; game_endGame()
 end
 
 ;==================================================================================================
@@ -269,6 +372,44 @@ func player_actionHit()
     var card = card_drawCard()
     gPlayerCards[card_getSuitLength(gPlayerCards)] = card
     gPlayerLastAction = GAMEACTION_HIT
+end
+
+; Finds out if the player has gone bust (suitValue > 21)
+func player_isBust() -> bool
+    return card_getSuitValue(gPlayerCards) > GAME_BLACKJACK_SUIT_VALUE
+end
+
+; Tells if the player has drawn 5 cards and can't draw any more
+func player_cantDraw() -> bool
+    return card_getSuitLength(gPlayerCards) >= GAME_MAX_CARDS
+end
+
+; Tells if the player has issued a stand order
+func player_isStanding() -> bool
+    return gPlayerLastAction == GAMEACTION_STAND
+end
+
+; Tells whether the player has forfeited the game
+func player_hasForfeit() -> bool
+    return gPlayerLastAction == GAMEACTION_FORFEIT
+end
+
+; Tells if the player has got 21, or a blackjack
+func player_hasBlackjack() -> bool
+    return card_getSuitValue(gPlayerCards) == GAME_BLACKJACK_SUIT_VALUE
+end
+
+; Tells if the player's hand is finished
+func player_handFinished()
+    return true if
+        player_isBust() or      ; If the player is bust then his/her hand is finished
+        player_cantDraw() or    ; If the player can't draw any more, then the hand is finished
+        player_isStanding() or  ; If the player's last action was stand, then the hand is finished.
+        player_hasForfeit() or  ; If the player has forfeited then the hand is finished too
+        player_hasBlackjack()   ; If the player has a blackjack (perfect suit) then auto end the hand
+   
+   ; None of the conditions which end the hand have been met (player can still play)
+   return false
 end
 
 ;==================================================================================================
