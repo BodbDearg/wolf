@@ -29,7 +29,15 @@ end
 ; General game stuff
 ;==================================================================================================
 
-var GAME_MIN_BET = 20   ; Minimum bet that can be made
+; Minimum bet that can be made
+var GAME_MIN_BET = 20
+
+; Game types
+var GAME_TYPE_NORMAL = 0        ; Show dealer cards
+var GAME_TYPE_ADVANCED = 1      ; Don't show dealer cards
+
+; The current game type
+var gGameCurrentGameType = GAME_TYPE_NORMAL
 
 ;==================================================================================================
 ; Game stat stuff
@@ -117,13 +125,30 @@ end
 ;--------------------------------------------------------------------------------------------------
 ; Display a warning when the player doesn't have enough to play
 ;--------------------------------------------------------------------------------------------------
-func menu_displayMoneyWarning()
+func menu_displayNotEnoughMoneyWarning()
     menu_drawTitleBar("INSUFFICIENT FUNDS")
 
     println("You do not have enough chips to play.")
     println("Please purchase more chips in order to play.")
     printPrefixTxtAndAmtLn("Minimum number of chips needed is: ", GAME_MIN_BET)
     printPrefixTxtAndAmtLn("Amount of chips you have: ", gPlayerChips)
+    
+    doEnterNumToContinue()
+end
+
+;--------------------------------------------------------------------------------------------------
+; Display a warning when the player hasn't bet enough
+;--------------------------------------------------------------------------------------------------
+func menu_displayBetTooSmallWarning(int betAmount)
+    menu_drawTitleBar("INVALID BET AMOUNT")
+
+    println("You have entered an invalid bet amount!")
+    println("You must have the minimum amount of chips needed to play and not bet more than what you have.")
+    nextln()
+
+    printPrefixTxtAndAmtLn("Minimum number of chips needed is: ", GAME_MIN_BET)
+    printPrefixTxtAndAmtLn("You bet: ", betAmount)
+    printPrefixTxtAndAmtLn("You have: ", gPlayerChips)
     
     doEnterNumToContinue()
 end
@@ -159,6 +184,19 @@ func menu_getMoney()
 end
 
 ;--------------------------------------------------------------------------------------------------
+; Asks the player to play another game after playing one
+;--------------------------------------------------------------------------------------------------
+func menu_askAnotherGame() -> bool
+    ; Prompt the user
+    menu_drawTitleBar("Play another game?")
+    printPrefixTxtAndAmtLn("Chips left: ", gPlayerChips)
+    print("Play another game? Enter >= 1 for 'yes' or <= 0 for 'no': ")
+     
+    ; Return whether the user answered yes or no
+    return readnum() >= 1
+end
+
+;--------------------------------------------------------------------------------------------------
 ; Ask the player for the bet amount to start the game.
 ; If the correct amount is entered then the game starts.
 ;--------------------------------------------------------------------------------------------------
@@ -186,20 +224,16 @@ func menu_getBet()
 
         ; If the user doesn't enter enough for the minimum bet then 
         ; display a warning and loop around to ask again
-        /;
         if betAmount < GAME_MIN_BET
-            ; TODO
-            ; MenuDisplayBetWarning(betAmount)
-            nop
-        end;/
+            menu_displayBetTooSmallWarning(betAmount)
+        end
 
         ; Begin the game loop with the bet amount
         ; TODO
         ; GameInitGame(betAmount);
 
         ; Quit out unless the user wants to play again
-        ; TODO
-        ; break unless MenuAskAnotherGame()
+        break unless menu_askAnotherGame()
     end
 end
 
@@ -229,17 +263,14 @@ func menu_displayMain()
         if choice == 1 or choice == 2
             ; User wants to play a game. Make sure we have the minimum bet amount first:
             if gPlayerChips < GAME_MIN_BET
-                menu_displayMoneyWarning()
+                menu_displayNotEnoughMoneyWarning()
             else
                 ; Have enough to play, set the game mode:
-                ;if choice == 1
-                    ; TODO
-                    ; GameSetGameType(GAME_TYPE_NORMAL)
-                ;else
-                    ; TODO
-                    ; GameSetGameType(GAME_TYPE_ADVANCED)
-                ;end
-                ;
+                if choice == 1
+                    gGameCurrentGameType = GAME_TYPE_NORMAL
+                else
+                    gGameCurrentGameType = GAME_TYPE_ADVANCED
+                end
 
                 ; Ask the player for the bet and start the game
                 menu_getBet()
