@@ -26,6 +26,114 @@ func doEnterNumToContinue()
 end
 
 ;==================================================================================================
+; Card related functionality
+;==================================================================================================
+
+; The card types
+var NO_CARD = -1
+var CARD_ACE = 0
+var CARD_2 = 1
+var CARD_3 = 2
+var CARD_4 = 3
+var CARD_5 = 4
+var CARD_6 = 5
+var CARD_7 = 6
+var CARD_8 = 7
+var CARD_9 = 8
+var CARD_10 = 9
+var CARD_JACK = 10
+var CARD_QUEEN = 11
+var CARD_KING = 12
+
+; The deck of 52 Cards. 4 of each type
+var gCardDeck = [
+    CARD_ACE, CARD_ACE, CARD_ACE, CARD_ACE,
+    CARD_2, CARD_2, CARD_2, CARD_2,
+    CARD_3, CARD_3, CARD_3, CARD_3,
+    CARD_4, CARD_4, CARD_4, CARD_4,
+    CARD_5, CARD_5, CARD_5, CARD_5,
+    CARD_6, CARD_6, CARD_6, CARD_6,
+    CARD_7, CARD_7, CARD_7, CARD_7,
+    CARD_8, CARD_8, CARD_8, CARD_8,
+    CARD_9, CARD_9, CARD_9, CARD_9,
+    CARD_10, CARD_10, CARD_10, CARD_10,
+    CARD_JACK, CARD_JACK, CARD_JACK, CARD_JACK,
+    CARD_QUEEN, CARD_QUEEN, CARD_QUEEN, CARD_QUEEN,
+    CARD_KING, CARD_KING, CARD_KING, CARD_KING
+]
+
+; The number of times to randomly swap each of the 52 cards in the deck with another card
+var NUM_CARD_SHUFFLES = 32
+
+; Current position in the deck. Increases after each card is drawn
+var gCardDeckPosition = 0
+
+;--------------------------------------------------------------------------------------------------
+; Convert a card type/number into a string
+;--------------------------------------------------------------------------------------------------
+func card_numToName(int cardType) -> string
+    return "No card"    if cardType == NO_CARD
+    return "Ace"        if cardType == CARD_ACE
+    return "2"          if cardType == CARD_2
+    return "3"          if cardType == CARD_3
+    return "4"          if cardType == CARD_4
+    return "5"          if cardType == CARD_5
+    return "6"          if cardType == CARD_6
+    return "7"          if cardType == CARD_7
+    return "8"          if cardType == CARD_8
+    return "9"          if cardType == CARD_9
+    return "10"         if cardType == CARD_10
+    return "Jack"       if cardType == CARD_JACK
+    return "Queen"      if cardType == CARD_QUEEN
+    return "King"       if cardType == CARD_KING
+
+    ; Shouldn't reach here
+    return "Unknown Card Type"
+end
+
+;--------------------------------------------------------------------------------------------------
+; Shuffles up the card deck
+;--------------------------------------------------------------------------------------------------
+func card_shuffleCards()
+    ; Begin swapping each card randomly with other cards in the array.
+    ; Do this NUM_CARD_SHUFFLES times.
+    var shuffleNum = 0
+
+    while shuffleNum < NUM_CARD_SHUFFLES
+        var cardNum = 0
+
+        while (cardNum < 52)
+            ; Get the card to swap with the current card and do the swap
+            var swapTarget = rand() % 52
+            var tmpCard = gCardDeck[cardNum]
+            gCardDeck[cardNum] = gCardDeck[swapTarget]
+            gCardDeck[swapTarget] = tmpCard
+    
+            cardNum++   ; Move onto the next card
+        end
+
+        shuffleNum++    ; Next shuffle iteration
+    end
+end
+
+;--------------------------------------------------------------------------------------------------
+; Initializes the card deck and shuffles the cards. Called at the start of each game.
+;--------------------------------------------------------------------------------------------------
+func card_initializeDeck()
+     ; Call the shuffle routine to randomly shuffle the cards and set the next card to be
+     ; drawn from the deck from the top of the deck.
+     card_shuffleCards()
+     gCardDeckPosition = 0
+end
+
+;--------------------------------------------------------------------------------------------------
+; Gives an empty suit of cards
+;--------------------------------------------------------------------------------------------------
+func card_getEmptySuit() -> int[5]
+    return [ NO_CARD, NO_CARD, NO_CARD, NO_CARD, NO_CARD ]
+end
+
+;==================================================================================================
 ; General game stuff
 ;==================================================================================================
 
@@ -36,8 +144,45 @@ var GAME_MIN_BET = 20
 var GAME_TYPE_NORMAL = 0        ; Show dealer cards
 var GAME_TYPE_ADVANCED = 1      ; Don't show dealer cards
 
+; Maximum amount of cards that can be drawn in game
+var GAME_MAX_CARDS = 5
+
+; The value of a suit of cards when you have a blackjack
+var GAME_BLACKJACK_SUIT_VALUE = 21
+    
+; Winners / losers of game
+var GAME_WINNER_PLAYER = 0      ; Player wins game
+var GAME_WINNER_DEALER = 1      ; Dealer wins game
+var GAME_WINNER_NONE = 2        ; Draw
+
 ; The current game type
 var gGameCurrentGameType = GAME_TYPE_NORMAL
+
+;--------------------------------------------------------------------------------------------------
+; Starts up the game
+;--------------------------------------------------------------------------------------------------
+func game_initGame(int betAmount)
+    ; Set the players bet amount and subtract from overall chips
+    player_makeBet(betAmount)
+     
+    ; Initialise the card deck
+    card_initializeDeck()
+     
+    ; Give both player and dealer no cards initially
+    gPlayerCards = card_getEmptySuit()
+    gDealerCards = card_getEmptySuit()
+
+    /;     
+    // Deal (HIT) two cards to the player and dealer
+    DealerActionHit();
+    PlayerActionHit();
+    DealerActionHit();
+    PlayerActionHit();
+     
+    // Begin the main game loop
+    GameDoGameLoop()
+    ;/
+end
 
 ;==================================================================================================
 ; Game stat stuff
@@ -51,10 +196,32 @@ var gGameStatMoneyGained = 0    ; Total amount gained on bets
 var gGameStatMoneyLost = 0      ; Total amount lost on bets
 
 ;==================================================================================================
+; Dealer related stuff
+;==================================================================================================
+
+; The dealer's suit of 5 cards
+var gDealerCards = [ NO_CARD, NO_CARD, NO_CARD, NO_CARD, NO_CARD ]
+
+;==================================================================================================
 ; Player related stuff
 ;==================================================================================================
 
-var gPlayerChips = 0        ; Current balance of chips the player has. 1 chip = 1 EUR
+; Current balance of chips the player has
+var gPlayerChips = 0
+
+; Amount of chips the player has currently bet
+var gPlayerBetChips = 0
+
+; The player's suit of 5 cards
+var gPlayerCards = [ NO_CARD, NO_CARD, NO_CARD, NO_CARD, NO_CARD ]
+
+;--------------------------------------------------------------------------------------------------
+; Casts the players current bet and sets aside the bet money
+;--------------------------------------------------------------------------------------------------
+func player_makeBet(int betAmount)
+    gPlayerChips -= betAmount
+    gPlayerBetChips = betAmount
+end
 
 ;==================================================================================================
 ; Menu related stuff 
@@ -160,14 +327,15 @@ func menu_getMoney()
     ; Ask for money amount
     menu_drawTitleBar("BUY GAME CHIPS")
     
-    println("Please input an amount to be exchanged for chips.")
-    println("One Euro corresponds to one game chip.")
+    println("Please input the amount of chips to buy.")
     println("Enter '0' or less to abort.")
+    nextln()
 
-    printPrefixTxtAndAmtLn("Minium play amount is: EUR ", GAME_MIN_BET)
+    printPrefixTxtAndAmtLn("Minium play amount in chips is: ", GAME_MIN_BET)
     printPrefixTxtAndAmtLn("Current amount of chips: ", gPlayerChips)
+    nextln()
 
-    print("Enter amount to exchange (EUR): ")
+    print("Enter amount of chips to buy: ")
 
     ; Read the amount to exchange and add to player balance,
     ; if <= 0 then it means the player cancelled
@@ -229,8 +397,7 @@ func menu_getBet()
         end
 
         ; Begin the game loop with the bet amount
-        ; TODO
-        ; GameInitGame(betAmount);
+        game_initGame(betAmount)
 
         ; Quit out unless the user wants to play again
         break unless menu_askAnotherGame()
