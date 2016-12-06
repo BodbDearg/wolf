@@ -5,7 +5,7 @@
 #include "Lexer/WCToken.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCNotExpr.hpp"
+#include "WCNotOrBNotExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -14,12 +14,12 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool AndExpr::peek(const Token * tokenPtr) {
-    return NotExpr::peek(tokenPtr);
+    return NotOrBNotExpr::peek(tokenPtr);
 }
 
 AndExpr * AndExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the initial expression
-    NotExpr * notExpr = NotExpr::parse(tokenPtr, alloc);
+    NotOrBNotExpr * notExpr = NotOrBNotExpr::parse(tokenPtr, alloc);
     WC_GUARD(notExpr, nullptr);
     
     // See if there is an 'and' for logical and
@@ -41,7 +41,7 @@ AndExpr * AndExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 // AndExprNoOp
 //-----------------------------------------------------------------------------
 
-AndExprNoOp::AndExprNoOp(NotExpr & expr) : mExpr(expr) {
+AndExprNoOp::AndExprNoOp(NotOrBNotExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
@@ -81,7 +81,7 @@ llvm::Constant * AndExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 // AndExprAnd
 //-----------------------------------------------------------------------------
 
-AndExprAnd::AndExprAnd(NotExpr & leftExpr, AndExpr & rightExpr) :
+AndExprAnd::AndExprAnd(NotOrBNotExpr & leftExpr, AndExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
@@ -117,7 +117,7 @@ llvm::Value * AndExprAnd::codegenAddrOf(CodegenCtx & cgCtx) {
 
 llvm::Value * AndExprAnd::codegenExprEval(CodegenCtx & cgCtx) {
     // Verify data types used by operator:
-    compileCheckBothExprsAreBool();
+    WC_GUARD(compileCheckBothExprsAreBool(), nullptr);
 
     // TODO: add support for lazy evaluation
     // Evaluate the sub expressions and create the instruction:
@@ -130,7 +130,7 @@ llvm::Value * AndExprAnd::codegenExprEval(CodegenCtx & cgCtx) {
 
 llvm::Constant * AndExprAnd::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Verify data types used by operator:
-    compileCheckBothExprsAreBool();
+    WC_GUARD(compileCheckBothExprsAreBool(), nullptr);
     
     // TODO: add support for lazy evaluation
     // Evaluate the sub expressions and create the instruction:

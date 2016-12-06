@@ -115,9 +115,6 @@
     <ClCompile Include="..\platform.all\AST\WCNopStmnt.cpp">
       <Filter>platform.all\AST</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCNotExpr.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
     <ClCompile Include="..\platform.all\AST\WCOrExpr.cpp">
       <Filter>platform.all\AST</Filter>
     </ClCompile>
@@ -203,6 +200,9 @@
       <Filter>platform.all\AST</Filter>
     </ClCompile>
     <ClCompile Include="..\platform.all\AST\WCTimeExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCNotOrBNotExpr.cpp">
       <Filter>platform.all\AST</Filter>
     </ClCompile>
   </ItemGroup>
@@ -327,9 +327,6 @@
     <ClInclude Include="..\platform.all\AST\WCNopStmnt.hpp">
       <Filter>platform.all\AST</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCNotExpr.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
     <ClInclude Include="..\platform.all\AST\WCOrExpr.hpp">
       <Filter>platform.all\AST</Filter>
     </ClInclude>
@@ -424,6 +421,9 @@
       <Filter>platform.all\AST</Filter>
     </ClInclude>
     <ClInclude Include="..\platform.all\AST\WCTimeExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCNotOrBNotExpr.hpp">
       <Filter>platform.all\AST</Filter>
     </ClInclude>
   </ItemGroup>

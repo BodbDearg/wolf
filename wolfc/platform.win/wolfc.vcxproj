@@ -178,7 +178,7 @@
     <ClCompile Include="..\platform.all\AST\WCMulDivExpr.cpp" />
     <ClCompile Include="..\platform.all\AST\WCNextStmnt.cpp" />
     <ClCompile Include="..\platform.all\AST\WCNopStmnt.cpp" />
-    <ClCompile Include="..\platform.all\AST\WCNotExpr.cpp" />
+    <ClCompile Include="..\platform.all\AST\WCNotOrBNotExpr.cpp" />
     <ClCompile Include="..\platform.all\AST\WCOrExpr.cpp" />
     <ClCompile Include="..\platform.all\AST\WCPostfixExpr.cpp" />
     <ClCompile Include="..\platform.all\AST\WCPrimaryExpr.cpp" />
@@ -246,7 +246,7 @@
     <ClInclude Include="..\platform.all\AST\WCMulDivExpr.hpp" />
     <ClInclude Include="..\platform.all\AST\WCNextStmnt.hpp" />
     <ClInclude Include="..\platform.all\AST\WCNopStmnt.hpp" />
-    <ClInclude Include="..\platform.all\AST\WCNotExpr.hpp" />
+    <ClInclude Include="..\platform.all\AST\WCNotOrBNotExpr.hpp" />
     <ClInclude Include="..\platform.all\AST\WCOrExpr.hpp" />
     <ClInclude Include="..\platform.all\AST\WCPostfixExpr.hpp" />
     <ClInclude Include="..\platform.all\AST\WCPrimaryExpr.hpp" />

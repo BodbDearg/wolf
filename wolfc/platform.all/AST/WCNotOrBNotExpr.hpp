@@ -41,7 +41,7 @@ public:
     EqExpr & mExpr;
 };
 
-/* not EqExpr */
+/* not NotOrBNotExpr */
 class NotOrBNotExprNot final : public NotOrBNotExpr {
 public:
     NotOrBNotExprNot(NotOrBNotExpr & expr, const Token & startToken);
@@ -64,9 +64,37 @@ public:
 private:
     /**
      * TODO: this is a temp function for the moment. Issue a compile error if the expr is not of 'bool'
-     * Return false for failure if that is the case.
+     * Return false for failure if that is not the case.
      */
     bool compileCheckExprIsBool() const;
+};
+
+/* ~ NotOrBNotExpr */
+class NotOrBNotExprBNot final : public NotOrBNotExpr {
+public:
+    NotOrBNotExprBNot(NotOrBNotExpr & expr, const Token & startToken);
+
+    virtual const Token & getStartToken() const override;
+    virtual const Token & getEndToken() const override;
+
+    virtual bool isLValue() override;
+    virtual bool isConstExpr() override;
+
+    virtual DataType & dataType() override;
+
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+
+    NotOrBNotExpr &     mExpr;
+    const Token &       mStartToken;
+
+private:
+    /**
+     * TODO: this is a temp function for the moment. Issue a compile error if the expr is not of 'int'
+     * Return false for failure if that is not the case.
+     */
+    bool compileCheckExprIsInt() const;
 };
 
 WC_END_NAMESPACE

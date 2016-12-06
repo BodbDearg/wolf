@@ -7,7 +7,7 @@ WC_BEGIN_NAMESPACE
 
 class DataType;
 class LinearAlloc;
-class NotExpr;
+class NotOrBNotExpr;
 
 /*
 AndExpr:
@@ -23,7 +23,7 @@ public:
 /* NotExpr */
 class AndExprNoOp final : public AndExpr {
 public:
-    AndExprNoOp(NotExpr & expr);
+    AndExprNoOp(NotOrBNotExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -37,13 +37,13 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    NotExpr & mExpr;
+    NotOrBNotExpr & mExpr;
 };
 
 /* NotExpr and AndExpr */
 class AndExprAnd final : public AndExpr {
 public:
-    AndExprAnd(NotExpr & leftExpr, AndExpr & rightExpr);
+    AndExprAnd(NotOrBNotExpr & leftExpr, AndExpr & rightExpr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -57,8 +57,8 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    NotExpr & mLeftExpr;
-    AndExpr & mRightExpr;
+    NotOrBNotExpr &     mLeftExpr;
+    AndExpr &           mRightExpr;
     
 private:
     /**

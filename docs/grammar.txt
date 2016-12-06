@@ -117,10 +117,10 @@ AndExpr:
 	*** TODO: NotOrBitNotExpr
 	*** TODO: NotOrBitNotExpr & NotOrBitNotExpr
 
-*** TODO: NotOrBNotExpr:
-	*** TODO: EqExpr
-	*** TODO: not NotOrBNotExpr
-	*** TODO: ~ NotOrBNotExpr
+NotOrBNotExpr:
+	EqExpr
+	not NotOrBNotExpr
+	~ NotOrBNotExpr
 
 EqExpr:
 	RelExpr

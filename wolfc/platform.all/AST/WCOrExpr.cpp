@@ -125,7 +125,7 @@ llvm::Value * OrExprOr::codegenAddrOf(CodegenCtx & cgCtx) {
 
 llvm::Value * OrExprOr::codegenExprEval(CodegenCtx & cgCtx) {
     // Verify data types used by operator:
-    compileCheckBothExprsAreBool();
+    WC_GUARD(compileCheckBothExprsAreBool(), nullptr);
 
     // TODO: add support for lazy evaluation
     // Evaluate the sub expressions and create the instruction:
@@ -138,7 +138,7 @@ llvm::Value * OrExprOr::codegenExprEval(CodegenCtx & cgCtx) {
 
 llvm::Constant * OrExprOr::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Verify data types used by operator:
-    compileCheckBothExprsAreBool();
+    WC_GUARD(compileCheckBothExprsAreBool(), nullptr);
     
     // TODO: add support for lazy evaluation
     // Evaluate the sub expressions and create the instruction:

@@ -160,9 +160,7 @@ AddSubExprAdd::AddSubExprAdd(MulDivExpr & leftExpr, AddSubExpr & rightExpr) :
 
 llvm::Value * AddSubExprAdd::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
-    if (!compileCheckBothExprsAreInt()) {
-        return nullptr;
-    }
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
     // Generate code for the operation
     llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
@@ -174,9 +172,7 @@ llvm::Value * AddSubExprAdd::codegenExprEval(CodegenCtx & cgCtx) {
 
 llvm::Constant * AddSubExprAdd::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
-    if (!compileCheckBothExprsAreInt()) {
-        return nullptr;
-    }
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
     // Generate code for the operation
     llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
@@ -198,9 +194,7 @@ AddSubExprSub::AddSubExprSub(MulDivExpr & leftExpr, AddSubExpr & rightExpr) :
 
 llvm::Value * AddSubExprSub::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
-    if (!compileCheckBothExprsAreInt()) {
-        return nullptr;
-    }
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
     // Generate code for the operation
     llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
@@ -212,9 +206,7 @@ llvm::Value * AddSubExprSub::codegenExprEval(CodegenCtx & cgCtx) {
 
 llvm::Constant * AddSubExprSub::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
-    if (!compileCheckBothExprsAreInt()) {
-        return nullptr;
-    }
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
     // Generate code for the operation
     llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);

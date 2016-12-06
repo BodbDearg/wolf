@@ -14,24 +14,37 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool NotOrBNotExpr::peek(const Token * tokenPtr) {
-    return tokenPtr->type == TokenType::kNot || EqExpr::peek(tokenPtr);
+    return  tokenPtr->type == TokenType::kNot ||
+            tokenPtr->type == TokenType::kTilde ||
+            EqExpr::peek(tokenPtr);
 }
 
 NotOrBNotExpr * NotOrBNotExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Save the first token:
     const Token * startToken = tokenPtr;
     
-    // See if an actual 'not' expression:
+    // See if an actual 'not' or bitwise not ('~') expression:
     if (startToken->type == TokenType::kNot) {
-        // Skip 'not'
+        // Logical 'not': skip 'not'
         ++tokenPtr;
         
-        // Parse the not expression following
+        // Parse the expression following
         NotOrBNotExpr * notExpr = NotOrBNotExpr::parse(tokenPtr, alloc);
         WC_GUARD(notExpr, nullptr);
         
         // Alright, return the parsed expr
         return WC_NEW_AST_NODE(alloc, NotOrBNotExprNot, *notExpr, *startToken);
+    }
+    else if (startToken->type == TokenType::kTilde) {
+        // Bitwise 'not': skip 'not'
+        ++tokenPtr;
+
+        // Parse the expression following
+        NotOrBNotExpr * notExpr = NotOrBNotExpr::parse(tokenPtr, alloc);
+        WC_GUARD(notExpr, nullptr);
+
+        // Alright, return the parsed expr
+        return WC_NEW_AST_NODE(alloc, NotOrBNotExprBNot, *notExpr, *startToken);
     }
     
     // No 'not'. Just parse an ordinary no-op expression
@@ -84,7 +97,7 @@ llvm::Constant * NotOrBNotExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 // NotOrBNotExprNot
 //-----------------------------------------------------------------------------
 
-NotOrBNotExprNot::NotOrBNotExprNot(NotOrBitNotExpr & expr, const Token & startToken) :
+NotOrBNotExprNot::NotOrBNotExprNot(NotOrBNotExpr & expr, const Token & startToken) :
     mExpr(expr),
     mStartToken(startToken)
 {
@@ -119,7 +132,7 @@ llvm::Value * NotOrBNotExprNot::codegenAddrOf(CodegenCtx & cgCtx) {
 
 llvm::Value * NotOrBNotExprNot::codegenExprEval(CodegenCtx & cgCtx) {
     // Expression must evaluate to a boolean:
-    compileCheckExprIsBool();
+    WC_GUARD(compileCheckExprIsBool(), nullptr);
 
     // Evaluate the expression and generate the code for the not instruction:
     llvm::Value * value = mExpr.codegenExprEval(cgCtx);
@@ -129,7 +142,7 @@ llvm::Value * NotOrBNotExprNot::codegenExprEval(CodegenCtx & cgCtx) {
 
 llvm::Constant * NotOrBNotExprNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Expression must evaluate to a boolean:
-    compileCheckExprIsBool();
+    WC_GUARD(compileCheckExprIsBool(), nullptr);
     
     // Evaluate the expression and generate the code for the not instruction:
     llvm::Constant * value = mExpr.codegenExprConstEval(cgCtx);
@@ -147,6 +160,76 @@ bool NotOrBNotExprNot::compileCheckExprIsBool() const {
         return false;
     }
     
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+// NotOrBNotExprBNot
+//-----------------------------------------------------------------------------
+
+NotOrBNotExprBNot::NotOrBNotExprBNot(NotOrBNotExpr & expr, const Token & startToken) :
+    mExpr(expr),
+    mStartToken(startToken)
+{
+    mExpr.mParent = this;
+}
+
+const Token & NotOrBNotExprBNot::getStartToken() const {
+    return mStartToken;
+}
+
+const Token & NotOrBNotExprBNot::getEndToken() const {
+    return mExpr.getEndToken();
+}
+
+bool NotOrBNotExprBNot::isLValue() {
+    return false;
+}
+
+bool NotOrBNotExprBNot::isConstExpr() {
+    return mExpr.isConstExpr();
+}
+
+DataType & NotOrBNotExprBNot::dataType() {
+    return mExpr.dataType();
+}
+
+llvm::Value * NotOrBNotExprBNot::codegenAddrOf(CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't get the address of '~' (bitwise not) operator result!");
+    return nullptr;
+}
+
+llvm::Value * NotOrBNotExprBNot::codegenExprEval(CodegenCtx & cgCtx) {
+    // Expression must evaluate to an int:
+    WC_GUARD(compileCheckExprIsInt(), nullptr);
+
+    // Evaluate the expression and generate the code for the not instruction:
+    llvm::Value * value = mExpr.codegenExprEval(cgCtx);
+    WC_GUARD(value, nullptr);
+    return cgCtx.irBuilder.CreateNot(value);
+}
+
+llvm::Constant * NotOrBNotExprBNot::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // Expression must evaluate to a boolean:
+    WC_GUARD(compileCheckExprIsInt(), nullptr);
+
+    // Evaluate the expression and generate the code for the not instruction:
+    llvm::Constant * value = mExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(value, nullptr);
+    return llvm::ConstantExpr::getNot(value);
+}
+
+bool NotOrBNotExprBNot::compileCheckExprIsInt() const {
+    const DataType & exprType = mExpr.dataType();
+
+    if (!exprType.isInteger()) {
+        compileError("Expression following '~' (bitwise not) must evaluate to 'int', not '%s'!",
+            exprType.name().c_str());
+
+        return false;
+    }
+
     return true;
 }
 

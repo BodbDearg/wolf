@@ -65,6 +65,8 @@ enum class TokenType {
     kColon,
     /* ? */
     kQMark,
+    /* ~ */
+    kTilde,
 
     /*=========================================================================
     | Language keywords: data types

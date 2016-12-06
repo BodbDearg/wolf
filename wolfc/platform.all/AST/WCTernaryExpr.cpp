@@ -143,7 +143,7 @@ llvm::Value * TernaryExprWithCond::codegenAddrOf(CodegenCtx & cgCtx) {
 
 llvm::Value * TernaryExprWithCond::codegenExprEval(CodegenCtx & cgCtx) {
     // Verify data types used by operator:
-    compileCheckExprDataTypes();
+    WC_GUARD(compileCheckExprDataTypes(), nullptr);
     
     // Create a block for the true, false and follow on expressions:
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
@@ -183,7 +183,7 @@ llvm::Value * TernaryExprWithCond::codegenExprEval(CodegenCtx & cgCtx) {
 
 llvm::Constant * TernaryExprWithCond::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Verify data types used by operator:
-    compileCheckExprDataTypes();
+    WC_GUARD(compileCheckExprDataTypes(), nullptr);
     
     // Generate the code for the boolean condition:
     llvm::Constant * condValue = mCondExpr.codegenExprConstEval(cgCtx);
