@@ -400,7 +400,7 @@ func player_hasBlackjack() -> bool
 end
 
 ; Tells if the player's hand is finished
-func player_handFinished()
+func player_handFinished() -> bool
     return true if
         player_isBust() or      ; If the player is bust then his/her hand is finished
         player_cantDraw() or    ; If the player can't draw any more, then the hand is finished

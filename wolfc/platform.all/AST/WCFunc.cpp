@@ -218,7 +218,14 @@ bool Func::codegen(CodegenCtx & cgCtx) {
         size_t argNum = llvmArg.getArgNo();
         WC_ASSERT(argNum < funcArgs.size());
         FuncArg * funcArg = funcArgs[argNum];
-        mArgValues[funcArg->name()] = DataValue(funcArg, &llvmArg, &funcArg->dataType(), false);
+        WC_ASSERT(funcArg);
+        DataType & argDataType = funcArg->dataType();
+        bool requiresLoad = argDataType.requiresStorage();
+        
+        mArgValues[funcArg->name()] = DataValue(funcArg,
+                                                &llvmArg,
+                                                &argDataType,
+                                                requiresLoad);
     }
     
     // Request deferred codegen for the function body. Will generate the body code for all functions
