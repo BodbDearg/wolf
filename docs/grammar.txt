@@ -113,9 +113,9 @@ AndExpr:
 	*** TODO: BitAndExpr
 	*** TODO: BitAndExpr ^ BitAndExpr
 
-*** TODO: BAndExpr:
-	*** TODO: NotOrBitNotExpr
-	*** TODO: NotOrBitNotExpr & NotOrBitNotExpr
+BAndExpr:
+	NotOrBNotExpr
+	NotOrBNotExpr & BAndExpr
 
 NotOrBNotExpr:
 	EqExpr

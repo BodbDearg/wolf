@@ -160,6 +160,7 @@
     <ClCompile Include="..\platform.all\AST\WCArrayLitExprs.cpp" />
     <ClCompile Include="..\platform.all\AST\WCAssignExpr.cpp" />
     <ClCompile Include="..\platform.all\AST\WCASTNode.cpp" />
+    <ClCompile Include="..\platform.all\AST\WCBAndExpr.cpp" />
     <ClCompile Include="..\platform.all\AST\WCBoolLit.cpp" />
     <ClCompile Include="..\platform.all\AST\WCBreakStmnt.cpp" />
     <ClCompile Include="..\platform.all\AST\WCDeclDef.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="..\platform.all\AST\WCArrayLitExprs.hpp" />
     <ClInclude Include="..\platform.all\AST\WCAssignExpr.hpp" />
     <ClInclude Include="..\platform.all\AST\WCASTNode.hpp" />
+    <ClInclude Include="..\platform.all\AST\WCBAndExpr.hpp" />
     <ClInclude Include="..\platform.all\AST\WCBoolLit.hpp" />
     <ClInclude Include="..\platform.all\AST\WCBreakStmnt.hpp" />
     <ClInclude Include="..\platform.all\AST\WCDeclDef.hpp" />

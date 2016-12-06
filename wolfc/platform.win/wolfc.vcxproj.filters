@@ -205,6 +205,9 @@
     <ClCompile Include="..\platform.all\AST\WCNotOrBNotExpr.cpp">
       <Filter>platform.all\AST</Filter>
     </ClCompile>
+    <ClCompile Include="..\platform.all\AST\WCBAndExpr.cpp">
+      <Filter>platform.all\AST</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\platform.all\WCAssert.hpp">
@@ -424,6 +427,9 @@
       <Filter>platform.all\AST</Filter>
     </ClInclude>
     <ClInclude Include="..\platform.all\AST\WCNotOrBNotExpr.hpp">
+      <Filter>platform.all\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\WCBAndExpr.hpp">
       <Filter>platform.all\AST</Filter>
     </ClInclude>
   </ItemGroup>

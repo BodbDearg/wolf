@@ -3,9 +3,9 @@
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
+#include "WCBAndExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCNotOrBNotExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -14,13 +14,13 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool AndExpr::peek(const Token * tokenPtr) {
-    return NotOrBNotExpr::peek(tokenPtr);
+    return BAndExpr::peek(tokenPtr);
 }
 
 AndExpr * AndExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the initial expression
-    NotOrBNotExpr * notExpr = NotOrBNotExpr::parse(tokenPtr, alloc);
-    WC_GUARD(notExpr, nullptr);
+    BAndExpr * leftExpr = BAndExpr::parse(tokenPtr, alloc);
+    WC_GUARD(leftExpr, nullptr);
     
     // See if there is an 'and' for logical and
     if (tokenPtr->type == TokenType::kAnd) {
@@ -28,20 +28,20 @@ AndExpr * AndExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         ++tokenPtr;
         
         // Parse the following and expression and create the AST node
-        AndExpr * andExpr = AndExpr::parse(tokenPtr, alloc);
-        WC_GUARD(andExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AndExprAnd, *notExpr, *andExpr);
+        AndExpr * rightExpr = AndExpr::parse(tokenPtr, alloc);
+        WC_GUARD(rightExpr, nullptr);
+        return WC_NEW_AST_NODE(alloc, AndExprAnd, *leftExpr, *rightExpr);
     }
 
     // Basic no-op expression
-    return WC_NEW_AST_NODE(alloc, AndExprNoOp, *notExpr);
+    return WC_NEW_AST_NODE(alloc, AndExprNoOp, *leftExpr);
 }
 
 //-----------------------------------------------------------------------------
 // AndExprNoOp
 //-----------------------------------------------------------------------------
 
-AndExprNoOp::AndExprNoOp(NotOrBNotExpr & expr) : mExpr(expr) {
+AndExprNoOp::AndExprNoOp(BAndExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
@@ -81,7 +81,7 @@ llvm::Constant * AndExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 // AndExprAnd
 //-----------------------------------------------------------------------------
 
-AndExprAnd::AndExprAnd(NotOrBNotExpr & leftExpr, AndExpr & rightExpr) :
+AndExprAnd::AndExprAnd(BAndExpr & leftExpr, AndExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {

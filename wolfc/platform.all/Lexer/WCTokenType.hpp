@@ -67,6 +67,8 @@ enum class TokenType {
     kQMark,
     /* ~ */
     kTilde,
+    /* & */
+    kAmpersand,
 
     /*=========================================================================
     | Language keywords: data types
