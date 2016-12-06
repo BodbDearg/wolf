@@ -10,20 +10,21 @@ class EqExpr;
 class LinearAlloc;
 
 /*
-NotExpr:
+NotOrBNotExpr:
 	EqExpr
-	not NotExpr
+	not NotOrBNotExpr
+	~ NotOrBNotExpr
 */
-class NotExpr : public ASTNode, public IExpr {
+class NotOrBNotExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static NotExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static NotOrBNotExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
 /* EqExpr */
-class NotExprNoOp final : public NotExpr {
+class NotOrBNotExprNoOp final : public NotOrBNotExpr {
 public:
-    NotExprNoOp(EqExpr & expr);
+    NotOrBNotExprNoOp(EqExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -41,9 +42,9 @@ public:
 };
 
 /* not EqExpr */
-class NotExprNot final : public NotExpr {
+class NotOrBNotExprNot final : public NotOrBNotExpr {
 public:
-    NotExprNot(NotExpr & expr, const Token & startToken);
+    NotOrBNotExprNot(NotOrBNotExpr & expr, const Token & startToken);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -57,8 +58,8 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    NotExpr &       mExpr;
-    const Token &   mStartToken;
+    NotOrBNotExpr &     mExpr;
+    const Token &       mStartToken;
 
 private:
     /**

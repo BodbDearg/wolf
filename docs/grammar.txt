@@ -102,12 +102,25 @@ OrExpr:
 	AndExpr or OrExpr
 
 AndExpr:
-	NotExpr
-	NotExpr and AndExpr
+	*** TODO: BitOrExpr
+	*** TODO: BitOrExpr and BitOrExpr
 
-NotExpr:
-	EqExpr
-	not NotExpr
+*** TODO: BOrExpr:
+	*** TODO: BitXorExpr
+	*** TODO: BitXorExpr | BitXorExpr
+	
+*** TODO: BXorExpr:
+	*** TODO: BitAndExpr
+	*** TODO: BitAndExpr ^ BitAndExpr
+
+*** TODO: BAndExpr:
+	*** TODO: NotOrBitNotExpr
+	*** TODO: NotOrBitNotExpr & NotOrBitNotExpr
+
+*** TODO: NotOrBNotExpr:
+	*** TODO: EqExpr
+	*** TODO: not NotOrBNotExpr
+	*** TODO: ~ NotOrBNotExpr
 
 EqExpr:
 	RelExpr
