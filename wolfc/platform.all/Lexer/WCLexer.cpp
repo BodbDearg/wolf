@@ -203,6 +203,7 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
         case '?': return parseBasicToken(TokenType::kQMark, 1);
         case '~': return parseBasicToken(TokenType::kTilde, 1);
         case '&': return parseBasicToken(TokenType::kAmpersand, 1);
+        case '^': return parseBasicToken(TokenType::kHat, 1);
             
         default:
             break;

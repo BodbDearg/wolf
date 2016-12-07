@@ -3,7 +3,7 @@
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
-#include "WCBAndExpr.hpp"
+#include "WCBXorExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 
@@ -14,12 +14,12 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool AndExpr::peek(const Token * tokenPtr) {
-    return BAndExpr::peek(tokenPtr);
+    return BXorExpr::peek(tokenPtr);
 }
 
 AndExpr * AndExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the initial expression
-    BAndExpr * leftExpr = BAndExpr::parse(tokenPtr, alloc);
+    BXorExpr * leftExpr = BXorExpr::parse(tokenPtr, alloc);
     WC_GUARD(leftExpr, nullptr);
     
     // See if there is an 'and' for logical and
@@ -41,7 +41,7 @@ AndExpr * AndExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 // AndExprNoOp
 //-----------------------------------------------------------------------------
 
-AndExprNoOp::AndExprNoOp(BAndExpr & expr) : mExpr(expr) {
+AndExprNoOp::AndExprNoOp(BXorExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
@@ -81,7 +81,7 @@ llvm::Constant * AndExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 // AndExprAnd
 //-----------------------------------------------------------------------------
 
-AndExprAnd::AndExprAnd(BAndExpr & leftExpr, AndExpr & rightExpr) :
+AndExprAnd::AndExprAnd(BXorExpr & leftExpr, AndExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {

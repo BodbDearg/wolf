@@ -109,9 +109,9 @@ AndExpr:
 	*** TODO: BitXorExpr
 	*** TODO: BitXorExpr | BitXorExpr
 	
-*** TODO: BXorExpr:
-	*** TODO: BitAndExpr
-	*** TODO: BitAndExpr ^ BitAndExpr
+BXorExpr:
+	BAndExpr
+	BAndExpr ^ BXorExpr
 
 BAndExpr:
 	NotOrBNotExpr
