@@ -5,25 +5,25 @@
 
 WC_BEGIN_NAMESPACE
 
-class BOrExpr;
+class BXorExpr;
 class DataType;
 class LinearAlloc;
 
 /*
- AndExpr:
-	BOrExpr
-	BOrExpr and AndExpr
+BOrExpr:
+	BitXorExpr
+	BitXorExpr | BOrExpr
 */
-class AndExpr : public ASTNode, public IExpr {
+class BOrExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static AndExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static BOrExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
-/* BOrExpr */
-class AndExprNoOp final : public AndExpr {
+/* BitXorExpr */
+class BOrExprNoOp final : public BOrExpr {
 public:
-    AndExprNoOp(BOrExpr & expr);
+    BOrExprNoOp(BXorExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -37,13 +37,13 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    BOrExpr & mExpr;
+    BXorExpr & mExpr;
 };
 
-/* BOrExpr and AndExpr */
-class AndExprAnd final : public AndExpr {
+/* BitXorExpr | BOrExpr */
+class BOrExprOr final : public BOrExpr {
 public:
-    AndExprAnd(BOrExpr & leftExpr, AndExpr & rightExpr);
+    BOrExprOr(BXorExpr & leftExpr, BOrExpr & rightExpr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -52,20 +52,20 @@ public:
     virtual bool isConstExpr() override;
     
     virtual DataType & dataType() override;
-
+    
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    BOrExpr &   mLeftExpr;
-    AndExpr &   mRightExpr;
+    BXorExpr &  mLeftExpr;
+    BOrExpr &   mRightExpr;
     
-private:
+protected:
     /**
-     * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'bool'
-     * Return false for failure if that is the case.
+     * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of type 'int';
+     * return false for failure if that is the case.
      */
-    bool compileCheckBothExprsAreBool() const;
+    bool compileCheckBothExprsAreInt() const;
 };
 
 WC_END_NAMESPACE

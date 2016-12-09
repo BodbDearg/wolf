@@ -102,12 +102,12 @@ OrExpr:
 	AndExpr or OrExpr
 
 AndExpr:
-	*** TODO: BitOrExpr
-	*** TODO: BitOrExpr and BitOrExpr
+	BOrExpr
+	BOrExpr and AndExpr
 
-*** TODO: BOrExpr:
-	*** TODO: BitXorExpr
-	*** TODO: BitXorExpr | BitXorExpr
+BOrExpr:
+	BitXorExpr
+	BitXorExpr | BOrExpr
 	
 BXorExpr:
 	BAndExpr

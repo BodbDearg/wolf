@@ -71,6 +71,8 @@ enum class TokenType {
     kAmpersand,
     /* ^ */
     kHat,
+    /* | */
+    kVBar,
 
     /*=========================================================================
     | Language keywords: data types
