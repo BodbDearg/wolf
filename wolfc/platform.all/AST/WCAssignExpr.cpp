@@ -23,107 +23,136 @@ AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     WC_GUARD(ternaryExpr, nullptr);
 
     // See if we might have a '+=' or '-=' etc. or a plain assign ('=') ahead:
-    if (tokenPtr->type == TokenType::kVBar &&
-        tokenPtr[1].type == TokenType::kEquals)
+    if (tokenPtr[0].type == TokenType::kLessThan &&
+        tokenPtr[1].type == TokenType::kLessThan &&
+        tokenPtr[2].type == TokenType::kEquals)
+    {
+        // '<<=' assign expression. Skip the '<<='
+        tokenPtr += 3;
+
+        // Parse the following expression and create the AST node
+        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
+        WC_GUARD(assignExpr, nullptr);
+        return WC_NEW_AST_NODE(alloc, AssignExprAssignLShift, *ternaryExpr, *assignExpr);
+    }
+    else if (tokenPtr[0].type == TokenType::kGreaterThan &&
+             tokenPtr[1].type == TokenType::kGreaterThan &&
+             tokenPtr[2].type == TokenType::kEquals)
+    {
+        // '>>=' assign expression. Skip the '>>='
+        tokenPtr += 3;
+        
+        // Parse the following expression and create the AST node
+        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
+        WC_GUARD(assignExpr, nullptr);
+        return WC_NEW_AST_NODE(alloc, AssignExprAssignArithRShift, *ternaryExpr, *assignExpr);
+    }
+    else if (tokenPtr[0].type == TokenType::kGreaterThan &&
+             tokenPtr[1].type == TokenType::kGreaterThan &&
+             tokenPtr[2].type == TokenType::kGreaterThan &&
+             tokenPtr[3].type == TokenType::kEquals)
+    {
+        // '>>>=' assign expression. Skip the '>>>='
+        tokenPtr += 4;
+        
+        // Parse the following expression and create the AST node
+        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
+        WC_GUARD(assignExpr, nullptr);
+        return WC_NEW_AST_NODE(alloc, AssignExprAssignLogicRShift, *ternaryExpr, *assignExpr);
+    }
+    else if (tokenPtr[0].type == TokenType::kVBar &&
+             tokenPtr[1].type == TokenType::kEquals)
     {
         // '|=' assign expression. Skip the '|='
-        ++tokenPtr;
-        ++tokenPtr;
+        tokenPtr += 2;
 
-        // Parse the following assign expression and create the AST node
+        // Parse the following expression and create the AST node
         AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(assignExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, AssignExprAssignBOr, *ternaryExpr, *assignExpr);
     }
-    else if (tokenPtr->type == TokenType::kHat &&
+    else if (tokenPtr[0].type == TokenType::kHat &&
              tokenPtr[1].type == TokenType::kEquals)
     {
         // '^=' assign expression. Skip the '^='
-        ++tokenPtr;
-        ++tokenPtr;
+        tokenPtr += 2;
 
-        // Parse the following assign expression and create the AST node
+        // Parse the following expression and create the AST node
         AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(assignExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, AssignExprAssignBXor, *ternaryExpr, *assignExpr);
     }
-    else if (tokenPtr->type == TokenType::kAmpersand &&
+    else if (tokenPtr[0].type == TokenType::kAmpersand &&
              tokenPtr[1].type == TokenType::kEquals)
     {
         // '&=' assign expression. Skip the '&='
-        ++tokenPtr;
-        ++tokenPtr;
+        tokenPtr += 2;
 
-        // Parse the following assign expression and create the AST node
+        // Parse the following expression and create the AST node
         AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(assignExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, AssignExprAssignBAnd, *ternaryExpr, *assignExpr);
     }
-    else if (tokenPtr->type == TokenType::kPlus &&
+    else if (tokenPtr[0].type == TokenType::kPlus &&
              tokenPtr[1].type == TokenType::kEquals)
     {
         // '+=' assign expression. Skip the '+='
-        ++tokenPtr;
-        ++tokenPtr;
+        tokenPtr += 2;
 
-        // Parse the following assign expression and create the AST node
+        // Parse the following expression and create the AST node
         AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(assignExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, AssignExprAssignAdd, *ternaryExpr, *assignExpr);
     }
-    else if (tokenPtr->type == TokenType::kMinus && 
+    else if (tokenPtr[0].type == TokenType::kMinus &&
              tokenPtr[1].type == TokenType::kEquals)
     {
         // '-=' assign expression. Skip the '-='
-        ++tokenPtr;
-        ++tokenPtr;
+        tokenPtr += 2;
 
-        // Parse the following assign expression and create the AST node
+        // Parse the following expression and create the AST node
         AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(assignExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, AssignExprAssignSub, *ternaryExpr, *assignExpr);
     }
-    else if (tokenPtr->type == TokenType::kAsterisk &&
+    else if (tokenPtr[0].type == TokenType::kAsterisk &&
              tokenPtr[1].type == TokenType::kEquals) 
     {
         // '*=' assign expression. Skip the '*='
-        ++tokenPtr;
-        ++tokenPtr;
+        tokenPtr += 2;
 
-        // Parse the following assign expression and create the AST node
+        // Parse the following expression and create the AST node
         AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(assignExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, AssignExprAssignMul, *ternaryExpr, *assignExpr);
     }
-    else if (tokenPtr->type == TokenType::kSlash &&
+    else if (tokenPtr[0].type == TokenType::kSlash &&
              tokenPtr[1].type == TokenType::kEquals)
     {
         // '/=' assign expression. Skip the '/='
-        ++tokenPtr;
-        ++tokenPtr;
+        tokenPtr += 2;
 
-        // Parse the following assign expression and create the AST node
+        // Parse the following expression and create the AST node
         AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(assignExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, AssignExprAssignDiv, *ternaryExpr, *assignExpr);
     }
-    else if (tokenPtr->type == TokenType::kPercent &&
+    else if (tokenPtr[0].type == TokenType::kPercent &&
              tokenPtr[1].type == TokenType::kEquals)
     {
         // '%=' assign expression. Skip the '%='
-        ++tokenPtr;
-        ++tokenPtr;
+        tokenPtr += 2;
 
-        // Parse the following assign expression and create the AST node
+        // Parse the following expression and create the AST node
         AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(assignExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, AssignExprAssignMod, *ternaryExpr, *assignExpr);
     }
-    else if (tokenPtr->type == TokenType::kEquals) {
+    else if (tokenPtr[0].type == TokenType::kEquals) {
         // Assign expression with simple '=' assign and no op. Skip the '='
         ++tokenPtr;
         
-        // Parse the following assign expression and create the AST node
+        // Parse the following expression and create the AST node
         AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
         WC_GUARD(assignExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, AssignExprAssign, *ternaryExpr, *assignExpr);
@@ -279,7 +308,103 @@ llvm::Value * AssignExprAssign::codegenExprEval(CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// AssignExprAssignOr
+// AssignExprAssignLShift
+//-----------------------------------------------------------------------------
+
+AssignExprAssignLShift::AssignExprAssignLShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
+    AssignExprAssignBase(leftExpr, rightExpr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+llvm::Value * AssignExprAssignLShift::codegenExprEval(CodegenCtx & cgCtx) {
+    // Basic compile checks:
+    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
+    
+    // Evaluate left value and right side value
+    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
+    WC_GUARD(leftAddr, nullptr);
+    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
+    WC_ASSERT(leftValue);
+    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightValue, nullptr);
+    
+    // Do the operation and store the result on the left
+    llvm::Value * newValue = cgCtx.irBuilder.CreateShl(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    WC_ASSERT(storeInst);
+    
+    // The expression evalutes to the left expression, which now has the value of the
+    // new value, so return that...
+    return newValue;
+}
+
+//-----------------------------------------------------------------------------
+// AssignExprAssignArithRShift
+//-----------------------------------------------------------------------------
+
+AssignExprAssignArithRShift::AssignExprAssignArithRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
+    AssignExprAssignBase(leftExpr, rightExpr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+llvm::Value * AssignExprAssignArithRShift::codegenExprEval(CodegenCtx & cgCtx) {
+    // Basic compile checks:
+    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
+    
+    // Evaluate left value and right side value
+    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
+    WC_GUARD(leftAddr, nullptr);
+    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
+    WC_ASSERT(leftValue);
+    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightValue, nullptr);
+    
+    // Do the operation and store the result on the left
+    llvm::Value * newValue = cgCtx.irBuilder.CreateAShr(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    WC_ASSERT(storeInst);
+    
+    // The expression evalutes to the left expression, which now has the value of the
+    // new value, so return that...
+    return newValue;
+}
+
+//-----------------------------------------------------------------------------
+// AssignExprAssignLogicRShift
+//-----------------------------------------------------------------------------
+
+AssignExprAssignLogicRShift::AssignExprAssignLogicRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
+    AssignExprAssignBase(leftExpr, rightExpr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+llvm::Value * AssignExprAssignLogicRShift::codegenExprEval(CodegenCtx & cgCtx) {
+    // Basic compile checks:
+    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
+    
+    // Evaluate left value and right side value
+    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
+    WC_GUARD(leftAddr, nullptr);
+    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
+    WC_ASSERT(leftValue);
+    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightValue, nullptr);
+    
+    // Do the operation and store the result on the left
+    llvm::Value * newValue = cgCtx.irBuilder.CreateLShr(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    WC_ASSERT(storeInst);
+    
+    // The expression evalutes to the left expression, which now has the value of the
+    // new value, so return that...
+    return newValue;
+}
+
+//-----------------------------------------------------------------------------
+// AssignExprAssignBOr
 //-----------------------------------------------------------------------------
 
 AssignExprAssignBOr::AssignExprAssignBOr(TernaryExpr & leftExpr, AssignExpr & rightExpr) :

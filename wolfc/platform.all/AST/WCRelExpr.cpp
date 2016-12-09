@@ -23,35 +23,41 @@ RelExpr * RelExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     WC_GUARD(leftExpr, nullptr);
     
     // See what tokens follow:
-    if (tokenPtr->type == TokenType::kLessThan) {
-        ++tokenPtr;     // Skip '<' - either '<' or '<=' operator:
-        
-        if (tokenPtr->type == TokenType::kEquals) {
-            ++tokenPtr;     // Skip '=' : found '<=' operator
+    if (tokenPtr[0].type == TokenType::kLessThan) {
+        if (tokenPtr[1].type == TokenType::kEquals && RelExpr::peek(tokenPtr + 2)) {
+            // '<=' operator : skip these tokens
+            tokenPtr += 2;
             
+            // Parse the right expression and return the AST node for the operation
             RelExpr * rightExpr = RelExpr::parse(tokenPtr, alloc);
             WC_GUARD(rightExpr, nullptr);
             return WC_NEW_AST_NODE(alloc, RelExprLE, *leftExpr, *rightExpr);
         }
-        else {
-            // '<' operator
+        else if (RelExpr::peek(tokenPtr + 1)) {
+            // '<' operator : skip this token
+            ++tokenPtr;
+            
+            // Parse the right expression and return the AST node for the operation
             RelExpr * rightExpr = RelExpr::parse(tokenPtr, alloc);
             WC_GUARD(rightExpr, nullptr);
             return WC_NEW_AST_NODE(alloc, RelExprLT, *leftExpr, *rightExpr);
         }
     }
-    else if (tokenPtr->type == TokenType::kGreaterThan) {
-        ++tokenPtr;     // Skip '>' - either '>' or '>=' operator:
-        
-        if (tokenPtr->type == TokenType::kEquals) {
-            ++tokenPtr;     // Skip '=' : found '>=' operator
+    else if (tokenPtr[0].type == TokenType::kGreaterThan) {
+        if (tokenPtr[1].type == TokenType::kEquals && RelExpr::peek(tokenPtr + 2)) {
+            // '>=' operator : skip these tokens
+            tokenPtr += 2;
             
+            // Parse the right expression and return the AST node for the operation
             RelExpr * rightExpr = RelExpr::parse(tokenPtr, alloc);
             WC_GUARD(rightExpr, nullptr);
             return WC_NEW_AST_NODE(alloc, RelExprGE, *leftExpr, *rightExpr);
         }
-        else {
-            // '>' operator
+        else if (RelExpr::peek(tokenPtr + 1)) {
+            // '>' operator : skip this token
+            ++tokenPtr;
+            
+            // Parse the right expression and return the AST node for the operation
             RelExpr * rightExpr = RelExpr::parse(tokenPtr, alloc);
             WC_GUARD(rightExpr, nullptr);
             return WC_NEW_AST_NODE(alloc, RelExprGT, *leftExpr, *rightExpr);

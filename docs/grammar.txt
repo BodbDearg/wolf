@@ -87,6 +87,9 @@ ReturnStmnt:
 AssignExpr:
     TernaryExpr
     TernaryExpr = AssignExpr
+	TernaryExpr <<= AssignExpr
+	TernaryExpr >>= AssignExpr
+	TernaryExpr >>>= AssignExpr
 	TernaryExpr |= AssignExpr
 	TernaryExpr ^= AssignExpr
 	TernaryExpr &= AssignExpr
