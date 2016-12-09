@@ -33,6 +33,7 @@
 		1F19FB351D3A02F3002D0EB2 /* WCFuncArgList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F19FB331D3A02F3002D0EB2 /* WCFuncArgList.cpp */; };
 		1F19FB381D3A18A3002D0EB2 /* WCFuncCallArgList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F19FB361D3A18A3002D0EB2 /* WCFuncCallArgList.cpp */; };
 		1F1A468D1DFA93D500EB2349 /* WCBOrExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F1A468B1DFA93D500EB2349 /* WCBOrExpr.cpp */; };
+		1F1A46901DFA9F1A00EB2349 /* WCShiftExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F1A468E1DFA9F1A00EB2349 /* WCShiftExpr.cpp */; };
 		1F231DB81CE1C0AF0085E1C6 /* WCUnaryExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F231DB61CE1C0AF0085E1C6 /* WCUnaryExpr.cpp */; };
 		1F231DBA1CE1D3220085E1C6 /* WCASTNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F231DB91CE1D3220085E1C6 /* WCASTNode.cpp */; };
 		1F28A91B1D0CCF1400AAE639 /* WCNextStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F28A9191D0CCF1400AAE639 /* WCNextStmnt.cpp */; };
@@ -136,6 +137,8 @@
 		1F19FB371D3A18A3002D0EB2 /* WCFuncCallArgList.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCFuncCallArgList.hpp; sourceTree = "<group>"; };
 		1F1A468B1DFA93D500EB2349 /* WCBOrExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCBOrExpr.cpp; sourceTree = "<group>"; };
 		1F1A468C1DFA93D500EB2349 /* WCBOrExpr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCBOrExpr.hpp; sourceTree = "<group>"; };
+		1F1A468E1DFA9F1A00EB2349 /* WCShiftExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCShiftExpr.cpp; sourceTree = "<group>"; };
+		1F1A468F1DFA9F1A00EB2349 /* WCShiftExpr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCShiftExpr.hpp; sourceTree = "<group>"; };
 		1F1E99081DDC47B800FFB94C /* WCLazyInit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCLazyInit.hpp; sourceTree = "<group>"; };
 		1F231DAD1CE165AD0085E1C6 /* docs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = docs; path = ../../docs; sourceTree = "<group>"; };
 		1F231DB11CE1B2400085E1C6 /* WCASTNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCASTNode.hpp; sourceTree = "<group>"; };
@@ -361,6 +364,8 @@
 				1F8BEB2E1CE59BA800A78DDE /* WCScope.hpp */,
 				1FA621541D24ED5500650E28 /* WCScopeStmnt.cpp */,
 				1FA621551D24ED5500650E28 /* WCScopeStmnt.hpp */,
+				1F1A468E1DFA9F1A00EB2349 /* WCShiftExpr.cpp */,
+				1F1A468F1DFA9F1A00EB2349 /* WCShiftExpr.hpp */,
 				1F7F6BB81CE6A401002E9FA4 /* WCStmnt.cpp */,
 				1F7F6BB91CE6A401002E9FA4 /* WCStmnt.hpp */,
 				1F7F6BB51CE6A10C002E9FA4 /* WCStmnts.cpp */,
@@ -574,6 +579,7 @@
 				1F19FB381D3A18A3002D0EB2 /* WCFuncCallArgList.cpp in Sources */,
 				1F5FB1271D4B119D002C8F15 /* WCArrayDataType.cpp in Sources */,
 				1FFD98A91CD9B3AD00398CA6 /* main.cpp in Sources */,
+				1F1A46901DFA9F1A00EB2349 /* WCShiftExpr.cpp in Sources */,
 				1F0B03F41D37781D00C7F894 /* WCCodegenCtx.cpp in Sources */,
 				1FD4558E1CE2DC90005EB3C3 /* WCIntLit.cpp in Sources */,
 				1F19FB2F1D39E00A002D0EB2 /* WCPrimitiveType.cpp in Sources */,

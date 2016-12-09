@@ -3,10 +3,10 @@
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
-#include "WCAddSubExpr.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCShiftExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -15,56 +15,58 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool RelExpr::peek(const Token * tokenPtr) {
-    return AddSubExpr::peek(tokenPtr);
+    return ShiftExpr::peek(tokenPtr);
 }
 
 RelExpr * RelExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    AddSubExpr * addSubExpr = AddSubExpr::parse(tokenPtr, alloc);
-    WC_GUARD(addSubExpr, nullptr);
+    ShiftExpr * leftExpr = ShiftExpr::parse(tokenPtr, alloc);
+    WC_GUARD(leftExpr, nullptr);
     
     // See what tokens follow:
     if (tokenPtr->type == TokenType::kLessThan) {
-        ++tokenPtr;     // Skip '<'
+        ++tokenPtr;     // Skip '<' - either '<' or '<=' operator:
         
         if (tokenPtr->type == TokenType::kEquals) {
-            ++tokenPtr;     // Skip '='
+            ++tokenPtr;     // Skip '=' : found '<=' operator
             
-            RelExpr * relExpr = RelExpr::parse(tokenPtr, alloc);
-            WC_GUARD(relExpr, nullptr);
-            return WC_NEW_AST_NODE(alloc, RelExprLE, *addSubExpr, *relExpr);
+            RelExpr * rightExpr = RelExpr::parse(tokenPtr, alloc);
+            WC_GUARD(rightExpr, nullptr);
+            return WC_NEW_AST_NODE(alloc, RelExprLE, *leftExpr, *rightExpr);
         }
         else {
-            RelExpr * relExpr = RelExpr::parse(tokenPtr, alloc);
-            WC_GUARD(relExpr, nullptr);
-            return WC_NEW_AST_NODE(alloc, RelExprLT, *addSubExpr, *relExpr);
+            // '<' operator
+            RelExpr * rightExpr = RelExpr::parse(tokenPtr, alloc);
+            WC_GUARD(rightExpr, nullptr);
+            return WC_NEW_AST_NODE(alloc, RelExprLT, *leftExpr, *rightExpr);
         }
     }
     else if (tokenPtr->type == TokenType::kGreaterThan) {
-        ++tokenPtr;     // Skip '>'
+        ++tokenPtr;     // Skip '>' - either '>' or '>=' operator:
         
         if (tokenPtr->type == TokenType::kEquals) {
-            ++tokenPtr;     // Skip '='
+            ++tokenPtr;     // Skip '=' : found '>=' operator
             
-            RelExpr * relExpr = RelExpr::parse(tokenPtr, alloc);
-            WC_GUARD(relExpr, nullptr);
-            return WC_NEW_AST_NODE(alloc, RelExprGE, *addSubExpr, *relExpr);
+            RelExpr * rightExpr = RelExpr::parse(tokenPtr, alloc);
+            WC_GUARD(rightExpr, nullptr);
+            return WC_NEW_AST_NODE(alloc, RelExprGE, *leftExpr, *rightExpr);
         }
         else {
-            RelExpr * relExpr = RelExpr::parse(tokenPtr, alloc);
-            WC_GUARD(relExpr, nullptr);
-            return WC_NEW_AST_NODE(alloc, RelExprGT, *addSubExpr, *relExpr);
+            // '>' operator
+            RelExpr * rightExpr = RelExpr::parse(tokenPtr, alloc);
+            WC_GUARD(rightExpr, nullptr);
+            return WC_NEW_AST_NODE(alloc, RelExprGT, *leftExpr, *rightExpr);
         }
     }
 
     // Basic no-op expression:
-    return WC_NEW_AST_NODE(alloc, RelExprNoOp, *addSubExpr);
+    return WC_NEW_AST_NODE(alloc, RelExprNoOp, *leftExpr);
 }
 
 //-----------------------------------------------------------------------------
 // RelExprNoOp
 //-----------------------------------------------------------------------------
 
-RelExprNoOp::RelExprNoOp(AddSubExpr & expr) : mExpr(expr) {
+RelExprNoOp::RelExprNoOp(ShiftExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
@@ -104,7 +106,7 @@ llvm::Constant * RelExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 // RelExprTwoOps
 //-----------------------------------------------------------------------------
 
-RelExprTwoOps::RelExprTwoOps(AddSubExpr & leftExpr, RelExpr & rightExpr) :
+RelExprTwoOps::RelExprTwoOps(ShiftExpr & leftExpr, RelExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
@@ -164,7 +166,7 @@ bool RelExprTwoOps::compileCheckBothExprsAreInt() const {
 // RelExprLT
 //-----------------------------------------------------------------------------
 
-RelExprLT::RelExprLT(AddSubExpr & leftExpr, RelExpr & rightExpr) : RelExprTwoOps(leftExpr, rightExpr) {
+RelExprLT::RelExprLT(ShiftExpr & leftExpr, RelExpr & rightExpr) : RelExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 
@@ -196,7 +198,7 @@ llvm::Constant * RelExprLT::codegenExprConstEval(CodegenCtx & cgCtx) {
 // RelExprLE
 //-----------------------------------------------------------------------------
 
-RelExprLE::RelExprLE(AddSubExpr & leftExpr, RelExpr & rightExpr) : RelExprTwoOps(leftExpr, rightExpr) {
+RelExprLE::RelExprLE(ShiftExpr & leftExpr, RelExpr & rightExpr) : RelExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 
@@ -228,7 +230,7 @@ llvm::Constant * RelExprLE::codegenExprConstEval(CodegenCtx & cgCtx) {
 // RelExprGT
 //-----------------------------------------------------------------------------
 
-RelExprGT::RelExprGT(AddSubExpr & leftExpr, RelExpr & rightExpr) : RelExprTwoOps(leftExpr, rightExpr) {
+RelExprGT::RelExprGT(ShiftExpr & leftExpr, RelExpr & rightExpr) : RelExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 
@@ -260,7 +262,7 @@ llvm::Constant * RelExprGT::codegenExprConstEval(CodegenCtx & cgCtx) {
 // RelExprGE
 //-----------------------------------------------------------------------------
 
-RelExprGE::RelExprGE(AddSubExpr & leftExpr, RelExpr & rightExpr) : RelExprTwoOps(leftExpr, rightExpr) {
+RelExprGE::RelExprGE(ShiftExpr & leftExpr, RelExpr & rightExpr) : RelExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 

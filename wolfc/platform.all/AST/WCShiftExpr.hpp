@@ -5,28 +5,26 @@
 
 WC_BEGIN_NAMESPACE
 
+class AddSubExpr;
 class DataType;
 class LinearAlloc;
-class ShiftExpr;
 
 /*
-RelExpr:
-	ShiftExpr
-	ShiftExpr < RelExpr
-	ShiftExpr <= RelExpr
-	ShiftExpr > RelExpr
-	ShiftExpr >= RelExpr
+ShiftExpr:
+	AddSubExpr << ShiftExpr
+	AddSubExpr >> ShiftExpr
+	AddSubExpr >>> ShiftExpr
 */
-class RelExpr : public ASTNode, public IExpr {
+class ShiftExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static RelExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static ShiftExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
-/* ShiftExpr */
-class RelExprNoOp final : public RelExpr {
+/* AddSubExpr */
+class ShiftExprNoOp final : public ShiftExpr {
 public:
-    RelExprNoOp(ShiftExpr & expr);
+    ShiftExprNoOp(AddSubExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -40,13 +38,13 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    ShiftExpr & mExpr;
+    AddSubExpr & mExpr;
 };
 
-/* Base for relational expressions with two operators. */
-class RelExprTwoOps : public RelExpr {
+/* Base class for an ShiftExpr with two operands */
+class ShiftExprTwoOps : public ShiftExpr {
 public:
-    RelExprTwoOps(ShiftExpr & leftExpr, RelExpr & rightExpr);
+    ShiftExprTwoOps(AddSubExpr & leftExpr, ShiftExpr & rightExpr);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -58,49 +56,40 @@ public:
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     
-    ShiftExpr & mLeftExpr;
-    RelExpr &   mRightExpr;
+    AddSubExpr &    mLeftExpr;
+    ShiftExpr &     mRightExpr;
     
 protected:
     /**
-     * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
-     * Return false for failure if that is the case.
+     * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of type 'int';
+     * return false for failure if that is the case.
      */
     bool compileCheckBothExprsAreInt() const;
 };
 
-/* ShiftExpr < RelExpr */
-class RelExprLT final : public RelExprTwoOps {
+/* AddSubExpr << ShiftExpr */
+class ShiftExprLShift final : public ShiftExprTwoOps {
 public:
-    RelExprLT(ShiftExpr & leftExpr, RelExpr & rightExpr);
-    
+    ShiftExprLShift(AddSubExpr & leftExpr, ShiftExpr & rightExpr);
+
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* ShiftExpr <= RelExpr */
-class RelExprLE final : public RelExprTwoOps {
+/* AddSubExpr >> ShiftExpr */
+class ShiftExprArithRShift final : public ShiftExprTwoOps {
 public:
-    RelExprLE(ShiftExpr & leftExpr, RelExpr & rightExpr);
-    
+    ShiftExprArithRShift(AddSubExpr & leftExpr, ShiftExpr & rightExpr);
+
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* ShiftExpr > RelExpr */
-class RelExprGT final : public RelExprTwoOps {
+/* AddSubExpr >>> ShiftExpr */
+class ShiftExprLogicRShift final : public ShiftExprTwoOps {
 public:
-    RelExprGT(ShiftExpr & leftExpr, RelExpr & rightExpr);
-    
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-};
+    ShiftExprLogicRShift(AddSubExpr & leftExpr, ShiftExpr & rightExpr);
 
-/* ShiftExpr >= RelExpr */
-class RelExprGE final : public RelExprTwoOps {
-public:
-    RelExprGE(ShiftExpr & leftExpr, RelExpr & rightExpr);
-    
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };

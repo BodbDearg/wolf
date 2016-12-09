@@ -131,11 +131,16 @@ EqExpr:
 	RelExpr != EqExpr
 
 RelExpr:
-	AddSubExpr
-	AddSubExpr < RelExpr
-	AddSubExpr <= RelExpr
-	AddSubExpr > RelExpr
-	AddSubExpr >= RelExpr
+	ShiftExpr
+	ShiftExpr < RelExpr
+	ShiftExpr <= RelExpr
+	ShiftExpr > RelExpr
+	ShiftExpr >= RelExpr
+
+ShiftExpr:
+	AddSubExpr << ShiftExpr
+	AddSubExpr >> ShiftExpr
+	AddSubExpr >>> ShiftExpr
 
 AddSubExpr:
 	MulDivExpr
