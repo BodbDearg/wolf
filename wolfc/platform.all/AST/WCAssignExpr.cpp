@@ -23,8 +23,44 @@ AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     WC_GUARD(ternaryExpr, nullptr);
 
     // See if we might have a '+=' or '-=' etc. or a plain assign ('=') ahead:
-    if (tokenPtr->type == TokenType::kPlus && 
+    if (tokenPtr->type == TokenType::kVBar &&
         tokenPtr[1].type == TokenType::kEquals)
+    {
+        // '|=' assign expression. Skip the '|='
+        ++tokenPtr;
+        ++tokenPtr;
+
+        // Parse the following assign expression and create the AST node
+        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
+        WC_GUARD(assignExpr, nullptr);
+        return WC_NEW_AST_NODE(alloc, AssignExprAssignBOr, *ternaryExpr, *assignExpr);
+    }
+    else if (tokenPtr->type == TokenType::kHat &&
+             tokenPtr[1].type == TokenType::kEquals)
+    {
+        // '^=' assign expression. Skip the '^='
+        ++tokenPtr;
+        ++tokenPtr;
+
+        // Parse the following assign expression and create the AST node
+        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
+        WC_GUARD(assignExpr, nullptr);
+        return WC_NEW_AST_NODE(alloc, AssignExprAssignBXor, *ternaryExpr, *assignExpr);
+    }
+    else if (tokenPtr->type == TokenType::kAmpersand &&
+             tokenPtr[1].type == TokenType::kEquals)
+    {
+        // '&=' assign expression. Skip the '&='
+        ++tokenPtr;
+        ++tokenPtr;
+
+        // Parse the following assign expression and create the AST node
+        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
+        WC_GUARD(assignExpr, nullptr);
+        return WC_NEW_AST_NODE(alloc, AssignExprAssignBAnd, *ternaryExpr, *assignExpr);
+    }
+    else if (tokenPtr->type == TokenType::kPlus &&
+             tokenPtr[1].type == TokenType::kEquals)
     {
         // '+=' assign expression. Skip the '+='
         ++tokenPtr;
@@ -240,6 +276,102 @@ llvm::Value * AssignExprAssign::codegenExprEval(CodegenCtx & cgCtx) {
     // The expression evalutes to the left expression, which now has the value of the 
     // right expression, so return that...
     return rightValue;
+}
+
+//-----------------------------------------------------------------------------
+// AssignExprAssignOr
+//-----------------------------------------------------------------------------
+
+AssignExprAssignBOr::AssignExprAssignBOr(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
+    AssignExprAssignBase(leftExpr, rightExpr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+llvm::Value * AssignExprAssignBOr::codegenExprEval(CodegenCtx & cgCtx) {
+    // Basic compile checks:
+    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
+    
+    // Evaluate left value and right side value
+    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
+    WC_GUARD(leftAddr, nullptr);
+    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
+    WC_ASSERT(leftValue);
+    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightValue, nullptr);
+    
+    // Do the operation and store the result on the left
+    llvm::Value * newValue = cgCtx.irBuilder.CreateOr(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    WC_ASSERT(storeInst);
+    
+    // The expression evalutes to the left expression, which now has the value of the
+    // new value, so return that...
+    return newValue;
+}
+
+//-----------------------------------------------------------------------------
+// AssignExprAssignBXor
+//-----------------------------------------------------------------------------
+
+AssignExprAssignBXor::AssignExprAssignBXor(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
+    AssignExprAssignBase(leftExpr, rightExpr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+llvm::Value * AssignExprAssignBXor::codegenExprEval(CodegenCtx & cgCtx) {
+    // Basic compile checks:
+    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
+    
+    // Evaluate left value and right side value
+    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
+    WC_GUARD(leftAddr, nullptr);
+    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
+    WC_ASSERT(leftValue);
+    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightValue, nullptr);
+    
+    // Do the operation and store the result on the left
+    llvm::Value * newValue = cgCtx.irBuilder.CreateXor(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    WC_ASSERT(storeInst);
+    
+    // The expression evalutes to the left expression, which now has the value of the
+    // new value, so return that...
+    return newValue;
+}
+
+//-----------------------------------------------------------------------------
+// AssignExprAssignBAnd
+//-----------------------------------------------------------------------------
+
+AssignExprAssignBAnd::AssignExprAssignBAnd(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
+    AssignExprAssignBase(leftExpr, rightExpr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+llvm::Value * AssignExprAssignBAnd::codegenExprEval(CodegenCtx & cgCtx) {
+    // Basic compile checks:
+    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
+    
+    // Evaluate left value and right side value
+    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
+    WC_GUARD(leftAddr, nullptr);
+    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
+    WC_ASSERT(leftValue);
+    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightValue, nullptr);
+    
+    // Do the operation and store the result on the left
+    llvm::Value * newValue = cgCtx.irBuilder.CreateAnd(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    WC_ASSERT(storeInst);
+    
+    // The expression evalutes to the left expression, which now has the value of the
+    // new value, so return that...
+    return newValue;
 }
 
 //-----------------------------------------------------------------------------

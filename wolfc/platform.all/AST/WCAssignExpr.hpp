@@ -13,6 +13,9 @@ class TernaryExpr;
 AssignExpr:
     TernaryExpr
     TernaryExpr = AssignExpr
+	TernaryExpr |= AssignExpr
+	TernaryExpr ^= AssignExpr
+	TernaryExpr &= AssignExpr
     TernaryExpr += AssignExpr
     TernaryExpr -= AssignExpr
     TernaryExpr *= AssignExpr
@@ -76,6 +79,30 @@ protected:
 class AssignExprAssign final : public AssignExprAssignBase {
 public:
     AssignExprAssign(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+    
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+};
+
+/* TernaryExpr |= AssignExpr */
+class AssignExprAssignBOr final : public AssignExprAssignBase {
+public:
+    AssignExprAssignBOr(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+    
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+};
+
+/* TernaryExpr ^= AssignExpr */
+class AssignExprAssignBXor final : public AssignExprAssignBase {
+public:
+    AssignExprAssignBXor(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+    
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+};
+
+/* TernaryExpr &= AssignExpr */
+class AssignExprAssignBAnd final : public AssignExprAssignBase {
+public:
+    AssignExprAssignBAnd(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
