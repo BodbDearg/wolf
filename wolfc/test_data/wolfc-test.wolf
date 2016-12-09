@@ -240,13 +240,13 @@ var GAME_TYPE_NORMAL = 0        ; Show dealer cards
 var GAME_TYPE_ADVANCED = 1      ; Don't show dealer cards
 
 ; Actions a player / dealer can take
-; Stored as powers of two so they can be used as bit flags when determining
+; Stored as bit flags so they can be used as bit flags when determining
 ; what actions are possible for the player at any given time.
 var GAMEACTION_NONE = 0
-var GAMEACTION_HIT = 1
-var GAMEACTION_STAND = 2
-var GAMEACTION_DOUBLEDOWN = 4   ; Player only action
-var GAMEACTION_FORFEIT = 8      ; Player only action
+var GAMEACTION_HIT = 1 << 0
+var GAMEACTION_STAND = 1 << 1
+var GAMEACTION_DOUBLEDOWN = 1 << 2  ; Player only action
+var GAMEACTION_FORFEIT = 1 << 3     ; Player only action
 
 ; The current type of game (GAME_TYPE_XXX constants)
 var gGameCurrentGameType = GAME_TYPE_NORMAL
