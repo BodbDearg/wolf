@@ -382,6 +382,7 @@ func game_drawCards(int[5] suitOfCards)
     while cardNum < suitLength
         print("Card ")
         print(cardNum + 1)
+        print(": ")
         print(card_numToName(suitOfCards[cardNum]))
         nextln()
         cardNum++
@@ -394,21 +395,109 @@ func game_doGameLoop()
     until player_handFinished()
         player_findAvailableActions()   ; Find the available actions to the player
         game_drawMainGameScreen()       ; Draw the main game screen
-        ; PlayerDoActions();                  // Ask the player for next action
+        player_doNextGameAction()       ; Ask the player for next action
     end
-    
-    ; TODO
-    /;
+
     ; Play out the dealers hand
     until dealer_handFinished()
-        ; Do the dealer's actions. Note: not updating screen till the end since this is almost instant
-        dealer_doActions()
+        ; Do the an action for the dealer. Note: not updating screen till the end since this is almost instant
+        dealer_doAction()
     end
-    ;/
     
-    ; TODO
     ; Game now over- call the end game function
-    ; game_endGame()
+    game_endGame()
+end
+
+; Finishes up the game, determines the winner and does payouts 
+func game_endGame()
+    ; First thing which must be done: find out who has won..
+    game_findWinner()
+
+    ; Pay out to the player if s/he has won, or refund if drawn
+    game_payOutChips()
+
+    ; Record the end game results in the statistics
+    if gGameWinner == GAME_WINNER_PLAYER 
+        ; Player has won the game: increment amount of games won and money won
+        gGameStatGamesWon++
+        gGameStatMoneyGained += gPlayerBetChips / 2
+    or if gGameWinner == GAME_WINNER_DEALER
+        ; Dealer has won the game: increment amount of games lost and money lost
+        gGameStatGamesLost++
+        gGameStatMoneyLost += gPlayerBetChips
+    else
+        ; Game was a draw: Increment amount of games drew
+        gGameStatGamesDrew++
+    end
+
+    ; Draw the game screen. This function will automatically output the game results also.
+    game_drawMainGameScreen()
+end
+
+; Figures out the winner of the game
+func game_findWinner()
+    ; Declare two bools to hold whether player or dealer has lost.
+    ; Both can win or lose at the same time- which will result in a draw
+    var playerWon = false
+    var dealerWon = false
+
+    ; Get the value of the player's and dealer's suits
+    var playerSuitValue = card_getSuitValue(gPlayerCards)
+    var dealerSuitValue = card_getSuitValue(gDealerCards)
+    
+    ; Check if the player has a better suit than the dealer, and is not
+    ; gone bust. Also check if the dealer is bust. If so, the player has 'won'
+    unless player_isBust()
+        if playerSuitValue > dealerSuitValue or dealer_isBust()
+            playerWon = true
+        end
+    end
+     
+    ; Check if the dealer has a better suit than the player, and is not
+    ; gone bust. Also check if the player is bust. If so, the dealer has 'won'
+    unless dealer_isBust()
+        if dealerSuitValue > playerSuitValue or player_isBust()
+            dealerWon = true
+        end
+    end
+
+    ; If the player has forfeit, set the player to have lost and the dealer
+    ; to have won regardless of what the cards are:
+    if player_hasForfeit()
+        playerWon = false
+        dealerWon = true
+    end
+     
+    ; Now set the final result. If both player and dealer had the same result then the overall
+    ; result will be a draw...
+    if playerWon
+        unless dealerWon 
+            gGameWinner = GAME_WINNER_PLAYER
+        else
+            gGameWinner = GAMEACTION_NONE
+        end
+    else
+        unless dealerWon 
+            gGameWinner = GAME_WINNER_NONE
+        else
+            gGameWinner = GAME_WINNER_DEALER
+        end
+    end
+end
+
+; Pay out chips at the end of a game to the winner (unless there is a draw)
+func game_payOutChips()
+    if gGameWinner == GAME_WINNER_PLAYER
+        ; Add 1.5 times the bet amount to the players chips. In other words, the player gets the
+        ; original bet back, plus half the bet in winnings.
+        gPlayerChips += (gPlayerBetChips * 3) / 2
+    or if gGameWinner == GAME_WINNER_DEALER
+        ; Dealer has won. Don't give back anything...
+        nop
+    else
+        ; Player has drawn with the dealer: Give back original bet amount.
+        gPlayerChips += gPlayerBetChips
+    end
 end
 
 ;==================================================================================================
@@ -437,13 +526,6 @@ func dealer_clearCards()
     gDealerCards = card_getEmptySuit()
 end
 
-; Adds another card to the dealer's hand/suit
-func dealer_actionHit()
-    var card = card_drawCard()
-    gDealerCards[card_getSuitLength(gDealerCards)] = card
-    gDealerLastAction = GAMEACTION_HIT
-end
-
 ; Finds out if the dealer has gone bust (suitValue > 21)
 func dealer_isBust() -> bool
     return card_getSuitValue(gDealerCards) > GAME_BLACKJACK_SUIT_VALUE
@@ -465,6 +547,61 @@ func dealer_handFinished() -> bool
         dealer_isBust() or      ; If the dealer is bust then his/her hand is finished
         dealer_cantDraw() or    ; If the dealer can't draw any more, then the hand is finished
         dealer_isStanding()     ; If the dealer's last action was stand, then the hand is finished.
+end
+
+; Does an action for the dealer
+func dealer_doAction()
+    ; Get the suit values for both dealer and player
+    var dealerSuitValue = card_getSuitValue(gDealerCards)
+    var playerSuitValue = card_getSuitValue(gPlayerCards)
+    
+    ; Decide whether to hit or stand
+    if dealerSuitValue >= 17
+        ; Dealers suit value is >= 17. Normally a dealer will stand on this, but the dealer must first
+        ; check if the player has got a better hand before standing.
+        if playerSuitValue > dealerSuitValue
+            ; Player has a greater suit value. If the player is not bust, then the dealer must try and hit
+            ; again in order to attempt beating the player.
+            if player_isBust()
+                ; The player has gone bust. Dealer can safely stand and win the game
+                dealer_actionStand()
+            else
+                ; The player hasn't gone bust and has a better hand than the dealer. The dealer must make
+                ; another hit in order to have some chance of winning.
+                dealer_actionHit()
+            end
+        else
+            ; Player's suit value is less than the dealer. The dealer should now stand at this point.
+            ; Will be too risky drawing another card!
+            dealer_actionStand()
+        end
+    or if player_hasForfeit()
+        ; Player has given up on the game. No point in drawing any further
+        ; cards. Order dealer to stand....
+        dealer_actionStand()
+    or if player_isBust()
+        ; The player has gone bust. Draw no more cards and stand.
+        dealer_actionStand()
+    or if playerSuitValue < dealerSuitValue
+        ; If the player has stood on a lower value than what the dealer currently has, then there is no point
+        ; in drawing any more cards. Stand...
+        dealer_actionStand()
+    else
+        ; All other standing conditions have not been met. Draw another card.
+        dealer_actionHit()
+    end
+end
+
+; Makes the dealer stand
+func dealer_actionStand()
+    gDealerLastAction = GAMEACTION_STAND
+end
+
+; Makes the dealer draw another card
+func dealer_actionHit()
+    var card = card_drawCard()
+    gDealerCards[card_getSuitLength(gDealerCards)] = card
+    gDealerLastAction = GAMEACTION_HIT
 end
 
 ;==================================================================================================
@@ -501,13 +638,6 @@ end
 ; Clear the player's suit of cards
 func player_clearCards()
     gPlayerCards = card_getEmptySuit()
-end
-
-; Adds another card to the player's hand/suit
-func player_actionHit()
-    var card = card_drawCard()
-    gPlayerCards[card_getSuitLength(gPlayerCards)] = card
-    gPlayerLastAction = GAMEACTION_HIT
 end
 
 ; Finds out if the player has gone bust (suitValue > 21)
@@ -577,6 +707,56 @@ end
 ; Tell if one of the player actions (passed as a bitmask) are available
 func player_areActionsAvailable(int actionsMask) -> bool
     return (gPlayerAvailableActions & actionsMask) != 0
+end
+
+; Reads the next action for the player to do during the game
+func player_doNextGameAction()
+    ; Read the action for the player to do
+    var playerAction = readnum()
+
+    ; See what action the player took:
+    if playerAction == GAMEACTION_HIT and player_areActionsAvailable(GAMEACTION_HIT)
+        player_actionHit()
+    or if playerAction == GAMEACTION_STAND  and player_areActionsAvailable(GAMEACTION_STAND)
+        player_actionStand()
+    or if playerAction == GAMEACTION_DOUBLEDOWN and player_areActionsAvailable(GAMEACTION_DOUBLEDOWN)
+        player_actionDoubleDown()
+    else
+        println("Invalid action input!")
+    end
+end
+
+; Make the player stand
+func player_actionStand()
+    gPlayerLastAction = GAMEACTION_STAND
+end
+
+; Make the player forfeit the game
+func player_actionForfeit()
+    gPlayerLastAction = GAMEACTION_FORFEIT
+end
+
+; Makes the player draw another card
+func player_actionHit()
+    var card = card_drawCard()
+    gPlayerCards[card_getSuitLength(gPlayerCards)] = card
+    gPlayerLastAction = GAMEACTION_HIT
+end
+
+; Makes the player draw another card and double the bet
+func player_actionDoubleDown()
+    ; Draw another card
+    player_actionHit()
+    
+    ; Take original bet away from available chips - bet has doubled
+    gPlayerChips -= gPlayerBetChips
+
+    ; Double the amount of bet chips
+    gPlayerBetChips *= 2
+    
+    ; Set the last action as STAND, because the player MUST stand and draw
+    ; no more cards after making a double down
+    gPlayerLastAction = GAMEACTION_STAND
 end
 
 ;==================================================================================================
