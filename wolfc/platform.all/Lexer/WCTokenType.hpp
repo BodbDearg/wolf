@@ -141,4 +141,6 @@ enum class TokenType {
     kPrint,
     /* 'readnum' */ // TODO: this is a temporary keyword, remove eventually
     kReadnum,
+    /* 'assert' */
+    kAssert,
 };

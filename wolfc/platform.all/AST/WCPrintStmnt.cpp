@@ -49,12 +49,12 @@ PrintStmnt * PrintStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     ++tokenPtr;
     
     // Create and return the print statement
-    return WC_NEW_AST_NODE(alloc, PrintStmnt, *assignExpr, *printTok, *closingParenTok);
+    return WC_NEW_AST_NODE(alloc, PrintStmnt, *printTok, *assignExpr, *closingParenTok);
 }
 
-PrintStmnt::PrintStmnt(AssignExpr & expr, const Token & startToken, const Token & endToken) :
-    mExpr(expr),
+PrintStmnt::PrintStmnt(const Token & startToken, AssignExpr & expr, const Token & endToken) :
     mStartToken(startToken),
+    mExpr(expr),
     mEndToken(endToken)
 {
     mExpr.mParent = this;

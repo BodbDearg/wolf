@@ -577,7 +577,8 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         parseKeyword("rand", TokenType::kRand) ||
         parseKeyword("srand", TokenType::kSRand) ||
         parseKeyword("print", TokenType::kPrint) ||
-        parseKeyword("readnum", TokenType::kReadnum))
+        parseKeyword("readnum", TokenType::kReadnum) ||
+        parseKeyword("assert", TokenType::kAssert))
     {
         return ParseResult::kSuccess;
     }

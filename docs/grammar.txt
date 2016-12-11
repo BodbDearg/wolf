@@ -36,6 +36,7 @@ Stmnts:
 Stmnt:
 	NoOpStmnt
     PrintStmnt
+    AssertStmnt
     VarDecl
     IfStmnt
     WhileStmnt
@@ -51,6 +52,9 @@ NoOpStmnt:
 
 PrintStmnt:
     print ( AssignExpr )
+
+AssertStmnt:
+    assert ( AssignExpr )
 
 VarDecl:
     var Identifier = AssignExpr

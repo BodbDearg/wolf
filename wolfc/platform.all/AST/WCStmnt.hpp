@@ -5,6 +5,7 @@
 
 WC_BEGIN_NAMESPACE
 
+class AssertStmnt;
 class AssignExpr;
 class BreakStmnt;
 class IfStmnt;
@@ -23,6 +24,7 @@ struct CodegenCtx;
 Stmnt:
 	NoOpStmnt
     PrintStmnt
+    AssertStmnt
     VarDecl
     IfStmnt
     WhileStmnt
@@ -30,7 +32,7 @@ Stmnt:
     ScopeStmnt
 	BreakStmnt
 	NextStmnt
- 	ReturnStmnt
+	ReturnStmnt
 	AssignExpr
 */
 class Stmnt : public ASTNode, public IStmnt {
@@ -63,6 +65,19 @@ public:
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
     PrintStmnt & mStmnt;
+};
+
+/* AssertStmnt */
+class StmntAssertStmnt final : public Stmnt {
+public:
+    StmntAssertStmnt(AssertStmnt & stmnt);
+    
+    virtual const Token & getStartToken() const override;
+    virtual const Token & getEndToken() const override;
+    
+    virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    AssertStmnt & mStmnt;
 };
 
 /* IfStmnt */

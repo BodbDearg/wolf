@@ -89,6 +89,9 @@ public:
     llvm::LLVMContext & mLLVMCtx;
     
 private:
+    /* Declare C standard library functions with the module */
+    void declareCStdLibFuncsInModule();
+    
     /* The LLVM module */
     std::unique_ptr<llvm::Module> mLLVMModule;
     

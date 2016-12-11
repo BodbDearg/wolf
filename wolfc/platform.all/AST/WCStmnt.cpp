@@ -1,5 +1,6 @@
 #include "WCStmnt.hpp"
 
+#include "WCAssertStmnt.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCBreakStmnt.hpp"
 #include "WCCodegenCtx.hpp"
@@ -23,6 +24,7 @@ WC_BEGIN_NAMESPACE
 bool Stmnt::peek(const Token * tokenPtr) {
     return  NopStmnt::peek(tokenPtr) ||
             PrintStmnt::peek(tokenPtr) ||
+            AssertStmnt::peek(tokenPtr) ||
             VarDecl::peek(tokenPtr) ||
             IfStmnt::peek(tokenPtr) ||
             WhileStmnt::peek(tokenPtr) ||
@@ -47,6 +49,13 @@ Stmnt * Stmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         PrintStmnt * printStmnt = PrintStmnt::parse(tokenPtr, alloc);
         WC_GUARD(printStmnt, nullptr);
         return WC_NEW_AST_NODE(alloc, StmntPrintStmnt, *printStmnt);
+    }
+    
+    // Parse assert expression if ahead
+    if (AssertStmnt::peek(tokenPtr)) {
+        AssertStmnt * assertStmnt = AssertStmnt::parse(tokenPtr, alloc);
+        WC_GUARD(assertStmnt, nullptr);
+        return WC_NEW_AST_NODE(alloc, StmntAssertStmnt, *assertStmnt);
     }
     
     // Parse var decl if ahead
@@ -148,6 +157,26 @@ const Token & StmntPrintStmnt::getEndToken() const {
 }
 
 bool StmntPrintStmnt::codegen(CodegenCtx & cgCtx) {
+    return mStmnt.codegen(cgCtx);
+}
+
+//-----------------------------------------------------------------------------
+// StmntAssertStmnt
+//-----------------------------------------------------------------------------
+
+StmntAssertStmnt::StmntAssertStmnt(AssertStmnt & stmnt) : mStmnt(stmnt) {
+    mStmnt.mParent = this;
+}
+
+const Token & StmntAssertStmnt::getStartToken() const {
+    return mStmnt.getStartToken();
+}
+
+const Token & StmntAssertStmnt::getEndToken() const {
+    return mStmnt.getEndToken();
+}
+
+bool StmntAssertStmnt::codegen(CodegenCtx & cgCtx) {
     return mStmnt.codegen(cgCtx);
 }
 
