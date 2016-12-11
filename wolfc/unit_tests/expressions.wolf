@@ -6,8 +6,8 @@ var addSubConstOps = [
     1 + -2,
     -1 + -2,
     2 - 5,
-    2 - (-5),
-    -2 - (-5)
+    2 - -5,
+    -2 - -5
 ]
 
 func testAddSubExpr()
@@ -15,8 +15,8 @@ func testAddSubExpr()
     assert(1 + -2 == -1)
     assert(-1 + -2 == -3)
     assert(2 - 5 == -3)
-    assert(2 - (-5) == 7)
-    assert(-2 - (-5) == 3)
+    assert(2 - -5 == 7)
+    assert(-2 - -5 == 3)
     assert(addSubConstOps[0] == 3)
     assert(addSubConstOps[1] == -1)
     assert(addSubConstOps[2] == -3)

@@ -168,14 +168,29 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
         case ')': return parseBasicToken(TokenType::kRParen, 1);
         case '[': return parseBasicToken(TokenType::kLBrack, 1);
         case ']': return parseBasicToken(TokenType::kRBrack, 1);
-        case '+': return parseBasicToken(TokenType::kPlus, 1);
-        
-        case '-': {
-            // '-' can be followed immediately by '>', in which case it is the arrow operator
-            if (mLexerState.srcPtr[1] == '>') {
-                return parseBasicToken(TokenType::kOpArrow, 2);
+            
+        case '+': {
+            if (mLexerState.srcPtr[1] == '+') {
+                // '++' operator
+                return parseBasicToken(TokenType::kIncrement, 2);
             }
             else {
+                // '+' operator
+                return parseBasicToken(TokenType::kPlus, 1);
+            }
+        }
+        
+        case '-': {
+            if (mLexerState.srcPtr[1] == '>') {
+                // '->' operator
+                return parseBasicToken(TokenType::kOpArrow, 2);
+            }
+            else if (mLexerState.srcPtr[1] == '-') {
+                // '--' operator
+                return parseBasicToken(TokenType::kDecrement, 2);
+            }
+            else {
+                // '-' operator
                 return parseBasicToken(TokenType::kMinus, 1);
             }
         }
