@@ -1,4 +1,4 @@
 func main() -> int
-    assert(2 > 1)
+    assert(true)
     return 0
 end

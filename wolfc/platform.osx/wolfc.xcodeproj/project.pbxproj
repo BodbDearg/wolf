@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		1F7D8AFB1DFD6590002FB442 /* wolfc-unit-tests */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 1F7D8AFC1DFD6590002FB442 /* Build configuration list for PBXAggregateTarget "wolfc-unit-tests" */;
+			buildPhases = (
+				1F7D8B011DFD6665002FB442 /* ShellScript */,
+			);
+			dependencies = (
+				1F7D8B001DFD6596002FB442 /* PBXTargetDependency */,
+			);
+			name = "wolfc-unit-tests";
+			productName = "wolfc-unit-tests";
+		};
 		1FFD98B81CD9EC0C00398CA6 /* wolfc-test */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 1FFD98B91CD9EC0C00398CA6 /* Build configuration list for PBXAggregateTarget "wolfc-test" */;
@@ -94,6 +106,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1F7D8AFF1DFD6596002FB442 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1FFD98951CD9B34900398CA6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1FFD989C1CD9B34900398CA6;
+			remoteInfo = wolfc;
+		};
 		1FFD98BC1CD9EC1800398CA6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1FFD98951CD9B34900398CA6 /* Project object */;
@@ -533,6 +552,11 @@
 				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Darragh Coy";
 				TargetAttributes = {
+					1F7D8AFB1DFD6590002FB442 = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = V7PDFH546M;
+						ProvisioningStyle = Automatic;
+					};
 					1FFD989C1CD9B34900398CA6 = {
 						CreatedOnToolsVersion = 7.3;
 					};
@@ -555,11 +579,25 @@
 			targets = (
 				1FFD989C1CD9B34900398CA6 /* wolfc */,
 				1FFD98B81CD9EC0C00398CA6 /* wolfc-test */,
+				1F7D8AFB1DFD6590002FB442 /* wolfc-unit-tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1F7D8B011DFD6665002FB442 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "WOLFC_PATH=\"${BUILT_PRODUCTS_DIR}/wolfc\"\nOUTPUT_DIR=\"${DERIVED_FILE_DIR}\"\nINPUT_DIR=\"${PROJECT_DIR}/../unit_tests\"\nCOMPILE_AND_RUN_SCRIPT=\"${PROJECT_DIR}/scripts/compile_and_run_wolf_file.sh\"\n\ncd \"${INPUT_DIR}\"\n\nfor wolf_file in *.wolf;\ndo\n    \"${COMPILE_AND_RUN_SCRIPT}\" \"${WOLFC_PATH}\" \"${OUTPUT_DIR}\" \"${wolf_file}\"\n\n\tif [ $? != 0 ]; then\n    \techo \"Unit test failed for file '${wolf_file}'!\"\n    \texit 1\n\tfi\ndone\n";
+		};
 		1FFD98BE1CD9EC2C00398CA6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -654,6 +692,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1F7D8B001DFD6596002FB442 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1FFD989C1CD9B34900398CA6 /* wolfc */;
+			targetProxy = 1F7D8AFF1DFD6596002FB442 /* PBXContainerItemProxy */;
+		};
 		1FFD98BD1CD9EC1800398CA6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 1FFD989C1CD9B34900398CA6 /* wolfc */;
@@ -662,6 +705,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		1F7D8AFD1DFD6590002FB442 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = V7PDFH546M;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1F7D8AFE1DFD6590002FB442 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = V7PDFH546M;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		1FFD98A21CD9B34900398CA6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -852,6 +911,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1F7D8AFC1DFD6590002FB442 /* Build configuration list for PBXAggregateTarget "wolfc-unit-tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F7D8AFD1DFD6590002FB442 /* Debug */,
+				1F7D8AFE1DFD6590002FB442 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1FFD98981CD9B34900398CA6 /* Build configuration list for PBXProject "wolfc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
