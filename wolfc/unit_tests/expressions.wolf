@@ -1,4 +1,31 @@
 ;==================================================================================================
+; EqExpr
+;==================================================================================================
+var eqExprConstOps = [
+    2 == 2,
+    1 == 2,
+    3 == 2,
+    2 != 2,
+    1 != 2,
+    3 != 2
+]
+
+func testEqExpr()
+    assert(2 == 2)
+    assert(not 1 == 2)
+    assert(not 3 == 2)
+    assert(not 2 != 2)
+    assert(1 != 2)
+    assert(3 != 2)
+    assert(eqExprConstOps[0])
+    assert(not eqExprConstOps[1])
+    assert(not eqExprConstOps[2])
+    assert(not eqExprConstOps[3])
+    assert(eqExprConstOps[4])
+    assert(eqExprConstOps[5])
+end
+
+;==================================================================================================
 ; RelExpr
 ;==================================================================================================
 var relExprConstOps = [
@@ -152,6 +179,7 @@ end
 ; Run the tests
 ;==================================================================================================
 func main() -> int
+    testEqExpr()
     testRelExpr()
     testShiftExpr()
     testAddSubExpr()
