@@ -276,14 +276,124 @@ func game_startGame(int betAmount)
     game_doGameLoop()
 end
 
+; Tells if the game is finished
+func game_isOver() -> bool
+    return player_handFinished() and dealer_handFinished()
+end
+
+; Draw the main game screen
+func game_drawMainGameScreen()
+    ; Draw a title bar with the text 'players hand'
+    menu_drawTitleBar("Player's hand")
+     
+    ; Draw the amount the player has bet
+    printPrefixTxtAndAmtLn("Bet amount: ", gPlayerBetChips)
+     
+    ; Draw the players cards
+    nextln()
+    nextln()
+    game_drawCards(gPlayerCards)
+     
+    ; Draw the player's suit value:
+    printPrefixTxtAndAmtLn("Suit Value: ", card_getSuitValue(gPlayerCards))
+
+    ; Draw a title bar with the text 'dealers hand'
+    menu_drawTitleBar("Dealer's hand");
+     
+    ; Only draw the dealer cards if on normal game type or if the game is over
+    if gGameCurrentGameType == GAME_TYPE_NORMAL or game_isOver()
+        ; Draw the dealers cards
+        game_drawCards(gDealerCards)
+         
+        ; Draw the dealer's suit value:
+        printPrefixTxtAndAmtLn("Suit Value: ", card_getSuitValue(gDealerCards))
+    else
+        ; Advanced game type: draw an **unavailable** message
+        println("*** NOT AVAILABLE ***")
+    end
+
+    ; If the game is not over- draw the possible actions the player can take, otherwise draw the results of the game.
+    unless game_isOver()
+        game_drawPlayerActions()
+    else
+        game_drawEndGameResults()
+    end
+end
+
+; Draw the actions available to the player
+func game_drawPlayerActions()
+    menu_drawTitleBar("Actions available: ")
+
+    if player_areActionsAvailable(GAMEACTION_HIT)
+        println("1 - Hit")
+    end
+    
+    if player_areActionsAvailable(GAMEACTION_STAND)
+        println("2 - Stand")
+    end
+    
+    if player_areActionsAvailable(GAMEACTION_DOUBLEDOWN)
+        println("3 - Double down")
+    end
+    
+    if player_areActionsAvailable(GAMEACTION_FORFEIT)
+        println("q - Quit (bet is forfeit)")
+    end
+    
+    nextln()
+    println("Input desired action: ")
+end
+
+; Draw the results at the end of a game
+func game_drawEndGameResults()
+    menu_drawTitleBar("Game over! Final results:")
+    print("Game result: ")
+
+    if gGameWinner == GAME_WINNER_PLAYER
+        println("Player wins.")
+    or if gGameWinner == GAME_WINNER_DEALER
+        println("Dealer wins.")
+    else
+        println("Game was a draw.")
+    end
+ 
+    print("Money lost / gained: ")
+
+    if gGameWinner == GAME_WINNER_PLAYER
+        print("Gained ")
+        print(((gPlayerBetChips * 3) / 2) - gPlayerBetChips)
+        println(" chips.")
+    or if gGameWinner == GAME_WINNER_DEALER
+        print("Lost ")
+        print(gPlayerBetChips)
+        println(" chips.")
+    else
+        println("No money lost or gained.")
+    end
+
+    doEnterNumToContinue()
+end
+
+; Draw the given suit of cards
+func game_drawCards(int[5] suitOfCards)
+    var suitLength = card_getSuitLength(suitOfCards)
+    var cardNum = 0
+
+    while cardNum < suitLength
+        print("Card ")
+        print(cardNum + 1)
+        print(card_numToName(suitOfCards[cardNum]))
+        nextln()
+        cardNum++
+    end
+end
+
 ; Does the main game loop
 func game_doGameLoop()
     ; Play out the player's hand first.
     until player_handFinished()
-        break
-        ; TODO
-        ; PlayerFindAvailableActions();       // Find the available actions to the player
-        ; GameScreenDrawGameScreen();         // Draw the Game screen
+        player_findAvailableActions()   ; Find the available actions to the player
+        game_drawMainGameScreen()       ; Draw the main game screen
         ; PlayerDoActions();                  // Ask the player for next action
     end
     
@@ -334,6 +444,29 @@ func dealer_actionHit()
     gDealerLastAction = GAMEACTION_HIT
 end
 
+; Finds out if the dealer has gone bust (suitValue > 21)
+func dealer_isBust() -> bool
+    return card_getSuitValue(gDealerCards) > GAME_BLACKJACK_SUIT_VALUE
+end
+
+; Tells if the dealer has drawn 5 cards and can't draw any more
+func dealer_cantDraw() -> bool
+    return card_getSuitLength(gDealerCards) >= GAME_MAX_CARDS
+end
+
+; Tells if the dealer has issued a stand order
+func dealer_isStanding() -> bool
+    return gDealerLastAction == GAMEACTION_STAND
+end
+
+; Tells if the dealers hand is finished
+func dealer_handFinished() -> bool
+    return  
+        dealer_isBust() or      ; If the dealer is bust then his/her hand is finished
+        dealer_cantDraw() or    ; If the dealer can't draw any more, then the hand is finished
+        dealer_isStanding()     ; If the dealer's last action was stand, then the hand is finished.
+end
+
 ;==================================================================================================
 ; Player related stuff
 ;==================================================================================================
@@ -349,6 +482,9 @@ var gPlayerCards = [ NO_CARD, NO_CARD, NO_CARD, NO_CARD, NO_CARD ]
 
 ; Last action the player took on the hand
 var gPlayerLastAction = GAMEACTION_NONE
+
+; What actions are possible at any given time
+var gPlayerAvailableActions = GAMEACTION_NONE
 
 ; Make the player buy some chips and add to the usable chip balance in the game
 func player_buyChips(int numChips)
@@ -401,15 +537,46 @@ end
 
 ; Tells if the player's hand is finished
 func player_handFinished() -> bool
-    return true if
+    return
         player_isBust() or      ; If the player is bust then his/her hand is finished
         player_cantDraw() or    ; If the player can't draw any more, then the hand is finished
         player_isStanding() or  ; If the player's last action was stand, then the hand is finished.
         player_hasForfeit() or  ; If the player has forfeited then the hand is finished too
         player_hasBlackjack()   ; If the player has a blackjack (perfect suit) then auto end the hand
-   
-   ; None of the conditions which end the hand have been met (player can still play)
-   return false
+end
+
+; Figures out what actions are available to the player
+func player_findAvailableActions()
+    ; Reset the available actions to none initially
+    gPlayerAvailableActions = GAMEACTION_NONE
+
+    ; Stand, hit and forfeit are always available until the game ends, the
+    ; player is standing or if the player can't draw any more
+    unless game_isOver()
+        unless player_isStanding() or player_cantDraw()
+            ; Game is still on. Set the bit flags for these options to 1
+            gPlayerAvailableActions |= GAMEACTION_STAND
+            gPlayerAvailableActions |= GAMEACTION_FORFEIT
+            gPlayerAvailableActions |= GAMEACTION_HIT
+        end
+    end
+     
+    ; Only allow double down if on first two cards and can afford it, and if not standing.
+    var numPlayerCards = card_getSuitLength(gPlayerCards)
+    
+    if numPlayerCards == 2
+        if gPlayerChips >= gPlayerBetChips
+            unless player_isStanding()
+                ; Criteria met for this action: make available
+                gPlayerAvailableActions |= GAMEACTION_DOUBLEDOWN
+            end
+        end
+    end
+end
+
+; Tell if one of the player actions (passed as a bitmask) are available
+func player_areActionsAvailable(int actionsMask) -> bool
+    return (gPlayerAvailableActions & actionsMask) != 0
 end
 
 ;==================================================================================================
