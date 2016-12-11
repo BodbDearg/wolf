@@ -39,10 +39,12 @@ static int mainImpl(int argc, const char * argv[]) {
     WC_GUARD(lexer.process(inputSrc.get()), -1);
 
     // Linear allocator that we can use
-    LinearAlloc linearAlloc(1024 * 1024,        /* 1 MB max alloc */
+    LinearAlloc linearAlloc(
+        1024 * 1024,        /* 1 MB max alloc */
         1024 * 1024 * 16,   /* 16 MB block size */
         128,                /* Space in blocks array to reserve */
-        1024 * 4);          /* Space in sys blocks array to reserve */
+        1024 * 4            /* Space in sys blocks array to reserve */
+    );
 
     {
         // Declare the module

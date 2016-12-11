@@ -298,7 +298,7 @@ func game_drawMainGameScreen()
     printPrefixTxtAndAmtLn("Suit Value: ", card_getSuitValue(gPlayerCards))
 
     ; Draw a title bar with the text 'dealers hand'
-    menu_drawTitleBar("Dealer's hand");
+    menu_drawTitleBar("Dealer's hand")
      
     ; Only draw the dealer cards if on normal game type or if the game is over
     if gGameCurrentGameType == GAME_TYPE_NORMAL or game_isOver()

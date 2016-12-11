@@ -30,7 +30,7 @@ contexts:
       scope: constant.numeric.wolf   
     - match: '(?<![^.]\.|:)\b(false|true)\b|(?<![.])\.{3}(?!\.)'
       scope: constant.language.wolf
-    - match: '\+|-|%|#|\*|\/|\^|==?|~=|<=?|>=?|(?<!\.)\.{2}(?!\.)'
+    - match: '\+|-|\*|\/|%|&|\||\^|!|=|<|>|'
       scope: keyword.operator.wolf
     - match: '(?<![^.]\.|:)\b(time|rand|srand|readnum|print)\b(?=[( {"''\[])'
       scope: support.function.wolf
