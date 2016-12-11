@@ -337,7 +337,7 @@ func game_drawPlayerActions()
     end
     
     if player_areActionsAvailable(GAMEACTION_FORFEIT)
-        println("q - Quit (bet is forfeit)")
+        println("4 - Quit (bet is forfeit)")
     end
     
     nextln()
@@ -712,15 +712,22 @@ end
 ; Reads the next action for the player to do during the game
 func player_doNextGameAction()
     ; Read the action for the player to do
+    ; 1 = hit, 2 = stand, 3 = double down, 4 = forfeit
     var playerAction = readnum()
 
     ; See what action the player took:
-    if playerAction == GAMEACTION_HIT and player_areActionsAvailable(GAMEACTION_HIT)
+    if playerAction == 1 and player_areActionsAvailable(GAMEACTION_HIT)
+        ; Hit
         player_actionHit()
-    or if playerAction == GAMEACTION_STAND  and player_areActionsAvailable(GAMEACTION_STAND)
+    or if playerAction == 2  and player_areActionsAvailable(GAMEACTION_STAND)
+        ; Stand
         player_actionStand()
-    or if playerAction == GAMEACTION_DOUBLEDOWN and player_areActionsAvailable(GAMEACTION_DOUBLEDOWN)
+    or if playerAction == 3 and player_areActionsAvailable(GAMEACTION_DOUBLEDOWN)
+        ; Double down
         player_actionDoubleDown()
+    or if playerAction == 4 and player_areActionsAvailable(GAMEACTION_FORFEIT)
+        ; Forfeit
+        player_actionForfeit()
     else
         println("Invalid action input!")
     end
@@ -914,12 +921,15 @@ func menu_getBet()
         ; display a warning and loop around to ask again
         if betAmount < GAME_MIN_BET
             menu_displayBetTooSmallWarning(betAmount)
+            next
         end
 
         ; Begin the game loop with the bet amount
         game_startGame(betAmount)
 
-        ; Quit out unless the user wants to play again
+        ; If the user doesn't have enough to play the next game or doesnt
+        ; want to play then don't play another game
+        break unless gPlayerChips >= GAME_MIN_BET
         break unless menu_askAnotherGame()
     end
 end
@@ -960,8 +970,6 @@ func menu_displayMain()
                 ; Ask the player for the bet and start the game
                 menu_getBet()
             end
-        or if choice == 2
-            println("NOT IMPLEMENTED YET!!")
         or if choice == 3
             menu_getMoney()
         or if choice == 4

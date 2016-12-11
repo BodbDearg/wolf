@@ -1,1 +1,2 @@
 - Make bitwise operators higher precedence than logical ones
+- Make logical statements lazy evaluate
