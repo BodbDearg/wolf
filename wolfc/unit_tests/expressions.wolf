@@ -1,7 +1,7 @@
 ;==================================================================================================
 ; NotExpr
 ;==================================================================================================
-var notExprConstOps = [
+var testNotExprConstexpr = [
     not false,
     not 1 > 2,
     not not true,
@@ -20,7 +20,7 @@ func testNotExpr()
 
     var testNum = 0
     while testNum < 6 
-        assert(notExprConstOps[testNum])
+        assert(testNotExprConstexpr[testNum])
         testNum++
     end
 end
@@ -28,7 +28,7 @@ end
 ;==================================================================================================
 ; CompareExpr
 ;==================================================================================================
-var compareExprConstOps = [
+var testCompareExprConstexpr = [
     2 == 2,
     not 1 == 2,
     not 3 == 2,
@@ -71,7 +71,7 @@ func testCompareExpr()
 
     var testNum = 0
     while testNum < 18 
-        assert(compareExprConstOps[testNum])
+        assert(testCompareExprConstexpr[testNum])
         testNum++
     end
 end
@@ -79,7 +79,7 @@ end
 ;==================================================================================================
 ; AddSubExpr
 ;==================================================================================================
-var addSubExprConstOps = [
+var testAddSubExprConstexpr = [
     1 + 2 == 3,
     1 + +2 == 3,
     +1 + +2 == 3,
@@ -102,7 +102,7 @@ func testAddSubExpr()
 
     var testNum = 0
     while testNum < 9
-        assert(addSubExprConstOps[testNum])
+        assert(testAddSubExprConstexpr[testNum])
         testNum++
     end
 end
@@ -110,7 +110,7 @@ end
 ;==================================================================================================
 ; MulDivExpr
 ;==================================================================================================
-var mulDivExprConstOps = [
+var testMulDivExprConstexpr = [
     2 * 2 == 4,
     2 * -2 == -4,
     -2 * -2 == 4,
@@ -131,7 +131,7 @@ func testMulDivExpr()
 
     var testNum = 0
     while testNum < 7
-        assert(mulDivExprConstOps[testNum])
+        assert(testMulDivExprConstexpr[testNum])
         testNum++
     end
 end
@@ -139,7 +139,7 @@ end
 ;==================================================================================================
 ; ShiftExpr
 ;==================================================================================================
-var shiftExprConstOpts = [
+var testShiftExprConstexpr = [
     1 << 0 == 1,
     1 << 1 == 2,
     2 << 2 == 8,
@@ -168,7 +168,36 @@ func testShiftExpr()
 
     var testNum = 0
     while testNum < 11
-        assert(shiftExprConstOpts[testNum])
+        assert(testShiftExprConstexpr[testNum])
+        testNum++
+    end
+end
+
+;==================================================================================================
+; UnaryExpr
+;==================================================================================================
+var testUnaryExprConstexpr = [
+    +1 == 1,
+    -1 == -1,
+    (1 + 2) * 2 == 6,
+    1 + (2 * 2) == 5,
+    ((1 + 2) * (3 + 4)) * 2 == 42
+]
+
+func testUnaryExpr()
+    assert(+1 == 1)
+    assert(-1 == -1)
+    assert((1 + 2) * 2 == 6)
+    assert(1 + (2 * 2) == 5)
+    assert(((1 + 2) * (3 + 4)) * 2 == 42)
+
+    ; FIXME - these don't work yet
+    ; assert(+ + 1  == + + 1)
+    ; assert(- - 1  == - - 1)
+
+    var testNum = 0
+    while testNum < 5
+        assert(testUnaryExprConstexpr[testNum])
         testNum++
     end
 end
@@ -183,5 +212,6 @@ func main() -> int
     testAddSubExpr()
     testMulDivExpr()
     testShiftExpr()
+    testUnaryExpr()
     return 0
 end

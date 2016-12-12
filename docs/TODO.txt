@@ -1,2 +1,3 @@
 - Make bitwise operators higher precedence than logical ones
 - Make logical statements lazy evaluate
+- Fix recursion on unary expression
