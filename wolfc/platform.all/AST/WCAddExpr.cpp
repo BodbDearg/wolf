@@ -34,8 +34,10 @@ AddExpr * AddExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         }
 
     switch (tokenPtr[0].type) {
-        PARSE_OP(TokenType::kPlus, AddExprAdd)     // +
-        PARSE_OP(TokenType::kMinus, AddExprSub)    // -
+        PARSE_OP(TokenType::kPlus, AddExprAdd)      // +
+        PARSE_OP(TokenType::kMinus, AddExprSub)     // -
+        PARSE_OP(TokenType::kVBar, AddExprBOr)      // |
+        PARSE_OP(TokenType::kHat, AddExprBXor)      // ^
             
         default:
             break;
@@ -215,6 +217,74 @@ llvm::Constant * AddExprSub::codegenExprConstEval(CodegenCtx & cgCtx) {
     llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
     WC_GUARD(right, nullptr);
     return llvm::ConstantExpr::getSub(left, right);
+}
+
+//-----------------------------------------------------------------------------
+// AddExprBOr
+//-----------------------------------------------------------------------------
+
+AddExprBOr::AddExprBOr(MulExpr & leftExpr, AddExpr & rightExpr) :
+    AddExprTwoOps(leftExpr, rightExpr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+llvm::Value * AddExprBOr::codegenExprEval(CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
+    
+    // Generate code for the operation
+    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return cgCtx.irBuilder.CreateOr(left, right, "AddExprBOr_OrOp");
+}
+
+llvm::Constant * AddExprBOr::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
+    
+    // Generate code for the operation
+    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return llvm::ConstantExpr::getOr(left, right);
+}
+
+//-----------------------------------------------------------------------------
+// AddExprBXor
+//-----------------------------------------------------------------------------
+
+AddExprBXor::AddExprBXor(MulExpr & leftExpr, AddExpr & rightExpr) :
+    AddExprTwoOps(leftExpr, rightExpr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+llvm::Value * AddExprBXor::codegenExprEval(CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
+    
+    // Generate code for the operation
+    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return cgCtx.irBuilder.CreateXor(left, right, "AddExprBXor_OrOp");
+}
+
+llvm::Constant * AddExprBXor::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
+    
+    // Generate code for the operation
+    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return llvm::ConstantExpr::getXor(left, right);
 }
 
 WC_END_NAMESPACE

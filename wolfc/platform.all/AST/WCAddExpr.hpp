@@ -14,6 +14,8 @@ AddExpr:
 	MulExpr
 	MulExpr + AddExpr
 	MulExpr - AddExpr
+	MulExpr | AddExpr
+	MulExpr ^ AddExpr
 */
 class AddExpr : public ASTNode, public IExpr {
 public:
@@ -80,6 +82,24 @@ public:
 class AddExprSub final : public AddExprTwoOps {
 public:
     AddExprSub(MulExpr & leftExpr, AddExpr & rightExpr);
+    
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+};
+
+/* MulExpr | AddExpr */
+class AddExprBOr final : public AddExprTwoOps {
+public:
+    AddExprBOr(MulExpr & leftExpr, AddExpr & rightExpr);
+    
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+};
+
+/* MulExpr ^ AddExpr */
+class AddExprBXor final : public AddExprTwoOps {
+public:
+    AddExprBXor(MulExpr & leftExpr, AddExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;

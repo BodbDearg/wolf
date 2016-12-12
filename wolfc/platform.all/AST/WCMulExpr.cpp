@@ -34,9 +34,10 @@ MulExpr * MulExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         }
 
     switch (tokenPtr[0].type) {
-        PARSE_OP(TokenType::kAsterisk, MulExprMul)  // *
-        PARSE_OP(TokenType::kSlash, MulExprDiv)     // /
-        PARSE_OP(TokenType::kPercent, MulExprMod)   // %
+        PARSE_OP(TokenType::kAsterisk, MulExprMul)      // *
+        PARSE_OP(TokenType::kSlash, MulExprDiv)         // /
+        PARSE_OP(TokenType::kPercent, MulExprMod)       // %
+        PARSE_OP(TokenType::kAmpersand, MulExprBAnd)    // &
             
         default:
             break;
@@ -247,6 +248,40 @@ llvm::Constant * MulExprMod::codegenExprConstEval(CodegenCtx & cgCtx) {
     llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
     WC_GUARD(right, nullptr);
     return llvm::ConstantExpr::getSRem(left, right);
+}
+
+//-----------------------------------------------------------------------------
+// MulExprBAnd
+//-----------------------------------------------------------------------------
+
+MulExprBAnd::MulExprBAnd(ShiftExpr & leftExpr, MulExpr & rightExpr) :
+    MulExprTwoOps(leftExpr, rightExpr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+llvm::Value * MulExprBAnd::codegenExprEval(CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
+
+    // Generate code for the operation
+    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return cgCtx.irBuilder.CreateAnd(left, right, "MulExprBAnd_AndOp");
+}
+
+llvm::Constant * MulExprBAnd::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // TODO: handle auto type promotion and other non int types
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
+
+    // Generate code for the operation
+    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(left, nullptr);
+    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(right, nullptr);
+    return llvm::ConstantExpr::getAnd(left, right);
 }
 
 WC_END_NAMESPACE

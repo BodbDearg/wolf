@@ -5,14 +5,14 @@
 
 WC_BEGIN_NAMESPACE
 
-class BOrExpr;
 class DataType;
 class LinearAlloc;
+class NotExpr;
 
 /*
- AndExpr:
-	BOrExpr
-	BOrExpr and AndExpr
+AndExpr:
+	NotExpr
+	NotExpr and AndExpr
 */
 class AndExpr : public ASTNode, public IExpr {
 public:
@@ -20,10 +20,10 @@ public:
     static AndExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
-/* BOrExpr */
+/* NotExpr */
 class AndExprNoOp final : public AndExpr {
 public:
-    AndExprNoOp(BOrExpr & expr);
+    AndExprNoOp(NotExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -37,13 +37,13 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    BOrExpr & mExpr;
+    NotExpr & mExpr;
 };
 
-/* BOrExpr and AndExpr */
+/* NotExpr and AndExpr */
 class AndExprAnd final : public AndExpr {
 public:
-    AndExprAnd(BOrExpr & leftExpr, AndExpr & rightExpr);
+    AndExprAnd(NotExpr & leftExpr, AndExpr & rightExpr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -57,7 +57,7 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    BOrExpr &   mLeftExpr;
+    NotExpr &   mLeftExpr;
     AndExpr &   mRightExpr;
     
 private:

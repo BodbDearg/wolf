@@ -91,17 +91,17 @@ ReturnStmnt:
 AssignExpr:
     TernaryExpr
     TernaryExpr = AssignExpr
-	TernaryExpr <<= AssignExpr
-	TernaryExpr >>= AssignExpr
-	TernaryExpr >>>= AssignExpr
-	TernaryExpr |= AssignExpr
-	TernaryExpr ^= AssignExpr
-	TernaryExpr &= AssignExpr
     TernaryExpr += AssignExpr
     TernaryExpr -= AssignExpr
+	TernaryExpr |= AssignExpr
+	TernaryExpr ^= AssignExpr
     TernaryExpr *= AssignExpr
     TernaryExpr /= AssignExpr
     TernaryExpr %= AssignExpr
+	TernaryExpr &= AssignExpr
+	TernaryExpr <<= AssignExpr
+	TernaryExpr >>= AssignExpr
+	TernaryExpr >>>= AssignExpr
 
 TernaryExpr:
 	OrExpr
@@ -112,20 +112,8 @@ OrExpr:
 	AndExpr or OrExpr
 
 AndExpr:
-	BOrExpr
-	BOrExpr and AndExpr
-
-BOrExpr:
-	BitXorExpr
-	BitXorExpr | BOrExpr
-	
-BXorExpr:
-	BAndExpr
-	BAndExpr ^ BXorExpr
-
-BAndExpr:
 	NotExpr
-	NotExpr & BAndExpr
+	NotExpr and AndExpr
 
 NotExpr:
 	CmpExpr
@@ -145,12 +133,15 @@ AddExpr:
 	MulExpr
 	MulExpr + AddExpr
 	MulExpr - AddExpr
+	MulExpr | AddExpr
+	MulExpr ^ AddExpr
 
 MulExpr:
 	ShiftExpr
 	ShiftExpr * MulExpr
 	ShiftExpr / MulExpr
 	ShiftExpr % MulExpr
+	ShiftExpr & MulExpr
 
 ShiftExpr:
 	UnaryExpr << ShiftExpr

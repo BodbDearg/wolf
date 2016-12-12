@@ -13,17 +13,17 @@ class TernaryExpr;
 AssignExpr:
     TernaryExpr
     TernaryExpr = AssignExpr
-	TernaryExpr <<= AssignExpr
-	TernaryExpr >>= AssignExpr
-	TernaryExpr >>>= AssignExpr
-	TernaryExpr |= AssignExpr
-	TernaryExpr ^= AssignExpr
-	TernaryExpr &= AssignExpr
     TernaryExpr += AssignExpr
     TernaryExpr -= AssignExpr
+	TernaryExpr |= AssignExpr
+	TernaryExpr ^= AssignExpr
     TernaryExpr *= AssignExpr
     TernaryExpr /= AssignExpr
     TernaryExpr %= AssignExpr
+	TernaryExpr &= AssignExpr
+	TernaryExpr <<= AssignExpr
+	TernaryExpr >>= AssignExpr
+	TernaryExpr >>>= AssignExpr
 */
 class AssignExpr : public ASTNode, public IExpr {
 public:
@@ -86,27 +86,19 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
-/* TernaryExpr <<= AssignExpr */
-class AssignExprAssignLShift final : public AssignExprAssignBase {
+/* TernaryExpr += AssignExpr */
+class AssignExprAssignAdd final : public AssignExprAssignBase {
 public:
-    AssignExprAssignLShift(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-    
+    AssignExprAssignAdd(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
-/* TernaryExpr >>= AssignExpr */
-class AssignExprAssignArithRShift final : public AssignExprAssignBase {
+/* TernaryExpr -= AssignExpr */
+class AssignExprAssignSub final : public AssignExprAssignBase {
 public:
-    AssignExprAssignArithRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-    
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-};
+    AssignExprAssignSub(TernaryExpr & leftExpr, AssignExpr & rightExpr);
 
-/* TernaryExpr >>>= AssignExpr */
-class AssignExprAssignLogicRShift final : public AssignExprAssignBase {
-public:
-    AssignExprAssignLogicRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-    
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
@@ -123,30 +115,6 @@ class AssignExprAssignBXor final : public AssignExprAssignBase {
 public:
     AssignExprAssignBXor(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-};
-
-/* TernaryExpr &= AssignExpr */
-class AssignExprAssignBAnd final : public AssignExprAssignBase {
-public:
-    AssignExprAssignBAnd(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-    
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-};
-
-/* TernaryExpr += AssignExpr */
-class AssignExprAssignAdd final : public AssignExprAssignBase {
-public:
-    AssignExprAssignAdd(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-};
-
-/* TernaryExpr -= AssignExpr */
-class AssignExprAssignSub final : public AssignExprAssignBase {
-public:
-    AssignExprAssignSub(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
@@ -171,6 +139,38 @@ class AssignExprAssignMod final : public AssignExprAssignBase {
 public:
     AssignExprAssignMod(TernaryExpr & leftExpr, AssignExpr & rightExpr);
 
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+};
+
+/* TernaryExpr &= AssignExpr */
+class AssignExprAssignBAnd final : public AssignExprAssignBase {
+public:
+    AssignExprAssignBAnd(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+    
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+};
+
+/* TernaryExpr <<= AssignExpr */
+class AssignExprAssignLShift final : public AssignExprAssignBase {
+public:
+    AssignExprAssignLShift(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+    
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+};
+
+/* TernaryExpr >>= AssignExpr */
+class AssignExprAssignArithRShift final : public AssignExprAssignBase {
+public:
+    AssignExprAssignArithRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+    
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+};
+
+/* TernaryExpr >>>= AssignExpr */
+class AssignExprAssignLogicRShift final : public AssignExprAssignBase {
+public:
+    AssignExprAssignLogicRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+    
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 

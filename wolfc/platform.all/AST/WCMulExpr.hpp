@@ -95,4 +95,14 @@ public:
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
+/* ShiftExpr & MulExpr */
+class MulExprBAnd final : public MulExprTwoOps {
+public:
+    MulExprBAnd(ShiftExpr & leftExpr, MulExpr & rightExpr);
+    
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+};
+
+
 WC_END_NAMESPACE
