@@ -10,22 +10,22 @@ class LinearAlloc;
 class ShiftExpr;
 
 /*
-MulDivExpr:
+MulExpr:
 	ShiftExpr
-	ShiftExpr * MulDivExpr
-	ShiftExpr / MulDivExpr
-	ShiftExpr % MulDivExpr
+	ShiftExpr * MulExpr
+	ShiftExpr / MulExpr
+	ShiftExpr % MulExpr
 */
-class MulDivExpr : public ASTNode, public IExpr {
+class MulExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static MulDivExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static MulExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
 /* ShiftExpr */
-class MulDivExprNoOp final : public MulDivExpr {
+class MulExprNoOp final : public MulExpr {
 public:
-    MulDivExprNoOp(ShiftExpr & expr);
+    MulExprNoOp(ShiftExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -42,10 +42,10 @@ public:
     ShiftExpr & mExpr;
 };
 
-/* Base class for an MulDivExpr with two operands */
-class MulDivExprTwoOps : public MulDivExpr {
+/* Base class for an MulExpr with two operands */
+class MulExprTwoOps : public MulExpr {
 public:
-    MulDivExprTwoOps(ShiftExpr & leftExpr, MulDivExpr & rightExpr);
+    MulExprTwoOps(ShiftExpr & leftExpr, MulExpr & rightExpr);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -58,7 +58,7 @@ public:
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     
     ShiftExpr &     mLeftExpr;
-    MulDivExpr &    mRightExpr;
+    MulExpr &    mRightExpr;
     
 protected:
     /**
@@ -68,28 +68,28 @@ protected:
     bool compileCheckBothExprsAreInt() const;
 };
 
-/* ShiftExpr * MulDivExpr */
-class MulDivExprMul final : public MulDivExprTwoOps {
+/* ShiftExpr * MulExpr */
+class MulExprMul final : public MulExprTwoOps {
 public:
-    MulDivExprMul(ShiftExpr & leftExpr, MulDivExpr & rightExpr);
+    MulExprMul(ShiftExpr & leftExpr, MulExpr & rightExpr);
 
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* ShiftExpr / MulDivExpr */
-class MulDivExprDiv final : public MulDivExprTwoOps {
+/* ShiftExpr / MulExpr */
+class MulExprDiv final : public MulExprTwoOps {
 public:
-    MulDivExprDiv(ShiftExpr & leftExpr, MulDivExpr & rightExpr);
+    MulExprDiv(ShiftExpr & leftExpr, MulExpr & rightExpr);
 
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* ShiftExpr % MulDivExpr */
-class MulDivExprMod final : public MulDivExprTwoOps {
+/* ShiftExpr % MulExpr */
+class MulExprMod final : public MulExprTwoOps {
 public:
-    MulDivExprMod(ShiftExpr & leftExpr, MulDivExpr & rightExpr);
+    MulExprMod(ShiftExpr & leftExpr, MulExpr & rightExpr);
 
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;

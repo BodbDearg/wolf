@@ -26,9 +26,9 @@ func testNotExpr()
 end
 
 ;==================================================================================================
-; CompareExpr
+; CmpExpr
 ;==================================================================================================
-var testCompareExprConstexpr = [
+var testCmpExprConstexpr = [
     2 == 2,
     not 1 == 2,
     not 3 == 2,
@@ -49,7 +49,7 @@ var testCompareExprConstexpr = [
     not 0 >= 1
 ]
 
-func testCompareExpr()
+func testCmpExpr()
     assert(2 == 2)
     assert(not 1 == 2)
     assert(not 3 == 2)
@@ -71,15 +71,15 @@ func testCompareExpr()
 
     var testNum = 0
     while testNum < 18 
-        assert(testCompareExprConstexpr[testNum])
+        assert(testCmpExprConstexpr[testNum])
         testNum++
     end
 end
 
 ;==================================================================================================
-; AddSubExpr
+; AddExpr
 ;==================================================================================================
-var testAddSubExprConstexpr = [
+var testAddExprConstexpr = [
     1 + 2 == 3,
     1 + +2 == 3,
     +1 + +2 == 3,
@@ -90,7 +90,7 @@ var testAddSubExprConstexpr = [
     -2 - -5 == 3
 ]
 
-func testAddSubExpr()
+func testAddExpr()
     assert(1 + 2 == 3)
     assert(1 + +2 == 3)
     assert(+1 + +2 == 3)
@@ -102,15 +102,15 @@ func testAddSubExpr()
 
     var testNum = 0
     while testNum < 9
-        assert(testAddSubExprConstexpr[testNum])
+        assert(testAddExprConstexpr[testNum])
         testNum++
     end
 end
 
 ;==================================================================================================
-; MulDivExpr
+; MulExpr
 ;==================================================================================================
-var testMulDivExprConstexpr = [
+var testMulExprConstexpr = [
     2 * 2 == 4,
     2 * -2 == -4,
     -2 * -2 == 4,
@@ -120,7 +120,7 @@ var testMulDivExprConstexpr = [
     5 % 3 == 2
 ]
 
-func testMulDivExpr()
+func testMulExpr()
     assert(2 * 2 == 4)
     assert(2 * -2 == -4)
     assert(-2 * -2 == 4)
@@ -131,7 +131,7 @@ func testMulDivExpr()
 
     var testNum = 0
     while testNum < 7
-        assert(testMulDivExprConstexpr[testNum])
+        assert(testMulExprConstexpr[testNum])
         testNum++
     end
 end
@@ -208,9 +208,9 @@ end
 func main() -> int
     ; Basic tests of AST grammar and operations
     testNotExpr()
-    testCompareExpr()
-    testAddSubExpr()
-    testMulDivExpr()
+    testCmpExpr()
+    testAddExpr()
+    testMulExpr()
     testShiftExpr()
     testUnaryExpr()
     return 0

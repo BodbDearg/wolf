@@ -5,13 +5,13 @@
 
 WC_BEGIN_NAMESPACE
 
-class CompareExpr;
+class CmpExpr;
 class DataType;
 class LinearAlloc;
 
 /*
 NotExpr:
-	CompareExpr
+	CmpExpr
 	not NotExpr
 	~ NotExpr
 */
@@ -24,7 +24,7 @@ public:
 /* EqExpr */
 class NotExprNoOp final : public NotExpr {
 public:
-    NotExprNoOp(CompareExpr & expr);
+    NotExprNoOp(CmpExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -38,7 +38,7 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    CompareExpr & mExpr;
+    CmpExpr & mExpr;
 };
 
 /* not NotExpr */

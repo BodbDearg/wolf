@@ -1,4 +1,4 @@
-#include "WCAddSubExpr.hpp"
+#include "WCAddExpr.hpp"
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
@@ -6,91 +6,91 @@
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCMulDivExpr.hpp"
+#include "WCMulExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
-// AddSubExpr
+// AddExpr
 //-----------------------------------------------------------------------------
 
-bool AddSubExpr::peek(const Token * tokenPtr) {
-    return MulDivExpr::peek(tokenPtr);
+bool AddExpr::peek(const Token * tokenPtr) {
+    return MulExpr::peek(tokenPtr);
 }
 
-AddSubExpr * AddSubExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    MulDivExpr * mulDivExpr = MulDivExpr::parse(tokenPtr, alloc);
-    WC_GUARD(mulDivExpr, nullptr);
+AddExpr * AddExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+    MulExpr * leftExpr = MulExpr::parse(tokenPtr, alloc);
+    WC_GUARD(leftExpr, nullptr);
     
     // See if '+' or '-' operation following:
-    if (tokenPtr->type == TokenType::kPlus && AddSubExpr::peek(tokenPtr + 1)) {
+    if (tokenPtr->type == TokenType::kPlus) {
         // Add operation: Skip '+'
         ++tokenPtr;
         
         // Parse following expr and return combined expr
-        AddSubExpr * addSubExpr = AddSubExpr::parse(tokenPtr, alloc);
+        AddExpr * addSubExpr = AddExpr::parse(tokenPtr, alloc);
         WC_GUARD(addSubExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AddSubExprAdd, *mulDivExpr, *addSubExpr);
+        return WC_NEW_AST_NODE(alloc, AddExprAdd, *leftExpr, *addSubExpr);
     }
-    else if (tokenPtr->type == TokenType::kMinus && AddSubExpr::peek(tokenPtr + 1)) {
+    else if (tokenPtr->type == TokenType::kMinus) {
         // Sub operation: Skip '-'
         ++tokenPtr;
         
         // Parse following expr and return combined expr
-        AddSubExpr * addSubExpr = AddSubExpr::parse(tokenPtr, alloc);
+        AddExpr * addSubExpr = AddExpr::parse(tokenPtr, alloc);
         WC_GUARD(addSubExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AddSubExprSub, *mulDivExpr, *addSubExpr);
+        return WC_NEW_AST_NODE(alloc, AddExprSub, *leftExpr, *addSubExpr);
     }
     
     // Basic no-op expression:
-    return WC_NEW_AST_NODE(alloc, AddSubExprNoOp, *mulDivExpr);
+    return WC_NEW_AST_NODE(alloc, AddExprNoOp, *leftExpr);
 }
 
 //-----------------------------------------------------------------------------
-// AddSubExprNoOp
+// AddExprNoOp
 //-----------------------------------------------------------------------------
 
-AddSubExprNoOp::AddSubExprNoOp(MulDivExpr & expr) : mExpr(expr) {
+AddExprNoOp::AddExprNoOp(MulExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-const Token & AddSubExprNoOp::getStartToken() const {
+const Token & AddExprNoOp::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & AddSubExprNoOp::getEndToken() const {
+const Token & AddExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool AddSubExprNoOp::isLValue() {
+bool AddExprNoOp::isLValue() {
     return mExpr.isLValue();
 }
 
-bool AddSubExprNoOp::isConstExpr() {
+bool AddExprNoOp::isConstExpr() {
     return mExpr.isConstExpr();
 }
 
-DataType & AddSubExprNoOp::dataType() {
+DataType & AddExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-llvm::Value * AddSubExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
+llvm::Value * AddExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * AddSubExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * AddExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
-llvm::Constant * AddSubExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * AddExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
-// AddSubExprTwoOps
+// AddExprTwoOps
 //-----------------------------------------------------------------------------
 
-AddSubExprTwoOps::AddSubExprTwoOps(MulDivExpr & leftExpr, AddSubExpr & rightExpr) :
+AddExprTwoOps::AddExprTwoOps(MulExpr & leftExpr, AddExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
@@ -98,35 +98,35 @@ AddSubExprTwoOps::AddSubExprTwoOps(MulDivExpr & leftExpr, AddSubExpr & rightExpr
     mRightExpr.mParent = this;
 }
 
-const Token & AddSubExprTwoOps::getStartToken() const {
+const Token & AddExprTwoOps::getStartToken() const {
     return mLeftExpr.getStartToken();
 }
 
-const Token & AddSubExprTwoOps::getEndToken() const {
+const Token & AddExprTwoOps::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-bool AddSubExprTwoOps::isLValue() {
+bool AddExprTwoOps::isLValue() {
     return false;
 }
 
-bool AddSubExprTwoOps::isConstExpr() {
+bool AddExprTwoOps::isConstExpr() {
     return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
-DataType & AddSubExprTwoOps::dataType() {
+DataType & AddExprTwoOps::dataType() {
     // TODO: handle auto type promotion
     return mLeftExpr.dataType();
 }
 
-llvm::Value * AddSubExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
+llvm::Value * AddExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
     // TODO: would this be true in future for complex types?
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't get the address of '+' or '-' operator result!");
     return nullptr;
 }
 
-bool AddSubExprTwoOps::compileCheckBothExprsAreInt() const {
+bool AddExprTwoOps::compileCheckBothExprsAreInt() const {
     const DataType & leftType = mLeftExpr.dataType();
     
     if (!leftType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
@@ -149,16 +149,16 @@ bool AddSubExprTwoOps::compileCheckBothExprsAreInt() const {
 }
 
 //-----------------------------------------------------------------------------
-// AddSubExprAdd
+// AddExprAdd
 //-----------------------------------------------------------------------------
 
-AddSubExprAdd::AddSubExprAdd(MulDivExpr & leftExpr, AddSubExpr & rightExpr) :
-    AddSubExprTwoOps(leftExpr, rightExpr)
+AddExprAdd::AddExprAdd(MulExpr & leftExpr, AddExpr & rightExpr) :
+    AddExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AddSubExprAdd::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * AddExprAdd::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
@@ -167,10 +167,10 @@ llvm::Value * AddSubExprAdd::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateAdd(left, right, "AddSubExprAdd_AddOp");
+    return cgCtx.irBuilder.CreateAdd(left, right, "AddExprAdd_AddOp");
 }
 
-llvm::Constant * AddSubExprAdd::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * AddExprAdd::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
@@ -183,16 +183,16 @@ llvm::Constant * AddSubExprAdd::codegenExprConstEval(CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// AddSubExprSub
+// AddExprSub
 //-----------------------------------------------------------------------------
 
-AddSubExprSub::AddSubExprSub(MulDivExpr & leftExpr, AddSubExpr & rightExpr) :
-    AddSubExprTwoOps(leftExpr, rightExpr)
+AddExprSub::AddExprSub(MulExpr & leftExpr, AddExpr & rightExpr) :
+    AddExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AddSubExprSub::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * AddExprSub::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
@@ -201,10 +201,10 @@ llvm::Value * AddSubExprSub::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateSub(left, right, "AddSubExprSub_SubOp");
+    return cgCtx.irBuilder.CreateSub(left, right, "AddExprSub_SubOp");
 }
 
-llvm::Constant * AddSubExprSub::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * AddExprSub::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     

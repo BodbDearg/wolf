@@ -5,30 +5,30 @@
 
 WC_BEGIN_NAMESPACE
 
-class AddSubExpr;
+class AddExpr;
 class DataType;
 class LinearAlloc;
 
 /*
-CompareExpr:
-	AddSubExpr
-	AddSubExpr == CompareExpr
-	AddSubExpr != CompareExpr
-	AddSubExpr < CompareExpr
-	AddSubExpr <= CompareExpr
-	AddSubExpr > CompareExpr
-	AddSubExpr >= CompareExpr
+CmpExpr:
+	AddExpr
+	AddExpr == CmpExpr
+	AddExpr != CmpExpr
+	AddExpr < CmpExpr
+	AddExpr <= CmpExpr
+	AddExpr > CmpExpr
+	AddExpr >= CmpExpr
 */
-class CompareExpr : public ASTNode, public IExpr {
+class CmpExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static CompareExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static CmpExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
-/* AddSubExpr */
-class CompareExprNoOp final : public CompareExpr {
+/* AddExpr */
+class CmpExprNoOp final : public CmpExpr {
 public:
-    CompareExprNoOp(AddSubExpr & expr);
+    CmpExprNoOp(AddExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -42,13 +42,13 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    AddSubExpr & mExpr;
+    AddExpr & mExpr;
 };
 
 /* Base for relational expressions with two operators. */
-class CompareExprTwoOps : public CompareExpr {
+class CmpExprTwoOps : public CmpExpr {
 public:
-    CompareExprTwoOps(AddSubExpr & leftExpr, CompareExpr & rightExpr);
+    CmpExprTwoOps(AddExpr & leftExpr, CmpExpr & rightExpr);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -60,8 +60,8 @@ public:
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     
-    AddSubExpr &    mLeftExpr;
-    CompareExpr &   mRightExpr;
+    AddExpr &   mLeftExpr;
+    CmpExpr &   mRightExpr;
     
 protected:
     /**
@@ -71,55 +71,55 @@ protected:
     bool compileCheckBothExprsAreInt() const;
 };
 
-/* AddSubExpr == CompareExpr */
-class CompareExprEQ final : public CompareExprTwoOps {
+/* AddExpr == CmpExpr */
+class CmpExprEQ final : public CmpExprTwoOps {
 public:
-    CompareExprEQ(AddSubExpr & leftExpr, CompareExpr & rightExpr);
+    CmpExprEQ(AddExpr & leftExpr, CmpExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* AddSubExpr != CompareExpr */
-class CompareExprNE final : public CompareExprTwoOps {
+/* AddExpr != CmpExpr */
+class CmpExprNE final : public CmpExprTwoOps {
 public:
-    CompareExprNE(AddSubExpr & leftExpr, CompareExpr & rightExpr);
+    CmpExprNE(AddExpr & leftExpr, CmpExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* AddSubExpr < CompareExpr */
-class CompareExprLT final : public CompareExprTwoOps {
+/* AddExpr < CmpExpr */
+class CmpExprLT final : public CmpExprTwoOps {
 public:
-    CompareExprLT(AddSubExpr & leftExpr, CompareExpr & rightExpr);
+    CmpExprLT(AddExpr & leftExpr, CmpExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* AddSubExpr <= CompareExpr */
-class CompareExprLE final : public CompareExprTwoOps {
+/* AddExpr <= CmpExpr */
+class CmpExprLE final : public CmpExprTwoOps {
 public:
-    CompareExprLE(AddSubExpr & leftExpr, CompareExpr & rightExpr);
+    CmpExprLE(AddExpr & leftExpr, CmpExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* AddSubExpr > CompareExpr */
-class CompareExprGT final : public CompareExprTwoOps {
+/* AddExpr > CmpExpr */
+class CmpExprGT final : public CmpExprTwoOps {
 public:
-    CompareExprGT(AddSubExpr & leftExpr, CompareExpr & rightExpr);
+    CmpExprGT(AddExpr & leftExpr, CmpExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* AddSubExpr >= CompareExpr */
-class CompareExprGE final : public CompareExprTwoOps {
+/* AddExpr >= CmpExpr */
+class CmpExprGE final : public CmpExprTwoOps {
 public:
-    CompareExprGE(AddSubExpr & leftExpr, CompareExpr & rightExpr);
+    CmpExprGE(AddExpr & leftExpr, CmpExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;

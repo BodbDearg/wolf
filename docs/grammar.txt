@@ -128,29 +128,29 @@ BAndExpr:
 	NotExpr & BAndExpr
 
 NotExpr:
-	CompareExpr
+	CmpExpr
 	not NotExpr
 	~ NotExpr
 
-CompareExpr:
-	AddSubExpr
-	AddSubExpr == CompareExpr
-	AddSubExpr != CompareExpr
-	AddSubExpr < CompareExpr
-	AddSubExpr <= CompareExpr
-	AddSubExpr > CompareExpr
-	AddSubExpr >= CompareExpr
+CmpExpr:
+	AddExpr
+	AddExpr == CmpExpr
+	AddExpr != CmpExpr
+	AddExpr < CmpExpr
+	AddExpr <= CmpExpr
+	AddExpr > CmpExpr
+	AddExpr >= CmpExpr
 
-AddSubExpr:
-	MulDivExpr
-	MulDivExpr + AddSubExpr
-	MulDivExpr - AddSubExpr
+AddExpr:
+	MulExpr
+	MulExpr + AddExpr
+	MulExpr - AddExpr
 
-MulDivExpr:
+MulExpr:
 	ShiftExpr
-	ShiftExpr * MulDivExpr
-	ShiftExpr / MulDivExpr
-	ShiftExpr % MulDivExpr
+	ShiftExpr * MulExpr
+	ShiftExpr / MulExpr
+	ShiftExpr % MulExpr
 
 ShiftExpr:
 	UnaryExpr << ShiftExpr

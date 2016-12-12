@@ -7,24 +7,24 @@ WC_BEGIN_NAMESPACE
 
 class DataType;
 class LinearAlloc;
-class MulDivExpr;
+class MulExpr;
 
 /*
-AddSubExpr:
-	MulDivExpr
-	MulDivExpr + AddSubExpr
-	MulDivExpr - AddSubExpr
+AddExpr:
+	MulExpr
+	MulExpr + AddExpr
+	MulExpr - AddExpr
 */
-class AddSubExpr : public ASTNode, public IExpr {
+class AddExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static AddSubExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static AddExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
-/* MulDivExpr */
-class AddSubExprNoOp final : public AddSubExpr {
+/* MulExpr */
+class AddExprNoOp final : public AddExpr {
 public:
-    AddSubExprNoOp(MulDivExpr & expr);
+    AddExprNoOp(MulExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -38,13 +38,13 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    MulDivExpr & mExpr;
+    MulExpr & mExpr;
 };
 
-/* Base class for an AddSubExpr with two operands */
-class AddSubExprTwoOps : public AddSubExpr {
+/* Base class for an AddExpr with two operands */
+class AddExprTwoOps : public AddExpr {
 public:
-    AddSubExprTwoOps(MulDivExpr & leftExpr, AddSubExpr & rightExpr);
+    AddExprTwoOps(MulExpr & leftExpr, AddExpr & rightExpr);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -56,8 +56,8 @@ public:
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     
-    MulDivExpr & mLeftExpr;
-    AddSubExpr & mRightExpr;
+    MulExpr &   mLeftExpr;
+    AddExpr &   mRightExpr;
     
 protected:
     /**
@@ -67,19 +67,19 @@ protected:
     bool compileCheckBothExprsAreInt() const;
 };
 
-/* MulDivExpr + AddSubExpr */
-class AddSubExprAdd final : public AddSubExprTwoOps {
+/* MulExpr + AddExpr */
+class AddExprAdd final : public AddExprTwoOps {
 public:
-    AddSubExprAdd(MulDivExpr & leftExpr, AddSubExpr & rightExpr);
+    AddExprAdd(MulExpr & leftExpr, AddExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* MulDivExpr - AddSubExpr */
-class AddSubExprSub final : public AddSubExprTwoOps {
+/* MulExpr - AddExpr */
+class AddExprSub final : public AddExprTwoOps {
 public:
-    AddSubExprSub(MulDivExpr & leftExpr, AddSubExpr & rightExpr);
+    AddExprSub(MulExpr & leftExpr, AddExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;

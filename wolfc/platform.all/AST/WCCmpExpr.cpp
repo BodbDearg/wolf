@@ -1,9 +1,9 @@
-#include "WCCompareExpr.hpp"
+#include "WCCmpExpr.hpp"
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
-#include "WCAddSubExpr.hpp"
+#include "WCAddExpr.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
@@ -11,15 +11,15 @@
 WC_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
-// CompareExpr
+// CmpExpr
 //-----------------------------------------------------------------------------
 
-bool CompareExpr::peek(const Token * tokenPtr) {
-    return AddSubExpr::peek(tokenPtr);
+bool CmpExpr::peek(const Token * tokenPtr) {
+    return AddExpr::peek(tokenPtr);
 }
 
-CompareExpr * CompareExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    AddSubExpr * leftExpr = AddSubExpr::parse(tokenPtr, alloc);
+CmpExpr * CmpExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+    AddExpr * leftExpr = AddExpr::parse(tokenPtr, alloc);
     WC_GUARD(leftExpr, nullptr);
     
     // See what tokens follow:
@@ -28,105 +28,105 @@ CompareExpr * CompareExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         ++tokenPtr;
         
         // Parse the right expression and return the AST node for the operation
-        CompareExpr * rightExpr = CompareExpr::parse(tokenPtr, alloc);
+        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);
         WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, CompareExprEQ, *leftExpr, *rightExpr);
+        return WC_NEW_AST_NODE(alloc, CmpExprEQ, *leftExpr, *rightExpr);
     }
     else if (tokenPtr[0].type == TokenType::kCmpNE) {
         // '!=' operator : skip this token
         ++tokenPtr;
         
         // Parse the right expression and return the AST node for the operation
-        CompareExpr * rightExpr = CompareExpr::parse(tokenPtr, alloc);
+        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);
         WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, CompareExprNE, *leftExpr, *rightExpr);
+        return WC_NEW_AST_NODE(alloc, CmpExprNE, *leftExpr, *rightExpr);
     }
     else if (tokenPtr[0].type == TokenType::kCmpLT) {
         // '<' operator : skip this token
         ++tokenPtr;
         
         // Parse the right expression and return the AST node for the operation
-        CompareExpr * rightExpr = CompareExpr::parse(tokenPtr, alloc);
+        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);
         WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, CompareExprLT, *leftExpr, *rightExpr);
+        return WC_NEW_AST_NODE(alloc, CmpExprLT, *leftExpr, *rightExpr);
     }
     else if (tokenPtr[0].type == TokenType::kCmpLE) {
         // '<=' operator : skip this token
         ++tokenPtr;
         
         // Parse the right expression and return the AST node for the operation
-        CompareExpr * rightExpr = CompareExpr::parse(tokenPtr, alloc);
+        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);
         WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, CompareExprLE, *leftExpr, *rightExpr);
+        return WC_NEW_AST_NODE(alloc, CmpExprLE, *leftExpr, *rightExpr);
     }
     else if (tokenPtr[0].type == TokenType::kCmpGT) {
         // '>' operator : skip this token
         ++tokenPtr;
         
         // Parse the right expression and return the AST node for the operation
-        CompareExpr * rightExpr = CompareExpr::parse(tokenPtr, alloc);
+        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);
         WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, CompareExprGT, *leftExpr, *rightExpr);
+        return WC_NEW_AST_NODE(alloc, CmpExprGT, *leftExpr, *rightExpr);
     }
     else if (tokenPtr[0].type == TokenType::kCmpGE) {
         // '>=' operator : skip this token
         ++tokenPtr;
         
         // Parse the right expression and return the AST node for the operation
-        CompareExpr * rightExpr = CompareExpr::parse(tokenPtr, alloc);
+        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);
         WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, CompareExprGE, *leftExpr, *rightExpr);
+        return WC_NEW_AST_NODE(alloc, CmpExprGE, *leftExpr, *rightExpr);
     }
 
     // Basic no-op expression:
-    return WC_NEW_AST_NODE(alloc, CompareExprNoOp, *leftExpr);
+    return WC_NEW_AST_NODE(alloc, CmpExprNoOp, *leftExpr);
 }
 
 //-----------------------------------------------------------------------------
-// CompareExprNoOp
+// CmpExprNoOp
 //-----------------------------------------------------------------------------
 
-CompareExprNoOp::CompareExprNoOp(AddSubExpr & expr) : mExpr(expr) {
+CmpExprNoOp::CmpExprNoOp(AddExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-const Token & CompareExprNoOp::getStartToken() const {
+const Token & CmpExprNoOp::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & CompareExprNoOp::getEndToken() const {
+const Token & CmpExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool CompareExprNoOp::isLValue() {
+bool CmpExprNoOp::isLValue() {
     return mExpr.isLValue();
 }
 
-bool CompareExprNoOp::isConstExpr() {
+bool CmpExprNoOp::isConstExpr() {
     return mExpr.isConstExpr();
 }
 
-DataType & CompareExprNoOp::dataType() {
+DataType & CmpExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-llvm::Value * CompareExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
+llvm::Value * CmpExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * CompareExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * CmpExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
-llvm::Constant * CompareExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * CmpExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
-// CompareExprTwoOps
+// CmpExprTwoOps
 //-----------------------------------------------------------------------------
 
-CompareExprTwoOps::CompareExprTwoOps(AddSubExpr & leftExpr, CompareExpr & rightExpr) :
+CmpExprTwoOps::CmpExprTwoOps(AddExpr & leftExpr, CmpExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
@@ -134,33 +134,33 @@ CompareExprTwoOps::CompareExprTwoOps(AddSubExpr & leftExpr, CompareExpr & rightE
     mRightExpr.mParent = this;
 }
 
-const Token & CompareExprTwoOps::getStartToken() const {
+const Token & CmpExprTwoOps::getStartToken() const {
     return mLeftExpr.getStartToken();
 }
 
-const Token & CompareExprTwoOps::getEndToken() const {
+const Token & CmpExprTwoOps::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-bool CompareExprTwoOps::isLValue() {
+bool CmpExprTwoOps::isLValue() {
     return false;
 }
 
-bool CompareExprTwoOps::isConstExpr() {
+bool CmpExprTwoOps::isConstExpr() {
     return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
-DataType & CompareExprTwoOps::dataType() {
+DataType & CmpExprTwoOps::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 
-llvm::Value * CompareExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
+llvm::Value * CmpExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of relational operation result!");
     return nullptr;
 }
 
-bool CompareExprTwoOps::compileCheckBothExprsAreInt() const {
+bool CmpExprTwoOps::compileCheckBothExprsAreInt() const {
     const DataType & leftType = mLeftExpr.dataType();
     
     if (!leftType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
@@ -183,14 +183,14 @@ bool CompareExprTwoOps::compileCheckBothExprsAreInt() const {
 }
 
 //-----------------------------------------------------------------------------
-// CompareExprEQ
+// CmpExprEQ
 //-----------------------------------------------------------------------------
 
-CompareExprEQ::CompareExprEQ(AddSubExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
+CmpExprEQ::CmpExprEQ(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * CompareExprEQ::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * CmpExprEQ::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
@@ -199,10 +199,10 @@ llvm::Value * CompareExprEQ::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateICmpEQ(left, right, "CompareExprEQ_CmpOp");
+    return cgCtx.irBuilder.CreateICmpEQ(left, right, "CmpExprEQ_CmpOp");
 }
 
-llvm::Constant * CompareExprEQ::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * CmpExprEQ::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
@@ -215,14 +215,14 @@ llvm::Constant * CompareExprEQ::codegenExprConstEval(CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// CompareExprNE
+// CmpExprNE
 //-----------------------------------------------------------------------------
 
-CompareExprNE::CompareExprNE(AddSubExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
+CmpExprNE::CmpExprNE(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * CompareExprNE::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * CmpExprNE::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
@@ -231,10 +231,10 @@ llvm::Value * CompareExprNE::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateICmpNE(left, right, "CompareExprNEQ_CmpOp");
+    return cgCtx.irBuilder.CreateICmpNE(left, right, "CmpExprNEQ_CmpOp");
 }
 
-llvm::Constant * CompareExprNE::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * CmpExprNE::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
@@ -247,14 +247,14 @@ llvm::Constant * CompareExprNE::codegenExprConstEval(CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// CompareExprLT
+// CmpExprLT
 //-----------------------------------------------------------------------------
 
-CompareExprLT::CompareExprLT(AddSubExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
+CmpExprLT::CmpExprLT(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * CompareExprLT::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * CmpExprLT::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
@@ -263,10 +263,10 @@ llvm::Value * CompareExprLT::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateICmpSLT(left, right, "CompareExprLT_CmpOp");
+    return cgCtx.irBuilder.CreateICmpSLT(left, right, "CmpExprLT_CmpOp");
 }
 
-llvm::Constant * CompareExprLT::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * CmpExprLT::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
@@ -279,14 +279,14 @@ llvm::Constant * CompareExprLT::codegenExprConstEval(CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// CompareExprLE
+// CmpExprLE
 //-----------------------------------------------------------------------------
 
-CompareExprLE::CompareExprLE(AddSubExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
+CmpExprLE::CmpExprLE(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * CompareExprLE::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * CmpExprLE::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
@@ -295,10 +295,10 @@ llvm::Value * CompareExprLE::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateICmpSLE(left, right, "CompareExprLE_CmpOp");
+    return cgCtx.irBuilder.CreateICmpSLE(left, right, "CmpExprLE_CmpOp");
 }
 
-llvm::Constant * CompareExprLE::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * CmpExprLE::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
@@ -311,14 +311,14 @@ llvm::Constant * CompareExprLE::codegenExprConstEval(CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// CompareExprGT
+// CmpExprGT
 //-----------------------------------------------------------------------------
 
-CompareExprGT::CompareExprGT(AddSubExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
+CmpExprGT::CmpExprGT(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * CompareExprGT::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * CmpExprGT::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
@@ -327,10 +327,10 @@ llvm::Value * CompareExprGT::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateICmpSGT(left, right, "CompareExprGT_CmpOp");
+    return cgCtx.irBuilder.CreateICmpSGT(left, right, "CmpExprGT_CmpOp");
 }
 
-llvm::Constant * CompareExprGT::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * CmpExprGT::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
@@ -343,14 +343,14 @@ llvm::Constant * CompareExprGT::codegenExprConstEval(CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// CompareExprGE
+// CmpExprGE
 //-----------------------------------------------------------------------------
 
-CompareExprGE::CompareExprGE(AddSubExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
+CmpExprGE::CmpExprGE(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * CompareExprGE::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * CmpExprGE::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
@@ -359,10 +359,10 @@ llvm::Value * CompareExprGE::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(left, nullptr);
     llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateICmpSGE(left, right, "CompareExprGE_CmpOp");
+    return cgCtx.irBuilder.CreateICmpSGE(left, right, "CmpExprGE_CmpOp");
 }
 
-llvm::Constant * CompareExprGE::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * CmpExprGE::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: handle auto type promotion and other non int types
     WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
     
