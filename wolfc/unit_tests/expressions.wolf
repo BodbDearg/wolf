@@ -1,7 +1,7 @@
 ;==================================================================================================
 ; NotExpr
 ;==================================================================================================
-var notOrBNotExprConstOps = [
+var notExprConstOps = [
     not false,
     not 1 > 2,
     not not true,
@@ -10,7 +10,7 @@ var notOrBNotExprConstOps = [
     (~-2) == 1
 ]
 
-func testNotOrBNotExpr()
+func testNotExpr()
     assert(not false)
     assert(not 1 > 2)
     assert(not not true)
@@ -20,7 +20,7 @@ func testNotOrBNotExpr()
 
     var testNum = 0
     while testNum < 6 
-        assert(notOrBNotExprConstOps[testNum])
+        assert(notExprConstOps[testNum])
         testNum++
     end
 end
@@ -72,43 +72,6 @@ func testCompareExpr()
     var testNum = 0
     while testNum < 18 
         assert(compareExprConstOps[testNum])
-        testNum++
-    end
-end
-
-;==================================================================================================
-; ShiftExpr
-;==================================================================================================
-var shiftExprConstOpts = [
-    1 << 0 == 1,
-    1 << 1 == 2,
-    2 << 2 == 8,
-    8 >> 0 == 8,
-    8 >> 1 == 4,
-    8 >> 2 == 2,
-    -8 >> 2 == -2,
-    8 >>> 0 == 8,
-    8 >>> 1 == 4,
-    8 >>> 2 == 2,
-    -1 >>> 63 == 1  ; FIXME - this won't work if int type is 32-bit
-]
-
-func testShiftExpr()
-    assert(1 << 0 == 1)
-    assert(1 << 1 == 2)
-    assert(2 << 2 == 8)
-    assert(8 >> 0 == 8)
-    assert(8 >> 1 == 4)
-    assert(8 >> 2 == 2)
-    assert(-8 >> 2 == -2)
-    assert(8 >>> 0 == 8)
-    assert(8 >>> 1 == 4)
-    assert(8 >>> 2 == 2)
-    assert(-1 >>> 63 == 1)  ; FIXME - this won't work if int type is 32-bit
-
-    var testNum = 0
-    while testNum < 11
-        assert(shiftExprConstOpts[testNum])
         testNum++
     end
 end
@@ -174,14 +137,51 @@ func testMulDivExpr()
 end
 
 ;==================================================================================================
+; ShiftExpr
+;==================================================================================================
+var shiftExprConstOpts = [
+    1 << 0 == 1,
+    1 << 1 == 2,
+    2 << 2 == 8,
+    8 >> 0 == 8,
+    8 >> 1 == 4,
+    8 >> 2 == 2,
+    -8 >> 2 == -2,
+    8 >>> 0 == 8,
+    8 >>> 1 == 4,
+    8 >>> 2 == 2,
+    -1 >>> 63 == 1  ; FIXME - this won't work if int type is 32-bit
+]
+
+func testShiftExpr()
+    assert(1 << 0 == 1)
+    assert(1 << 1 == 2)
+    assert(2 << 2 == 8)
+    assert(8 >> 0 == 8)
+    assert(8 >> 1 == 4)
+    assert(8 >> 2 == 2)
+    assert(-8 >> 2 == -2)
+    assert(8 >>> 0 == 8)
+    assert(8 >>> 1 == 4)
+    assert(8 >>> 2 == 2)
+    assert(-1 >>> 63 == 1)  ; FIXME - this won't work if int type is 32-bit
+
+    var testNum = 0
+    while testNum < 11
+        assert(shiftExprConstOpts[testNum])
+        testNum++
+    end
+end
+
+;==================================================================================================
 ; Run the tests
 ;==================================================================================================
 func main() -> int
     ; Basic tests of AST grammar and operations
-    testNotOrBNotExpr()
+    testNotExpr()
     testCompareExpr()
-    testShiftExpr()
     testAddSubExpr()
     testMulDivExpr()
+    testShiftExpr()
     return 0
 end
