@@ -133,18 +133,13 @@ NotExpr:
 	~ NotExpr
 
 CompareExpr:
-	ShiftExpr
-	ShiftExpr == CompareExpr
-	ShiftExpr != CompareExpr
-	ShiftExpr < CompareExpr
-	ShiftExpr <= CompareExpr
-	ShiftExpr > CompareExpr
-	ShiftExpr >= CompareExpr
-
-ShiftExpr:
-	AddSubExpr << ShiftExpr
-	AddSubExpr >> ShiftExpr
-	AddSubExpr >>> ShiftExpr
+	AddSubExpr
+	AddSubExpr == CompareExpr
+	AddSubExpr != CompareExpr
+	AddSubExpr < CompareExpr
+	AddSubExpr <= CompareExpr
+	AddSubExpr > CompareExpr
+	AddSubExpr >= CompareExpr
 
 AddSubExpr:
 	MulDivExpr
@@ -152,10 +147,15 @@ AddSubExpr:
 	MulDivExpr - AddSubExpr
 
 MulDivExpr:
-	UnaryExpr
-	UnaryExpr * MulDivExpr
-	UnaryExpr / MulDivExpr
-	UnaryExpr % MulDivExpr
+	ShiftExpr
+	ShiftExpr * MulDivExpr
+	ShiftExpr / MulDivExpr
+	ShiftExpr % MulDivExpr
+
+ShiftExpr:
+	UnaryExpr << ShiftExpr
+	UnaryExpr >> ShiftExpr
+	UnaryExpr >>> ShiftExpr
 
 UnaryExpr:
 	PostfixExpr

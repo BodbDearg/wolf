@@ -3,10 +3,10 @@
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
+#include "WCAddSubExpr.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCShiftExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -15,11 +15,11 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool CompareExpr::peek(const Token * tokenPtr) {
-    return ShiftExpr::peek(tokenPtr);
+    return AddSubExpr::peek(tokenPtr);
 }
 
 CompareExpr * CompareExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    ShiftExpr * leftExpr = ShiftExpr::parse(tokenPtr, alloc);
+    AddSubExpr * leftExpr = AddSubExpr::parse(tokenPtr, alloc);
     WC_GUARD(leftExpr, nullptr);
     
     // See what tokens follow:
@@ -86,7 +86,7 @@ CompareExpr * CompareExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 // CompareExprNoOp
 //-----------------------------------------------------------------------------
 
-CompareExprNoOp::CompareExprNoOp(ShiftExpr & expr) : mExpr(expr) {
+CompareExprNoOp::CompareExprNoOp(AddSubExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
@@ -126,7 +126,7 @@ llvm::Constant * CompareExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 // CompareExprTwoOps
 //-----------------------------------------------------------------------------
 
-CompareExprTwoOps::CompareExprTwoOps(ShiftExpr & leftExpr, CompareExpr & rightExpr) :
+CompareExprTwoOps::CompareExprTwoOps(AddSubExpr & leftExpr, CompareExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
@@ -186,7 +186,7 @@ bool CompareExprTwoOps::compileCheckBothExprsAreInt() const {
 // CompareExprEQ
 //-----------------------------------------------------------------------------
 
-CompareExprEQ::CompareExprEQ(ShiftExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
+CompareExprEQ::CompareExprEQ(AddSubExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 
@@ -218,7 +218,7 @@ llvm::Constant * CompareExprEQ::codegenExprConstEval(CodegenCtx & cgCtx) {
 // CompareExprNE
 //-----------------------------------------------------------------------------
 
-CompareExprNE::CompareExprNE(ShiftExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
+CompareExprNE::CompareExprNE(AddSubExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 
@@ -250,7 +250,7 @@ llvm::Constant * CompareExprNE::codegenExprConstEval(CodegenCtx & cgCtx) {
 // CompareExprLT
 //-----------------------------------------------------------------------------
 
-CompareExprLT::CompareExprLT(ShiftExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
+CompareExprLT::CompareExprLT(AddSubExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 
@@ -282,7 +282,7 @@ llvm::Constant * CompareExprLT::codegenExprConstEval(CodegenCtx & cgCtx) {
 // CompareExprLE
 //-----------------------------------------------------------------------------
 
-CompareExprLE::CompareExprLE(ShiftExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
+CompareExprLE::CompareExprLE(AddSubExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 
@@ -314,7 +314,7 @@ llvm::Constant * CompareExprLE::codegenExprConstEval(CodegenCtx & cgCtx) {
 // CompareExprGT
 //-----------------------------------------------------------------------------
 
-CompareExprGT::CompareExprGT(ShiftExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
+CompareExprGT::CompareExprGT(AddSubExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 
@@ -346,7 +346,7 @@ llvm::Constant * CompareExprGT::codegenExprConstEval(CodegenCtx & cgCtx) {
 // CompareExprGE
 //-----------------------------------------------------------------------------
 
-CompareExprGE::CompareExprGE(ShiftExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
+CompareExprGE::CompareExprGE(AddSubExpr & leftExpr, CompareExpr & rightExpr) : CompareExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
 

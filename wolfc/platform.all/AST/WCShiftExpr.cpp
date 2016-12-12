@@ -6,7 +6,7 @@
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCAddSubExpr.hpp"
+#include "WCUnaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -15,11 +15,11 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool ShiftExpr::peek(const Token * tokenPtr) {
-    return AddSubExpr::peek(tokenPtr);
+    return UnaryExpr::peek(tokenPtr);
 }
 
 ShiftExpr * ShiftExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    AddSubExpr * leftExpr = AddSubExpr::parse(tokenPtr, alloc);
+    UnaryExpr * leftExpr = UnaryExpr::parse(tokenPtr, alloc);
     WC_GUARD(leftExpr, nullptr);
     
     // See if shift operator following:
@@ -59,7 +59,7 @@ ShiftExpr * ShiftExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 // ShiftExprNoOp
 //-----------------------------------------------------------------------------
 
-ShiftExprNoOp::ShiftExprNoOp(AddSubExpr & expr) : mExpr(expr) {
+ShiftExprNoOp::ShiftExprNoOp(UnaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
@@ -99,7 +99,7 @@ llvm::Constant * ShiftExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 // ShiftExprTwoOps
 //-----------------------------------------------------------------------------
 
-ShiftExprTwoOps::ShiftExprTwoOps(AddSubExpr & leftExpr, ShiftExpr & rightExpr) :
+ShiftExprTwoOps::ShiftExprTwoOps(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
@@ -160,7 +160,7 @@ bool ShiftExprTwoOps::compileCheckBothExprsAreInt() const {
 // ShiftExprLShift
 //-----------------------------------------------------------------------------
 
-ShiftExprLShift::ShiftExprLShift(AddSubExpr & leftExpr, ShiftExpr & rightExpr) :
+ShiftExprLShift::ShiftExprLShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
     ShiftExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
@@ -194,7 +194,7 @@ llvm::Constant * ShiftExprLShift::codegenExprConstEval(CodegenCtx & cgCtx) {
 // ShiftExprArithRShift
 //-----------------------------------------------------------------------------
 
-ShiftExprArithRShift::ShiftExprArithRShift(AddSubExpr & leftExpr, ShiftExpr & rightExpr) :
+ShiftExprArithRShift::ShiftExprArithRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
     ShiftExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
@@ -228,7 +228,7 @@ llvm::Constant * ShiftExprArithRShift::codegenExprConstEval(CodegenCtx & cgCtx) 
 // ShiftExprLogicRShift
 //-----------------------------------------------------------------------------
 
-ShiftExprLogicRShift::ShiftExprLogicRShift(AddSubExpr & leftExpr, ShiftExpr & rightExpr) :
+ShiftExprLogicRShift::ShiftExprLogicRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
     ShiftExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();

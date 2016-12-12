@@ -5,15 +5,15 @@
 
 WC_BEGIN_NAMESPACE
 
-class AddSubExpr;
 class DataType;
 class LinearAlloc;
+class UnaryExpr;
 
 /*
 ShiftExpr:
-	AddSubExpr << ShiftExpr
-	AddSubExpr >> ShiftExpr
-	AddSubExpr >>> ShiftExpr
+	UnaryExpr << ShiftExpr
+	UnaryExpr >> ShiftExpr
+	UnaryExpr >>> ShiftExpr
 */
 class ShiftExpr : public ASTNode, public IExpr {
 public:
@@ -21,10 +21,10 @@ public:
     static ShiftExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
-/* AddSubExpr */
+/* UnaryExpr */
 class ShiftExprNoOp final : public ShiftExpr {
 public:
-    ShiftExprNoOp(AddSubExpr & expr);
+    ShiftExprNoOp(UnaryExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -38,13 +38,13 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    AddSubExpr & mExpr;
+    UnaryExpr & mExpr;
 };
 
 /* Base class for an ShiftExpr with two operands */
 class ShiftExprTwoOps : public ShiftExpr {
 public:
-    ShiftExprTwoOps(AddSubExpr & leftExpr, ShiftExpr & rightExpr);
+    ShiftExprTwoOps(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -56,8 +56,8 @@ public:
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     
-    AddSubExpr &    mLeftExpr;
-    ShiftExpr &     mRightExpr;
+    UnaryExpr & mLeftExpr;
+    ShiftExpr & mRightExpr;
     
 protected:
     /**
@@ -67,28 +67,28 @@ protected:
     bool compileCheckBothExprsAreInt() const;
 };
 
-/* AddSubExpr << ShiftExpr */
+/* UnaryExpr << ShiftExpr */
 class ShiftExprLShift final : public ShiftExprTwoOps {
 public:
-    ShiftExprLShift(AddSubExpr & leftExpr, ShiftExpr & rightExpr);
+    ShiftExprLShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
 
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* AddSubExpr >> ShiftExpr */
+/* UnaryExpr >> ShiftExpr */
 class ShiftExprArithRShift final : public ShiftExprTwoOps {
 public:
-    ShiftExprArithRShift(AddSubExpr & leftExpr, ShiftExpr & rightExpr);
+    ShiftExprArithRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
 
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* AddSubExpr >>> ShiftExpr */
+/* UnaryExpr >>> ShiftExpr */
 class ShiftExprLogicRShift final : public ShiftExprTwoOps {
 public:
-    ShiftExprLogicRShift(AddSubExpr & leftExpr, ShiftExpr & rightExpr);
+    ShiftExprLogicRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
 
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;

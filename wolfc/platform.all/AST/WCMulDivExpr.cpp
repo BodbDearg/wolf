@@ -6,7 +6,7 @@
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCUnaryExpr.hpp"
+#include "WCShiftExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -15,12 +15,12 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool MulDivExpr::peek(const Token * tokenPtr) {
-    return UnaryExpr::peek(tokenPtr);
+    return ShiftExpr::peek(tokenPtr);
 }
 
 MulDivExpr * MulDivExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    UnaryExpr * unaryExpr = UnaryExpr::parse(tokenPtr, alloc);
-    WC_GUARD(unaryExpr, nullptr);
+    ShiftExpr * leftExpr = ShiftExpr::parse(tokenPtr, alloc);
+    WC_GUARD(leftExpr, nullptr);
     
     // See if '*' or '/' following:
     if (tokenPtr->type == TokenType::kAsterisk && MulDivExpr::peek(tokenPtr + 1)) {
@@ -28,38 +28,38 @@ MulDivExpr * MulDivExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         ++tokenPtr;
         
         // Parse following expr and return combined expr
-        MulDivExpr * mulDivExpr = MulDivExpr::parse(tokenPtr, alloc);
-        WC_GUARD(mulDivExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, MulDivExprMul, *unaryExpr, *mulDivExpr);
+        MulDivExpr * rightExpr = MulDivExpr::parse(tokenPtr, alloc);
+        WC_GUARD(rightExpr, nullptr);
+        return WC_NEW_AST_NODE(alloc, MulDivExprMul, *leftExpr, *rightExpr);
     }
     else if (tokenPtr->type == TokenType::kSlash && MulDivExpr::peek(tokenPtr + 1)) {
         // Div operation: Skip '/'
         ++tokenPtr;
         
         // Parse following expr and return combined expr
-        MulDivExpr * mulDivExpr = MulDivExpr::parse(tokenPtr, alloc);
-        WC_GUARD(mulDivExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, MulDivExprDiv, *unaryExpr, *mulDivExpr);
+        MulDivExpr * rightExpr = MulDivExpr::parse(tokenPtr, alloc);
+        WC_GUARD(rightExpr, nullptr);
+        return WC_NEW_AST_NODE(alloc, MulDivExprDiv, *leftExpr, *rightExpr);
     }
     else if (tokenPtr->type == TokenType::kPercent && MulDivExpr::peek(tokenPtr + 1)) {
         // Modulo operation: Skip '%'
         ++tokenPtr;
 
         // Parse following expr and return combined expr
-        MulDivExpr * mulDivExpr = MulDivExpr::parse(tokenPtr, alloc);
-        WC_GUARD(mulDivExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, MulDivExprMod, *unaryExpr, *mulDivExpr);
+        MulDivExpr * rightExpr = MulDivExpr::parse(tokenPtr, alloc);
+        WC_GUARD(rightExpr, nullptr);
+        return WC_NEW_AST_NODE(alloc, MulDivExprMod, *leftExpr, *rightExpr);
     }
     
     // Basic no-op expression:
-    return WC_NEW_AST_NODE(alloc, MulDivExprNoOp, *unaryExpr);
+    return WC_NEW_AST_NODE(alloc, MulDivExprNoOp, *leftExpr);
 }
 
 //-----------------------------------------------------------------------------
 // MulDivExprNoOp
 //-----------------------------------------------------------------------------
 
-MulDivExprNoOp::MulDivExprNoOp(UnaryExpr & expr) : mExpr(expr) {
+MulDivExprNoOp::MulDivExprNoOp(ShiftExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
@@ -99,7 +99,7 @@ llvm::Constant * MulDivExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 // MulDivExprTwoOps
 //-----------------------------------------------------------------------------
 
-MulDivExprTwoOps::MulDivExprTwoOps(UnaryExpr & leftExpr, MulDivExpr & rightExpr) :
+MulDivExprTwoOps::MulDivExprTwoOps(ShiftExpr & leftExpr, MulDivExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
@@ -160,7 +160,7 @@ bool MulDivExprTwoOps::compileCheckBothExprsAreInt() const {
 // MulDivExprMul
 //-----------------------------------------------------------------------------
 
-MulDivExprMul::MulDivExprMul(UnaryExpr & leftExpr, MulDivExpr & rightExpr) :
+MulDivExprMul::MulDivExprMul(ShiftExpr & leftExpr, MulDivExpr & rightExpr) :
     MulDivExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
@@ -194,7 +194,7 @@ llvm::Constant * MulDivExprMul::codegenExprConstEval(CodegenCtx & cgCtx) {
 // MulDivExprDiv
 //-----------------------------------------------------------------------------
 
-MulDivExprDiv::MulDivExprDiv(UnaryExpr & leftExpr, MulDivExpr & rightExpr) :
+MulDivExprDiv::MulDivExprDiv(ShiftExpr & leftExpr, MulDivExpr & rightExpr) :
     MulDivExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
@@ -228,7 +228,7 @@ llvm::Constant * MulDivExprDiv::codegenExprConstEval(CodegenCtx & cgCtx) {
 // MulDivExprMod
 //-----------------------------------------------------------------------------
 
-MulDivExprMod::MulDivExprMod(UnaryExpr & leftExpr, MulDivExpr & rightExpr) :
+MulDivExprMod::MulDivExprMod(ShiftExpr & leftExpr, MulDivExpr & rightExpr) :
     MulDivExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
@@ -257,6 +257,5 @@ llvm::Constant * MulDivExprMod::codegenExprConstEval(CodegenCtx & cgCtx) {
     WC_GUARD(right, nullptr);
     return llvm::ConstantExpr::getSRem(left, right);
 }
-
 
 WC_END_NAMESPACE
