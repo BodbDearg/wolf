@@ -340,7 +340,6 @@ end
 ;==================================================================================================
 ; PostfixExpr
 ;==================================================================================================
-
 func testPostfixExprFuncCall1() -> int
     return 5
 end
@@ -360,6 +359,15 @@ end
 func testPostfixExprFuncCall4(int[3] v) -> int[3]
     return v
 end
+
+func testPostfixExprFuncCall5(int v1 , int v2, int v3) -> int
+    return v1 * v2 * v3
+end
+
+var testPostfixExprConstexpr = [
+    [1, 2, 3][2] == 3,
+    [1, 2, 3][0] == 1
+]
 
 func testPostfixExpr()
     ; Increment and decrement
@@ -383,6 +391,7 @@ func testPostfixExpr()
     assert(testPostfixExprFuncCall3([1, 2, 3])[1] == 10)
     assert(testPostfixExprFuncCall3([1, 2, 3])[2] == 15)
     assert(testPostfixExprFuncCall4([1, 2, 3])[2] == 3)
+    assert(testPostfixExprFuncCall5(1, 2, 3) == 6)
     
     ; Array indexing
     var array1 = [ 1, 2, 3, 4]
@@ -399,6 +408,9 @@ func testPostfixExpr()
     array2[1] = [7, 8]
     assert(array2[1][0] == 7)
     assert(array2[1][1] == 8)
+
+    assert(testPostfixExprConstexpr[0])
+    assert(testPostfixExprConstexpr[1])
 end
 
 ;==================================================================================================
