@@ -1,4 +1,50 @@
 ;==================================================================================================
+; OrExpr
+;==================================================================================================
+var testOrExprConstexpr = [
+    not (false or false),
+    true or false,
+    true or true,
+    false or true
+]
+
+func testOrExpr()
+    assert(not (false or false))
+    assert(true or false)
+    assert(true or true)
+    assert(false or true)
+
+    var testNum = 0
+    while testNum < 4
+        assert(testOrExprConstexpr[testNum])
+        testNum++
+    end    
+end
+
+;==================================================================================================
+; AndExpr
+;==================================================================================================
+var testAndExprConstexpr = [
+    not (false and false),
+    not (true and false),
+    not (false and true),
+    true and true
+]
+
+func testAndExpr()
+    assert(not (false and false))
+    assert(not (true and false))
+    assert(not (false and true))
+    assert(true and true)
+
+    var testNum = 0
+    while testNum < 4
+        assert(testAndExprConstexpr[testNum])
+        testNum++
+    end    
+end
+
+;==================================================================================================
 ; NotExpr
 ;==================================================================================================
 var testNotExprConstexpr = [
@@ -227,6 +273,8 @@ end
 ;==================================================================================================
 func main() -> int
     ; Basic tests of AST grammar and operations
+    testOrExpr()
+    testAndExpr()
     testNotExpr()
     testCmpExpr()
     testAddExpr()
