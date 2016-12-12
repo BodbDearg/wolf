@@ -519,6 +519,14 @@ llvm::Value * PostfixExprArrayLookup::codegenExprEval(CodegenCtx & cgCtx) {
 }
 
 llvm::Constant * PostfixExprArrayLookup::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // Codegen the array constant:
+    llvm::ConstantArray * arrayConstant = static_cast<llvm::ConstantArray*>(mArrayExpr.codegenExprConstEval(cgCtx));
+    WC_GUARD(arrayConstant, nullptr);
+    
+    // Codegen the index expression:
+    llvm::Constant * indexConstant = mIndexExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(indexConstant, nullptr);
+    
     // Make sure the array is actually an array...
     // TODO: support this operator on custom types eventually
     if (!mArrayExpr.dataType().isArray()) {
@@ -534,14 +542,6 @@ llvm::Constant * PostfixExprArrayLookup::codegenExprConstEval(CodegenCtx & cgCtx
         
         return nullptr;
     }
-    
-    // Codegen the array constant:
-    llvm::ConstantArray * arrayConstant = static_cast<llvm::ConstantArray*>(mArrayExpr.codegenExprConstEval(cgCtx));
-    WC_GUARD(arrayConstant, nullptr);
-    
-    // Codegen the index expression:
-    llvm::Constant * indexConstant = mIndexExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(indexConstant, nullptr);
     
     // Make sure the index expression fits in 64-bits
     llvm::APInt indexAPInt = indexConstant->getUniqueInteger();
