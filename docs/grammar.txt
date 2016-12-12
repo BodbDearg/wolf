@@ -124,13 +124,13 @@ BXorExpr:
 	BAndExpr ^ BXorExpr
 
 BAndExpr:
-	NotOrBNotExpr
-	NotOrBNotExpr & BAndExpr
+	NotExpr
+	NotExpr & BAndExpr
 
-NotOrBNotExpr:
+NotExpr:
 	CompareExpr
-	not NotOrBNotExpr
-	~ NotOrBNotExpr
+	not NotExpr
+	~ NotExpr
 
 CompareExpr:
 	ShiftExpr

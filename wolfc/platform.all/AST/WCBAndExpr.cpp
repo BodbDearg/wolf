@@ -6,7 +6,7 @@
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCNotOrBNotExpr.hpp"
+#include "WCNotExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -15,11 +15,11 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool BAndExpr::peek(const Token * tokenPtr) {
-    return NotOrBNotExpr::peek(tokenPtr);
+    return NotExpr::peek(tokenPtr);
 }
 
 BAndExpr * BAndExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    NotOrBNotExpr * leftExpr = NotOrBNotExpr::parse(tokenPtr, alloc);
+    NotExpr * leftExpr = NotExpr::parse(tokenPtr, alloc);
     WC_GUARD(leftExpr, nullptr);
 
     // See if '&' following:
@@ -41,7 +41,7 @@ BAndExpr * BAndExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 // BAndExprNoOp
 //-----------------------------------------------------------------------------
 
-BAndExprNoOp::BAndExprNoOp(NotOrBNotExpr & expr) : mExpr(expr) {
+BAndExprNoOp::BAndExprNoOp(NotExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
@@ -81,7 +81,7 @@ llvm::Constant * BAndExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 // BAndExprBAnd
 //-----------------------------------------------------------------------------
 
-BAndExprBAnd::BAndExprBAnd(NotOrBNotExpr & leftExpr, BAndExpr & rightExpr) :
+BAndExprBAnd::BAndExprBAnd(NotExpr & leftExpr, BAndExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {

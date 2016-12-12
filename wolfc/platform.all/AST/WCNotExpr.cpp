@@ -1,4 +1,4 @@
-#include "WCNotOrBNotExpr.hpp"
+#include "WCNotExpr.hpp"
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
@@ -10,16 +10,16 @@
 WC_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
-// NotOrBNotExpr
+// NotExpr
 //-----------------------------------------------------------------------------
 
-bool NotOrBNotExpr::peek(const Token * tokenPtr) {
+bool NotExpr::peek(const Token * tokenPtr) {
     return  tokenPtr->type == TokenType::kNot ||
             tokenPtr->type == TokenType::kTilde ||
             CompareExpr::peek(tokenPtr);
 }
 
-NotOrBNotExpr * NotOrBNotExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+NotExpr * NotExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Save the first token:
     const Token * startToken = tokenPtr;
     
@@ -29,108 +29,108 @@ NotOrBNotExpr * NotOrBNotExpr::parse(const Token *& tokenPtr, LinearAlloc & allo
         ++tokenPtr;
         
         // Parse the expression following
-        NotOrBNotExpr * notExpr = NotOrBNotExpr::parse(tokenPtr, alloc);
+        NotExpr * notExpr = NotExpr::parse(tokenPtr, alloc);
         WC_GUARD(notExpr, nullptr);
         
         // Alright, return the parsed expr
-        return WC_NEW_AST_NODE(alloc, NotOrBNotExprNot, *notExpr, *startToken);
+        return WC_NEW_AST_NODE(alloc, NotExprNot, *notExpr, *startToken);
     }
     else if (startToken->type == TokenType::kTilde) {
         // Bitwise 'not': skip 'not'
         ++tokenPtr;
 
         // Parse the expression following
-        NotOrBNotExpr * notExpr = NotOrBNotExpr::parse(tokenPtr, alloc);
+        NotExpr * notExpr = NotExpr::parse(tokenPtr, alloc);
         WC_GUARD(notExpr, nullptr);
 
         // Alright, return the parsed expr
-        return WC_NEW_AST_NODE(alloc, NotOrBNotExprBNot, *notExpr, *startToken);
+        return WC_NEW_AST_NODE(alloc, NotExprBNot, *notExpr, *startToken);
     }
     
     // No 'not'. Just parse an ordinary no-op expression
     CompareExpr * addSubExpr = CompareExpr::parse(tokenPtr, alloc);
     WC_GUARD(addSubExpr, nullptr);
-    return WC_NEW_AST_NODE(alloc, NotOrBNotExprNoOp, *addSubExpr);
+    return WC_NEW_AST_NODE(alloc, NotExprNoOp, *addSubExpr);
 }
 
 //-----------------------------------------------------------------------------
-// NotOrBNotExprNoOp
+// NotExprNoOp
 //-----------------------------------------------------------------------------
 
-NotOrBNotExprNoOp::NotOrBNotExprNoOp(CompareExpr & expr) : mExpr(expr) {
+NotExprNoOp::NotExprNoOp(CompareExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-const Token & NotOrBNotExprNoOp::getStartToken() const {
+const Token & NotExprNoOp::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & NotOrBNotExprNoOp::getEndToken() const {
+const Token & NotExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool NotOrBNotExprNoOp::isLValue() {
+bool NotExprNoOp::isLValue() {
     return mExpr.isLValue();
 }
 
-bool NotOrBNotExprNoOp::isConstExpr() {
+bool NotExprNoOp::isConstExpr() {
     return mExpr.isConstExpr();
 }
 
-DataType & NotOrBNotExprNoOp::dataType() {
+DataType & NotExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-llvm::Value * NotOrBNotExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
+llvm::Value * NotExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * NotOrBNotExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * NotExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
-llvm::Constant * NotOrBNotExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * NotExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
-// NotOrBNotExprNot
+// NotExprNot
 //-----------------------------------------------------------------------------
 
-NotOrBNotExprNot::NotOrBNotExprNot(NotOrBNotExpr & expr, const Token & startToken) :
+NotExprNot::NotExprNot(NotExpr & expr, const Token & startToken) :
     mExpr(expr),
     mStartToken(startToken)
 {
     mExpr.mParent = this;
 }
 
-const Token & NotOrBNotExprNot::getStartToken() const {
+const Token & NotExprNot::getStartToken() const {
     return mStartToken;
 }
 
-const Token & NotOrBNotExprNot::getEndToken() const {
+const Token & NotExprNot::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool NotOrBNotExprNot::isLValue() {
+bool NotExprNot::isLValue() {
     return false;
 }
 
-bool NotOrBNotExprNot::isConstExpr() {
+bool NotExprNot::isConstExpr() {
     return mExpr.isConstExpr();
 }
 
-DataType & NotOrBNotExprNot::dataType() {
+DataType & NotExprNot::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
 }
 
-llvm::Value * NotOrBNotExprNot::codegenAddrOf(CodegenCtx & cgCtx) {
+llvm::Value * NotExprNot::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't get the address of 'not' operator result!");
     return nullptr;
 }
 
-llvm::Value * NotOrBNotExprNot::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * NotExprNot::codegenExprEval(CodegenCtx & cgCtx) {
     // Expression must evaluate to a boolean:
     WC_GUARD(compileCheckExprIsBool(), nullptr);
 
@@ -140,7 +140,7 @@ llvm::Value * NotOrBNotExprNot::codegenExprEval(CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateNot(value);
 }
 
-llvm::Constant * NotOrBNotExprNot::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * NotExprNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Expression must evaluate to a boolean:
     WC_GUARD(compileCheckExprIsBool(), nullptr);
     
@@ -150,7 +150,7 @@ llvm::Constant * NotOrBNotExprNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     return llvm::ConstantExpr::getNot(value);
 }
 
-bool NotOrBNotExprNot::compileCheckExprIsBool() const {
+bool NotExprNot::compileCheckExprIsBool() const {
     const DataType & exprType = mExpr.dataType();
     
     if (!exprType.isBool()) {
@@ -164,43 +164,43 @@ bool NotOrBNotExprNot::compileCheckExprIsBool() const {
 }
 
 //-----------------------------------------------------------------------------
-// NotOrBNotExprBNot
+// NotExprBNot
 //-----------------------------------------------------------------------------
 
-NotOrBNotExprBNot::NotOrBNotExprBNot(NotOrBNotExpr & expr, const Token & startToken) :
+NotExprBNot::NotExprBNot(NotExpr & expr, const Token & startToken) :
     mExpr(expr),
     mStartToken(startToken)
 {
     mExpr.mParent = this;
 }
 
-const Token & NotOrBNotExprBNot::getStartToken() const {
+const Token & NotExprBNot::getStartToken() const {
     return mStartToken;
 }
 
-const Token & NotOrBNotExprBNot::getEndToken() const {
+const Token & NotExprBNot::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool NotOrBNotExprBNot::isLValue() {
+bool NotExprBNot::isLValue() {
     return false;
 }
 
-bool NotOrBNotExprBNot::isConstExpr() {
+bool NotExprBNot::isConstExpr() {
     return mExpr.isConstExpr();
 }
 
-DataType & NotOrBNotExprBNot::dataType() {
+DataType & NotExprBNot::dataType() {
     return mExpr.dataType();
 }
 
-llvm::Value * NotOrBNotExprBNot::codegenAddrOf(CodegenCtx & cgCtx) {
+llvm::Value * NotExprBNot::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't get the address of '~' (bitwise not) operator result!");
     return nullptr;
 }
 
-llvm::Value * NotOrBNotExprBNot::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * NotExprBNot::codegenExprEval(CodegenCtx & cgCtx) {
     // Expression must evaluate to an int:
     WC_GUARD(compileCheckExprIsInt(), nullptr);
 
@@ -210,7 +210,7 @@ llvm::Value * NotOrBNotExprBNot::codegenExprEval(CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateNot(value);
 }
 
-llvm::Constant * NotOrBNotExprBNot::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * NotExprBNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Expression must evaluate to a boolean:
     WC_GUARD(compileCheckExprIsInt(), nullptr);
 
@@ -220,7 +220,7 @@ llvm::Constant * NotOrBNotExprBNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     return llvm::ConstantExpr::getNot(value);
 }
 
-bool NotOrBNotExprBNot::compileCheckExprIsInt() const {
+bool NotExprBNot::compileCheckExprIsInt() const {
     const DataType & exprType = mExpr.dataType();
 
     if (!exprType.isInteger()) {

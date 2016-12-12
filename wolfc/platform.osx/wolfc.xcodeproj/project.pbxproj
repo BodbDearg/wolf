@@ -54,7 +54,7 @@
 		1F54B4B21D02A4DB0016BF70 /* WCStrDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F54B4B01D02A4DB0016BF70 /* WCStrDataType.cpp */; };
 		1F54B4B51D02B0D00016BF70 /* WCAndExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F54B4B31D02B0D00016BF70 /* WCAndExpr.cpp */; };
 		1F54B4B81D02B4EF0016BF70 /* WCOrExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F54B4B61D02B4EF0016BF70 /* WCOrExpr.cpp */; };
-		1F54B4BB1D02C14E0016BF70 /* WCNotOrBNotExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F54B4B91D02C14E0016BF70 /* WCNotOrBNotExpr.cpp */; };
+		1F54B4BB1D02C14E0016BF70 /* WCNotExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F54B4B91D02C14E0016BF70 /* WCNotExpr.cpp */; };
 		1F59D4DD1CE45BE200B095AC /* WCPrintStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F59D4DB1CE45BE200B095AC /* WCPrintStmnt.cpp */; };
 		1F59D4DF1CE45F1100B095AC /* WCCharUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F59D4DE1CE45F1100B095AC /* WCCharUtils.cpp */; };
 		1F59D4E21CE4698000B095AC /* WCStrLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F59D4E01CE4698000B095AC /* WCStrLit.cpp */; };
@@ -177,8 +177,8 @@
 		1F54B4B41D02B0D00016BF70 /* WCAndExpr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCAndExpr.hpp; sourceTree = "<group>"; };
 		1F54B4B61D02B4EF0016BF70 /* WCOrExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCOrExpr.cpp; sourceTree = "<group>"; };
 		1F54B4B71D02B4EF0016BF70 /* WCOrExpr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCOrExpr.hpp; sourceTree = "<group>"; };
-		1F54B4B91D02C14E0016BF70 /* WCNotOrBNotExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCNotOrBNotExpr.cpp; sourceTree = "<group>"; };
-		1F54B4BA1D02C14E0016BF70 /* WCNotOrBNotExpr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCNotOrBNotExpr.hpp; sourceTree = "<group>"; };
+		1F54B4B91D02C14E0016BF70 /* WCNotExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCNotExpr.cpp; sourceTree = "<group>"; };
+		1F54B4BA1D02C14E0016BF70 /* WCNotExpr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCNotExpr.hpp; sourceTree = "<group>"; };
 		1F59D4DB1CE45BE200B095AC /* WCPrintStmnt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCPrintStmnt.cpp; sourceTree = "<group>"; };
 		1F59D4DC1CE45BE200B095AC /* WCPrintStmnt.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCPrintStmnt.hpp; sourceTree = "<group>"; };
 		1F59D4DE1CE45F1100B095AC /* WCCharUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCCharUtils.cpp; sourceTree = "<group>"; };
@@ -361,8 +361,8 @@
 				1F28A91A1D0CCF1400AAE639 /* WCNextStmnt.hpp */,
 				1F65622C1D09027A00815D7D /* WCNopStmnt.cpp */,
 				1F65622D1D09027A00815D7D /* WCNopStmnt.hpp */,
-				1F54B4B91D02C14E0016BF70 /* WCNotOrBNotExpr.cpp */,
-				1F54B4BA1D02C14E0016BF70 /* WCNotOrBNotExpr.hpp */,
+				1F54B4B91D02C14E0016BF70 /* WCNotExpr.cpp */,
+				1F54B4BA1D02C14E0016BF70 /* WCNotExpr.hpp */,
 				1F54B4B61D02B4EF0016BF70 /* WCOrExpr.cpp */,
 				1F54B4B71D02B4EF0016BF70 /* WCOrExpr.hpp */,
 				1FCF06F91D38C51A00875428 /* WCPostfixExpr.cpp */,
@@ -671,7 +671,7 @@
 				1FABAE631D0CAA2D0024983E /* WCBreakStmnt.cpp in Sources */,
 				1F92939E1D035C880068E51B /* WCMulDivExpr.cpp in Sources */,
 				1F54B4B21D02A4DB0016BF70 /* WCStrDataType.cpp in Sources */,
-				1F54B4BB1D02C14E0016BF70 /* WCNotOrBNotExpr.cpp in Sources */,
+				1F54B4BB1D02C14E0016BF70 /* WCNotExpr.cpp in Sources */,
 				1FD459AD1D04D07300F01435 /* WCCompareExpr.cpp in Sources */,
 				1F19FB351D3A02F3002D0EB2 /* WCFuncArgList.cpp in Sources */,
 				1FBDF9EA1D4E878100D7EC14 /* WCArrayLitExprs.cpp in Sources */,
