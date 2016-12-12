@@ -143,6 +143,9 @@ llvm::Value * TernaryExprWithCond::codegenAddrOf(CodegenCtx & cgCtx) {
 
 llvm::Value * TernaryExprWithCond::codegenExprEval(CodegenCtx & cgCtx) {
     // Verify data types used by operator:
+    //
+    // FIXME: move this to after code generation, so we catch things like bad variable names better and
+    // get better error info by delegating down the AST tree.
     WC_GUARD(compileCheckExprDataTypes(), nullptr);
     
     // Create a block for the true, false and follow on expressions:

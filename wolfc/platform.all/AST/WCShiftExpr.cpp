@@ -125,6 +125,34 @@ llvm::Value * ShiftExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
     return nullptr;
 }
 
+llvm::Value * ShiftExprTwoOps::codegenExprEval(CodegenCtx & cgCtx) {
+    // Evaluate left and right expressions
+    llvm::Value * leftVal = mLeftExpr.codegenExprEval(cgCtx);
+    WC_GUARD(leftVal, nullptr);
+    llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightVal, nullptr);
+    
+    // TODO: handle auto type promotion and other non int types
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
+    
+    // Codegen the op itself
+    return codegenOpEval(cgCtx, *leftVal, *rightVal);
+}
+
+llvm::Constant * ShiftExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // Evaluate left and right expressions
+    llvm::Constant * leftVal = mLeftExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(leftVal, nullptr);
+    llvm::Constant * rightVal = mRightExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(rightVal, nullptr);
+    
+    // TODO: handle auto type promotion and other non int types
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
+    
+    // Codegen the op itself
+    return codegenOpConstEval(*leftVal, *rightVal);
+}
+
 bool ShiftExprTwoOps::compileCheckBothExprsAreInt() const {
     const DataType & leftType = mLeftExpr.dataType();
     
@@ -157,28 +185,17 @@ ShiftExprLShift::ShiftExprLShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * ShiftExprLShift::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateShl(left, right, "ShiftExprLShift_LShiftOp");
+llvm::Value * ShiftExprLShift::codegenOpEval(CodegenCtx & cgCtx,
+                                             llvm::Value & leftVal,
+                                             llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateShl(&leftVal, &rightVal, "ShiftExprLShift_LShiftOp");
 }
 
-llvm::Constant * ShiftExprLShift::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return llvm::ConstantExpr::getShl(left, right);
+llvm::Constant * ShiftExprLShift::codegenOpConstEval(llvm::Constant & leftVal,
+                                                     llvm::Constant & rightVal)
+{
+    return llvm::ConstantExpr::getShl(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -191,28 +208,17 @@ ShiftExprArithRShift::ShiftExprArithRShift(UnaryExpr & leftExpr, ShiftExpr & rig
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * ShiftExprArithRShift::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateAShr(left, right, "ShiftExprArithRShift_ARShiftOp");
+llvm::Value * ShiftExprArithRShift::codegenOpEval(CodegenCtx & cgCtx,
+                                                  llvm::Value & leftVal,
+                                                  llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateAShr(&leftVal, &rightVal, "ShiftExprArithRShift_ARShiftOp");
 }
 
-llvm::Constant * ShiftExprArithRShift::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return llvm::ConstantExpr::getAShr(left, right);
+llvm::Constant * ShiftExprArithRShift::codegenOpConstEval(llvm::Constant & leftVal,
+                                                          llvm::Constant & rightVal)
+{
+    return llvm::ConstantExpr::getAShr(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -225,28 +231,17 @@ ShiftExprLogicRShift::ShiftExprLogicRShift(UnaryExpr & leftExpr, ShiftExpr & rig
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * ShiftExprLogicRShift::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-
-    // Generate code for the operation
-    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateLShr(left, right, "ShiftExprLogicRShift_LRShiftOp");
+llvm::Value * ShiftExprLogicRShift::codegenOpEval(CodegenCtx & cgCtx,
+                                                  llvm::Value & leftVal,
+                                                  llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateLShr(&leftVal, &rightVal, "ShiftExprLogicRShift_LRShiftOp");
 }
 
-llvm::Constant * ShiftExprLogicRShift::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-
-    // Generate code for the operation
-    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return llvm::ConstantExpr::getLShr(left, right);
+llvm::Constant * ShiftExprLogicRShift::codegenOpConstEval(llvm::Constant & leftVal,
+                                                          llvm::Constant & rightVal)
+{
+    return llvm::ConstantExpr::getLShr(&leftVal, &rightVal);
 }
 
 WC_END_NAMESPACE

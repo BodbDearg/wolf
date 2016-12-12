@@ -131,22 +131,26 @@ llvm::Value * NotExprNot::codegenAddrOf(CodegenCtx & cgCtx) {
 }
 
 llvm::Value * NotExprNot::codegenExprEval(CodegenCtx & cgCtx) {
-    // Expression must evaluate to a boolean:
-    WC_GUARD(compileCheckExprIsBool(), nullptr);
-
-    // Evaluate the expression and generate the code for the not instruction:
+    // Evaluate the expression to be 'notted'
     llvm::Value * value = mExpr.codegenExprEval(cgCtx);
     WC_GUARD(value, nullptr);
+    
+    // Expression must evaluate to a boolean:
+    WC_GUARD(compileCheckExprIsBool(), nullptr);
+    
+    // Create the not operation
     return cgCtx.irBuilder.CreateNot(value);
 }
 
 llvm::Constant * NotExprNot::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // Evaluate the expression to be 'notted'
+    llvm::Constant * value = mExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(value, nullptr);
+    
     // Expression must evaluate to a boolean:
     WC_GUARD(compileCheckExprIsBool(), nullptr);
     
-    // Evaluate the expression and generate the code for the not instruction:
-    llvm::Constant * value = mExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(value, nullptr);
+    // Create the not operation
     return llvm::ConstantExpr::getNot(value);
 }
 
@@ -201,22 +205,28 @@ llvm::Value * NotExprBNot::codegenAddrOf(CodegenCtx & cgCtx) {
 }
 
 llvm::Value * NotExprBNot::codegenExprEval(CodegenCtx & cgCtx) {
-    // Expression must evaluate to an int:
-    WC_GUARD(compileCheckExprIsInt(), nullptr);
-
-    // Evaluate the expression and generate the code for the not instruction:
+    // Evaluate the expression to be 'notted'
     llvm::Value * value = mExpr.codegenExprEval(cgCtx);
     WC_GUARD(value, nullptr);
+    
+    // FIXME: this is just a temporary limitation.
+    // Expression must evaluate to an int.
+    WC_GUARD(compileCheckExprIsInt(), nullptr);
+    
+    // Create the not operation
     return cgCtx.irBuilder.CreateNot(value);
 }
 
 llvm::Constant * NotExprBNot::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // Expression must evaluate to a boolean:
-    WC_GUARD(compileCheckExprIsInt(), nullptr);
-
-    // Evaluate the expression and generate the code for the not instruction:
+    // Evaluate the expression to be 'notted'
     llvm::Constant * value = mExpr.codegenExprConstEval(cgCtx);
     WC_GUARD(value, nullptr);
+    
+    // FIXME: this is just a temporary limitation.
+    // Expression must evaluate to an int.
+    WC_GUARD(compileCheckExprIsInt(), nullptr);
+
+    // Create the not operation
     return llvm::ConstantExpr::getNot(value);
 }
 

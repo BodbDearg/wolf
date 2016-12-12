@@ -57,6 +57,8 @@ public:
     virtual DataType & dataType() final override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     MulExpr &   mLeftExpr;
     AddExpr &   mRightExpr;
@@ -67,6 +69,21 @@ protected:
      * return false for failure if that is the case.
      */
     bool compileCheckBothExprsAreInt() const;
+    
+    /**
+     * Do the actual codegen for the operation itself (runtime evaluation).
+     * All other type checks have been done and sub-expressions evaluated at this point.
+     */
+    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
+                                        llvm::Value & leftVal,
+                                        llvm::Value & rightVal) = 0;
+    
+    /**
+     * Do the actual codegen for the operation itself (compile time evaluation).
+     * All other type checks have been done and sub-expressions evaluated at this point.
+     */
+    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
+                                                llvm::Constant & rightVal) = 0;
 };
 
 /* MulExpr + AddExpr */
@@ -74,8 +91,12 @@ class AddExprAdd final : public AddExprTwoOps {
 public:
     AddExprAdd(MulExpr & leftExpr, AddExpr & rightExpr);
     
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
+                                        llvm::Value & leftVal,
+                                        llvm::Value & rightVal) override;
+    
+    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
+                                                llvm::Constant & rightVal) override;
 };
 
 /* MulExpr - AddExpr */
@@ -83,8 +104,12 @@ class AddExprSub final : public AddExprTwoOps {
 public:
     AddExprSub(MulExpr & leftExpr, AddExpr & rightExpr);
     
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
+                                        llvm::Value & leftVal,
+                                        llvm::Value & rightVal) override;
+    
+    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
+                                                llvm::Constant & rightVal) override;
 };
 
 /* MulExpr | AddExpr */
@@ -92,8 +117,12 @@ class AddExprBOr final : public AddExprTwoOps {
 public:
     AddExprBOr(MulExpr & leftExpr, AddExpr & rightExpr);
     
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
+                                        llvm::Value & leftVal,
+                                        llvm::Value & rightVal) override;
+    
+    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
+                                                llvm::Constant & rightVal) override;
 };
 
 /* MulExpr ^ AddExpr */
@@ -101,8 +130,12 @@ class AddExprBXor final : public AddExprTwoOps {
 public:
     AddExprBXor(MulExpr & leftExpr, AddExpr & rightExpr);
     
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
+                                        llvm::Value & leftVal,
+                                        llvm::Value & rightVal) override;
+    
+    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
+                                                llvm::Constant & rightVal) override;
 };
 
 WC_END_NAMESPACE

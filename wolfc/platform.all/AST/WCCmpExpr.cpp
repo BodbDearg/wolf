@@ -127,6 +127,34 @@ llvm::Value * CmpExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
     return nullptr;
 }
 
+llvm::Value * CmpExprTwoOps::codegenExprEval(CodegenCtx & cgCtx) {
+    // Evaluate left and right expressions
+    llvm::Value * leftVal = mLeftExpr.codegenExprEval(cgCtx);
+    WC_GUARD(leftVal, nullptr);
+    llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightVal, nullptr);
+    
+    // TODO: handle auto type promotion and other non int types
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
+    
+    // Codegen the op itself
+    return codegenOpEval(cgCtx, *leftVal, *rightVal);
+}
+
+llvm::Constant * CmpExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // Evaluate left and right expressions
+    llvm::Constant * leftVal = mLeftExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(leftVal, nullptr);
+    llvm::Constant * rightVal = mRightExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(rightVal, nullptr);
+    
+    // TODO: handle auto type promotion and other non int types
+    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
+    
+    // Codegen the op itself
+    return codegenOpConstEval(*leftVal, *rightVal);
+}
+
 bool CmpExprTwoOps::compileCheckBothExprsAreInt() const {
     const DataType & leftType = mLeftExpr.dataType();
     
@@ -157,28 +185,17 @@ CmpExprEQ::CmpExprEQ(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(le
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * CmpExprEQ::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateICmpEQ(left, right, "CmpExprEQ_CmpOp");
+llvm::Value * CmpExprEQ::codegenOpEval(CodegenCtx & cgCtx,
+                                       llvm::Value & leftVal,
+                                       llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateICmpEQ(&leftVal, &rightVal, "CmpExprEQ_CmpOp");
 }
 
-llvm::Constant * CmpExprEQ::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_EQ, left, right);
+llvm::Constant * CmpExprEQ::codegenOpConstEval(llvm::Constant & leftVal,
+                                               llvm::Constant & rightVal)
+{
+    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_EQ, &leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -189,28 +206,17 @@ CmpExprNE::CmpExprNE(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(le
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * CmpExprNE::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateICmpNE(left, right, "CmpExprNEQ_CmpOp");
+llvm::Value * CmpExprNE::codegenOpEval(CodegenCtx & cgCtx,
+                                       llvm::Value & leftVal,
+                                       llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateICmpNE(&leftVal, &rightVal, "CmpExprNE_CmpOp");
 }
 
-llvm::Constant * CmpExprNE::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_NE, left, right);
+llvm::Constant * CmpExprNE::codegenOpConstEval(llvm::Constant & leftVal,
+                                               llvm::Constant & rightVal)
+{
+    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_NE, &leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -221,28 +227,17 @@ CmpExprLT::CmpExprLT(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(le
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * CmpExprLT::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateICmpSLT(left, right, "CmpExprLT_CmpOp");
+llvm::Value * CmpExprLT::codegenOpEval(CodegenCtx & cgCtx,
+                                       llvm::Value & leftVal,
+                                       llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateICmpSLT(&leftVal, &rightVal, "CmpExprLT_CmpOp");
 }
 
-llvm::Constant * CmpExprLT::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SLT, left, right);
+llvm::Constant * CmpExprLT::codegenOpConstEval(llvm::Constant & leftVal,
+                                               llvm::Constant & rightVal)
+{
+    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SLT, &leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -253,28 +248,17 @@ CmpExprLE::CmpExprLE(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(le
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * CmpExprLE::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateICmpSLE(left, right, "CmpExprLE_CmpOp");
+llvm::Value * CmpExprLE::codegenOpEval(CodegenCtx & cgCtx,
+                                       llvm::Value & leftVal,
+                                       llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateICmpSLE(&leftVal, &rightVal, "CmpExprLE_CmpOp");
 }
 
-llvm::Constant * CmpExprLE::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SLE, left, right);
+llvm::Constant * CmpExprLE::codegenOpConstEval(llvm::Constant & leftVal,
+                                               llvm::Constant & rightVal)
+{
+    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SLE, &leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -285,28 +269,17 @@ CmpExprGT::CmpExprGT(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(le
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * CmpExprGT::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateICmpSGT(left, right, "CmpExprGT_CmpOp");
+llvm::Value * CmpExprGT::codegenOpEval(CodegenCtx & cgCtx,
+                                       llvm::Value & leftVal,
+                                       llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateICmpSGT(&leftVal, &rightVal, "CmpExprGT_CmpOp");
 }
 
-llvm::Constant * CmpExprGT::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SGT, left, right);
+llvm::Constant * CmpExprGT::codegenOpConstEval(llvm::Constant & leftVal,
+                                               llvm::Constant & rightVal)
+{
+    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SGT, &leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -317,28 +290,17 @@ CmpExprGE::CmpExprGE(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(le
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * CmpExprGE::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Value * left = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Value * right = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return cgCtx.irBuilder.CreateICmpSGE(left, right, "CmpExprGE_CmpOp");
+llvm::Value * CmpExprGE::codegenOpEval(CodegenCtx & cgCtx,
+                                       llvm::Value & leftVal,
+                                       llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateICmpSGE(&leftVal, &rightVal, "CmpExprGE_CmpOp");
 }
 
-llvm::Constant * CmpExprGE::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Generate code for the operation
-    llvm::Constant * left = mLeftExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(left, nullptr);
-    llvm::Constant * right = mRightExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(right, nullptr);
-    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SGE, left, right);
+llvm::Constant * CmpExprGE::codegenOpConstEval(llvm::Constant & leftVal,
+                                               llvm::Constant & rightVal)
+{
+    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SGE, &leftVal, &rightVal);
 }
 
 WC_END_NAMESPACE

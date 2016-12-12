@@ -56,9 +56,11 @@ public:
     virtual DataType & dataType() final override;
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     ShiftExpr &     mLeftExpr;
-    MulExpr &    mRightExpr;
+    MulExpr &       mRightExpr;
     
 protected:
     /**
@@ -66,6 +68,21 @@ protected:
      * return false for failure if that is the case.
      */
     bool compileCheckBothExprsAreInt() const;
+    
+    /**
+     * Do the actual codegen for the operation itself (runtime evaluation).
+     * All other type checks have been done and sub-expressions evaluated at this point.
+     */
+    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
+                                        llvm::Value & leftVal,
+                                        llvm::Value & rightVal) = 0;
+    
+    /**
+     * Do the actual codegen for the operation itself (compile time evaluation).
+     * All other type checks have been done and sub-expressions evaluated at this point.
+     */
+    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
+                                                llvm::Constant & rightVal) = 0;    
 };
 
 /* ShiftExpr * MulExpr */
@@ -73,8 +90,12 @@ class MulExprMul final : public MulExprTwoOps {
 public:
     MulExprMul(ShiftExpr & leftExpr, MulExpr & rightExpr);
 
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
+                                        llvm::Value & leftVal,
+                                        llvm::Value & rightVal) override;
+    
+    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
+                                                llvm::Constant & rightVal) override;
 };
 
 /* ShiftExpr / MulExpr */
@@ -82,8 +103,12 @@ class MulExprDiv final : public MulExprTwoOps {
 public:
     MulExprDiv(ShiftExpr & leftExpr, MulExpr & rightExpr);
 
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
+                                        llvm::Value & leftVal,
+                                        llvm::Value & rightVal) override;
+    
+    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
+                                                llvm::Constant & rightVal) override;
 };
 
 /* ShiftExpr % MulExpr */
@@ -91,8 +116,12 @@ class MulExprMod final : public MulExprTwoOps {
 public:
     MulExprMod(ShiftExpr & leftExpr, MulExpr & rightExpr);
 
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
+                                        llvm::Value & leftVal,
+                                        llvm::Value & rightVal) override;
+    
+    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
+                                                llvm::Constant & rightVal) override;
 };
 
 /* ShiftExpr & MulExpr */
@@ -100,8 +129,12 @@ class MulExprBAnd final : public MulExprTwoOps {
 public:
     MulExprBAnd(ShiftExpr & leftExpr, MulExpr & rightExpr);
     
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
+                                        llvm::Value & leftVal,
+                                        llvm::Value & rightVal) override;
+    
+    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
+                                                llvm::Constant & rightVal) override;
 };
 
 

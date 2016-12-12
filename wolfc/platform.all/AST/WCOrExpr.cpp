@@ -124,28 +124,32 @@ llvm::Value * OrExprOr::codegenAddrOf(CodegenCtx & cgCtx) {
 }
 
 llvm::Value * OrExprOr::codegenExprEval(CodegenCtx & cgCtx) {
-    // Verify data types used by operator:
-    WC_GUARD(compileCheckBothExprsAreBool(), nullptr);
-
     // TODO: add support for lazy evaluation
-    // Evaluate the sub expressions and create the instruction:
+    // Evaluate the sub expressions first:
     llvm::Value * leftValue = mLeftExpr.codegenExprEval(cgCtx);
     WC_GUARD(leftValue, nullptr);
     llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(rightValue, nullptr);
+    
+    // Verify data types used by operator:
+    WC_GUARD(compileCheckBothExprsAreBool(), nullptr);
+    
+    // Create the logical operation:
     return cgCtx.irBuilder.CreateOr(rightValue, leftValue);
 }
 
 llvm::Constant * OrExprOr::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // Verify data types used by operator:
-    WC_GUARD(compileCheckBothExprsAreBool(), nullptr);
-    
     // TODO: add support for lazy evaluation
-    // Evaluate the sub expressions and create the instruction:
+    // Evaluate the sub expressions first:
     llvm::Constant * leftValue = mLeftExpr.codegenExprConstEval(cgCtx);
     WC_GUARD(leftValue, nullptr);
     llvm::Constant * rightValue = mRightExpr.codegenExprConstEval(cgCtx);
     WC_GUARD(rightValue, nullptr);
+    
+    // Verify data types used by operator:
+    WC_GUARD(compileCheckBothExprsAreBool(), nullptr);
+    
+    // Create the logical operation:
     return llvm::ConstantExpr::getOr(rightValue, leftValue);
 }
 
