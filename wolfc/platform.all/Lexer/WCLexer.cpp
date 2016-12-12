@@ -247,8 +247,14 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
                 return parseBasicToken(TokenType::kCmpLE, 2);
             }
             else if (mLexerState.srcPtr[1] == '<') {
-                // '<<' operator
-                return parseBasicToken(TokenType::kLShift, 2);
+                if (mLexerState.srcPtr[2] == '=') {
+                    // '<<=' operator
+                    return parseBasicToken(TokenType::kAssignLShift, 3);
+                }
+                else {
+                    // '<<' operator
+                    return parseBasicToken(TokenType::kLShift, 2);
+                }
             }
             else {
                 // '<' operator
@@ -263,12 +269,24 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
             }
             else if (mLexerState.srcPtr[1] == '>') {
                 if (mLexerState.srcPtr[2] == '>') {
-                    // '>>>' operator
-                    return parseBasicToken(TokenType::kLRShift, 3);
+                    if (mLexerState.srcPtr[3] == '=') {
+                        // '>>>=' operator
+                        return parseBasicToken(TokenType::kAssignLRShift, 4);
+                    }
+                    else {
+                        // '>>>' operator
+                        return parseBasicToken(TokenType::kLRShift, 3);
+                    }
                 }
                 else {
-                    // '>>' operator
-                    return parseBasicToken(TokenType::kARShift, 2);
+                    if (mLexerState.srcPtr[2] == '=') {
+                        // '>>=' operator
+                        return parseBasicToken(TokenType::kAssignARShift, 3);
+                    }
+                    else {
+                        // '>>=' operator
+                        return parseBasicToken(TokenType::kARShift, 2);
+                    }
                 }
             }
             else {
