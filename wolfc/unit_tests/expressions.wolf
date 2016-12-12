@@ -414,6 +414,36 @@ func testPostfixExpr()
 end
 
 ;==================================================================================================
+; PrimaryExpr
+;==================================================================================================
+func testPrimaryExpr()
+    ; IntLit
+    var v1 = 1
+    var v2 = 1234
+    assert(v1 == 1)
+    assert(v2 == 1234)
+
+    ; BoolLit
+    var v3 = false
+    var v4 = true
+    assert(not v3)
+    assert(v4)
+
+    ; StrLit
+    ; TODO: In future do more here?
+    var v5 = "Hello world!"
+
+    ; ArrayLit
+    var v6 = [
+        [ [ 1 ] ],
+        [ [ 2 ] ]
+    ]
+
+    assert(v6[0][0][0] == 1)
+    assert(v6[0][1][0] == 2)
+end
+
+;==================================================================================================
 ; Run the tests
 ;==================================================================================================
 func main() -> int
@@ -429,5 +459,6 @@ func main() -> int
     testShiftExpr()
     testUnaryExpr()
     testPostfixExpr()
+    testPrimaryExpr()
     return 0
 end
