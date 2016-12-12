@@ -22,60 +22,27 @@ CmpExpr * CmpExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     AddExpr * leftExpr = AddExpr::parse(tokenPtr, alloc);
     WC_GUARD(leftExpr, nullptr);
     
-    // See what tokens follow:
-    if (tokenPtr[0].type == TokenType::kCmpEQ) {
-        // '==' operator : skip this token
-        ++tokenPtr;
-        
-        // Parse the right expression and return the AST node for the operation
-        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);
-        WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, CmpExprEQ, *leftExpr, *rightExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kCmpNE) {
-        // '!=' operator : skip this token
-        ++tokenPtr;
-        
-        // Parse the right expression and return the AST node for the operation
-        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);
-        WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, CmpExprNE, *leftExpr, *rightExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kCmpLT) {
-        // '<' operator : skip this token
-        ++tokenPtr;
-        
-        // Parse the right expression and return the AST node for the operation
-        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);
-        WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, CmpExprLT, *leftExpr, *rightExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kCmpLE) {
-        // '<=' operator : skip this token
-        ++tokenPtr;
-        
-        // Parse the right expression and return the AST node for the operation
-        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);
-        WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, CmpExprLE, *leftExpr, *rightExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kCmpGT) {
-        // '>' operator : skip this token
-        ++tokenPtr;
-        
-        // Parse the right expression and return the AST node for the operation
-        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);
-        WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, CmpExprGT, *leftExpr, *rightExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kCmpGE) {
-        // '>=' operator : skip this token
-        ++tokenPtr;
-        
-        // Parse the right expression and return the AST node for the operation
-        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);
-        WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, CmpExprGE, *leftExpr, *rightExpr);
+    // See if there is a known operator ahead.
+    // If we find a known operator parse the operator token, the right operand and
+    // return the AST node for the operation.
+    #define PARSE_OP(TokenType, ASTNodeType)\
+        case TokenType: {\
+            ++tokenPtr;\
+            CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);\
+            WC_GUARD(rightExpr, nullptr);\
+            return WC_NEW_AST_NODE(alloc, ASTNodeType, *leftExpr, *rightExpr);\
+        }
+
+    switch (tokenPtr[0].type) {
+        PARSE_OP(TokenType::kCmpEQ, CmpExprEQ)  // ==
+        PARSE_OP(TokenType::kCmpNE, CmpExprNE)  // !=
+        PARSE_OP(TokenType::kCmpLT, CmpExprLT)  // <
+        PARSE_OP(TokenType::kCmpLE, CmpExprLE)  // <=
+        PARSE_OP(TokenType::kCmpGT, CmpExprGT)  // >
+        PARSE_OP(TokenType::kCmpGE, CmpExprGE)  // >=
+            
+        default:
+            break;
     }
 
     // Basic no-op expression:

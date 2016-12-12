@@ -22,9 +22,10 @@ AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     TernaryExpr * leftExpr = TernaryExpr::parse(tokenPtr, alloc);
     WC_GUARD(leftExpr, nullptr);
 
-    // See if there is an operator ahead for a combined assign and operation, if there
-    // is then consume the operator and parse the right operand:
-    #define CHECK_FOR_ASSIGN_OP(TokenType, ASTNodeType)\
+    // See if there is a known operator ahead.
+    // If we find a known operator parse the operator token, the right operand and
+    // return the AST node for the operation.
+    #define PARSE_OP(TokenType, ASTNodeType)\
         case TokenType: {\
             ++tokenPtr;\
             AssignExpr * rightExpr = AssignExpr::parse(tokenPtr, alloc);\
@@ -33,22 +34,24 @@ AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         }
 
     switch (tokenPtr[0].type) {
-        CHECK_FOR_ASSIGN_OP(TokenType::kAssignLShift, AssignExprAssignLShift)           // <<=
-        CHECK_FOR_ASSIGN_OP(TokenType::kAssignARShift, AssignExprAssignArithRShift)     // >>=
-        CHECK_FOR_ASSIGN_OP(TokenType::kAssignLRShift, AssignExprAssignLogicRShift)     // >>>=
-        CHECK_FOR_ASSIGN_OP(TokenType::kAssignBOr, AssignExprAssignBOr)                 // |=
-        CHECK_FOR_ASSIGN_OP(TokenType::kAssignBXor, AssignExprAssignBXor)               // ^=
-        CHECK_FOR_ASSIGN_OP(TokenType::kAssignBAnd, AssignExprAssignBAnd)               // &=
-        CHECK_FOR_ASSIGN_OP(TokenType::kAssignAdd, AssignExprAssignAdd)                 // +=
-        CHECK_FOR_ASSIGN_OP(TokenType::kAssignSub, AssignExprAssignSub)                 // -=
-        CHECK_FOR_ASSIGN_OP(TokenType::kAssignMul, AssignExprAssignMul)                 // *=
-        CHECK_FOR_ASSIGN_OP(TokenType::kAssignDiv, AssignExprAssignDiv)                 // /=
-        CHECK_FOR_ASSIGN_OP(TokenType::kAssignMod, AssignExprAssignMod)                 // %=
-        CHECK_FOR_ASSIGN_OP(TokenType::kAssign, AssignExprAssign)                       // =
+        PARSE_OP(TokenType::kAssignLShift, AssignExprAssignLShift)           // <<=
+        PARSE_OP(TokenType::kAssignARShift, AssignExprAssignArithRShift)     // >>=
+        PARSE_OP(TokenType::kAssignLRShift, AssignExprAssignLogicRShift)     // >>>=
+        PARSE_OP(TokenType::kAssignBOr, AssignExprAssignBOr)                 // |=
+        PARSE_OP(TokenType::kAssignBXor, AssignExprAssignBXor)               // ^=
+        PARSE_OP(TokenType::kAssignBAnd, AssignExprAssignBAnd)               // &=
+        PARSE_OP(TokenType::kAssignAdd, AssignExprAssignAdd)                 // +=
+        PARSE_OP(TokenType::kAssignSub, AssignExprAssignSub)                 // -=
+        PARSE_OP(TokenType::kAssignMul, AssignExprAssignMul)                 // *=
+        PARSE_OP(TokenType::kAssignDiv, AssignExprAssignDiv)                 // /=
+        PARSE_OP(TokenType::kAssignMod, AssignExprAssignMod)                 // %=
+        PARSE_OP(TokenType::kAssign, AssignExprAssign)                       // =
             
         default:
             break;
     }
+    
+    #undef PARSE_OP
 
     // Assign expression with no assign
     return WC_NEW_AST_NODE(alloc, AssignExprNoAssign, *leftExpr);

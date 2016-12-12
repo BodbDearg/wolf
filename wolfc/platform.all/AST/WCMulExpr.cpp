@@ -22,33 +22,24 @@ MulExpr * MulExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     ShiftExpr * leftExpr = ShiftExpr::parse(tokenPtr, alloc);
     WC_GUARD(leftExpr, nullptr);
     
-    // See if '*' or '/' following:
-    if (tokenPtr->type == TokenType::kAsterisk && MulExpr::peek(tokenPtr + 1)) {
-        // Mul operation: Skip '*'
-        ++tokenPtr;
-        
-        // Parse following expr and return combined expr
-        MulExpr * rightExpr = MulExpr::parse(tokenPtr, alloc);
-        WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, MulExprMul, *leftExpr, *rightExpr);
-    }
-    else if (tokenPtr->type == TokenType::kSlash && MulExpr::peek(tokenPtr + 1)) {
-        // Div operation: Skip '/'
-        ++tokenPtr;
-        
-        // Parse following expr and return combined expr
-        MulExpr * rightExpr = MulExpr::parse(tokenPtr, alloc);
-        WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, MulExprDiv, *leftExpr, *rightExpr);
-    }
-    else if (tokenPtr->type == TokenType::kPercent && MulExpr::peek(tokenPtr + 1)) {
-        // Modulo operation: Skip '%'
-        ++tokenPtr;
+    // See if there is a known operator ahead.
+    // If we find a known operator parse the operator token, the right operand and
+    // return the AST node for the operation.
+    #define PARSE_OP(TokenType, ASTNodeType)\
+        case TokenType: {\
+            ++tokenPtr;\
+            MulExpr * rightExpr = MulExpr::parse(tokenPtr, alloc);\
+            WC_GUARD(rightExpr, nullptr);\
+            return WC_NEW_AST_NODE(alloc, ASTNodeType, *leftExpr, *rightExpr);\
+        }
 
-        // Parse following expr and return combined expr
-        MulExpr * rightExpr = MulExpr::parse(tokenPtr, alloc);
-        WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, MulExprMod, *leftExpr, *rightExpr);
+    switch (tokenPtr[0].type) {
+        PARSE_OP(TokenType::kAsterisk, MulExprMul)  // *
+        PARSE_OP(TokenType::kSlash, MulExprDiv)     // /
+        PARSE_OP(TokenType::kPercent, MulExprMod)   // %
+            
+        default:
+            break;
     }
     
     // Basic no-op expression:

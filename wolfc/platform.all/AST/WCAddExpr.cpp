@@ -22,25 +22,26 @@ AddExpr * AddExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     MulExpr * leftExpr = MulExpr::parse(tokenPtr, alloc);
     WC_GUARD(leftExpr, nullptr);
     
-    // See if '+' or '-' operation following:
-    if (tokenPtr->type == TokenType::kPlus) {
-        // Add operation: Skip '+'
-        ++tokenPtr;
-        
-        // Parse following expr and return combined expr
-        AddExpr * addSubExpr = AddExpr::parse(tokenPtr, alloc);
-        WC_GUARD(addSubExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AddExprAdd, *leftExpr, *addSubExpr);
+    // See if there is a known operator ahead.
+    // If we find a known operator parse the operator token, the right operand and
+    // return the AST node for the operation.
+    #define PARSE_OP(TokenType, ASTNodeType)\
+        case TokenType: {\
+            ++tokenPtr;\
+            AddExpr * rightExpr = AddExpr::parse(tokenPtr, alloc);\
+            WC_GUARD(rightExpr, nullptr);\
+            return WC_NEW_AST_NODE(alloc, ASTNodeType, *leftExpr, *rightExpr);\
+        }
+
+    switch (tokenPtr[0].type) {
+        PARSE_OP(TokenType::kPlus, AddExprAdd)     // +
+        PARSE_OP(TokenType::kMinus, AddExprSub)    // -
+            
+        default:
+            break;
     }
-    else if (tokenPtr->type == TokenType::kMinus) {
-        // Sub operation: Skip '-'
-        ++tokenPtr;
-        
-        // Parse following expr and return combined expr
-        AddExpr * addSubExpr = AddExpr::parse(tokenPtr, alloc);
-        WC_GUARD(addSubExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AddExprSub, *leftExpr, *addSubExpr);
-    }
+    
+    #undef PARSE_OP
     
     // Basic no-op expression:
     return WC_NEW_AST_NODE(alloc, AddExprNoOp, *leftExpr);

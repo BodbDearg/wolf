@@ -22,33 +22,24 @@ ShiftExpr * ShiftExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     UnaryExpr * leftExpr = UnaryExpr::parse(tokenPtr, alloc);
     WC_GUARD(leftExpr, nullptr);
     
-    // See if shift operator following:
-    if (tokenPtr[0].type == TokenType::kLShift && ShiftExpr::peek(tokenPtr + 1)) {
-        // '<<' operation: skip operator token
-        ++tokenPtr;
-        
-        // Parse following expr and return combined expr
-        ShiftExpr * rightExpr = ShiftExpr::parse(tokenPtr, alloc);
-        WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, ShiftExprLShift, *leftExpr, *rightExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kARShift && ShiftExpr::peek(tokenPtr + 1)) {
-        // '>>' operation: skip operator token
-        ++tokenPtr;
-        
-        // Parse following expr and return combined expr
-        ShiftExpr * rightExpr = ShiftExpr::parse(tokenPtr, alloc);
-        WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, ShiftExprArithRShift, *leftExpr, *rightExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kLRShift && ShiftExpr::peek(tokenPtr + 1)) {
-        // '>>>' operation: skip operator token
-        ++tokenPtr;
-        
-        // Parse following expr and return combined expr
-        ShiftExpr * rightExpr = ShiftExpr::parse(tokenPtr, alloc);
-        WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, ShiftExprLogicRShift, *leftExpr, *rightExpr);
+    // See if there is a known operator ahead.
+    // If we find a known operator parse the operator token, the right operand and
+    // return the AST node for the operation.
+    #define PARSE_OP(TokenType, ASTNodeType)\
+        case TokenType: {\
+            ++tokenPtr;\
+            ShiftExpr * rightExpr = ShiftExpr::parse(tokenPtr, alloc);\
+            WC_GUARD(rightExpr, nullptr);\
+            return WC_NEW_AST_NODE(alloc, ASTNodeType, *leftExpr, *rightExpr);\
+        }
+
+    switch (tokenPtr[0].type) {
+        PARSE_OP(TokenType::kLShift, ShiftExprLShift)           // <<
+        PARSE_OP(TokenType::kARShift, ShiftExprArithRShift)     // >>
+        PARSE_OP(TokenType::kLRShift, ShiftExprLogicRShift)     // >>>
+            
+        default:
+            break;
     }
     
     // Basic no-op expression:
