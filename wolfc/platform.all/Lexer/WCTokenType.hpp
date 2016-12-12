@@ -53,12 +53,48 @@ enum class TokenType {
     kAsterisk,
     /* '/' */
     kSlash,
-    /* '<' */
-    kLessThan,
-    /* '>' */
-    kGreaterThan,
     /* '=' */
-    kEquals,
+    kAssign,
+    /* '<<=' */
+    kAssignLShift,
+    /* '>>=' */
+    kAssignARShift,
+    /* '>>>=' */
+    kAssignLRShift,
+    /* '|=' */
+    kAssignBOr,
+    /* '^=' */
+    kAssignBXor,
+    /* '&=' */
+    kAssignBAnd,
+    /* '+=' */
+    kAssignAdd,
+    /* '-=' */
+    kAssignSub,
+    /* '*=' */
+    kAssignMul,
+    /* '/=' */
+    kAssignDiv,
+    /* '%=' */
+    kAssignMod,
+    /* '==' */
+    kCmpEQ,
+    /* '!=' */
+    kCmpNE,
+    /* '<' */
+    kCmpLT,
+    /* '<=' */
+    kCmpLE,
+    /* '>' */
+    kCmpGT,
+    /* '>=' */
+    kCmpGE,
+    /* '<<' */
+    kLShift,
+    /* '>>' */
+    kARShift,
+    /* '>>>' */
+    kLRShift,
     /* '!' */
     kExclamation,
     /* ',' */

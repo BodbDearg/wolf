@@ -128,21 +128,18 @@ BAndExpr:
 	NotOrBNotExpr & BAndExpr
 
 NotOrBNotExpr:
-	EqExpr
+	CompareExpr
 	not NotOrBNotExpr
 	~ NotOrBNotExpr
 
-EqExpr:
-	RelExpr
-	RelExpr == EqExpr
-	RelExpr != EqExpr
-
-RelExpr:
+CompareExpr:
 	ShiftExpr
-	ShiftExpr < RelExpr
-	ShiftExpr <= RelExpr
-	ShiftExpr > RelExpr
-	ShiftExpr >= RelExpr
+	ShiftExpr == CompareExpr
+	ShiftExpr != CompareExpr
+	ShiftExpr < CompareExpr
+	ShiftExpr <= CompareExpr
+	ShiftExpr > CompareExpr
+	ShiftExpr >= CompareExpr
 
 ShiftExpr:
 	AddSubExpr << ShiftExpr

@@ -174,6 +174,10 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
                 // '++' operator
                 return parseBasicToken(TokenType::kIncrement, 2);
             }
+            else if (mLexerState.srcPtr[1] == '=') {
+                // '+=' operator
+                return parseBasicToken(TokenType::kAssignAdd, 2);
+            }
             else {
                 // '+' operator
                 return parseBasicToken(TokenType::kPlus, 1);
@@ -189,14 +193,37 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
                 // '--' operator
                 return parseBasicToken(TokenType::kDecrement, 2);
             }
+            else if (mLexerState.srcPtr[1] == '=') {
+                // '-=' operator
+                return parseBasicToken(TokenType::kAssignSub, 2);
+            }
             else {
                 // '-' operator
                 return parseBasicToken(TokenType::kMinus, 1);
             }
         }
         
-        case '%': return parseBasicToken(TokenType::kPercent, 1);
-        case '*': return parseBasicToken(TokenType::kAsterisk, 1);
+        case '%': {
+            if (mLexerState.srcPtr[1] == '=') {
+                // '%=' operator
+                return parseBasicToken(TokenType::kAssignMod, 2);
+            }
+            else {
+                // '%' operator
+                return parseBasicToken(TokenType::kPercent, 1);
+            }
+        }
+        
+        case '*': {
+            if (mLexerState.srcPtr[1] == '=') {
+                // '*=' operator
+                return parseBasicToken(TokenType::kAssignMul, 2);
+            }
+            else {
+                // '*' operator
+                return parseBasicToken(TokenType::kAsterisk, 1);
+            }
+        }
         
         case '/': {
             // '/' can be followed immediately by ';', in which case it is a multi line comment opener
@@ -204,22 +231,111 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
                 // Multi line comment: do not interpret the '/' as a token
                 return ParseResult::kNone;
             }
+            else if (mLexerState.srcPtr[1] == '=') {
+                // '/=' operator
+                return parseBasicToken(TokenType::kAssignDiv, 2);
+            }
             else {
+                // '/' operator
                 return parseBasicToken(TokenType::kSlash, 1);
             }
         }
             
-        case '<': return parseBasicToken(TokenType::kLessThan, 1);
-        case '>': return parseBasicToken(TokenType::kGreaterThan, 1);
-        case '=': return parseBasicToken(TokenType::kEquals, 1);
-        case '!': return parseBasicToken(TokenType::kExclamation, 1);
+        case '<': {
+            if (mLexerState.srcPtr[1] == '=') {
+                // '<=' operator
+                return parseBasicToken(TokenType::kCmpLE, 2);
+            }
+            else if (mLexerState.srcPtr[1] == '<') {
+                // '<<' operator
+                return parseBasicToken(TokenType::kLShift, 2);
+            }
+            else {
+                // '<' operator
+                return parseBasicToken(TokenType::kCmpLT, 1);
+            }
+        }
+            
+        case '>': {
+            if (mLexerState.srcPtr[1] == '=') {
+                // '>=' operator
+                return parseBasicToken(TokenType::kCmpGE, 2);
+            }
+            else if (mLexerState.srcPtr[1] == '>') {
+                if (mLexerState.srcPtr[2] == '>') {
+                    // '>>>' operator
+                    return parseBasicToken(TokenType::kLRShift, 3);
+                }
+                else {
+                    // '>>' operator
+                    return parseBasicToken(TokenType::kARShift, 2);
+                }
+            }
+            else {
+                // '>' operator
+                return parseBasicToken(TokenType::kCmpGT, 1);
+            }
+        }
+            
+        case '=': {
+            if (mLexerState.srcPtr[1] == '=') {
+                // '==' operator
+                return parseBasicToken(TokenType::kCmpEQ, 2);
+            }
+            else {
+                // '=' operator
+                return parseBasicToken(TokenType::kAssign, 1);
+            }
+        }
+            
+        case '!': {
+            if (mLexerState.srcPtr[1] == '=') {
+                // '!=' operator
+                return parseBasicToken(TokenType::kCmpNE, 2);
+            }
+            else {
+                // '!' operator
+                return parseBasicToken(TokenType::kExclamation, 1);
+            }
+        }
+            
         case ',': return parseBasicToken(TokenType::kComma, 1);
         case ':': return parseBasicToken(TokenType::kColon, 1);
         case '?': return parseBasicToken(TokenType::kQMark, 1);
         case '~': return parseBasicToken(TokenType::kTilde, 1);
-        case '&': return parseBasicToken(TokenType::kAmpersand, 1);
-        case '^': return parseBasicToken(TokenType::kHat, 1);
-        case '|': return parseBasicToken(TokenType::kVBar, 1);
+            
+        case '&': {
+            if (mLexerState.srcPtr[1] == '=') {
+                // '&=' operator
+                return parseBasicToken(TokenType::kAssignBAnd, 2);
+            }
+            else {
+                // '&' operator
+                return parseBasicToken(TokenType::kAmpersand, 1);
+            }
+        }
+            
+        case '^': {
+            if (mLexerState.srcPtr[1] == '=') {
+                // '^=' operator
+                return parseBasicToken(TokenType::kAssignBXor, 2);
+            }
+            else {
+                // '^' operator
+                return parseBasicToken(TokenType::kHat, 1);
+            }
+        }
+        
+        case '|': {
+            if (mLexerState.srcPtr[1] == '=') {
+                // '|=' operator
+                return parseBasicToken(TokenType::kAssignBOr, 2);
+            }
+            else {
+                // '|' operator
+                return parseBasicToken(TokenType::kVBar, 1);
+            }
+        }
             
         default:
             break;

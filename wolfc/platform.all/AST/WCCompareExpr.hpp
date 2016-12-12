@@ -10,23 +10,25 @@ class LinearAlloc;
 class ShiftExpr;
 
 /*
-RelExpr:
+CompareExpr:
 	ShiftExpr
-	ShiftExpr < RelExpr
-	ShiftExpr <= RelExpr
-	ShiftExpr > RelExpr
-	ShiftExpr >= RelExpr
+	ShiftExpr == CompareExpr
+	ShiftExpr != CompareExpr
+	ShiftExpr < CompareExpr
+	ShiftExpr <= CompareExpr
+	ShiftExpr > CompareExpr
+	ShiftExpr >= CompareExpr
 */
-class RelExpr : public ASTNode, public IExpr {
+class CompareExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static RelExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static CompareExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
 /* ShiftExpr */
-class RelExprNoOp final : public RelExpr {
+class CompareExprNoOp final : public CompareExpr {
 public:
-    RelExprNoOp(ShiftExpr & expr);
+    CompareExprNoOp(ShiftExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -44,9 +46,9 @@ public:
 };
 
 /* Base for relational expressions with two operators. */
-class RelExprTwoOps : public RelExpr {
+class CompareExprTwoOps : public CompareExpr {
 public:
-    RelExprTwoOps(ShiftExpr & leftExpr, RelExpr & rightExpr);
+    CompareExprTwoOps(ShiftExpr & leftExpr, CompareExpr & rightExpr);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -58,8 +60,8 @@ public:
     
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     
-    ShiftExpr & mLeftExpr;
-    RelExpr &   mRightExpr;
+    ShiftExpr &     mLeftExpr;
+    CompareExpr &   mRightExpr;
     
 protected:
     /**
@@ -69,37 +71,55 @@ protected:
     bool compileCheckBothExprsAreInt() const;
 };
 
-/* ShiftExpr < RelExpr */
-class RelExprLT final : public RelExprTwoOps {
+/* ShiftExpr == CompareExpr */
+class CompareExprEQ final : public CompareExprTwoOps {
 public:
-    RelExprLT(ShiftExpr & leftExpr, RelExpr & rightExpr);
+    CompareExprEQ(ShiftExpr & leftExpr, CompareExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* ShiftExpr <= RelExpr */
-class RelExprLE final : public RelExprTwoOps {
+/* ShiftExpr != CompareExpr */
+class CompareExprNE final : public CompareExprTwoOps {
 public:
-    RelExprLE(ShiftExpr & leftExpr, RelExpr & rightExpr);
+    CompareExprNE(ShiftExpr & leftExpr, CompareExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* ShiftExpr > RelExpr */
-class RelExprGT final : public RelExprTwoOps {
+/* ShiftExpr < CompareExpr */
+class CompareExprLT final : public CompareExprTwoOps {
 public:
-    RelExprGT(ShiftExpr & leftExpr, RelExpr & rightExpr);
+    CompareExprLT(ShiftExpr & leftExpr, CompareExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
 };
 
-/* ShiftExpr >= RelExpr */
-class RelExprGE final : public RelExprTwoOps {
+/* ShiftExpr <= CompareExpr */
+class CompareExprLE final : public CompareExprTwoOps {
 public:
-    RelExprGE(ShiftExpr & leftExpr, RelExpr & rightExpr);
+    CompareExprLE(ShiftExpr & leftExpr, CompareExpr & rightExpr);
+    
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+};
+
+/* ShiftExpr > CompareExpr */
+class CompareExprGT final : public CompareExprTwoOps {
+public:
+    CompareExprGT(ShiftExpr & leftExpr, CompareExpr & rightExpr);
+    
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+};
+
+/* ShiftExpr >= CompareExpr */
+class CompareExprGE final : public CompareExprTwoOps {
+public:
+    CompareExprGE(ShiftExpr & leftExpr, CompareExpr & rightExpr);
     
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;

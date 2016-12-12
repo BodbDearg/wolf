@@ -19,147 +19,39 @@ bool AssignExpr::peek(const Token * tokenPtr) {
 
 AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the initial expression
-    TernaryExpr * ternaryExpr = TernaryExpr::parse(tokenPtr, alloc);
-    WC_GUARD(ternaryExpr, nullptr);
+    TernaryExpr * leftExpr = TernaryExpr::parse(tokenPtr, alloc);
+    WC_GUARD(leftExpr, nullptr);
 
-    // See if we might have a '+=' or '-=' etc. or a plain assign ('=') ahead:
-    if (tokenPtr[0].type == TokenType::kLessThan &&
-        tokenPtr[1].type == TokenType::kLessThan &&
-        tokenPtr[2].type == TokenType::kEquals)
-    {
-        // '<<=' assign expression. Skip the '<<='
-        tokenPtr += 3;
+    // See if there is an operator ahead for a combined assign and operation, if there
+    // is then consume the operator and parse the right operand:
+    #define CHECK_FOR_ASSIGN_OP(TokenType, ASTNodeType)\
+        case TokenType: {\
+            ++tokenPtr;\
+            AssignExpr * rightExpr = AssignExpr::parse(tokenPtr, alloc);\
+            WC_GUARD(rightExpr, nullptr);\
+            return WC_NEW_AST_NODE(alloc, ASTNodeType, *leftExpr, *rightExpr);\
+        }
 
-        // Parse the following expression and create the AST node
-        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
-        WC_GUARD(assignExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AssignExprAssignLShift, *ternaryExpr, *assignExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kGreaterThan &&
-             tokenPtr[1].type == TokenType::kGreaterThan &&
-             tokenPtr[2].type == TokenType::kEquals)
-    {
-        // '>>=' assign expression. Skip the '>>='
-        tokenPtr += 3;
-        
-        // Parse the following expression and create the AST node
-        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
-        WC_GUARD(assignExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AssignExprAssignArithRShift, *ternaryExpr, *assignExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kGreaterThan &&
-             tokenPtr[1].type == TokenType::kGreaterThan &&
-             tokenPtr[2].type == TokenType::kGreaterThan &&
-             tokenPtr[3].type == TokenType::kEquals)
-    {
-        // '>>>=' assign expression. Skip the '>>>='
-        tokenPtr += 4;
-        
-        // Parse the following expression and create the AST node
-        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
-        WC_GUARD(assignExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AssignExprAssignLogicRShift, *ternaryExpr, *assignExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kVBar &&
-             tokenPtr[1].type == TokenType::kEquals)
-    {
-        // '|=' assign expression. Skip the '|='
-        tokenPtr += 2;
-
-        // Parse the following expression and create the AST node
-        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
-        WC_GUARD(assignExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AssignExprAssignBOr, *ternaryExpr, *assignExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kHat &&
-             tokenPtr[1].type == TokenType::kEquals)
-    {
-        // '^=' assign expression. Skip the '^='
-        tokenPtr += 2;
-
-        // Parse the following expression and create the AST node
-        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
-        WC_GUARD(assignExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AssignExprAssignBXor, *ternaryExpr, *assignExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kAmpersand &&
-             tokenPtr[1].type == TokenType::kEquals)
-    {
-        // '&=' assign expression. Skip the '&='
-        tokenPtr += 2;
-
-        // Parse the following expression and create the AST node
-        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
-        WC_GUARD(assignExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AssignExprAssignBAnd, *ternaryExpr, *assignExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kPlus &&
-             tokenPtr[1].type == TokenType::kEquals)
-    {
-        // '+=' assign expression. Skip the '+='
-        tokenPtr += 2;
-
-        // Parse the following expression and create the AST node
-        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
-        WC_GUARD(assignExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AssignExprAssignAdd, *ternaryExpr, *assignExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kMinus &&
-             tokenPtr[1].type == TokenType::kEquals)
-    {
-        // '-=' assign expression. Skip the '-='
-        tokenPtr += 2;
-
-        // Parse the following expression and create the AST node
-        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
-        WC_GUARD(assignExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AssignExprAssignSub, *ternaryExpr, *assignExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kAsterisk &&
-             tokenPtr[1].type == TokenType::kEquals) 
-    {
-        // '*=' assign expression. Skip the '*='
-        tokenPtr += 2;
-
-        // Parse the following expression and create the AST node
-        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
-        WC_GUARD(assignExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AssignExprAssignMul, *ternaryExpr, *assignExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kSlash &&
-             tokenPtr[1].type == TokenType::kEquals)
-    {
-        // '/=' assign expression. Skip the '/='
-        tokenPtr += 2;
-
-        // Parse the following expression and create the AST node
-        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
-        WC_GUARD(assignExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AssignExprAssignDiv, *ternaryExpr, *assignExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kPercent &&
-             tokenPtr[1].type == TokenType::kEquals)
-    {
-        // '%=' assign expression. Skip the '%='
-        tokenPtr += 2;
-
-        // Parse the following expression and create the AST node
-        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
-        WC_GUARD(assignExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AssignExprAssignMod, *ternaryExpr, *assignExpr);
-    }
-    else if (tokenPtr[0].type == TokenType::kEquals) {
-        // Assign expression with simple '=' assign and no op. Skip the '='
-        ++tokenPtr;
-        
-        // Parse the following expression and create the AST node
-        AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
-        WC_GUARD(assignExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AssignExprAssign, *ternaryExpr, *assignExpr);
+    switch (tokenPtr[0].type) {
+        CHECK_FOR_ASSIGN_OP(TokenType::kAssignLShift, AssignExprAssignLShift)           // <<=
+        CHECK_FOR_ASSIGN_OP(TokenType::kAssignARShift, AssignExprAssignArithRShift)     // >>=
+        CHECK_FOR_ASSIGN_OP(TokenType::kAssignLRShift, AssignExprAssignLogicRShift)     // >>>=
+        CHECK_FOR_ASSIGN_OP(TokenType::kAssignBOr, AssignExprAssignBOr)                 // |=
+        CHECK_FOR_ASSIGN_OP(TokenType::kAssignBXor, AssignExprAssignBXor)               // ^=
+        CHECK_FOR_ASSIGN_OP(TokenType::kAssignBAnd, AssignExprAssignBAnd)               // &=
+        CHECK_FOR_ASSIGN_OP(TokenType::kAssignAdd, AssignExprAssignAdd)                 // +=
+        CHECK_FOR_ASSIGN_OP(TokenType::kAssignSub, AssignExprAssignSub)                 // -=
+        CHECK_FOR_ASSIGN_OP(TokenType::kAssignMul, AssignExprAssignMul)                 // *=
+        CHECK_FOR_ASSIGN_OP(TokenType::kAssignDiv, AssignExprAssignDiv)                 // /=
+        CHECK_FOR_ASSIGN_OP(TokenType::kAssignMod, AssignExprAssignMod)                 // %=
+        CHECK_FOR_ASSIGN_OP(TokenType::kAssign, AssignExprAssign)                       // =
+            
+        default:
+            break;
     }
 
     // Assign expression with no assign
-    return WC_NEW_AST_NODE(alloc, AssignExprNoAssign, *ternaryExpr);
+    return WC_NEW_AST_NODE(alloc, AssignExprNoAssign, *leftExpr);
 }
 
 //-----------------------------------------------------------------------------

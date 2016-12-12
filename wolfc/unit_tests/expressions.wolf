@@ -17,45 +17,24 @@ func testNotOrBNotExpr()
     assert(not not 1 < 2)
     assert((~-1) == 0)
     assert((~-2) == 1)
-    assert(notOrBNotExprConstOps[0])
-    assert(notOrBNotExprConstOps[1])
-    assert(notOrBNotExprConstOps[2])
-    assert(notOrBNotExprConstOps[3])
-    assert(notOrBNotExprConstOps[4])
-    assert(notOrBNotExprConstOps[5])
+
+    var testNum = 0
+    while testNum < 6 
+        assert(notOrBNotExprConstOps[testNum])
+        testNum++
+    end
 end
 
 ;==================================================================================================
-; EqExpr
+; CompareExpr
 ;==================================================================================================
-var eqExprConstOps = [
+var compareExprConstOps = [
     2 == 2,
     not 1 == 2,
     not 3 == 2,
     not 2 != 2,
     1 != 2,
-    3 != 2
-]
-
-func testEqExpr()
-    assert(2 == 2)
-    assert(not 1 == 2)
-    assert(not 3 == 2)
-    assert(not 2 != 2)
-    assert(1 != 2)
-    assert(3 != 2)
-    assert(eqExprConstOps[0])
-    assert(eqExprConstOps[1])
-    assert(eqExprConstOps[2])
-    assert(eqExprConstOps[3])
-    assert(eqExprConstOps[4])
-    assert(eqExprConstOps[5])
-end
-
-;==================================================================================================
-; RelExpr
-;==================================================================================================
-var relExprConstOps = [
+    3 != 2,
     1 < 2,
     not 2 < 2,
     not 3 < 2,
@@ -70,7 +49,13 @@ var relExprConstOps = [
     not 0 >= 1
 ]
 
-func testRelExpr()
+func testCompareExpr()
+    assert(2 == 2)
+    assert(not 1 == 2)
+    assert(not 3 == 2)
+    assert(not 2 != 2)
+    assert(1 != 2)
+    assert(3 != 2)
     assert(1 < 2)
     assert(not 2 < 2)
     assert(not 3 < 2)
@@ -83,18 +68,12 @@ func testRelExpr()
     assert(2 >= 1)
     assert(1 >= 1)
     assert(not 0 >= 1)
-    assert(relExprConstOps[0])
-    assert(relExprConstOps[1])
-    assert(relExprConstOps[2])
-    assert(relExprConstOps[3])
-    assert(relExprConstOps[4])
-    assert(relExprConstOps[5])
-    assert(relExprConstOps[6])
-    assert(relExprConstOps[7])
-    assert(relExprConstOps[8])
-    assert(relExprConstOps[9])
-    assert(relExprConstOps[10])
-    assert(relExprConstOps[11])
+
+    var testNum = 0
+    while testNum < 18 
+        assert(compareExprConstOps[testNum])
+        testNum++
+    end
 end
 
 ;==================================================================================================
@@ -126,17 +105,12 @@ func testShiftExpr()
     assert(8 >>> 1 == 4)
     assert(8 >>> 2 == 2)
     assert(-1 >>> 63 == 1)  ; FIXME - this won't work if int type is 32-bit
-    assert(shiftExprConstOpts[0])
-    assert(shiftExprConstOpts[1])
-    assert(shiftExprConstOpts[2])
-    assert(shiftExprConstOpts[3])
-    assert(shiftExprConstOpts[4])
-    assert(shiftExprConstOpts[5])
-    assert(shiftExprConstOpts[6])
-    assert(shiftExprConstOpts[7])
-    assert(shiftExprConstOpts[8])
-    assert(shiftExprConstOpts[9])
-    assert(shiftExprConstOpts[10])
+
+    var testNum = 0
+    while testNum < 11
+        assert(shiftExprConstOpts[testNum])
+        testNum++
+    end
 end
 
 ;==================================================================================================
@@ -162,14 +136,12 @@ func testAddSubExpr()
     assert(2 - 5 == -3)
     assert(2 - -5 == 7)
     assert(-2 - -5 == 3)
-    assert(addSubExprConstOps[0])
-    assert(addSubExprConstOps[1])
-    assert(addSubExprConstOps[2])
-    assert(addSubExprConstOps[3])
-    assert(addSubExprConstOps[4])
-    assert(addSubExprConstOps[5])
-    assert(addSubExprConstOps[6])
-    assert(addSubExprConstOps[7])
+
+    var testNum = 0
+    while testNum < 9
+        assert(addSubExprConstOps[testNum])
+        testNum++
+    end
 end
 
 ;==================================================================================================
@@ -193,22 +165,21 @@ func testMulDivExpr()
     assert(10 / -2 == -5)
     assert(5 % 3 == 2)
     assert(5 % -3 == 2)
-    assert(mulDivExprConstOps[0])
-    assert(mulDivExprConstOps[1])
-    assert(mulDivExprConstOps[2])
-    assert(mulDivExprConstOps[3])
-    assert(mulDivExprConstOps[4])
-    assert(mulDivExprConstOps[5])
-    assert(mulDivExprConstOps[6])
+
+    var testNum = 0
+    while testNum < 7
+        assert(mulDivExprConstOps[testNum])
+        testNum++
+    end
 end
 
 ;==================================================================================================
 ; Run the tests
 ;==================================================================================================
 func main() -> int
+    ; Basic tests of AST grammar and operations
     testNotOrBNotExpr()
-    testEqExpr()
-    testRelExpr()
+    testCompareExpr()
     testShiftExpr()
     testAddSubExpr()
     testMulDivExpr()

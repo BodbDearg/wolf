@@ -4,7 +4,7 @@
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCEqExpr.hpp"
+#include "WCCompareExpr.hpp"
 #include "WCLinearAlloc.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -16,7 +16,7 @@ WC_BEGIN_NAMESPACE
 bool NotOrBNotExpr::peek(const Token * tokenPtr) {
     return  tokenPtr->type == TokenType::kNot ||
             tokenPtr->type == TokenType::kTilde ||
-            EqExpr::peek(tokenPtr);
+            CompareExpr::peek(tokenPtr);
 }
 
 NotOrBNotExpr * NotOrBNotExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
@@ -48,7 +48,7 @@ NotOrBNotExpr * NotOrBNotExpr::parse(const Token *& tokenPtr, LinearAlloc & allo
     }
     
     // No 'not'. Just parse an ordinary no-op expression
-    EqExpr * addSubExpr = EqExpr::parse(tokenPtr, alloc);
+    CompareExpr * addSubExpr = CompareExpr::parse(tokenPtr, alloc);
     WC_GUARD(addSubExpr, nullptr);
     return WC_NEW_AST_NODE(alloc, NotOrBNotExprNoOp, *addSubExpr);
 }
@@ -57,7 +57,7 @@ NotOrBNotExpr * NotOrBNotExpr::parse(const Token *& tokenPtr, LinearAlloc & allo
 // NotOrBNotExprNoOp
 //-----------------------------------------------------------------------------
 
-NotOrBNotExprNoOp::NotOrBNotExprNoOp(EqExpr & expr) : mExpr(expr) {
+NotOrBNotExprNoOp::NotOrBNotExprNoOp(CompareExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 

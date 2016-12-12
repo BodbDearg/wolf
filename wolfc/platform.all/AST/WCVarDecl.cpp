@@ -32,7 +32,7 @@ VarDecl * VarDecl::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     WC_GUARD(ident, nullptr);
     
     // Parse the '='
-    if (tokenPtr->type != TokenType::kEquals) {
+    if (tokenPtr->type != TokenType::kAssign) {
         parseError(*tokenPtr, "Expected '=' following variable name for variable declaration!");
         return nullptr;
     }

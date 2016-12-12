@@ -22,38 +22,28 @@ ShiftExpr * ShiftExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     AddSubExpr * leftExpr = AddSubExpr::parse(tokenPtr, alloc);
     WC_GUARD(leftExpr, nullptr);
     
-    // See if '<<' or '>>' or '>>>' following:
-    if (tokenPtr[0].type == TokenType::kLessThan &&
-        tokenPtr[1].type == TokenType::kLessThan &&
-        ShiftExpr::peek(tokenPtr + 2))
-    {
-        // '<<' operation: Skip '<<'
-        tokenPtr += 2;
+    // See if shift operator following:
+    if (tokenPtr[0].type == TokenType::kLShift && ShiftExpr::peek(tokenPtr + 1)) {
+        // '<<' operation: skip operator token
+        ++tokenPtr;
         
         // Parse following expr and return combined expr
         ShiftExpr * rightExpr = ShiftExpr::parse(tokenPtr, alloc);
         WC_GUARD(rightExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, ShiftExprLShift, *leftExpr, *rightExpr);
     }
-    else if (tokenPtr[0].type == TokenType::kGreaterThan &&
-             tokenPtr[1].type == TokenType::kGreaterThan &&
-             ShiftExpr::peek(tokenPtr + 2))
-    {
-        // '>>' operation: Skip '>>'
-        tokenPtr += 2;
+    else if (tokenPtr[0].type == TokenType::kARShift && ShiftExpr::peek(tokenPtr + 1)) {
+        // '>>' operation: skip operator token
+        ++tokenPtr;
         
         // Parse following expr and return combined expr
         ShiftExpr * rightExpr = ShiftExpr::parse(tokenPtr, alloc);
         WC_GUARD(rightExpr, nullptr);
         return WC_NEW_AST_NODE(alloc, ShiftExprArithRShift, *leftExpr, *rightExpr);
     }
-    else if (tokenPtr[0].type == TokenType::kGreaterThan &&
-             tokenPtr[1].type == TokenType::kGreaterThan &&
-             tokenPtr[2].type == TokenType::kGreaterThan &&
-             ShiftExpr::peek(tokenPtr + 3))
-    {
-        // '>>>' operation: Skip '>>>'
-        tokenPtr += 3;
+    else if (tokenPtr[0].type == TokenType::kLRShift && ShiftExpr::peek(tokenPtr + 1)) {
+        // '>>>' operation: skip operator token
+        ++tokenPtr;
         
         // Parse following expr and return combined expr
         ShiftExpr * rightExpr = ShiftExpr::parse(tokenPtr, alloc);
