@@ -1,4 +1,23 @@
 ;==================================================================================================
+; TernaryExpr
+;==================================================================================================
+var testTernaryExprConstexpr = [
+    (true ? 1 : 2) == 1,
+    (false ? 1 : 2) == 2
+]
+
+func testTernaryExpr()
+    assert((true ? 1 : 2) == 1)
+    assert((false ? 1 : 2) == 2)
+
+    var testNum = 0
+    while testNum < 2
+        assert(testOrExprConstexpr[testNum])
+        testNum++
+    end
+end
+
+;==================================================================================================
 ; OrExpr
 ;==================================================================================================
 var testOrExprConstexpr = [
@@ -18,7 +37,7 @@ func testOrExpr()
     while testNum < 4
         assert(testOrExprConstexpr[testNum])
         testNum++
-    end    
+    end
 end
 
 ;==================================================================================================
@@ -41,7 +60,7 @@ func testAndExpr()
     while testNum < 4
         assert(testAndExprConstexpr[testNum])
         testNum++
-    end    
+    end
 end
 
 ;==================================================================================================
@@ -273,6 +292,7 @@ end
 ;==================================================================================================
 func main() -> int
     ; Basic tests of AST grammar and operations
+    testTernaryExpr()
     testOrExpr()
     testAndExpr()
     testNotExpr()
