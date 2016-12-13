@@ -137,9 +137,9 @@ bool AssertStmnt::codegen(CodegenCtx & cgCtx) {
     llvm::Value * printfFmtStrValue = cgCtx.irBuilder.CreateGlobalStringPtr("%s", "AssertPrintfFmtStr");
     WC_ASSERT(printfFmtStrValue);
     
-    // Generate code for assert fail:
+    // Generate code for assert fail
     cgCtx.irBuilder.SetInsertPoint(failBB);
-    WC_ASSERTED_OP(cgCtx.irBuilder.CreateCall(printfFn, { printfFmtStrValue, assertMsgStrValue }));
+    WC_ASSERTED_OP(cgCtx.irBuilder.CreateCall(printfFn, { printfFmtStrValue, assertMsgStrValue }, "AssertStmnt_PrintfResult"));
     WC_ASSERTED_OP(cgCtx.irBuilder.CreateCall(abortFn));
     WC_ASSERTED_OP(cgCtx.irBuilder.CreateUnreachable());
     

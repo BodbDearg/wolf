@@ -153,7 +153,19 @@ bool ReturnStmntNoCondVoid::codegen(CodegenCtx & cgCtx) {
     
     // Generate the code for the return and return true for success
     cgCtx.irBuilder.CreateRetVoid();
-    return true;
+    
+    // Create a new basic block for the unreachable code past this and set all future code to insert after it:
+    {
+        Func * parentFunc = getParentFunc();
+        WC_ASSERT(parentFunc);
+        std::string unreachableBBLbl = makeLLVMLabelForTok("ReturnStmntNoCondVoid:unreachable", getEndToken());
+        llvm::BasicBlock * unreachableBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, unreachableBBLbl, parentFunc->mLLVMFunc);
+        WC_ASSERT(unreachableBB);
+        cgCtx.irBuilder.SetInsertPoint(unreachableBB);
+        cgCtx.irBuilder.CreateUnreachable();
+    }
+    
+    return true;    // Success!
 }
 
 DataType & ReturnStmntNoCondVoid::dataType() {
@@ -189,7 +201,19 @@ bool ReturnStmntNoCondWithValue::codegen(CodegenCtx & cgCtx) {
     
     // Now generate the return and return true for success
     cgCtx.irBuilder.CreateRet(returnExprResult);
-    return true;
+    
+    // Create a new basic block for the unreachable code past this and set all future code to insert after it:
+    {
+        Func * parentFunc = getParentFunc();
+        WC_ASSERT(parentFunc);
+        std::string unreachableBBLbl = makeLLVMLabelForTok("ReturnStmntNoCondWithValue:unreachable", getEndToken());
+        llvm::BasicBlock * unreachableBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, unreachableBBLbl, parentFunc->mLLVMFunc);
+        WC_ASSERT(unreachableBB);
+        cgCtx.irBuilder.SetInsertPoint(unreachableBB);
+        cgCtx.irBuilder.CreateUnreachable();
+    }
+    
+    return true;    // Success!
 }
 
 DataType & ReturnStmntNoCondWithValue::dataType() {

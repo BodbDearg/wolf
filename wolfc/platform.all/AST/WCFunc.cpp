@@ -266,11 +266,19 @@ bool Func::deferredCodegen(CodegenCtx & cgCtx) {
     // a compile error not to return a valid value.
     if (!cgCtx.irBuilder.GetInsertBlock()->getTerminator()) {
         if (returnDataType().isVoid()) {
+            // Need an implicit return, make it:
             cgCtx.irBuilder.CreateRetVoid();
         }
         else {
-            compileError("Missing a return statement at end of non void function!");
-            return false;
+            // Can't do an implicit return, make sure all codepaths return a value:
+            if (!mScope.allCodepathsHaveUncondRet()) {
+                compileError("Not all codepaths return a value in function which requires a return value!");
+                return false;
+            }
+            
+            // If the end statement is unreachable then let llvm know.
+            // All codepaths in the scope return a value so the last bit of code can never be reached.
+            cgCtx.irBuilder.CreateUnreachable();
         }
     }
     

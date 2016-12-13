@@ -88,7 +88,7 @@ const Token & LoopStmnt::getStartToken() const {
 }
 
 bool LoopStmnt::allCodepathsHaveUncondRet() const {
-    return false;
+    return mBodyScope.allCodepathsHaveUncondRet();
 }
 
 //-----------------------------------------------------------------------------
