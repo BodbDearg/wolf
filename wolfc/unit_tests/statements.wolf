@@ -22,19 +22,44 @@ func testReturnStmntFunc3() -> int
     assert(false)   ; Should be unreachable!
 end
 
+func testReturnStmntFunc4(int i)
+    return if i == 1234
+    assert(false)
+end
+
+func testReturnStmntFunc5(int i)
+    return unless i == 0
+    assert(false)
+end
+
+func testReturnStmntFunc6(int i) -> int
+    return 1 if i == 1
+    return 2 if i >= 2
+    return 0
+end
+
+func testReturnStmntFunc7(int i) -> int
+    return 1 unless i <= 0
+    return 0
+end
+
 func testReturnStmnt()
     testReturnStmntFunc1()
     testReturnStmntFunc2()
     assert(testReturnStmntFunc3() == 1234)
+    testReturnStmntFunc4(1234)
+    testReturnStmntFunc5(1)
+    testReturnStmntFunc5(-1)
+    assert(testReturnStmntFunc6(1) == 1)
+    assert(testReturnStmntFunc6(2) == 2)
+    assert(testReturnStmntFunc6(3) == 2)
+    assert(testReturnStmntFunc6(0) == 0)
+    assert(testReturnStmntFunc6(-1) == 0)
+    assert(testReturnStmntFunc7(-2) == 0)
+    assert(testReturnStmntFunc7(0) == 0)
+    assert(testReturnStmntFunc7(1) == 1)
+    assert(testReturnStmntFunc7(2) == 1)
 end
-
-/;
-ReturnStmnt:
-    return
-    return AssignExpr
-    return if|unless AssignExpr
-    return AssignExpr if|unless AssignExpr
-;/
 
 ;==================================================================================================
 ; Run the tests
