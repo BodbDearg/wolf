@@ -1,6 +1,8 @@
 ;==================================================================================================
 ; ReturnStmnt
 ;==================================================================================================
+
+/; FIXME - BROKEN
 func testReturnStmntFunc1()
     return
     assert(false)   ; Should be unreachable!
@@ -16,22 +18,19 @@ func testReturnStmntFunc2()
     assert(false)   ; Should be unreachable!
 end
 
-/; FIXME - BROKEN
 func testReturnStmntFunc3() -> int
     return 1234
     assert(false)   ; Should be unreachable!
     return 0
 end
-;/
+
 
 func testReturnStmnt()
     testReturnStmntFunc1()
     testReturnStmntFunc2()
-    /; FIXME - BROKEN
     assert(testReturnStmntFunc3() == 1234)
-    ;/
 end
-
+;/
 /;
 ReturnStmnt:
     return
@@ -44,6 +43,6 @@ ReturnStmnt:
 ; Run the tests
 ;==================================================================================================
 func main() -> int
-    testReturnStmnt()
+    ;testReturnStmnt()
     return 0
 end

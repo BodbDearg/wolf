@@ -7,13 +7,14 @@
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <map>
+    #include <vector>
 WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
 class DataType;
 class LinearAlloc;
-class Stmnts;
+class Stmnt;
 class VarDecl;
 
 // TODO: not a statement, don't inherit from IStmnt
@@ -24,10 +25,9 @@ Scope:
 */
 class Scope final : public ASTNode, public IBasicCodegenNode {
 public:
-    static bool peek(const Token * tokenPtr);
     static Scope * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
-    Scope(Stmnts & stmnts);
+    Scope(const Token & startToken, std::vector<Stmnt*> && stmnts);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -46,12 +46,15 @@ public:
     /* Get a variable within this scope. Returns null if not found within this scope. */
     DataValue * getVar(const char * varName);
     
-    /* All the statements in the scope. */
-    Stmnts & mStmnts;
-    
 private:
+    /* All the statements in the scope. */
+    std::vector<Stmnt*> mStmnts;
+    
     /* A list of variables in the scope. Generated during code generation. */
     std::map<const char*, DataValue, CStrComparator> mVarValues;
+    
+    /* The start token that the scope started off with */
+    const Token & mStartToken;
 };
 
 WC_END_NAMESPACE

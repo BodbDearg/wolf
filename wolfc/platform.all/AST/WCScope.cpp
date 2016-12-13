@@ -3,36 +3,61 @@
 #include "DataType/WCDataType.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCStmnts.hpp"
+#include "WCStmnt.hpp"
 #include "WCStringUtils.hpp"
 #include "WCVarDecl.hpp"
 
 WC_BEGIN_NAMESPACE
 
-bool Scope::peek(const Token * tokenPtr) {
-    return Stmnts::peek(tokenPtr);
-}
-
 Scope * Scope::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    Stmnts * stmnts = Stmnts::parse(tokenPtr, alloc);
-    WC_GUARD(stmnts, nullptr);
-    return WC_NEW_AST_NODE(alloc, Scope, *stmnts);
+    // Save start token:
+    const Token * startToken = tokenPtr;
+    
+    // Parse all statements we can:
+    std::vector<Stmnt*> stmnts;
+    
+    while (Stmnt::peek(tokenPtr)) {
+        Stmnt * stmnt = Stmnt::parse(tokenPtr, alloc);
+        WC_GUARD(stmnt, nullptr);
+        stmnts.push_back(stmnt);
+    }
+    
+    // Return the parsed scope
+    return WC_NEW_AST_NODE(alloc, Scope, *startToken, std::move(stmnts));
 }
 
-Scope::Scope(Stmnts & stmnts) : mStmnts(stmnts) {
-    mStmnts.mParent = this;
+Scope::Scope(const Token & startToken, std::vector<Stmnt*> && stmnts)
+:
+    mStartToken(startToken),
+    mStmnts(stmnts)
+{
+    for (Stmnt * stmnt : mStmnts) {
+        stmnt->mParent = this;
+    }
 }
 
 const Token & Scope::getStartToken() const {
-    return mStmnts.getStartToken();
+    if (!mStmnts.empty()) {
+        return mStmnts.front()->getStartToken();
+    }
+    
+    return mStartToken;
 }
 
 const Token & Scope::getEndToken() const {
-    return mStmnts.getEndToken();
+    if (!mStmnts.empty()) {
+        return mStmnts.back()->getEndToken();
+    }
+    
+    return mStartToken;
 }
 
 bool Scope::codegen(CodegenCtx & cgCtx) {
-    return mStmnts.codegen(cgCtx);
+    for (Stmnt * stmnt : mStmnts) {
+        WC_GUARD(stmnt->codegen(cgCtx), false);
+    }
+    
+    return true;
 }
 
 DataValue * Scope::createVar(const char * varName,

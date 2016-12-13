@@ -6,8 +6,9 @@
 #include "WCCStrComparator.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
-    #include <memory>
     #include <map>
+    #include <memory>
+    #include <vector>
 WC_THIRD_PARTY_INCLUDES_END
 
 namespace llvm {
@@ -18,7 +19,7 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class DeclDefs;
+class DeclDef;
 class Func;
 class LinearAlloc;
 class VarDecl;
@@ -26,7 +27,7 @@ struct CodegenCtx;
 
 /* 
 Module:
-    DeclDefs <EOF>
+    [0..N: DeclDef] EOF
 */
 class Module final : public ASTNode {
 public:
@@ -96,13 +97,16 @@ private:
     std::unique_ptr<llvm::Module> mLLVMModule;
     
     /* All declarations and definitions in the module/ */
-    DeclDefs * mDeclDefs = nullptr;
+    std::vector<DeclDef*> mDeclDefs;
     
     /* A list of registered functions in the module. Generated during the compile phase. */
     std::map<std::string, Func*> mFuncs;
     
     /* A list of registered global variables in the module. Generated during the compile phase. */
     std::map<const char*, DataValue, CStrComparator> mVarValues;
+    
+    /* The EOF token */
+    const Token * mEOFToken;
 };
 
 WC_END_NAMESPACE

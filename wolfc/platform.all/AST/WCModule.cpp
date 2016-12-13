@@ -4,7 +4,7 @@
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
-#include "WCDeclDefs.hpp"
+#include "WCDeclDef.hpp"
 #include "WCFunc.hpp"
 #include "WCVarDecl.hpp"
 
@@ -14,7 +14,10 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
-Module::Module(llvm::LLVMContext & llvmCtx) : mLLVMCtx(llvmCtx) {
+Module::Module(llvm::LLVMContext & llvmCtx) :
+    mLLVMCtx(llvmCtx),
+    mEOFToken(nullptr)
+{
     WC_EMPTY_FUNC_BODY();
 }
 
@@ -24,23 +27,34 @@ Module::~Module() {
 }
 
 const Token & Module::getStartToken() const {
-    WC_ASSERT(mDeclDefs);
-    return mDeclDefs->getStartToken();
+    if (!mDeclDefs.empty()) {
+        return mDeclDefs.front()->getStartToken();
+    }
+    
+    WC_ASSERT(mEOFToken);
+    return *mEOFToken;
 }
 
 const Token & Module::getEndToken() const {
-    WC_ASSERT(mDeclDefs);
-    return mDeclDefs->getEndToken();
+    if (!mDeclDefs.empty()) {
+        return mDeclDefs.back()->getEndToken();
+    }
+    
+    WC_ASSERT(mEOFToken);
+    return *mEOFToken;
 }
 
 bool Module::parseCode(const Token * tokenList, LinearAlloc & alloc) {
-    mDeclDefs = DeclDefs::parse(tokenList, alloc);
-    WC_GUARD(mDeclDefs, false);
-    mDeclDefs->mParent = this;
+    while (DeclDef::peek(tokenList)) {
+        DeclDef * declDef = DeclDef::parse(tokenList, alloc);
+        WC_GUARD(declDef, false);
+        declDef->mParent = this;
+        mDeclDefs.push_back(declDef);
+    }
     
     if (tokenList->type != TokenType::kEOF) {
         parseError(*tokenList, "Expected EOF at end of module code!");
-        mDeclDefs = nullptr;
+        mDeclDefs.clear();
         return false;
     }
     
@@ -50,11 +64,6 @@ bool Module::parseCode(const Token * tokenList, LinearAlloc & alloc) {
 bool Module::generateCode() {
     // Clear out previous code and check we parsed ok
     mLLVMModule.reset();
-    
-    if (!mDeclDefs) {
-        compileError("Can't generate code, parsing was not successful!");
-        return false;
-    }
     
     // TODO: alloc this memory with the linear allocator
     // Create module
@@ -70,7 +79,9 @@ bool Module::generateCode() {
     CodegenCtx codegenCtx(mLLVMCtx, irBuilder, *this);
     
     // Do the immediate forward code generation
-    WC_GUARD(mDeclDefs->codegen(codegenCtx), false);
+    for (DeclDef * declDef : mDeclDefs) {
+        WC_GUARD(declDef->codegen(codegenCtx), false);
+    }
     
     // Now do any deferred code generation that needs to be done.
     // There may be multiple passes here for this loop:
