@@ -95,6 +95,10 @@ const Token & WhileStmnt::getEndToken() const {
     return mEndToken;
 }
 
+bool WhileStmnt::allCodepathsHaveUncondRet() const {
+    return false;
+}
+
 llvm::BasicBlock * WhileStmnt::getNextStmntTargetBlock() {
     return mWhileCondBB;
 }

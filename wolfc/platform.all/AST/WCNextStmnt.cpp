@@ -106,6 +106,10 @@ bool NextStmntNoCond::codegen(CodegenCtx & cgCtx) {
     return true;    // All good so far!
 }
 
+bool NextStmntNoCond::allCodepathsHaveUncondRet() const {
+    return true;
+}
+
 //-----------------------------------------------------------------------------
 // NextStmntWithCond
 //-----------------------------------------------------------------------------
@@ -167,6 +171,10 @@ bool NextStmntWithCond::codegen(CodegenCtx & cgCtx) {
     });
     
     return true;    // All good so far!
+}
+
+bool NextStmntWithCond::allCodepathsHaveUncondRet() const {
+    return false;
 }
 
 bool NextStmntWithCond::isIfCondInverted() const {

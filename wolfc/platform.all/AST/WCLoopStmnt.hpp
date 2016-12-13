@@ -21,6 +21,8 @@ public:
     
     virtual const Token & getStartToken() const final override;
     
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
     Scope &         mBodyScope;
     const Token &   mStartToken;
 };

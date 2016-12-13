@@ -60,6 +60,10 @@ const Token & BreakStmnt::getStartToken() const {
     return mBreakToken;
 }
 
+bool BreakStmnt::allCodepathsHaveUncondRet() const {
+    return false;
+}
+
 bool BreakStmnt::deferredCodegen(CodegenCtx & cgCtx) {
     // Get the parent repeatable statement:
     IRepeatableStmnt * parentRepeatableStmnt = firstParentOfType<IRepeatableStmnt>();

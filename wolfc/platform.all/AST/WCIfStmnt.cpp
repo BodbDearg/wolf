@@ -113,21 +113,15 @@ IfStmnt * IfStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 }
 
 IfStmnt::IfStmnt(AssignExpr & ifExpr,
-                 IBasicCodegenNode & thenNode,
+                 Scope & thenScope,
                  const Token & startToken)
 :
     mIfExpr(ifExpr),
-    mThenNode(thenNode),
+    mThenScope(thenScope),
     mStartToken(startToken)
 {
     mIfExpr.mParent = this;
-    
-    // Need to do a tricky cast for this:
-    {
-        ASTNode * thenASTNode = dynamic_cast<ASTNode*>(&thenNode);
-        WC_ASSERT(thenASTNode);
-        thenASTNode->mParent = this;
-    }
+    mThenScope.mParent = this;
 }
 
 const Token & IfStmnt::getStartToken() const {
@@ -158,11 +152,11 @@ llvm::Value * IfStmnt::codegenIfExpr(CodegenCtx & cgCtx) const {
 //-----------------------------------------------------------------------------
 
 IfStmntNoElse::IfStmntNoElse(AssignExpr & ifExpr,
-                             IBasicCodegenNode & thenNode,
+                             Scope & thenScope,
                              const Token & startToken,
                              const Token & endToken)
 :
-    IfStmnt(ifExpr, thenNode, startToken),
+    IfStmnt(ifExpr, thenScope, startToken),
     mEndToken(endToken)
 {
     WC_EMPTY_FUNC_BODY();
@@ -186,14 +180,13 @@ bool IfStmntNoElse::codegen(CodegenCtx & cgCtx) {
     WC_ASSERT(ifBranchBB);
     
     // Create the start basic block for the 'then' scope:
-    ASTNode & thenASTNode = dynamic_cast<ASTNode&>(mThenNode);
-    std::string thenBBLbl = makeLLVMLabelForTok("IfStmntNoElse:then", thenASTNode.getStartToken());
+    std::string thenBBLbl = makeLLVMLabelForTok("IfStmntNoElse:then", mThenScope.getStartToken());
     llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, thenBBLbl, parentFn);
     WC_ASSERT(thenBB);
 
     // Codegen the 'then' scope
     cgCtx.irBuilder.SetInsertPoint(thenBB);
-    WC_GUARD(mThenNode.codegen(cgCtx), false);
+    WC_GUARD(mThenScope.codegen(cgCtx), false);
     
     // Get the current block, this is the end block for the 'then' scope:
     llvm::BasicBlock * thenEndBB = cgCtx.irBuilder.GetInsertBlock();
@@ -226,16 +219,20 @@ bool IfStmntNoElse::codegen(CodegenCtx & cgCtx) {
     return true;
 }
 
+bool IfStmntNoElse::allCodepathsHaveUncondRet() const {
+    return false;
+}
+
 //-----------------------------------------------------------------------------
 // IfStmntElseIf
 //-----------------------------------------------------------------------------
 
 IfStmntElseIf::IfStmntElseIf(AssignExpr & ifExpr,
-                             IBasicCodegenNode & thenNode,
+                             Scope & thenScope,
                              IfStmnt & outerIfStmnt,
                              const Token & startToken)
 :
-    IfStmnt(ifExpr, thenNode, startToken),
+    IfStmnt(ifExpr, thenScope, startToken),
     mElseIfStmnt(outerIfStmnt)
 {
     mElseIfStmnt.mParent = this;
@@ -259,14 +256,13 @@ bool IfStmntElseIf::codegen(CodegenCtx & cgCtx) {
     WC_ASSERT(ifBranchBB);
     
     // Create the start basic block for the 'then' scope:
-    ASTNode & thenASTNode = dynamic_cast<ASTNode&>(mThenNode);
-    std::string thenBBLbl = makeLLVMLabelForTok("IfStmntElseIf:then", thenASTNode.getStartToken());
+    std::string thenBBLbl = makeLLVMLabelForTok("IfStmntElseIf:then", mThenScope.getStartToken());
     llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, thenBBLbl, parentFn);
     WC_ASSERT(thenBB);
     
     // Codegen the 'then' scope
     cgCtx.irBuilder.SetInsertPoint(thenBB);
-    WC_GUARD(mThenNode.codegen(cgCtx), false);
+    WC_GUARD(mThenScope.codegen(cgCtx), false);
     
     // Get the current block, this is the end block for the 'then' scope:
     llvm::BasicBlock * thenEndBB = cgCtx.irBuilder.GetInsertBlock();
@@ -319,24 +315,26 @@ bool IfStmntElseIf::codegen(CodegenCtx & cgCtx) {
     return true;
 }
 
+bool IfStmntElseIf::allCodepathsHaveUncondRet() const {
+    return  mThenScope.allCodepathsHaveUncondRet() &&
+            mElseIfStmnt.allCodepathsHaveUncondRet();
+}
+
 //-----------------------------------------------------------------------------
 // IfStmntElse
 //-----------------------------------------------------------------------------
 
 IfStmntElse::IfStmntElse(AssignExpr & ifExpr,
-                         IBasicCodegenNode & thenNode,
-                         IBasicCodegenNode & elseNode,
+                         Scope & thenScope,
+                         Scope & elseScope,
                          const Token & startToken,
                          const Token & endToken)
 :
-    IfStmnt(ifExpr, thenNode, startToken),
-    mElseNode(elseNode),
+    IfStmnt(ifExpr, thenScope, startToken),
+    mElseScope(elseScope),
     mEndToken(endToken)
 {
-    // Need to do a tricky cast for this:
-    ASTNode * elseASTNode = dynamic_cast<ASTNode*>(&elseNode);
-    WC_ASSERT(elseASTNode);
-    elseASTNode->mParent = this;
+    mElseScope.mParent = this;
 }
     
 const Token & IfStmntElse::getEndToken() const {
@@ -357,28 +355,26 @@ bool IfStmntElse::codegen(CodegenCtx & cgCtx) {
     WC_ASSERT(ifBranchBB);
     
     // Create the start basic block for the 'then' scope:
-    ASTNode & thenASTNode = dynamic_cast<ASTNode&>(mThenNode);
-    std::string thenBBLbl = makeLLVMLabelForTok("IfStmntElse:then", thenASTNode.getStartToken());
+    std::string thenBBLbl = makeLLVMLabelForTok("IfStmntElse:then", mThenScope.getStartToken());
     llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, thenBBLbl, parentFn);
     WC_ASSERT(thenBB);
     
     // Codegen the 'then' scope
     cgCtx.irBuilder.SetInsertPoint(thenBB);
-    WC_GUARD(mThenNode.codegen(cgCtx), false);
+    WC_GUARD(mThenScope.codegen(cgCtx), false);
 
     // Get the current block, this is the end block for the 'then' scope:
     llvm::BasicBlock * thenEndBB = cgCtx.irBuilder.GetInsertBlock();
     WC_ASSERT(thenEndBB);
     
     // Create the start basic block for the 'else' scope:
-    ASTNode & elseASTNode = dynamic_cast<ASTNode&>(mElseNode);
-    std::string elseBBLbl = makeLLVMLabelForTok("IfStmntElse:else", elseASTNode.getStartToken());
+    std::string elseBBLbl = makeLLVMLabelForTok("IfStmntElse:else", mElseScope.getStartToken());
     llvm::BasicBlock * elseBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, elseBBLbl, parentFn);
     WC_ASSERT(elseBB);
     
     // Codegen the 'else' scope
     cgCtx.irBuilder.SetInsertPoint(elseBB);
-    WC_GUARD(mElseNode.codegen(cgCtx), false);
+    WC_GUARD(mElseScope.codegen(cgCtx), false);
     
     // Get the current block, this is the end block for the 'else' scope:
     llvm::BasicBlock * elseEndBB = cgCtx.irBuilder.GetInsertBlock();
@@ -416,6 +412,11 @@ bool IfStmntElse::codegen(CodegenCtx & cgCtx) {
     // Insert future code past the end of this if statement
     cgCtx.irBuilder.SetInsertPoint(endBB);
     return true;
+}
+
+bool IfStmntElse::allCodepathsHaveUncondRet() const {
+    return  mThenScope.allCodepathsHaveUncondRet() &&
+            mElseScope.allCodepathsHaveUncondRet();
 }
 
 WC_END_NAMESPACE

@@ -51,6 +51,8 @@ public:
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
     NopStmnt & mStmnt;
 };
 
@@ -63,6 +65,8 @@ public:
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    virtual bool allCodepathsHaveUncondRet() const override;
     
     PrintStmnt & mStmnt;
 };
@@ -77,6 +81,8 @@ public:
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
     AssertStmnt & mStmnt;
 };
 
@@ -89,6 +95,8 @@ public:
     virtual const Token & getEndToken() const override;
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    virtual bool allCodepathsHaveUncondRet() const override;
     
     IfStmnt & mIfStmnt;
 };
@@ -103,6 +111,8 @@ public:
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
     WhileStmnt & mWhileStmnt;
 };
 
@@ -115,6 +125,8 @@ public:
     virtual const Token & getEndToken() const override;
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    virtual bool allCodepathsHaveUncondRet() const override;
     
     LoopStmnt & mLoopStmnt;
 };
@@ -129,6 +141,8 @@ public:
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
     ScopeStmnt & mScopeStmnt;
 };
 
@@ -141,6 +155,8 @@ public:
     virtual const Token & getEndToken() const override;
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    virtual bool allCodepathsHaveUncondRet() const override;
     
     BreakStmnt & mBreakStmnt;
 };
@@ -155,6 +171,8 @@ public:
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
     NextStmnt & mNextStmnt;
 };
 
@@ -167,6 +185,8 @@ public:
     virtual const Token & getEndToken() const override;
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    virtual bool allCodepathsHaveUncondRet() const override;
     
     ReturnStmnt & mReturnStmnt;
 };
@@ -181,6 +201,8 @@ public:
 
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
     VarDecl & mDecl;
 };
 
@@ -193,6 +215,8 @@ public:
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    virtual bool allCodepathsHaveUncondRet() const override;
     
     AssignExpr & mExpr;
 };

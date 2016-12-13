@@ -87,6 +87,10 @@ const Token & LoopStmnt::getStartToken() const {
     return mStartToken;
 }
 
+bool LoopStmnt::allCodepathsHaveUncondRet() const {
+    return false;
+}
+
 //-----------------------------------------------------------------------------
 // LoopStmntNoCond
 //-----------------------------------------------------------------------------

@@ -3,7 +3,7 @@
 #include "DataType/WCDataValue.hpp"
 #include "WCASTNode.hpp"
 #include "WCCStrComparator.hpp"
-#include "WCIBasicCodegenNode.hpp"
+#include "WCIStmnt.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <map>
@@ -23,7 +23,7 @@ class VarDecl;
 Scope:
     Stmnts
 */
-class Scope final : public ASTNode, public IBasicCodegenNode {
+class Scope final : public ASTNode, public IStmnt {
 public:
     static Scope * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
@@ -33,6 +33,8 @@ public:
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    virtual bool allCodepathsHaveUncondRet() const override;
     
     /** 
      * Create a variable within this scope.

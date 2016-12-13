@@ -83,4 +83,8 @@ bool PrintStmnt::codegen(CodegenCtx & cgCtx) {
     return mExpr.dataType().codegenPrintStmnt(cgCtx, *this, *printfFn, *exprVal);
 }
 
+bool PrintStmnt::allCodepathsHaveUncondRet() const {
+    return false;
+}
+
 WC_END_NAMESPACE

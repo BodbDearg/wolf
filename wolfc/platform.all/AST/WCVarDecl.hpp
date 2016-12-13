@@ -26,6 +26,8 @@ public:
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
     bool codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope);
     bool codegenAsGlobalVar(CodegenCtx & cgCtx);
     

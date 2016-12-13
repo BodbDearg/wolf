@@ -24,6 +24,8 @@ public:
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
     Scope &         mBodyScope;
     const Token &   mStartToken;
     const Token &   mEndToken;

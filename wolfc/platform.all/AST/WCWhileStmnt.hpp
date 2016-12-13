@@ -28,6 +28,8 @@ public:
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
     virtual llvm::BasicBlock * getNextStmntTargetBlock() override;
     virtual llvm::BasicBlock * getBreakStmntTargetBlock() override;
     

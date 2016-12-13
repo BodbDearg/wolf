@@ -8,6 +8,7 @@ WC_BEGIN_NAMESPACE
 class AssignExpr;
 class DataType;
 class LinearAlloc;
+class Scope;
 
 /*
 IfStmnt:
@@ -21,7 +22,7 @@ public:
     static IfStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
     
     IfStmnt(AssignExpr & ifExpr,
-            IBasicCodegenNode & thenNode,
+            Scope & thenScope,
             const Token & startToken);
     
     virtual const Token & getStartToken() const final override;
@@ -38,22 +39,24 @@ public:
      */
     llvm::Value * codegenIfExpr(CodegenCtx & cgCtx) const;
     
-    AssignExpr &            mIfExpr;
-    IBasicCodegenNode &     mThenNode;
-    const Token &           mStartToken;
+    AssignExpr &    mIfExpr;
+    Scope &         mThenScope;
+    const Token &   mStartToken;
 };
 
 /* if|unless AssignExpr [then] Scope end */
 class IfStmntNoElse final : public IfStmnt {
 public:
     IfStmntNoElse(AssignExpr & ifExpr,
-                  IBasicCodegenNode & thenNode,
+                  Scope & thenScope,
                   const Token & startToken,
                   const Token & endToken);
     
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    virtual bool allCodepathsHaveUncondRet() const override;
     
     const Token & mEndToken;
 };
@@ -62,13 +65,15 @@ public:
 class IfStmntElseIf final : public IfStmnt {
 public:
     IfStmntElseIf(AssignExpr & ifExpr,
-                  IBasicCodegenNode & thenNode,
+                  Scope & thenScope,
                   IfStmnt & elseIfStmnt,
                   const Token & startToken);
     
     virtual const Token & getEndToken() const override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    virtual bool allCodepathsHaveUncondRet() const override;
     
     IfStmnt & mElseIfStmnt;
 };
@@ -77,8 +82,8 @@ public:
 class IfStmntElse final : public IfStmnt {
 public:
     IfStmntElse(AssignExpr & ifExpr,
-                IBasicCodegenNode & thenNode,
-                IBasicCodegenNode & elseNode,
+                Scope & thenScope,
+                Scope & elseScope,
                 const Token & startToken,
                 const Token & endToken);
     
@@ -86,8 +91,10 @@ public:
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
-    IBasicCodegenNode &     mElseNode;
-    const Token &           mEndToken;
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
+    Scope &         mElseScope;
+    const Token &   mEndToken;
 };
 
 WC_END_NAMESPACE

@@ -38,6 +38,10 @@ const Token & NopStmnt::getEndToken() const {
     return mToken;
 }
 
+bool NopStmnt::allCodepathsHaveUncondRet() const {
+    return false;
+}
+
 bool NopStmnt::codegen(CodegenCtx & cgCtx) {
     // Like it's name suggests 'nop' actually does nothing. Shock, horror!
     WC_UNUSED_PARAM(cgCtx);

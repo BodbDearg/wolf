@@ -57,6 +57,8 @@ public:
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
     virtual DataType & dataType() override;
+    
+    virtual bool allCodepathsHaveUncondRet() const override;
 };
 
 /* return AssignExpr */
@@ -70,6 +72,8 @@ public:
     
     virtual DataType & dataType() override;
     
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
     /* Expression for the value to return */
     AssignExpr & mReturnExpr;
 };
@@ -82,6 +86,8 @@ public:
                             AssignExpr & condExpr);
     
     virtual const Token & getEndToken() const final override;
+    
+    virtual bool allCodepathsHaveUncondRet() const override;
     
     /* Returns true if the condition for returning is inversed ('unless' instead of 'if') */
     bool isCondExprInversed() const;

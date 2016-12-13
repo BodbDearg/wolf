@@ -140,6 +140,10 @@ bool StmntNopStmnt::codegen(CodegenCtx & cgCtx) {
     return mStmnt.codegen(cgCtx);
 }
 
+bool StmntNopStmnt::allCodepathsHaveUncondRet() const {
+    return mStmnt.allCodepathsHaveUncondRet();
+}
+
 //-----------------------------------------------------------------------------
 // StmntPrintStmnt
 //-----------------------------------------------------------------------------
@@ -158,6 +162,10 @@ const Token & StmntPrintStmnt::getEndToken() const {
 
 bool StmntPrintStmnt::codegen(CodegenCtx & cgCtx) {
     return mStmnt.codegen(cgCtx);
+}
+
+bool StmntPrintStmnt::allCodepathsHaveUncondRet() const {
+    return mStmnt.allCodepathsHaveUncondRet();
 }
 
 //-----------------------------------------------------------------------------
@@ -180,6 +188,10 @@ bool StmntAssertStmnt::codegen(CodegenCtx & cgCtx) {
     return mStmnt.codegen(cgCtx);
 }
 
+bool StmntAssertStmnt::allCodepathsHaveUncondRet() const {
+    return mStmnt.allCodepathsHaveUncondRet();
+}
+
 //-----------------------------------------------------------------------------
 // StmntIfStmnt
 //-----------------------------------------------------------------------------
@@ -198,6 +210,10 @@ const Token & StmntIfStmnt::getEndToken() const {
 
 bool StmntIfStmnt::codegen(CodegenCtx & cgCtx) {
     return mIfStmnt.codegen(cgCtx);
+}
+
+bool StmntIfStmnt::allCodepathsHaveUncondRet() const {
+    return mIfStmnt.allCodepathsHaveUncondRet();
 }
 
 //-----------------------------------------------------------------------------
@@ -220,6 +236,10 @@ bool StmntWhileStmnt::codegen(CodegenCtx & cgCtx) {
     return mWhileStmnt.codegen(cgCtx);
 }
 
+bool StmntWhileStmnt::allCodepathsHaveUncondRet() const {
+    return mWhileStmnt.allCodepathsHaveUncondRet();
+}
+
 //-----------------------------------------------------------------------------
 // StmntLoopStmnt
 //-----------------------------------------------------------------------------
@@ -238,6 +258,10 @@ const Token & StmntLoopStmnt::getEndToken() const {
 
 bool StmntLoopStmnt::codegen(CodegenCtx & cgCtx) {
     return mLoopStmnt.codegen(cgCtx);
+}
+
+bool StmntLoopStmnt::allCodepathsHaveUncondRet() const {
+    return mLoopStmnt.allCodepathsHaveUncondRet();
 }
 
 //-----------------------------------------------------------------------------
@@ -260,6 +284,10 @@ bool StmntScopeStmnt::codegen(CodegenCtx & cgCtx) {
     return mScopeStmnt.codegen(cgCtx);
 }
 
+bool StmntScopeStmnt::allCodepathsHaveUncondRet() const {
+    return mScopeStmnt.allCodepathsHaveUncondRet();
+}
+
 //-----------------------------------------------------------------------------
 // StmntBreakStmnt
 //-----------------------------------------------------------------------------
@@ -278,6 +306,10 @@ const Token & StmntBreakStmnt::getEndToken() const {
 
 bool StmntBreakStmnt::codegen(CodegenCtx & cgCtx) {
     return mBreakStmnt.codegen(cgCtx);
+}
+
+bool StmntBreakStmnt::allCodepathsHaveUncondRet() const {
+    return mBreakStmnt.allCodepathsHaveUncondRet();
 }
 
 //-----------------------------------------------------------------------------
@@ -300,6 +332,10 @@ bool StmntNextStmnt::codegen(CodegenCtx & cgCtx) {
     return mNextStmnt.codegen(cgCtx);
 }
 
+bool StmntNextStmnt::allCodepathsHaveUncondRet() const {
+    return mNextStmnt.allCodepathsHaveUncondRet();
+}
+
 //-----------------------------------------------------------------------------
 // StmntReturnStmnt
 //-----------------------------------------------------------------------------
@@ -318,6 +354,10 @@ const Token & StmntReturnStmnt::getEndToken() const {
 
 bool StmntReturnStmnt::codegen(CodegenCtx & cgCtx) {
     return mReturnStmnt.codegen(cgCtx);
+}
+
+bool StmntReturnStmnt::allCodepathsHaveUncondRet() const {
+    return mReturnStmnt.allCodepathsHaveUncondRet();
 }
 
 //-----------------------------------------------------------------------------
@@ -340,6 +380,10 @@ bool StmntVarDecl::codegen(CodegenCtx & cgCtx) {
     return mDecl.codegen(cgCtx);
 }
 
+bool StmntVarDecl::allCodepathsHaveUncondRet() const {
+    return mDecl.allCodepathsHaveUncondRet();
+}
+
 //-----------------------------------------------------------------------------
 // StmntAssignExpr
 //-----------------------------------------------------------------------------
@@ -358,6 +402,10 @@ const Token & StmntAssignExpr::getEndToken() const {
     
 bool StmntAssignExpr::codegen(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx) != nullptr;
+}
+
+bool StmntAssignExpr::allCodepathsHaveUncondRet() const {
+    return false;
 }
 
 WC_END_NAMESPACE

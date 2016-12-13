@@ -27,6 +27,8 @@ public:
     
     virtual const Token & getStartToken() const override;
     
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
     /* Shouldn't be called directly. The statement itself will schedule this. */
     bool deferredCodegen(CodegenCtx & cgCtx);
     
@@ -44,7 +46,6 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    /* Do the basic forward codegen for the statement. */
     virtual bool codegen(CodegenCtx & cgCtx) override;
 };
 
@@ -57,7 +58,6 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    /* Do the basic forward codegen for the statement. */
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
     /* Tell if the 'if' condition for the statement is inverted (unless) */

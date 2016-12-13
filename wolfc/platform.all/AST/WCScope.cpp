@@ -60,6 +60,16 @@ bool Scope::codegen(CodegenCtx & cgCtx) {
     return true;
 }
 
+bool Scope::allCodepathsHaveUncondRet() const {
+    for (Stmnt * stmnt : mStmnts) {
+        if (stmnt->allCodepathsHaveUncondRet()) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
 DataValue * Scope::createVar(const char * varName,
                              DataType & dataType,
                              CodegenCtx & cgCtx,

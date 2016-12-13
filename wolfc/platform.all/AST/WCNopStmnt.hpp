@@ -23,6 +23,8 @@ public:
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
     
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
     const Token & mToken;
 };
 

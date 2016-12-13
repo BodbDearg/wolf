@@ -44,8 +44,9 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    /* Do the basic forward codegen for the statement. */
     virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    virtual bool allCodepathsHaveUncondRet() const override;
 };
 
 /* next if|unless AssignExpr */
@@ -57,8 +58,9 @@ public:
     
     virtual const Token & getEndToken() const override;
     
-    /* Do the basic forward codegen for the statement. */
     virtual bool codegen(CodegenCtx & cgCtx) override;
+    
+    virtual bool allCodepathsHaveUncondRet() const override;
     
     /* Tell if the 'if' condition for the statement is inverted (unless) */
     bool isIfCondInverted() const;

@@ -92,4 +92,8 @@ bool ScopeStmnt::codegen(CodegenCtx & cgCtx) {
     return true;
 }
 
+bool ScopeStmnt::allCodepathsHaveUncondRet() const {
+    return mBodyScope.allCodepathsHaveUncondRet();
+}
+
 WC_END_NAMESPACE

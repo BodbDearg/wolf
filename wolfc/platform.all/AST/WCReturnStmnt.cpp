@@ -160,6 +160,10 @@ DataType & ReturnStmntNoCondVoid::dataType() {
     return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kVoid);
 }
 
+bool ReturnStmntNoCondVoid::allCodepathsHaveUncondRet() const {
+    return true;
+}
+
 //-----------------------------------------------------------------------------
 // ReturnStmntNoCondWithValue
 //-----------------------------------------------------------------------------
@@ -192,6 +196,10 @@ DataType & ReturnStmntNoCondWithValue::dataType() {
     return mReturnExpr.dataType();
 }
 
+bool ReturnStmntNoCondWithValue::allCodepathsHaveUncondRet() const {
+    return true;
+}
+
 //-----------------------------------------------------------------------------
 // ReturnStmntWithCondBase
 //-----------------------------------------------------------------------------
@@ -213,6 +221,10 @@ const Token & ReturnStmntWithCondBase::getEndToken() const {
 
 bool ReturnStmntWithCondBase::isCondExprInversed() const {
     return mCondToken.type == TokenType::kUnless;
+}
+
+bool ReturnStmntWithCondBase::allCodepathsHaveUncondRet() const {
+    return false;
 }
 
 //-----------------------------------------------------------------------------

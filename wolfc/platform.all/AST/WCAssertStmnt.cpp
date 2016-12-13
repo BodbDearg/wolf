@@ -148,4 +148,8 @@ bool AssertStmnt::codegen(CodegenCtx & cgCtx) {
     return true;
 }
 
+bool AssertStmnt::allCodepathsHaveUncondRet() const {
+    return false;
+}
+
 WC_END_NAMESPACE

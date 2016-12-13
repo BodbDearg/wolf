@@ -73,6 +73,10 @@ bool VarDecl::codegen(CodegenCtx & cgCtx) {
     return codegenAsGlobalVar(cgCtx);
 }
 
+bool VarDecl::allCodepathsHaveUncondRet() const {
+    return false;
+}
+
 bool VarDecl::codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope) {
     // Create the variable. If this fails then the variable already exists:
     DataType & exprType = mExpr.dataType();
