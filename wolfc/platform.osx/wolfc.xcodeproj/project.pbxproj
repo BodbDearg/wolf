@@ -583,11 +583,11 @@
 			inputPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/wolfc-test.out",
+				"$(DERIVED_FILE_DIR)/wolfc-test",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "WOLFC_PATH=\"${BUILT_PRODUCTS_DIR}/wolfc\"\nOUTPUT_DIR=\"${DERIVED_FILE_DIR}\"\nINPUT_FILE=\"${PROJECT_DIR}/../test_data/wolfc-test.wolf\"\nCOMPILE_AND_RUN_SCRIPT=\"${PROJECT_DIR}/scripts/compile_and_run_wolf_file.sh\"\n\n\"${COMPILE_AND_RUN_SCRIPT}\" \"${WOLFC_PATH}\" \"${OUTPUT_DIR}\" \"${INPUT_FILE}\"\n";
+			shellScript = "WOLFC_PATH=\"${BUILT_PRODUCTS_DIR}/wolfc\"\nset -e\n\nINTERMEDIATE_DIR=\"${DERIVED_FILE_DIR}\"\nOUTPUT_DIR=\"${BUILT_PRODUCTS_DIR}\"\nINPUT_FILE=\"${PROJECT_DIR}/../test_data/wolfc-test.wolf\"\nCOMPILE_SCRIPT=\"${PROJECT_DIR}/scripts/compile_wolf_file.sh\"\n\n\"${COMPILE_SCRIPT}\" \"${WOLFC_PATH}\" \"${INTERMEDIATE_DIR}\" \"${OUTPUT_DIR}\" \"${INPUT_FILE}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
