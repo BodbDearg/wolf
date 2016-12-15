@@ -1,26 +1,38 @@
-# Small script that compiles and runs a wolf script
+# Small script that compiles a wolf script
 #
 # Args:
 # 	$1 - path to 'wolfc'
 #	$2 - folder for intermidate files (.ll and .s)
 #	$3 - folder for output executable
-#	$4 - file to compile and run
+#	$4 - file to compile
 WOLFC_PATH="${1}"
 INTERMEDIATE_OUTPUT_DIR="${2}"
 EXECUTABLE_OUTPUT_DIR="${3}"
 mkdir -p "${INTERMEDIATE_OUTPUT_DIR}"
+
+if [ $? != 0 ]; then
+	echo "Failed to create intermidate output folder '${INTERMEDIATE_OUTPUT_DIR}'"
+	exit 1
+fi
+
 mkdir -p "${EXECUTABLE_OUTPUT_DIR}"
-INPUT_PATH="${4}"
+
+if [ $? != 0 ]; then
+	echo "Failed to create executable output folder '${INTERMEDIATE_OUTPUT_DIR}'"
+	exit 1
+fi
+
+INPUT_FILE_PATH="${4}"
 
 # Get the name of the input file without the extension
-INPUT_FILENAME=`basename "${INPUT_PATH}" .wolf`
+INPUT_FILENAME=`basename "${INPUT_FILE_PATH}" .wolf`
 
 # Generate the llvm ir code using wolfc
 OUTPUT_LL_FILE_PATH="${INTERMEDIATE_OUTPUT_DIR}/${INPUT_FILENAME}.ll"
-"${WOLFC_PATH}" "${INPUT_PATH}" 2> "${OUTPUT_LL_FILE_PATH}"
+"${WOLFC_PATH}" "${INPUT_FILE_PATH}" 2> "${OUTPUT_LL_FILE_PATH}"
 
 if [ $? != 0 ]; then
-    echo "A compiler error occurred for file '${INPUT_PATH}'! Error details follow: "
+    echo "A compiler error occurred for file '${INPUT_FILE_PATH}'! Error details follow: "
     cat "${OUTPUT_LL_FILE_PATH}"
     exit 1
 fi

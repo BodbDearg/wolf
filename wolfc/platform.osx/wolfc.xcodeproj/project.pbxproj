@@ -573,7 +573,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "WOLFC_PATH=\"${BUILT_PRODUCTS_DIR}/wolfc\"\nOUTPUT_DIR=\"${DERIVED_FILE_DIR}\"\nINPUT_DIR=\"${PROJECT_DIR}/../unit_tests\"\nCOMPILE_AND_RUN_SCRIPT=\"${PROJECT_DIR}/scripts/compile_and_run_wolf_file.sh\"\n\ncd \"${INPUT_DIR}\"\n\nfor wolf_file in *.wolf;\ndo\n    \"${COMPILE_AND_RUN_SCRIPT}\" \"${WOLFC_PATH}\" \"${OUTPUT_DIR}\" \"${wolf_file}\"\n\n\tif [ $? != 0 ]; then\n    \techo \"Unit test failed for file '${wolf_file}'!\"\n    \texit 1\n\tfi\ndone\n";
+			shellScript = "WOLFC_PATH=\"${BUILT_PRODUCTS_DIR}/wolfc\"\nINTERMEDIATE_DIR=\"${DERIVED_FILE_DIR}\"\nOUTPUT_DIR=\"${BUILT_PRODUCTS_DIR}\"\nINPUT_DIR=\"${PROJECT_DIR}/../unit_tests\"\nCOMPILE_AND_RUN_SCRIPT=\"${PROJECT_DIR}/scripts/compile_and_run_wolf_file.sh\"\n\ncd \"${INPUT_DIR}\"\n\nfor wolf_file in *.wolf;\ndo\n    \"${COMPILE_AND_RUN_SCRIPT}\" \"${WOLFC_PATH}\" \"${INTERMEDIATE_DIR}\" \"${OUTPUT_DIR}\" \"${wolf_file}\"\n\n\tif [ $? != 0 ]; then\n    \techo \"Unit test failed for file '${wolf_file}'!\"\n    \texit 1\n\tfi\ndone\n";
 		};
 		1FFD98BE1CD9EC2C00398CA6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
