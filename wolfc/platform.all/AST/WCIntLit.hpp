@@ -5,7 +5,6 @@
 
 WC_BEGIN_NAMESPACE
 
-class DataType;
 class LinearAlloc;
 
 /* Represents TokenType::kIntLit in the AST tree */

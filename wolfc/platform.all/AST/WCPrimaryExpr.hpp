@@ -7,7 +7,6 @@ WC_BEGIN_NAMESPACE
 
 class ArrayLit;
 class BoolLit;
-class DataType;
 class Identifier;
 class IntLit;
 class LinearAlloc;

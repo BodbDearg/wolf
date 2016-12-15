@@ -6,6 +6,7 @@
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
+#include "WCCastExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCFunc.hpp"
 #include "WCFuncArg.hpp"
@@ -27,12 +28,12 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool PostfixExpr::peek(const Token * currentToken) {
-    return PrimaryExpr::peek(currentToken);
+    return CastExpr::peek(currentToken);
 }
 
 PostfixExpr * PostfixExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
-    // Parse the initial primary expression
-    PrimaryExpr * expr = PrimaryExpr::parse(currentToken, alloc);
+    // Parse the initial expression
+    CastExpr * expr = CastExpr::parse(currentToken, alloc);
     WC_GUARD(expr, nullptr);
 
     // Save the outermost postfix expression here:
@@ -114,7 +115,7 @@ PostfixExpr * PostfixExpr::parse(const Token *& currentToken, LinearAlloc & allo
 // PostfixExprNoPostfix
 //-----------------------------------------------------------------------------
 
-PostfixExprNoPostfix::PostfixExprNoPostfix(PrimaryExpr & expr) : mExpr(expr) {
+PostfixExprNoPostfix::PostfixExprNoPostfix(CastExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
@@ -154,7 +155,7 @@ llvm::Constant * PostfixExprNoPostfix::codegenExprConstEval(CodegenCtx & cgCtx) 
 // PostfixExprIncDecBase
 //-----------------------------------------------------------------------------
 
-PostfixExprIncDecBase::PostfixExprIncDecBase(PrimaryExpr & expr, const Token & endToken) : 
+PostfixExprIncDecBase::PostfixExprIncDecBase(CastExpr & expr, const Token & endToken) :
     mExpr(expr),
     mEndToken(endToken)
 {
@@ -216,7 +217,7 @@ bool PostfixExprIncDecBase::compileCheckExprIsInt() const {
 // PostfixExprInc
 //-----------------------------------------------------------------------------
 
-PostfixExprInc::PostfixExprInc(PrimaryExpr & expr, const Token & endToken) : 
+PostfixExprInc::PostfixExprInc(CastExpr & expr, const Token & endToken) :
     PostfixExprIncDecBase(expr, endToken)
 {
     WC_EMPTY_FUNC_BODY();
@@ -249,7 +250,7 @@ llvm::Value * PostfixExprInc::codegenExprEval(CodegenCtx & cgCtx) {
 // PostfixExprDec
 //-----------------------------------------------------------------------------
 
-PostfixExprDec::PostfixExprDec(PrimaryExpr & expr, const Token & endToken) :
+PostfixExprDec::PostfixExprDec(CastExpr & expr, const Token & endToken) :
     PostfixExprIncDecBase(expr, endToken)
 {
     WC_EMPTY_FUNC_BODY();
@@ -435,11 +436,14 @@ const char * PostfixExprFuncCall::nameOfFuncCalled() const {
     // TODO: support lambda calls (some day)
     // TODO: support built in functions on basic types (somenum.isNan() etc.)
     
-    PostfixExprNoPostfix * exprNoPostfix = dynamic_cast<PostfixExprNoPostfix*>(&mExpr);
-    WC_GUARD(exprNoPostfix, nullptr);
-    PrimaryExprIdentifier * exprIdent = dynamic_cast<PrimaryExprIdentifier*>(&exprNoPostfix->mExpr);
-    WC_GUARD(exprIdent, nullptr);
-    return exprIdent->name();
+    PostfixExprNoPostfix * postfixExprNoPostfix = dynamic_cast<PostfixExprNoPostfix*>(&mExpr);
+    WC_GUARD(postfixExprNoPostfix, nullptr);
+    CastExprNoCast * castExprNoCast = dynamic_cast<CastExprNoCast*>(&postfixExprNoPostfix->mExpr);
+    WC_GUARD(castExprNoCast, nullptr);
+    PrimaryExprIdentifier * primaryExprIdentifier = dynamic_cast<PrimaryExprIdentifier*>(&castExprNoCast->mExpr);
+    WC_GUARD(primaryExprIdentifier, nullptr);
+    
+    return primaryExprIdentifier->name();
 }
 
 Func * PostfixExprFuncCall::lookupFuncCalled() const {

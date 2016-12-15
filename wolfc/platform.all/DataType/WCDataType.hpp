@@ -98,6 +98,12 @@ public:
                                    llvm::Constant & printfFn,
                                    llvm::Value & value) const = 0;
     
+    /* Codegen a basic cast to the given type */
+    virtual llvm::Value * codegenCastTo(CodegenCtx & cgCtx,
+                                        ASTNode & callingNode,
+                                        llvm::Value & valueToCast,
+                                        DataType & castToType);
+    
     /**
      * Check that the LLVM type for this data type is defined and issue a compile error if not.
      * Returns false if the LLVM type is not defined and true otherwise.

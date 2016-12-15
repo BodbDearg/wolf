@@ -179,6 +179,10 @@ enum class TokenType : uint8_t {
     kReturn,
     /* func */
     kFunc,
+    /* cast */
+    kCast,
+    /* to */
+    kTo,
     /* 'time' */   // TODO: this is a temporary keyword, remove eventually
     kTime,
     /* 'rand' */   // TODO: this is a temporary keyword, remove eventually

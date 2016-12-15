@@ -7,17 +7,16 @@ WC_BEGIN_NAMESPACE
 
 class ArrayDataType;
 class AssignExpr;
-class DataType;
+class CastExpr;
 class Func;
 class FuncCall;
 class LinearAlloc;
-class PrimaryExpr;
 
 /*
 PostfixExpr:
-	PrimaryExpr
-	PrimaryExpr ++
-	PrimaryExpr --
+	CastExpr
+	CastExpr ++
+	CastExpr --
 	PostfixExpr FuncCall
 	PostfixExpr [ AssignExpr ]
 */
@@ -27,10 +26,10 @@ public:
     static PostfixExpr * parse(const Token *& currentToken, LinearAlloc & alloc);
 };
 
-/* PrimaryExpr */
+/* CastExpr */
 class PostfixExprNoPostfix final : public PostfixExpr {
 public:
-    PostfixExprNoPostfix(PrimaryExpr & expr);
+    PostfixExprNoPostfix(CastExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -44,13 +43,13 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    PrimaryExpr & mExpr;
+    CastExpr & mExpr;
 };
 
 /* Base class for increment/decrement postfix expressions */
 class PostfixExprIncDecBase : public PostfixExpr {
 public:
-    PostfixExprIncDecBase(PrimaryExpr & expr, const Token & endToken);
+    PostfixExprIncDecBase(CastExpr & expr, const Token & endToken);
 
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -63,8 +62,8 @@ public:
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) final override;
 
-    PrimaryExpr & mExpr;
-    const Token & mEndToken;
+    CastExpr &      mExpr;
+    const Token &   mEndToken;
 
 protected:
     /**
@@ -74,18 +73,18 @@ protected:
     bool compileCheckExprIsInt() const;
 };
 
-/* PrimaryExpr ++ */
+/* CastExpr ++ */
 class PostfixExprInc final : public PostfixExprIncDecBase {
 public:
-    PostfixExprInc(PrimaryExpr & expr, const Token & endToken);
+    PostfixExprInc(CastExpr & expr, const Token & endToken);
 
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
-/* PrimaryExpr -- */
+/* CastExpr -- */
 class PostfixExprDec final : public PostfixExprIncDecBase {
 public:
-    PostfixExprDec(PrimaryExpr & expr, const Token & endToken);
+    PostfixExprDec(CastExpr & expr, const Token & endToken);
 
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };

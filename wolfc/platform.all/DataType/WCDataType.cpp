@@ -28,6 +28,27 @@ bool DataType::codegenLLVMTypeIfRequired(CodegenCtx & cgCtx, ASTNode & callingNo
     return codegenLLVMType(cgCtx, callingNode);
 }
 
+llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
+                                      ASTNode & callingNode,
+                                      llvm::Value & valueToCast,
+                                      DataType & castToType)
+{
+    // If the type to cast to is the same as this type then do nothing, cast not needed:
+    if (equals(castToType)) {
+        return &valueToCast;
+    }
+    
+    // The default impl of this just raises an error
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(valueToCast);
+    
+    callingNode.compileError("Cast from type '%s' to '%s' is not allowed!",
+                             name().c_str(),
+                             castToType.name().c_str());
+    
+    return nullptr;
+}
+
 bool DataType::compileCheckLLVMTypeDefined(ASTNode & callingNode) {
     WC_GUARD(!mLLVMType, true);
     callingNode.compileError("The LLVM type for data type '%s' is undefined!", name().c_str());

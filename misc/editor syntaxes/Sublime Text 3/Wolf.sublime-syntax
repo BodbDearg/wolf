@@ -34,6 +34,8 @@ contexts:
       scope: keyword.operator.wolf
     - match: '(?<![^.]\.|:)\b(time|assert|rand|srand|readnum|print)\b(?=[( {"''\[])'
       scope: support.function.wolf
+    - match: \b(cast|to)\b
+      scope: keyword.casting.wolf
     - match: \b(and|or|not)\b
       scope: keyword.logical.wolf
     - match: \b(then|end|do|scope)\b

@@ -147,11 +147,15 @@ UnaryExpr:
 	(AssignExpr)
 
 PostfixExpr:
-	PrimaryExpr
-	PrimaryExpr ++
-	PrimaryExpr --
+	CastExpr
+	CastExpr ++
+	CastExpr --
 	PostfixExpr FuncCall
 	PostfixExpr [ AssignExpr ]
+
+CastExpr:
+	PrimaryExpr
+	cast ( AssignExpr to Type )
 
 FuncCall:
 	( [FuncCallArgList] )

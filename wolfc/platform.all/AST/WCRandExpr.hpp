@@ -6,7 +6,6 @@
 WC_BEGIN_NAMESPACE
 
 class AssignExpr;
-class DataType;
 class LinearAlloc;
 class StrLit;
 

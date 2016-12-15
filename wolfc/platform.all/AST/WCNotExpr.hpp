@@ -6,7 +6,6 @@
 WC_BEGIN_NAMESPACE
 
 class CmpExpr;
-class DataType;
 class LinearAlloc;
 
 /*

@@ -5,7 +5,6 @@
 
 WC_BEGIN_NAMESPACE
 
-class DataType;
 class LinearAlloc;
 class StrLit;
 

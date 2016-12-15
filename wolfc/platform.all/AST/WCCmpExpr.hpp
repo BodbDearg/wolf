@@ -6,7 +6,6 @@
 WC_BEGIN_NAMESPACE
 
 class AddExpr;
-class DataType;
 class LinearAlloc;
 
 /*

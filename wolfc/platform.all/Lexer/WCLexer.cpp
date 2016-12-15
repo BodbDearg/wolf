@@ -722,6 +722,8 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         parseKeyword("nop", TokenType::kNop) ||
         parseKeyword("return", TokenType::kReturn) ||
         parseKeyword("func", TokenType::kFunc) ||
+        parseKeyword("cast", TokenType::kCast) ||
+        parseKeyword("to", TokenType::kTo) ||
         parseKeyword("time", TokenType::kTime) ||
         parseKeyword("rand", TokenType::kRand) ||
         parseKeyword("srand", TokenType::kSRand) ||
