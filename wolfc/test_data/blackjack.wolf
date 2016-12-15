@@ -67,7 +67,7 @@ var NUM_CARD_SHUFFLES = 32
 var gCardDeckPosition = 0
 
 ; Convert a card type/number into a string
-func card_numToName(int cardType) -> string
+func card_numToName(int cardType) as string
     return "No card"    if cardType == NO_CARD
     return "Ace"        if cardType == CARD_ACE
     return "2"          if cardType == CARD_2
@@ -119,12 +119,12 @@ func card_initializeDeck()
 end
 
 ; Gives an empty suit of cards
-func card_getEmptySuit() -> int[5]
+func card_getEmptySuit() as int[5]
     return [ NO_CARD, NO_CARD, NO_CARD, NO_CARD, NO_CARD ]
 end
 
 ; Get the length (number of cards) in a player or dealer suit
-func card_getSuitLength(int[5] suitOfCards) -> int
+func card_getSuitLength(int[5] suitOfCards) as int
     var suitLength = 0
     
     while suitLength < 5 and suitOfCards[suitLength] != NO_CARD
@@ -135,7 +135,7 @@ func card_getSuitLength(int[5] suitOfCards) -> int
 end
 
 ; Draw a card from the deck of cards
-func card_drawCard() -> int
+func card_drawCard() as int
     return NO_CARD if gCardDeckPosition >= 52
     var drawnCard = gCardDeck[gCardDeckPosition]
     gCardDeckPosition++
@@ -143,7 +143,7 @@ func card_drawCard() -> int
 end
 
 ; Gets the best value of a player's / dealer's hand
-func card_getSuitValue(int[5] suitOfCards) -> int
+func card_getSuitValue(int[5] suitOfCards) as int
     ; Get how many cards are actually in the suit first
     var suitLength = card_getSuitLength(suitOfCards)
     
@@ -277,7 +277,7 @@ func game_startGame(int betAmount)
 end
 
 ; Tells if the game is finished
-func game_isOver() -> bool
+func game_isOver() as bool
     return player_handFinished() and dealer_handFinished()
 end
 
@@ -527,22 +527,22 @@ func dealer_clearCards()
 end
 
 ; Finds out if the dealer has gone bust (suitValue > 21)
-func dealer_isBust() -> bool
+func dealer_isBust() as bool
     return card_getSuitValue(gDealerCards) > GAME_BLACKJACK_SUIT_VALUE
 end
 
 ; Tells if the dealer has drawn 5 cards and can't draw any more
-func dealer_cantDraw() -> bool
+func dealer_cantDraw() as bool
     return card_getSuitLength(gDealerCards) >= GAME_MAX_CARDS
 end
 
 ; Tells if the dealer has issued a stand order
-func dealer_isStanding() -> bool
+func dealer_isStanding() as bool
     return gDealerLastAction == GAMEACTION_STAND
 end
 
 ; Tells if the dealers hand is finished
-func dealer_handFinished() -> bool
+func dealer_handFinished() as bool
     return  
         dealer_isBust() or      ; If the dealer is bust then his/her hand is finished
         dealer_cantDraw() or    ; If the dealer can't draw any more, then the hand is finished
@@ -641,32 +641,32 @@ func player_clearCards()
 end
 
 ; Finds out if the player has gone bust (suitValue > 21)
-func player_isBust() -> bool
+func player_isBust() as bool
     return card_getSuitValue(gPlayerCards) > GAME_BLACKJACK_SUIT_VALUE
 end
 
 ; Tells if the player has drawn 5 cards and can't draw any more
-func player_cantDraw() -> bool
+func player_cantDraw() as bool
     return card_getSuitLength(gPlayerCards) >= GAME_MAX_CARDS
 end
 
 ; Tells if the player has issued a stand order
-func player_isStanding() -> bool
+func player_isStanding() as bool
     return gPlayerLastAction == GAMEACTION_STAND
 end
 
 ; Tells whether the player has forfeited the game
-func player_hasForfeit() -> bool
+func player_hasForfeit() as bool
     return gPlayerLastAction == GAMEACTION_FORFEIT
 end
 
 ; Tells if the player has got 21, or a blackjack
-func player_hasBlackjack() -> bool
+func player_hasBlackjack() as bool
     return card_getSuitValue(gPlayerCards) == GAME_BLACKJACK_SUIT_VALUE
 end
 
 ; Tells if the player's hand is finished
-func player_handFinished() -> bool
+func player_handFinished() as bool
     return
         player_isBust() or      ; If the player is bust then his/her hand is finished
         player_cantDraw() or    ; If the player can't draw any more, then the hand is finished
@@ -705,7 +705,7 @@ func player_findAvailableActions()
 end
 
 ; Tell if one of the player actions (passed as a bitmask) are available
-func player_areActionsAvailable(int actionsMask) -> bool
+func player_areActionsAvailable(int actionsMask) as bool
     return (gPlayerAvailableActions & actionsMask) != 0
 end
 
@@ -883,7 +883,7 @@ func menu_getMoney()
 end
 
 ; Asks the player to play another game after playing one
-func menu_askAnotherGame() -> bool
+func menu_askAnotherGame() as bool
     ; Prompt the user
     menu_drawTitleBar("Play another game?")
     printPrefixTxtAndAmtLn("Chips left: ", gPlayerChips)
@@ -985,7 +985,7 @@ end
 ;==================================================================================================
 ; Main program entry point
 ;==================================================================================================
-func main() -> int
+func main() as int
     ; Seed the random number generator to the current time (in seconds) and begin the menu loop
     srand(time())
     menu_displayMain()

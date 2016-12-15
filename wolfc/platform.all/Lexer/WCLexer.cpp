@@ -185,11 +185,7 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
         }
         
         case '-': {
-            if (mLexerState.srcPtr[1] == '>') {
-                // '->' operator
-                return parseBasicToken(TokenType::kOpArrow, 2);
-            }
-            else if (mLexerState.srcPtr[1] == '-') {
+            if (mLexerState.srcPtr[1] == '-') {
                 // '--' operator
                 return parseBasicToken(TokenType::kDecrement, 2);
             }
@@ -724,6 +720,7 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         parseKeyword("func", TokenType::kFunc) ||
         parseKeyword("cast", TokenType::kCast) ||
         parseKeyword("to", TokenType::kTo) ||
+        parseKeyword("as", TokenType::kAs) ||
         parseKeyword("time", TokenType::kTime) ||
         parseKeyword("rand", TokenType::kRand) ||
         parseKeyword("srand", TokenType::kSRand) ||
