@@ -12,6 +12,10 @@ WC_BEGIN_NAMESPACE
 
 static const std::string kName = "void";
 
+DataTypeId VoidDataType::getTypeId() const {
+    return DataTypeId::kVoid;
+}
+
 const std::string & VoidDataType::name() const {
     return kName;
 }
@@ -22,10 +26,6 @@ bool VoidDataType::equals(const DataType & other) const {
 
 bool VoidDataType::isSized() const {
     return false;
-}
-
-bool VoidDataType::isVoid() const {
-    return true;
 }
 
 llvm::AllocaInst * VoidDataType::codegenAlloca(CodegenCtx & cgCtx,

@@ -50,7 +50,7 @@ bool StrLit::isConstExpr() {
 }
 
 DataType & StrLit::dataType() {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kStr);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kStr);
 }
 
 llvm::Value * StrLit::codegenAddrOf(CodegenCtx & cgCtx) {

@@ -1,5 +1,6 @@
 #include "WCIdentifier.hpp"
 
+#include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
@@ -55,7 +56,7 @@ DataType & Identifier::dataType() {
         return *dataValue->type;
     }
     
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kUnknown);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown);
 }
 
 llvm::Value * Identifier::codegenAddrOf(CodegenCtx & cgCtx) {

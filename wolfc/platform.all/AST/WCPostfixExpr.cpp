@@ -182,7 +182,7 @@ bool PostfixExprIncDecBase::isConstExpr() {
 DataType & PostfixExprIncDecBase::dataType() {
     // Unlike C/C++ increment and decrement expressions do not return a value. This removes the need for prefix/postfix 
     // increment and prevents them from being used in a confusing way in expressions.
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kVoid);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
 }
 
 llvm::Value * PostfixExprIncDecBase::codegenAddrOf(CodegenCtx & cgCtx) {
@@ -202,7 +202,7 @@ llvm::Constant * PostfixExprIncDecBase::codegenExprConstEval(CodegenCtx & cgCtx)
 bool PostfixExprIncDecBase::compileCheckExprIsInt() const {
     const DataType & type = mExpr.dataType();
 
-    if (!type.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+    if (!type.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt))) {
         compileError("Data type operated on by increment/decrement operator must be 'int' for now and not '%s'!",
                      type.name().c_str());
 
@@ -318,7 +318,7 @@ DataType & PostfixExprFuncCall::dataType() {
         return funcCalled->returnDataType();
     }
     
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kUnknown);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown);
 }
 
 llvm::Value * PostfixExprFuncCall::codegenAddrOf(CodegenCtx & cgCtx) {
@@ -491,7 +491,7 @@ DataType & PostfixExprArrayLookup::dataType() {
     // Expect the array expression to have the array data type.
     // If it doesn't have this type then we don't know what the element type is..
     const ArrayDataType * arrayDataType = dynamic_cast<ArrayDataType*>(&mArrayExpr.dataType());
-    WC_GUARD(arrayDataType, PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kUnknown));
+    WC_GUARD(arrayDataType, PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown));
     
     // Return the element data type
     return arrayDataType->mInnerType;

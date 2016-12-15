@@ -169,7 +169,7 @@ bool ReturnStmntNoCondVoid::codegen(CodegenCtx & cgCtx) {
 }
 
 DataType & ReturnStmntNoCondVoid::dataType() {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kVoid);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
 }
 
 bool ReturnStmntNoCondVoid::allCodepathsHaveUncondRet() const {
@@ -310,7 +310,7 @@ bool ReturnStmntWithCondVoid::codegen(CodegenCtx & cgCtx) {
 }
     
 DataType & ReturnStmntWithCondVoid::dataType() {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kVoid);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
 }
 
 //-----------------------------------------------------------------------------

@@ -1,7 +1,15 @@
 #pragma once
 
+#include "WCMacros.hpp"
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <cstdint>
+WC_THIRD_PARTY_INCLUDES_END
+
+WC_BEGIN_NAMESPACE
+
 /* Enum representing the type of token */
-enum class TokenType {
+enum class TokenType : uint8_t {
     /*=========================================================================
     | Special / other
     =========================================================================*/
@@ -184,3 +192,5 @@ enum class TokenType {
     /* 'assert' */
     kAssert,
 };
+
+WC_END_NAMESPACE

@@ -8,7 +8,7 @@
 WC_BEGIN_NAMESPACE
 
 bool PrimitiveType::peek(const Token * currentToken) {
-    return PrimitiveDataTypes::dataTypeForLangKeyword(currentToken->type).isValid();
+    return PrimitiveDataTypes::getUsingLangKeyword(currentToken->type).isValid();
 }
 
 PrimitiveType * PrimitiveType::parse(const Token *& currentToken, LinearAlloc & alloc) {
@@ -39,7 +39,7 @@ const Token & PrimitiveType::getEndToken() const {
 }
 
 DataType & PrimitiveType::dataType() {
-    return PrimitiveDataTypes::dataTypeForLangKeyword(mToken.type);
+    return PrimitiveDataTypes::getUsingLangKeyword(mToken.type);
 }
 
 bool PrimitiveType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {

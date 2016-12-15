@@ -6,6 +6,10 @@ WC_BEGIN_NAMESPACE
 
 static const std::string kName = "<?!unknown!?>";
 
+DataTypeId UnknownDataType::getTypeId() const {
+    return DataTypeId::kUnknown;
+}
+
 const std::string & UnknownDataType::name() const {
     return kName;
 }
@@ -20,10 +24,6 @@ bool UnknownDataType::isValid() const {
 
 bool UnknownDataType::isSized() const {
     return false;
-}
-
-bool UnknownDataType::isUnknown() const {
-    return true;
 }
 
 llvm::AllocaInst * UnknownDataType::codegenAlloca(CodegenCtx & cgCtx,

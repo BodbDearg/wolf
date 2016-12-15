@@ -1,6 +1,7 @@
 #include "WCRandExpr.hpp"
 
 #include "DataType/WCDataType.hpp"
+#include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssignExpr.hpp"
@@ -129,7 +130,7 @@ RandExprRand::RandExprRand(const Token & startToken, const Token & endToken) :
 }
 
 DataType & RandExprRand::dataType() {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt);
 }
 
 llvm::Value * RandExprRand::codegenExprEval(CodegenCtx & cgCtx) {
@@ -168,7 +169,7 @@ RandExprSRand::RandExprSRand(const Token & startToken,
 }
 
 DataType & RandExprSRand::dataType() {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kVoid);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
 }
 
 llvm::Value * RandExprSRand::codegenExprEval(CodegenCtx & cgCtx) {
@@ -179,7 +180,7 @@ llvm::Value * RandExprSRand::codegenExprEval(CodegenCtx & cgCtx) {
     // The seed expr type must be 'int'
     DataType & seedDataType = mSeedExpr.dataType();
     
-    if (!seedDataType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+    if (!seedDataType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt))) {
         compileError("Data type for seed given to 'srand()' call must be 'int' not '%s'!",
                      seedDataType.name().c_str());
         

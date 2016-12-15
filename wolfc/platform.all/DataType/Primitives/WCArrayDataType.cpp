@@ -35,6 +35,10 @@ ArrayDataType::~ArrayDataType() {
     WC_EMPTY_FUNC_BODY();
 }
 
+DataTypeId ArrayDataType::getTypeId() const {
+    return DataTypeId::kArray;
+}
+
 const std::string & ArrayDataType::name() const {
     return mName;
 }
@@ -54,10 +58,6 @@ bool ArrayDataType::equals(const DataType & other) const {
     
     // Lastly see if the inner types match:
     return mInnerType.equals(otherArray->mInnerType);
-}
-
-bool ArrayDataType::isArray() const {
-    return true;
 }
 
 bool ArrayDataType::requiresStorage() const {

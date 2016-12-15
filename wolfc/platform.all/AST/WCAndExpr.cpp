@@ -106,7 +106,7 @@ bool AndExprAnd::isConstExpr() {
 }
 
 DataType & AndExprAnd::dataType() {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
 llvm::Value * AndExprAnd::codegenAddrOf(CodegenCtx & cgCtx) {

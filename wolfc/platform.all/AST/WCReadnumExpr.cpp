@@ -1,5 +1,6 @@
 #include "WCReadnumExpr.hpp"
 
+#include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCCodegenCtx.hpp"
@@ -67,7 +68,7 @@ bool ReadnumExpr::isConstExpr() {
 }
 
 DataType & ReadnumExpr::dataType() {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt);
 }
 
 llvm::Value * ReadnumExpr::codegenAddrOf(CodegenCtx & cgCtx) {

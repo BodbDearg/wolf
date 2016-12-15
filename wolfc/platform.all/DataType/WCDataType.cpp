@@ -16,26 +16,6 @@ bool DataType::isSized() const {
     return true;    // True for all types except 'Unknown' and 'Void'
 }
 
-bool DataType::isUnknown() const {
-    return false;   // False for all types except 'Unknown'
-}
-
-bool DataType::isVoid() const {
-    return false;   // False for all types except 'void'
-}
-
-bool DataType::isBool() const {
-    return false;   // False for all types except 'bool'
-}
-
-bool DataType::isInteger() const {
-    return false;   // False by default for all types
-}
-
-bool DataType::isArray() const {
-    return false;   // False for all types except 'array'
-}
-
 bool DataType::requiresStorage() const {
     return false;   // False by default for all types
 }

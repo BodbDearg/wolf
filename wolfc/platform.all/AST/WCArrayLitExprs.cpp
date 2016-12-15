@@ -1,6 +1,7 @@
 #include "WCArrayLitExprs.hpp"
 
 #include "DataType/WCDataType.hpp"
+#include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssignExpr.hpp"
@@ -113,7 +114,7 @@ DataType & ArrayLitExprsMulti::getElementType() const {
     
     if (!exprDataType.equals(exprsListDataType)) {
         // Can't determine element type, ambiguous!
-        return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kUnknown);
+        return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown);
     }
     
     // Element types match so the element type of the array is this:

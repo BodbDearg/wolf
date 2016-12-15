@@ -10,11 +10,11 @@ WC_BEGIN_NAMESPACE
  */
 class UnknownDataType final : public DataType {
 public:
+    virtual DataTypeId getTypeId() const override;
     virtual const std::string & name() const override;
     virtual bool equals(const DataType & other) const override;
     virtual bool isValid() const override;
     virtual bool isSized() const override;
-    virtual bool isUnknown() const override;
     
     virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,
                                              ASTNode & callingNode,

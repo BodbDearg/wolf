@@ -114,7 +114,7 @@ bool OrExprOr::isConstExpr() {
 }
 
 DataType & OrExprOr::dataType() {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
 llvm::Value * OrExprOr::codegenAddrOf(CodegenCtx & cgCtx) {

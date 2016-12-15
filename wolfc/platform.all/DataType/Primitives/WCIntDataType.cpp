@@ -12,16 +12,16 @@ WC_BEGIN_NAMESPACE
 
 static const std::string kName = "int";
 
+DataTypeId IntDataType::getTypeId() const {
+    return DataTypeId::kInt;
+}
+
 const std::string & IntDataType::name() const {
     return kName;
 }
 
 bool IntDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const IntDataType*>(&other) != nullptr;
-}
-
-bool IntDataType::isInteger() const {
-    return true;
 }
 
 bool IntDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {

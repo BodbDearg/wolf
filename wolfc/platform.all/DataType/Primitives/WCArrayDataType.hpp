@@ -10,9 +10,9 @@ public:
     ArrayDataType(DataType & innerType, size_t size);
     virtual ~ArrayDataType() override;
     
+    virtual DataTypeId getTypeId() const override;
     virtual const std::string & name() const override;
     virtual bool equals(const DataType & other) const override;
-    virtual bool isArray() const override;
     virtual bool requiresStorage() const override;
     
     virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,

@@ -9,16 +9,16 @@ WC_BEGIN_NAMESPACE
 
 static const std::string kName = "bool";
 
+DataTypeId BoolDataType::getTypeId() const {
+    return DataTypeId::kBool;
+}
+
 const std::string & BoolDataType::name() const {
     return kName;
 }
 
 bool BoolDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const BoolDataType*>(&other) != nullptr;
-}
-
-bool BoolDataType::isBool() const {
-    return true;
 }
 
 llvm::AllocaInst * BoolDataType::codegenAlloca(CodegenCtx & cgCtx,

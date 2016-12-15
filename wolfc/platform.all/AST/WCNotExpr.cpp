@@ -121,7 +121,7 @@ bool NotExprNot::isConstExpr() {
 }
 
 DataType & NotExprNot::dataType() {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
 llvm::Value * NotExprNot::codegenAddrOf(CodegenCtx & cgCtx) {

@@ -1,5 +1,6 @@
 #include "WCTimeExpr.hpp"
 
+#include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCCodegenCtx.hpp"
@@ -67,7 +68,7 @@ bool TimeExpr::isConstExpr() {
 }
 
 DataType & TimeExpr::dataType() {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt);
 }
 
 llvm::Value * TimeExpr::codegenAddrOf(CodegenCtx & cgCtx) {

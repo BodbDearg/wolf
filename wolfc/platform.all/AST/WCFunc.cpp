@@ -157,7 +157,7 @@ DataType & Func::returnDataType() const {
     }
     
     // If no return type is explicitly specified then 'void' is assumed
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kVoid);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
 }
 
 bool Func::codegen(CodegenCtx & cgCtx) {

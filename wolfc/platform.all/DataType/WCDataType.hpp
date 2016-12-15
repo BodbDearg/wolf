@@ -1,5 +1,6 @@
 #pragma once
 
+#include "WCDataTypeId.hpp"
 #include "WCMacros.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -24,6 +25,9 @@ class DataType {
 public:
     virtual ~DataType();
     
+    /* Get the id of the data type */
+    virtual DataTypeId getTypeId() const = 0;
+    
     /* Give the name of the datatype, e.g 'int32' */
     virtual const std::string & name() const = 0;
     
@@ -40,19 +44,29 @@ public:
     virtual bool isSized() const;
     
     /* Utility. Tell if this data type is the unknown data type. */
-    virtual bool isUnknown() const;
+    inline bool isUnknown() const {
+        return getTypeId() == DataTypeId::kUnknown;
+    }
     
     /* Utility. Tell if this data type is the 'void' data type. */
-    virtual bool isVoid() const;
+    inline bool isVoid() const {
+        return getTypeId() == DataTypeId::kVoid;
+    }
     
     /* Utility. Tell if this data type is the 'bool' data type. */
-    virtual bool isBool() const;
+    inline bool isBool() const {
+        return getTypeId() == DataTypeId::kBool;
+    }
     
     /* Utility. Tell if this data type is an integer data type. */
-    virtual bool isInteger() const;
+    inline bool isInteger() const {
+        return getTypeId() == DataTypeId::kInt;
+    }
     
     /* Utility. Tell if this data type is an array data type. */
-    virtual bool isArray() const;
+    inline bool isArray() const {
+        return getTypeId() == DataTypeId::kArray;
+    }
     
     /**
      * If true then the data type requires a storage area to hold it's data since it is

@@ -12,6 +12,10 @@ WC_BEGIN_NAMESPACE
 
 static const std::string kName = "string";
 
+DataTypeId StrDataType::getTypeId() const {
+    return DataTypeId::kStr;
+}
+
 const std::string & StrDataType::name() const {
     return kName;
 }

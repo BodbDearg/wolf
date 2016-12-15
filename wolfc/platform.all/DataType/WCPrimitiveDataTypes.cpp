@@ -16,23 +16,30 @@ static IntDataType      gIntDataType;
 static BoolDataType     gBoolDataType;
 static StrDataType      gStrDataType;   // TODO: remove, this is a temporary data type
 
-DataType & PrimitiveDataTypes::get(Type type) {
+DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
     switch (type) {
-        case Type::kUnknown: return gUnknownDataType;
-        case Type::kVoid: return gVoidDataType;
-        case Type::kInt: return gIntDataType;
-        case Type::kBool: return gBoolDataType;
-        case Type::kStr: return gStrDataType;
+        // If 'Unknown' is specifically asked for
+        case DataTypeId::kUnknown: return gUnknownDataType;
+            
+        // The basic data types
+        case DataTypeId::kVoid: return gVoidDataType;
+        case DataTypeId::kInt: return gIntDataType;
+        case DataTypeId::kBool: return gBoolDataType;
+        case DataTypeId::kStr: return gStrDataType;
+            
+        // All these types are created or customized by the user, hence non-primitive:
+        case DataTypeId::kArray:
+            break;
             
         // This is not a valid value!
-        case Type::kNumTypes:
+        case DataTypeId::kNumTypes:
             break;
     }
     
     return gUnknownDataType;
 }
 
-DataType & PrimitiveDataTypes::dataTypeForLangKeyword(TokenType tokenType) {
+DataType & PrimitiveDataTypes::getUsingLangKeyword(TokenType tokenType) {
     switch (tokenType) {
         case TokenType::kVoid: return gVoidDataType;
         case TokenType::kInt: return gIntDataType;

@@ -118,7 +118,7 @@ DataType & TypeArray::dataType() {
     }
     
     // Don't know what our exact data type is yet:
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kUnknown);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown);
 }
 
 bool TypeArray::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {

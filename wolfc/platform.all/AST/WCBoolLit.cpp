@@ -1,5 +1,6 @@
 #include "WCBoolLit.hpp"
 
+#include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCCodegenCtx.hpp"
@@ -47,7 +48,7 @@ bool BoolLit::isConstExpr() {
 }
 
 DataType & BoolLit::dataType() {
-    return PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kBool);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
 llvm::Value * BoolLit::codegenAddrOf(CodegenCtx & cgCtx) {

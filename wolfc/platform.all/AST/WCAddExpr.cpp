@@ -160,7 +160,7 @@ llvm::Constant * AddExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
 bool AddExprTwoOps::compileCheckBothExprsAreInt() const {
     const DataType & leftType = mLeftExpr.dataType();
     
-    if (!leftType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+    if (!leftType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt))) {
         compileError("Left type in expression must be 'int' for now and not '%s'!",
                      leftType.name().c_str());
         
@@ -169,7 +169,7 @@ bool AddExprTwoOps::compileCheckBothExprsAreInt() const {
     
     const DataType & rightType = mRightExpr.dataType();
     
-    if (!rightType.equals(PrimitiveDataTypes::get(PrimitiveDataTypes::Type::kInt))) {
+    if (!rightType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt))) {
         compileError("Right type in expression must be 'int' for now and not '%s'!",
                      rightType.name().c_str());
         
