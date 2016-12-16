@@ -62,12 +62,12 @@ Func * Func::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     
     ++tokenPtr; // Skip ')'
     
-    // See if 'as' follows for function explicit return type.
+    // See if a '->' follows for function explicit return type.
     // If it is not present then a 'void' return type is assumed.
     Type * returnType = nullptr;
     
-    if (tokenPtr->type == TokenType::kAs) {
-        // Explicit return type, skip the 'as' first
+    if (tokenPtr->type == TokenType::kOpArrow) {
+        // Explicit return type, skip the '->' first
         ++tokenPtr;
         
         // Now parse the return type, if that fails then bail

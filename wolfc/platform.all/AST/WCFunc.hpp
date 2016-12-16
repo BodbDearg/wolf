@@ -26,7 +26,7 @@ struct CodegenCtx;
 
 /*
 Func:
-	func Identifier ( [FuncArgList] ) [ as Type ] Scope end
+	func Identifier ( [FuncArgList] ) [ -> Type ] Scope end
 */
 class Func final : public ASTNode {
 public:

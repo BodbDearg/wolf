@@ -17,7 +17,7 @@ func testReturnStmntFunc2()
     assert(false)   ; Should be unreachable!
 end
 
-func testReturnStmntFunc3() as int
+func testReturnStmntFunc3() -> int
     return 1234
     assert(false)   ; Should be unreachable!
     return 0
@@ -40,7 +40,7 @@ ReturnStmnt:
 ;==================================================================================================
 ; Run the tests
 ;==================================================================================================
-func main() as int
+func main() -> int
     testReturnStmnt()
     return 0
 end

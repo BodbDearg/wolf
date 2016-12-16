@@ -340,15 +340,15 @@ end
 ;==================================================================================================
 ; PostfixExpr
 ;==================================================================================================
-func testPostfixExprFuncCall1() as int
+func testPostfixExprFuncCall1() -> int
     return 5
 end
 
-func testPostfixExprFuncCall2(int v) as int
+func testPostfixExprFuncCall2(int v) -> int
     return v * 5
 end
 
-func testPostfixExprFuncCall3(int[3] v) as int[3]
+func testPostfixExprFuncCall3(int[3] v) -> int[3]
     return [ 
         v[0] * 5,
         v[1] * 5,
@@ -356,11 +356,11 @@ func testPostfixExprFuncCall3(int[3] v) as int[3]
     ]
 end
 
-func testPostfixExprFuncCall4(int[3] v) as int[3]
+func testPostfixExprFuncCall4(int[3] v) -> int[3]
     return v
 end
 
-func testPostfixExprFuncCall5(int v1 , int v2, int v3) as int
+func testPostfixExprFuncCall5(int v1 , int v2, int v3) -> int
     return v1 * v2 * v3
 end
 
@@ -453,7 +453,7 @@ end
 ;==================================================================================================
 ; Run the tests
 ;==================================================================================================
-func main() as int
+func main() -> int
     ; Basic tests of AST grammar and operations
     testAssignExpr()
     testTernaryExpr()

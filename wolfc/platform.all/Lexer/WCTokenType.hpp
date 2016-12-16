@@ -107,6 +107,8 @@ enum class TokenType : uint8_t {
     kExclamation,
     /* ',' */
     kComma,
+    /* -> */
+    kOpArrow,
     /* : */
     kColon,
     /* ? */
@@ -181,8 +183,6 @@ enum class TokenType : uint8_t {
     kCast,
     /* to */
     kTo,
-    /* as */
-    kAs,
     /* 'time' */   // TODO: this is a temporary keyword, remove eventually
     kTime,
     /* 'rand' */   // TODO: this is a temporary keyword, remove eventually
