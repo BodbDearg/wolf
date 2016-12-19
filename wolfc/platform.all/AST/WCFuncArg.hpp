@@ -12,7 +12,7 @@ class Type;
 
 /*
 FuncArg:
-	PrimitiveType Identifier
+	Identifier : Type
 */
 class FuncArg final : public ASTNode {
 public:
@@ -30,8 +30,8 @@ public:
     
     bool codegen(CodegenCtx & cgCtx, ASTNode & callingNode);
     
-    Type &          mType;
     Identifier &    mIdent;
+    Type &          mType;
 };
 
 WC_END_NAMESPACE

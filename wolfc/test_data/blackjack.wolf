@@ -1,7 +1,7 @@
 ;==================================================================================================
 ; Utility functions
 ;==================================================================================================
-func println(string text)
+func println(text: string)
     print(text)
     print("\n")
 end
@@ -10,7 +10,7 @@ func nextln()
     print("\n")
 end
 
-func printPrefixTxtAndAmtLn(string text, int amount)
+func printPrefixTxtAndAmtLn(text: string, amount: int)
     print(text)
     print(amount)
     nextln()
@@ -67,7 +67,7 @@ var NUM_CARD_SHUFFLES = 32
 var gCardDeckPosition = 0
 
 ; Convert a card type/number into a string
-func card_numToName(int cardType) -> string
+func card_numToName(cardType: int) -> string
     return "No card"    if cardType == NO_CARD
     return "Ace"        if cardType == CARD_ACE
     return "2"          if cardType == CARD_2
@@ -124,7 +124,7 @@ func card_getEmptySuit() -> int[5]
 end
 
 ; Get the length (number of cards) in a player or dealer suit
-func card_getSuitLength(int[5] suitOfCards) -> int
+func card_getSuitLength(suitOfCards: int[5]) -> int
     var suitLength = 0
     
     while suitLength < 5 and suitOfCards[suitLength] != NO_CARD
@@ -143,7 +143,7 @@ func card_drawCard() -> int
 end
 
 ; Gets the best value of a player's / dealer's hand
-func card_getSuitValue(int[5] suitOfCards) -> int
+func card_getSuitValue(suitOfCards: int[5]) -> int
     ; Get how many cards are actually in the suit first
     var suitLength = card_getSuitLength(suitOfCards)
     
@@ -255,7 +255,7 @@ var gGameCurrentGameType = GAME_TYPE_NORMAL
 var gGameWinner = GAME_WINNER_NONE
 
 ; Starts up the game
-func game_startGame(int betAmount)
+func game_startGame(betAmount: int)
     ; Set the players bet amount and subtract from overall chips
     player_makeBet(betAmount)
      
@@ -375,7 +375,7 @@ func game_drawEndGameResults()
 end
 
 ; Draw the given suit of cards
-func game_drawCards(int[5] suitOfCards)
+func game_drawCards(suitOfCards: int[5])
     var suitLength = card_getSuitLength(suitOfCards)
     var cardNum = 0
 
@@ -624,13 +624,13 @@ var gPlayerLastAction = GAMEACTION_NONE
 var gPlayerAvailableActions = GAMEACTION_NONE
 
 ; Make the player buy some chips and add to the usable chip balance in the game
-func player_buyChips(int numChips)
+func player_buyChips(numChips: int)
     gPlayerChips += numChips
     gGameStatMoneyInput += numChips
 end
 
 ; Casts the player's current bet and sets aside the bet money
-func player_makeBet(int betAmount)
+func player_makeBet(betAmount: int)
     gPlayerChips -= betAmount
     gPlayerBetChips = betAmount
 end
@@ -705,7 +705,7 @@ func player_findAvailableActions()
 end
 
 ; Tell if one of the player actions (passed as a bitmask) are available
-func player_areActionsAvailable(int actionsMask) -> bool
+func player_areActionsAvailable(actionsMask: int) -> bool
     return (gPlayerAvailableActions & actionsMask) != 0
 end
 
@@ -773,7 +773,7 @@ end
 var gDisplayMenu = true     ; Continue displaying the main menu?
 
 ; Draws a title bar for the menu
-func menu_drawTitleBar(string titleText)
+func menu_drawTitleBar(titleText: string)
     nextln()
     println("*************************************************")
     println(titleText)
@@ -841,7 +841,7 @@ func menu_displayNotEnoughMoneyWarning()
 end
 
 ; Display a warning when the player hasn't bet enough
-func menu_displayBetTooSmallWarning(int betAmount)
+func menu_displayBetTooSmallWarning(betAmount: int)
     menu_drawTitleBar("INVALID BET AMOUNT")
 
     println("You have entered an invalid bet amount!")

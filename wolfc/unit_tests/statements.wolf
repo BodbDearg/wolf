@@ -21,23 +21,23 @@ func testReturnStmntFunc3() -> int
     assert(false)   ; Should be unreachable!
 end
 
-func testReturnStmntFunc4(int i)
+func testReturnStmntFunc4(i: int)
     return if i == 1234
     assert(false)
 end
 
-func testReturnStmntFunc5(int i)
+func testReturnStmntFunc5(i: int)
     return unless i == 0
     assert(false)
 end
 
-func testReturnStmntFunc6(int i) -> int
+func testReturnStmntFunc6(i: int) -> int
     return 1 if i == 1
     return 2 if i >= 2
     return 0
 end
 
-func testReturnStmntFunc7(int i) -> int
+func testReturnStmntFunc7(i: int) -> int
     return 1 unless i <= 0
     return 0
 end

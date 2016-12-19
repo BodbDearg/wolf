@@ -8,7 +8,7 @@
 WC_BEGIN_NAMESPACE
 
 bool FuncArg::peek(const Token * currentToken) {
-    return Type::peek(currentToken);
+    return Identifier::peek(currentToken);
 }
 
 FuncArg * FuncArg::parse(const Token *& currentToken, LinearAlloc & alloc) {
@@ -16,13 +16,22 @@ FuncArg * FuncArg::parse(const Token *& currentToken, LinearAlloc & alloc) {
     // TODO: support arrays eventually
     // TODO: support pointers eventually
     
+    // Parse the identifier:
+    Identifier * ident = Identifier::parse(currentToken, alloc);
+    WC_GUARD(ident, nullptr);
+    
+    // Expect ':' following the identifier
+    if (currentToken->type != TokenType::kColon) {
+        parseError(*currentToken, "expect ':' following argument name for function argument!");
+        return nullptr;
+    }
+    
+    // Skip ':'
+    ++currentToken;
+    
     // Parse the data type
     Type * type = Type::parse(currentToken, alloc);
     WC_GUARD(type, nullptr);
-    
-    // Parse the identifier following:
-    Identifier * ident = Identifier::parse(currentToken, alloc);
-    WC_GUARD(ident, nullptr);
     
     // Success, return the node:
     return WC_NEW_AST_NODE(alloc, FuncArg, *type, *ident);

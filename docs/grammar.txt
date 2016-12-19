@@ -13,7 +13,7 @@ FuncArgList:
 	FuncArg , FuncArgList
 
 FuncArg:
-	Type Identifier
+	Identifier : Type
 
 Type:
 	PrimitiveType
