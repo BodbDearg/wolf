@@ -17,7 +17,7 @@ class PrimitiveType;
 /*
 Type:
 	PrimitiveType
-	Type [ AssignExpr ]
+	[ AssignExpr ] Type
 */
 class Type : public ASTNode {
 public:
@@ -44,10 +44,10 @@ public:
     PrimitiveType & mType;
 };
 
-/* Type [ AssignExpr ] */
+/* [ AssignExpr ] Type */
 class TypeArray final : public Type {
 public:
-    TypeArray(Type & elemType, AssignExpr & sizeExpr, const Token & endBracket);
+    TypeArray(const Token & startToken, AssignExpr & sizeExpr, Type & elemType);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -56,9 +56,9 @@ public:
     
     virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
     
-    Type &          mElemType;
+    const Token &   mStartToken;
     AssignExpr &    mSizeExpr;
-    const Token &   mEndBracket;
+    Type &          mElemType;
     
     /* The data type of the type array. This is generated during code generation. */
     DataType * mDataType = nullptr;

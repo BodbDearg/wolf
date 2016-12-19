@@ -119,12 +119,12 @@ func card_initializeDeck()
 end
 
 ; Gives an empty suit of cards
-func card_getEmptySuit() -> int[5]
+func card_getEmptySuit() -> [5]int
     return [ NO_CARD, NO_CARD, NO_CARD, NO_CARD, NO_CARD ]
 end
 
 ; Get the length (number of cards) in a player or dealer suit
-func card_getSuitLength(suitOfCards: int[5]) -> int
+func card_getSuitLength(suitOfCards: [5]int) -> int
     var suitLength = 0
     
     while suitLength < 5 and suitOfCards[suitLength] != NO_CARD
@@ -143,7 +143,7 @@ func card_drawCard() -> int
 end
 
 ; Gets the best value of a player's / dealer's hand
-func card_getSuitValue(suitOfCards: int[5]) -> int
+func card_getSuitValue(suitOfCards: [5]int) -> int
     ; Get how many cards are actually in the suit first
     var suitLength = card_getSuitLength(suitOfCards)
     
@@ -375,7 +375,7 @@ func game_drawEndGameResults()
 end
 
 ; Draw the given suit of cards
-func game_drawCards(suitOfCards: int[5])
+func game_drawCards(suitOfCards: [5]int)
     var suitLength = card_getSuitLength(suitOfCards)
     var cardNum = 0
 

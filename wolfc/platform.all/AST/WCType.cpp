@@ -19,51 +19,44 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 
 bool Type::peek(const Token * currentToken) {
-    return PrimitiveType::peek(currentToken);
+    return  currentToken->type == TokenType::kLBrack ||
+            PrimitiveType::peek(currentToken);
 }
 
 Type * Type::parse(const Token *& currentToken, LinearAlloc & alloc) {
-    // Parse a primitive type first:
+    // See if there is an array type following:
+    if (currentToken->type == TokenType::kLBrack) {
+        // Array type ahead: skip the '['
+        const Token * startToken = currentToken;
+        ++currentToken;
+        
+        // Parse the inner assign expression for the array size:
+        AssignExpr * arraySizeExpr = AssignExpr::parse(currentToken, alloc);
+        WC_GUARD(arraySizeExpr, nullptr);
+        
+        // Expect a ']' next:
+        if (currentToken->type != TokenType::kRBrack) {
+            parseError(*currentToken, "Expected ']' to close array size specifier!");
+            return nullptr;
+        }
+        
+        // Skip ']'
+        ++currentToken;
+        
+        // Parse the inner type following:
+        Type * innerType = Type::parse(currentToken, alloc);
+        WC_GUARD(innerType, nullptr);
+        
+        // Return the array type:
+        return WC_NEW_AST_NODE(alloc, TypeArray, *startToken, *arraySizeExpr, *innerType);
+    }
+    
+    // Primitive type following, parse it:
     PrimitiveType * primitiveType = PrimitiveType::parse(currentToken, alloc);
     WC_GUARD(primitiveType, nullptr);
     
-    // Make the outer type:
-    Type * outerType = WC_NEW_AST_NODE(alloc, TypePrimitive, *primitiveType);
-    
-    // Continue parsing until we see no array etc. tokens ahead:
-    while (true) {
-        // See if array specifier ahead: [ AssignExpr ]
-        if (currentToken->type == TokenType::kLBrack) {
-            // Skip the '['
-            ++currentToken;
-            
-            // Parse the inner assign expression for the array size:
-            AssignExpr * arraySizeExpr = AssignExpr::parse(currentToken, alloc);
-            WC_GUARD(arraySizeExpr, nullptr);
-            
-            // Expect a ']' next:
-            if (currentToken->type != TokenType::kRBrack) {
-                parseError(*currentToken, "Expected ']' to close array size specifier!");
-                return nullptr;
-            }
-            
-            // Consume the ']':
-            const Token * endBracket = currentToken;
-            ++currentToken;
-            
-            // Make the new array type, and make it the new outer type:
-            outerType = WC_NEW_AST_NODE(alloc, TypeArray, *outerType, *arraySizeExpr, * endBracket);
-            
-            // Continue parsing for now:
-            continue;
-        }
-        
-        // If we've got to here then nothing else is ahead, break:
-        break;
-    }
-    
-    // Return the outer type:
-    return outerType;
+    // Return the node parsed
+    return WC_NEW_AST_NODE(alloc, TypePrimitive, *primitiveType);
 }
 
 //-----------------------------------------------------------------------------
@@ -94,21 +87,21 @@ bool TypePrimitive::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
 // TypeArray
 //-----------------------------------------------------------------------------
 
-TypeArray::TypeArray(Type & elemType, AssignExpr & sizeExpr, const Token & endBracket) :
-    mElemType(elemType),
+TypeArray::TypeArray(const Token & startToken, AssignExpr & sizeExpr, Type & elemType) :
+    mStartToken(startToken),
     mSizeExpr(sizeExpr),
-    mEndBracket(endBracket)
+    mElemType(elemType)
 {
-    mElemType.mParent = this;
     mSizeExpr.mParent = this;
+    mElemType.mParent = this;
 }
 
 const Token & TypeArray::getStartToken() const {
-    return mElemType.getStartToken();
+    return mStartToken;
 }
 
 const Token & TypeArray::getEndToken() const {
-    return mEndBracket;
+    return mElemType.getEndToken();
 }
 
 DataType & TypeArray::dataType() {

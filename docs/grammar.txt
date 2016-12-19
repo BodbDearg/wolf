@@ -17,7 +17,7 @@ FuncArg:
 
 Type:
 	PrimitiveType
-	Type [ AssignExpr ]
+	[ AssignExpr ] Type
 
 PrimitiveType:
 	void|int|bool|string
