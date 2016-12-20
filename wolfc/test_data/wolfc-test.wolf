@@ -1,3 +1,6 @@
+var v : bool = 2
+
 func main() -> int
+    print(v)
     return 0
 end

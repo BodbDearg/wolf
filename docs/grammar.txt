@@ -50,6 +50,7 @@ AssertStmnt:
 
 VarDecl:
     var Identifier = AssignExpr
+    var Identifier : Type = AssignExpr
 
 IfStmnt:
 	if|unless AssignExpr [then] Scope end
