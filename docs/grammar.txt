@@ -20,7 +20,7 @@ Type:
 	[ AssignExpr ] Type
 
 PrimitiveType:
-	void|int|bool|string
+	void|int|int64|bool|string
 
 Scope:
     [0..N: Stmnt]
@@ -143,9 +143,9 @@ ShiftExpr:
 
 UnaryExpr:
 	PostfixExpr
-	-PostfixExpr
-	+PostfixExpr
-	(AssignExpr)
+	- PostfixExpr
+	+ PostfixExpr
+	( AssignExpr )
 
 PostfixExpr:
 	CastExpr

@@ -10,7 +10,7 @@ class LinearAlloc;
 
 /*
 PrimitiveType:
-	void|int|bool|string
+	void|int|int64|bool|string
 */
 class PrimitiveType final : public ASTNode {
 public:
