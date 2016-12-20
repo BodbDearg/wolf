@@ -59,9 +59,7 @@ public:
     }
     
     /* Utility. Tell if this data type is an integer data type. */
-    inline bool isInteger() const {
-        return getTypeId() == DataTypeId::kInt;
-    }
+    virtual bool isInteger() const;
     
     /* Utility. Tell if this data type is an array data type. */
     inline bool isArray() const {

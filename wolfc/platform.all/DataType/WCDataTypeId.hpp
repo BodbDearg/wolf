@@ -14,8 +14,8 @@ enum class DataTypeId : uint8_t {
     kUnknown,
     /* Void/null data type. No actual data held. */
     kVoid,
-    /* Integer data type */
-    kInt,
+    /* Signed 64-bit integer data type */
+    kInt64,
     /* Boolean data type */
     kBool,
     /**

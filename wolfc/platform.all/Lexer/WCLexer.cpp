@@ -700,6 +700,7 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         parseKeyword("false", TokenType::kFalse) ||
         parseKeyword("void", TokenType::kVoid) ||
         parseKeyword("int", TokenType::kInt) ||
+        parseKeyword("int64", TokenType::kInt64) ||        
         parseKeyword("bool", TokenType::kBool) ||
         parseKeyword("string", TokenType::kString) ||
         parseKeyword("var", TokenType::kVar) ||

@@ -68,7 +68,7 @@ bool ReadnumExpr::isConstExpr() {
 }
 
 DataType & ReadnumExpr::dataType() {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
 }
 
 llvm::Value * ReadnumExpr::codegenAddrOf(CodegenCtx & cgCtx) {

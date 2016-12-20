@@ -203,7 +203,7 @@ llvm::Constant * PostfixExprIncDecBase::codegenExprConstEval(CodegenCtx & cgCtx)
 bool PostfixExprIncDecBase::compileCheckExprIsInt() const {
     const DataType & type = mExpr.dataType();
 
-    if (!type.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt))) {
+    if (!type.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
         compileError("Data type operated on by increment/decrement operator must be 'int' for now and not '%s'!",
                      type.name().c_str());
 

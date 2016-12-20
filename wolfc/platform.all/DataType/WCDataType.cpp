@@ -1,6 +1,7 @@
 #include "WCDataType.hpp"
 
 #include "AST/WCASTNode.hpp"
+#include "WCAssert.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -14,6 +15,10 @@ bool DataType::isValid() const {
 
 bool DataType::isSized() const {
     return true;    // True for all types except 'Unknown' and 'Void'
+}
+
+bool DataType::isInteger() const {
+    return false;   // False by default for everything except integer types
 }
 
 bool DataType::requiresStorage() const {

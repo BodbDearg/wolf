@@ -34,6 +34,27 @@ namespace PrimitiveDataTypes {
      * Returns the 'unknown' data type if the keyword does not correspond to a valid data type.
      */
     DataType & getUsingLangKeyword(TokenType tokenType);
+    
+    /**
+     * Get the default unsigned integer type or the type of the 'uint' alias. Will be a 32-bit
+     * unsigned integer for 32-bit targets, and a 64-bit unsigned integer for 64-bit targets.
+     */
+    DataType & getDefaultUIntType();
+    DataTypeId getDefaultUIntTypeId();
+    
+    /**
+     * Get the default signed integer type or the type of the 'int' alias. Will be a 32-bit
+     * signed integer for 32-bit targets, and a 64-bit signed integer for 64-bit targets.
+     */
+    DataType & getDefaultIntType();
+    DataTypeId getDefaultIntTypeId();
+    
+    /**
+     * Get the default floating point type or the type of the 'float' alias. Will be 32-bit unless
+     * double precision by default is specified.
+     */
+    DataType & getDefaultFloatType();
+    DataTypeId getDefaultFloatTypeId();
 }
 
 WC_END_NAMESPACE

@@ -163,7 +163,7 @@ llvm::Value * UnaryExprMinus::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: support more types
     const DataType & exprType = mExpr.dataType();
     
-    if (!exprType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt))) {
+    if (!exprType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
         compileError("Unary '-' operator only supports 'int' datatype, not '%s'!",
                      exprType.name().c_str());
         
@@ -179,7 +179,7 @@ llvm::Constant * UnaryExprMinus::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: support more types
     const DataType & exprType = mExpr.dataType();
     
-    if (!exprType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt))) {
+    if (!exprType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
         compileError("Unary '-' operator only supports 'int' datatype, not '%s'!",
                      exprType.name().c_str());
         
@@ -226,7 +226,7 @@ llvm::Value * UnaryExprPlus::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: support more types
     const DataType & exprType = mExpr.dataType();
     
-    if (!exprType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt))) {
+    if (!exprType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
         compileError("Unary '+' operator only supports 'int' datatype, not '%s'!",
                      exprType.name().c_str());
         
@@ -240,7 +240,7 @@ llvm::Constant * UnaryExprPlus::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: support more types
     const DataType & exprType = mExpr.dataType();
     
-    if (!exprType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt))) {
+    if (!exprType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
         compileError("Unary '+' operator only supports 'int' datatype, not '%s'!",
                      exprType.name().c_str());
         

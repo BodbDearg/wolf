@@ -130,7 +130,7 @@ RandExprRand::RandExprRand(const Token & startToken, const Token & endToken) :
 }
 
 DataType & RandExprRand::dataType() {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
 }
 
 llvm::Value * RandExprRand::codegenExprEval(CodegenCtx & cgCtx) {
@@ -180,7 +180,7 @@ llvm::Value * RandExprSRand::codegenExprEval(CodegenCtx & cgCtx) {
     // The seed expr type must be 'int'
     DataType & seedDataType = mSeedExpr.dataType();
     
-    if (!seedDataType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt))) {
+    if (!seedDataType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
         compileError("Data type for seed given to 'srand()' call must be 'int' not '%s'!",
                      seedDataType.name().c_str());
         

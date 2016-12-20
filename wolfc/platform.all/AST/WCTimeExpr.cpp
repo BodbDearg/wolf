@@ -68,7 +68,7 @@ bool TimeExpr::isConstExpr() {
 }
 
 DataType & TimeExpr::dataType() {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt);
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
 }
 
 llvm::Value * TimeExpr::codegenAddrOf(CodegenCtx & cgCtx) {

@@ -48,7 +48,7 @@ bool IntLit::isConstExpr() {
 }
 
 DataType & IntLit::dataType() {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt);
+    return PrimitiveDataTypes::getDefaultUIntType();
 }
 
 llvm::Value * IntLit::codegenAddrOf(CodegenCtx & cgCtx) {
