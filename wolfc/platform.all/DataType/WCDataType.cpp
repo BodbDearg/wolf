@@ -11,8 +11,10 @@ WC_THIRD_PARTY_INCLUDES_END
 WC_BEGIN_NAMESPACE
 
 const char * const DataType::kOpSymbol_Add = "+";
+const char * const DataType::kOpSymbol_Sub = "-";
 
 const char * const DataType::kOpName_Add = "add";
+const char * const DataType::kOpName_Sub = "subtract";
 
 DataType::~DataType() {
     WC_EMPTY_FUNC_BODY();
@@ -94,7 +96,21 @@ llvm::Value * DataType::codegenAddOp(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, "+", "add", rightTy);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Add, kOpName_Add, rightTy);
+    return nullptr;
+}
+
+llvm::Value * DataType::codegenSubOp(CodegenCtx & cgCtx,
+                                     ASTNode & callingNode,
+                                     llvm::Value & leftVal,
+                                     DataType & rightTy,
+                                     llvm::Value & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Sub, kOpName_Sub, rightTy);
     return nullptr;
 }
 
@@ -106,7 +122,19 @@ llvm::Constant * DataType::codegenConstAddOp(ASTNode & callingNode,
     // The default impl simply issues an error that the operator is not available
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, "+", "add", rightTy);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Add, kOpName_Add, rightTy);
+    return nullptr;
+}
+
+llvm::Constant * DataType::codegenConstSubOp(ASTNode & callingNode,
+                                             llvm::Constant & leftVal,
+                                             DataType & rightTy,
+                                             llvm::Constant & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Sub, kOpName_Sub, rightTy);
     return nullptr;
 }
 

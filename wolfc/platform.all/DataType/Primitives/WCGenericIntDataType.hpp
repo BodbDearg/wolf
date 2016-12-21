@@ -15,7 +15,18 @@ public:
                                        DataType & rightTy,
                                        llvm::Value & rightVal) override;
     
+    virtual llvm::Value * codegenSubOp(CodegenCtx & cgCtx,
+                                       ASTNode & callingNode,
+                                       llvm::Value & leftVal,
+                                       DataType & rightTy,
+                                       llvm::Value & rightVal) override;
+    
     virtual llvm::Constant * codegenConstAddOp(ASTNode & callingNode,
+                                               llvm::Constant & leftVal,
+                                               DataType & rightTy,
+                                               llvm::Constant & rightVal) override;
+    
+    virtual llvm::Constant * codegenConstSubOp(ASTNode & callingNode,
                                                llvm::Constant & leftVal,
                                                DataType & rightTy,
                                                llvm::Constant & rightVal) override;

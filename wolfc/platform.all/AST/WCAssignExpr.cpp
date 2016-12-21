@@ -219,13 +219,16 @@ llvm::Value * AssignExprAssignAdd::codegenExprEval(CodegenCtx & cgCtx) {
     // Evaluate left value and right side value
     llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
     WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftValue);
-    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightValue, nullptr);
+    llvm::Value * leftVal = cgCtx.irBuilder.CreateLoad(leftAddr);
+    WC_ASSERT(leftVal);
+    llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightVal, nullptr);
 
     // Do the operation and store the result on the left
-    llvm::Value * newValue = cgCtx.irBuilder.CreateAdd(leftValue, rightValue);
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    llvm::Value * newValue = leftTy.codegenAddOp(cgCtx, *this, *leftVal, rightTy, *rightVal);
+    WC_GUARD(newValue, nullptr);
     llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
     WC_ASSERT(storeInst);
 
@@ -251,13 +254,16 @@ llvm::Value * AssignExprAssignSub::codegenExprEval(CodegenCtx & cgCtx) {
     // Evaluate left value and right side value
     llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
     WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftValue);
-    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightValue, nullptr);
+    llvm::Value * leftVal = cgCtx.irBuilder.CreateLoad(leftAddr);
+    WC_ASSERT(leftVal);
+    llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightVal, nullptr);
 
     // Do the operation and store the result on the left
-    llvm::Value * newValue = cgCtx.irBuilder.CreateSub(leftValue, rightValue);
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    llvm::Value * newValue = leftTy.codegenSubOp(cgCtx, *this, *leftVal, rightTy, *rightVal);
+    WC_GUARD(newValue, nullptr);
     llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
     WC_ASSERT(storeInst);
 

@@ -112,11 +112,22 @@ public:
                                        DataType & rightTy,
                                        llvm::Value & rightVal);
     
+    virtual llvm::Value * codegenSubOp(CodegenCtx & cgCtx,
+                                       ASTNode & callingNode,
+                                       llvm::Value & leftVal,
+                                       DataType & rightTy,
+                                       llvm::Value & rightVal);
+    
     /**
      * Codegen various compile time binary operations: the two values must to be of the same type.
      * The default impl issues an 'unsupported op' compile error.
      */
     virtual llvm::Constant * codegenConstAddOp(ASTNode & callingNode,
+                                               llvm::Constant & leftVal,
+                                               DataType & rightTy,
+                                               llvm::Constant & rightVal);
+    
+    virtual llvm::Constant * codegenConstSubOp(ASTNode & callingNode,
                                                llvm::Constant & leftVal,
                                                DataType & rightTy,
                                                llvm::Constant & rightVal);
@@ -153,8 +164,10 @@ public:
     
 protected:
     static const char * const kOpSymbol_Add;
+    static const char * const kOpSymbol_Sub;
     
     static const char * const kOpName_Add;
+    static const char * const kOpName_Sub;
     
     /**
      * Run code generation for this data type.

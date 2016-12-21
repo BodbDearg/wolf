@@ -27,6 +27,20 @@ llvm::Value * GenericIntDataType::codegenAddOp(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateAdd(&leftVal, &rightVal, "GenericInt_AddOp");
 }
 
+llvm::Value * GenericIntDataType::codegenSubOp(CodegenCtx & cgCtx,
+                                               ASTNode & callingNode,
+                                               llvm::Value & leftVal,
+                                               DataType & rightTy,
+                                               llvm::Value & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_Sub,
+                                            kOpName_Sub,
+                                            rightTy), nullptr);
+    
+    return cgCtx.irBuilder.CreateSub(&leftVal, &rightVal, "GenericInt_SubOp");
+}
+
 llvm::Constant * GenericIntDataType::codegenConstAddOp(ASTNode & callingNode,
                                                        llvm::Constant & leftVal,
                                                        DataType & rightTy,
@@ -38,6 +52,19 @@ llvm::Constant * GenericIntDataType::codegenConstAddOp(ASTNode & callingNode,
                                             rightTy), nullptr);
     
     return llvm::ConstantExpr::getAdd(&leftVal, &rightVal);
+}
+
+llvm::Constant * GenericIntDataType::codegenConstSubOp(ASTNode & callingNode,
+                                                       llvm::Constant & leftVal,
+                                                       DataType & rightTy,
+                                                       llvm::Constant & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_Sub,
+                                            kOpName_Sub,
+                                            rightTy), nullptr);
+    
+    return llvm::ConstantExpr::getSub(&leftVal, &rightVal);
 }
 
 WC_END_NAMESPACE

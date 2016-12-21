@@ -220,13 +220,17 @@ llvm::Value * AddExprSub::codegenOpEval(CodegenCtx & cgCtx,
                                         llvm::Value & leftVal,
                                         llvm::Value & rightVal)
 {
-    return cgCtx.irBuilder.CreateSub(&leftVal, &rightVal, "AddExprSub_SubOp");
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return leftTy.codegenSubOp(cgCtx, *this, leftVal, rightTy, rightVal);
 }
 
 llvm::Constant * AddExprSub::codegenOpConstEval(llvm::Constant & leftVal,
                                                 llvm::Constant & rightVal)
 {
-    return llvm::ConstantExpr::getSub(&leftVal, &rightVal);
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return leftTy.codegenConstSubOp(*this, leftVal, rightTy, rightVal);
 }
 
 //-----------------------------------------------------------------------------
