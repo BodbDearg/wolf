@@ -1,4 +1,37 @@
 ;==================================================================================================
+; LoopStmnt
+;==================================================================================================
+func testLoopStmnt()
+    ; loop
+    var i = 0
+
+    loop
+        i++
+        break if i == 3
+    end
+
+    assert(i == 3)
+
+    ; loop repeat while
+    i = 0
+
+    loop
+        i++
+    repeat while i < 3
+
+    assert(i == 3)
+
+    ; loop repeat until
+    i = 0
+    
+    loop
+        i++
+    repeat until i >= 3
+
+    assert(i == 3)
+end
+
+;==================================================================================================
 ; ScopeStmnt
 ;==================================================================================================
 func testScopeStmnt()
@@ -26,7 +59,7 @@ func testBreakStatement()
         assert(false)   ; Should not be reached
     end
 
-    ; break if AssignExpr
+    ; break if
     var breakCond = true
 
     loop
@@ -34,7 +67,7 @@ func testBreakStatement()
         assert(false)   ; Should not be reached
     end
 
-    ; break unless AssignExpr
+    ; break unless
     breakCond = false
 
     loop
@@ -56,7 +89,7 @@ func testNextStatement()
         assert(false)   ; Should not be reached
     end
 
-    ; next if AssignExpr
+    ; next if
     continue = true
 
     while continue 
@@ -65,7 +98,7 @@ func testNextStatement()
         assert(false)   ; Should not be reached
     end
 
-    ; next unless AssignExpr
+    ; next unless
     continue = true
 
     while continue 
@@ -109,7 +142,6 @@ func testReturnStmntFunc5(i: int)
 end
 
 func testReturnStmntFunc6(i: int) -> int
-    ; return if
     return 1 if i == 1
     return 2 if i >= 2
     return 0
@@ -142,6 +174,7 @@ end
 ; Run the tests
 ;==================================================================================================
 func main() -> int
+    testLoopStmnt()
     testScopeStmnt()
     testBreakStatement()
     testNextStatement()
