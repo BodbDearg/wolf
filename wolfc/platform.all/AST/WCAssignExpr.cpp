@@ -174,6 +174,41 @@ bool AssignExprAssignBase::compileCheckAssignIsLegal() {
 }
 
 //-----------------------------------------------------------------------------
+// AssignExprBinaryOpBase
+//-----------------------------------------------------------------------------
+
+AssignExprBinaryOpBase::AssignExprBinaryOpBase(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
+    AssignExprAssignBase(leftExpr, rightExpr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+llvm::Value * AssignExprBinaryOpBase::codegenExprEval(CodegenCtx & cgCtx) {
+    // Basic compile checks:
+    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
+
+    // Evaluate left value and right side value
+    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
+    WC_GUARD(leftAddr, nullptr);
+    llvm::Value * leftVal = cgCtx.irBuilder.CreateLoad(leftAddr);
+    WC_ASSERT(leftVal);
+    llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightVal, nullptr);
+
+    // Do the operation and store the result on the left
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    llvm::Value * newVal = codegenBinaryOp(cgCtx, leftTy, *leftVal, rightTy, *rightVal);
+    WC_GUARD(newVal, nullptr);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
+    WC_ASSERT(storeInst);
+
+    // The expression evalutes to the left expression, which now has the value of the 
+    // new value, so return that...
+    return newVal;
+}
+
+//-----------------------------------------------------------------------------
 // AssignExprAssign
 //-----------------------------------------------------------------------------
 
@@ -207,34 +242,18 @@ llvm::Value * AssignExprAssign::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 
 AssignExprAssignAdd::AssignExprAssignAdd(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprAssignBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AssignExprAssignAdd::codegenExprEval(CodegenCtx & cgCtx) {
-    // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
-
-    // Evaluate left value and right side value
-    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftVal = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftVal);
-    llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightVal, nullptr);
-
-    // Do the operation and store the result on the left
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    llvm::Value * newVal = leftTy.codegenAddOp(cgCtx, *this, *leftVal, rightTy, *rightVal);
-    WC_GUARD(newVal, nullptr);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
-    WC_ASSERT(storeInst);
-
-    // The expression evalutes to the left expression, which now has the value of the 
-    // new value, so return that...
-    return newVal;
+llvm::Value * AssignExprAssignAdd::codegenBinaryOp(CodegenCtx & cgCtx,
+                                                   DataType & leftTy,
+                                                   llvm::Value & leftVal,
+                                                   DataType & rightTy,
+                                                   llvm::Value & rightVal)
+{
+    return leftTy.codegenAddOp(cgCtx, *this, leftVal, rightTy, rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -242,34 +261,18 @@ llvm::Value * AssignExprAssignAdd::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 
 AssignExprAssignSub::AssignExprAssignSub(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprAssignBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AssignExprAssignSub::codegenExprEval(CodegenCtx & cgCtx) {
-    // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
-
-    // Evaluate left value and right side value
-    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftVal = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftVal);
-    llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightVal, nullptr);
-
-    // Do the operation and store the result on the left
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    llvm::Value * newVal = leftTy.codegenSubOp(cgCtx, *this, *leftVal, rightTy, *rightVal);
-    WC_GUARD(newVal, nullptr);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
-    WC_ASSERT(storeInst);
-
-    // The expression evalutes to the left expression, which now has the value of the 
-    // new value, so return that...
-    return newVal;
+llvm::Value * AssignExprAssignSub::codegenBinaryOp(CodegenCtx & cgCtx,
+                                                   DataType & leftTy,
+                                                   llvm::Value & leftVal,
+                                                   DataType & rightTy,
+                                                   llvm::Value & rightVal)
+{
+    return leftTy.codegenSubOp(cgCtx, *this, leftVal, rightTy, rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -277,34 +280,18 @@ llvm::Value * AssignExprAssignSub::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 
 AssignExprAssignBOr::AssignExprAssignBOr(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprAssignBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AssignExprAssignBOr::codegenExprEval(CodegenCtx & cgCtx) {
-    // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
-    
-    // Evaluate left value and right side value
-    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftVal = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftVal);
-    llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightVal, nullptr);
-    
-    // Do the operation and store the result on the left
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    llvm::Value * newVal = leftTy.codegenBOrOp(cgCtx, *this, *leftVal, rightTy, *rightVal);
-    WC_GUARD(newVal, nullptr);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
-    WC_ASSERT(storeInst);
-    
-    // The expression evalutes to the left expression, which now has the value of the
-    // new value, so return that...
-    return newVal;
+llvm::Value * AssignExprAssignBOr::codegenBinaryOp(CodegenCtx & cgCtx,
+                                                   DataType & leftTy,
+                                                   llvm::Value & leftVal,
+                                                   DataType & rightTy,
+                                                   llvm::Value & rightVal)
+{
+    return leftTy.codegenBOrOp(cgCtx, *this, leftVal, rightTy, rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -312,31 +299,18 @@ llvm::Value * AssignExprAssignBOr::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 
 AssignExprAssignBXor::AssignExprAssignBXor(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprAssignBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AssignExprAssignBXor::codegenExprEval(CodegenCtx & cgCtx) {
-    // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
-    
-    // Evaluate left value and right side value
-    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftValue);
-    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightValue, nullptr);
-    
-    // Do the operation and store the result on the left
-    llvm::Value * newVal = cgCtx.irBuilder.CreateXor(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
-    WC_ASSERT(storeInst);
-    
-    // The expression evalutes to the left expression, which now has the value of the
-    // new value, so return that...
-    return newVal;
+llvm::Value * AssignExprAssignBXor::codegenBinaryOp(CodegenCtx & cgCtx,
+                                                    DataType & leftTy,
+                                                    llvm::Value & leftVal,
+                                                    DataType & rightTy,
+                                                    llvm::Value & rightVal)
+{
+    return leftTy.codegenBXOrOp(cgCtx, *this, leftVal, rightTy, rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -344,31 +318,18 @@ llvm::Value * AssignExprAssignBXor::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 
 AssignExprAssignMul::AssignExprAssignMul(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprAssignBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AssignExprAssignMul::codegenExprEval(CodegenCtx & cgCtx) {
-    // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
-
-    // Evaluate left value and right side value
-    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftValue);
-    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightValue, nullptr);
-
-    // Do the operation and store the result on the left
-    llvm::Value * newVal = cgCtx.irBuilder.CreateMul(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
-    WC_ASSERT(storeInst);
-
-    // The expression evalutes to the left expression, which now has the value of the 
-    // new value, so return that...
-    return newVal;
+llvm::Value * AssignExprAssignMul::codegenBinaryOp(CodegenCtx & cgCtx,
+                                                   DataType & leftTy,
+                                                   llvm::Value & leftVal,
+                                                   DataType & rightTy,
+                                                   llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateMul(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -376,31 +337,18 @@ llvm::Value * AssignExprAssignMul::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 
 AssignExprAssignDiv::AssignExprAssignDiv(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprAssignBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AssignExprAssignDiv::codegenExprEval(CodegenCtx & cgCtx) {
-    // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
-
-    // Evaluate left value and right side value
-    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftValue);
-    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightValue, nullptr);
-
-    // Do the operation and store the result on the left
-    llvm::Value * newVal = cgCtx.irBuilder.CreateSDiv(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
-    WC_ASSERT(storeInst);
-
-    // The expression evalutes to the left expression, which now has the value of the 
-    // new value, so return that...
-    return newVal;
+llvm::Value * AssignExprAssignDiv::codegenBinaryOp(CodegenCtx & cgCtx,
+                                                   DataType & leftTy,
+                                                   llvm::Value & leftVal,
+                                                   DataType & rightTy,
+                                                   llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateSDiv(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -408,31 +356,18 @@ llvm::Value * AssignExprAssignDiv::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 
 AssignExprAssignMod::AssignExprAssignMod(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprAssignBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AssignExprAssignMod::codegenExprEval(CodegenCtx & cgCtx) {
-    // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
-
-    // Evaluate left value and right side value
-    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftValue);
-    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightValue, nullptr);
-
-    // Do the operation and store the result on the left
-    llvm::Value * newVal = cgCtx.irBuilder.CreateSRem(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
-    WC_ASSERT(storeInst);
-
-    // The expression evalutes to the left expression, which now has the value of the 
-    // new value, so return that...
-    return newVal;
+llvm::Value * AssignExprAssignMod::codegenBinaryOp(CodegenCtx & cgCtx,
+                                                   DataType & leftTy,
+                                                   llvm::Value & leftVal,
+                                                   DataType & rightTy,
+                                                   llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateSRem(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -440,31 +375,18 @@ llvm::Value * AssignExprAssignMod::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 
 AssignExprAssignBAnd::AssignExprAssignBAnd(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprAssignBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AssignExprAssignBAnd::codegenExprEval(CodegenCtx & cgCtx) {
-    // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
-    
-    // Evaluate left value and right side value
-    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftValue);
-    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightValue, nullptr);
-    
-    // Do the operation and store the result on the left
-    llvm::Value * newVal = cgCtx.irBuilder.CreateAnd(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
-    WC_ASSERT(storeInst);
-    
-    // The expression evalutes to the left expression, which now has the value of the
-    // new value, so return that...
-    return newVal;
+llvm::Value * AssignExprAssignBAnd::codegenBinaryOp(CodegenCtx & cgCtx,
+                                                    DataType & leftTy,
+                                                    llvm::Value & leftVal,
+                                                    DataType & rightTy,
+                                                    llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateAnd(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -472,31 +394,18 @@ llvm::Value * AssignExprAssignBAnd::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 
 AssignExprAssignLShift::AssignExprAssignLShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprAssignBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AssignExprAssignLShift::codegenExprEval(CodegenCtx & cgCtx) {
-    // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
-    
-    // Evaluate left value and right side value
-    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftValue);
-    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightValue, nullptr);
-    
-    // Do the operation and store the result on the left
-    llvm::Value * newVal = cgCtx.irBuilder.CreateShl(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
-    WC_ASSERT(storeInst);
-    
-    // The expression evalutes to the left expression, which now has the value of the
-    // new value, so return that...
-    return newVal;
+llvm::Value * AssignExprAssignLShift::codegenBinaryOp(CodegenCtx & cgCtx,
+                                                      DataType & leftTy,
+                                                      llvm::Value & leftVal,
+                                                      DataType & rightTy,
+                                                      llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateShl(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -504,31 +413,18 @@ llvm::Value * AssignExprAssignLShift::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 
 AssignExprAssignArithRShift::AssignExprAssignArithRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprAssignBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AssignExprAssignArithRShift::codegenExprEval(CodegenCtx & cgCtx) {
-    // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
-    
-    // Evaluate left value and right side value
-    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftValue);
-    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightValue, nullptr);
-    
-    // Do the operation and store the result on the left
-    llvm::Value * newVal = cgCtx.irBuilder.CreateAShr(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
-    WC_ASSERT(storeInst);
-    
-    // The expression evalutes to the left expression, which now has the value of the
-    // new value, so return that...
-    return newVal;
+llvm::Value * AssignExprAssignArithRShift::codegenBinaryOp(CodegenCtx & cgCtx,
+                                                           DataType & leftTy,
+                                                           llvm::Value & leftVal,
+                                                           DataType & rightTy,
+                                                           llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateAShr(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
@@ -536,31 +432,18 @@ llvm::Value * AssignExprAssignArithRShift::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 
 AssignExprAssignLogicRShift::AssignExprAssignLogicRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprAssignBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AssignExprAssignLogicRShift::codegenExprEval(CodegenCtx & cgCtx) {
-    // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
-    
-    // Evaluate left value and right side value
-    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftValue);
-    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightValue, nullptr);
-    
-    // Do the operation and store the result on the left
-    llvm::Value * newVal = cgCtx.irBuilder.CreateLShr(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
-    WC_ASSERT(storeInst);
-    
-    // The expression evalutes to the left expression, which now has the value of the
-    // new value, so return that...
-    return newVal;
+llvm::Value * AssignExprAssignLogicRShift::codegenBinaryOp(CodegenCtx & cgCtx,
+                                                           DataType & leftTy,
+                                                           llvm::Value & leftVal,
+                                                           DataType & rightTy,
+                                                           llvm::Value & rightVal)
+{
+    return cgCtx.irBuilder.CreateLShr(&leftVal, &rightVal);
 }
 
 WC_END_NAMESPACE
