@@ -12,6 +12,8 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
+// TODO: Make this be for ALL numeric literals
+
 bool IntLit::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kIntLit;
 }
@@ -48,20 +50,24 @@ bool IntLit::isConstExpr() {
 }
 
 DataType & IntLit::dataType() {
+    // TODO: data type should be based on the numeric literal and precision suffixes used
     return PrimitiveDataTypes::getDefaultUIntType();
 }
 
 llvm::Value * IntLit::codegenAddrOf(CodegenCtx & cgCtx) {
+    // TODO: update message here when we convert to a more generic numeric literal
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of an 'int' literal!");
     return nullptr;
 }
 
 llvm::Value * IntLit::codegenExprEval(CodegenCtx & cgCtx) {
+    // TODO: data type should be based on the numeric literal and precision suffixes used
     return cgCtx.irBuilder.getInt64(mToken.data.intVal);
 }
 
 llvm::Constant * IntLit::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // TODO: data type should be based on the numeric literal and precision suffixes used
     return llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), mToken.data.intVal);
 }
 

@@ -1,4 +1,36 @@
 ;==================================================================================================
+; NextStmnt
+;==================================================================================================
+func testNextStatement()
+    ; next
+    var continue = false
+
+    while continue 
+        continue = false
+        next
+        assert(false)   ; Should not be reached
+    end
+
+    ; next if AssignExpr
+    continue = true
+
+    while continue 
+        continue = false
+        next if not continue
+        assert(false)   ; Should not be reached
+    end
+
+    ; next unless AssignExpr
+    continue = true
+
+    while continue 
+        continue = false
+        next unless continue
+        assert(false)   ; Should not be reached
+    end
+end
+
+;==================================================================================================
 ; ReturnStmnt
 ;==================================================================================================
 func testReturnStmntFunc1()
@@ -32,6 +64,7 @@ func testReturnStmntFunc5(i: int)
 end
 
 func testReturnStmntFunc6(i: int) -> int
+    ; return if
     return 1 if i == 1
     return 2 if i >= 2
     return 0
@@ -64,6 +97,7 @@ end
 ; Run the tests
 ;==================================================================================================
 func main() -> int
+    testNextStatement()
     testReturnStmnt()
     return 0
 end

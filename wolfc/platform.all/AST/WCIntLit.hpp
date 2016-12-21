@@ -7,6 +7,8 @@ WC_BEGIN_NAMESPACE
 
 class LinearAlloc;
 
+// TODO: Make this be for ALL numeric literals
+
 /* Represents TokenType::kIntLit in the AST tree */
 class IntLit final : public ASTNode, public IExpr {
 public:

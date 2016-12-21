@@ -139,7 +139,7 @@ llvm::Value * NotExprNot::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(compileCheckExprIsBool(), nullptr);
     
     // Create the not operation
-    return cgCtx.irBuilder.CreateNot(value);
+    return cgCtx.irBuilder.CreateNot(value, "NotExprNot_NotOp");
 }
 
 llvm::Constant * NotExprNot::codegenExprConstEval(CodegenCtx & cgCtx) {
@@ -214,7 +214,7 @@ llvm::Value * NotExprBNot::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(compileCheckExprIsInt(), nullptr);
     
     // Create the not operation
-    return cgCtx.irBuilder.CreateNot(value);
+    return cgCtx.irBuilder.CreateNot(value, "NotExprBNot_NotOp");
 }
 
 llvm::Constant * NotExprBNot::codegenExprConstEval(CodegenCtx & cgCtx) {
