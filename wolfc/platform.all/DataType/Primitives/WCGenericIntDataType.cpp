@@ -55,6 +55,20 @@ llvm::Value * GenericIntDataType::codegenBOrOp(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateOr(&leftVal, &rightVal, "GenericInt_BOrOp");
 }
 
+llvm::Value * GenericIntDataType::codegenBXOrOp(CodegenCtx & cgCtx,
+                                                ASTNode & callingNode,
+                                                llvm::Value & leftVal,
+                                                DataType & rightTy,
+                                                llvm::Value & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_BXOr,
+                                            kOpName_BXOr,
+                                            rightTy), nullptr);
+    
+    return cgCtx.irBuilder.CreateXor(&leftVal, &rightVal, "GenericInt_BXOrOp");
+}
+
 llvm::Constant * GenericIntDataType::codegenConstAddOp(ASTNode & callingNode,
                                                        llvm::Constant & leftVal,
                                                        DataType & rightTy,
@@ -92,6 +106,19 @@ llvm::Constant * GenericIntDataType::codegenConstBOrOp(ASTNode & callingNode,
                                             rightTy), nullptr);
     
     return llvm::ConstantExpr::getOr(&leftVal, &rightVal);
+}
+
+llvm::Constant * GenericIntDataType::codegenConstBXOrOp(ASTNode & callingNode,
+                                                        llvm::Constant & leftVal,
+                                                        DataType & rightTy,
+                                                        llvm::Constant & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_BXOr,
+                                            kOpName_BXOr,
+                                            rightTy), nullptr);
+    
+    return llvm::ConstantExpr::getXor(&leftVal, &rightVal);
 }
 
 WC_END_NAMESPACE

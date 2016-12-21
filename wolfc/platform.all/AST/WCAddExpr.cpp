@@ -274,13 +274,17 @@ llvm::Value * AddExprBXor::codegenOpEval(CodegenCtx & cgCtx,
                                          llvm::Value & leftVal,
                                          llvm::Value & rightVal)
 {
-    return cgCtx.irBuilder.CreateXor(&leftVal, &rightVal, "AddExprBXor_XorOp");
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return leftTy.codegenBXOrOp(cgCtx, *this, leftVal, rightTy, rightVal);
 }
 
 llvm::Constant * AddExprBXor::codegenOpConstEval(llvm::Constant & leftVal,
                                                  llvm::Constant & rightVal)
 {
-    return llvm::ConstantExpr::getXor(&leftVal, &rightVal);
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return leftTy.codegenConstBXOrOp(*this, leftVal, rightTy, rightVal);
 }
 
 WC_END_NAMESPACE

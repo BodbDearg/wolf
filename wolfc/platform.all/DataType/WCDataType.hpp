@@ -124,6 +124,12 @@ public:
                                        DataType & rightTy,
                                        llvm::Value & rightVal);
     
+    virtual llvm::Value * codegenBXOrOp(CodegenCtx & cgCtx,
+                                        ASTNode & callingNode,
+                                        llvm::Value & leftVal,
+                                        DataType & rightTy,
+                                        llvm::Value & rightVal);
+    
     /**
      * Codegen various compile time binary operations: the two values must to be of the same type.
      * The default impl issues an 'unsupported op' compile error.
@@ -142,6 +148,11 @@ public:
                                                llvm::Constant & leftVal,
                                                DataType & rightTy,
                                                llvm::Constant & rightVal);
+    
+    virtual llvm::Constant * codegenConstBXOrOp(ASTNode & callingNode,
+                                                llvm::Constant & leftVal,
+                                                DataType & rightTy,
+                                                llvm::Constant & rightVal);
     
     /**
      * Check that the LLVM type for this data type is defined and issue a compile error if not.
@@ -177,10 +188,12 @@ protected:
     static const char * const kOpSymbol_Add;
     static const char * const kOpSymbol_Sub;
     static const char * const kOpSymbol_BOr;
+    static const char * const kOpSymbol_BXOr;
     
     static const char * const kOpName_Add;
     static const char * const kOpName_Sub;
     static const char * const kOpName_BOr;
+    static const char * const kOpName_BXOr;
     
     /**
      * Run code generation for this data type.

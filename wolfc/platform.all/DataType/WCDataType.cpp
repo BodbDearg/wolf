@@ -13,10 +13,12 @@ WC_BEGIN_NAMESPACE
 const char * const DataType::kOpSymbol_Add = "+";
 const char * const DataType::kOpSymbol_Sub = "-";
 const char * const DataType::kOpSymbol_BOr = "|";
+const char * const DataType::kOpSymbol_BXOr = "^";
 
 const char * const DataType::kOpName_Add = "add";
 const char * const DataType::kOpName_Sub = "subtract";
 const char * const DataType::kOpName_BOr = "bitwise or";
+const char * const DataType::kOpName_BXOr = "bitwise xor";
 
 DataType::~DataType() {
     WC_EMPTY_FUNC_BODY();
@@ -130,6 +132,20 @@ llvm::Value * DataType::codegenBOrOp(CodegenCtx & cgCtx,
     return nullptr;
 }
 
+llvm::Value * DataType::codegenBXOrOp(CodegenCtx & cgCtx,
+                                      ASTNode & callingNode,
+                                      llvm::Value & leftVal,
+                                      DataType & rightTy,
+                                      llvm::Value & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_BXOr, kOpName_BXOr, rightTy);
+    return nullptr;
+}
+
 llvm::Constant * DataType::codegenConstAddOp(ASTNode & callingNode,
                                              llvm::Constant & leftVal,
                                              DataType & rightTy,
@@ -163,6 +179,18 @@ llvm::Constant * DataType::codegenConstBOrOp(ASTNode & callingNode,
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
     issueOpNotAvailableCompileError(callingNode, kOpSymbol_BOr, kOpName_BOr, rightTy);
+    return nullptr;
+}
+
+llvm::Constant * DataType::codegenConstBXOrOp(ASTNode & callingNode,
+                                              llvm::Constant & leftVal,
+                                              DataType & rightTy,
+                                              llvm::Constant & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_BXOr, kOpName_BXOr, rightTy);
     return nullptr;
 }
 
