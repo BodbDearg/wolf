@@ -135,7 +135,7 @@ llvm::Value * OrExprOr::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(compileCheckBothExprsAreBool(), nullptr);
     
     // Create the logical operation:
-    return cgCtx.irBuilder.CreateOr(rightValue, leftValue);
+    return cgCtx.irBuilder.CreateOr(rightValue, leftValue, "OrExprOr_OrOp");
 }
 
 llvm::Constant * OrExprOr::codegenExprConstEval(CodegenCtx & cgCtx) {

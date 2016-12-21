@@ -172,7 +172,7 @@ llvm::Value * UnaryExprMinus::codegenExprEval(CodegenCtx & cgCtx) {
     
     llvm::Value * exprValue = mExpr.codegenExprEval(cgCtx);
     WC_GUARD(exprValue, nullptr);
-    return cgCtx.irBuilder.CreateNeg(exprValue);
+    return cgCtx.irBuilder.CreateNeg(exprValue, "UnaryExprMinus_NegOp");
 }
 
 llvm::Constant * UnaryExprMinus::codegenExprConstEval(CodegenCtx & cgCtx) {

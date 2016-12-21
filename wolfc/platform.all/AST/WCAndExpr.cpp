@@ -127,7 +127,7 @@ llvm::Value * AndExprAnd::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(compileCheckBothExprsAreBool(), nullptr);
 
     // Create the logical operation:
-    return cgCtx.irBuilder.CreateAnd(rightValue, leftValue);
+    return cgCtx.irBuilder.CreateAnd(rightValue, leftValue, "AndExprAnd_AndOp");
 }
 
 llvm::Constant * AndExprAnd::codegenExprConstEval(CodegenCtx & cgCtx) {
