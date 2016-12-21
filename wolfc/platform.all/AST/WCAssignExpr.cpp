@@ -227,14 +227,14 @@ llvm::Value * AssignExprAssignAdd::codegenExprEval(CodegenCtx & cgCtx) {
     // Do the operation and store the result on the left
     DataType & leftTy = mLeftExpr.dataType();
     DataType & rightTy = mRightExpr.dataType();
-    llvm::Value * newValue = leftTy.codegenAddOp(cgCtx, *this, *leftVal, rightTy, *rightVal);
-    WC_GUARD(newValue, nullptr);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    llvm::Value * newVal = leftTy.codegenAddOp(cgCtx, *this, *leftVal, rightTy, *rightVal);
+    WC_GUARD(newVal, nullptr);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
     WC_ASSERT(storeInst);
 
     // The expression evalutes to the left expression, which now has the value of the 
     // new value, so return that...
-    return newValue;
+    return newVal;
 }
 
 //-----------------------------------------------------------------------------
@@ -262,14 +262,14 @@ llvm::Value * AssignExprAssignSub::codegenExprEval(CodegenCtx & cgCtx) {
     // Do the operation and store the result on the left
     DataType & leftTy = mLeftExpr.dataType();
     DataType & rightTy = mRightExpr.dataType();
-    llvm::Value * newValue = leftTy.codegenSubOp(cgCtx, *this, *leftVal, rightTy, *rightVal);
-    WC_GUARD(newValue, nullptr);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    llvm::Value * newVal = leftTy.codegenSubOp(cgCtx, *this, *leftVal, rightTy, *rightVal);
+    WC_GUARD(newVal, nullptr);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
     WC_ASSERT(storeInst);
 
     // The expression evalutes to the left expression, which now has the value of the 
     // new value, so return that...
-    return newValue;
+    return newVal;
 }
 
 //-----------------------------------------------------------------------------
@@ -289,19 +289,22 @@ llvm::Value * AssignExprAssignBOr::codegenExprEval(CodegenCtx & cgCtx) {
     // Evaluate left value and right side value
     llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
     WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftValue = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftValue);
-    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightValue, nullptr);
+    llvm::Value * leftVal = cgCtx.irBuilder.CreateLoad(leftAddr);
+    WC_ASSERT(leftVal);
+    llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
+    WC_GUARD(rightVal, nullptr);
     
     // Do the operation and store the result on the left
-    llvm::Value * newValue = cgCtx.irBuilder.CreateOr(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    llvm::Value * newVal = leftTy.codegenBOrOp(cgCtx, *this, *leftVal, rightTy, *rightVal);
+    WC_GUARD(newVal, nullptr);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
     WC_ASSERT(storeInst);
     
     // The expression evalutes to the left expression, which now has the value of the
     // new value, so return that...
-    return newValue;
+    return newVal;
 }
 
 //-----------------------------------------------------------------------------
@@ -327,13 +330,13 @@ llvm::Value * AssignExprAssignBXor::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(rightValue, nullptr);
     
     // Do the operation and store the result on the left
-    llvm::Value * newValue = cgCtx.irBuilder.CreateXor(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    llvm::Value * newVal = cgCtx.irBuilder.CreateXor(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
     WC_ASSERT(storeInst);
     
     // The expression evalutes to the left expression, which now has the value of the
     // new value, so return that...
-    return newValue;
+    return newVal;
 }
 
 //-----------------------------------------------------------------------------
@@ -359,13 +362,13 @@ llvm::Value * AssignExprAssignMul::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(rightValue, nullptr);
 
     // Do the operation and store the result on the left
-    llvm::Value * newValue = cgCtx.irBuilder.CreateMul(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    llvm::Value * newVal = cgCtx.irBuilder.CreateMul(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
     WC_ASSERT(storeInst);
 
     // The expression evalutes to the left expression, which now has the value of the 
     // new value, so return that...
-    return newValue;
+    return newVal;
 }
 
 //-----------------------------------------------------------------------------
@@ -391,13 +394,13 @@ llvm::Value * AssignExprAssignDiv::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(rightValue, nullptr);
 
     // Do the operation and store the result on the left
-    llvm::Value * newValue = cgCtx.irBuilder.CreateSDiv(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    llvm::Value * newVal = cgCtx.irBuilder.CreateSDiv(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
     WC_ASSERT(storeInst);
 
     // The expression evalutes to the left expression, which now has the value of the 
     // new value, so return that...
-    return newValue;
+    return newVal;
 }
 
 //-----------------------------------------------------------------------------
@@ -423,13 +426,13 @@ llvm::Value * AssignExprAssignMod::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(rightValue, nullptr);
 
     // Do the operation and store the result on the left
-    llvm::Value * newValue = cgCtx.irBuilder.CreateSRem(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    llvm::Value * newVal = cgCtx.irBuilder.CreateSRem(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
     WC_ASSERT(storeInst);
 
     // The expression evalutes to the left expression, which now has the value of the 
     // new value, so return that...
-    return newValue;
+    return newVal;
 }
 
 //-----------------------------------------------------------------------------
@@ -455,13 +458,13 @@ llvm::Value * AssignExprAssignBAnd::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(rightValue, nullptr);
     
     // Do the operation and store the result on the left
-    llvm::Value * newValue = cgCtx.irBuilder.CreateAnd(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    llvm::Value * newVal = cgCtx.irBuilder.CreateAnd(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
     WC_ASSERT(storeInst);
     
     // The expression evalutes to the left expression, which now has the value of the
     // new value, so return that...
-    return newValue;
+    return newVal;
 }
 
 //-----------------------------------------------------------------------------
@@ -487,13 +490,13 @@ llvm::Value * AssignExprAssignLShift::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(rightValue, nullptr);
     
     // Do the operation and store the result on the left
-    llvm::Value * newValue = cgCtx.irBuilder.CreateShl(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    llvm::Value * newVal = cgCtx.irBuilder.CreateShl(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
     WC_ASSERT(storeInst);
     
     // The expression evalutes to the left expression, which now has the value of the
     // new value, so return that...
-    return newValue;
+    return newVal;
 }
 
 //-----------------------------------------------------------------------------
@@ -519,13 +522,13 @@ llvm::Value * AssignExprAssignArithRShift::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(rightValue, nullptr);
     
     // Do the operation and store the result on the left
-    llvm::Value * newValue = cgCtx.irBuilder.CreateAShr(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    llvm::Value * newVal = cgCtx.irBuilder.CreateAShr(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
     WC_ASSERT(storeInst);
     
     // The expression evalutes to the left expression, which now has the value of the
     // new value, so return that...
-    return newValue;
+    return newVal;
 }
 
 //-----------------------------------------------------------------------------
@@ -551,13 +554,13 @@ llvm::Value * AssignExprAssignLogicRShift::codegenExprEval(CodegenCtx & cgCtx) {
     WC_GUARD(rightValue, nullptr);
     
     // Do the operation and store the result on the left
-    llvm::Value * newValue = cgCtx.irBuilder.CreateLShr(leftValue, rightValue);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newValue, leftAddr);
+    llvm::Value * newVal = cgCtx.irBuilder.CreateLShr(leftValue, rightValue);
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
     WC_ASSERT(storeInst);
     
     // The expression evalutes to the left expression, which now has the value of the
     // new value, so return that...
-    return newValue;
+    return newVal;
 }
 
 WC_END_NAMESPACE
