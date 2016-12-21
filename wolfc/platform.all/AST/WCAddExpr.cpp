@@ -247,13 +247,17 @@ llvm::Value * AddExprBOr::codegenOpEval(CodegenCtx & cgCtx,
                                         llvm::Value & leftVal,
                                         llvm::Value & rightVal)
 {
-    return cgCtx.irBuilder.CreateOr(&leftVal, &rightVal, "AddExprBOr_OrOp");
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return leftTy.codegenBOrOp(cgCtx, *this, leftVal, rightTy, rightVal);
 }
 
 llvm::Constant * AddExprBOr::codegenOpConstEval(llvm::Constant & leftVal,
                                                 llvm::Constant & rightVal)
 {
-    return llvm::ConstantExpr::getOr(&leftVal, &rightVal);
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return leftTy.codegenConstBOrOp(*this, leftVal, rightTy, rightVal);
 }
 
 //-----------------------------------------------------------------------------

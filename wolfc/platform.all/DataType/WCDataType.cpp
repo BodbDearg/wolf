@@ -12,9 +12,11 @@ WC_BEGIN_NAMESPACE
 
 const char * const DataType::kOpSymbol_Add = "+";
 const char * const DataType::kOpSymbol_Sub = "-";
+const char * const DataType::kOpSymbol_BOr = "|";
 
 const char * const DataType::kOpName_Add = "add";
 const char * const DataType::kOpName_Sub = "subtract";
+const char * const DataType::kOpName_BOr = "bitwise or";
 
 DataType::~DataType() {
     WC_EMPTY_FUNC_BODY();
@@ -114,6 +116,20 @@ llvm::Value * DataType::codegenSubOp(CodegenCtx & cgCtx,
     return nullptr;
 }
 
+llvm::Value * DataType::codegenBOrOp(CodegenCtx & cgCtx,
+                                     ASTNode & callingNode,
+                                     llvm::Value & leftVal,
+                                     DataType & rightTy,
+                                     llvm::Value & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_BOr, kOpName_BOr, rightTy);
+    return nullptr;
+}
+
 llvm::Constant * DataType::codegenConstAddOp(ASTNode & callingNode,
                                              llvm::Constant & leftVal,
                                              DataType & rightTy,
@@ -135,6 +151,18 @@ llvm::Constant * DataType::codegenConstSubOp(ASTNode & callingNode,
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
     issueOpNotAvailableCompileError(callingNode, kOpSymbol_Sub, kOpName_Sub, rightTy);
+    return nullptr;
+}
+
+llvm::Constant * DataType::codegenConstBOrOp(ASTNode & callingNode,
+                                             llvm::Constant & leftVal,
+                                             DataType & rightTy,
+                                             llvm::Constant & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_BOr, kOpName_BOr, rightTy);
     return nullptr;
 }
 
