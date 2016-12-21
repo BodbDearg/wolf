@@ -12,8 +12,13 @@ public:
     virtual llvm::Value * codegenAddOp(CodegenCtx & cgCtx,
                                        ASTNode & callingNode,
                                        llvm::Value & leftVal,
-                                       DataType & rightType,
+                                       DataType & rightTy,
                                        llvm::Value & rightVal) override;
+    
+    virtual llvm::Constant * codegenConstAddOp(ASTNode & callingNode,
+                                               llvm::Constant & leftVal,
+                                               DataType & rightTy,
+                                               llvm::Constant & rightVal) override;
 };
 
 WC_END_NAMESPACE

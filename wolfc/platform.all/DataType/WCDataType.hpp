@@ -99,8 +99,8 @@ public:
     /* Codegen a basic cast to the given type */
     virtual llvm::Value * codegenCastTo(CodegenCtx & cgCtx,
                                         ASTNode & callingNode,
-                                        llvm::Value & valueToCast,
-                                        DataType & castToType);
+                                        llvm::Value & valToCast,
+                                        DataType & castToTy);
     
     /**
      * Codegen various runtime binary operations: the two values must to be of the same type.
@@ -109,17 +109,16 @@ public:
     virtual llvm::Value * codegenAddOp(CodegenCtx & cgCtx,
                                        ASTNode & callingNode,
                                        llvm::Value & leftVal,
-                                       DataType & rightType,
+                                       DataType & rightTy,
                                        llvm::Value & rightVal);
     
     /**
      * Codegen various compile time binary operations: the two values must to be of the same type.
      * The default impl issues an 'unsupported op' compile error.
      */
-    virtual llvm::Constant * codegenConstAddOp(CodegenCtx & cgCtx,
-                                               ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstAddOp(ASTNode & callingNode,
                                                llvm::Constant & leftVal,
-                                               DataType & rightType,
+                                               DataType & rightTy,
                                                llvm::Constant & rightVal);
     
     /**
@@ -153,6 +152,10 @@ public:
     llvm::Type * mLLVMType = nullptr;
     
 protected:
+    static const char * const kOpSymbol_Add;
+    
+    static const char * const kOpName_Add;
+    
     /**
      * Run code generation for this data type.
      * Generates the llvm type for the data type and returns true if generation was successful.

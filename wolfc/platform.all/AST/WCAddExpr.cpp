@@ -193,20 +193,17 @@ llvm::Value * AddExprAdd::codegenOpEval(CodegenCtx & cgCtx,
                                         llvm::Value & leftVal,
                                         llvm::Value & rightVal)
 {
-    DataType & leftType = mLeftExpr.dataType();
-    DataType & rightType = mRightExpr.dataType();
-    
-    return leftType.codegenAddOp(cgCtx,
-                                 *this,
-                                 leftVal,
-                                 rightType,
-                                 rightVal);
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return leftTy.codegenAddOp(cgCtx, *this, leftVal, rightTy, rightVal);
 }
 
 llvm::Constant * AddExprAdd::codegenOpConstEval(llvm::Constant & leftVal,
                                                 llvm::Constant & rightVal)
 {
-    return llvm::ConstantExpr::getAdd(&leftVal, &rightVal);
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return leftTy.codegenConstAddOp(*this, leftVal, rightTy, rightVal);
 }
 
 //-----------------------------------------------------------------------------

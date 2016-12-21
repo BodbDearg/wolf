@@ -10,6 +10,10 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
+const char * const DataType::kOpSymbol_Add = "+";
+
+const char * const DataType::kOpName_Add = "add";
+
 DataType::~DataType() {
     WC_EMPTY_FUNC_BODY();
 }
@@ -61,21 +65,21 @@ bool DataType::codegenPrintStmnt(CodegenCtx & cgCtx,
 
 llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
                                       ASTNode & callingNode,
-                                      llvm::Value & valueToCast,
-                                      DataType & castToType)
+                                      llvm::Value & valToCast,
+                                      DataType & castToTy)
 {
     // If the type to cast to is the same as this type then do nothing, cast not needed:
-    if (equals(castToType)) {
-        return &valueToCast;
+    if (equals(castToTy)) {
+        return &valToCast;
     }
     
     // The default impl of this just raises an error
     WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(valueToCast);
+    WC_UNUSED_PARAM(valToCast);
     
     callingNode.compileError("Cast from type left type '%s' to right type '%s' is not allowed!",
                              name().c_str(),
-                             castToType.name().c_str());
+                             castToTy.name().c_str());
     
     return nullptr;
 }
@@ -83,28 +87,26 @@ llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
 llvm::Value * DataType::codegenAddOp(CodegenCtx & cgCtx,
                                      ASTNode & callingNode,
                                      llvm::Value & leftVal,
-                                     DataType & rightType,
+                                     DataType & rightTy,
                                      llvm::Value & rightVal)
 {
     // The default impl simply issues an error that the operator is not available
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, "+", "add", rightType);
+    issueOpNotAvailableCompileError(callingNode, "+", "add", rightTy);
     return nullptr;
 }
 
-llvm::Constant * DataType::codegenConstAddOp(CodegenCtx & cgCtx,
-                                             ASTNode & callingNode,
+llvm::Constant * DataType::codegenConstAddOp(ASTNode & callingNode,
                                              llvm::Constant & leftVal,
-                                             DataType & rightType,
+                                             DataType & rightTy,
                                              llvm::Constant & rightVal)
 {
     // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, "+", "add", rightType);
+    issueOpNotAvailableCompileError(callingNode, "+", "add", rightTy);
     return nullptr;
 }
 
