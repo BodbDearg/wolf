@@ -1,4 +1,88 @@
 ;==================================================================================================
+; IfStmnt
+;==================================================================================================
+func testIfStmnt()
+    ; basic 'if' (no else)
+    var a = 200
+    var b = 300
+
+    if a < b
+        a = b
+    end
+
+    assert(a == b)
+
+    ; 'if' with 'or if'
+    if a < b
+        assert(false)   ; Should not be reached
+    or if a == b
+        a = 400
+    end
+
+    assert(a == 400)
+
+    ; 'if' with 'else'
+    if a < b
+        assert(false)   ; Should not be reached
+    else
+        a = 200
+    end
+
+    assert(a == 200)
+
+    ; 'if' with 'then' (allows single line statement)
+    if a < b then a = b end
+    assert(a == b)
+
+    ; 'if' with 'or if' and 'then' (allows single line statement)
+    if a < b then assert(false) or if a == b then a = 400 end
+    assert(a == 400)
+
+    ; 'if' with 'else' and 'then' (allows single line statement)
+    if a < b then assert(false) else a = 200 end
+    assert(a == 200)
+
+    ; basic 'unless' (no else)
+    a = 200
+
+    unless a >= b
+        a = b
+    end
+
+    assert(a == b)
+
+    ; 'unless' with 'or unless'
+    unless a >= b
+        assert(false)   ; Should not be reached
+    or unless a != b
+        a = 400
+    end
+
+    assert(a == 400)
+
+    ; 'unless' with 'else'
+    unless a >= b
+        assert(false)   ; Should not be reached
+    else
+        a = 200
+    end
+
+    assert(a == 200)
+
+    ; 'unless' with 'then' (allows single line statement)
+    unless a >= b then a = b end
+    assert(a == b)
+
+    ; 'unless' with 'or unless' and 'then' (allows single line statement)
+    unless a >= b then assert(false) or unless a != b then a = 400 end
+    assert(a == 400)
+
+    ; 'unless' with 'else' and 'then' (allows single line statement)
+    unless a >= b then assert(false) else a = 200 end
+    assert(a == 200)
+end
+
+;==================================================================================================
 ; WhileStmnt
 ;==================================================================================================
 func testWhileStmnt()
@@ -13,7 +97,7 @@ func testWhileStmnt()
 
     assert(i == 3)
 
-    ; While with do (allowed on singleline)
+    ; While with do (allows single line statement)
     i = 0
     while i < 3 do i++ end
     assert(i == 3)
@@ -29,7 +113,7 @@ func testWhileStmnt()
 
     assert(i == 3)
 
-    ; Until with do (allowed on singleline)
+    ; Until with do (allows single line statement)
     i = 3
     until i >= 3 do i++ end
     assert(i == 3)
@@ -211,6 +295,7 @@ end
 ; Run the tests
 ;==================================================================================================
 func main() -> int
+    testIfStmnt()
     testWhileStmnt()
     testLoopStmnt()
     testScopeStmnt()
