@@ -36,18 +36,6 @@ llvm::AllocaInst * UnknownDataType::codegenAlloca(CodegenCtx & cgCtx,
     return nullptr;
 }
 
-bool UnknownDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
-                                        const PrintStmnt & parentPrintStmnt,
-                                        llvm::Constant & printfFn,
-                                        llvm::Value & valToPrint)
-{
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(printfFn);
-    WC_UNUSED_PARAM(valToPrint);
-    parentPrintStmnt.compileError("Unknown datatype cannot be printed!");
-    return false;
-}
-
 bool UnknownDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     // No codegen to do for the unknown data type:
     WC_UNUSED_PARAM(cgCtx);

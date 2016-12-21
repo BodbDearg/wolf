@@ -22,12 +22,12 @@ bool BoolDataType::equals(const DataType & other) const {
 }
 
 bool BoolDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
-                                     const PrintStmnt & parentPrintStmnt,
+                                     ASTNode & callingNode,
                                      llvm::Constant & printfFn,
                                      llvm::Value & valToPrint)
 {
+    WC_UNUSED_PARAM(callingNode);
     WC_UNUSED_PARAM(printfFn);
-    WC_UNUSED_PARAM(parentPrintStmnt);
     
     // Create the two blocks for true & false and a branch
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();

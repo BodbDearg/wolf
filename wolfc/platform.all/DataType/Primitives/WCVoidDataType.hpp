@@ -19,11 +19,6 @@ public:
                                              ASTNode & callingNode,
                                              const std::string & instLabel) override;
     
-    virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
-                                   const PrintStmnt & parentPrintStmnt,
-                                   llvm::Constant & printfFn,
-                                   llvm::Value & valToPrint) override;
-    
 protected:
     virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
 };

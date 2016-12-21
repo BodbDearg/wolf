@@ -25,11 +25,11 @@ bool StrDataType::equals(const DataType & other) const {
 }
 
 bool StrDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
-                                    const PrintStmnt & parentPrintStmnt,
+                                    ASTNode & callingNode,
                                     llvm::Constant & printfFn,
                                     llvm::Value & valToPrint)
 {
-    WC_UNUSED_PARAM(parentPrintStmnt);
+    WC_UNUSED_PARAM(callingNode);
     
     // Create a format string for printf and call
     llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%s", "print_fmt_str:string");

@@ -14,11 +14,6 @@ public:
     virtual const std::string & name() const override;
     virtual bool equals(const DataType & other) const override;
     virtual bool requiresStorage() const override;
-    
-    virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
-                                   const PrintStmnt & parentPrintStmnt,
-                                   llvm::Constant & printfFn,
-                                   llvm::Value & valToPrint) override;
 
     DataType &      mInnerType;
     size_t          mSize;

@@ -38,11 +38,11 @@ bool Int64DataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
 }
 
 bool Int64DataType::codegenPrintStmnt(CodegenCtx & cgCtx,
-                                      const PrintStmnt & parentPrintStmnt,
+                                      ASTNode & callingNode,
                                       llvm::Constant & printfFn,
                                       llvm::Value & valToPrint)
 {
-    WC_UNUSED_PARAM(parentPrintStmnt);
+    WC_UNUSED_PARAM(callingNode);
     
     // Create a format string for printf and call
     llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%lld", "print_fmt_str:int");

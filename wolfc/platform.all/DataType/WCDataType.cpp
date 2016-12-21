@@ -47,6 +47,18 @@ llvm::AllocaInst * DataType::codegenAlloca(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateAlloca(mLLVMType, nullptr, instLabel);
 }
 
+bool DataType::codegenPrintStmnt(CodegenCtx & cgCtx,
+                                 ASTNode & callingNode,
+                                 llvm::Constant & printfFn,
+                                 llvm::Value & valToPrint)
+{
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(printfFn);
+    WC_UNUSED_PARAM(valToPrint);
+    callingNode.compileError("print() is not supported for expression of type '%s'!", name().c_str());
+    return false;
+}
+
 llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
                                       ASTNode & callingNode,
                                       llvm::Value & valueToCast,

@@ -17,7 +17,6 @@ namespace llvm {
 WC_BEGIN_NAMESPACE
 
 class ASTNode;
-class PrintStmnt;
 struct CodegenCtx;
 
 /* Base class for a data type */
@@ -90,11 +89,12 @@ public:
     /**
      * Generate the code for a print statement for this type. The codegen context, printf function prototype, 
      * parent print statement and the value to be printed are passed in as params.
+     * The default implementation of this fails with an 'unsupported op' error.
      */
     virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
-                                   const PrintStmnt & parentPrintStmnt,
+                                   ASTNode & callingNode,
                                    llvm::Constant & printfFn,
-                                   llvm::Value & valToPrint) = 0;
+                                   llvm::Value & valToPrint);
     
     /* Codegen a basic cast to the given type */
     virtual llvm::Value * codegenCastTo(CodegenCtx & cgCtx,

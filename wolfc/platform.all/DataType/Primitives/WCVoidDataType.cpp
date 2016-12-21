@@ -38,18 +38,6 @@ llvm::AllocaInst * VoidDataType::codegenAlloca(CodegenCtx & cgCtx,
     return nullptr;
 }
 
-bool VoidDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
-                                     const PrintStmnt & parentPrintStmnt,
-                                     llvm::Constant & printfFn,
-                                     llvm::Value & valToPrint)
-{
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(printfFn);
-    WC_UNUSED_PARAM(valToPrint);
-    parentPrintStmnt.compileError("Type '%s' cannot be printed!");
-    return false;
-}
-
 bool VoidDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     mLLVMType = llvm::Type::getVoidTy(cgCtx.llvmCtx);
     
