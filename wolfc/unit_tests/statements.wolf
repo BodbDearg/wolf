@@ -1,4 +1,31 @@
 ;==================================================================================================
+; BreakStmnt
+;==================================================================================================
+func testBreakStatement()
+    ; break
+    loop
+        break
+        assert(false)   ; Should not be reached
+    end
+
+    ; break if AssignExpr
+    var breakCond = true
+
+    loop
+        break if breakCond
+        assert(false)   ; Should not be reached
+    end
+
+    ; break unless AssignExpr
+    breakCond = false
+
+    loop
+        break unless breakCond
+        assert(false)   ; Should not be reached
+    end
+end
+
+;==================================================================================================
 ; NextStmnt
 ;==================================================================================================
 func testNextStatement()
@@ -97,6 +124,7 @@ end
 ; Run the tests
 ;==================================================================================================
 func main() -> int
+    testBreakStatement()
     testNextStatement()
     testReturnStmnt()
     return 0
