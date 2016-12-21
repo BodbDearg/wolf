@@ -24,15 +24,6 @@ bool StrDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const StrDataType*>(&other) != nullptr;
 }
 
-llvm::AllocaInst * StrDataType::codegenAlloca(CodegenCtx & cgCtx,
-                                              ASTNode & callingNode,
-                                              const std::string & instLabel)
-{
-    WC_GUARD_ASSERT(mLLVMType, nullptr);
-    WC_UNUSED_PARAM(callingNode);
-    return cgCtx.irBuilder.CreateAlloca(mLLVMType, nullptr, instLabel);
-}
-
 bool StrDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                     const PrintStmnt & parentPrintStmnt,
                                     llvm::Constant & printfFn,

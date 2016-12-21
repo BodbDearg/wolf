@@ -11,10 +11,6 @@ public:
     virtual const std::string & name() const override;
     virtual bool equals(const DataType & other) const override;
     
-    virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,
-                                             ASTNode & callingNode,
-                                             const std::string & instLabel) override;
-    
     virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
                                    const PrintStmnt & parentPrintStmnt,
                                    llvm::Constant & printfFn,

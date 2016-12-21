@@ -15,10 +15,6 @@ public:
     virtual bool equals(const DataType & other) const override;
     virtual bool requiresStorage() const override;
     
-    virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,
-                                             ASTNode & callingNode,
-                                             const std::string & instLabel) override;
-    
     virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
                                    const PrintStmnt & parentPrintStmnt,
                                    llvm::Constant & printfFn,

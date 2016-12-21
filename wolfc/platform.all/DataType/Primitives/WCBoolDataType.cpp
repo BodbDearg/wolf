@@ -21,15 +21,6 @@ bool BoolDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const BoolDataType*>(&other) != nullptr;
 }
 
-llvm::AllocaInst * BoolDataType::codegenAlloca(CodegenCtx & cgCtx,
-                                               ASTNode & callingNode,
-                                               const std::string & instLabel)
-{
-    WC_GUARD_ASSERT(mLLVMType, nullptr);
-    WC_UNUSED_PARAM(callingNode);
-    return cgCtx.irBuilder.CreateAlloca(mLLVMType, nullptr, instLabel);
-}
-
 bool BoolDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                      const PrintStmnt & parentPrintStmnt,
                                      llvm::Constant & printfFn,

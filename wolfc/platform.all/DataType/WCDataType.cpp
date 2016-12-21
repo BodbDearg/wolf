@@ -2,6 +2,11 @@
 
 #include "AST/WCASTNode.hpp"
 #include "WCAssert.hpp"
+#include "WCCodegenCtx.hpp"
+
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <llvm/IR/Module.h>
+WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
@@ -33,6 +38,15 @@ bool DataType::codegenLLVMTypeIfRequired(CodegenCtx & cgCtx, ASTNode & callingNo
     return codegenLLVMType(cgCtx, callingNode);
 }
 
+llvm::AllocaInst * DataType::codegenAlloca(CodegenCtx & cgCtx,
+                                           ASTNode & callingNode,
+                                           const std::string & instLabel)
+{
+    WC_GUARD_ASSERT(mLLVMType, nullptr);
+    WC_UNUSED_PARAM(callingNode);
+    return cgCtx.irBuilder.CreateAlloca(mLLVMType, nullptr, instLabel);
+}
+
 llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
                                       ASTNode & callingNode,
                                       llvm::Value & valueToCast,
@@ -59,6 +73,20 @@ llvm::Value * DataType::codegenAddOp(CodegenCtx & cgCtx,
                                      llvm::Value & leftVal,
                                      DataType & rightType,
                                      llvm::Value & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, "+", "add", rightType);
+    return nullptr;
+}
+
+llvm::Constant * DataType::codegenConstAddOp(CodegenCtx & cgCtx,
+                                             ASTNode & callingNode,
+                                             llvm::Constant & leftVal,
+                                             DataType & rightType,
+                                             llvm::Constant & rightVal)
 {
     // The default impl simply issues an error that the operator is not available
     WC_UNUSED_PARAM(cgCtx);

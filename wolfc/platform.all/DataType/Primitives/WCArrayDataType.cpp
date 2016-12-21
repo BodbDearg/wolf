@@ -64,15 +64,6 @@ bool ArrayDataType::requiresStorage() const {
     return true;
 }
 
-llvm::AllocaInst * ArrayDataType::codegenAlloca(CodegenCtx & cgCtx,
-                                                ASTNode & callingNode,
-                                                const std::string & instLabel)
-{
-    WC_GUARD_ASSERT(mInnerType.mLLVMType, nullptr);
-    WC_UNUSED_PARAM(callingNode);
-    return cgCtx.irBuilder.CreateAlloca(mLLVMType, nullptr, instLabel);
-}
-
 bool ArrayDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                       const PrintStmnt & parentPrintStmnt,
                                       llvm::Constant & printfFn,

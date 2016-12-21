@@ -24,10 +24,6 @@ bool Int64DataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const Int64DataType*>(&other) != nullptr;
 }
 
-bool Int64DataType::isInteger() const {
-    return true;
-}
-
 bool Int64DataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     // Lazy out if already done
     WC_GUARD(!mLLVMType, true);
@@ -39,15 +35,6 @@ bool Int64DataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     }
     
     return true;
-}
-
-llvm::AllocaInst * Int64DataType::codegenAlloca(CodegenCtx & cgCtx,
-                                                ASTNode & callingNode,
-                                                const std::string & instLabel)
-{
-    WC_GUARD_ASSERT(mLLVMType, nullptr);
-    WC_UNUSED_PARAM(callingNode);
-    return cgCtx.irBuilder.CreateAlloca(mLLVMType, nullptr, instLabel);
 }
 
 bool Int64DataType::codegenPrintStmnt(CodegenCtx & cgCtx,
@@ -62,16 +49,6 @@ bool Int64DataType::codegenPrintStmnt(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateCall(&printfFn,
                                       { fmtStr, &valToPrint },
                                       "print_printf_call:int") != nullptr;
-}
-
-llvm::Value * Int64DataType::codegenAddOp(CodegenCtx & cgCtx,
-                                          ASTNode & callingNode,
-                                          llvm::Value & leftVal,
-                                          DataType & rightType,
-                                          llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode, "+", "add", rightType), nullptr);
-    return cgCtx.irBuilder.CreateAdd(&leftVal, &rightVal, "Int64_AddOp");
 }
 
 WC_END_NAMESPACE

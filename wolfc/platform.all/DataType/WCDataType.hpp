@@ -85,7 +85,7 @@ public:
      */
     virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,
                                              ASTNode & callingNode,
-                                             const std::string & instLabel) = 0;
+                                             const std::string & instLabel);
     
     /**
      * Generate the code for a print statement for this type. The codegen context, printf function prototype, 
@@ -103,7 +103,7 @@ public:
                                         DataType & castToType);
     
     /**
-     * Codegen an add operation: the two values must to be of the same type.
+     * Codegen various runtime binary operations: the two values must to be of the same type.
      * The default impl issues an 'unsupported op' compile error.
      */
     virtual llvm::Value * codegenAddOp(CodegenCtx & cgCtx,
@@ -111,6 +111,16 @@ public:
                                        llvm::Value & leftVal,
                                        DataType & rightType,
                                        llvm::Value & rightVal);
+    
+    /**
+     * Codegen various compile time binary operations: the two values must to be of the same type.
+     * The default impl issues an 'unsupported op' compile error.
+     */
+    virtual llvm::Constant * codegenConstAddOp(CodegenCtx & cgCtx,
+                                               ASTNode & callingNode,
+                                               llvm::Constant & leftVal,
+                                               DataType & rightType,
+                                               llvm::Constant & rightVal);
     
     /**
      * Check that the LLVM type for this data type is defined and issue a compile error if not.

@@ -4,7 +4,7 @@
 
 WC_BEGIN_NAMESPACE
 
-static const std::string kName = "<?!unknown!?>";
+static const std::string kName = "<Unknown>";
 
 DataTypeId UnknownDataType::getTypeId() const {
     return DataTypeId::kUnknown;

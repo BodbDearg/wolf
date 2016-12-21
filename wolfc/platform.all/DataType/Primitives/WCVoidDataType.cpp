@@ -46,7 +46,7 @@ bool VoidDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(printfFn);
     WC_UNUSED_PARAM(valToPrint);
-    parentPrintStmnt.compileError("Type 'void' cannot be printed!");
+    parentPrintStmnt.compileError("Type '%s' cannot be printed!");
     return false;
 }
 
