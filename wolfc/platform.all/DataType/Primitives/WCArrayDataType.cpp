@@ -76,12 +76,12 @@ llvm::AllocaInst * ArrayDataType::codegenAlloca(CodegenCtx & cgCtx,
 bool ArrayDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                       const PrintStmnt & parentPrintStmnt,
                                       llvm::Constant & printfFn,
-                                      llvm::Value & value) const
+                                      llvm::Value & valToPrint)
 {
     // TODO: support printing of arrays
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(printfFn);
-    WC_UNUSED_PARAM(value);
+    WC_UNUSED_PARAM(valToPrint);
     parentPrintStmnt.compileError("Type '%s' cannot be printed (yet)!", name().c_str());
     return false;
 }

@@ -41,11 +41,11 @@ llvm::AllocaInst * VoidDataType::codegenAlloca(CodegenCtx & cgCtx,
 bool VoidDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                      const PrintStmnt & parentPrintStmnt,
                                      llvm::Constant & printfFn,
-                                     llvm::Value & value) const
+                                     llvm::Value & valToPrint)
 {
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(printfFn);
-    WC_UNUSED_PARAM(value);
+    WC_UNUSED_PARAM(valToPrint);
     parentPrintStmnt.compileError("Type 'void' cannot be printed!");
     return false;
 }

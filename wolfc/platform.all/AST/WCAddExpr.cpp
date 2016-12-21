@@ -193,7 +193,14 @@ llvm::Value * AddExprAdd::codegenOpEval(CodegenCtx & cgCtx,
                                         llvm::Value & leftVal,
                                         llvm::Value & rightVal)
 {
-    return cgCtx.irBuilder.CreateAdd(&leftVal, &rightVal, "AddExprAdd_AddOp");
+    DataType & leftType = mLeftExpr.dataType();
+    DataType & rightType = mRightExpr.dataType();
+    
+    return leftType.codegenAddOp(cgCtx,
+                                 *this,
+                                 leftVal,
+                                 rightType,
+                                 rightVal);
 }
 
 llvm::Constant * AddExprAdd::codegenOpConstEval(llvm::Constant & leftVal,

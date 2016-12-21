@@ -53,13 +53,25 @@ llvm::AllocaInst * Int64DataType::codegenAlloca(CodegenCtx & cgCtx,
 bool Int64DataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                       const PrintStmnt & parentPrintStmnt,
                                       llvm::Constant & printfFn,
-                                      llvm::Value & value) const
+                                      llvm::Value & valToPrint)
 {
     WC_UNUSED_PARAM(parentPrintStmnt);
     
     // Create a format string for printf and call
     llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%lld", "print_fmt_str:int");
-    return cgCtx.irBuilder.CreateCall(&printfFn, { fmtStr, &value }, "print_printf_call:int") != nullptr;
+    return cgCtx.irBuilder.CreateCall(&printfFn,
+                                      { fmtStr, &valToPrint },
+                                      "print_printf_call:int") != nullptr;
+}
+
+llvm::Value * Int64DataType::codegenAddOp(CodegenCtx & cgCtx,
+                                          ASTNode & callingNode,
+                                          llvm::Value & leftVal,
+                                          DataType & rightType,
+                                          llvm::Value & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode, "+", "add", rightType), nullptr);
+    return cgCtx.irBuilder.CreateAdd(&leftVal, &rightVal, "Int64_AddOp");
 }
 
 WC_END_NAMESPACE

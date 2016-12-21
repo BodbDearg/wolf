@@ -20,7 +20,13 @@ public:
     virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
                                    const PrintStmnt & parentPrintStmnt,
                                    llvm::Constant & printfFn,
-                                   llvm::Value & value) const override;
+                                   llvm::Value & valToPrint) override;
+    
+    virtual llvm::Value * codegenAddOp(CodegenCtx & cgCtx,
+                                       ASTNode & callingNode,
+                                       llvm::Value & leftVal,
+                                       DataType & rightType,
+                                       llvm::Value & rightVal) override;
     
 protected:
     virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;

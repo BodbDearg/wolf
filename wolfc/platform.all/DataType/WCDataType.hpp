@@ -94,7 +94,7 @@ public:
     virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
                                    const PrintStmnt & parentPrintStmnt,
                                    llvm::Constant & printfFn,
-                                   llvm::Value & value) const = 0;
+                                   llvm::Value & valToPrint) = 0;
     
     /* Codegen a basic cast to the given type */
     virtual llvm::Value * codegenCastTo(CodegenCtx & cgCtx,
@@ -103,10 +103,38 @@ public:
                                         DataType & castToType);
     
     /**
+     * Codegen an add operation: the two values must to be of the same type.
+     * The default impl issues an 'unsupported op' compile error.
+     */
+    virtual llvm::Value * codegenAddOp(CodegenCtx & cgCtx,
+                                       ASTNode & callingNode,
+                                       llvm::Value & leftVal,
+                                       DataType & rightType,
+                                       llvm::Value & rightVal);
+    
+    /**
      * Check that the LLVM type for this data type is defined and issue a compile error if not.
      * Returns false if the LLVM type is not defined and true otherwise.
      */
     bool compileCheckLLVMTypeDefined(ASTNode & callingNode);
+    
+    /**
+     * Does a compile check that the right expression type in a binary operator matches
+     * exactly this data type. Issues a compile error and returns false if the check fails.
+     */
+    bool compileCheckBinaryOpTypesMatch(ASTNode & callingNode,
+                                        const char * opSymbol,
+                                        const char * opName,
+                                        DataType & rightExprType);
+    
+    /**
+     * Issues a compile error that an operator is not supported between this type and 
+     * an expression of a given type.
+     */
+    void issueOpNotAvailableCompileError(ASTNode & callingNode,
+                                         const char * opSymbol,
+                                         const char * opName,
+                                         DataType & rightExprType) const;
     
     /**
      * The llvm type for the data type. This is filled in during code generation.
@@ -122,7 +150,7 @@ protected:
     virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) = 0;
     
     /* Issue a generic compile error for failing to generate the LLVM type for this data type. */
-    void issueGenericCodegenLLVMTypeError(ASTNode & callingNode);
+    void issueGenericCodegenLLVMTypeError(ASTNode & callingNode) const;
 };
 
 WC_END_NAMESPACE

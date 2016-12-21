@@ -22,7 +22,7 @@ public:
     virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
                                    const PrintStmnt & parentPrintStmnt,
                                    llvm::Constant & printfFn,
-                                   llvm::Value & value) const override;
+                                   llvm::Value & valToPrint) override;
 
     DataType &      mInnerType;
     size_t          mSize;

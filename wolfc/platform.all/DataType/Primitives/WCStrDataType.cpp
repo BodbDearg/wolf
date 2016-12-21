@@ -36,13 +36,15 @@ llvm::AllocaInst * StrDataType::codegenAlloca(CodegenCtx & cgCtx,
 bool StrDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                     const PrintStmnt & parentPrintStmnt,
                                     llvm::Constant & printfFn,
-                                    llvm::Value & value) const
+                                    llvm::Value & valToPrint)
 {
     WC_UNUSED_PARAM(parentPrintStmnt);
     
     // Create a format string for printf and call
     llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("%s", "print_fmt_str:string");
-    return cgCtx.irBuilder.CreateCall(&printfFn, { fmtStr, &value }, "print_printf_call:string") != nullptr;
+    return cgCtx.irBuilder.CreateCall(&printfFn,
+                                      { fmtStr, &valToPrint },
+                                      "print_printf_call:string") != nullptr;
 }
 
 bool StrDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {

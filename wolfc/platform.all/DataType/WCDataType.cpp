@@ -47,10 +47,24 @@ llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(valueToCast);
     
-    callingNode.compileError("Cast from type '%s' to '%s' is not allowed!",
+    callingNode.compileError("Cast from type left type '%s' to right type '%s' is not allowed!",
                              name().c_str(),
                              castToType.name().c_str());
     
+    return nullptr;
+}
+
+llvm::Value * DataType::codegenAddOp(CodegenCtx & cgCtx,
+                                     ASTNode & callingNode,
+                                     llvm::Value & leftVal,
+                                     DataType & rightType,
+                                     llvm::Value & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, "+", "add", rightType);
     return nullptr;
 }
 
@@ -60,7 +74,42 @@ bool DataType::compileCheckLLVMTypeDefined(ASTNode & callingNode) {
     return false;
 }
 
-void DataType::issueGenericCodegenLLVMTypeError(ASTNode & callingNode) {
+bool DataType::compileCheckBinaryOpTypesMatch(ASTNode & callingNode,
+                                              const char * opSymbol,
+                                              const char * opName,
+                                              DataType & rightExprType)
+{
+    // If the types match then all is ok
+    if (equals(rightExprType)) {
+        return true;
+    }
+    
+    // Issue the compile error:
+    callingNode.compileError("The types on both sides of the '%s' (%s) operator are incompatible! "
+                             "The left expression type '%s' does not match the right expression type '%s'!",
+                             opSymbol,
+                             opName,
+                             name().c_str(),
+                             rightExprType.name().c_str());
+    
+    // Check failed:
+    return false;
+}
+
+void DataType::issueOpNotAvailableCompileError(ASTNode & callingNode,
+                                               const char * opSymbol,
+                                               const char * opName,
+                                               DataType & rightExprType) const
+{
+    callingNode.compileError("The '%s' (%s) operator is not supported for a left "
+                             "expression of type '%s' with a right expression of type '%s'!",
+                             opSymbol,
+                             opName,
+                             name().c_str(),
+                             rightExprType.name().c_str());
+}
+
+void DataType::issueGenericCodegenLLVMTypeError(ASTNode & callingNode) const {
     callingNode.compileError("Failed to codegen the llvm type for data type '%s'!", name().c_str());
 }
 

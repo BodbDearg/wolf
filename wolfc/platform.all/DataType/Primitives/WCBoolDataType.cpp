@@ -33,7 +33,7 @@ llvm::AllocaInst * BoolDataType::codegenAlloca(CodegenCtx & cgCtx,
 bool BoolDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                      const PrintStmnt & parentPrintStmnt,
                                      llvm::Constant & printfFn,
-                                     llvm::Value & value) const
+                                     llvm::Value & valToPrint)
 {
     WC_UNUSED_PARAM(printfFn);
     WC_UNUSED_PARAM(parentPrintStmnt);
@@ -47,7 +47,7 @@ bool BoolDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
     WC_GUARD_ASSERT(falseBB, false);
     
     // Generate the branch
-    llvm::Value * branch = cgCtx.irBuilder.CreateCondBr(&value, trueBB, falseBB);
+    llvm::Value * branch = cgCtx.irBuilder.CreateCondBr(&valToPrint, trueBB, falseBB);
     WC_GUARD_ASSERT(branch, false);
     llvm::BasicBlock * continueBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "print:continue", parentFn);
     WC_GUARD_ASSERT(continueBB, false);
