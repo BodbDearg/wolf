@@ -1,4 +1,41 @@
 ;==================================================================================================
+; WhileStmnt
+;==================================================================================================
+func testWhileStmnt()
+    ; Basic while
+    var i = 0
+
+    while i < 3
+        i++
+        var i = 0
+        i--
+    end
+
+    assert(i == 3)
+
+    ; While with do (allowed on singleline)
+    i = 0
+    while i < 3 do i++ end
+    assert(i == 3)
+
+    ; Basic until
+    i = 0
+
+    until i >= 3
+        i++
+        var i = 0
+        i--
+    end
+
+    assert(i == 3)
+
+    ; Until with do (allowed on singleline)
+    i = 3
+    until i >= 3 do i++ end
+    assert(i == 3)
+end
+
+;==================================================================================================
 ; LoopStmnt
 ;==================================================================================================
 func testLoopStmnt()
@@ -23,7 +60,7 @@ func testLoopStmnt()
 
     ; loop repeat until
     i = 0
-    
+
     loop
         i++
     repeat until i >= 3
@@ -174,6 +211,7 @@ end
 ; Run the tests
 ;==================================================================================================
 func main() -> int
+    testWhileStmnt()
     testLoopStmnt()
     testScopeStmnt()
     testBreakStatement()
