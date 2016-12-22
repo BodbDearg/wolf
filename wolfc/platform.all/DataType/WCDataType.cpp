@@ -10,6 +10,12 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
+const char * const DataType::kOpSymbol_CmpEQ = "==";
+const char * const DataType::kOpSymbol_CmpNE = "!=";
+const char * const DataType::kOpSymbol_CmpLT = "<";
+const char * const DataType::kOpSymbol_CmpLE = "<=";
+const char * const DataType::kOpSymbol_CmpGT = ">";
+const char * const DataType::kOpSymbol_CmpGE = ">=";
 const char * const DataType::kOpSymbol_Add = "+";
 const char * const DataType::kOpSymbol_Sub = "-";
 const char * const DataType::kOpSymbol_BOr = "|";
@@ -26,6 +32,12 @@ const char * const DataType::kOpSymbol_Minus = "-";
 const char * const DataType::kOpSymbol_Inc = "++";
 const char * const DataType::kOpSymbol_Dec = "--";
 
+const char * const DataType::kOpName_CmpEQ = "equals";
+const char * const DataType::kOpName_CmpNE = "not equal to";
+const char * const DataType::kOpName_CmpLT = "less than";
+const char * const DataType::kOpName_CmpLE = "less than or equal to";
+const char * const DataType::kOpName_CmpGT = "greater than";
+const char * const DataType::kOpName_CmpGE = "greater than or equal to";
 const char * const DataType::kOpName_Add = "add";
 const char * const DataType::kOpName_Sub = "subtract";
 const char * const DataType::kOpName_BOr = "bitwise or";
@@ -112,353 +124,111 @@ llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
     return nullptr;
 }
 
-llvm::Value * DataType::codegenAddOp(CodegenCtx & cgCtx,
-                                     ASTNode & callingNode,
-                                     llvm::Value & leftVal,
-                                     DataType & rightTy,
-                                     llvm::Value & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Add, kOpName_Add, rightTy);
-    return nullptr;
-}
+/* Default binary op implementations */
+#define IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(OpName)\
+    llvm::Value * DataType::codegen ## OpName ## Op(CodegenCtx & cgCtx,\
+                                                    ASTNode & callingNode,\
+                                                    llvm::Value & leftVal,\
+                                                    DataType & rightTy,\
+                                                    llvm::Value & rightVal)\
+    {\
+        /* The default impl simply issues an error that the operator is not available */\
+        WC_UNUSED_PARAM(cgCtx);\
+        WC_UNUSED_PARAM(leftVal);\
+        WC_UNUSED_PARAM(rightVal);\
+        issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_ ## OpName, kOpName_ ## OpName, rightTy);\
+        return nullptr;\
+    }
 
-llvm::Value * DataType::codegenSubOp(CodegenCtx & cgCtx,
-                                     ASTNode & callingNode,
-                                     llvm::Value & leftVal,
-                                     DataType & rightTy,
-                                     llvm::Value & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Sub, kOpName_Sub, rightTy);
-    return nullptr;
-}
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(CmpEQ)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(CmpNE)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(CmpLT)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(CmpLE)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(CmpGT)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(CmpGE)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(Add)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(Sub)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(BOr)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(BXOr)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(Mul)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(Div)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(Mod)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(BAnd)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(LShift)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(ARShift)
+IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(LRShift)
 
-llvm::Value * DataType::codegenBOrOp(CodegenCtx & cgCtx,
-                                     ASTNode & callingNode,
-                                     llvm::Value & leftVal,
-                                     DataType & rightTy,
-                                     llvm::Value & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_BOr, kOpName_BOr, rightTy);
-    return nullptr;
-}
+#undef IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC
 
-llvm::Value * DataType::codegenBXOrOp(CodegenCtx & cgCtx,
-                                      ASTNode & callingNode,
-                                      llvm::Value & leftVal,
-                                      DataType & rightTy,
-                                      llvm::Value & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_BXOr, kOpName_BXOr, rightTy);
-    return nullptr;
-}
+/* Default unary op implementations */
+#define IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(OpName)\
+    llvm::Value * DataType::codegen ## OpName ## Op(CodegenCtx & cgCtx,\
+                                                    ASTNode & callingNode,\
+                                                    llvm::Value & val)\
+    {\
+        /* The default impl simply issues an error that the operator is not available */\
+        WC_UNUSED_PARAM(cgCtx);\
+        WC_UNUSED_PARAM(val);\
+        issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_ ## OpName, kOpName_ ## OpName);\
+        return nullptr;\
+    }
 
-llvm::Value * DataType::codegenMulOp(CodegenCtx & cgCtx,
-                                     ASTNode & callingNode,
-                                     llvm::Value & leftVal,
-                                     DataType & rightTy,
-                                     llvm::Value & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Mul, kOpName_Mul, rightTy);
-    return nullptr;
-}
+IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Plus)
+IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Minus)
+IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Inc)
+IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Dec)
 
-llvm::Value * DataType::codegenDivOp(CodegenCtx & cgCtx,
-                                     ASTNode & callingNode,
-                                     llvm::Value & leftVal,
-                                     DataType & rightTy,
-                                     llvm::Value & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Div, kOpName_Div, rightTy);
-    return nullptr;
-}
+#undef IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC
 
-llvm::Value * DataType::codegenModOp(CodegenCtx & cgCtx,
-                                     ASTNode & callingNode,
-                                     llvm::Value & leftVal,
-                                     DataType & rightTy,
-                                     llvm::Value & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Mod, kOpName_Mod, rightTy);
-    return nullptr;
-}
+/* Default const binary op implementations */
+#define IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(OpName)\
+    llvm::Constant * DataType::codegenConst ## OpName ## Op(ASTNode & callingNode,\
+                                                            llvm::Constant & leftVal,\
+                                                            DataType & rightTy,\
+                                                            llvm::Constant & rightVal)\
+    {\
+        /* The default impl simply issues an error that the operator is not available */\
+        WC_UNUSED_PARAM(leftVal);\
+        WC_UNUSED_PARAM(rightVal);\
+        issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_ ## OpName, kOpName_ ## OpName, rightTy);\
+        return nullptr;\
+    }
 
-llvm::Value * DataType::codegenBAndOp(CodegenCtx & cgCtx,
-                                      ASTNode & callingNode,
-                                      llvm::Value & leftVal,
-                                      DataType & rightTy,
-                                      llvm::Value & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_BAnd, kOpName_BAnd, rightTy);
-    return nullptr;
-}
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(CmpEQ)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(CmpNE)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(CmpLT)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(CmpLE)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(CmpGT)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(CmpGE)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Add)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Sub)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(BOr)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(BXOr)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Mul)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Div)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Mod)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(BAnd)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(LShift)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(ARShift)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(LRShift)
 
-llvm::Value * DataType::codegenLShiftOp(CodegenCtx & cgCtx,
-                                        ASTNode & callingNode,
-                                        llvm::Value & leftVal,
-                                        DataType & rightTy,
-                                        llvm::Value & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_LShift, kOpName_LShift, rightTy);
-    return nullptr;
-}
+#undef IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC
 
-llvm::Value * DataType::codegenARShiftOp(CodegenCtx & cgCtx,
-                                         ASTNode & callingNode,
-                                         llvm::Value & leftVal,
-                                         DataType & rightTy,
-                                         llvm::Value & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_ARShift, kOpName_ARShift, rightTy);
-    return nullptr;
-}
+/* Default const unary op implementations */
+#define IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(OpName)\
+    llvm::Constant * DataType::codegenConst ## OpName ## Op(ASTNode & callingNode,\
+                                                            llvm::Constant & val)\
+    {\
+        /* The default impl simply issues an error that the operator is not available */\
+        WC_UNUSED_PARAM(val);\
+        issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_ ## OpName, kOpName_ ## OpName);\
+        return nullptr;\
+    }
 
-llvm::Value * DataType::codegenLRShiftOp(CodegenCtx & cgCtx,
-                                         ASTNode & callingNode,
-                                         llvm::Value & leftVal,
-                                         DataType & rightTy,
-                                         llvm::Value & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_LRShift, kOpName_LRShift, rightTy);
-    return nullptr;
-}
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Plus)
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Minus)
 
-llvm::Value * DataType::codegenPlusOp(CodegenCtx & cgCtx,
-                                      ASTNode & callingNode,
-                                      llvm::Value & val)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(val);
-    issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_Plus, kOpName_Plus);
-    return nullptr;
-}
-
-llvm::Value * DataType::codegenMinusOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
-                                       llvm::Value & val)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(val);
-    issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_Minus, kOpName_Minus);
-    return nullptr;
-}
-
-llvm::Value * DataType::codegenIncOp(CodegenCtx & cgCtx,
-                                     ASTNode & callingNode,
-                                     llvm::Value & val)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(val);
-    issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_Inc, kOpName_Inc);
-    return nullptr;
-}
-
-llvm::Value * DataType::codegenDecOp(CodegenCtx & cgCtx,
-                                     ASTNode & callingNode,
-                                     llvm::Value & val)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(val);
-    issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_Dec, kOpName_Dec);
-    return nullptr;
-}
-
-llvm::Constant * DataType::codegenConstAddOp(ASTNode & callingNode,
-                                             llvm::Constant & leftVal,
-                                             DataType & rightTy,
-                                             llvm::Constant & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Add, kOpName_Add, rightTy);
-    return nullptr;
-}
-
-llvm::Constant * DataType::codegenConstSubOp(ASTNode & callingNode,
-                                             llvm::Constant & leftVal,
-                                             DataType & rightTy,
-                                             llvm::Constant & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Sub, kOpName_Sub, rightTy);
-    return nullptr;
-}
-
-llvm::Constant * DataType::codegenConstBOrOp(ASTNode & callingNode,
-                                             llvm::Constant & leftVal,
-                                             DataType & rightTy,
-                                             llvm::Constant & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_BOr, kOpName_BOr, rightTy);
-    return nullptr;
-}
-
-llvm::Constant * DataType::codegenConstBXOrOp(ASTNode & callingNode,
-                                              llvm::Constant & leftVal,
-                                              DataType & rightTy,
-                                              llvm::Constant & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_BXOr, kOpName_BXOr, rightTy);
-    return nullptr;
-}
-
-llvm::Constant * DataType::codegenConstMulOp(ASTNode & callingNode,
-                                             llvm::Constant & leftVal,
-                                             DataType & rightTy,
-                                             llvm::Constant & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Mul, kOpName_Mul, rightTy);
-    return nullptr;
-}
-
-llvm::Constant * DataType::codegenConstDivOp(ASTNode & callingNode,
-                                             llvm::Constant & leftVal,
-                                             DataType & rightTy,
-                                             llvm::Constant & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Div, kOpName_Div, rightTy);
-    return nullptr;
-}
-
-llvm::Constant * DataType::codegenConstModOp(ASTNode & callingNode,
-                                             llvm::Constant & leftVal,
-                                             DataType & rightTy,
-                                             llvm::Constant & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Mod, kOpName_Mod, rightTy);
-    return nullptr;
-}
-
-llvm::Constant * DataType::codegenConstBAndOp(ASTNode & callingNode,
-                                              llvm::Constant & leftVal,
-                                              DataType & rightTy,
-                                              llvm::Constant & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_BAnd, kOpName_BAnd, rightTy);
-    return nullptr;
-}
-
-llvm::Constant * DataType::codegenConstLShiftOp(ASTNode & callingNode,
-                                                llvm::Constant & leftVal,
-                                                DataType & rightTy,
-                                                llvm::Constant & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_LShift, kOpName_LShift, rightTy);
-    return nullptr;
-}
-
-llvm::Constant * DataType::codegenConstARShiftOp(ASTNode & callingNode,
-                                                 llvm::Constant & leftVal,
-                                                 DataType & rightTy,
-                                                 llvm::Constant & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_ARShift, kOpName_ARShift, rightTy);
-    return nullptr;
-}
-
-llvm::Constant * DataType::codegenConstLRShiftOp(ASTNode & callingNode,
-                                                 llvm::Constant & leftVal,
-                                                 DataType & rightTy,
-                                                 llvm::Constant & rightVal)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(leftVal);
-    WC_UNUSED_PARAM(rightVal);
-    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_LRShift, kOpName_LRShift, rightTy);
-    return nullptr;
-}
-
-llvm::Constant * DataType::codegenConstPlusOp(ASTNode & callingNode,
-                                              llvm::Constant & val)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(val);
-    issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_Plus, kOpName_Plus);
-    return nullptr;
-}
-
-llvm::Constant * DataType::codegenConstMinusOp(ASTNode & callingNode,
-                                               llvm::Constant & val)
-{
-    // The default impl simply issues an error that the operator is not available
-    WC_UNUSED_PARAM(val);
-    issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_Minus, kOpName_Minus);
-    return nullptr;
-}
+#undef IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC
 
 bool DataType::compileCheckLLVMTypeDefined(ASTNode & callingNode) {
     WC_GUARD(!mLLVMType, true);

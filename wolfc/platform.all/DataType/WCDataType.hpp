@@ -106,160 +106,83 @@ public:
      * Codegen various runtime binary operations: the two values must to be of the same type.
      * The default impl issues an 'unsupported op' compile error.
      */
-    virtual llvm::Value * codegenAddOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
-                                       llvm::Value & leftVal,
-                                       DataType & rightTy,
-                                       llvm::Value & rightVal);
+    #define WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(OpName)\
+        virtual llvm::Value * codegen ## OpName ## Op(CodegenCtx & cgCtx,\
+                                                      ASTNode & callingNode,\
+                                                      llvm::Value & leftVal,\
+                                                      DataType & rightTy,\
+                                                      llvm::Value & rightVal);
     
-    virtual llvm::Value * codegenSubOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
-                                       llvm::Value & leftVal,
-                                       DataType & rightTy,
-                                       llvm::Value & rightVal);
-    
-    virtual llvm::Value * codegenBOrOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
-                                       llvm::Value & leftVal,
-                                       DataType & rightTy,
-                                       llvm::Value & rightVal);
-    
-    virtual llvm::Value * codegenBXOrOp(CodegenCtx & cgCtx,
-                                        ASTNode & callingNode,
-                                        llvm::Value & leftVal,
-                                        DataType & rightTy,
-                                        llvm::Value & rightVal);
-    
-    virtual llvm::Value * codegenMulOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
-                                       llvm::Value & leftVal,
-                                       DataType & rightTy,
-                                       llvm::Value & rightVal);
-    
-    virtual llvm::Value * codegenDivOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
-                                       llvm::Value & leftVal,
-                                       DataType & rightTy,
-                                       llvm::Value & rightVal);
-    
-    virtual llvm::Value * codegenModOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
-                                       llvm::Value & leftVal,
-                                       DataType & rightTy,
-                                       llvm::Value & rightVal);
-    
-    virtual llvm::Value * codegenBAndOp(CodegenCtx & cgCtx,
-                                        ASTNode & callingNode,
-                                        llvm::Value & leftVal,
-                                        DataType & rightTy,
-                                        llvm::Value & rightVal);
-    
-    virtual llvm::Value * codegenLShiftOp(CodegenCtx & cgCtx,
-                                          ASTNode & callingNode,
-                                          llvm::Value & leftVal,
-                                          DataType & rightTy,
-                                          llvm::Value & rightVal);
-    
-    virtual llvm::Value * codegenARShiftOp(CodegenCtx & cgCtx,
-                                           ASTNode & callingNode,
-                                           llvm::Value & leftVal,
-                                           DataType & rightTy,
-                                           llvm::Value & rightVal);
-    
-    virtual llvm::Value * codegenLRShiftOp(CodegenCtx & cgCtx,
-                                           ASTNode & callingNode,
-                                           llvm::Value & leftVal,
-                                           DataType & rightTy,
-                                           llvm::Value & rightVal);
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(CmpEQ)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(CmpNE)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(CmpLT)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(CmpLE)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(CmpGT)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(CmpGE)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(Add)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(Sub)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(BOr)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(BXOr)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(Mul)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(Div)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(Mod)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(BAnd)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(LShift)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(ARShift)
+    WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(LRShift)
     
     /**
      * Codegen various runtime unary operations.
      * The default impl issues an 'unsupported op' compile error.
      */
-    virtual llvm::Value * codegenPlusOp(CodegenCtx & cgCtx,
-                                        ASTNode & callingNode,
-                                        llvm::Value & val);
+    #define WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(OpName)\
+        virtual llvm::Value * codegen ## OpName ## Op(CodegenCtx & cgCtx,\
+                                                      ASTNode & callingNode,\
+                                                      llvm::Value & val);
     
-    virtual llvm::Value * codegenMinusOp(CodegenCtx & cgCtx,
-                                         ASTNode & callingNode,
-                                         llvm::Value & val);
-    
-    virtual llvm::Value * codegenIncOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
-                                       llvm::Value & val);
-    
-    virtual llvm::Value * codegenDecOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
-                                       llvm::Value & val);
+    WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(Plus)
+    WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(Minus)
+    WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(Inc)
+    WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(Dec)
     
     /**
      * Codegen various compile time binary operations: the two values must to be of the same type.
      * The default impl issues an 'unsupported op' compile error.
      */
-    virtual llvm::Constant * codegenConstAddOp(ASTNode & callingNode,
-                                               llvm::Constant & leftVal,
-                                               DataType & rightTy,
-                                               llvm::Constant & rightVal);
+    #define WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(OpName)\
+        virtual llvm::Constant * codegenConst ## OpName ## Op(ASTNode & callingNode,\
+                                                              llvm::Constant & leftVal,\
+                                                              DataType & rightTy,\
+                                                              llvm::Constant & rightVal);
     
-    virtual llvm::Constant * codegenConstSubOp(ASTNode & callingNode,
-                                               llvm::Constant & leftVal,
-                                               DataType & rightTy,
-                                               llvm::Constant & rightVal);
-    
-    virtual llvm::Constant * codegenConstBOrOp(ASTNode & callingNode,
-                                               llvm::Constant & leftVal,
-                                               DataType & rightTy,
-                                               llvm::Constant & rightVal);
-    
-    virtual llvm::Constant * codegenConstBXOrOp(ASTNode & callingNode,
-                                                llvm::Constant & leftVal,
-                                                DataType & rightTy,
-                                                llvm::Constant & rightVal);
-    
-    virtual llvm::Constant * codegenConstMulOp(ASTNode & callingNode,
-                                               llvm::Constant & leftVal,
-                                               DataType & rightTy,
-                                               llvm::Constant & rightVal);
-
-    virtual llvm::Constant * codegenConstDivOp(ASTNode & callingNode,
-                                               llvm::Constant & leftVal,
-                                               DataType & rightTy,
-                                               llvm::Constant & rightVal);
-    
-    virtual llvm::Constant * codegenConstModOp(ASTNode & callingNode,
-                                               llvm::Constant & leftVal,
-                                               DataType & rightTy,
-                                               llvm::Constant & rightVal);
-    
-    virtual llvm::Constant * codegenConstBAndOp(ASTNode & callingNode,
-                                                llvm::Constant & leftVal,
-                                                DataType & rightTy,
-                                                llvm::Constant & rightVal);
-    
-    virtual llvm::Constant * codegenConstLShiftOp(ASTNode & callingNode,
-                                                  llvm::Constant & leftVal,
-                                                  DataType & rightTy,
-                                                  llvm::Constant & rightVal);
-    
-    virtual llvm::Constant * codegenConstARShiftOp(ASTNode & callingNode,
-                                                   llvm::Constant & leftVal,
-                                                   DataType & rightTy,
-                                                   llvm::Constant & rightVal);
-    
-    virtual llvm::Constant * codegenConstLRShiftOp(ASTNode & callingNode,
-                                                   llvm::Constant & leftVal,
-                                                   DataType & rightTy,
-                                                   llvm::Constant & rightVal);
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(CmpEQ)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(CmpNE)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(CmpLT)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(CmpLE)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(CmpGT)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(CmpGE)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(Add)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(Sub)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(BOr)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(BXOr)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(Mul)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(Div)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(Mod)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(BAnd)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(LShift)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(ARShift)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(LRShift)
     
     /**
      * Codegen various compile time unary operations.
      * The default impl issues an 'unsupported op' compile error.
      */
-    virtual llvm::Constant * codegenConstPlusOp(ASTNode & callingNode,
-                                                llvm::Constant & val);
+    #define WC_DATA_TYPE_DECL_CODEGEN_CONST_UNARY_OP_FUNC(OpName)\
+        virtual llvm::Constant * codegenConst ## OpName ## Op(ASTNode & callingNode,\
+                                                              llvm::Constant & val);
     
-    virtual llvm::Constant * codegenConstMinusOp(ASTNode & callingNode,
-                                                 llvm::Constant & val);
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_UNARY_OP_FUNC(Plus)
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_UNARY_OP_FUNC(Minus)
     
     /**
      * Check that the LLVM type for this data type is defined and issue a compile error if not.
@@ -299,6 +222,12 @@ public:
     llvm::Type * mLLVMType = nullptr;
     
 protected:
+    static const char * const kOpSymbol_CmpEQ;
+    static const char * const kOpSymbol_CmpNE;
+    static const char * const kOpSymbol_CmpLT;
+    static const char * const kOpSymbol_CmpLE;
+    static const char * const kOpSymbol_CmpGT;
+    static const char * const kOpSymbol_CmpGE;
     static const char * const kOpSymbol_Add;
     static const char * const kOpSymbol_Sub;
     static const char * const kOpSymbol_BOr;
@@ -315,6 +244,12 @@ protected:
     static const char * const kOpSymbol_Inc;
     static const char * const kOpSymbol_Dec;
     
+    static const char * const kOpName_CmpEQ;
+    static const char * const kOpName_CmpNE;
+    static const char * const kOpName_CmpLT;
+    static const char * const kOpName_CmpLE;
+    static const char * const kOpName_CmpGT;
+    static const char * const kOpName_CmpGE;
     static const char * const kOpName_Add;
     static const char * const kOpName_Sub;
     static const char * const kOpName_BOr;
