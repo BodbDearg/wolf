@@ -202,28 +202,22 @@ llvm::Value * NotExprBNot::codegenAddrOf(CodegenCtx & cgCtx) {
 
 llvm::Value * NotExprBNot::codegenExprEval(CodegenCtx & cgCtx) {
     // Evaluate the expression to be 'notted'
-    llvm::Value * value = mExpr.codegenExprEval(cgCtx);
-    WC_GUARD(value, nullptr);
+    llvm::Value * val = mExpr.codegenExprEval(cgCtx);
+    WC_GUARD(val, nullptr);
     
-    // FIXME: this is just a temporary limitation.
-    // Expression must evaluate to an int.
-    WC_GUARD(compileCheckExprIsInt(), nullptr);
-    
-    // Create the not operation
-    return cgCtx.irBuilder.CreateNot(value, "NotExprBNot_NotOp");
+    // Do the operation and return the result:
+    DataType & exprTy = mExpr.dataType();
+    return exprTy.codegenBNotOp(cgCtx, *this, *val);
 }
 
 llvm::Constant * NotExprBNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Evaluate the expression to be 'notted'
-    llvm::Constant * value = mExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(value, nullptr);
+    llvm::Constant * val = mExpr.codegenExprConstEval(cgCtx);
+    WC_GUARD(val, nullptr);
     
-    // FIXME: this is just a temporary limitation.
-    // Expression must evaluate to an int.
-    WC_GUARD(compileCheckExprIsInt(), nullptr);
-
-    // Create the not operation
-    return llvm::ConstantExpr::getNot(value);
+    // Do the operation and return the result:
+    DataType & exprTy = mExpr.dataType();
+    return exprTy.codegenConstBNotOp(*this, *val);
 }
 
 bool NotExprBNot::compileCheckExprIsInt() const {

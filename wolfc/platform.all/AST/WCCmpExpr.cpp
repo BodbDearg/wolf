@@ -90,10 +90,18 @@ llvm::Constant * CmpExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // CmpExprTwoOps
 //-----------------------------------------------------------------------------
-CmpExprTwoOps::CmpExprTwoOps(AddExpr & leftExpr, CmpExpr & rightExpr) :
+CmpExprTwoOps::CmpExprTwoOps(AddExpr & leftExpr,
+                             CmpExpr & rightExpr,
+                             DTCodegenBinaryOpFunc codegenBinaryOpFunc,
+                             DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc)
+:
     mLeftExpr(leftExpr),
-    mRightExpr(rightExpr)
+    mRightExpr(rightExpr),
+    mCodegenBinaryOpFunc(codegenBinaryOpFunc),
+    mCodegenConstBinaryOpFunc(codegenConstBinaryOpFunc)
 {
+    WC_ASSERT(mCodegenBinaryOpFunc);
+    WC_ASSERT(mCodegenConstBinaryOpFunc);
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
 }
@@ -131,11 +139,10 @@ llvm::Value * CmpExprTwoOps::codegenExprEval(CodegenCtx & cgCtx) {
     llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(rightVal, nullptr);
     
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Codegen the op itself
-    return codegenOpEval(cgCtx, *leftVal, *rightVal);
+    // Perform the op:
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return (leftTy.*mCodegenBinaryOpFunc)(cgCtx, *this, *leftVal, rightTy, *rightVal);
 }
 
 llvm::Constant * CmpExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
@@ -145,153 +152,64 @@ llvm::Constant * CmpExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
     llvm::Constant * rightVal = mRightExpr.codegenExprConstEval(cgCtx);
     WC_GUARD(rightVal, nullptr);
     
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Codegen the op itself
-    return codegenOpConstEval(*leftVal, *rightVal);
-}
-
-bool CmpExprTwoOps::compileCheckBothExprsAreInt() const {
-    const DataType & leftType = mLeftExpr.dataType();
-    
-    if (!leftType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
-        compileError("Left type in expression must be 'int' for now and not '%s'!",
-                     leftType.name().c_str());
-        
-        return false;
-    }
-    
-    const DataType & rightType = mRightExpr.dataType();
-    
-    if (!rightType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
-        compileError("Right type in expression must be 'int' for now and not '%s'!",
-                     rightType.name().c_str());
-        
-        return false;
-    }
-    
-    return true;
+    // Perform the op:
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return (leftTy.*mCodegenConstBinaryOpFunc)(*this, *leftVal, rightTy, *rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // CmpExprEQ
 //-----------------------------------------------------------------------------
-CmpExprEQ::CmpExprEQ(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
+CmpExprEQ::CmpExprEQ(AddExpr & leftExpr, CmpExpr & rightExpr) :
+    CmpExprTwoOps(leftExpr, rightExpr, &DataType::codegenCmpEQOp, &DataType::codegenConstCmpEQOp)
+{
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * CmpExprEQ::codegenOpEval(CodegenCtx & cgCtx,
-                                       llvm::Value & leftVal,
-                                       llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateICmpEQ(&leftVal, &rightVal, "CmpExprEQ_CmpOp");
-}
-
-llvm::Constant * CmpExprEQ::codegenOpConstEval(llvm::Constant & leftVal,
-                                               llvm::Constant & rightVal)
-{
-    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_EQ, &leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // CmpExprNE
 //-----------------------------------------------------------------------------
-CmpExprNE::CmpExprNE(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
+CmpExprNE::CmpExprNE(AddExpr & leftExpr, CmpExpr & rightExpr) :
+    CmpExprTwoOps(leftExpr, rightExpr, &DataType::codegenCmpNEOp, &DataType::codegenConstCmpNEOp)
+{
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * CmpExprNE::codegenOpEval(CodegenCtx & cgCtx,
-                                       llvm::Value & leftVal,
-                                       llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateICmpNE(&leftVal, &rightVal, "CmpExprNE_CmpOp");
-}
-
-llvm::Constant * CmpExprNE::codegenOpConstEval(llvm::Constant & leftVal,
-                                               llvm::Constant & rightVal)
-{
-    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_NE, &leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // CmpExprLT
 //-----------------------------------------------------------------------------
-CmpExprLT::CmpExprLT(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
+CmpExprLT::CmpExprLT(AddExpr & leftExpr, CmpExpr & rightExpr) :
+    CmpExprTwoOps(leftExpr, rightExpr, &DataType::codegenCmpLTOp, &DataType::codegenConstCmpLTOp)
+{
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * CmpExprLT::codegenOpEval(CodegenCtx & cgCtx,
-                                       llvm::Value & leftVal,
-                                       llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateICmpSLT(&leftVal, &rightVal, "CmpExprLT_CmpOp");
-}
-
-llvm::Constant * CmpExprLT::codegenOpConstEval(llvm::Constant & leftVal,
-                                               llvm::Constant & rightVal)
-{
-    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SLT, &leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // CmpExprLE
 //-----------------------------------------------------------------------------
-CmpExprLE::CmpExprLE(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
+CmpExprLE::CmpExprLE(AddExpr & leftExpr, CmpExpr & rightExpr) :
+    CmpExprTwoOps(leftExpr, rightExpr, &DataType::codegenCmpLEOp, &DataType::codegenConstCmpLEOp)
+{
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * CmpExprLE::codegenOpEval(CodegenCtx & cgCtx,
-                                       llvm::Value & leftVal,
-                                       llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateICmpSLE(&leftVal, &rightVal, "CmpExprLE_CmpOp");
-}
-
-llvm::Constant * CmpExprLE::codegenOpConstEval(llvm::Constant & leftVal,
-                                               llvm::Constant & rightVal)
-{
-    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SLE, &leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // CmpExprGT
 //-----------------------------------------------------------------------------
-CmpExprGT::CmpExprGT(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
+CmpExprGT::CmpExprGT(AddExpr & leftExpr, CmpExpr & rightExpr) :
+    CmpExprTwoOps(leftExpr, rightExpr, &DataType::codegenCmpGTOp, &DataType::codegenConstCmpGTOp)
+{
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * CmpExprGT::codegenOpEval(CodegenCtx & cgCtx,
-                                       llvm::Value & leftVal,
-                                       llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateICmpSGT(&leftVal, &rightVal, "CmpExprGT_CmpOp");
-}
-
-llvm::Constant * CmpExprGT::codegenOpConstEval(llvm::Constant & leftVal,
-                                               llvm::Constant & rightVal)
-{
-    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SGT, &leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // CmpExprGE
 //-----------------------------------------------------------------------------
-CmpExprGE::CmpExprGE(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
+CmpExprGE::CmpExprGE(AddExpr & leftExpr, CmpExpr & rightExpr) :
+    CmpExprTwoOps(leftExpr, rightExpr, &DataType::codegenCmpGEOp, &DataType::codegenConstCmpGEOp)
+{
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * CmpExprGE::codegenOpEval(CodegenCtx & cgCtx,
-                                       llvm::Value & leftVal,
-                                       llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateICmpSGE(&leftVal, &rightVal, "CmpExprGE_CmpOp");
-}
-
-llvm::Constant * CmpExprGE::codegenOpConstEval(llvm::Constant & leftVal,
-                                               llvm::Constant & rightVal)
-{
-    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SGE, &leftVal, &rightVal);
 }
 
 WC_END_NAMESPACE

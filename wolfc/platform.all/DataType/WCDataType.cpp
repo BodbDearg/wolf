@@ -10,6 +10,7 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
+const char * const DataType::kOpSymbol_BNot = "~";
 const char * const DataType::kOpSymbol_CmpEQ = "==";
 const char * const DataType::kOpSymbol_CmpNE = "!=";
 const char * const DataType::kOpSymbol_CmpLT = "<";
@@ -32,6 +33,7 @@ const char * const DataType::kOpSymbol_Minus = "-";
 const char * const DataType::kOpSymbol_Inc = "++";
 const char * const DataType::kOpSymbol_Dec = "--";
 
+const char * const DataType::kOpName_BNot = "bitwise not";
 const char * const DataType::kOpName_CmpEQ = "equals";
 const char * const DataType::kOpName_CmpNE = "not equal to";
 const char * const DataType::kOpName_CmpLT = "less than";
@@ -173,6 +175,7 @@ IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(LRShift)
         return nullptr;\
     }
 
+IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(BNot)
 IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Plus)
 IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Minus)
 IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Inc)
@@ -225,6 +228,7 @@ IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(LRShift)
         return nullptr;\
     }
 
+IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(BNot)
 IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Plus)
 IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Minus)
 

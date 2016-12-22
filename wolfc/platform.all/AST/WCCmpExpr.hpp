@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DataType/WCDataTypeCodegenFuncs.hpp"
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
 
@@ -47,7 +48,10 @@ public:
 /* Base for relational expressions with two operators. */
 class CmpExprTwoOps : public CmpExpr {
 public:
-    CmpExprTwoOps(AddExpr & leftExpr, CmpExpr & rightExpr);
+    CmpExprTwoOps(AddExpr & leftExpr,
+                  CmpExpr & rightExpr,
+                  DTCodegenBinaryOpFunc codegenBinaryOpFunc,
+                  DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -64,105 +68,45 @@ public:
     AddExpr &   mLeftExpr;
     CmpExpr &   mRightExpr;
     
-protected:
-    /**
-     * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'int'
-     * Return false for failure if that is the case.
-     */
-    bool compileCheckBothExprsAreInt() const;
-    
-    /**
-     * Do the actual codegen for the operation itself (runtime evaluation).
-     * All other type checks have been done and sub-expressions evaluated at this point.
-     */
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) = 0;
-    
-    /**
-     * Do the actual codegen for the operation itself (compile time evaluation).
-     * All other type checks have been done and sub-expressions evaluated at this point.
-     */
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) = 0;
+private:
+    const DTCodegenBinaryOpFunc         mCodegenBinaryOpFunc;
+    const DTCodegenConstBinaryOpFunc    mCodegenConstBinaryOpFunc;
 };
 
 /* AddExpr == CmpExpr */
 class CmpExprEQ final : public CmpExprTwoOps {
 public:
     CmpExprEQ(AddExpr & leftExpr, CmpExpr & rightExpr);
-    
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) override;
 };
 
 /* AddExpr != CmpExpr */
 class CmpExprNE final : public CmpExprTwoOps {
 public:
     CmpExprNE(AddExpr & leftExpr, CmpExpr & rightExpr);
-    
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) override;
 };
 
 /* AddExpr < CmpExpr */
 class CmpExprLT final : public CmpExprTwoOps {
 public:
     CmpExprLT(AddExpr & leftExpr, CmpExpr & rightExpr);
-    
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) override;
 };
 
 /* AddExpr <= CmpExpr */
 class CmpExprLE final : public CmpExprTwoOps {
 public:
     CmpExprLE(AddExpr & leftExpr, CmpExpr & rightExpr);
-    
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) override;
 };
 
 /* AddExpr > CmpExpr */
 class CmpExprGT final : public CmpExprTwoOps {
 public:
     CmpExprGT(AddExpr & leftExpr, CmpExpr & rightExpr);
-    
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) override;
 };
 
 /* AddExpr >= CmpExpr */
 class CmpExprGE final : public CmpExprTwoOps {
 public:
     CmpExprGE(AddExpr & leftExpr, CmpExpr & rightExpr);
-    
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) override;
 };
 
 WC_END_NAMESPACE

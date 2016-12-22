@@ -140,6 +140,7 @@ public:
                                                       ASTNode & callingNode,\
                                                       llvm::Value & val);
     
+    WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(BNot)
     WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(Plus)
     WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(Minus)
     WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(Inc)
@@ -181,6 +182,7 @@ public:
         virtual llvm::Constant * codegenConst ## OpName ## Op(ASTNode & callingNode,\
                                                               llvm::Constant & val);
     
+    WC_DATA_TYPE_DECL_CODEGEN_CONST_UNARY_OP_FUNC(BNot)
     WC_DATA_TYPE_DECL_CODEGEN_CONST_UNARY_OP_FUNC(Plus)
     WC_DATA_TYPE_DECL_CODEGEN_CONST_UNARY_OP_FUNC(Minus)
     
@@ -222,6 +224,7 @@ public:
     llvm::Type * mLLVMType = nullptr;
     
 protected:
+    static const char * const kOpSymbol_BNot;
     static const char * const kOpSymbol_CmpEQ;
     static const char * const kOpSymbol_CmpNE;
     static const char * const kOpSymbol_CmpLT;
@@ -244,6 +247,7 @@ protected:
     static const char * const kOpSymbol_Inc;
     static const char * const kOpSymbol_Dec;
     
+    static const char * const kOpName_BNot;
     static const char * const kOpName_CmpEQ;
     static const char * const kOpName_CmpNE;
     static const char * const kOpName_CmpLT;

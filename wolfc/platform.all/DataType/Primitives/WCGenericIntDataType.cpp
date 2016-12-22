@@ -14,6 +14,34 @@ bool GenericIntDataType::isInteger() const {
     return true;
 }
 
+llvm::Value * GenericIntDataType::codegenCmpEQOp(CodegenCtx & cgCtx,
+                                                 ASTNode & callingNode,
+                                                 llvm::Value & leftVal,
+                                                 DataType & rightTy,
+                                                 llvm::Value & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_CmpEQ,
+                                            kOpName_CmpEQ,
+                                            rightTy), nullptr);
+    
+    return cgCtx.irBuilder.CreateICmpEQ(&leftVal, &rightVal, "GenericInt_CmpEQOp");
+}
+
+llvm::Value * GenericIntDataType::codegenCmpNEOp(CodegenCtx & cgCtx,
+                                                 ASTNode & callingNode,
+                                                 llvm::Value & leftVal,
+                                                 DataType & rightTy,
+                                                 llvm::Value & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_CmpNE,
+                                            kOpName_CmpNE,
+                                            rightTy), nullptr);
+    
+    return cgCtx.irBuilder.CreateICmpNE(&leftVal, &rightVal, "GenericInt_CmpNEOp");
+}
+
 llvm::Value * GenericIntDataType::codegenAddOp(CodegenCtx & cgCtx,
                                                ASTNode & callingNode,
                                                llvm::Value & leftVal,
@@ -126,6 +154,14 @@ llvm::Value * GenericIntDataType::codegenLRShiftOp(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateLShr(&leftVal, &rightVal, "GenericInt_LRShiftOp");
 }
 
+llvm::Value * GenericIntDataType::codegenBNotOp(CodegenCtx & cgCtx,
+                                                ASTNode & callingNode,
+                                                llvm::Value & val)
+{
+    WC_UNUSED_PARAM(callingNode);
+    return cgCtx.irBuilder.CreateNot(&val);
+}
+
 llvm::Value * GenericIntDataType::codegenPlusOp(CodegenCtx & cgCtx,
                                                 ASTNode & callingNode,
                                                 llvm::Value & val)
@@ -164,6 +200,32 @@ llvm::Value * GenericIntDataType::codegenDecOp(CodegenCtx & cgCtx,
     llvm::Value * decBy = cgCtx.irBuilder.getInt64(1);
     WC_ASSERT(decBy);
     return cgCtx.irBuilder.CreateSub(&val, decBy, "GenericInt_DecOp");
+}
+
+llvm::Constant * GenericIntDataType::codegenConstCmpEQOp(ASTNode & callingNode,
+                                                         llvm::Constant & leftVal,
+                                                         DataType & rightTy,
+                                                         llvm::Constant & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_CmpEQ,
+                                            kOpName_CmpEQ,
+                                            rightTy), nullptr);
+    
+    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_EQ, &leftVal, &rightVal);
+}
+
+llvm::Constant * GenericIntDataType::codegenConstCmpNEOp(ASTNode & callingNode,
+                                                         llvm::Constant & leftVal,
+                                                         DataType & rightTy,
+                                                         llvm::Constant & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_CmpNE,
+                                            kOpName_CmpNE,
+                                            rightTy), nullptr);
+    
+    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_NE, &leftVal, &rightVal);
 }
 
 llvm::Constant * GenericIntDataType::codegenConstAddOp(ASTNode & callingNode,
@@ -268,6 +330,13 @@ llvm::Constant * GenericIntDataType::codegenConstLRShiftOp(ASTNode & callingNode
                                             rightTy), nullptr);
     
     return llvm::ConstantExpr::getLShr(&leftVal, &rightVal);
+}
+
+llvm::Constant * GenericIntDataType::codegenConstBNotOp(ASTNode & callingNode,
+                                                        llvm::Constant & val)
+{
+    WC_UNUSED_PARAM(callingNode);
+    return llvm::ConstantExpr::getNot(&val);
 }
 
 llvm::Constant * GenericIntDataType::codegenConstPlusOp(ASTNode & callingNode,
