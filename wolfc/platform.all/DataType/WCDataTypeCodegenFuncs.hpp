@@ -46,4 +46,13 @@ typedef llvm::Value * (DataType::*DTCodegenUnaryOpFunc)(
     llvm::Value & val
 );
 
+/**
+ * Typedef for a 'DataType' member function which codegens a compile time constant unary op.
+ * For example, a function that generates code for a constant 'negate' operation.
+ */
+typedef llvm::Constant * (DataType::*DTCodegenConstUnaryOpFunc)(
+    ASTNode & callingNode,
+    llvm::Constant & val
+);
+
 WC_END_NAMESPACE

@@ -123,127 +123,76 @@ llvm::Constant * UnaryExprPrimary::codegenExprConstEval(CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// UnaryExprMinus
+// UnaryExprPlusMinusBase
 //-----------------------------------------------------------------------------
-UnaryExprMinus::UnaryExprMinus(PostfixExpr & expr, const Token & startToken) :
-    mExpr(expr),
-    mStartToken(startToken)
+UnaryExprPlusMinusBase::UnaryExprPlusMinusBase(PostfixExpr & expr,
+                                               const Token & startToken,
+                                               DTCodegenUnaryOpFunc codegenUnaryOpFunc,
+                                               DTCodegenConstUnaryOpFunc codegenConstUnaryOpFunc)
+:
+    UnaryExprPrimary(expr),
+    mStartToken(startToken),
+    mCodegenUnaryOpFunc(codegenUnaryOpFunc),
+    mCodegenConstUnaryOpFunc(codegenConstUnaryOpFunc)
 {
-    mExpr.mParent = this;
+    WC_EMPTY_FUNC_BODY();
 }
 
-const Token & UnaryExprMinus::getStartToken() const {
+const Token & UnaryExprPlusMinusBase::getStartToken() const {
     return mStartToken;
 }
 
-const Token & UnaryExprMinus::getEndToken() const {
+const Token & UnaryExprPlusMinusBase::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool UnaryExprMinus::isLValue() {
+bool UnaryExprPlusMinusBase::isLValue() {
     return false;
 }
 
-bool UnaryExprMinus::isConstExpr() {
-    return mExpr.isConstExpr();
+llvm::Value * UnaryExprPlusMinusBase::codegenAddrOf(CodegenCtx & cgCtx) {
+    // TODO: would this be true in future for complex types?
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of a unary expression result!");
+    return nullptr;
 }
 
-DataType & UnaryExprMinus::dataType() {
-    return mExpr.dataType();
-}
-
-llvm::Value * UnaryExprMinus::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mExpr.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * UnaryExprMinus::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: support more types
-    const DataType & exprType = mExpr.dataType();
-    
-    if (!exprType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
-        compileError("Unary '-' operator only supports 'int' datatype, not '%s'!",
-                     exprType.name().c_str());
-        
-        return nullptr;
-    }
-    
+llvm::Value * UnaryExprPlusMinusBase::codegenExprEval(CodegenCtx & cgCtx) {
+    // Generate the code for the expression value first
     llvm::Value * exprValue = mExpr.codegenExprEval(cgCtx);
     WC_GUARD(exprValue, nullptr);
-    return cgCtx.irBuilder.CreateNeg(exprValue, "UnaryExprMinus_NegOp");
+    
+    // Now do the operation
+    DataType & exprType = mExpr.dataType();
+    return (exprType.*mCodegenUnaryOpFunc)(cgCtx, *this, *exprValue);
 }
 
-llvm::Constant * UnaryExprMinus::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: support more types
-    const DataType & exprType = mExpr.dataType();
-    
-    if (!exprType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
-        compileError("Unary '-' operator only supports 'int' datatype, not '%s'!",
-                     exprType.name().c_str());
-        
-        return nullptr;
-    }
-    
+llvm::Constant * UnaryExprPlusMinusBase::codegenExprConstEval(CodegenCtx & cgCtx) {
+    // Generate the code for the expression value first
     llvm::Constant * exprValue = mExpr.codegenExprConstEval(cgCtx);
     WC_GUARD(exprValue, nullptr);
-    return llvm::ConstantExpr::getNeg(exprValue);
+    
+    // Now do the operation
+    DataType & exprType = mExpr.dataType();
+    return (exprType.*mCodegenConstUnaryOpFunc)(*this, *exprValue);
 }
 
 //-----------------------------------------------------------------------------
 // UnaryExprPlus
 //-----------------------------------------------------------------------------
 UnaryExprPlus::UnaryExprPlus(PostfixExpr & expr, const Token & startToken) :
-    UnaryExprPrimary(expr),
-    mStartToken(startToken)
+    UnaryExprPlusMinusBase(expr, startToken, &DataType::codegenPlusOp, &DataType::codegenConstPlusOp)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-const Token & UnaryExprPlus::getStartToken() const {
-    return mStartToken;
-}
-
-const Token & UnaryExprPlus::getEndToken() const {
-    return mExpr.getEndToken();
-}
-
-bool UnaryExprPlus::isLValue() {
-    return false;
-}
-
-DataType & UnaryExprPlus::dataType() {
-    return mExpr.dataType();
-}
-
-llvm::Value * UnaryExprPlus::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mExpr.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * UnaryExprPlus::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: support more types
-    const DataType & exprType = mExpr.dataType();
-    
-    if (!exprType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
-        compileError("Unary '+' operator only supports 'int' datatype, not '%s'!",
-                     exprType.name().c_str());
-        
-        return nullptr;
-    }
-    
-    return UnaryExprPrimary::codegenExprEval(cgCtx);
-}
-
-llvm::Constant * UnaryExprPlus::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: support more types
-    const DataType & exprType = mExpr.dataType();
-    
-    if (!exprType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
-        compileError("Unary '+' operator only supports 'int' datatype, not '%s'!",
-                     exprType.name().c_str());
-        
-        return nullptr;
-    }
-    
-    return UnaryExprPrimary::codegenExprConstEval(cgCtx);
+//-----------------------------------------------------------------------------
+// UnaryExprMinus
+//-----------------------------------------------------------------------------
+UnaryExprMinus::UnaryExprMinus(PostfixExpr & expr, const Token & startToken) :
+    UnaryExprPlusMinusBase(expr, startToken, &DataType::codegenMinusOp, &DataType::codegenConstMinusOp)
+{
+    WC_EMPTY_FUNC_BODY();
 }
 
 //-----------------------------------------------------------------------------

@@ -21,6 +21,8 @@ const char * const DataType::kOpSymbol_BAnd = "&";
 const char * const DataType::kOpSymbol_LShift = "<<";
 const char * const DataType::kOpSymbol_ARShift = ">>";
 const char * const DataType::kOpSymbol_LRShift = ">>>";
+const char * const DataType::kOpSymbol_Plus = "+";
+const char * const DataType::kOpSymbol_Minus = "-";
 const char * const DataType::kOpSymbol_Inc = "++";
 const char * const DataType::kOpSymbol_Dec = "--";
 
@@ -35,6 +37,8 @@ const char * const DataType::kOpName_BAnd = "bitwise and";
 const char * const DataType::kOpName_LShift = "left shift";
 const char * const DataType::kOpName_ARShift = "arithmetic right shift";
 const char * const DataType::kOpName_LRShift = "logical right shift";
+const char * const DataType::kOpName_Plus = "plus";
+const char * const DataType::kOpName_Minus = "minus";
 const char * const DataType::kOpName_Inc = "increment";
 const char * const DataType::kOpName_Dec = "decrement";
 
@@ -262,6 +266,28 @@ llvm::Value * DataType::codegenLRShiftOp(CodegenCtx & cgCtx,
     return nullptr;
 }
 
+llvm::Value * DataType::codegenPlusOp(CodegenCtx & cgCtx,
+                                      ASTNode & callingNode,
+                                      llvm::Value & val)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(val);
+    issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_Plus, kOpName_Plus);
+    return nullptr;
+}
+
+llvm::Value * DataType::codegenMinusOp(CodegenCtx & cgCtx,
+                                       ASTNode & callingNode,
+                                       llvm::Value & val)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(val);
+    issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_Minus, kOpName_Minus);
+    return nullptr;
+}
+
 llvm::Value * DataType::codegenIncOp(CodegenCtx & cgCtx,
                                      ASTNode & callingNode,
                                      llvm::Value & val)
@@ -413,6 +439,24 @@ llvm::Constant * DataType::codegenConstLRShiftOp(ASTNode & callingNode,
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
     issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_LRShift, kOpName_LRShift, rightTy);
+    return nullptr;
+}
+
+llvm::Constant * DataType::codegenConstPlusOp(ASTNode & callingNode,
+                                              llvm::Constant & val)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(val);
+    issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_Plus, kOpName_Plus);
+    return nullptr;
+}
+
+llvm::Constant * DataType::codegenConstMinusOp(ASTNode & callingNode,
+                                               llvm::Constant & val)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(val);
+    issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_Minus, kOpName_Minus);
     return nullptr;
 }
 

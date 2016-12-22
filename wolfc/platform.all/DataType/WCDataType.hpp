@@ -176,6 +176,14 @@ public:
      * Codegen various runtime unary operations.
      * The default impl issues an 'unsupported op' compile error.
      */
+    virtual llvm::Value * codegenPlusOp(CodegenCtx & cgCtx,
+                                        ASTNode & callingNode,
+                                        llvm::Value & val);
+    
+    virtual llvm::Value * codegenMinusOp(CodegenCtx & cgCtx,
+                                         ASTNode & callingNode,
+                                         llvm::Value & val);
+    
     virtual llvm::Value * codegenIncOp(CodegenCtx & cgCtx,
                                        ASTNode & callingNode,
                                        llvm::Value & val);
@@ -244,6 +252,16 @@ public:
                                                    llvm::Constant & rightVal);
     
     /**
+     * Codegen various compile time unary operations.
+     * The default impl issues an 'unsupported op' compile error.
+     */
+    virtual llvm::Constant * codegenConstPlusOp(ASTNode & callingNode,
+                                                llvm::Constant & val);
+    
+    virtual llvm::Constant * codegenConstMinusOp(ASTNode & callingNode,
+                                                 llvm::Constant & val);
+    
+    /**
      * Check that the LLVM type for this data type is defined and issue a compile error if not.
      * Returns false if the LLVM type is not defined and true otherwise.
      */
@@ -292,6 +310,8 @@ protected:
     static const char * const kOpSymbol_LShift;
     static const char * const kOpSymbol_ARShift;
     static const char * const kOpSymbol_LRShift;
+    static const char * const kOpSymbol_Plus;
+    static const char * const kOpSymbol_Minus;
     static const char * const kOpSymbol_Inc;
     static const char * const kOpSymbol_Dec;
     
@@ -306,6 +326,8 @@ protected:
     static const char * const kOpName_LShift;
     static const char * const kOpName_ARShift;
     static const char * const kOpName_LRShift;
+    static const char * const kOpName_Plus;
+    static const char * const kOpName_Minus;
     static const char * const kOpName_Inc;
     static const char * const kOpName_Dec;
     

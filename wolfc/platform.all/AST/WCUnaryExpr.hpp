@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DataType/WCDataTypeCodegenFuncs.hpp"
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
 
@@ -12,9 +13,9 @@ class PostfixExpr;
 /*
 UnaryExpr:
 	PostfixExpr
-	-PostfixExpr
-	+PostfixExpr
-	(AssignExpr)
+	+ PostfixExpr
+	- PostfixExpr
+	( AssignExpr )
 */
 class UnaryExpr : public ASTNode, public IExpr {
 public:
@@ -42,47 +43,41 @@ public:
     PostfixExpr & mExpr;
 };
 
-/* -PostfixExpr */
-class UnaryExprMinus final : public UnaryExpr {
+/* Base class for '+' or '-' unary expression */
+class UnaryExprPlusMinusBase : public UnaryExprPrimary {
 public:
-    UnaryExprMinus(PostfixExpr & expr, const Token & startToken);
+    UnaryExprPlusMinusBase(PostfixExpr & expr,
+                           const Token & startToken,
+                           DTCodegenUnaryOpFunc codegenUnaryOpFunc,
+                           DTCodegenConstUnaryOpFunc codegenConstUnaryOpFunc);
     
-    virtual const Token & getStartToken() const override;
-    virtual const Token & getEndToken() const override;
+    virtual const Token & getStartToken() const final override;
+    virtual const Token & getEndToken() const final override;
     
-    virtual bool isLValue() override;
-    virtual bool isConstExpr() override;
+    virtual bool isLValue() final override;
     
-    virtual DataType & dataType() override;
+    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) final override;
+    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) final override;
     
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-    
-    PostfixExpr &   mExpr;
-    const Token &   mStartToken;
+    const Token &                       mStartToken;
+    const DTCodegenUnaryOpFunc          mCodegenUnaryOpFunc;
+    const DTCodegenConstUnaryOpFunc     mCodegenConstUnaryOpFunc;
 };
 
-/* +PostfixExpr */
-class UnaryExprPlus final : public UnaryExprPrimary {
+/* + PostfixExpr */
+class UnaryExprPlus final : public UnaryExprPlusMinusBase {
 public:
     UnaryExprPlus(PostfixExpr & expr, const Token & startToken);
-    
-    virtual const Token & getStartToken() const override;
-    virtual const Token & getEndToken() const override;
-    
-    virtual bool isLValue() override;
-    
-    virtual DataType & dataType() override;
-    
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-    
-    const Token &   mStartToken;
 };
 
-/* (AssignExpr) */
+/* - PostfixExpr */
+class UnaryExprMinus final : public UnaryExprPlusMinusBase {
+public:
+    UnaryExprMinus(PostfixExpr & expr, const Token & startToken);
+};
+
+/* ( AssignExpr ) */
 class UnaryExprParen final : public UnaryExpr {
 public:
     UnaryExprParen(AssignExpr & expr, const Token & startToken, const Token & endToken);

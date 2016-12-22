@@ -57,6 +57,14 @@ public:
                                            DataType & rightTy,
                                            llvm::Value & rightVal) override;
     
+    virtual llvm::Value * codegenPlusOp(CodegenCtx & cgCtx,
+                                        ASTNode & callingNode,
+                                        llvm::Value & val) override;
+    
+    virtual llvm::Value * codegenMinusOp(CodegenCtx & cgCtx,
+                                         ASTNode & callingNode,
+                                         llvm::Value & val) override;
+    
     virtual llvm::Value * codegenIncOp(CodegenCtx & cgCtx,
                                        ASTNode & callingNode,
                                        llvm::Value & val) override;
@@ -104,6 +112,12 @@ public:
                                                    llvm::Constant & leftVal,
                                                    DataType & rightTy,
                                                    llvm::Constant & rightVal) override;
+    
+    virtual llvm::Constant * codegenConstPlusOp(ASTNode & callingNode,
+                                                llvm::Constant & val) override;
+    
+    virtual llvm::Constant * codegenConstMinusOp(ASTNode & callingNode,
+                                                 llvm::Constant & val) override;
 };
 
 WC_END_NAMESPACE

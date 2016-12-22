@@ -126,6 +126,26 @@ llvm::Value * GenericIntDataType::codegenLRShiftOp(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateLShr(&leftVal, &rightVal, "GenericInt_LRShiftOp");
 }
 
+llvm::Value * GenericIntDataType::codegenPlusOp(CodegenCtx & cgCtx,
+                                                ASTNode & callingNode,
+                                                llvm::Value & val)
+{
+    // This is a 'no-op' for numbers - simply return the value passed in
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(callingNode);
+    return &val;
+}
+
+llvm::Value * GenericIntDataType::codegenMinusOp(CodegenCtx & cgCtx,
+                                                 ASTNode & callingNode,
+                                                 llvm::Value & val)
+{
+    #warning DO NOT ALLOW FOR UNSIGNED
+    // FIXME: Should this be an error for unsigned integers?
+    WC_UNUSED_PARAM(callingNode);
+    return cgCtx.irBuilder.CreateNeg(&val);
+}
+
 llvm::Value * GenericIntDataType::codegenIncOp(CodegenCtx & cgCtx,
                                                ASTNode & callingNode,
                                                llvm::Value & val)
@@ -248,6 +268,23 @@ llvm::Constant * GenericIntDataType::codegenConstLRShiftOp(ASTNode & callingNode
                                             rightTy), nullptr);
     
     return llvm::ConstantExpr::getLShr(&leftVal, &rightVal);
+}
+
+llvm::Constant * GenericIntDataType::codegenConstPlusOp(ASTNode & callingNode,
+                                                        llvm::Constant & val)
+{
+    // This is a 'no-op' for numbers - simply return the value passed in
+    WC_UNUSED_PARAM(callingNode);
+    return &val;
+}
+
+llvm::Constant * GenericIntDataType::codegenConstMinusOp(ASTNode & callingNode,
+                                                         llvm::Constant & val)
+{
+    #warning DO NOT ALLOW FOR UNSIGNED
+    // FIXME: Should this be an error for unsigned integers?
+    WC_UNUSED_PARAM(callingNode);
+    return llvm::ConstantExpr::getNeg(&val);
 }
 
 WC_END_NAMESPACE
