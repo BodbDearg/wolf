@@ -16,6 +16,28 @@ public:
                                    llvm::Constant & printfFn,
                                    llvm::Value & valToPrint) override;
     
+    virtual llvm::Value * codegenCmpEQOp(CodegenCtx & cgCtx,
+                                         ASTNode & callingNode,
+                                         llvm::Value & leftVal,
+                                         DataType & rightTy,
+                                         llvm::Value & rightVal) override;
+    
+    virtual llvm::Value * codegenCmpNEOp(CodegenCtx & cgCtx,
+                                         ASTNode & callingNode,
+                                         llvm::Value & leftVal,
+                                         DataType & rightTy,
+                                         llvm::Value & rightVal) override;
+    
+    virtual llvm::Constant * codegenConstCmpEQOp(ASTNode & callingNode,
+                                                 llvm::Constant & leftVal,
+                                                 DataType & rightTy,
+                                                 llvm::Constant & rightVal) override;
+    
+    virtual llvm::Constant * codegenConstCmpNEOp(ASTNode & callingNode,
+                                                 llvm::Constant & leftVal,
+                                                 DataType & rightTy,
+                                                 llvm::Constant & rightVal) override;
+    
 protected:
     virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
 };

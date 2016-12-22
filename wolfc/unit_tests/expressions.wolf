@@ -161,7 +161,11 @@ var testCmpExprConstexpr = [
     not 0 > 1,
     2 >= 1,
     1 >= 1,
-    not 0 >= 1
+    not 0 >= 1,
+    true == true,
+    false != true,
+    not true == false,
+    not false != false
 ]
 
 func testCmpExpr()
@@ -183,9 +187,13 @@ func testCmpExpr()
     assert(2 >= 1)
     assert(1 >= 1)
     assert(not 0 >= 1)
+    assert(true == true)
+    assert(false != true)
+    assert(not true == false)
+    assert(not false != false)
 
     var testNum = 0
-    while testNum < 18 
+    while testNum < 22
         assert(testCmpExprConstexpr[testNum])
         testNum++
     end

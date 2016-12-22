@@ -77,4 +77,58 @@ bool BoolDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     return true;
 }
 
+llvm::Value * BoolDataType::codegenCmpEQOp(CodegenCtx & cgCtx,
+                                           ASTNode & callingNode,
+                                           llvm::Value & leftVal,
+                                           DataType & rightTy,
+                                           llvm::Value & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_CmpEQ,
+                                            kOpName_CmpEQ,
+                                            rightTy), nullptr);
+    
+    return cgCtx.irBuilder.CreateICmpEQ(&leftVal, &rightVal, "Bool_CmpEQOp");
+}
+
+llvm::Value * BoolDataType::codegenCmpNEOp(CodegenCtx & cgCtx,
+                                           ASTNode & callingNode,
+                                           llvm::Value & leftVal,
+                                           DataType & rightTy,
+                                           llvm::Value & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_CmpNE,
+                                            kOpName_CmpNE,
+                                            rightTy), nullptr);
+    
+    return cgCtx.irBuilder.CreateICmpNE(&leftVal, &rightVal, "Bool_CmpNEOp");
+}
+
+llvm::Constant * BoolDataType::codegenConstCmpEQOp(ASTNode & callingNode,
+                                                   llvm::Constant & leftVal,
+                                                   DataType & rightTy,
+                                                   llvm::Constant & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_CmpEQ,
+                                            kOpName_CmpEQ,
+                                            rightTy), nullptr);
+    
+    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_EQ, &leftVal, &rightVal);
+}
+
+llvm::Constant * BoolDataType::codegenConstCmpNEOp(ASTNode & callingNode,
+                                                   llvm::Constant & leftVal,
+                                                   DataType & rightTy,
+                                                   llvm::Constant & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_CmpNE,
+                                            kOpName_CmpNE,
+                                            rightTy), nullptr);
+    
+    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_NE, &leftVal, &rightVal);
+}
+
 WC_END_NAMESPACE
