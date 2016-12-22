@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DataType/WCDataTypeCodegenFuncs.hpp"
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
 
@@ -49,7 +50,9 @@ public:
 /* Base class for increment/decrement postfix expressions */
 class PostfixExprIncDecBase : public PostfixExpr {
 public:
-    PostfixExprIncDecBase(CastExpr & expr, const Token & endToken);
+    PostfixExprIncDecBase(CastExpr & expr,
+                          const Token & endToken,
+                          DTCodegenUnaryOpFunc codegenUnaryOpFunc);
 
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -60,33 +63,26 @@ public:
     virtual DataType & dataType() final override;
 
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) final override;
 
     CastExpr &      mExpr;
     const Token &   mEndToken;
 
-protected:
-    /**
-     * TODO: this is a temp function for the moment. Issue a compile error if expr is not of type 'int';
-     * return false for failure if that is the case.
-     */
-    bool compileCheckExprIsInt() const;
+private:
+    const DTCodegenUnaryOpFunc mCodegenUnaryOpFunc;
 };
 
 /* CastExpr ++ */
 class PostfixExprInc final : public PostfixExprIncDecBase {
 public:
     PostfixExprInc(CastExpr & expr, const Token & endToken);
-
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
 /* CastExpr -- */
 class PostfixExprDec final : public PostfixExprIncDecBase {
 public:
     PostfixExprDec(CastExpr & expr, const Token & endToken);
-
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
 /* PostfixExpr FuncCall */

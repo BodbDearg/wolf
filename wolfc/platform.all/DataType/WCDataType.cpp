@@ -21,6 +21,8 @@ const char * const DataType::kOpSymbol_BAnd = "&";
 const char * const DataType::kOpSymbol_LShift = "<<";
 const char * const DataType::kOpSymbol_ARShift = ">>";
 const char * const DataType::kOpSymbol_LRShift = ">>>";
+const char * const DataType::kOpSymbol_Inc = "++";
+const char * const DataType::kOpSymbol_Dec = "--";
 
 const char * const DataType::kOpName_Add = "add";
 const char * const DataType::kOpName_Sub = "subtract";
@@ -33,6 +35,8 @@ const char * const DataType::kOpName_BAnd = "bitwise and";
 const char * const DataType::kOpName_LShift = "left shift";
 const char * const DataType::kOpName_ARShift = "arithmetic right shift";
 const char * const DataType::kOpName_LRShift = "logical right shift";
+const char * const DataType::kOpName_Inc = "increment";
+const char * const DataType::kOpName_Dec = "decrement";
 
 DataType::~DataType() {
     WC_EMPTY_FUNC_BODY();
@@ -114,7 +118,7 @@ llvm::Value * DataType::codegenAddOp(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Add, kOpName_Add, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Add, kOpName_Add, rightTy);
     return nullptr;
 }
 
@@ -128,7 +132,7 @@ llvm::Value * DataType::codegenSubOp(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Sub, kOpName_Sub, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Sub, kOpName_Sub, rightTy);
     return nullptr;
 }
 
@@ -142,7 +146,7 @@ llvm::Value * DataType::codegenBOrOp(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_BOr, kOpName_BOr, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_BOr, kOpName_BOr, rightTy);
     return nullptr;
 }
 
@@ -156,7 +160,7 @@ llvm::Value * DataType::codegenBXOrOp(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_BXOr, kOpName_BXOr, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_BXOr, kOpName_BXOr, rightTy);
     return nullptr;
 }
 
@@ -170,7 +174,7 @@ llvm::Value * DataType::codegenMulOp(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Mul, kOpName_Mul, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Mul, kOpName_Mul, rightTy);
     return nullptr;
 }
 
@@ -184,7 +188,7 @@ llvm::Value * DataType::codegenDivOp(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Div, kOpName_Div, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Div, kOpName_Div, rightTy);
     return nullptr;
 }
 
@@ -198,7 +202,7 @@ llvm::Value * DataType::codegenModOp(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Mod, kOpName_Mod, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Mod, kOpName_Mod, rightTy);
     return nullptr;
 }
 
@@ -212,7 +216,7 @@ llvm::Value * DataType::codegenBAndOp(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_BAnd, kOpName_BAnd, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_BAnd, kOpName_BAnd, rightTy);
     return nullptr;
 }
 
@@ -226,7 +230,7 @@ llvm::Value * DataType::codegenLShiftOp(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_LShift, kOpName_LShift, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_LShift, kOpName_LShift, rightTy);
     return nullptr;
 }
 
@@ -240,7 +244,7 @@ llvm::Value * DataType::codegenARShiftOp(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_ARShift, kOpName_ARShift, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_ARShift, kOpName_ARShift, rightTy);
     return nullptr;
 }
 
@@ -254,7 +258,29 @@ llvm::Value * DataType::codegenLRShiftOp(CodegenCtx & cgCtx,
     WC_UNUSED_PARAM(cgCtx);
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_LRShift, kOpName_LRShift, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_LRShift, kOpName_LRShift, rightTy);
+    return nullptr;
+}
+
+llvm::Value * DataType::codegenIncOp(CodegenCtx & cgCtx,
+                                     ASTNode & callingNode,
+                                     llvm::Value & val)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(val);
+    issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_Inc, kOpName_Inc);
+    return nullptr;
+}
+
+llvm::Value * DataType::codegenDecOp(CodegenCtx & cgCtx,
+                                     ASTNode & callingNode,
+                                     llvm::Value & val)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(val);
+    issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_Dec, kOpName_Dec);
     return nullptr;
 }
 
@@ -266,7 +292,7 @@ llvm::Constant * DataType::codegenConstAddOp(ASTNode & callingNode,
     // The default impl simply issues an error that the operator is not available
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Add, kOpName_Add, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Add, kOpName_Add, rightTy);
     return nullptr;
 }
 
@@ -278,7 +304,7 @@ llvm::Constant * DataType::codegenConstSubOp(ASTNode & callingNode,
     // The default impl simply issues an error that the operator is not available
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Sub, kOpName_Sub, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Sub, kOpName_Sub, rightTy);
     return nullptr;
 }
 
@@ -290,7 +316,7 @@ llvm::Constant * DataType::codegenConstBOrOp(ASTNode & callingNode,
     // The default impl simply issues an error that the operator is not available
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_BOr, kOpName_BOr, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_BOr, kOpName_BOr, rightTy);
     return nullptr;
 }
 
@@ -302,7 +328,7 @@ llvm::Constant * DataType::codegenConstBXOrOp(ASTNode & callingNode,
     // The default impl simply issues an error that the operator is not available
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_BXOr, kOpName_BXOr, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_BXOr, kOpName_BXOr, rightTy);
     return nullptr;
 }
 
@@ -314,7 +340,7 @@ llvm::Constant * DataType::codegenConstMulOp(ASTNode & callingNode,
     // The default impl simply issues an error that the operator is not available
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Mul, kOpName_Mul, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Mul, kOpName_Mul, rightTy);
     return nullptr;
 }
 
@@ -326,7 +352,7 @@ llvm::Constant * DataType::codegenConstDivOp(ASTNode & callingNode,
     // The default impl simply issues an error that the operator is not available
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Div, kOpName_Div, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Div, kOpName_Div, rightTy);
     return nullptr;
 }
 
@@ -338,7 +364,7 @@ llvm::Constant * DataType::codegenConstModOp(ASTNode & callingNode,
     // The default impl simply issues an error that the operator is not available
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Mod, kOpName_Mod, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_Mod, kOpName_Mod, rightTy);
     return nullptr;
 }
 
@@ -350,7 +376,7 @@ llvm::Constant * DataType::codegenConstBAndOp(ASTNode & callingNode,
     // The default impl simply issues an error that the operator is not available
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_BAnd, kOpName_BAnd, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_BAnd, kOpName_BAnd, rightTy);
     return nullptr;
 }
 
@@ -362,7 +388,7 @@ llvm::Constant * DataType::codegenConstLShiftOp(ASTNode & callingNode,
     // The default impl simply issues an error that the operator is not available
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_LShift, kOpName_LShift, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_LShift, kOpName_LShift, rightTy);
     return nullptr;
 }
 
@@ -374,7 +400,7 @@ llvm::Constant * DataType::codegenConstARShiftOp(ASTNode & callingNode,
     // The default impl simply issues an error that the operator is not available
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_ARShift, kOpName_ARShift, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_ARShift, kOpName_ARShift, rightTy);
     return nullptr;
 }
 
@@ -386,7 +412,7 @@ llvm::Constant * DataType::codegenConstLRShiftOp(ASTNode & callingNode,
     // The default impl simply issues an error that the operator is not available
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
-    issueOpNotAvailableCompileError(callingNode, kOpSymbol_LRShift, kOpName_LRShift, rightTy);
+    issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_LRShift, kOpName_LRShift, rightTy);
     return nullptr;
 }
 
@@ -418,17 +444,28 @@ bool DataType::compileCheckBinaryOpTypesMatch(ASTNode & callingNode,
     return false;
 }
 
-void DataType::issueOpNotAvailableCompileError(ASTNode & callingNode,
-                                               const char * opSymbol,
-                                               const char * opName,
-                                               DataType & rightExprType) const
+void DataType::issueBinaryOpNotAvailableCompileError(ASTNode & callingNode,
+                                                     const char * opSymbol,
+                                                     const char * opName,
+                                                     DataType & rightExprType) const
 {
-    callingNode.compileError("The '%s' (%s) operator is not supported for a left "
+    callingNode.compileError("The '%s' (%s) binary operator is not supported for a left "
                              "expression of type '%s' with a right expression of type '%s'!",
                              opSymbol,
                              opName,
                              name().c_str(),
                              rightExprType.name().c_str());
+}
+
+void DataType::issueUnaryOpNotAvailableCompileError(ASTNode & callingNode,
+                                                    const char * opSymbol,
+                                                    const char * opName) const
+{
+    callingNode.compileError("The '%s' (%s) unary operator is not supported for an "
+                             "expression of type '%s'!",
+                             opSymbol,
+                             opName,
+                             name().c_str());
 }
 
 void DataType::issueGenericCodegenLLVMTypeError(ASTNode & callingNode) const {

@@ -173,6 +173,18 @@ public:
                                            llvm::Value & rightVal);
     
     /**
+     * Codegen various runtime unary operations.
+     * The default impl issues an 'unsupported op' compile error.
+     */
+    virtual llvm::Value * codegenIncOp(CodegenCtx & cgCtx,
+                                       ASTNode & callingNode,
+                                       llvm::Value & val);
+    
+    virtual llvm::Value * codegenDecOp(CodegenCtx & cgCtx,
+                                       ASTNode & callingNode,
+                                       llvm::Value & val);
+    
+    /**
      * Codegen various compile time binary operations: the two values must to be of the same type.
      * The default impl issues an 'unsupported op' compile error.
      */
@@ -247,13 +259,20 @@ public:
                                         DataType & rightExprType);
     
     /**
-     * Issues a compile error that an operator is not supported between this type and 
-     * an expression of a given type.
+     * Issues a compile error that a binary operator is not supported between this 
+     * type and an expression of a given type.
      */
-    void issueOpNotAvailableCompileError(ASTNode & callingNode,
-                                         const char * opSymbol,
-                                         const char * opName,
-                                         DataType & rightExprType) const;
+    void issueBinaryOpNotAvailableCompileError(ASTNode & callingNode,
+                                               const char * opSymbol,
+                                               const char * opName,
+                                               DataType & rightExprType) const;
+    
+    /**
+     * Issues a compile error that a binary operator is not supported.
+     */
+    void issueUnaryOpNotAvailableCompileError(ASTNode & callingNode,
+                                              const char * opSymbol,
+                                              const char * opName) const;
     
     /**
      * The llvm type for the data type. This is filled in during code generation.
@@ -273,6 +292,8 @@ protected:
     static const char * const kOpSymbol_LShift;
     static const char * const kOpSymbol_ARShift;
     static const char * const kOpSymbol_LRShift;
+    static const char * const kOpSymbol_Inc;
+    static const char * const kOpSymbol_Dec;
     
     static const char * const kOpName_Add;
     static const char * const kOpName_Sub;
@@ -285,6 +306,8 @@ protected:
     static const char * const kOpName_LShift;
     static const char * const kOpName_ARShift;
     static const char * const kOpName_LRShift;
+    static const char * const kOpName_Inc;
+    static const char * const kOpName_Dec;
     
     /**
      * Run code generation for this data type.

@@ -1,6 +1,7 @@
 #include "WCGenericIntDataType.hpp"
 
 #include "AST/WCASTNode.hpp"
+#include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -123,6 +124,26 @@ llvm::Value * GenericIntDataType::codegenLRShiftOp(CodegenCtx & cgCtx,
                                             rightTy), nullptr);
     
     return cgCtx.irBuilder.CreateLShr(&leftVal, &rightVal, "GenericInt_LRShiftOp");
+}
+
+llvm::Value * GenericIntDataType::codegenIncOp(CodegenCtx & cgCtx,
+                                               ASTNode & callingNode,
+                                               llvm::Value & val)
+{
+    WC_UNUSED_PARAM(callingNode);
+    llvm::Value * incBy = cgCtx.irBuilder.getInt64(1);
+    WC_ASSERT(incBy);
+    return cgCtx.irBuilder.CreateAdd(&val, incBy, "GenericInt_IncOp");
+}
+
+llvm::Value * GenericIntDataType::codegenDecOp(CodegenCtx & cgCtx,
+                                               ASTNode & callingNode,
+                                               llvm::Value & val)
+{
+    WC_UNUSED_PARAM(callingNode);
+    llvm::Value * decBy = cgCtx.irBuilder.getInt64(1);
+    WC_ASSERT(decBy);
+    return cgCtx.irBuilder.CreateSub(&val, decBy, "GenericInt_DecOp");
 }
 
 llvm::Constant * GenericIntDataType::codegenConstAddOp(ASTNode & callingNode,

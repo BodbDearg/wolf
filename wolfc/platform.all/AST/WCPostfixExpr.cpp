@@ -152,10 +152,15 @@ llvm::Constant * PostfixExprNoPostfix::codegenExprConstEval(CodegenCtx & cgCtx) 
 //-----------------------------------------------------------------------------
 // PostfixExprIncDecBase
 //-----------------------------------------------------------------------------
-PostfixExprIncDecBase::PostfixExprIncDecBase(CastExpr & expr, const Token & endToken) :
+PostfixExprIncDecBase::PostfixExprIncDecBase(CastExpr & expr,
+                                             const Token & endToken,
+                                             DTCodegenUnaryOpFunc codegenUnaryOpFunc)
+:
     mExpr(expr),
-    mEndToken(endToken)
+    mEndToken(endToken),
+    mCodegenUnaryOpFunc(codegenUnaryOpFunc)
 {
+    WC_ASSERT(mCodegenUnaryOpFunc);
     mExpr.mParent = this;
 }
 
@@ -189,6 +194,26 @@ llvm::Value * PostfixExprIncDecBase::codegenAddrOf(CodegenCtx & cgCtx) {
     return nullptr;
 }
 
+llvm::Value * PostfixExprIncDecBase::codegenExprEval(CodegenCtx & cgCtx) {
+    // Get the address of the expression
+    llvm::Value * exprAddr = mExpr.codegenAddrOf(cgCtx);
+    WC_GUARD(exprAddr, nullptr);
+
+    // Load it's current value
+    llvm::Value * exprOldValue = cgCtx.irBuilder.CreateLoad(exprAddr, "PostfixExprIncDecBase:Load");
+    WC_ASSERT(exprOldValue);
+
+    // Do the increment:
+    DataType & exprType = mExpr.dataType();
+    llvm::Value * exprNewValue = (exprType.*mCodegenUnaryOpFunc)(cgCtx, *this, *exprOldValue);
+    WC_GUARD(exprNewValue, nullptr);
+
+    // Save out the result
+    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(exprNewValue, exprAddr);
+    WC_ASSERT(storeInst);
+    return storeInst;
+}
+
 llvm::Constant * PostfixExprIncDecBase::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Not allowed to use in constant expressions
     // TODO: can this be relaxed in future for functions that can be evaluated at compile time?
@@ -197,81 +222,22 @@ llvm::Constant * PostfixExprIncDecBase::codegenExprConstEval(CodegenCtx & cgCtx)
     return nullptr;
 }
 
-bool PostfixExprIncDecBase::compileCheckExprIsInt() const {
-    const DataType & type = mExpr.dataType();
-
-    if (!type.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
-        compileError("Data type operated on by increment/decrement operator must be 'int' for now and not '%s'!",
-                     type.name().c_str());
-
-        return false;
-    }
-    
-    return true;
-}
-
 //-----------------------------------------------------------------------------
 // PostfixExprInc
 //-----------------------------------------------------------------------------
 PostfixExprInc::PostfixExprInc(CastExpr & expr, const Token & endToken) :
-    PostfixExprIncDecBase(expr, endToken)
+    PostfixExprIncDecBase(expr, endToken, &DataType::codegenIncOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * PostfixExprInc::codegenExprEval(CodegenCtx & cgCtx) {
-    // Get the address of the expression
-    llvm::Value * exprAddr = mExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(exprAddr, nullptr);
-
-    // Load it's current value
-    llvm::Value * exprOldValue = cgCtx.irBuilder.CreateLoad(exprAddr, "PostfixExprInc:Load");
-    WC_ASSERT(exprOldValue);
-
-    // This is the value to increment by
-    llvm::Value * incBy = cgCtx.irBuilder.getInt64(1);
-    WC_ASSERT(incBy);
-
-    // Do the increment:
-    llvm::Value * exprNewValue = cgCtx.irBuilder.CreateAdd(exprOldValue, incBy, "PostfixExprInc:Add");
-    WC_ASSERT(exprNewValue);
-
-    // Save out the result
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(exprNewValue, exprAddr);
-    WC_ASSERT(storeInst);
-    return storeInst;
 }
 
 //-----------------------------------------------------------------------------
 // PostfixExprDec
 //-----------------------------------------------------------------------------
 PostfixExprDec::PostfixExprDec(CastExpr & expr, const Token & endToken) :
-    PostfixExprIncDecBase(expr, endToken)
+    PostfixExprIncDecBase(expr, endToken, &DataType::codegenDecOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * PostfixExprDec::codegenExprEval(CodegenCtx & cgCtx) {
-    // Get the address of the expression
-    llvm::Value * exprAddr = mExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(exprAddr, nullptr);
-
-    // Load it's current value
-    llvm::Value * exprOldValue = cgCtx.irBuilder.CreateLoad(exprAddr, "PostfixExprDec:Load");
-    WC_ASSERT(exprOldValue);
-
-    // This is the value to decrement by
-    llvm::Value * decBy = cgCtx.irBuilder.getInt64(1);
-    WC_ASSERT(decBy);
-
-    // Do the increment:
-    llvm::Value * exprNewValue = cgCtx.irBuilder.CreateSub(exprOldValue, decBy, "PostfixExprDec:Sub");
-    WC_ASSERT(exprNewValue);
-
-    // Save out the result
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(exprNewValue, exprAddr);
-    WC_ASSERT(storeInst);
-    return storeInst;
 }
 
 //-----------------------------------------------------------------------------

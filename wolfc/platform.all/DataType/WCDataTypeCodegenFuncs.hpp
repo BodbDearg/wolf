@@ -36,4 +36,14 @@ typedef llvm::Constant * (DataType::*DTCodegenConstBinaryOpFunc)(
     llvm::Constant & rightVal
 );
 
+/**
+ * Typedef for a 'DataType' member function which codegens a runtime unary op.
+ * For example, a function that generates code for an 'negate' or 'increment' operation.
+ */
+typedef llvm::Value * (DataType::*DTCodegenUnaryOpFunc)(
+    CodegenCtx & cgCtx,
+    ASTNode & callingNode,
+    llvm::Value & val
+);
+
 WC_END_NAMESPACE
