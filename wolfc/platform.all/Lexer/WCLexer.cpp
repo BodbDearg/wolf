@@ -704,6 +704,7 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         parseKeyword("bool", TokenType::kBool) ||
         parseKeyword("string", TokenType::kString) ||
         parseKeyword("var", TokenType::kVar) ||
+        parseKeyword("is", TokenType::kIs) ||
         parseKeyword("and", TokenType::kAnd) ||
         parseKeyword("or", TokenType::kOr) ||
         parseKeyword("not", TokenType::kNot) ||

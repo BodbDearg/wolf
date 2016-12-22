@@ -32,7 +32,9 @@ CmpExpr * CmpExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
             return WC_NEW_AST_NODE(alloc, ASTNodeType, *leftExpr, *rightExpr);\
         }
 
-    switch (tokenPtr[0].type) {
+    TokenType nextTokType = tokenPtr[0].type;
+    
+    switch (nextTokType) {
         PARSE_OP(TokenType::kCmpEQ, CmpExprEQ)  // ==
         PARSE_OP(TokenType::kCmpNE, CmpExprNE)  // !=
         PARSE_OP(TokenType::kCmpLT, CmpExprLT)  // <
@@ -42,6 +44,33 @@ CmpExpr * CmpExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
             
         default:
             break;
+    }
+    
+    // 'is' and 'is not' are just aliases for '==' and '!='.
+    // Check for them here now
+    if (nextTokType == TokenType::kIs) {
+        // Skip 'is'
+        ++tokenPtr;
+        
+        // See if 'not' follows, if it does then it inverses the comparison:
+        bool cmpNotEq = false;
+        
+        if (tokenPtr[0].type == TokenType::kNot) {
+            cmpNotEq = true;
+            ++tokenPtr;
+        }
+        
+        // Parse the right expression
+        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);\
+        WC_GUARD(rightExpr, nullptr);
+        
+        // Now return the operation:
+        if (cmpNotEq) {
+            return WC_NEW_AST_NODE(alloc, CmpExprNE, *leftExpr, *rightExpr);
+        }
+        else {
+            return WC_NEW_AST_NODE(alloc, CmpExprEQ, *leftExpr, *rightExpr);
+        }
     }
 
     // Basic no-op expression:

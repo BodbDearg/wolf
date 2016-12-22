@@ -68,20 +68,20 @@ var gCardDeckPosition = 0
 
 ; Convert a card type/number into a string
 func card_numToName(cardType: int) -> string
-    return "No card"    if cardType == NO_CARD
-    return "Ace"        if cardType == CARD_ACE
-    return "2"          if cardType == CARD_2
-    return "3"          if cardType == CARD_3
-    return "4"          if cardType == CARD_4
-    return "5"          if cardType == CARD_5
-    return "6"          if cardType == CARD_6
-    return "7"          if cardType == CARD_7
-    return "8"          if cardType == CARD_8
-    return "9"          if cardType == CARD_9
-    return "10"         if cardType == CARD_10
-    return "Jack"       if cardType == CARD_JACK
-    return "Queen"      if cardType == CARD_QUEEN
-    return "King"       if cardType == CARD_KING
+    return "No card"    if cardType is NO_CARD
+    return "Ace"        if cardType is CARD_ACE
+    return "2"          if cardType is CARD_2
+    return "3"          if cardType is CARD_3
+    return "4"          if cardType is CARD_4
+    return "5"          if cardType is CARD_5
+    return "6"          if cardType is CARD_6
+    return "7"          if cardType is CARD_7
+    return "8"          if cardType is CARD_8
+    return "9"          if cardType is CARD_9
+    return "10"         if cardType is CARD_10
+    return "Jack"       if cardType is CARD_JACK
+    return "Queen"      if cardType is CARD_QUEEN
+    return "King"       if cardType is CARD_KING
 
     ; Shouldn't reach here
     return "Unknown Card Type"
@@ -127,7 +127,7 @@ end
 func card_getSuitLength(suitOfCards: [5]int) -> int
     var suitLength = 0
     
-    while suitLength < 5 and suitOfCards[suitLength] != NO_CARD
+    while suitLength < 5 and suitOfCards[suitLength] is not NO_CARD
         suitLength++
     end
     
@@ -157,31 +157,31 @@ func card_getSuitValue(suitOfCards: [5]int) -> int
         while cardNum < suitLength
             var card = suitOfCards[cardNum]
 
-            if card == CARD_ACE 
+            if card is CARD_ACE 
                 suitValue += 1 
-            or if card == CARD_2 
+            or if card is CARD_2 
                 suitValue += 2 
-            or if card == CARD_3 
+            or if card is CARD_3 
                 suitValue += 3 
-            or if card == CARD_4 
+            or if card is CARD_4 
                 suitValue += 4 
-            or if card == CARD_5 
+            or if card is CARD_5 
                 suitValue += 5 
-            or if card == CARD_6 
+            or if card is CARD_6 
                 suitValue += 6 
-            or if card == CARD_7 
+            or if card is CARD_7 
                 suitValue += 7
-            or if card == CARD_8 
+            or if card is CARD_8 
                 suitValue += 8 
-            or if card == CARD_9
+            or if card is CARD_9
                 suitValue += 9 
-            or if card == CARD_10 
+            or if card is CARD_10 
                 suitValue += 10 
-            or if card == CARD_KING 
+            or if card is CARD_KING 
                 suitValue += 10 
-            or if card == CARD_QUEEN 
+            or if card is CARD_QUEEN 
                 suitValue += 10 
-            or if card == CARD_JACK 
+            or if card is CARD_JACK 
                 suitValue += 10 
             end
 
@@ -198,7 +198,7 @@ func card_getSuitValue(suitOfCards: [5]int) -> int
             ; Grab the current card and ignore if not an ace
             var card = suitOfCards[cardNum]
             
-            if card == CARD_ACE
+            if card is CARD_ACE
                 ; Came across an ace:
                 ; Check if counting the ace as an 11 causes the suit value to go over 21.
                 ; If not: add 10 to the value of the suit (note, we've already '1' for this cards value)
@@ -301,7 +301,7 @@ func game_drawMainGameScreen()
     menu_drawTitleBar("Dealer's hand")
      
     ; Only draw the dealer cards if on normal game type or if the game is over
-    if gGameCurrentGameType == GAME_TYPE_NORMAL or game_isOver()
+    if gGameCurrentGameType is GAME_TYPE_NORMAL or game_isOver()
         ; Draw the dealers cards
         game_drawCards(gDealerCards)
          
@@ -349,9 +349,9 @@ func game_drawEndGameResults()
     menu_drawTitleBar("Game over! Final results:")
     print("Game result: ")
 
-    if gGameWinner == GAME_WINNER_PLAYER
+    if gGameWinner is GAME_WINNER_PLAYER
         println("Player wins.")
-    or if gGameWinner == GAME_WINNER_DEALER
+    or if gGameWinner is GAME_WINNER_DEALER
         println("Dealer wins.")
     else
         println("Game was a draw.")
@@ -359,11 +359,11 @@ func game_drawEndGameResults()
  
     print("Money lost / gained: ")
 
-    if gGameWinner == GAME_WINNER_PLAYER
+    if gGameWinner is GAME_WINNER_PLAYER
         print("Gained ")
         print(((gPlayerBetChips * 3) / 2) - gPlayerBetChips)
         println(" chips.")
-    or if gGameWinner == GAME_WINNER_DEALER
+    or if gGameWinner is GAME_WINNER_DEALER
         print("Lost ")
         print(gPlayerBetChips)
         println(" chips.")
@@ -417,11 +417,11 @@ func game_endGame()
     game_payOutChips()
 
     ; Record the end game results in the statistics
-    if gGameWinner == GAME_WINNER_PLAYER 
+    if gGameWinner is GAME_WINNER_PLAYER 
         ; Player has won the game: increment amount of games won and money won
         gGameStatGamesWon++
         gGameStatMoneyGained += gPlayerBetChips / 2
-    or if gGameWinner == GAME_WINNER_DEALER
+    or if gGameWinner is GAME_WINNER_DEALER
         ; Dealer has won the game: increment amount of games lost and money lost
         gGameStatGamesLost++
         gGameStatMoneyLost += gPlayerBetChips
@@ -487,11 +487,11 @@ end
 
 ; Pay out chips at the end of a game to the winner (unless there is a draw)
 func game_payOutChips()
-    if gGameWinner == GAME_WINNER_PLAYER
+    if gGameWinner is GAME_WINNER_PLAYER
         ; Add 1.5 times the bet amount to the players chips. In other words, the player gets the
         ; original bet back, plus half the bet in winnings.
         gPlayerChips += (gPlayerBetChips * 3) / 2
-    or if gGameWinner == GAME_WINNER_DEALER
+    or if gGameWinner is GAME_WINNER_DEALER
         ; Dealer has won. Don't give back anything...
         nop
     else
@@ -538,7 +538,7 @@ end
 
 ; Tells if the dealer has issued a stand order
 func dealer_isStanding() -> bool
-    return gDealerLastAction == GAMEACTION_STAND
+    return gDealerLastAction is GAMEACTION_STAND
 end
 
 ; Tells if the dealers hand is finished
@@ -652,17 +652,17 @@ end
 
 ; Tells if the player has issued a stand order
 func player_isStanding() -> bool
-    return gPlayerLastAction == GAMEACTION_STAND
+    return gPlayerLastAction is GAMEACTION_STAND
 end
 
 ; Tells whether the player has forfeited the game
 func player_hasForfeit() -> bool
-    return gPlayerLastAction == GAMEACTION_FORFEIT
+    return gPlayerLastAction is GAMEACTION_FORFEIT
 end
 
 ; Tells if the player has got 21, or a blackjack
 func player_hasBlackjack() -> bool
-    return card_getSuitValue(gPlayerCards) == GAME_BLACKJACK_SUIT_VALUE
+    return card_getSuitValue(gPlayerCards) is GAME_BLACKJACK_SUIT_VALUE
 end
 
 ; Tells if the player's hand is finished
@@ -694,7 +694,7 @@ func player_findAvailableActions()
     ; Only allow double down if on first two cards and can afford it, and if not standing.
     var numPlayerCards = card_getSuitLength(gPlayerCards)
     
-    if numPlayerCards == 2
+    if numPlayerCards is 2
         if gPlayerChips >= gPlayerBetChips
             unless player_isStanding()
                 ; Criteria met for this action: make available
@@ -706,7 +706,7 @@ end
 
 ; Tell if one of the player actions (passed as a bitmask) are available
 func player_areActionsAvailable(actionsMask: int) -> bool
-    return (gPlayerAvailableActions & actionsMask) != 0
+    return gPlayerAvailableActions & actionsMask != 0
 end
 
 ; Reads the next action for the player to do during the game
@@ -715,18 +715,14 @@ func player_doNextGameAction()
     ; 1 = hit, 2 = stand, 3 = double down, 4 = forfeit
     var playerAction = readnum()
 
-    ; See what action the player took:
-    if playerAction == 1 and player_areActionsAvailable(GAMEACTION_HIT)
-        ; Hit
+    ; See what action the player requested and perform it if possible
+    if playerAction is 1 and player_areActionsAvailable(GAMEACTION_HIT)
         player_actionHit()
-    or if playerAction == 2  and player_areActionsAvailable(GAMEACTION_STAND)
-        ; Stand
+    or if playerAction is 2 and player_areActionsAvailable(GAMEACTION_STAND)
         player_actionStand()
-    or if playerAction == 3 and player_areActionsAvailable(GAMEACTION_DOUBLEDOWN)
-        ; Double down
+    or if playerAction is 3 and player_areActionsAvailable(GAMEACTION_DOUBLEDOWN)
         player_actionDoubleDown()
-    or if playerAction == 4 and player_areActionsAvailable(GAMEACTION_FORFEIT)
-        ; Forfeit
+    or if playerAction is 4 and player_areActionsAvailable(GAMEACTION_FORFEIT)
         player_actionForfeit()
     else
         println("Invalid action input!")
@@ -955,13 +951,13 @@ func menu_displayMain()
         ; Ask the player for input
         var choice = readnum()
 
-        if choice == 1 or choice == 2
+        if choice is 1 or choice is 2
             ; User wants to play a game. Make sure we have the minimum bet amount first:
             if gPlayerChips < GAME_MIN_BET
                 menu_displayNotEnoughMoneyWarning()
             else
                 ; Have enough to play, set the game mode:
-                if choice == 1
+                if choice is 1
                     gGameCurrentGameType = GAME_TYPE_NORMAL
                 else
                     gGameCurrentGameType = GAME_TYPE_ADVANCED
@@ -970,11 +966,11 @@ func menu_displayMain()
                 ; Ask the player for the bet and start the game
                 menu_getBet()
             end
-        or if choice == 3
+        or if choice is 3
             menu_getMoney()
-        or if choice == 4
+        or if choice is 4
             menu_displayStatistics()
-        or if choice == 5
+        or if choice is 5
             gDisplayMenu = false
         else
             println("Invalid menu choice, try again!")

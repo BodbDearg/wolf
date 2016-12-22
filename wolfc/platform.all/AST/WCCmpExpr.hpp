@@ -13,7 +13,9 @@ class LinearAlloc;
 CmpExpr:
 	AddExpr
 	AddExpr == CmpExpr
+	AddExpr is CmpExpr
 	AddExpr != CmpExpr
+	AddExpr is not CmpExpr
 	AddExpr < CmpExpr
 	AddExpr <= CmpExpr
 	AddExpr > CmpExpr
@@ -73,13 +75,19 @@ private:
     const DTCodegenConstBinaryOpFunc    mCodegenConstBinaryOpFunc;
 };
 
-/* AddExpr == CmpExpr */
+/**
+ * AddExpr == CmpExpr
+ * AddExpr is CmpExpr
+ */
 class CmpExprEQ final : public CmpExprTwoOps {
 public:
     CmpExprEQ(AddExpr & leftExpr, CmpExpr & rightExpr);
 };
 
-/* AddExpr != CmpExpr */
+/** 
+ * AddExpr != CmpExpr
+ * AddExpr is not CmpExpr
+ */
 class CmpExprNE final : public CmpExprTwoOps {
 public:
     CmpExprNE(AddExpr & leftExpr, CmpExpr & rightExpr);

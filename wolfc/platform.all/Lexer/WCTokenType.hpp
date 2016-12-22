@@ -143,6 +143,8 @@ enum class TokenType : uint8_t {
     
     /* var */
     kVar,
+    /* is */
+    kIs,
     /* and */
     kAnd,
     /* or */

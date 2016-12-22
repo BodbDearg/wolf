@@ -36,7 +36,7 @@ contexts:
       scope: support.function.wolf
     - match: \b(cast|to)\b
       scope: keyword.casting.wolf
-    - match: \b(and|or|not)\b
+    - match: \b(is|and|or|not)\b
       scope: keyword.logical.wolf
     - match: \b(then|end|do|scope)\b
       scope: keyword.blockdelims.wolf
