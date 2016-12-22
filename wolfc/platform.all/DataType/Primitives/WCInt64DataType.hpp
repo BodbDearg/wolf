@@ -1,11 +1,11 @@
 #pragma once
 
-#include "WCGenericIntDataType.hpp"
+#include "WCGenericSignedIntDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 
 /* Signed 64-bit integer data type. */
-class Int64DataType final : public GenericIntDataType {
+class Int64DataType final : public GenericSignedIntDataType {
 public:
     virtual DataTypeId getTypeId() const override;
     virtual const std::string & name() const override;

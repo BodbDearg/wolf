@@ -69,6 +69,62 @@ llvm::Value * GenericIntDataType::codegenBXOrOp(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateXor(&leftVal, &rightVal, "GenericInt_BXOrOp");
 }
 
+llvm::Value * GenericIntDataType::codegenMulOp(CodegenCtx & cgCtx,
+                                               ASTNode & callingNode,
+                                               llvm::Value & leftVal,
+                                               DataType & rightTy,
+                                               llvm::Value & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_Mul,
+                                            kOpName_Mul,
+                                            rightTy), nullptr);
+    
+    return cgCtx.irBuilder.CreateMul(&leftVal, &rightVal, "GenericInt_MulOp");
+}
+
+llvm::Value * GenericIntDataType::codegenBAndOp(CodegenCtx & cgCtx,
+                                                ASTNode & callingNode,
+                                                llvm::Value & leftVal,
+                                                DataType & rightTy,
+                                                llvm::Value & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_BAnd,
+                                            kOpName_BAnd,
+                                            rightTy), nullptr);
+    
+    return cgCtx.irBuilder.CreateAnd(&leftVal, &rightVal, "GenericInt_BAndOp");
+}
+
+llvm::Value * GenericIntDataType::codegenLShiftOp(CodegenCtx & cgCtx,
+                                                  ASTNode & callingNode,
+                                                  llvm::Value & leftVal,
+                                                  DataType & rightTy,
+                                                  llvm::Value & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_LShift,
+                                            kOpName_LShift,
+                                            rightTy), nullptr);
+    
+    return cgCtx.irBuilder.CreateShl(&leftVal, &rightVal, "GenericInt_LShiftOp");
+}
+
+llvm::Value * GenericIntDataType::codegenLRShiftOp(CodegenCtx & cgCtx,
+                                                   ASTNode & callingNode,
+                                                   llvm::Value & leftVal,
+                                                   DataType & rightTy,
+                                                   llvm::Value & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_LRShift,
+                                            kOpName_LRShift,
+                                            rightTy), nullptr);
+    
+    return cgCtx.irBuilder.CreateLShr(&leftVal, &rightVal, "GenericInt_LRShiftOp");
+}
+
 llvm::Constant * GenericIntDataType::codegenConstAddOp(ASTNode & callingNode,
                                                        llvm::Constant & leftVal,
                                                        DataType & rightTy,
@@ -119,6 +175,58 @@ llvm::Constant * GenericIntDataType::codegenConstBXOrOp(ASTNode & callingNode,
                                             rightTy), nullptr);
     
     return llvm::ConstantExpr::getXor(&leftVal, &rightVal);
+}
+
+llvm::Constant * GenericIntDataType::codegenConstMulOp(ASTNode & callingNode,
+                                                       llvm::Constant & leftVal,
+                                                       DataType & rightTy,
+                                                       llvm::Constant & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_Mul,
+                                            kOpName_Mul,
+                                            rightTy), nullptr);
+    
+    return llvm::ConstantExpr::getMul(&leftVal, &rightVal);
+}
+
+llvm::Constant * GenericIntDataType::codegenConstBAndOp(ASTNode & callingNode,
+                                                        llvm::Constant & leftVal,
+                                                        DataType & rightTy,
+                                                        llvm::Constant & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_BAnd,
+                                            kOpName_BAnd,
+                                            rightTy), nullptr);
+    
+    return llvm::ConstantExpr::getAnd(&leftVal, &rightVal);
+}
+
+llvm::Constant * GenericIntDataType::codegenConstLShiftOp(ASTNode & callingNode,
+                                                          llvm::Constant & leftVal,
+                                                          DataType & rightTy,
+                                                          llvm::Constant & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_LShift,
+                                            kOpName_LShift,
+                                            rightTy), nullptr);
+    
+    return llvm::ConstantExpr::getShl(&leftVal, &rightVal);
+}
+
+llvm::Constant * GenericIntDataType::codegenConstLRShiftOp(ASTNode & callingNode,
+                                                           llvm::Constant & leftVal,
+                                                           DataType & rightTy,
+                                                           llvm::Constant & rightVal)
+{
+    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
+                                            kOpSymbol_LRShift,
+                                            kOpName_LRShift,
+                                            rightTy), nullptr);
+    
+    return llvm::ConstantExpr::getLShr(&leftVal, &rightVal);
 }
 
 WC_END_NAMESPACE

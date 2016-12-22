@@ -90,10 +90,18 @@ llvm::Constant * AddExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // AddExprTwoOps
 //-----------------------------------------------------------------------------
-AddExprTwoOps::AddExprTwoOps(MulExpr & leftExpr, AddExpr & rightExpr) :
+AddExprTwoOps::AddExprTwoOps(MulExpr & leftExpr,
+                             AddExpr & rightExpr,
+                             DTCodegenBinaryOpFunc codegenBinaryOpFunc,
+                             DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc)
+:
     mLeftExpr(leftExpr),
-    mRightExpr(rightExpr)
+    mRightExpr(rightExpr),
+    mCodegenBinaryOpFunc(codegenBinaryOpFunc),
+    mCodegenConstBinaryOpFunc(codegenConstBinaryOpFunc)
 {
+    WC_ASSERT(mCodegenBinaryOpFunc);
+    WC_ASSERT(mCodegenConstBinaryOpFunc);
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
 }
@@ -122,7 +130,7 @@ DataType & AddExprTwoOps::dataType() {
 llvm::Value * AddExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
     // TODO: would this be true in future for complex types?
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't get the address of '+' or '-' operator result!");
+    compileError("Can't take the address of a binary expression result!");
     return nullptr;
 }
 
@@ -133,11 +141,10 @@ llvm::Value * AddExprTwoOps::codegenExprEval(CodegenCtx & cgCtx) {
     llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(rightVal, nullptr);
     
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Codegen the op itself
-    return codegenOpEval(cgCtx, *leftVal, *rightVal);
+    // Do the operation and return the result
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return (leftTy.*mCodegenBinaryOpFunc)(cgCtx, *this, *leftVal, rightTy, *rightVal);
 }
 
 llvm::Constant * AddExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
@@ -147,137 +154,46 @@ llvm::Constant * AddExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
     llvm::Constant * rightVal = mRightExpr.codegenExprConstEval(cgCtx);
     WC_GUARD(rightVal, nullptr);
     
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Codegen the op itself
-    return codegenOpConstEval(*leftVal, *rightVal);
-}
-
-bool AddExprTwoOps::compileCheckBothExprsAreInt() const {
-    const DataType & leftType = mLeftExpr.dataType();
-    
-    if (!leftType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
-        compileError("Left type in expression must be 'int' for now and not '%s'!",
-                     leftType.name().c_str());
-        
-        return false;
-    }
-    
-    const DataType & rightType = mRightExpr.dataType();
-    
-    if (!rightType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
-        compileError("Right type in expression must be 'int' for now and not '%s'!",
-                     rightType.name().c_str());
-        
-        return false;
-    }
-    
-    return true;
+    // Do the operation and return the result
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return (leftTy.*mCodegenConstBinaryOpFunc)(*this, *leftVal, rightTy, *rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // AddExprAdd
 //-----------------------------------------------------------------------------
 AddExprAdd::AddExprAdd(MulExpr & leftExpr, AddExpr & rightExpr) :
-    AddExprTwoOps(leftExpr, rightExpr)
+    AddExprTwoOps(leftExpr, rightExpr, &DataType::codegenAddOp, &DataType::codegenConstAddOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * AddExprAdd::codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal)
-{
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    return leftTy.codegenAddOp(cgCtx, *this, leftVal, rightTy, rightVal);
-}
-
-llvm::Constant * AddExprAdd::codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal)
-{
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    return leftTy.codegenConstAddOp(*this, leftVal, rightTy, rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // AddExprSub
 //-----------------------------------------------------------------------------
 AddExprSub::AddExprSub(MulExpr & leftExpr, AddExpr & rightExpr) :
-    AddExprTwoOps(leftExpr, rightExpr)
+    AddExprTwoOps(leftExpr, rightExpr, &DataType::codegenSubOp, &DataType::codegenConstSubOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * AddExprSub::codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal)
-{
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    return leftTy.codegenSubOp(cgCtx, *this, leftVal, rightTy, rightVal);
-}
-
-llvm::Constant * AddExprSub::codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal)
-{
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    return leftTy.codegenConstSubOp(*this, leftVal, rightTy, rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // AddExprBOr
 //-----------------------------------------------------------------------------
 AddExprBOr::AddExprBOr(MulExpr & leftExpr, AddExpr & rightExpr) :
-    AddExprTwoOps(leftExpr, rightExpr)
+    AddExprTwoOps(leftExpr, rightExpr, &DataType::codegenBOrOp, &DataType::codegenConstBOrOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * AddExprBOr::codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal)
-{
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    return leftTy.codegenBOrOp(cgCtx, *this, leftVal, rightTy, rightVal);
-}
-
-llvm::Constant * AddExprBOr::codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal)
-{
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    return leftTy.codegenConstBOrOp(*this, leftVal, rightTy, rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // AddExprBXor
 //-----------------------------------------------------------------------------
 AddExprBXor::AddExprBXor(MulExpr & leftExpr, AddExpr & rightExpr) :
-    AddExprTwoOps(leftExpr, rightExpr)
+    AddExprTwoOps(leftExpr, rightExpr, &DataType::codegenBXOrOp, &DataType::codegenConstBXOrOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * AddExprBXor::codegenOpEval(CodegenCtx & cgCtx,
-                                         llvm::Value & leftVal,
-                                         llvm::Value & rightVal)
-{
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    return leftTy.codegenBXOrOp(cgCtx, *this, leftVal, rightTy, rightVal);
-}
-
-llvm::Constant * AddExprBXor::codegenOpConstEval(llvm::Constant & leftVal,
-                                                 llvm::Constant & rightVal)
-{
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    return leftTy.codegenConstBXOrOp(*this, leftVal, rightTy, rightVal);
 }
 
 WC_END_NAMESPACE

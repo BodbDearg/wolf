@@ -78,6 +78,7 @@
 		1FA621561D24ED5500650E28 /* WCScopeStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FA621541D24ED5500650E28 /* WCScopeStmnt.cpp */; };
 		1FABAE631D0CAA2D0024983E /* WCBreakStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FABAE611D0CAA2D0024983E /* WCBreakStmnt.cpp */; };
 		1FB40C671E0AFE4000D34587 /* WCGenericIntDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB40C651E0AFE4000D34587 /* WCGenericIntDataType.cpp */; };
+		1FB40C6A1E0B3E5200D34587 /* WCGenericSignedIntDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB40C681E0B3E5200D34587 /* WCGenericSignedIntDataType.cpp */; };
 		1FB5FF201CEAE5D900EA979F /* WCVarDecl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB5FF1E1CEAE5D900EA979F /* WCVarDecl.cpp */; };
 		1FB764D31CEEDAE800729AF4 /* WCReadnumExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB764D11CEEDAE800729AF4 /* WCReadnumExpr.cpp */; };
 		1FBDF9EA1D4E878100D7EC14 /* WCArrayLitExprs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FBDF9E81D4E878100D7EC14 /* WCArrayLitExprs.cpp */; };
@@ -230,6 +231,9 @@
 		1FABAE621D0CAA2D0024983E /* WCBreakStmnt.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCBreakStmnt.hpp; sourceTree = "<group>"; };
 		1FB40C651E0AFE4000D34587 /* WCGenericIntDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCGenericIntDataType.cpp; sourceTree = "<group>"; };
 		1FB40C661E0AFE4000D34587 /* WCGenericIntDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCGenericIntDataType.hpp; sourceTree = "<group>"; };
+		1FB40C681E0B3E5200D34587 /* WCGenericSignedIntDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCGenericSignedIntDataType.cpp; sourceTree = "<group>"; };
+		1FB40C691E0B3E5200D34587 /* WCGenericSignedIntDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCGenericSignedIntDataType.hpp; sourceTree = "<group>"; };
+		1FB40C6B1E0B537800D34587 /* WCDataTypeCodegenFuncs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCDataTypeCodegenFuncs.hpp; sourceTree = "<group>"; };
 		1FB5FF1E1CEAE5D900EA979F /* WCVarDecl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCVarDecl.cpp; sourceTree = "<group>"; };
 		1FB5FF1F1CEAE5D900EA979F /* WCVarDecl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCVarDecl.hpp; sourceTree = "<group>"; };
 		1FB764D11CEEDAE800729AF4 /* WCReadnumExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCReadnumExpr.cpp; sourceTree = "<group>"; };
@@ -408,6 +412,7 @@
 				1FCD4E011D0160DB0076E358 /* Primitives */,
 				1FCD4DF21D0136360076E358 /* WCDataType.cpp */,
 				1FCD4DF31D0136360076E358 /* WCDataType.hpp */,
+				1FB40C6B1E0B537800D34587 /* WCDataTypeCodegenFuncs.hpp */,
 				1F3D5F8A1E020CB000A413B7 /* WCDataTypeId.hpp */,
 				1F02E3F11D11115D00E8892C /* WCDataValue.hpp */,
 				1FCD4DF51D0157C50076E358 /* WCPrimitiveDataTypes.cpp */,
@@ -425,6 +430,8 @@
 				1FCD4E031D0160DB0076E358 /* WCBoolDataType.hpp */,
 				1FB40C651E0AFE4000D34587 /* WCGenericIntDataType.cpp */,
 				1FB40C661E0AFE4000D34587 /* WCGenericIntDataType.hpp */,
+				1FB40C681E0B3E5200D34587 /* WCGenericSignedIntDataType.cpp */,
+				1FB40C691E0B3E5200D34587 /* WCGenericSignedIntDataType.hpp */,
 				1FCD4E0B1D0161A60076E358 /* WCInt64DataType.cpp */,
 				1FCD4E0C1D0161A60076E358 /* WCInt64DataType.hpp */,
 				1F54B4B01D02A4DB0016BF70 /* WCStrDataType.cpp */,
@@ -608,6 +615,7 @@
 				1F0B03F41D37781D00C7F894 /* WCCodegenCtx.cpp in Sources */,
 				1F3D5F8D1E02427900A413B7 /* WCCastExpr.cpp in Sources */,
 				1FD4558E1CE2DC90005EB3C3 /* WCIntLit.cpp in Sources */,
+				1FB40C6A1E0B3E5200D34587 /* WCGenericSignedIntDataType.cpp in Sources */,
 				1F19FB2F1D39E00A002D0EB2 /* WCPrimitiveType.cpp in Sources */,
 				1FB40C671E0AFE4000D34587 /* WCGenericIntDataType.cpp in Sources */,
 				1F59D4E21CE4698000B095AC /* WCStrLit.cpp in Sources */,

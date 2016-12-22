@@ -88,10 +88,18 @@ llvm::Constant * MulExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // MulExprTwoOps
 //-----------------------------------------------------------------------------
-MulExprTwoOps::MulExprTwoOps(ShiftExpr & leftExpr, MulExpr & rightExpr) :
+MulExprTwoOps::MulExprTwoOps(ShiftExpr & leftExpr,
+                             MulExpr & rightExpr,
+                             DTCodegenBinaryOpFunc codegenBinaryOpFunc,
+                             DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc)
+:
     mLeftExpr(leftExpr),
-    mRightExpr(rightExpr)
+    mRightExpr(rightExpr),
+    mCodegenBinaryOpFunc(codegenBinaryOpFunc),
+    mCodegenConstBinaryOpFunc(codegenConstBinaryOpFunc)
 {
+    WC_ASSERT(mCodegenBinaryOpFunc);
+    WC_ASSERT(mCodegenConstBinaryOpFunc);
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
 }
@@ -119,7 +127,7 @@ DataType & MulExprTwoOps::dataType() {
 
 llvm::Value * MulExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of '*' or '/' operator result!");
+    compileError("Can't take the address of a binary expression result!");
     return nullptr;
 }
 
@@ -130,11 +138,10 @@ llvm::Value * MulExprTwoOps::codegenExprEval(CodegenCtx & cgCtx) {
     llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(rightVal, nullptr);
     
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Codegen the op itself
-    return codegenOpEval(cgCtx, *leftVal, *rightVal);
+    // Do the operation and return the result
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return (leftTy.*mCodegenBinaryOpFunc)(cgCtx, *this, *leftVal, rightTy, *rightVal);
 }
 
 llvm::Constant * MulExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
@@ -144,121 +151,46 @@ llvm::Constant * MulExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
     llvm::Constant * rightVal = mRightExpr.codegenExprConstEval(cgCtx);
     WC_GUARD(rightVal, nullptr);
     
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Codegen the op itself
-    return codegenOpConstEval(*leftVal, *rightVal);
-}
-
-bool MulExprTwoOps::compileCheckBothExprsAreInt() const {
-    const DataType & leftType = mLeftExpr.dataType();
-    
-    if (!leftType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
-        compileError("Left type in expression must be 'int' for now and not '%s'!",
-                     leftType.name().c_str());
-        
-        return false;
-    }
-    
-    const DataType & rightType = mRightExpr.dataType();
-    
-    if (!rightType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
-        compileError("Right type in expression must be 'int' for now and not '%s'!",
-                     rightType.name().c_str());
-        
-        return false;
-    }
-    
-    return true;
+    // Do the operation and return the result
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return (leftTy.*mCodegenConstBinaryOpFunc)(*this, *leftVal, rightTy, *rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // MulExprMul
 //-----------------------------------------------------------------------------
 MulExprMul::MulExprMul(ShiftExpr & leftExpr, MulExpr & rightExpr) :
-    MulExprTwoOps(leftExpr, rightExpr)
+    MulExprTwoOps(leftExpr, rightExpr, &DataType::codegenMulOp, &DataType::codegenConstMulOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * MulExprMul::codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateMul(&leftVal, &rightVal, "MulExprMul_MulOp");
-}
-
-llvm::Constant * MulExprMul::codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal)
-{
-    return llvm::ConstantExpr::getMul(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // MulExprDiv
 //-----------------------------------------------------------------------------
 MulExprDiv::MulExprDiv(ShiftExpr & leftExpr, MulExpr & rightExpr) :
-    MulExprTwoOps(leftExpr, rightExpr)
+    MulExprTwoOps(leftExpr, rightExpr, &DataType::codegenDivOp, &DataType::codegenConstDivOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * MulExprDiv::codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateSDiv(&leftVal, &rightVal, "MulExprDiv_DivOp");
-}
-
-llvm::Constant * MulExprDiv::codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal)
-{
-    return llvm::ConstantExpr::getSDiv(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // MulExprMod
 //-----------------------------------------------------------------------------
 MulExprMod::MulExprMod(ShiftExpr & leftExpr, MulExpr & rightExpr) :
-    MulExprTwoOps(leftExpr, rightExpr)
+    MulExprTwoOps(leftExpr, rightExpr, &DataType::codegenModOp, &DataType::codegenConstModOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * MulExprMod::codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateSRem(&leftVal, &rightVal, "MulExprMod_ModOp");
-}
-
-llvm::Constant * MulExprMod::codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal)
-{
-    return llvm::ConstantExpr::getSRem(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // MulExprBAnd
 //-----------------------------------------------------------------------------
 MulExprBAnd::MulExprBAnd(ShiftExpr & leftExpr, MulExpr & rightExpr) :
-    MulExprTwoOps(leftExpr, rightExpr)
+    MulExprTwoOps(leftExpr, rightExpr, &DataType::codegenBAndOp, &DataType::codegenConstBAndOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * MulExprBAnd::codegenOpEval(CodegenCtx & cgCtx,
-                                         llvm::Value & leftVal,
-                                         llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateAnd(&leftVal, &rightVal, "MulExprBAnd_AndOp");
-}
-
-llvm::Constant * MulExprBAnd::codegenOpConstEval(llvm::Constant & leftVal,
-                                                 llvm::Constant & rightVal)
-{
-    return llvm::ConstantExpr::getAnd(&leftVal, &rightVal);
 }
 
 WC_END_NAMESPACE

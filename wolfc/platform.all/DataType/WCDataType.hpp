@@ -130,6 +130,48 @@ public:
                                         DataType & rightTy,
                                         llvm::Value & rightVal);
     
+    virtual llvm::Value * codegenMulOp(CodegenCtx & cgCtx,
+                                       ASTNode & callingNode,
+                                       llvm::Value & leftVal,
+                                       DataType & rightTy,
+                                       llvm::Value & rightVal);
+    
+    virtual llvm::Value * codegenDivOp(CodegenCtx & cgCtx,
+                                       ASTNode & callingNode,
+                                       llvm::Value & leftVal,
+                                       DataType & rightTy,
+                                       llvm::Value & rightVal);
+    
+    virtual llvm::Value * codegenModOp(CodegenCtx & cgCtx,
+                                       ASTNode & callingNode,
+                                       llvm::Value & leftVal,
+                                       DataType & rightTy,
+                                       llvm::Value & rightVal);
+    
+    virtual llvm::Value * codegenBAndOp(CodegenCtx & cgCtx,
+                                        ASTNode & callingNode,
+                                        llvm::Value & leftVal,
+                                        DataType & rightTy,
+                                        llvm::Value & rightVal);
+    
+    virtual llvm::Value * codegenLShiftOp(CodegenCtx & cgCtx,
+                                          ASTNode & callingNode,
+                                          llvm::Value & leftVal,
+                                          DataType & rightTy,
+                                          llvm::Value & rightVal);
+    
+    virtual llvm::Value * codegenARShiftOp(CodegenCtx & cgCtx,
+                                           ASTNode & callingNode,
+                                           llvm::Value & leftVal,
+                                           DataType & rightTy,
+                                           llvm::Value & rightVal);
+    
+    virtual llvm::Value * codegenLRShiftOp(CodegenCtx & cgCtx,
+                                           ASTNode & callingNode,
+                                           llvm::Value & leftVal,
+                                           DataType & rightTy,
+                                           llvm::Value & rightVal);
+    
     /**
      * Codegen various compile time binary operations: the two values must to be of the same type.
      * The default impl issues an 'unsupported op' compile error.
@@ -153,6 +195,41 @@ public:
                                                 llvm::Constant & leftVal,
                                                 DataType & rightTy,
                                                 llvm::Constant & rightVal);
+    
+    virtual llvm::Constant * codegenConstMulOp(ASTNode & callingNode,
+                                               llvm::Constant & leftVal,
+                                               DataType & rightTy,
+                                               llvm::Constant & rightVal);
+
+    virtual llvm::Constant * codegenConstDivOp(ASTNode & callingNode,
+                                               llvm::Constant & leftVal,
+                                               DataType & rightTy,
+                                               llvm::Constant & rightVal);
+    
+    virtual llvm::Constant * codegenConstModOp(ASTNode & callingNode,
+                                               llvm::Constant & leftVal,
+                                               DataType & rightTy,
+                                               llvm::Constant & rightVal);
+    
+    virtual llvm::Constant * codegenConstBAndOp(ASTNode & callingNode,
+                                                llvm::Constant & leftVal,
+                                                DataType & rightTy,
+                                                llvm::Constant & rightVal);
+    
+    virtual llvm::Constant * codegenConstLShiftOp(ASTNode & callingNode,
+                                                  llvm::Constant & leftVal,
+                                                  DataType & rightTy,
+                                                  llvm::Constant & rightVal);
+    
+    virtual llvm::Constant * codegenConstARShiftOp(ASTNode & callingNode,
+                                                   llvm::Constant & leftVal,
+                                                   DataType & rightTy,
+                                                   llvm::Constant & rightVal);
+    
+    virtual llvm::Constant * codegenConstLRShiftOp(ASTNode & callingNode,
+                                                   llvm::Constant & leftVal,
+                                                   DataType & rightTy,
+                                                   llvm::Constant & rightVal);
     
     /**
      * Check that the LLVM type for this data type is defined and issue a compile error if not.
@@ -189,11 +266,25 @@ protected:
     static const char * const kOpSymbol_Sub;
     static const char * const kOpSymbol_BOr;
     static const char * const kOpSymbol_BXOr;
+    static const char * const kOpSymbol_Mul;
+    static const char * const kOpSymbol_Div;
+    static const char * const kOpSymbol_Mod;
+    static const char * const kOpSymbol_BAnd;
+    static const char * const kOpSymbol_LShift;
+    static const char * const kOpSymbol_ARShift;
+    static const char * const kOpSymbol_LRShift;
     
     static const char * const kOpName_Add;
     static const char * const kOpName_Sub;
     static const char * const kOpName_BOr;
     static const char * const kOpName_BXOr;
+    static const char * const kOpName_Mul;
+    static const char * const kOpName_Div;
+    static const char * const kOpName_Mod;
+    static const char * const kOpName_BAnd;
+    static const char * const kOpName_LShift;
+    static const char * const kOpName_ARShift;
+    static const char * const kOpName_LRShift;
     
     /**
      * Run code generation for this data type.

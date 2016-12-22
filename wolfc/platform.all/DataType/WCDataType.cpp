@@ -14,11 +14,25 @@ const char * const DataType::kOpSymbol_Add = "+";
 const char * const DataType::kOpSymbol_Sub = "-";
 const char * const DataType::kOpSymbol_BOr = "|";
 const char * const DataType::kOpSymbol_BXOr = "^";
+const char * const DataType::kOpSymbol_Mul = "*";
+const char * const DataType::kOpSymbol_Div = "/";
+const char * const DataType::kOpSymbol_Mod = "%";
+const char * const DataType::kOpSymbol_BAnd = "&";
+const char * const DataType::kOpSymbol_LShift = "<<";
+const char * const DataType::kOpSymbol_ARShift = ">>";
+const char * const DataType::kOpSymbol_LRShift = ">>>";
 
 const char * const DataType::kOpName_Add = "add";
 const char * const DataType::kOpName_Sub = "subtract";
 const char * const DataType::kOpName_BOr = "bitwise or";
 const char * const DataType::kOpName_BXOr = "bitwise xor";
+const char * const DataType::kOpName_Mul = "multiply";
+const char * const DataType::kOpName_Div = "divide";
+const char * const DataType::kOpName_Mod = "modulus";
+const char * const DataType::kOpName_BAnd = "bitwise and";
+const char * const DataType::kOpName_LShift = "left shift";
+const char * const DataType::kOpName_ARShift = "arithmetic right shift";
+const char * const DataType::kOpName_LRShift = "logical right shift";
 
 DataType::~DataType() {
     WC_EMPTY_FUNC_BODY();
@@ -146,6 +160,104 @@ llvm::Value * DataType::codegenBXOrOp(CodegenCtx & cgCtx,
     return nullptr;
 }
 
+llvm::Value * DataType::codegenMulOp(CodegenCtx & cgCtx,
+                                     ASTNode & callingNode,
+                                     llvm::Value & leftVal,
+                                     DataType & rightTy,
+                                     llvm::Value & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Mul, kOpName_Mul, rightTy);
+    return nullptr;
+}
+
+llvm::Value * DataType::codegenDivOp(CodegenCtx & cgCtx,
+                                     ASTNode & callingNode,
+                                     llvm::Value & leftVal,
+                                     DataType & rightTy,
+                                     llvm::Value & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Div, kOpName_Div, rightTy);
+    return nullptr;
+}
+
+llvm::Value * DataType::codegenModOp(CodegenCtx & cgCtx,
+                                     ASTNode & callingNode,
+                                     llvm::Value & leftVal,
+                                     DataType & rightTy,
+                                     llvm::Value & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Mod, kOpName_Mod, rightTy);
+    return nullptr;
+}
+
+llvm::Value * DataType::codegenBAndOp(CodegenCtx & cgCtx,
+                                      ASTNode & callingNode,
+                                      llvm::Value & leftVal,
+                                      DataType & rightTy,
+                                      llvm::Value & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_BAnd, kOpName_BAnd, rightTy);
+    return nullptr;
+}
+
+llvm::Value * DataType::codegenLShiftOp(CodegenCtx & cgCtx,
+                                        ASTNode & callingNode,
+                                        llvm::Value & leftVal,
+                                        DataType & rightTy,
+                                        llvm::Value & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_LShift, kOpName_LShift, rightTy);
+    return nullptr;
+}
+
+llvm::Value * DataType::codegenARShiftOp(CodegenCtx & cgCtx,
+                                         ASTNode & callingNode,
+                                         llvm::Value & leftVal,
+                                         DataType & rightTy,
+                                         llvm::Value & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_ARShift, kOpName_ARShift, rightTy);
+    return nullptr;
+}
+
+llvm::Value * DataType::codegenLRShiftOp(CodegenCtx & cgCtx,
+                                         ASTNode & callingNode,
+                                         llvm::Value & leftVal,
+                                         DataType & rightTy,
+                                         llvm::Value & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(cgCtx);
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_LRShift, kOpName_LRShift, rightTy);
+    return nullptr;
+}
+
 llvm::Constant * DataType::codegenConstAddOp(ASTNode & callingNode,
                                              llvm::Constant & leftVal,
                                              DataType & rightTy,
@@ -191,6 +303,90 @@ llvm::Constant * DataType::codegenConstBXOrOp(ASTNode & callingNode,
     WC_UNUSED_PARAM(leftVal);
     WC_UNUSED_PARAM(rightVal);
     issueOpNotAvailableCompileError(callingNode, kOpSymbol_BXOr, kOpName_BXOr, rightTy);
+    return nullptr;
+}
+
+llvm::Constant * DataType::codegenConstMulOp(ASTNode & callingNode,
+                                             llvm::Constant & leftVal,
+                                             DataType & rightTy,
+                                             llvm::Constant & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Mul, kOpName_Mul, rightTy);
+    return nullptr;
+}
+
+llvm::Constant * DataType::codegenConstDivOp(ASTNode & callingNode,
+                                             llvm::Constant & leftVal,
+                                             DataType & rightTy,
+                                             llvm::Constant & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Div, kOpName_Div, rightTy);
+    return nullptr;
+}
+
+llvm::Constant * DataType::codegenConstModOp(ASTNode & callingNode,
+                                             llvm::Constant & leftVal,
+                                             DataType & rightTy,
+                                             llvm::Constant & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_Mod, kOpName_Mod, rightTy);
+    return nullptr;
+}
+
+llvm::Constant * DataType::codegenConstBAndOp(ASTNode & callingNode,
+                                              llvm::Constant & leftVal,
+                                              DataType & rightTy,
+                                              llvm::Constant & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_BAnd, kOpName_BAnd, rightTy);
+    return nullptr;
+}
+
+llvm::Constant * DataType::codegenConstLShiftOp(ASTNode & callingNode,
+                                                llvm::Constant & leftVal,
+                                                DataType & rightTy,
+                                                llvm::Constant & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_LShift, kOpName_LShift, rightTy);
+    return nullptr;
+}
+
+llvm::Constant * DataType::codegenConstARShiftOp(ASTNode & callingNode,
+                                                 llvm::Constant & leftVal,
+                                                 DataType & rightTy,
+                                                 llvm::Constant & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_ARShift, kOpName_ARShift, rightTy);
+    return nullptr;
+}
+
+llvm::Constant * DataType::codegenConstLRShiftOp(ASTNode & callingNode,
+                                                 llvm::Constant & leftVal,
+                                                 DataType & rightTy,
+                                                 llvm::Constant & rightVal)
+{
+    // The default impl simply issues an error that the operator is not available
+    WC_UNUSED_PARAM(leftVal);
+    WC_UNUSED_PARAM(rightVal);
+    issueOpNotAvailableCompileError(callingNode, kOpSymbol_LRShift, kOpName_LRShift, rightTy);
     return nullptr;
 }
 

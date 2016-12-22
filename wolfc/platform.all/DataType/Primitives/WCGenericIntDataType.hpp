@@ -33,6 +33,30 @@ public:
                                         DataType & rightTy,
                                         llvm::Value & rightVal) override;
     
+    virtual llvm::Value * codegenMulOp(CodegenCtx & cgCtx,
+                                       ASTNode & callingNode,
+                                       llvm::Value & leftVal,
+                                       DataType & rightTy,
+                                       llvm::Value & rightVal) override;
+    
+    virtual llvm::Value * codegenBAndOp(CodegenCtx & cgCtx,
+                                        ASTNode & callingNode,
+                                        llvm::Value & leftVal,
+                                        DataType & rightTy,
+                                        llvm::Value & rightVal) override;
+    
+    virtual llvm::Value * codegenLShiftOp(CodegenCtx & cgCtx,
+                                          ASTNode & callingNode,
+                                          llvm::Value & leftVal,
+                                          DataType & rightTy,
+                                          llvm::Value & rightVal) override;
+    
+    virtual llvm::Value * codegenLRShiftOp(CodegenCtx & cgCtx,
+                                           ASTNode & callingNode,
+                                           llvm::Value & leftVal,
+                                           DataType & rightTy,
+                                           llvm::Value & rightVal) override;
+    
     virtual llvm::Constant * codegenConstAddOp(ASTNode & callingNode,
                                                llvm::Constant & leftVal,
                                                DataType & rightTy,
@@ -52,6 +76,26 @@ public:
                                                 llvm::Constant & leftVal,
                                                 DataType & rightTy,
                                                 llvm::Constant & rightVal) override;
+    
+    virtual llvm::Constant * codegenConstMulOp(ASTNode & callingNode,
+                                               llvm::Constant & leftVal,
+                                               DataType & rightTy,
+                                               llvm::Constant & rightVal) override;
+    
+    virtual llvm::Constant * codegenConstBAndOp(ASTNode & callingNode,
+                                                llvm::Constant & leftVal,
+                                                DataType & rightTy,
+                                                llvm::Constant & rightVal) override;
+    
+    virtual llvm::Constant * codegenConstLShiftOp(ASTNode & callingNode,
+                                                  llvm::Constant & leftVal,
+                                                  DataType & rightTy,
+                                                  llvm::Constant & rightVal) override;
+    
+    virtual llvm::Constant * codegenConstLRShiftOp(ASTNode & callingNode,
+                                                   llvm::Constant & leftVal,
+                                                   DataType & rightTy,
+                                                   llvm::Constant & rightVal) override;
 };
 
 WC_END_NAMESPACE

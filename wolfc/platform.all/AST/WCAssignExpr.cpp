@@ -33,18 +33,18 @@ AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         }
 
     switch (tokenPtr[0].type) {
-        PARSE_OP(TokenType::kAssign, AssignExprAssign)                       // =
-        PARSE_OP(TokenType::kAssignBOr, AssignExprAssignBOr)                 // |=
-        PARSE_OP(TokenType::kAssignBXor, AssignExprAssignBXor)               // ^=
-        PARSE_OP(TokenType::kAssignBAnd, AssignExprAssignBAnd)               // &=
-        PARSE_OP(TokenType::kAssignAdd, AssignExprAssignAdd)                 // +=
-        PARSE_OP(TokenType::kAssignSub, AssignExprAssignSub)                 // -=
-        PARSE_OP(TokenType::kAssignMul, AssignExprAssignMul)                 // *=
-        PARSE_OP(TokenType::kAssignDiv, AssignExprAssignDiv)                 // /=
-        PARSE_OP(TokenType::kAssignMod, AssignExprAssignMod)                 // %=
-        PARSE_OP(TokenType::kAssignLShift, AssignExprAssignLShift)           // <<=
-        PARSE_OP(TokenType::kAssignARShift, AssignExprAssignArithRShift)     // >>=
-        PARSE_OP(TokenType::kAssignLRShift, AssignExprAssignLogicRShift)     // >>>=
+        PARSE_OP(TokenType::kAssign, AssignExprAssign)                  // =
+        PARSE_OP(TokenType::kAssignBOr, AssignExprAssignBOr)            // |=
+        PARSE_OP(TokenType::kAssignBXor, AssignExprAssignBXor)          // ^=
+        PARSE_OP(TokenType::kAssignBAnd, AssignExprAssignBAnd)          // &=
+        PARSE_OP(TokenType::kAssignAdd, AssignExprAssignAdd)            // +=
+        PARSE_OP(TokenType::kAssignSub, AssignExprAssignSub)            // -=
+        PARSE_OP(TokenType::kAssignMul, AssignExprAssignMul)            // *=
+        PARSE_OP(TokenType::kAssignDiv, AssignExprAssignDiv)            // /=
+        PARSE_OP(TokenType::kAssignMod, AssignExprAssignMod)            // %=
+        PARSE_OP(TokenType::kAssignLShift, AssignExprAssignLShift)      // <<=
+        PARSE_OP(TokenType::kAssignARShift, AssignExprAssignARShift)    // >>=
+        PARSE_OP(TokenType::kAssignLRShift, AssignExprAssignLRShift)    // >>>=
             
         default:
             break;
@@ -173,10 +173,14 @@ bool AssignExprAssignBase::compileCheckAssignIsLegal() {
 //-----------------------------------------------------------------------------
 // AssignExprBinaryOpBase
 //-----------------------------------------------------------------------------
-AssignExprBinaryOpBase::AssignExprBinaryOpBase(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprAssignBase(leftExpr, rightExpr)
+AssignExprBinaryOpBase::AssignExprBinaryOpBase(TernaryExpr & leftExpr,
+                                               AssignExpr & rightExpr,
+                                               DTCodegenBinaryOpFunc codegenBinaryOpFunc)
+:
+    AssignExprAssignBase(leftExpr, rightExpr),
+    mCodegenBinaryOpFunc(codegenBinaryOpFunc)
 {
-    WC_EMPTY_FUNC_BODY();
+    WC_ASSERT(mCodegenBinaryOpFunc);
 }
 
 llvm::Value * AssignExprBinaryOpBase::codegenExprEval(CodegenCtx & cgCtx) {
@@ -194,7 +198,12 @@ llvm::Value * AssignExprBinaryOpBase::codegenExprEval(CodegenCtx & cgCtx) {
     // Do the operation and store the result on the left
     DataType & leftTy = mLeftExpr.dataType();
     DataType & rightTy = mRightExpr.dataType();
-    llvm::Value * newVal = codegenBinaryOp(cgCtx, leftTy, *leftVal, rightTy, *rightVal);
+    llvm::Value * newVal = (leftTy.*mCodegenBinaryOpFunc)(cgCtx,
+                                                          *this,
+                                                          *leftVal,
+                                                          rightTy,
+                                                          *rightVal);
+    
     WC_GUARD(newVal, nullptr);
     llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
     WC_ASSERT(storeInst);
@@ -236,198 +245,99 @@ llvm::Value * AssignExprAssign::codegenExprEval(CodegenCtx & cgCtx) {
 // AssignExprAssignAdd
 //-----------------------------------------------------------------------------
 AssignExprAssignAdd::AssignExprAssignAdd(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr, &DataType::codegenAddOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * AssignExprAssignAdd::codegenBinaryOp(CodegenCtx & cgCtx,
-                                                   DataType & leftTy,
-                                                   llvm::Value & leftVal,
-                                                   DataType & rightTy,
-                                                   llvm::Value & rightVal)
-{
-    return leftTy.codegenAddOp(cgCtx, *this, leftVal, rightTy, rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // AssignExprAssignSub
 //-----------------------------------------------------------------------------
 AssignExprAssignSub::AssignExprAssignSub(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr, &DataType::codegenSubOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * AssignExprAssignSub::codegenBinaryOp(CodegenCtx & cgCtx,
-                                                   DataType & leftTy,
-                                                   llvm::Value & leftVal,
-                                                   DataType & rightTy,
-                                                   llvm::Value & rightVal)
-{
-    return leftTy.codegenSubOp(cgCtx, *this, leftVal, rightTy, rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // AssignExprAssignBOr
 //-----------------------------------------------------------------------------
 AssignExprAssignBOr::AssignExprAssignBOr(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr, &DataType::codegenBOrOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * AssignExprAssignBOr::codegenBinaryOp(CodegenCtx & cgCtx,
-                                                   DataType & leftTy,
-                                                   llvm::Value & leftVal,
-                                                   DataType & rightTy,
-                                                   llvm::Value & rightVal)
-{
-    return leftTy.codegenBOrOp(cgCtx, *this, leftVal, rightTy, rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // AssignExprAssignBXor
 //-----------------------------------------------------------------------------
 AssignExprAssignBXor::AssignExprAssignBXor(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr, &DataType::codegenBXOrOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * AssignExprAssignBXor::codegenBinaryOp(CodegenCtx & cgCtx,
-                                                    DataType & leftTy,
-                                                    llvm::Value & leftVal,
-                                                    DataType & rightTy,
-                                                    llvm::Value & rightVal)
-{
-    return leftTy.codegenBXOrOp(cgCtx, *this, leftVal, rightTy, rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // AssignExprAssignMul
 //-----------------------------------------------------------------------------
 AssignExprAssignMul::AssignExprAssignMul(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr, &DataType::codegenMulOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * AssignExprAssignMul::codegenBinaryOp(CodegenCtx & cgCtx,
-                                                   DataType & leftTy,
-                                                   llvm::Value & leftVal,
-                                                   DataType & rightTy,
-                                                   llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateMul(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // AssignExprAssignDiv
 //-----------------------------------------------------------------------------
 AssignExprAssignDiv::AssignExprAssignDiv(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr, &DataType::codegenDivOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * AssignExprAssignDiv::codegenBinaryOp(CodegenCtx & cgCtx,
-                                                   DataType & leftTy,
-                                                   llvm::Value & leftVal,
-                                                   DataType & rightTy,
-                                                   llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateSDiv(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // AssignExprAssignMod
 //-----------------------------------------------------------------------------
 AssignExprAssignMod::AssignExprAssignMod(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr, &DataType::codegenModOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * AssignExprAssignMod::codegenBinaryOp(CodegenCtx & cgCtx,
-                                                   DataType & leftTy,
-                                                   llvm::Value & leftVal,
-                                                   DataType & rightTy,
-                                                   llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateSRem(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // AssignExprAssignBAnd
 //-----------------------------------------------------------------------------
 AssignExprAssignBAnd::AssignExprAssignBAnd(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr, &DataType::codegenBAndOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * AssignExprAssignBAnd::codegenBinaryOp(CodegenCtx & cgCtx,
-                                                    DataType & leftTy,
-                                                    llvm::Value & leftVal,
-                                                    DataType & rightTy,
-                                                    llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateAnd(&leftVal, &rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // AssignExprAssignLShift
 //-----------------------------------------------------------------------------
 AssignExprAssignLShift::AssignExprAssignLShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr)
+    AssignExprBinaryOpBase(leftExpr, rightExpr, &DataType::codegenLShiftOp)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AssignExprAssignLShift::codegenBinaryOp(CodegenCtx & cgCtx,
-                                                      DataType & leftTy,
-                                                      llvm::Value & leftVal,
-                                                      DataType & rightTy,
-                                                      llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateShl(&leftVal, &rightVal);
-}
-
 //-----------------------------------------------------------------------------
-// AssignExprAssignArithRShift
+// AssignExprAssignARShift
 //-----------------------------------------------------------------------------
-AssignExprAssignArithRShift::AssignExprAssignArithRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr)
+AssignExprAssignARShift::AssignExprAssignARShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
+    AssignExprBinaryOpBase(leftExpr, rightExpr, &DataType::codegenARShiftOp)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * AssignExprAssignArithRShift::codegenBinaryOp(CodegenCtx & cgCtx,
-                                                           DataType & leftTy,
-                                                           llvm::Value & leftVal,
-                                                           DataType & rightTy,
-                                                           llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateAShr(&leftVal, &rightVal);
-}
-
 //-----------------------------------------------------------------------------
-// AssignExprAssignLogicRShift
+// AssignExprAssignLRShift
 //-----------------------------------------------------------------------------
-AssignExprAssignLogicRShift::AssignExprAssignLogicRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr)
+AssignExprAssignLRShift::AssignExprAssignLRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
+    AssignExprBinaryOpBase(leftExpr, rightExpr, &DataType::codegenLRShiftOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * AssignExprAssignLogicRShift::codegenBinaryOp(CodegenCtx & cgCtx,
-                                                           DataType & leftTy,
-                                                           llvm::Value & leftVal,
-                                                           DataType & rightTy,
-                                                           llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateLShr(&leftVal, &rightVal);
 }
 
 WC_END_NAMESPACE

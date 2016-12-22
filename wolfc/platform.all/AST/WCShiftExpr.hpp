@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DataType/WCDataTypeCodegenFuncs.hpp"
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
 
@@ -43,7 +44,10 @@ public:
 /* Base class for an ShiftExpr with two operands */
 class ShiftExprTwoOps : public ShiftExpr {
 public:
-    ShiftExprTwoOps(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
+    ShiftExprTwoOps(UnaryExpr & leftExpr,
+                    ShiftExpr & rightExpr,
+                    DTCodegenBinaryOpFunc codegenBinaryOpFunc,
+                    DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -60,66 +64,27 @@ public:
     UnaryExpr & mLeftExpr;
     ShiftExpr & mRightExpr;
     
-protected:
-    /**
-     * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of type 'int';
-     * return false for failure if that is the case.
-     */
-    bool compileCheckBothExprsAreInt() const;
-    
-    /**
-     * Do the actual codegen for the operation itself (runtime evaluation).
-     * All other type checks have been done and sub-expressions evaluated at this point.
-     */
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) = 0;
-    
-    /**
-     * Do the actual codegen for the operation itself (compile time evaluation).
-     * All other type checks have been done and sub-expressions evaluated at this point.
-     */
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) = 0;
+private:
+    const DTCodegenBinaryOpFunc         mCodegenBinaryOpFunc;
+    const DTCodegenConstBinaryOpFunc    mCodegenConstBinaryOpFunc;
 };
 
 /* UnaryExpr << ShiftExpr */
 class ShiftExprLShift final : public ShiftExprTwoOps {
 public:
     ShiftExprLShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
-
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) override;
 };
 
 /* UnaryExpr >> ShiftExpr */
-class ShiftExprArithRShift final : public ShiftExprTwoOps {
+class ShiftExprARShift final : public ShiftExprTwoOps {
 public:
-    ShiftExprArithRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
-
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) override;
+    ShiftExprARShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
 };
 
 /* UnaryExpr >>> ShiftExpr */
-class ShiftExprLogicRShift final : public ShiftExprTwoOps {
+class ShiftExprLRShift final : public ShiftExprTwoOps {
 public:
-    ShiftExprLogicRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
-
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) override;
+    ShiftExprLRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
 };
 
 WC_END_NAMESPACE

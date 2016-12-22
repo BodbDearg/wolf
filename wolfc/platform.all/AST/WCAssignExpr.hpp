@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DataType/WCDataTypeCodegenFuncs.hpp"
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
 
@@ -77,25 +78,6 @@ protected:
      bool compileCheckAssignIsLegal();
 };
 
-/* Base class for an assign expression that does a binary operation (add, mul etc.) */
-class AssignExprBinaryOpBase : public AssignExprAssignBase {
-public:
-    AssignExprBinaryOpBase(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-    
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) final override;
-    
-    /**
-     * Do the actual codegen for the binary operation itself with the given 
-     * left and right value. Basic type checks etc. will have been perfomed before
-     * calling this.
-     */
-    virtual llvm::Value * codegenBinaryOp(CodegenCtx & cgCtx,
-                                          DataType & leftTy,
-                                          llvm::Value & leftVal,
-                                          DataType & rightTy,
-                                          llvm::Value & rightVal) = 0;
-};
-
 /* TernaryExpr = AssignExpr */
 class AssignExprAssign final : public AssignExprAssignBase {
 public:
@@ -104,136 +86,82 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
 };
 
+/* Base class for an assign expression that does a binary operation (add, mul etc.) */
+class AssignExprBinaryOpBase : public AssignExprAssignBase {
+public:
+    AssignExprBinaryOpBase(TernaryExpr & leftExpr,
+                           AssignExpr & rightExpr,
+                           DTCodegenBinaryOpFunc codegenBinaryOpFunc);
+    
+    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) final override;
+    
+    const DTCodegenBinaryOpFunc mCodegenBinaryOpFunc;
+};
+
 /* TernaryExpr += AssignExpr */
 class AssignExprAssignAdd final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignAdd(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-
-    virtual llvm::Value * codegenBinaryOp(CodegenCtx & cgCtx,
-                                          DataType & leftTy,
-                                          llvm::Value & leftVal,
-                                          DataType & rightTy,
-                                          llvm::Value & rightVal) override;
 };
 
 /* TernaryExpr -= AssignExpr */
 class AssignExprAssignSub final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignSub(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-
-    virtual llvm::Value * codegenBinaryOp(CodegenCtx & cgCtx,
-                                          DataType & leftTy,
-                                          llvm::Value & leftVal,
-                                          DataType & rightTy,
-                                          llvm::Value & rightVal) override;
 };
 
 /* TernaryExpr |= AssignExpr */
 class AssignExprAssignBOr final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignBOr(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-    
-    virtual llvm::Value * codegenBinaryOp(CodegenCtx & cgCtx,
-                                          DataType & leftTy,
-                                          llvm::Value & leftVal,
-                                          DataType & rightTy,
-                                          llvm::Value & rightVal) override;
 };
 
 /* TernaryExpr ^= AssignExpr */
 class AssignExprAssignBXor final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignBXor(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-    
-    virtual llvm::Value * codegenBinaryOp(CodegenCtx & cgCtx,
-                                          DataType & leftTy,
-                                          llvm::Value & leftVal,
-                                          DataType & rightTy,
-                                          llvm::Value & rightVal) override;
 };
 
 /* TernaryExpr *= AssignExpr */
 class AssignExprAssignMul final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignMul(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-
-    virtual llvm::Value * codegenBinaryOp(CodegenCtx & cgCtx,
-                                          DataType & leftTy,
-                                          llvm::Value & leftVal,
-                                          DataType & rightTy,
-                                          llvm::Value & rightVal) override;
 };
 
 /* TernaryExpr /= AssignExpr */
 class AssignExprAssignDiv final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignDiv(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-
-    virtual llvm::Value * codegenBinaryOp(CodegenCtx & cgCtx,
-                                          DataType & leftTy,
-                                          llvm::Value & leftVal,
-                                          DataType & rightTy,
-                                          llvm::Value & rightVal) override;
 };
 
 /* TernaryExpr %= AssignExpr */
 class AssignExprAssignMod final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignMod(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-
-    virtual llvm::Value * codegenBinaryOp(CodegenCtx & cgCtx,
-                                          DataType & leftTy,
-                                          llvm::Value & leftVal,
-                                          DataType & rightTy,
-                                          llvm::Value & rightVal) override;
 };
 
 /* TernaryExpr &= AssignExpr */
 class AssignExprAssignBAnd final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignBAnd(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-    
-    virtual llvm::Value * codegenBinaryOp(CodegenCtx & cgCtx,
-                                          DataType & leftTy,
-                                          llvm::Value & leftVal,
-                                          DataType & rightTy,
-                                          llvm::Value & rightVal) override;
 };
 
 /* TernaryExpr <<= AssignExpr */
 class AssignExprAssignLShift final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignLShift(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-    
-    virtual llvm::Value * codegenBinaryOp(CodegenCtx & cgCtx,
-                                          DataType & leftTy,
-                                          llvm::Value & leftVal,
-                                          DataType & rightTy,
-                                          llvm::Value & rightVal) override;
 };
 
 /* TernaryExpr >>= AssignExpr */
-class AssignExprAssignArithRShift final : public AssignExprBinaryOpBase {
+class AssignExprAssignARShift final : public AssignExprBinaryOpBase {
 public:
-    AssignExprAssignArithRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-    
-    virtual llvm::Value * codegenBinaryOp(CodegenCtx & cgCtx,
-                                          DataType & leftTy,
-                                          llvm::Value & leftVal,
-                                          DataType & rightTy,
-                                          llvm::Value & rightVal) override;
+    AssignExprAssignARShift(TernaryExpr & leftExpr, AssignExpr & rightExpr);
 };
 
 /* TernaryExpr >>>= AssignExpr */
-class AssignExprAssignLogicRShift final : public AssignExprBinaryOpBase {
+class AssignExprAssignLRShift final : public AssignExprBinaryOpBase {
 public:
-    AssignExprAssignLogicRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr);
-    
-    virtual llvm::Value * codegenBinaryOp(CodegenCtx & cgCtx,
-                                          DataType & leftTy,
-                                          llvm::Value & leftVal,
-                                          DataType & rightTy,
-                                          llvm::Value & rightVal) override;
+    AssignExprAssignLRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr);
 };
 
 WC_END_NAMESPACE

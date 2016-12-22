@@ -33,9 +33,9 @@ ShiftExpr * ShiftExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         }
 
     switch (tokenPtr[0].type) {
-        PARSE_OP(TokenType::kLShift, ShiftExprLShift)           // <<
-        PARSE_OP(TokenType::kARShift, ShiftExprArithRShift)     // >>
-        PARSE_OP(TokenType::kLRShift, ShiftExprLogicRShift)     // >>>
+        PARSE_OP(TokenType::kLShift, ShiftExprLShift)       // <<
+        PARSE_OP(TokenType::kARShift, ShiftExprARShift)     // >>
+        PARSE_OP(TokenType::kLRShift, ShiftExprLRShift)     // >>>
             
         default:
             break;
@@ -87,10 +87,18 @@ llvm::Constant * ShiftExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // ShiftExprTwoOps
 //-----------------------------------------------------------------------------
-ShiftExprTwoOps::ShiftExprTwoOps(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
+ShiftExprTwoOps::ShiftExprTwoOps(UnaryExpr & leftExpr,
+                                 ShiftExpr & rightExpr,
+                                 DTCodegenBinaryOpFunc codegenBinaryOpFunc,
+                                 DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc)
+:
     mLeftExpr(leftExpr),
-    mRightExpr(rightExpr)
+    mRightExpr(rightExpr),
+    mCodegenBinaryOpFunc(codegenBinaryOpFunc),
+    mCodegenConstBinaryOpFunc(codegenConstBinaryOpFunc)
 {
+    WC_ASSERT(mCodegenBinaryOpFunc);
+    WC_ASSERT(mCodegenConstBinaryOpFunc);
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
 }
@@ -118,7 +126,7 @@ DataType & ShiftExprTwoOps::dataType() {
 
 llvm::Value * ShiftExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of '*' or '/' operator result!");
+    compileError("Can't take the address of a binary expression result!");
     return nullptr;
 }
 
@@ -129,11 +137,10 @@ llvm::Value * ShiftExprTwoOps::codegenExprEval(CodegenCtx & cgCtx) {
     llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
     WC_GUARD(rightVal, nullptr);
     
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Codegen the op itself
-    return codegenOpEval(cgCtx, *leftVal, *rightVal);
+    // Do the operation and return the result
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return (leftTy.*mCodegenBinaryOpFunc)(cgCtx, *this, *leftVal, rightTy, *rightVal);
 }
 
 llvm::Constant * ShiftExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
@@ -143,99 +150,37 @@ llvm::Constant * ShiftExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
     llvm::Constant * rightVal = mRightExpr.codegenExprConstEval(cgCtx);
     WC_GUARD(rightVal, nullptr);
     
-    // TODO: handle auto type promotion and other non int types
-    WC_GUARD(compileCheckBothExprsAreInt(), nullptr);
-    
-    // Codegen the op itself
-    return codegenOpConstEval(*leftVal, *rightVal);
-}
-
-bool ShiftExprTwoOps::compileCheckBothExprsAreInt() const {
-    const DataType & leftType = mLeftExpr.dataType();
-    
-    if (!leftType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
-        compileError("Left type in expression must be 'int' for now and not '%s'!",
-                     leftType.name().c_str());
-        
-        return false;
-    }
-    
-    const DataType & rightType = mRightExpr.dataType();
-    
-    if (!rightType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
-        compileError("Right type in expression must be 'int' for now and not '%s'!",
-                     rightType.name().c_str());
-        
-        return false;
-    }
-    
-    return true;
+    // Do the operation and return the result
+    DataType & leftTy = mLeftExpr.dataType();
+    DataType & rightTy = mRightExpr.dataType();
+    return (leftTy.*mCodegenConstBinaryOpFunc)(*this, *leftVal, rightTy, *rightVal);
 }
 
 //-----------------------------------------------------------------------------
 // ShiftExprLShift
 //-----------------------------------------------------------------------------
 ShiftExprLShift::ShiftExprLShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
-    ShiftExprTwoOps(leftExpr, rightExpr)
+    ShiftExprTwoOps(leftExpr, rightExpr, &DataType::codegenLShiftOp, &DataType::codegenConstLShiftOp)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * ShiftExprLShift::codegenOpEval(CodegenCtx & cgCtx,
-                                             llvm::Value & leftVal,
-                                             llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateShl(&leftVal, &rightVal, "ShiftExprLShift_LShiftOp");
-}
-
-llvm::Constant * ShiftExprLShift::codegenOpConstEval(llvm::Constant & leftVal,
-                                                     llvm::Constant & rightVal)
-{
-    return llvm::ConstantExpr::getShl(&leftVal, &rightVal);
-}
-
 //-----------------------------------------------------------------------------
-// ShiftExprArithRShift
+// ShiftExprARShift
 //-----------------------------------------------------------------------------
-ShiftExprArithRShift::ShiftExprArithRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
-    ShiftExprTwoOps(leftExpr, rightExpr)
+ShiftExprARShift::ShiftExprARShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
+    ShiftExprTwoOps(leftExpr, rightExpr, &DataType::codegenARShiftOp, &DataType::codegenConstARShiftOp)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-llvm::Value * ShiftExprArithRShift::codegenOpEval(CodegenCtx & cgCtx,
-                                                  llvm::Value & leftVal,
-                                                  llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateAShr(&leftVal, &rightVal, "ShiftExprArithRShift_ARShiftOp");
-}
-
-llvm::Constant * ShiftExprArithRShift::codegenOpConstEval(llvm::Constant & leftVal,
-                                                          llvm::Constant & rightVal)
-{
-    return llvm::ConstantExpr::getAShr(&leftVal, &rightVal);
-}
-
 //-----------------------------------------------------------------------------
-// ShiftExprLogicRShift
+// ShiftExprLRShift
 //-----------------------------------------------------------------------------
-ShiftExprLogicRShift::ShiftExprLogicRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
-    ShiftExprTwoOps(leftExpr, rightExpr)
+ShiftExprLRShift::ShiftExprLRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
+    ShiftExprTwoOps(leftExpr, rightExpr, &DataType::codegenLRShiftOp, &DataType::codegenConstLRShiftOp)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-llvm::Value * ShiftExprLogicRShift::codegenOpEval(CodegenCtx & cgCtx,
-                                                  llvm::Value & leftVal,
-                                                  llvm::Value & rightVal)
-{
-    return cgCtx.irBuilder.CreateLShr(&leftVal, &rightVal, "ShiftExprLogicRShift_LRShiftOp");
-}
-
-llvm::Constant * ShiftExprLogicRShift::codegenOpConstEval(llvm::Constant & leftVal,
-                                                          llvm::Constant & rightVal)
-{
-    return llvm::ConstantExpr::getLShr(&leftVal, &rightVal);
 }
 
 WC_END_NAMESPACE

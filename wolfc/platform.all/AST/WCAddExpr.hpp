@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DataType/WCDataTypeCodegenFuncs.hpp"
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
 
@@ -45,7 +46,10 @@ public:
 /* Base class for an AddExpr with two operands */
 class AddExprTwoOps : public AddExpr {
 public:
-    AddExprTwoOps(MulExpr & leftExpr, AddExpr & rightExpr);
+    AddExprTwoOps(MulExpr & leftExpr,
+                  AddExpr & rightExpr,
+                  DTCodegenBinaryOpFunc codegenBinaryOpFunc,
+                  DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -59,82 +63,36 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    MulExpr &   mLeftExpr;
-    AddExpr &   mRightExpr;
+    MulExpr & mLeftExpr;
+    AddExpr & mRightExpr;
     
-protected:
-    /**
-     * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of type 'int';
-     * return false for failure if that is the case.
-     */
-    bool compileCheckBothExprsAreInt() const;
-    
-    /**
-     * Do the actual codegen for the operation itself (runtime evaluation).
-     * All other type checks have been done and sub-expressions evaluated at this point.
-     */
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) = 0;
-    
-    /**
-     * Do the actual codegen for the operation itself (compile time evaluation).
-     * All other type checks have been done and sub-expressions evaluated at this point.
-     */
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) = 0;
+private:
+    const DTCodegenBinaryOpFunc         mCodegenBinaryOpFunc;
+    const DTCodegenConstBinaryOpFunc    mCodegenConstBinaryOpFunc;
 };
 
 /* MulExpr + AddExpr */
 class AddExprAdd final : public AddExprTwoOps {
 public:
     AddExprAdd(MulExpr & leftExpr, AddExpr & rightExpr);
-    
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) override;
 };
 
 /* MulExpr - AddExpr */
 class AddExprSub final : public AddExprTwoOps {
 public:
     AddExprSub(MulExpr & leftExpr, AddExpr & rightExpr);
-    
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) override;
 };
 
 /* MulExpr | AddExpr */
 class AddExprBOr final : public AddExprTwoOps {
 public:
     AddExprBOr(MulExpr & leftExpr, AddExpr & rightExpr);
-    
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) override;
 };
 
 /* MulExpr ^ AddExpr */
 class AddExprBXor final : public AddExprTwoOps {
 public:
     AddExprBXor(MulExpr & leftExpr, AddExpr & rightExpr);
-    
-    virtual llvm::Value * codegenOpEval(CodegenCtx & cgCtx,
-                                        llvm::Value & leftVal,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Constant * codegenOpConstEval(llvm::Constant & leftVal,
-                                                llvm::Constant & rightVal) override;
 };
 
 WC_END_NAMESPACE
