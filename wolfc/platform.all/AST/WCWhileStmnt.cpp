@@ -10,10 +10,6 @@
 
 WC_BEGIN_NAMESPACE
 
-//-----------------------------------------------------------------------------
-// WhileStmnt
-//-----------------------------------------------------------------------------
-
 bool WhileStmnt::peek(const Token * tokenPtr) {
     TokenType tokenType = tokenPtr->type;
     return tokenType == TokenType::kWhile || tokenType == TokenType::kUntil;

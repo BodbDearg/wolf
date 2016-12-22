@@ -16,7 +16,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // CastExpr
 //-----------------------------------------------------------------------------
-
 bool CastExpr::peek(const Token * currentToken) {
     return PrimaryExpr::peek(currentToken) || currentToken->type == TokenType::kCast;
 }
@@ -86,7 +85,6 @@ CastExpr * CastExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // CastExprNoCast
 //-----------------------------------------------------------------------------
-
 CastExprNoCast::CastExprNoCast(PrimaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -126,7 +124,6 @@ llvm::Constant * CastExprNoCast::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // CastExprCast
 //-----------------------------------------------------------------------------
-
 CastExprCast::CastExprCast(const Token & startToken,
                            AssignExpr & expr,
                            Type & type,

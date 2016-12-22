@@ -9,7 +9,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // FuncCallArgList
 //-----------------------------------------------------------------------------
-
 bool FuncCallArgList::peek(const Token * tokenPtr) {
     return AssignExpr::peek(tokenPtr);
 }
@@ -39,7 +38,6 @@ FuncCallArgList * FuncCallArgList::parse(const Token *& tokenPtr, LinearAlloc & 
 //-----------------------------------------------------------------------------
 // FuncCallArgListSingle
 //-----------------------------------------------------------------------------
-
 FuncCallArgListSingle::FuncCallArgListSingle(AssignExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -63,7 +61,6 @@ void FuncCallArgListSingle::getArgs(std::vector<AssignExpr*> & args) const {
 //-----------------------------------------------------------------------------
 // FuncCallArgListMulti
 //-----------------------------------------------------------------------------
-
 FuncCallArgListMulti::FuncCallArgListMulti(AssignExpr & expr, FuncCallArgList & argList) :
     mExpr(expr),
     mArgList(argList)

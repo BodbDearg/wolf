@@ -12,7 +12,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // ArrayLitExprs
 //-----------------------------------------------------------------------------
-
 bool ArrayLitExprs::peek(const Token * tokenPtr) {
     return AssignExpr::peek(tokenPtr);
 }
@@ -42,7 +41,6 @@ ArrayLitExprs * ArrayLitExprs::parse(const Token *& tokenPtr, LinearAlloc & allo
 //-----------------------------------------------------------------------------
 // ArrayLitExprsSingle
 //-----------------------------------------------------------------------------
-
 ArrayLitExprsSingle::ArrayLitExprsSingle(AssignExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -74,7 +72,6 @@ DataType & ArrayLitExprsSingle::getElementType() const {
 //-----------------------------------------------------------------------------
 // ArrayLitExprsMulti
 //-----------------------------------------------------------------------------
-
 ArrayLitExprsMulti::ArrayLitExprsMulti(AssignExpr & expr, ArrayLitExprs & exprsList) :
     mExpr(expr),
     mExprsList(exprsList)

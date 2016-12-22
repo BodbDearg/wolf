@@ -13,7 +13,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // IfExpr
 //-----------------------------------------------------------------------------
-
 bool IfStmnt::peek(const Token * tokenPtr) {
     TokenType tokenType = tokenPtr->type;
     return tokenType == TokenType::kIf || tokenType == TokenType::kUnless;
@@ -150,7 +149,6 @@ llvm::Value * IfStmnt::codegenIfExpr(CodegenCtx & cgCtx) const {
 //-----------------------------------------------------------------------------
 // IfStmntNoElse
 //-----------------------------------------------------------------------------
-
 IfStmntNoElse::IfStmntNoElse(AssignExpr & ifExpr,
                              Scope & thenScope,
                              const Token & startToken,
@@ -226,7 +224,6 @@ bool IfStmntNoElse::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // IfStmntElseIf
 //-----------------------------------------------------------------------------
-
 IfStmntElseIf::IfStmntElseIf(AssignExpr & ifExpr,
                              Scope & thenScope,
                              IfStmnt & outerIfStmnt,
@@ -323,7 +320,6 @@ bool IfStmntElseIf::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // IfStmntElse
 //-----------------------------------------------------------------------------
-
 IfStmntElse::IfStmntElse(AssignExpr & ifExpr,
                          Scope & thenScope,
                          Scope & elseScope,

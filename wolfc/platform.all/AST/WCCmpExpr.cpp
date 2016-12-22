@@ -13,7 +13,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // CmpExpr
 //-----------------------------------------------------------------------------
-
 bool CmpExpr::peek(const Token * tokenPtr) {
     return AddExpr::peek(tokenPtr);
 }
@@ -52,7 +51,6 @@ CmpExpr * CmpExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // CmpExprNoOp
 //-----------------------------------------------------------------------------
-
 CmpExprNoOp::CmpExprNoOp(AddExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -92,7 +90,6 @@ llvm::Constant * CmpExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // CmpExprTwoOps
 //-----------------------------------------------------------------------------
-
 CmpExprTwoOps::CmpExprTwoOps(AddExpr & leftExpr, CmpExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
@@ -180,7 +177,6 @@ bool CmpExprTwoOps::compileCheckBothExprsAreInt() const {
 //-----------------------------------------------------------------------------
 // CmpExprEQ
 //-----------------------------------------------------------------------------
-
 CmpExprEQ::CmpExprEQ(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
@@ -201,7 +197,6 @@ llvm::Constant * CmpExprEQ::codegenOpConstEval(llvm::Constant & leftVal,
 //-----------------------------------------------------------------------------
 // CmpExprNE
 //-----------------------------------------------------------------------------
-
 CmpExprNE::CmpExprNE(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
@@ -222,7 +217,6 @@ llvm::Constant * CmpExprNE::codegenOpConstEval(llvm::Constant & leftVal,
 //-----------------------------------------------------------------------------
 // CmpExprLT
 //-----------------------------------------------------------------------------
-
 CmpExprLT::CmpExprLT(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
@@ -243,7 +237,6 @@ llvm::Constant * CmpExprLT::codegenOpConstEval(llvm::Constant & leftVal,
 //-----------------------------------------------------------------------------
 // CmpExprLE
 //-----------------------------------------------------------------------------
-
 CmpExprLE::CmpExprLE(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
@@ -264,7 +257,6 @@ llvm::Constant * CmpExprLE::codegenOpConstEval(llvm::Constant & leftVal,
 //-----------------------------------------------------------------------------
 // CmpExprGT
 //-----------------------------------------------------------------------------
-
 CmpExprGT::CmpExprGT(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }
@@ -285,7 +277,6 @@ llvm::Constant * CmpExprGT::codegenOpConstEval(llvm::Constant & leftVal,
 //-----------------------------------------------------------------------------
 // CmpExprGE
 //-----------------------------------------------------------------------------
-
 CmpExprGE::CmpExprGE(AddExpr & leftExpr, CmpExpr & rightExpr) : CmpExprTwoOps(leftExpr, rightExpr) {
     WC_EMPTY_FUNC_BODY();
 }

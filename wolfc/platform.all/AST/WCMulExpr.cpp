@@ -13,7 +13,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // MulExpr
 //-----------------------------------------------------------------------------
-
 bool MulExpr::peek(const Token * tokenPtr) {
     return ShiftExpr::peek(tokenPtr);
 }
@@ -50,7 +49,6 @@ MulExpr * MulExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // MulExprNoOp
 //-----------------------------------------------------------------------------
-
 MulExprNoOp::MulExprNoOp(ShiftExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -90,7 +88,6 @@ llvm::Constant * MulExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // MulExprTwoOps
 //-----------------------------------------------------------------------------
-
 MulExprTwoOps::MulExprTwoOps(ShiftExpr & leftExpr, MulExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
@@ -179,7 +176,6 @@ bool MulExprTwoOps::compileCheckBothExprsAreInt() const {
 //-----------------------------------------------------------------------------
 // MulExprMul
 //-----------------------------------------------------------------------------
-
 MulExprMul::MulExprMul(ShiftExpr & leftExpr, MulExpr & rightExpr) :
     MulExprTwoOps(leftExpr, rightExpr)
 {
@@ -202,7 +198,6 @@ llvm::Constant * MulExprMul::codegenOpConstEval(llvm::Constant & leftVal,
 //-----------------------------------------------------------------------------
 // MulExprDiv
 //-----------------------------------------------------------------------------
-
 MulExprDiv::MulExprDiv(ShiftExpr & leftExpr, MulExpr & rightExpr) :
     MulExprTwoOps(leftExpr, rightExpr)
 {
@@ -225,7 +220,6 @@ llvm::Constant * MulExprDiv::codegenOpConstEval(llvm::Constant & leftVal,
 //-----------------------------------------------------------------------------
 // MulExprMod
 //-----------------------------------------------------------------------------
-
 MulExprMod::MulExprMod(ShiftExpr & leftExpr, MulExpr & rightExpr) :
     MulExprTwoOps(leftExpr, rightExpr)
 {
@@ -248,7 +242,6 @@ llvm::Constant * MulExprMod::codegenOpConstEval(llvm::Constant & leftVal,
 //-----------------------------------------------------------------------------
 // MulExprBAnd
 //-----------------------------------------------------------------------------
-
 MulExprBAnd::MulExprBAnd(ShiftExpr & leftExpr, MulExpr & rightExpr) :
     MulExprTwoOps(leftExpr, rightExpr)
 {

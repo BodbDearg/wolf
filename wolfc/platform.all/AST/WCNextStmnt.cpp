@@ -17,7 +17,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // NextStmnt
 //-----------------------------------------------------------------------------
-
 bool NextStmnt::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kNext;
 }
@@ -77,7 +76,6 @@ bool NextStmnt::deferredCodegen(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // NextStmntNoCond
 //-----------------------------------------------------------------------------
-
 NextStmntNoCond::NextStmntNoCond(const Token & nextToken) : NextStmnt(nextToken) {
     WC_EMPTY_FUNC_BODY();
 }
@@ -113,7 +111,6 @@ bool NextStmntNoCond::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // NextStmntWithCond
 //-----------------------------------------------------------------------------
-
 NextStmntWithCond::NextStmntWithCond(const Token & nextToken,
                                      const Token & condToken,
                                      AssignExpr & condExpr)

@@ -23,7 +23,6 @@ static bool isCondTokenType(TokenType tokenType) {
 //-----------------------------------------------------------------------------
 // ReturnStmnt
 //-----------------------------------------------------------------------------
-
 bool ReturnStmnt::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kReturn;
 }
@@ -137,7 +136,6 @@ bool ReturnStmnt::verifyReturnTypeCorrect() {
 //-----------------------------------------------------------------------------
 // ReturnStmntNoCondVoid
 //-----------------------------------------------------------------------------
-
 ReturnStmntNoCondVoid::ReturnStmntNoCondVoid(const Token & returnToken) : ReturnStmnt(returnToken) {
     WC_EMPTY_FUNC_BODY();
 }
@@ -179,7 +177,6 @@ bool ReturnStmntNoCondVoid::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // ReturnStmntNoCondWithValue
 //-----------------------------------------------------------------------------
-
 ReturnStmntNoCondWithValue::ReturnStmntNoCondWithValue(const Token & returnToken, AssignExpr & returnExpr) :
     ReturnStmnt(returnToken),
     mReturnExpr(returnExpr)
@@ -227,7 +224,6 @@ bool ReturnStmntNoCondWithValue::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // ReturnStmntWithCondBase
 //-----------------------------------------------------------------------------
-
 ReturnStmntWithCondBase::ReturnStmntWithCondBase(const Token & returnToken,
                                                  const Token & condToken,
                                                  AssignExpr & condExpr)
@@ -254,7 +250,6 @@ bool ReturnStmntWithCondBase::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // ReturnStmntWithCondVoid
 //-----------------------------------------------------------------------------
-
 ReturnStmntWithCondVoid::ReturnStmntWithCondVoid(const Token & returnToken,
                                                  const Token & condToken,
                                                  AssignExpr & condExpr)
@@ -316,7 +311,6 @@ DataType & ReturnStmntWithCondVoid::dataType() {
 //-----------------------------------------------------------------------------
 // ReturnStmntWithCondAndValue
 //-----------------------------------------------------------------------------
-
 ReturnStmntWithCondAndValue::ReturnStmntWithCondAndValue(const Token & returnToken,
                                                          AssignExpr & returnExpr,
                                                          const Token & condToken,

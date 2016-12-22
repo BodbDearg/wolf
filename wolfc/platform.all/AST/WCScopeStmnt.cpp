@@ -11,10 +11,6 @@
 
 WC_BEGIN_NAMESPACE
 
-//-----------------------------------------------------------------------------
-// ScopeStmnt
-//-----------------------------------------------------------------------------
-
 bool ScopeStmnt::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kScope;
 }

@@ -5,10 +5,6 @@
 
 WC_BEGIN_NAMESPACE
 
-//-----------------------------------------------------------------------------
-// NopStmnt
-//-----------------------------------------------------------------------------
-
 bool NopStmnt::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kNop;
 }

@@ -13,7 +13,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // ShiftExpr
 //-----------------------------------------------------------------------------
-
 bool ShiftExpr::peek(const Token * tokenPtr) {
     return UnaryExpr::peek(tokenPtr);
 }
@@ -49,7 +48,6 @@ ShiftExpr * ShiftExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // ShiftExprNoOp
 //-----------------------------------------------------------------------------
-
 ShiftExprNoOp::ShiftExprNoOp(UnaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -89,7 +87,6 @@ llvm::Constant * ShiftExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // ShiftExprTwoOps
 //-----------------------------------------------------------------------------
-
 ShiftExprTwoOps::ShiftExprTwoOps(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
@@ -178,7 +175,6 @@ bool ShiftExprTwoOps::compileCheckBothExprsAreInt() const {
 //-----------------------------------------------------------------------------
 // ShiftExprLShift
 //-----------------------------------------------------------------------------
-
 ShiftExprLShift::ShiftExprLShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
     ShiftExprTwoOps(leftExpr, rightExpr)
 {
@@ -201,7 +197,6 @@ llvm::Constant * ShiftExprLShift::codegenOpConstEval(llvm::Constant & leftVal,
 //-----------------------------------------------------------------------------
 // ShiftExprArithRShift
 //-----------------------------------------------------------------------------
-
 ShiftExprArithRShift::ShiftExprArithRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
     ShiftExprTwoOps(leftExpr, rightExpr)
 {
@@ -224,7 +219,6 @@ llvm::Constant * ShiftExprArithRShift::codegenOpConstEval(llvm::Constant & leftV
 //-----------------------------------------------------------------------------
 // ShiftExprLogicRShift
 //-----------------------------------------------------------------------------
-
 ShiftExprLogicRShift::ShiftExprLogicRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
     ShiftExprTwoOps(leftExpr, rightExpr)
 {

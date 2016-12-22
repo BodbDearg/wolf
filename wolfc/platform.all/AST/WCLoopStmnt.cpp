@@ -14,7 +14,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // LoopStmnt
 //-----------------------------------------------------------------------------
-
 bool LoopStmnt::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kLoop;
 }
@@ -94,7 +93,6 @@ bool LoopStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // LoopStmntNoCond
 //-----------------------------------------------------------------------------
-
 LoopStmntNoCond::LoopStmntNoCond(Scope & bodyScope, const Token & startToken, const Token & endToken) :
     LoopStmnt(bodyScope, startToken),
     mEndToken(endToken)
@@ -147,7 +145,6 @@ bool LoopStmntNoCond::codegen(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // LoopStmntWithCond
 //-----------------------------------------------------------------------------
-
 LoopStmntWithCond::LoopStmntWithCond(Scope & bodyScope,
                                      const Token & startToken,
                                      const Token & condTypeToken,

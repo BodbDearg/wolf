@@ -18,7 +18,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // RandExpr
 //-----------------------------------------------------------------------------
-
 bool RandExpr::peek(const Token * tokenPtr) {
     return  tokenPtr->type == TokenType::kRand ||
             tokenPtr->type == TokenType::kSRand;
@@ -122,7 +121,6 @@ llvm::Constant * RandExpr::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // RandExprRand
 //-----------------------------------------------------------------------------
-
 RandExprRand::RandExprRand(const Token & startToken, const Token & endToken) :
     RandExpr(startToken, endToken)
 {
@@ -157,7 +155,6 @@ llvm::Value * RandExprRand::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // RandExprSRand
 //-----------------------------------------------------------------------------
-
 RandExprSRand::RandExprSRand(const Token & startToken,
                              AssignExpr & seedExpr,
                              const Token & endToken)

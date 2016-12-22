@@ -16,7 +16,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // VarDecl
 //-----------------------------------------------------------------------------
-
 bool VarDecl::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kVar;
 }
@@ -171,7 +170,6 @@ bool VarDecl::codegenAsGlobalVar(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // VarDeclInferType
 //-----------------------------------------------------------------------------
-
 VarDeclInferType::VarDeclInferType(const Token & startToken,
                                    Identifier & ident,
                                    AssignExpr & initExpr)
@@ -188,7 +186,6 @@ DataType & VarDeclInferType::dataType() const {
 //-----------------------------------------------------------------------------
 // VarDeclExplicitType
 //-----------------------------------------------------------------------------
-
 VarDeclExplicitType::VarDeclExplicitType(const Token & startToken,
                                          Identifier & ident,
                                          Type & type,

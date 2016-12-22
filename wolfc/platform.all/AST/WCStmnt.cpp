@@ -20,7 +20,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // Stmnt
 //-----------------------------------------------------------------------------
-
 bool Stmnt::peek(const Token * tokenPtr) {
     return  NopStmnt::peek(tokenPtr) ||
             PrintStmnt::peek(tokenPtr) ||
@@ -123,7 +122,6 @@ Stmnt * Stmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // StmntNopStmnt
 //-----------------------------------------------------------------------------
-
 StmntNopStmnt::StmntNopStmnt(NopStmnt & stmnt) : mStmnt(stmnt) {
     mStmnt.mParent = this;
 }
@@ -147,7 +145,6 @@ bool StmntNopStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // StmntPrintStmnt
 //-----------------------------------------------------------------------------
-
 StmntPrintStmnt::StmntPrintStmnt(PrintStmnt & stmnt) : mStmnt(stmnt) {
     mStmnt.mParent = this;
 }
@@ -171,7 +168,6 @@ bool StmntPrintStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // StmntAssertStmnt
 //-----------------------------------------------------------------------------
-
 StmntAssertStmnt::StmntAssertStmnt(AssertStmnt & stmnt) : mStmnt(stmnt) {
     mStmnt.mParent = this;
 }
@@ -195,7 +191,6 @@ bool StmntAssertStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // StmntIfStmnt
 //-----------------------------------------------------------------------------
-
 StmntIfStmnt::StmntIfStmnt(IfStmnt & ifStmnt) : mIfStmnt(ifStmnt) {
     mIfStmnt.mParent = this;
 }
@@ -219,7 +214,6 @@ bool StmntIfStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // StmntWhileStmnt
 //-----------------------------------------------------------------------------
-
 StmntWhileStmnt::StmntWhileStmnt(WhileStmnt & whileStmnt) : mWhileStmnt(whileStmnt) {
     mWhileStmnt.mParent = this;
 }
@@ -243,7 +237,6 @@ bool StmntWhileStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // StmntLoopStmnt
 //-----------------------------------------------------------------------------
-
 StmntLoopStmnt::StmntLoopStmnt(LoopStmnt & loopStmnt) : mLoopStmnt(loopStmnt) {
     mLoopStmnt.mParent = this;
 }
@@ -267,7 +260,6 @@ bool StmntLoopStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // StmntScopeStmnt
 //-----------------------------------------------------------------------------
-
 StmntScopeStmnt::StmntScopeStmnt(ScopeStmnt & scopeStmnt) : mScopeStmnt(scopeStmnt) {
     mScopeStmnt.mParent = this;
 }
@@ -291,7 +283,6 @@ bool StmntScopeStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // StmntBreakStmnt
 //-----------------------------------------------------------------------------
-
 StmntBreakStmnt::StmntBreakStmnt(BreakStmnt & breakStmnt) : mBreakStmnt(breakStmnt) {
     mBreakStmnt.mParent = this;
 }
@@ -315,7 +306,6 @@ bool StmntBreakStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // StmntNextStmnt
 //-----------------------------------------------------------------------------
-
 StmntNextStmnt::StmntNextStmnt(NextStmnt & nextStmnt) : mNextStmnt(nextStmnt) {
     mNextStmnt.mParent = this;
 }
@@ -339,7 +329,6 @@ bool StmntNextStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // StmntReturnStmnt
 //-----------------------------------------------------------------------------
-
 StmntReturnStmnt::StmntReturnStmnt(ReturnStmnt & returnStmnt) : mReturnStmnt(returnStmnt) {
     mReturnStmnt.mParent = this;
 }
@@ -363,7 +352,6 @@ bool StmntReturnStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // StmntVarDecl
 //-----------------------------------------------------------------------------
-
 StmntVarDecl::StmntVarDecl(VarDecl & decl) : mDecl(decl) {
     mDecl.mParent = this;
 }
@@ -387,7 +375,6 @@ bool StmntVarDecl::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 // StmntAssignExpr
 //-----------------------------------------------------------------------------
-
 StmntAssignExpr::StmntAssignExpr(AssignExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }

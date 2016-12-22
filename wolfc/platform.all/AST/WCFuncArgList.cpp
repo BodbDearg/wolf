@@ -9,7 +9,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // FuncArgList
 //-----------------------------------------------------------------------------
-
 bool FuncArgList::peek(const Token * tokenPtr) {
     return FuncArg::peek(tokenPtr);
 }
@@ -39,7 +38,6 @@ FuncArgList * FuncArgList::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // FuncArgListSingle
 //-----------------------------------------------------------------------------
-
 FuncArgListSingle::FuncArgListSingle(FuncArg & arg) : mArg(arg) {
     mArg.mParent = this;
 }
@@ -63,7 +61,6 @@ void FuncArgListSingle::getArgs(std::vector<FuncArg*> & args) const {
 //-----------------------------------------------------------------------------
 // FuncArgListMulti
 //-----------------------------------------------------------------------------
-
 FuncArgListMulti::FuncArgListMulti(FuncArg & arg, FuncArgList & argList) :
     mArg(arg),
     mArgList(argList)

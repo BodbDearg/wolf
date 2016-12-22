@@ -13,7 +13,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // AddExpr
 //-----------------------------------------------------------------------------
-
 bool AddExpr::peek(const Token * tokenPtr) {
     return MulExpr::peek(tokenPtr);
 }
@@ -52,7 +51,6 @@ AddExpr * AddExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // AddExprNoOp
 //-----------------------------------------------------------------------------
-
 AddExprNoOp::AddExprNoOp(MulExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -92,7 +90,6 @@ llvm::Constant * AddExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // AddExprTwoOps
 //-----------------------------------------------------------------------------
-
 AddExprTwoOps::AddExprTwoOps(MulExpr & leftExpr, AddExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
@@ -182,7 +179,6 @@ bool AddExprTwoOps::compileCheckBothExprsAreInt() const {
 //-----------------------------------------------------------------------------
 // AddExprAdd
 //-----------------------------------------------------------------------------
-
 AddExprAdd::AddExprAdd(MulExpr & leftExpr, AddExpr & rightExpr) :
     AddExprTwoOps(leftExpr, rightExpr)
 {
@@ -209,7 +205,6 @@ llvm::Constant * AddExprAdd::codegenOpConstEval(llvm::Constant & leftVal,
 //-----------------------------------------------------------------------------
 // AddExprSub
 //-----------------------------------------------------------------------------
-
 AddExprSub::AddExprSub(MulExpr & leftExpr, AddExpr & rightExpr) :
     AddExprTwoOps(leftExpr, rightExpr)
 {
@@ -236,7 +231,6 @@ llvm::Constant * AddExprSub::codegenOpConstEval(llvm::Constant & leftVal,
 //-----------------------------------------------------------------------------
 // AddExprBOr
 //-----------------------------------------------------------------------------
-
 AddExprBOr::AddExprBOr(MulExpr & leftExpr, AddExpr & rightExpr) :
     AddExprTwoOps(leftExpr, rightExpr)
 {
@@ -263,7 +257,6 @@ llvm::Constant * AddExprBOr::codegenOpConstEval(llvm::Constant & leftVal,
 //-----------------------------------------------------------------------------
 // AddExprBXor
 //-----------------------------------------------------------------------------
-
 AddExprBXor::AddExprBXor(MulExpr & leftExpr, AddExpr & rightExpr) :
     AddExprTwoOps(leftExpr, rightExpr)
 {

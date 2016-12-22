@@ -9,7 +9,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // DeclDef
 //-----------------------------------------------------------------------------
-
 bool DeclDef::peek(const Token * tokenPtr) {
     return Func::peek(tokenPtr) || VarDecl::peek(tokenPtr);
 }
@@ -37,7 +36,6 @@ DeclDef * DeclDef::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // DeclDefFunc
 //-----------------------------------------------------------------------------
-
 DeclDefFunc::DeclDefFunc(Func & func) : mFunc(func) {
     mFunc.mParent = this;
 }
@@ -57,7 +55,6 @@ bool DeclDefFunc::codegen(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // DeclDefVarDecl
 //-----------------------------------------------------------------------------
-
 DeclDefVarDecl::DeclDefVarDecl(VarDecl & varDecl) : mVarDecl(varDecl) {
     mVarDecl.mParent = this;
 }

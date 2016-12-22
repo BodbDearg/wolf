@@ -13,7 +13,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // TernaryExpr
 //-----------------------------------------------------------------------------
-
 bool TernaryExpr::peek(const Token * tokenPtr) {
     return OrExpr::peek(tokenPtr);
 }
@@ -56,7 +55,6 @@ TernaryExpr * TernaryExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // TernaryExprNoCond
 //-----------------------------------------------------------------------------
-
 TernaryExprNoCond::TernaryExprNoCond(OrExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -96,7 +94,6 @@ llvm::Constant * TernaryExprNoCond::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // TernaryExprWithCond
 //-----------------------------------------------------------------------------
-
 TernaryExprWithCond::TernaryExprWithCond(OrExpr & condExpr,
                                          AssignExpr & trueExpr,
                                          AssignExpr & falseExpr)

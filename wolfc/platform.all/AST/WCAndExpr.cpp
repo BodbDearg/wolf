@@ -12,7 +12,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // AndExpr
 //-----------------------------------------------------------------------------
-
 bool AndExpr::peek(const Token * tokenPtr) {
     return NotExpr::peek(tokenPtr);
 }
@@ -40,7 +39,6 @@ AndExpr * AndExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // AndExprNoOp
 //-----------------------------------------------------------------------------
-
 AndExprNoOp::AndExprNoOp(NotExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -80,7 +78,6 @@ llvm::Constant * AndExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // AndExprAnd
 //-----------------------------------------------------------------------------
-
 AndExprAnd::AndExprAnd(NotExpr & leftExpr, AndExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)

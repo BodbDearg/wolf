@@ -18,7 +18,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // BreakStmnt
 //-----------------------------------------------------------------------------
-
 bool BreakStmnt::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kBreak;
 }
@@ -82,7 +81,6 @@ bool BreakStmnt::deferredCodegen(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // BreakStmntNoCond
 //-----------------------------------------------------------------------------
-
 BreakStmntNoCond::BreakStmntNoCond(const Token & breakToken) : BreakStmnt(breakToken) {
     WC_EMPTY_FUNC_BODY();
 }
@@ -114,7 +112,6 @@ bool BreakStmntNoCond::codegen(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // BreakStmntWithCond
 //-----------------------------------------------------------------------------
-
 BreakStmntWithCond::BreakStmntWithCond(const Token & breakToken,
                                        const Token & condToken,
                                        AssignExpr & condExpr)

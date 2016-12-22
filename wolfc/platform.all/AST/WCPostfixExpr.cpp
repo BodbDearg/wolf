@@ -26,7 +26,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // PostfixExpr
 //-----------------------------------------------------------------------------
-
 bool PostfixExpr::peek(const Token * currentToken) {
     return CastExpr::peek(currentToken);
 }
@@ -114,7 +113,6 @@ PostfixExpr * PostfixExpr::parse(const Token *& currentToken, LinearAlloc & allo
 //-----------------------------------------------------------------------------
 // PostfixExprNoPostfix
 //-----------------------------------------------------------------------------
-
 PostfixExprNoPostfix::PostfixExprNoPostfix(CastExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -154,7 +152,6 @@ llvm::Constant * PostfixExprNoPostfix::codegenExprConstEval(CodegenCtx & cgCtx) 
 //-----------------------------------------------------------------------------
 // PostfixExprIncDecBase
 //-----------------------------------------------------------------------------
-
 PostfixExprIncDecBase::PostfixExprIncDecBase(CastExpr & expr, const Token & endToken) :
     mExpr(expr),
     mEndToken(endToken)
@@ -216,7 +213,6 @@ bool PostfixExprIncDecBase::compileCheckExprIsInt() const {
 //-----------------------------------------------------------------------------
 // PostfixExprInc
 //-----------------------------------------------------------------------------
-
 PostfixExprInc::PostfixExprInc(CastExpr & expr, const Token & endToken) :
     PostfixExprIncDecBase(expr, endToken)
 {
@@ -249,7 +245,6 @@ llvm::Value * PostfixExprInc::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // PostfixExprDec
 //-----------------------------------------------------------------------------
-
 PostfixExprDec::PostfixExprDec(CastExpr & expr, const Token & endToken) :
     PostfixExprIncDecBase(expr, endToken)
 {
@@ -282,7 +277,6 @@ llvm::Value * PostfixExprDec::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // PostfixExprFuncCall
 //-----------------------------------------------------------------------------
-
 PostfixExprFuncCall::PostfixExprFuncCall(PostfixExpr & expr, FuncCall & funcCall) :
     mExpr(expr),
     mFuncCall(funcCall),
@@ -462,7 +456,6 @@ Func * PostfixExprFuncCall::lookupFuncCalled() const {
 //-----------------------------------------------------------------------------
 // PostfixExprArrayLookup
 //-----------------------------------------------------------------------------
-
 PostfixExprArrayLookup::PostfixExprArrayLookup(PostfixExpr & arrayExpr,
                                                AssignExpr & indexExpr,
                                                const Token & endToken)

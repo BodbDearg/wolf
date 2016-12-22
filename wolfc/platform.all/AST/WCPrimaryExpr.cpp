@@ -16,7 +16,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // PrimaryExpr
 //-----------------------------------------------------------------------------
-
 bool PrimaryExpr::peek(const Token * currentToken) {
     return  IntLit::peek(currentToken) ||
             BoolLit::peek(currentToken) ||
@@ -77,7 +76,6 @@ PrimaryExpr * PrimaryExpr::parse(const Token *& currentToken, LinearAlloc & allo
 //-----------------------------------------------------------------------------
 // PrimaryExprIntLit
 //-----------------------------------------------------------------------------
-
 PrimaryExprIntLit::PrimaryExprIntLit(IntLit & lit) : mLit(lit) {
     mLit.mParent = this;
 }
@@ -117,7 +115,6 @@ llvm::Constant * PrimaryExprIntLit::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // PrimaryExprBoolLit
 //-----------------------------------------------------------------------------
-
 PrimaryExprBoolLit::PrimaryExprBoolLit(BoolLit & lit) : mLit(lit) {
     mLit.mParent = this;
 }
@@ -157,7 +154,6 @@ llvm::Constant * PrimaryExprBoolLit::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // PrimaryExprStrLit
 //-----------------------------------------------------------------------------
-
 PrimaryExprStrLit::PrimaryExprStrLit(StrLit & lit) : mLit(lit) {
     mLit.mParent = this;
 }
@@ -197,7 +193,6 @@ llvm::Constant * PrimaryExprStrLit::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // PrimaryExprArrayLit
 //-----------------------------------------------------------------------------
-
 PrimaryExprArrayLit::PrimaryExprArrayLit(ArrayLit & lit) : mLit(lit) {
     mLit.mParent = this;
 }
@@ -237,7 +232,6 @@ llvm::Constant * PrimaryExprArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // PrimaryExprIdentifier
 //-----------------------------------------------------------------------------
-
 PrimaryExprIdentifier::PrimaryExprIdentifier(Identifier & ident) : mIdent(ident) {
     mIdent.mParent = this;
 }
@@ -281,7 +275,6 @@ const char * PrimaryExprIdentifier::name() const {
 //-----------------------------------------------------------------------------
 // PrimaryExprReadnum
 //-----------------------------------------------------------------------------
-
 PrimaryExprReadnum::PrimaryExprReadnum(ReadnumExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -321,7 +314,6 @@ llvm::Constant * PrimaryExprReadnum::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // PrimaryExprTime
 //-----------------------------------------------------------------------------
-
 PrimaryExprTime::PrimaryExprTime(TimeExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -361,7 +353,6 @@ llvm::Constant * PrimaryExprTime::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // PrimaryRandExpr
 //-----------------------------------------------------------------------------
-
 PrimaryExprRandExpr::PrimaryExprRandExpr(RandExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }

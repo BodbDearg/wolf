@@ -12,7 +12,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // NotExpr
 //-----------------------------------------------------------------------------
-
 bool NotExpr::peek(const Token * tokenPtr) {
     return  tokenPtr->type == TokenType::kNot ||
             tokenPtr->type == TokenType::kTilde ||
@@ -56,7 +55,6 @@ NotExpr * NotExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // NotExprNoOp
 //-----------------------------------------------------------------------------
-
 NotExprNoOp::NotExprNoOp(CmpExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -96,7 +94,6 @@ llvm::Constant * NotExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // NotExprNot
 //-----------------------------------------------------------------------------
-
 NotExprNot::NotExprNot(NotExpr & expr, const Token & startToken) :
     mExpr(expr),
     mStartToken(startToken)
@@ -170,7 +167,6 @@ bool NotExprNot::compileCheckExprIsBool() const {
 //-----------------------------------------------------------------------------
 // NotExprBNot
 //-----------------------------------------------------------------------------
-
 NotExprBNot::NotExprBNot(NotExpr & expr, const Token & startToken) :
     mExpr(expr),
     mStartToken(startToken)

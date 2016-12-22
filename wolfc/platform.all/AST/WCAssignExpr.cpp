@@ -12,7 +12,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // AssignExpr
 //-----------------------------------------------------------------------------
-
 bool AssignExpr::peek(const Token * tokenPtr) {
     return TernaryExpr::peek(tokenPtr);
 }
@@ -60,7 +59,6 @@ AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // AssignExprNoAssign
 //-----------------------------------------------------------------------------
-
 AssignExprNoAssign::AssignExprNoAssign(TernaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -100,7 +98,6 @@ llvm::Constant * AssignExprNoAssign::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // AssignExprAssignBase
 //-----------------------------------------------------------------------------
-
 AssignExprAssignBase::AssignExprAssignBase(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
@@ -176,7 +173,6 @@ bool AssignExprAssignBase::compileCheckAssignIsLegal() {
 //-----------------------------------------------------------------------------
 // AssignExprBinaryOpBase
 //-----------------------------------------------------------------------------
-
 AssignExprBinaryOpBase::AssignExprBinaryOpBase(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprAssignBase(leftExpr, rightExpr)
 {
@@ -211,7 +207,6 @@ llvm::Value * AssignExprBinaryOpBase::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // AssignExprAssign
 //-----------------------------------------------------------------------------
-
 AssignExprAssign::AssignExprAssign(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprAssignBase(leftExpr, rightExpr)
 {
@@ -240,7 +235,6 @@ llvm::Value * AssignExprAssign::codegenExprEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // AssignExprAssignAdd
 //-----------------------------------------------------------------------------
-
 AssignExprAssignAdd::AssignExprAssignAdd(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
@@ -259,7 +253,6 @@ llvm::Value * AssignExprAssignAdd::codegenBinaryOp(CodegenCtx & cgCtx,
 //-----------------------------------------------------------------------------
 // AssignExprAssignSub
 //-----------------------------------------------------------------------------
-
 AssignExprAssignSub::AssignExprAssignSub(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
@@ -278,7 +271,6 @@ llvm::Value * AssignExprAssignSub::codegenBinaryOp(CodegenCtx & cgCtx,
 //-----------------------------------------------------------------------------
 // AssignExprAssignBOr
 //-----------------------------------------------------------------------------
-
 AssignExprAssignBOr::AssignExprAssignBOr(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
@@ -297,7 +289,6 @@ llvm::Value * AssignExprAssignBOr::codegenBinaryOp(CodegenCtx & cgCtx,
 //-----------------------------------------------------------------------------
 // AssignExprAssignBXor
 //-----------------------------------------------------------------------------
-
 AssignExprAssignBXor::AssignExprAssignBXor(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
@@ -316,7 +307,6 @@ llvm::Value * AssignExprAssignBXor::codegenBinaryOp(CodegenCtx & cgCtx,
 //-----------------------------------------------------------------------------
 // AssignExprAssignMul
 //-----------------------------------------------------------------------------
-
 AssignExprAssignMul::AssignExprAssignMul(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
@@ -335,7 +325,6 @@ llvm::Value * AssignExprAssignMul::codegenBinaryOp(CodegenCtx & cgCtx,
 //-----------------------------------------------------------------------------
 // AssignExprAssignDiv
 //-----------------------------------------------------------------------------
-
 AssignExprAssignDiv::AssignExprAssignDiv(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
@@ -354,7 +343,6 @@ llvm::Value * AssignExprAssignDiv::codegenBinaryOp(CodegenCtx & cgCtx,
 //-----------------------------------------------------------------------------
 // AssignExprAssignMod
 //-----------------------------------------------------------------------------
-
 AssignExprAssignMod::AssignExprAssignMod(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
@@ -373,7 +361,6 @@ llvm::Value * AssignExprAssignMod::codegenBinaryOp(CodegenCtx & cgCtx,
 //-----------------------------------------------------------------------------
 // AssignExprAssignBAnd
 //-----------------------------------------------------------------------------
-
 AssignExprAssignBAnd::AssignExprAssignBAnd(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
@@ -392,7 +379,6 @@ llvm::Value * AssignExprAssignBAnd::codegenBinaryOp(CodegenCtx & cgCtx,
 //-----------------------------------------------------------------------------
 // AssignExprAssignLShift
 //-----------------------------------------------------------------------------
-
 AssignExprAssignLShift::AssignExprAssignLShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
@@ -411,7 +397,6 @@ llvm::Value * AssignExprAssignLShift::codegenBinaryOp(CodegenCtx & cgCtx,
 //-----------------------------------------------------------------------------
 // AssignExprAssignArithRShift
 //-----------------------------------------------------------------------------
-
 AssignExprAssignArithRShift::AssignExprAssignArithRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
@@ -430,7 +415,6 @@ llvm::Value * AssignExprAssignArithRShift::codegenBinaryOp(CodegenCtx & cgCtx,
 //-----------------------------------------------------------------------------
 // AssignExprAssignLogicRShift
 //-----------------------------------------------------------------------------
-
 AssignExprAssignLogicRShift::AssignExprAssignLogicRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprBinaryOpBase(leftExpr, rightExpr)
 {

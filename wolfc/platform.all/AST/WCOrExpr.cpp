@@ -12,7 +12,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // OrExpr
 //-----------------------------------------------------------------------------
-
 bool OrExpr::peek(const Token * tokenPtr) {
     return AndExpr::peek(tokenPtr);
 }
@@ -48,7 +47,6 @@ OrExpr * OrExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // OrExprNoOp
 //-----------------------------------------------------------------------------
-
 OrExprNoOp::OrExprNoOp(AndExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -88,7 +86,6 @@ llvm::Constant * OrExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // OrExprOr
 //-----------------------------------------------------------------------------
-
 OrExprOr::OrExprOr(AndExpr & leftExpr, OrExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)

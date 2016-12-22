@@ -13,7 +13,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // UnaryExpr
 //-----------------------------------------------------------------------------
-
 bool UnaryExpr::peek(const Token * currentToken) {
     /* 
     -PostfixExpr
@@ -87,7 +86,6 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // UnaryExprPrimary
 //-----------------------------------------------------------------------------
-
 UnaryExprPrimary::UnaryExprPrimary(PostfixExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
@@ -127,7 +125,6 @@ llvm::Constant * UnaryExprPrimary::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // UnaryExprMinus
 //-----------------------------------------------------------------------------
-
 UnaryExprMinus::UnaryExprMinus(PostfixExpr & expr, const Token & startToken) :
     mExpr(expr),
     mStartToken(startToken)
@@ -194,7 +191,6 @@ llvm::Constant * UnaryExprMinus::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // UnaryExprPlus
 //-----------------------------------------------------------------------------
-
 UnaryExprPlus::UnaryExprPlus(PostfixExpr & expr, const Token & startToken) :
     UnaryExprPrimary(expr),
     mStartToken(startToken)
@@ -253,7 +249,6 @@ llvm::Constant * UnaryExprPlus::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // UnaryExprParen
 //-----------------------------------------------------------------------------
-
 UnaryExprParen::UnaryExprParen(AssignExpr & expr, const Token & startToken, const Token & endToken) :
     mExpr(expr),
     mStartToken(startToken),

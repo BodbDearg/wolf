@@ -17,7 +17,6 @@ WC_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // Type
 //-----------------------------------------------------------------------------
-
 bool Type::peek(const Token * currentToken) {
     return  currentToken->type == TokenType::kLBrack ||
             PrimitiveType::peek(currentToken);
@@ -62,7 +61,6 @@ Type * Type::parse(const Token *& currentToken, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // TypePrimitive
 //-----------------------------------------------------------------------------
-
 TypePrimitive::TypePrimitive(PrimitiveType & type) : mType(type) {
     mParent = this;
 }
@@ -86,7 +84,6 @@ bool TypePrimitive::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
 //-----------------------------------------------------------------------------
 // TypeArray
 //-----------------------------------------------------------------------------
-
 TypeArray::TypeArray(const Token & startToken, AssignExpr & sizeExpr, Type & elemType) :
     mStartToken(startToken),
     mSizeExpr(sizeExpr),
