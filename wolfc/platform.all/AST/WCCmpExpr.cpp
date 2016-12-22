@@ -61,7 +61,7 @@ CmpExpr * CmpExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         }
         
         // Parse the right expression
-        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);\
+        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);
         WC_GUARD(rightExpr, nullptr);
         
         // Now return the operation:
