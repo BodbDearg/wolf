@@ -1,4 +1,12 @@
+- Change 'var' to 'let'
+- Change 'nop' to 'noop'
 - Fix recursion on unary expression (should be able to do - - 1 for example)
 - Make logical statements lazy evaluate
-- Allow empty function, scope etc. bodies
-- Compile time casting
+- Allow 'do' to open function body
+- Make newline a token and terminate statements on newline
+- Make the parser not accept multiple statements on the same line
+- Allow ',' to separate multiple statements on the same line
+- Implement 'undefined' var declarations
+- Don't allow negation of unsigned ints
+- Implement various integer types int32, int16, uint32 etc. Upgrade lexer to add precision suffixes.
+- Upgrade lexer to support float numbers and implement float types.
