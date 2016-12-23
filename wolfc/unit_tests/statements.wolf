@@ -1,8 +1,8 @@
 ;==================================================================================================
 ; NoOpStmnt
 ;==================================================================================================
-func testNopStatement()
-    nop
+func testNoOpStatement()
+    noop
     assert(true)    ; Just a simple parse test really
 end
 
@@ -340,7 +340,7 @@ end
 ; Run the tests
 ;==================================================================================================
 func main() -> int
-    testNopStatement()
+    testNoOpStatement()
     testAssertStmnt()
     testVarDecl()
     testIfStmnt()

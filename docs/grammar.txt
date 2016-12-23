@@ -40,7 +40,7 @@ Stmnt:
 	AssignExpr
 
 NoOpStmnt:
-    nop
+    noop
 
 PrintStmnt:
     print ( AssignExpr )

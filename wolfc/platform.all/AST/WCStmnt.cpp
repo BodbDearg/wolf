@@ -8,7 +8,7 @@
 #include "WCLinearAlloc.hpp"
 #include "WCLoopStmnt.hpp"
 #include "WCNextStmnt.hpp"
-#include "WCNopStmnt.hpp"
+#include "WCNoOpStmnt.hpp"
 #include "WCPrintStmnt.hpp"
 #include "WCReturnStmnt.hpp"
 #include "WCScopeStmnt.hpp"
@@ -21,7 +21,7 @@ WC_BEGIN_NAMESPACE
 // Stmnt
 //-----------------------------------------------------------------------------
 bool Stmnt::peek(const Token * tokenPtr) {
-    return  NopStmnt::peek(tokenPtr) ||
+    return  NoOpStmnt::peek(tokenPtr) ||
             PrintStmnt::peek(tokenPtr) ||
             AssertStmnt::peek(tokenPtr) ||
             VarDecl::peek(tokenPtr) ||
@@ -36,11 +36,11 @@ bool Stmnt::peek(const Token * tokenPtr) {
 }
     
 Stmnt * Stmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    // Parse 'nop' statment if ahead
-    if (NopStmnt::peek(tokenPtr)) {
-        NopStmnt * nopStmnt = NopStmnt::parse(tokenPtr, alloc);
-        WC_GUARD(nopStmnt, nullptr);
-        return WC_NEW_AST_NODE(alloc, StmntNopStmnt, *nopStmnt);
+    // Parse 'noop' statment if ahead
+    if (NoOpStmnt::peek(tokenPtr)) {
+        NoOpStmnt * noOpStmnt = NoOpStmnt::parse(tokenPtr, alloc);
+        WC_GUARD(noOpStmnt, nullptr);
+        return WC_NEW_AST_NODE(alloc, StmntNoOpStmnt, *noOpStmnt);
     }
     
     // Parse print expression if ahead
@@ -120,25 +120,25 @@ Stmnt * Stmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 }
 
 //-----------------------------------------------------------------------------
-// StmntNopStmnt
+// StmntNoOpStmnt
 //-----------------------------------------------------------------------------
-StmntNopStmnt::StmntNopStmnt(NopStmnt & stmnt) : mStmnt(stmnt) {
+StmntNoOpStmnt::StmntNoOpStmnt(NoOpStmnt & stmnt) : mStmnt(stmnt) {
     mStmnt.mParent = this;
 }
 
-const Token & StmntNopStmnt::getStartToken() const {
+const Token & StmntNoOpStmnt::getStartToken() const {
     return mStmnt.getStartToken();
 }
 
-const Token & StmntNopStmnt::getEndToken() const {
+const Token & StmntNoOpStmnt::getEndToken() const {
     return mStmnt.getEndToken();
 }
 
-bool StmntNopStmnt::codegen(CodegenCtx & cgCtx) {
+bool StmntNoOpStmnt::codegen(CodegenCtx & cgCtx) {
     return mStmnt.codegen(cgCtx);
 }
 
-bool StmntNopStmnt::allCodepathsHaveUncondRet() const {
+bool StmntNoOpStmnt::allCodepathsHaveUncondRet() const {
     return mStmnt.allCodepathsHaveUncondRet();
 }
 

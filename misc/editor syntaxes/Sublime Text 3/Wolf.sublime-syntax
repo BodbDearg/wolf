@@ -48,7 +48,7 @@ contexts:
       scope: keyword.controlflow.modifiers.wolf
     - match: \b(func)\b
       scope: keyword.functions.wolf
-    - match: \b(var|nop|as)\b
+    - match: \b(var|noop)\b
       scope: keyword.misc.wolf
     - match: \b(void|bool|int|int64|int32|int16|int8|uint|uint64|uint32|uint16|uint8|float|char|uchar|string|ustring)\b
       scope: storage.type.wolf      

@@ -12,7 +12,7 @@ class IfStmnt;
 class LinearAlloc;
 class LoopStmnt;
 class NextStmnt;
-class NopStmnt;
+class NoOpStmnt;
 class PrintStmnt;
 class ReturnStmnt;
 class ScopeStmnt;
@@ -41,10 +41,10 @@ public:
     static Stmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
-/* NopStmnt */
-class StmntNopStmnt final : public Stmnt {
+/* NoOpStmnt */
+class StmntNoOpStmnt final : public Stmnt {
 public:
-    StmntNopStmnt(NopStmnt & stmnt);
+    StmntNoOpStmnt(NoOpStmnt & stmnt);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -53,7 +53,7 @@ public:
     
     virtual bool allCodepathsHaveUncondRet() const override;
     
-    NopStmnt & mStmnt;
+    NoOpStmnt & mStmnt;
 };
 
 /* PrintStmnt */

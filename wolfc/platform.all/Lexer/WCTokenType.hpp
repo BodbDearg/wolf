@@ -177,8 +177,8 @@ enum class TokenType : uint8_t {
     kRepeat,
     /* scope */
     kScope,
-    /* nop */
-    kNop,
+    /* noop */
+    kNoOp,
     /* return */
     kReturn,
     /* func */
