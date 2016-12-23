@@ -474,7 +474,7 @@ func game_findWinner()
         unless dealerWon 
             gGameWinner = GAME_WINNER_PLAYER
         else
-            gGameWinner = GAMEACTION_NONE
+            gGameWinner = GAME_WINNER_NONE
         end
     else
         unless dealerWon 
