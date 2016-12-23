@@ -6,7 +6,7 @@
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCOrExpr.hpp"
+#include "WCLOrExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -14,12 +14,12 @@ WC_BEGIN_NAMESPACE
 // TernaryExpr
 //-----------------------------------------------------------------------------
 bool TernaryExpr::peek(const Token * tokenPtr) {
-    return OrExpr::peek(tokenPtr);
+    return LOrExpr::peek(tokenPtr);
 }
 
 TernaryExpr * TernaryExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the initial expression
-    OrExpr * firstExpr = OrExpr::parse(tokenPtr, alloc);
+    LOrExpr * firstExpr = LOrExpr::parse(tokenPtr, alloc);
     WC_GUARD(firstExpr, nullptr);
     
     // See if a '?' follows:
@@ -55,7 +55,7 @@ TernaryExpr * TernaryExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
 //-----------------------------------------------------------------------------
 // TernaryExprNoCond
 //-----------------------------------------------------------------------------
-TernaryExprNoCond::TernaryExprNoCond(OrExpr & expr) : mExpr(expr) {
+TernaryExprNoCond::TernaryExprNoCond(LOrExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
@@ -94,7 +94,7 @@ llvm::Constant * TernaryExprNoCond::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 // TernaryExprWithCond
 //-----------------------------------------------------------------------------
-TernaryExprWithCond::TernaryExprWithCond(OrExpr & condExpr,
+TernaryExprWithCond::TernaryExprWithCond(LOrExpr & condExpr,
                                          AssignExpr & trueExpr,
                                          AssignExpr & falseExpr)
 :

@@ -32,7 +32,7 @@ NotExpr * NotExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         WC_GUARD(notExpr, nullptr);
         
         // Alright, return the parsed expr
-        return WC_NEW_AST_NODE(alloc, NotExprNot, *notExpr, *startToken);
+        return WC_NEW_AST_NODE(alloc, NotExprLNot, *notExpr, *startToken);
     }
     else if (startToken->type == TokenType::kTilde) {
         // Bitwise 'not': skip 'not'
@@ -92,42 +92,42 @@ llvm::Constant * NotExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// NotExprNot
+// NotExprLNot
 //-----------------------------------------------------------------------------
-NotExprNot::NotExprNot(NotExpr & expr, const Token & startToken) :
+NotExprLNot::NotExprLNot(NotExpr & expr, const Token & startToken) :
     mExpr(expr),
     mStartToken(startToken)
 {
     mExpr.mParent = this;
 }
 
-const Token & NotExprNot::getStartToken() const {
+const Token & NotExprLNot::getStartToken() const {
     return mStartToken;
 }
 
-const Token & NotExprNot::getEndToken() const {
+const Token & NotExprLNot::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool NotExprNot::isLValue() {
+bool NotExprLNot::isLValue() {
     return false;
 }
 
-bool NotExprNot::isConstExpr() {
+bool NotExprLNot::isConstExpr() {
     return mExpr.isConstExpr();
 }
 
-DataType & NotExprNot::dataType() {
+DataType & NotExprLNot::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
-llvm::Value * NotExprNot::codegenAddrOf(CodegenCtx & cgCtx) {
+llvm::Value * NotExprLNot::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't get the address of 'not' operator result!");
     return nullptr;
 }
 
-llvm::Value * NotExprNot::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * NotExprLNot::codegenExprEval(CodegenCtx & cgCtx) {
     // Evaluate the expression to be 'notted'
     llvm::Value * value = mExpr.codegenExprEval(cgCtx);
     WC_GUARD(value, nullptr);
@@ -139,7 +139,7 @@ llvm::Value * NotExprNot::codegenExprEval(CodegenCtx & cgCtx) {
     return cgCtx.irBuilder.CreateNot(value, "NotExprNot_NotOp");
 }
 
-llvm::Constant * NotExprNot::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * NotExprLNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Evaluate the expression to be 'notted'
     llvm::Constant * value = mExpr.codegenExprConstEval(cgCtx);
     WC_GUARD(value, nullptr);
@@ -151,7 +151,7 @@ llvm::Constant * NotExprNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     return llvm::ConstantExpr::getNot(value);
 }
 
-bool NotExprNot::compileCheckExprIsBool() const {
+bool NotExprLNot::compileCheckExprIsBool() const {
     const DataType & exprType = mExpr.dataType();
     
     if (!exprType.isBool()) {

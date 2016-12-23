@@ -5,24 +5,24 @@
 
 WC_BEGIN_NAMESPACE
 
-class AndExpr;
+class LAndExpr;
 class LinearAlloc;
 
 /*
-OrExpr:
-	AndExpr
-	AndExpr or OrExpr
+LOrExpr:
+	LAndExpr
+	LAndExpr or LOrExpr
 */
-class OrExpr : public ASTNode, public IExpr {
+class LOrExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static OrExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static LOrExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
-/* AndExpr */
-class OrExprNoOp final : public OrExpr {
+/* LAndExpr */
+class LOrExprNoOp final : public LOrExpr {
 public:
-    OrExprNoOp(AndExpr & expr);
+    LOrExprNoOp(LAndExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -36,13 +36,13 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    AndExpr & mExpr;
+    LAndExpr & mExpr;
 };
 
-/* AndExpr or OrExpr */
-class OrExprOr final : public OrExpr {
+/* LAndExpr or LOrExpr */
+class LOrExprOr final : public LOrExpr {
 public:
-    OrExprOr(AndExpr & leftExpr, OrExpr & rightExpr);
+    LOrExprOr(LAndExpr & leftExpr, LOrExpr & rightExpr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -56,8 +56,8 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    AndExpr &   mLeftExpr;
-    OrExpr &    mRightExpr;
+    LAndExpr &  mLeftExpr;
+    LOrExpr &   mRightExpr;
     
 private:
     /**

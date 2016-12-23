@@ -97,16 +97,16 @@ AssignExpr:
 	TernaryExpr >>>= AssignExpr
 
 TernaryExpr:
-	OrExpr
-	OrExpr ? AssignExpr : AssignExpr
+	LOrExpr
+	LOrExpr ? AssignExpr : AssignExpr
 
-OrExpr:
-	AndExpr
-	AndExpr or OrExpr
+LOrExpr:
+	LAndExpr
+	LAndExpr or LOrExpr
 
-AndExpr:
+LAndExpr:
 	NotExpr
-	NotExpr and AndExpr
+	NotExpr and LAndExpr
 
 NotExpr:
 	CmpExpr

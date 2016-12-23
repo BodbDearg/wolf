@@ -7,12 +7,12 @@ WC_BEGIN_NAMESPACE
 
 class AssignExpr;
 class LinearAlloc;
-class OrExpr;
+class LOrExpr;
 
 /*
 TernaryExpr:
-	OrExpr
-	OrExpr ? AssignExpr : AssignExpr
+	LOrExpr
+	LOrExpr ? AssignExpr : AssignExpr
 */
 class TernaryExpr : public ASTNode, public IExpr {
 public:
@@ -20,10 +20,10 @@ public:
     static TernaryExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
-/* OrExpr */
+/* LOrExpr */
 class TernaryExprNoCond final : public TernaryExpr {
 public:
-    TernaryExprNoCond(OrExpr & expr);
+    TernaryExprNoCond(LOrExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -37,13 +37,13 @@ public:
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
-    OrExpr & mExpr;
+    LOrExpr & mExpr;
 };
 
-/* OrExpr ? AssignExpr : AssignExpr */
+/* LOrExpr ? AssignExpr : AssignExpr */
 class TernaryExprWithCond final : public TernaryExpr {
 public:
-    TernaryExprWithCond(OrExpr & condExpr,
+    TernaryExprWithCond(LOrExpr & condExpr,
                         AssignExpr & trueExpr,
                         AssignExpr & falseExpr);
     
@@ -66,7 +66,7 @@ public:
      */
     bool compileCheckExprDataTypes() const;
     
-    OrExpr &        mCondExpr;
+    LOrExpr &       mCondExpr;
     AssignExpr &    mTrueExpr;
     AssignExpr &    mFalseExpr;
 };

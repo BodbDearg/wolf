@@ -41,9 +41,9 @@ public:
 };
 
 /* not NotExpr */
-class NotExprNot final : public NotExpr {
+class NotExprLNot final : public NotExpr {
 public:
-    NotExprNot(NotExpr & expr, const Token & startToken);
+    NotExprLNot(NotExpr & expr, const Token & startToken);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;

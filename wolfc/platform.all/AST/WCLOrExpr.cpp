@@ -1,84 +1,92 @@
-#include "WCAndExpr.hpp"
+#include "WCLOrExpr.hpp"
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCCodegenCtx.hpp"
+#include "WCLAndExpr.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCNotExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
-// AndExpr
+// LOrExpr
 //-----------------------------------------------------------------------------
-bool AndExpr::peek(const Token * tokenPtr) {
-    return NotExpr::peek(tokenPtr);
+bool LOrExpr::peek(const Token * tokenPtr) {
+    return LAndExpr::peek(tokenPtr);
 }
 
-AndExpr * AndExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+LOrExpr * LOrExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Parse the initial expression
-    NotExpr * leftExpr = NotExpr::parse(tokenPtr, alloc);
-    WC_GUARD(leftExpr, nullptr);
+    LAndExpr * andExpr = LAndExpr::parse(tokenPtr, alloc);
+    WC_GUARD(andExpr, nullptr);
     
-    // See if there is an 'and' for logical and
-    if (tokenPtr->type == TokenType::kAnd) {
-        // And expression with and. Skip the 'and'
-        ++tokenPtr;
+    // See if there is an 'or' for logical or:
+    if (tokenPtr->type == TokenType::kOr) {
+        TokenType nextTokType = tokenPtr[1].type;
+
+        // Note: do not parse if we find 'or if' or 'or unless' since those are block
+        // terminators for a 'if / or if / else' chain
+        if (nextTokType != TokenType::kIf &&
+            nextTokType != TokenType::kUnless)
+        {
+            // Or expression with or. Skip the 'or'
+            ++tokenPtr;
         
-        // Parse the following and expression and create the AST node
-        AndExpr * rightExpr = AndExpr::parse(tokenPtr, alloc);
-        WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, AndExprAnd, *leftExpr, *rightExpr);
+            // Parse the following and expression and create the AST node
+            LOrExpr * orExpr = LOrExpr::parse(tokenPtr, alloc);
+            WC_GUARD(orExpr, nullptr);
+            return WC_NEW_AST_NODE(alloc, LOrExprOr, *andExpr, *orExpr);
+        }
     }
 
     // Basic no-op expression
-    return WC_NEW_AST_NODE(alloc, AndExprNoOp, *leftExpr);
+    return WC_NEW_AST_NODE(alloc, LOrExprNoOp, *andExpr);
 }
 
 //-----------------------------------------------------------------------------
-// AndExprNoOp
+// LOrExprNoOp
 //-----------------------------------------------------------------------------
-AndExprNoOp::AndExprNoOp(NotExpr & expr) : mExpr(expr) {
+LOrExprNoOp::LOrExprNoOp(LAndExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-const Token & AndExprNoOp::getStartToken() const {
+const Token & LOrExprNoOp::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & AndExprNoOp::getEndToken() const {
+const Token & LOrExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool AndExprNoOp::isLValue() {
+bool LOrExprNoOp::isLValue() {
     return mExpr.isLValue();
 }
 
-bool AndExprNoOp::isConstExpr() {
+bool LOrExprNoOp::isConstExpr() {
     return mExpr.isConstExpr();
 }
 
-DataType & AndExprNoOp::dataType() {
+DataType & LOrExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-llvm::Value * AndExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
+llvm::Value * LOrExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
 
-llvm::Value * AndExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * LOrExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprEval(cgCtx);
 }
 
-llvm::Constant * AndExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * LOrExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
 
 //-----------------------------------------------------------------------------
-// AndExprAnd
+// LOrExprOr
 //-----------------------------------------------------------------------------
-AndExprAnd::AndExprAnd(NotExpr & leftExpr, AndExpr & rightExpr) :
+LOrExprOr::LOrExprOr(LAndExpr & leftExpr, LOrExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
@@ -86,33 +94,33 @@ AndExprAnd::AndExprAnd(NotExpr & leftExpr, AndExpr & rightExpr) :
     mRightExpr.mParent = this;
 }
 
-const Token & AndExprAnd::getStartToken() const {
+const Token & LOrExprOr::getStartToken() const {
     return mLeftExpr.getStartToken();
 }
 
-const Token & AndExprAnd::getEndToken() const {
+const Token & LOrExprOr::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-bool AndExprAnd::isLValue() {
+bool LOrExprOr::isLValue() {
     return false;
 }
 
-bool AndExprAnd::isConstExpr() {
+bool LOrExprOr::isConstExpr() {
     return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
-DataType & AndExprAnd::dataType() {
+DataType & LOrExprOr::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
-llvm::Value * AndExprAnd::codegenAddrOf(CodegenCtx & cgCtx) {
+llvm::Value * LOrExprOr::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't get the address of 'and' operator result!");
+    compileError("Can't get the address of 'or' operator result!");
     return nullptr;
 }
 
-llvm::Value * AndExprAnd::codegenExprEval(CodegenCtx & cgCtx) {
+llvm::Value * LOrExprOr::codegenExprEval(CodegenCtx & cgCtx) {
     // TODO: add support for lazy evaluation
     // Evaluate the sub expressions first:
     llvm::Value * leftValue = mLeftExpr.codegenExprEval(cgCtx);
@@ -122,12 +130,12 @@ llvm::Value * AndExprAnd::codegenExprEval(CodegenCtx & cgCtx) {
     
     // Verify data types used by operator:
     WC_GUARD(compileCheckBothExprsAreBool(), nullptr);
-
+    
     // Create the logical operation:
-    return cgCtx.irBuilder.CreateAnd(rightValue, leftValue, "AndExprAnd_AndOp");
+    return cgCtx.irBuilder.CreateOr(rightValue, leftValue, "LOrExprOr_OrOp");
 }
 
-llvm::Constant * AndExprAnd::codegenExprConstEval(CodegenCtx & cgCtx) {
+llvm::Constant * LOrExprOr::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: add support for lazy evaluation
     // Evaluate the sub expressions first:
     llvm::Constant * leftValue = mLeftExpr.codegenExprConstEval(cgCtx);
@@ -139,14 +147,14 @@ llvm::Constant * AndExprAnd::codegenExprConstEval(CodegenCtx & cgCtx) {
     WC_GUARD(compileCheckBothExprsAreBool(), nullptr);
     
     // Create the logical operation:
-    return llvm::ConstantExpr::getAnd(rightValue, leftValue);
+    return llvm::ConstantExpr::getOr(rightValue, leftValue);
 }
 
-bool AndExprAnd::compileCheckBothExprsAreBool() const {
+bool LOrExprOr::compileCheckBothExprsAreBool() const {
     const DataType & leftType = mLeftExpr.dataType();
     
     if (!leftType.isBool()) {
-        compileError("Left side of logical 'and' expression must evaluate to 'bool', not '%s'!",
+        compileError("Left side of logical 'or' expression must evaluate to 'bool', not '%s'!",
                      leftType.name().c_str());
         
         return false;
@@ -155,7 +163,7 @@ bool AndExprAnd::compileCheckBothExprsAreBool() const {
     const DataType & rightType = mRightExpr.dataType();
     
     if (!rightType.isBool()) {
-        compileError("Right side of logical 'and' expression must evaluate to 'bool', not '%s'!",
+        compileError("Right side of logical 'or' expression must evaluate to 'bool', not '%s'!",
                      rightType.name().c_str());
         
         return false;

@@ -9,20 +9,20 @@ class LinearAlloc;
 class NotExpr;
 
 /*
-AndExpr:
+LAndExpr:
 	NotExpr
-	NotExpr and AndExpr
+	NotExpr and LAndExpr
 */
-class AndExpr : public ASTNode, public IExpr {
+class LAndExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static AndExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static LAndExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
 };
 
 /* NotExpr */
-class AndExprNoOp final : public AndExpr {
+class LAndExprNoOp final : public LAndExpr {
 public:
-    AndExprNoOp(NotExpr & expr);
+    LAndExprNoOp(NotExpr & expr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -40,9 +40,9 @@ public:
 };
 
 /* NotExpr and AndExpr */
-class AndExprAnd final : public AndExpr {
+class LAndExprAnd final : public LAndExpr {
 public:
-    AndExprAnd(NotExpr & leftExpr, AndExpr & rightExpr);
+    LAndExprAnd(NotExpr & leftExpr, LAndExpr & rightExpr);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
@@ -57,7 +57,7 @@ public:
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
     
     NotExpr &   mLeftExpr;
-    AndExpr &   mRightExpr;
+    LAndExpr &  mRightExpr;
     
 private:
     /**
