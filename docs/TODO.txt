@@ -1,5 +1,4 @@
 - Change 'var' to 'let'
-- Change 'nop' to 'noop'
 - Fix recursion on unary expression (should be able to do - - 1 for example)
 - Make logical statements lazy evaluate
 - Allow 'do' to open function body
