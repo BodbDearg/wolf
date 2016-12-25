@@ -14,8 +14,8 @@ class Type;
 
 /*
 VarDecl:
-    var Identifier = AssignExpr
-    var Identifier : Type = AssignExpr
+    let Identifier = AssignExpr
+    let Identifier : Type = AssignExpr
 */
 class VarDecl : public ASTNode, public IStmnt {
 public:
@@ -43,7 +43,7 @@ public:
     AssignExpr & 	mInitExpr;
 };
 
-/* var Identifier = AssignExpr */
+/* let Identifier = AssignExpr */
 class VarDeclInferType final : public VarDecl {
 public:
     VarDeclInferType(const Token & startToken,
@@ -53,7 +53,7 @@ public:
     virtual DataType & dataType() const final override;
 };
 
-/* var Identifier : Type = AssignExpr */
+/* let Identifier : Type = AssignExpr */
 class VarDeclExplicitType final : public VarDecl {
 public:
     VarDeclExplicitType(const Token & startToken,

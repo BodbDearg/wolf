@@ -703,7 +703,7 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         parseKeyword("int64", TokenType::kInt64) ||        
         parseKeyword("bool", TokenType::kBool) ||
         parseKeyword("string", TokenType::kString) ||
-        parseKeyword("var", TokenType::kVar) ||
+        parseKeyword("let", TokenType::kLet) ||
         parseKeyword("is", TokenType::kIs) ||
         parseKeyword("and", TokenType::kAnd) ||
         parseKeyword("or", TokenType::kOr) ||

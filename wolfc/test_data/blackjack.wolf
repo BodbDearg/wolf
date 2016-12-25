@@ -28,23 +28,23 @@ end
 ;==================================================================================================
 
 ; The card types
-var NO_CARD = -1
-var CARD_ACE = 0
-var CARD_2 = 1
-var CARD_3 = 2
-var CARD_4 = 3
-var CARD_5 = 4
-var CARD_6 = 5
-var CARD_7 = 6
-var CARD_8 = 7
-var CARD_9 = 8
-var CARD_10 = 9
-var CARD_JACK = 10
-var CARD_QUEEN = 11
-var CARD_KING = 12
+let NO_CARD = -1
+let CARD_ACE = 0
+let CARD_2 = 1
+let CARD_3 = 2
+let CARD_4 = 3
+let CARD_5 = 4
+let CARD_6 = 5
+let CARD_7 = 6
+let CARD_8 = 7
+let CARD_9 = 8
+let CARD_10 = 9
+let CARD_JACK = 10
+let CARD_QUEEN = 11
+let CARD_KING = 12
 
 ; The deck of 52 Cards. 4 of each type
-var gCardDeck = [
+let gCardDeck = [
     CARD_ACE, CARD_ACE, CARD_ACE, CARD_ACE,
     CARD_2, CARD_2, CARD_2, CARD_2,
     CARD_3, CARD_3, CARD_3, CARD_3,
@@ -61,10 +61,10 @@ var gCardDeck = [
 ]
 
 ; The number of times to randomly swap each of the 52 cards in the deck with another card
-var NUM_CARD_SHUFFLES = 32
+let NUM_CARD_SHUFFLES = 32
 
 ; Current position in the deck. Increases after each card is drawn
-var gCardDeckPosition = 0
+let gCardDeckPosition = 0
 
 ; Convert a card type/number into a string
 func card_numToName(cardType: int) -> string
@@ -91,15 +91,15 @@ end
 func card_shuffleCards()
     ; Begin swapping each card randomly with other cards in the array.
     ; Do this NUM_CARD_SHUFFLES times.
-    var shuffleNum = 0
+    let shuffleNum = 0
 
     while shuffleNum < NUM_CARD_SHUFFLES
-        var cardNum = 0
+        let cardNum = 0
 
         while (cardNum < 52)
             ; Get the card to swap with the current card and do the swap
-            var swapTarget = rand() % 52
-            var tmpCard = gCardDeck[cardNum]
+            let swapTarget = rand() % 52
+            let tmpCard = gCardDeck[cardNum]
             gCardDeck[cardNum] = gCardDeck[swapTarget]
             gCardDeck[swapTarget] = tmpCard
     
@@ -125,7 +125,7 @@ end
 
 ; Get the length (number of cards) in a player or dealer suit
 func card_getSuitLength(suitOfCards: [5]int) -> int
-    var suitLength = 0
+    let suitLength = 0
     
     while suitLength < 5 and suitOfCards[suitLength] is not NO_CARD
         suitLength++
@@ -137,7 +137,7 @@ end
 ; Draw a card from the deck of cards
 func card_drawCard() -> int
     return NO_CARD if gCardDeckPosition >= 52
-    var drawnCard = gCardDeck[gCardDeckPosition]
+    let drawnCard = gCardDeck[gCardDeckPosition]
     gCardDeckPosition++
     return drawnCard
 end
@@ -145,17 +145,17 @@ end
 ; Gets the best value of a player's / dealer's hand
 func card_getSuitValue(suitOfCards: [5]int) -> int
     ; Get how many cards are actually in the suit first
-    var suitLength = card_getSuitLength(suitOfCards)
+    let suitLength = card_getSuitLength(suitOfCards)
     
     ; Calculate suit value- counting aces's initially as having a value of 1
     ; Aces are wildcards that can either be '1' or '11'
-    var suitValue = 0
+    let suitValue = 0
 
     scope
-        var cardNum = 0
+        let cardNum = 0
 
         while cardNum < suitLength
-            var card = suitOfCards[cardNum]
+            let card = suitOfCards[cardNum]
 
             if card is CARD_ACE 
                 suitValue += 1 
@@ -192,11 +192,11 @@ func card_getSuitValue(suitOfCards: [5]int) -> int
     ; Now cycle through the suit again, this time add 10 to the value if an
     ; ace is encountered and it doesn't cause the overall value to go over 21.
     scope
-        var cardNum = 0
+        let cardNum = 0
 
         while cardNum < suitLength
             ; Grab the current card and ignore if not an ace
-            var card = suitOfCards[cardNum]
+            let card = suitOfCards[cardNum]
             
             if card is CARD_ACE
                 ; Came across an ace:
@@ -222,37 +222,37 @@ end
 ;==================================================================================================
 
 ; Minimum bet that can be made
-var GAME_MIN_BET = 20
+let GAME_MIN_BET = 20
 
 ; Maximum amount of cards that can be drawn in game
-var GAME_MAX_CARDS = 5
+let GAME_MAX_CARDS = 5
 
 ; The value of a suit of cards when you have a blackjack
-var GAME_BLACKJACK_SUIT_VALUE = 21
+let GAME_BLACKJACK_SUIT_VALUE = 21
 
 ; Winners / losers of game
-var GAME_WINNER_PLAYER = 0      ; Player wins game
-var GAME_WINNER_DEALER = 1      ; Dealer wins game
-var GAME_WINNER_NONE = 2        ; Draw
+let GAME_WINNER_PLAYER = 0      ; Player wins game
+let GAME_WINNER_DEALER = 1      ; Dealer wins game
+let GAME_WINNER_NONE = 2        ; Draw
 
 ; Game types
-var GAME_TYPE_NORMAL = 0        ; Show dealer cards
-var GAME_TYPE_ADVANCED = 1      ; Don't show dealer cards
+let GAME_TYPE_NORMAL = 0        ; Show dealer cards
+let GAME_TYPE_ADVANCED = 1      ; Don't show dealer cards
 
 ; Actions a player / dealer can take
 ; Stored as bit flags so they can be used as bit flags when determining
 ; what actions are possible for the player at any given time.
-var GAMEACTION_NONE = 0
-var GAMEACTION_HIT = 1 << 0
-var GAMEACTION_STAND = 1 << 1
-var GAMEACTION_DOUBLEDOWN = 1 << 2  ; Player only action
-var GAMEACTION_FORFEIT = 1 << 3     ; Player only action
+let GAMEACTION_NONE = 0
+let GAMEACTION_HIT = 1 << 0
+let GAMEACTION_STAND = 1 << 1
+let GAMEACTION_DOUBLEDOWN = 1 << 2  ; Player only action
+let GAMEACTION_FORFEIT = 1 << 3     ; Player only action
 
 ; The current type of game (GAME_TYPE_XXX constants)
-var gGameCurrentGameType = GAME_TYPE_NORMAL
+let gGameCurrentGameType = GAME_TYPE_NORMAL
 
 ; Who won the last game (GAME_WINNER_XXX constants)
-var gGameWinner = GAME_WINNER_NONE
+let gGameWinner = GAME_WINNER_NONE
 
 ; Starts up the game
 func game_startGame(betAmount: int)
@@ -376,8 +376,8 @@ end
 
 ; Draw the given suit of cards
 func game_drawCards(suitOfCards: [5]int)
-    var suitLength = card_getSuitLength(suitOfCards)
-    var cardNum = 0
+    let suitLength = card_getSuitLength(suitOfCards)
+    let cardNum = 0
 
     while cardNum < suitLength
         print("Card ")
@@ -438,12 +438,12 @@ end
 func game_findWinner()
     ; Declare two bools to hold whether player or dealer has lost.
     ; Both can win or lose at the same time- which will result in a draw
-    var playerWon = false
-    var dealerWon = false
+    let playerWon = false
+    let dealerWon = false
 
     ; Get the value of the player's and dealer's suits
-    var playerSuitValue = card_getSuitValue(gPlayerCards)
-    var dealerSuitValue = card_getSuitValue(gDealerCards)
+    let playerSuitValue = card_getSuitValue(gPlayerCards)
+    let dealerSuitValue = card_getSuitValue(gDealerCards)
     
     ; Check if the player has a better suit than the dealer, and is not
     ; gone bust. Also check if the dealer is bust. If so, the player has 'won'
@@ -493,7 +493,7 @@ func game_payOutChips()
         gPlayerChips += (gPlayerBetChips * 3) / 2
     or if gGameWinner is GAME_WINNER_DEALER
         ; Dealer has won. Don't give back anything...
-        nop
+        noop
     else
         ; Player has drawn with the dealer: Give back original bet amount.
         gPlayerChips += gPlayerBetChips
@@ -504,22 +504,22 @@ end
 ; Game stat stuff
 ;==================================================================================================
 
-var gGameStatGamesWon = 0       ; Number of games the player has won
-var gGameStatGamesLost = 0      ; Number of games the player has lost
-var gGameStatGamesDrew = 0      ; Number of games the player drew
-var gGameStatMoneyInput = 0     ; Total amount of money the player has put into this game
-var gGameStatMoneyGained = 0    ; Total amount gained on bets
-var gGameStatMoneyLost = 0      ; Total amount lost on bets
+let gGameStatGamesWon = 0       ; Number of games the player has won
+let gGameStatGamesLost = 0      ; Number of games the player has lost
+let gGameStatGamesDrew = 0      ; Number of games the player drew
+let gGameStatMoneyInput = 0     ; Total amount of money the player has put into this game
+let gGameStatMoneyGained = 0    ; Total amount gained on bets
+let gGameStatMoneyLost = 0      ; Total amount lost on bets
 
 ;==================================================================================================
 ; Dealer related stuff
 ;==================================================================================================
 
 ; The dealer's suit of 5 cards
-var gDealerCards = [ NO_CARD, NO_CARD, NO_CARD, NO_CARD, NO_CARD ]
+let gDealerCards = [ NO_CARD, NO_CARD, NO_CARD, NO_CARD, NO_CARD ]
 
 ; Last action the dealer took on the hand
-var gDealerLastAction = GAMEACTION_NONE
+let gDealerLastAction = GAMEACTION_NONE
 
 ; Clear the dealer's suit of cards
 func dealer_clearCards()
@@ -552,8 +552,8 @@ end
 ; Does an action for the dealer
 func dealer_doAction()
     ; Get the suit values for both dealer and player
-    var dealerSuitValue = card_getSuitValue(gDealerCards)
-    var playerSuitValue = card_getSuitValue(gPlayerCards)
+    let dealerSuitValue = card_getSuitValue(gDealerCards)
+    let playerSuitValue = card_getSuitValue(gPlayerCards)
     
     ; Decide whether to hit or stand
     if dealerSuitValue >= 17
@@ -599,7 +599,7 @@ end
 
 ; Makes the dealer draw another card
 func dealer_actionHit()
-    var card = card_drawCard()
+    let card = card_drawCard()
     gDealerCards[card_getSuitLength(gDealerCards)] = card
     gDealerLastAction = GAMEACTION_HIT
 end
@@ -609,19 +609,19 @@ end
 ;==================================================================================================
 
 ; Current balance of chips the player has
-var gPlayerChips = 0
+let gPlayerChips = 0
 
 ; Amount of chips the player has currently bet
-var gPlayerBetChips = 0
+let gPlayerBetChips = 0
 
 ; The player's suit of 5 cards
-var gPlayerCards = [ NO_CARD, NO_CARD, NO_CARD, NO_CARD, NO_CARD ]
+let gPlayerCards = [ NO_CARD, NO_CARD, NO_CARD, NO_CARD, NO_CARD ]
 
 ; Last action the player took on the hand
-var gPlayerLastAction = GAMEACTION_NONE
+let gPlayerLastAction = GAMEACTION_NONE
 
 ; What actions are possible at any given time
-var gPlayerAvailableActions = GAMEACTION_NONE
+let gPlayerAvailableActions = GAMEACTION_NONE
 
 ; Make the player buy some chips and add to the usable chip balance in the game
 func player_buyChips(numChips: int)
@@ -692,7 +692,7 @@ func player_findAvailableActions()
     end
      
     ; Only allow double down if on first two cards and can afford it, and if not standing.
-    var numPlayerCards = card_getSuitLength(gPlayerCards)
+    let numPlayerCards = card_getSuitLength(gPlayerCards)
     
     if numPlayerCards is 2
         if gPlayerChips >= gPlayerBetChips
@@ -713,7 +713,7 @@ end
 func player_doNextGameAction()
     ; Read the action for the player to do
     ; 1 = hit, 2 = stand, 3 = double down, 4 = forfeit
-    var playerAction = readnum()
+    let playerAction = readnum()
 
     ; See what action the player requested and perform it if possible
     if playerAction is 1 and player_areActionsAvailable(GAMEACTION_HIT)
@@ -741,7 +741,7 @@ end
 
 ; Makes the player draw another card
 func player_actionHit()
-    var card = card_drawCard()
+    let card = card_drawCard()
     gPlayerCards[card_getSuitLength(gPlayerCards)] = card
     gPlayerLastAction = GAMEACTION_HIT
 end
@@ -766,7 +766,7 @@ end
 ; Menu related stuff 
 ;==================================================================================================
 
-var gDisplayMenu = true     ; Continue displaying the main menu?
+let gDisplayMenu = true     ; Continue displaying the main menu?
 
 ; Draws a title bar for the menu
 func menu_drawTitleBar(titleText: string)
@@ -782,17 +782,17 @@ func menu_displayStatistics()
     menu_drawTitleBar("GAME STATISTICS")
      
     ; Calculate the total games played
-    var totalGamesPlayed = gGameStatGamesWon
+    let totalGamesPlayed = gGameStatGamesWon
     totalGamesPlayed += gGameStatGamesLost
     totalGamesPlayed += gGameStatGamesDrew
 
     ; Calculate total gained / lost
-    var netEarnings = gGameStatMoneyGained - gGameStatMoneyLost
+    let netEarnings = gGameStatMoneyGained - gGameStatMoneyLost
 
     ; Calculate how many chips the player currently has as a percentage of how much they have bought. 
     ; This gives an earning metric of sorts...
     ; If money input is currently zero then set as 100, don't divide by zero!
-    var percentOfChipsBought = 0
+    let percentOfChipsBought = 0
 
     if gGameStatMoneyInput > 0
         ; Have input some money. Calculate percentage as normal
@@ -867,7 +867,7 @@ func menu_getMoney()
     print("Enter amount of chips to buy: ")
 
     ; Read the amount to buy, if <= 0 then it means the player cancelled
-    var buyAmount = readnum()
+    let buyAmount = readnum()
     return if buyAmount <= 0
 
     ; Add to the player's balance of chips and the total amount of money input
@@ -908,7 +908,7 @@ func menu_getBet()
         printPrefixTxtAndAmtLn("Chips available: ", gPlayerChips)
          
         ; Get the bet amount
-        var betAmount = readnum()
+        let betAmount = readnum()
 
         ; If bet amount is <= then the user wants to quit
         break if betAmount <= 0
@@ -949,7 +949,7 @@ func menu_displayMain()
               "Input choice and press enter: ")
 
         ; Ask the player for input
-        var choice = readnum()
+        let choice = readnum()
 
         if choice is 1 or choice is 2
             ; User wants to play a game. Make sure we have the minimum bet amount first:

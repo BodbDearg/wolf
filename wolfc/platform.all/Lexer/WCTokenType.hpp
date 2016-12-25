@@ -141,8 +141,8 @@ enum class TokenType : uint8_t {
     | Language keywords: general
     =========================================================================*/
     
-    /* var */
-    kVar,
+    /* let */
+    kLet,
     /* is */
     kIs,
     /* and */

@@ -49,8 +49,8 @@ AssertStmnt:
     assert ( AssignExpr )
 
 VarDecl:
-    var Identifier = AssignExpr
-    var Identifier : Type = AssignExpr
+    let Identifier = AssignExpr
+    let Identifier : Type = AssignExpr
 
 IfStmnt:
 	if|unless AssignExpr [then] Scope end

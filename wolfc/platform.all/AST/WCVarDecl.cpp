@@ -17,19 +17,19 @@ WC_BEGIN_NAMESPACE
 // VarDecl
 //-----------------------------------------------------------------------------
 bool VarDecl::peek(const Token * tokenPtr) {
-    return tokenPtr->type == TokenType::kVar;
+    return tokenPtr->type == TokenType::kLet;
 }
 
 VarDecl * VarDecl::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    // Parse 'var' keyword
-    if (tokenPtr->type != TokenType::kVar) {
-        // TODO: add 'let' to docs here?
-        parseError(*tokenPtr, "Expected keyword 'var' at start of variable declaration!");
+    // Parse 'let' keyword
+    if (tokenPtr->type != TokenType::kLet) {
+        parseError(*tokenPtr, "Expected keyword 'let' at start of a variable declaration!");
         return nullptr;
     }
     
+    // Save and skip 'let'
     const Token * varToken = tokenPtr;
-    ++tokenPtr;     // Skip 'var'
+    ++tokenPtr;
     
     // Parse the identifier ahead
     Identifier * ident = Identifier::parse(tokenPtr, alloc);

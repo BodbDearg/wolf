@@ -2,7 +2,7 @@
 ; AssignExpr
 ;==================================================================================================
 func testAssignExpr()
-    var i = 0
+    let i = 0
     assert(i == 0)
     i = 1
     assert(i == 1)
@@ -51,7 +51,7 @@ end
 ;==================================================================================================
 ; TernaryExpr
 ;==================================================================================================
-var testTernaryExprConstexpr = [
+let testTernaryExprConstexpr = [
     (true ? 1 : 2) == 1,
     (false ? 1 : 2) == 2
 ]
@@ -60,7 +60,7 @@ func testTernaryExpr()
     assert((true ? 1 : 2) == 1)
     assert((false ? 1 : 2) == 2)
 
-    var testNum = 0
+    let testNum = 0
     while testNum < 2
         assert(testOrExprConstexpr[testNum])
         testNum++
@@ -70,7 +70,7 @@ end
 ;==================================================================================================
 ; OrExpr
 ;==================================================================================================
-var testOrExprConstexpr = [
+let testOrExprConstexpr = [
     not (false or false),
     true or false,
     true or true,
@@ -83,7 +83,7 @@ func testOrExpr()
     assert(true or true)
     assert(false or true)
 
-    var testNum = 0
+    let testNum = 0
     while testNum < 4
         assert(testOrExprConstexpr[testNum])
         testNum++
@@ -93,7 +93,7 @@ end
 ;==================================================================================================
 ; AndExpr
 ;==================================================================================================
-var testAndExprConstexpr = [
+let testAndExprConstexpr = [
     not (false and false),
     not (true and false),
     not (false and true),
@@ -106,7 +106,7 @@ func testAndExpr()
     assert(not (false and true))
     assert(true and true)
 
-    var testNum = 0
+    let testNum = 0
     while testNum < 4
         assert(testAndExprConstexpr[testNum])
         testNum++
@@ -116,7 +116,7 @@ end
 ;==================================================================================================
 ; NotExpr
 ;==================================================================================================
-var testNotExprConstexpr = [
+let testNotExprConstexpr = [
     not false,
     not 1 > 2,
     not not true,
@@ -133,7 +133,7 @@ func testNotExpr()
     assert((~-1) == 0)
     assert((~-2) == 1)
 
-    var testNum = 0
+    let testNum = 0
     while testNum < 6 
         assert(testNotExprConstexpr[testNum])
         testNum++
@@ -143,7 +143,7 @@ end
 ;==================================================================================================
 ; CmpExpr
 ;==================================================================================================
-var testCmpExprConstexpr = [
+let testCmpExprConstexpr = [
     2 == 2,
     not 1 == 2,
     not 3 == 2,
@@ -196,7 +196,7 @@ func testCmpExpr()
     assert(1234 is not 5678)
     assert(not 1234 is not 1234)
 
-    var testNum = 0
+    let testNum = 0
     while testNum < 22
         assert(testCmpExprConstexpr[testNum])
         testNum++
@@ -206,7 +206,7 @@ end
 ;==================================================================================================
 ; AddExpr
 ;==================================================================================================
-var testAddExprConstexpr = [
+let testAddExprConstexpr = [
     1 + 2 == 3,
     1 + +2 == 3,
     +1 + +2 == 3,
@@ -239,7 +239,7 @@ func testAddExpr()
     assert(1 ^ 1 == 0)
     assert(0 ^ 1 == 1)
 
-    var testNum = 0
+    let testNum = 0
     while testNum < 14
         assert(testAddExprConstexpr[testNum])
         testNum++
@@ -249,7 +249,7 @@ end
 ;==================================================================================================
 ; MulExpr
 ;==================================================================================================
-var testMulExprConstexpr = [
+let testMulExprConstexpr = [
     2 * 2 == 4,
     2 * -2 == -4,
     -2 * -2 == 4,
@@ -276,7 +276,7 @@ func testMulExpr()
     assert(3 & 1 == 1)
     assert(6 & 2 == 2)
 
-    var testNum = 0
+    let testNum = 0
     while testNum < 11
         assert(testMulExprConstexpr[testNum])
         testNum++
@@ -286,7 +286,7 @@ end
 ;==================================================================================================
 ; ShiftExpr
 ;==================================================================================================
-var testShiftExprConstexpr = [
+let testShiftExprConstexpr = [
     1 << 0 == 1,
     1 << 1 == 2,
     2 << 2 == 8,
@@ -313,7 +313,7 @@ func testShiftExpr()
     assert(8 >>> 2 == 2)
     assert(-1 >>> 63 == 1)  ; FIXME - this won't work if int type is 32-bit
 
-    var testNum = 0
+    let testNum = 0
     while testNum < 11
         assert(testShiftExprConstexpr[testNum])
         testNum++
@@ -323,7 +323,7 @@ end
 ;==================================================================================================
 ; UnaryExpr
 ;==================================================================================================
-var testUnaryExprConstexpr = [
+let testUnaryExprConstexpr = [
     +1 == 1,
     -1 == -1,
     (1 + 2) * 2 == 6,
@@ -342,7 +342,7 @@ func testUnaryExpr()
     ; assert(+ + 1  == + + 1)
     ; assert(- - 1  == - - 1)
 
-    var testNum = 0
+    let testNum = 0
     while testNum < 5
         assert(testUnaryExprConstexpr[testNum])
         testNum++
@@ -376,14 +376,14 @@ func testPostfixExprFuncCall5(v1: int, v2: int, v3: int) -> int
     return v1 * v2 * v3
 end
 
-var testPostfixExprConstexpr = [
+let testPostfixExprConstexpr = [
     [1, 2, 3][2] == 3,
     [1, 2, 3][0] == 1
 ]
 
 func testPostfixExpr()
     ; Increment and decrement
-    var i = 0
+    let i = 0
     i++ 
     assert(i == 1)
     i++
@@ -406,14 +406,14 @@ func testPostfixExpr()
     assert(testPostfixExprFuncCall5(1, 2, 3) == 6)
     
     ; Array indexing
-    var array1 = [ 1, 2, 3, 4]
+    let array1 = [ 1, 2, 3, 4]
     assert(array1[0] == 1)
     assert(array1[1] == 2)
     assert(array1[3] == 4)
     array1[1] = 99
     assert(array1[1] == 99)
 
-    var array2 = [[1, 2], [3, 4], [5, 6]]
+    let array2 = [[1, 2], [3, 4], [5, 6]]
     assert(array2[1][0] == 3)
     assert(array2[1][1] == 4)
     assert(array2[2][1] == 6)
@@ -438,23 +438,23 @@ end
 ;==================================================================================================
 func testPrimaryExpr()
     ; IntLit
-    var v1 = 1
-    var v2 = 1234
+    let v1 = 1
+    let v2 = 1234
     assert(v1 == 1)
     assert(v2 == 1234)
 
     ; BoolLit
-    var v3 = false
-    var v4 = true
+    let v3 = false
+    let v4 = true
     assert(not v3)
     assert(v4)
 
     ; StrLit
     ; TODO: In future do more here?
-    var v5 = "Hello world!"
+    let v5 = "Hello world!"
 
     ; ArrayLit
-    var v6 = [
+    let v6 = [
         [ [ 1 ] ],
         [ [ 2 ] ]
     ]
