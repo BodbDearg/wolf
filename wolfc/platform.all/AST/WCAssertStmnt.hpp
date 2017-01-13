@@ -15,7 +15,7 @@ AssertStmnt:
 class AssertStmnt final : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    static AssertStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static AssertStmnt * parse(ParseCtx & parseCtx);
     
     AssertStmnt(const Token & startToken, AssignExpr & expr, const Token & endToken);
     

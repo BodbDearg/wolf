@@ -2,10 +2,10 @@
 
 #include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
+#include "WCParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
@@ -17,31 +17,31 @@ bool TimeExpr::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kTime;
 }
 
-TimeExpr * TimeExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    if (tokenPtr->type != TokenType::kTime) {
-        parseError(*tokenPtr, "Expected 'time' at begining of time() expression!");
+TimeExpr * TimeExpr::parse(ParseCtx & parseCtx) {
+    if (parseCtx.curTok->type != TokenType::kTime) {
+        parseError(parseCtx, "Expected 'time' at begining of time() expression!");
         return nullptr;
     }
     
-    const Token * readnumTok = tokenPtr;
-    ++tokenPtr;     // Consume 'time'
+    const Token * readnumTok = parseCtx.curTok;
+    parseCtx.nextTok();     // Consume 'time'
     
-    if (tokenPtr->type != TokenType::kLParen) {
-        parseError(*tokenPtr, "Expect '(' following 'time'!");
+    if (parseCtx.curTok->type != TokenType::kLParen) {
+        parseError(parseCtx, "Expect '(' following 'time'!");
         return nullptr;
     }
     
-    ++tokenPtr;     // Consume '('
+    parseCtx.nextTok();     // Consume '('
     
-    if (tokenPtr->type != TokenType::kRParen) {
-        parseError(*tokenPtr, "Expect ')' following '('!");
+    if (parseCtx.curTok->type != TokenType::kRParen) {
+        parseError(parseCtx, "Expect ')' following '('!");
         return nullptr;
     }
     
-    const Token * rparenTok = tokenPtr;
-    ++tokenPtr;     // Consume ')'
+    const Token * rparenTok = parseCtx.curTok;
+    parseCtx.nextTok();     // Consume ')'
     
-    return WC_NEW_AST_NODE(alloc, TimeExpr, *readnumTok, *rparenTok);
+    return WC_NEW_AST_NODE(parseCtx, TimeExpr, *readnumTok, *rparenTok);
 }
 
 TimeExpr::TimeExpr(const Token & startToken, const Token & endToken) :

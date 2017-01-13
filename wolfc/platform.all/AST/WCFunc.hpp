@@ -31,7 +31,7 @@ Func:
 class Func final : public ASTNode {
 public:
     static bool peek(const Token * tokenPtr);
-    static Func * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static Func * parse(ParseCtx & parseCtx);
     
     Func(const Token & startToken,
          Identifier & identifier,

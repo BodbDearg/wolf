@@ -15,7 +15,7 @@ ScopeStmnt:
 class ScopeStmnt final : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    static ScopeStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static ScopeStmnt * parse(ParseCtx & parseCtx);
     
     ScopeStmnt(const Token & startToken, Scope & bodyScope, const Token & endToken);
     

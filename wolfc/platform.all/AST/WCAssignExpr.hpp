@@ -28,7 +28,7 @@ AssignExpr:
 class AssignExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static AssignExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static AssignExpr * parse(ParseCtx & parseCtx);
 };
 
 /* TernaryExpr */

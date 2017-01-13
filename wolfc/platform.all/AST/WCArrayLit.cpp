@@ -1,12 +1,12 @@
 #include "WCArrayLit.hpp"
 
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCArrayLitExprs.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Constants.h>
@@ -18,31 +18,31 @@ bool ArrayLit::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kLBrack;
 }
 
-ArrayLit * ArrayLit::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+ArrayLit * ArrayLit::parse(ParseCtx & parseCtx) {
     // Parse the initial '[':
-    if (tokenPtr->type != TokenType::kLBrack) {
-        parseError(*tokenPtr, "Expected integer literal!");
+    if (parseCtx.curTok->type != TokenType::kLBrack) {
+        parseError(parseCtx, "Expected integer literal!");
         return nullptr;
     }
     
-    const Token * lBrack = tokenPtr;
-    ++tokenPtr;
+    const Token * lBrack = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // Parse the array literal expressions
-    ArrayLitExprs * exprs = ArrayLitExprs::parse(tokenPtr, alloc);
+    ArrayLitExprs * exprs = ArrayLitExprs::parse(parseCtx);
     WC_GUARD(exprs, nullptr);
     
     // Parse the closing ']'
-    if (tokenPtr->type != TokenType::kRBrack) {
-        parseError(*tokenPtr, "Expected closing ']' for array literal!");
+    if (parseCtx.curTok->type != TokenType::kRBrack) {
+        parseError(parseCtx, "Expected closing ']' for array literal!");
         return nullptr;
     }
     
-    const Token * rBrack = tokenPtr;
-    ++tokenPtr;
+    const Token * rBrack = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // Now return the parsed node:
-    return WC_NEW_AST_NODE(alloc, ArrayLit, *lBrack, *exprs, *rBrack);
+    return WC_NEW_AST_NODE(parseCtx, ArrayLit, *lBrack, *exprs, *rBrack);
 }
 
 ArrayLit::ArrayLit(const Token & lBrack,

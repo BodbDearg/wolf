@@ -15,7 +15,7 @@ PrintStmnt:
 class PrintStmnt final : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    static PrintStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static PrintStmnt * parse(ParseCtx & parseCtx);
     
     PrintStmnt(const Token & startToken, AssignExpr & expr, const Token & endToken);
     

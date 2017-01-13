@@ -12,7 +12,7 @@ struct DataValue;
 class Identifier final : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static Identifier * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static Identifier * parse(ParseCtx & parseCtx);
     
     Identifier(const Token & token);
     

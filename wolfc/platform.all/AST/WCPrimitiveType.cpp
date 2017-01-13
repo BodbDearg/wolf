@@ -2,8 +2,8 @@
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -11,19 +11,19 @@ bool PrimitiveType::peek(const Token * currentToken) {
     return PrimitiveDataTypes::getUsingLangKeyword(currentToken->type).isValid();
 }
 
-PrimitiveType * PrimitiveType::parse(const Token *& currentToken, LinearAlloc & alloc) {
+PrimitiveType * PrimitiveType::parse(ParseCtx & parseCtx) {
     // Must be a valid token ahead
-    if (!peek(currentToken)) {
-        parseError(*currentToken, "Expected primitive data type!");
+    if (!peek(parseCtx.curTok)) {
+        parseError(parseCtx, "Expected primitive data type!");
         return nullptr;
     }
     
     // Save the token and skip
-    const Token * token = currentToken;
-    ++currentToken;
+    const Token * token = parseCtx.curTok;
+    parseCtx.nextTok();
 
     // Return the node:
-    return WC_NEW_AST_NODE(alloc, PrimitiveType, *token);
+    return WC_NEW_AST_NODE(parseCtx, PrimitiveType, *token);
 }
 
 PrimitiveType::PrimitiveType(const Token & token) : mToken(token) {

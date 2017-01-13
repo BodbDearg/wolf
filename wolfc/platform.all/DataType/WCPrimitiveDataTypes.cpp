@@ -5,7 +5,7 @@
 #include "DataType/Primitives/WCStrDataType.hpp"
 #include "DataType/Primitives/WCUnknownDataType.hpp"
 #include "DataType/Primitives/WCVoidDataType.hpp"
-#include "Lexer/WCToken.hpp"
+#include "Lexer/WCTokenType.hpp"
 
 WC_BEGIN_NAMESPACE
 

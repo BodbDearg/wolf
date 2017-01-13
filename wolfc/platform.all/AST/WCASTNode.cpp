@@ -1,30 +1,79 @@
 #include "WCASTNode.hpp"
 
-#include "Lexer/WCToken.hpp"
 #include "WCFunc.hpp"
 #include "WCModule.hpp"
+#include "WCParseCtx.hpp"
 #include "WCScope.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
-    #include <cstdio>
     #include <cstdarg>
+    #include <cstdio>
 WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
-void ASTNode::parseError(const Token & srcToken, const char * msg, ...) {
-    // Generic error info
-    std::fprintf(stderr,
-                 "Error! Parsing failed at line %zu, column %zu! Message:\n",
-                 srcToken.startLine + 1,
-                 srcToken.startCol + 1);
+void ASTNode::parseError(ParseCtx & parseCtx,
+                         const char * msgFmtStr,
+                         ...)
+{
+    va_list msgFmtStrArgs;
+    va_start(msgFmtStrArgs, msgFmtStr);
+    parseError(parseCtx, msgFmtStr, msgFmtStrArgs);
+    va_end(msgFmtStrArgs);
+}
+
+void ASTNode::parseError(ParseCtx & parseCtx,
+                         const Token & atTok,
+                         const char * msgFmtStr,
+                         ...)
+{
+    va_list msgFmtStrArgs;
+    va_start(msgFmtStrArgs, msgFmtStr);
+    parseError(parseCtx, atTok, msgFmtStr, msgFmtStrArgs);
+    va_end(msgFmtStrArgs);
+}
+
+void ASTNode::parseError(ParseCtx & parseCtx,
+                         const char * msgFmtStr,
+                         std::va_list msgFmtStrArgs)
+{
+    WC_ASSERT(parseCtx.curTok);
+    parseError(parseCtx, *parseCtx.curTok, msgFmtStr, msgFmtStrArgs);
+}
+
+void ASTNode::parseError(ParseCtx & parseCtx,
+                         const Token & atTok,
+                         const char * msgFmtStr,
+                         std::va_list msgFmtStrArgs)
+{
+    WC_ASSERT(msgFmtStr);
     
-    // Specific error message
-    std::va_list args;
-    va_start(args, msg);
-    std::vfprintf(stderr, msg, args);
-    va_end(args);
-    std::fprintf(stderr, "\n");
+    // TODO: support really really long strings here, larger than 16K
+    // For super long strings we should try to allocate on the heap
+    const size_t kMaxMsgLen = 1024 * 16;
+    char msgBuf[kMaxMsgLen];
+    
+    // Print the start of the message
+    std::sprintf(msgBuf,
+                 "Error! Parsing failed at line %zu, column %zu! Message:\n",
+                 atTok.startLine + 1,
+                 atTok.startCol + 1);
+    
+    // Get how long the message is so far:
+    size_t msgPrefixLen = std::strlen(msgBuf);
+    
+    // Print the message to the buffer
+    vsnprintf(msgBuf + msgPrefixLen, kMaxMsgLen - msgPrefixLen, msgFmtStr, msgFmtStrArgs);
+    
+    // Ensure it is terminated
+    msgBuf[kMaxMsgLen - 1] = 0;
+    
+    // Save the message:
+    parseCtx.errorMsgs.push_back(msgBuf);
+    
+    // TODO: Remove this and just save the message to the given list
+    // Print it to stderr:
+    std::fprintf(stderr, "%s", msgBuf);
 }
 
 ASTNode::ASTNode() : mParent(nullptr) {

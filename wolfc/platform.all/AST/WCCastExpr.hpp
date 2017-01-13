@@ -18,7 +18,7 @@ CastExpr:
 class CastExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * currentToken);
-    static CastExpr * parse(const Token *& currentToken, LinearAlloc & alloc);
+    static CastExpr * parse(ParseCtx & parseCtx);
 };
 
 /* PrimaryExpr */

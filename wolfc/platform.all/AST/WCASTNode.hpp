@@ -2,27 +2,48 @@
 
 #include "WCMacros.hpp"
 
-#include <string>
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <cstdarg>
+    #include <string>
+WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
-struct Token;
 class Func;
 class Module;
 class Scope;
+struct ParseCtx;
+struct Token;
 
 /* Macro for allocating an AST tree node */
-#define WC_NEW_AST_NODE(allocator, NodeType, ...)\
-    new(alloc.allocSizeOf<NodeType>()) NodeType(__VA_ARGS__)
+#define WC_NEW_AST_NODE(parseCtx, NodeType, ...)\
+    new(parseCtx.alloc.allocSizeOf<NodeType>()) NodeType(__VA_ARGS__)
 
 /* Abstract base class for all AST nodes. */
 class ASTNode {
 public:
     /**
-     * Emit a formatted error message followed by a newline to stderr for a parse error at the given token.
-     * Line and column information from the given token are added also.
+     * Emit a formatted error message followed by a newline to stderr for a parse error.
+     * Line and column information from are added also. If a parse context is given the 
+     * line and column info included is for the current token.
      */
-    static void parseError(const Token & srcToken, const char * msg, ...);
+    static void parseError(ParseCtx & parseCtx,
+                           const char * msgFmtStr,
+                           ...);
+    
+    static void parseError(ParseCtx & parseCtx,
+                           const Token & atTok,
+                           const char * msgFmtStr,
+                           ...);
+    
+    static void parseError(ParseCtx & parseCtx,
+                           const char * msgFmtStr,
+                           std::va_list msgFmtStrArgs);
+    
+    static void parseError(ParseCtx & parseCtx,
+                           const Token & atTok,
+                           const char * msgFmtStr,
+                           std::va_list msgFmtStrArgs);
     
     ASTNode();
     

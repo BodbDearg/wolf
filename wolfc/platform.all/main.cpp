@@ -2,6 +2,7 @@
 #include "Lexer/WCLexer.hpp"
 #include "WCFileUtils.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <cstdio>
@@ -49,13 +50,16 @@ static int mainImpl(int argc, const char * argv[]) {
     {
         // Declare the module
         Module module(llvmContext);
+        
+        // Create a parsing context and parse the module
+        ParseCtx parseCtx(lexer.getTokenList(), linearAlloc);
 
-        // Parse and codegen the module
-        if (!module.parseCode(lexer.getTokenList(), linearAlloc)) {
+        if (!module.parse(parseCtx)) {
             std::printf("Parsing failed for source file '%s'!\n", argv[1]);
             return -1;
         }
 
+        // Codegen the module
         if (!module.generateCode()) {
             std::printf("Compile failed for source file '%s'!\n", argv[1]);
             return -1;

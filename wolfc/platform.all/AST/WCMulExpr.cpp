@@ -2,10 +2,10 @@
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 #include "WCShiftExpr.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -17,8 +17,8 @@ bool MulExpr::peek(const Token * tokenPtr) {
     return ShiftExpr::peek(tokenPtr);
 }
 
-MulExpr * MulExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    ShiftExpr * leftExpr = ShiftExpr::parse(tokenPtr, alloc);
+MulExpr * MulExpr::parse(ParseCtx & parseCtx) {
+    ShiftExpr * leftExpr = ShiftExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);
     
     // See if there is a known operator ahead.
@@ -26,13 +26,13 @@ MulExpr * MulExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // return the AST node for the operation.
     #define PARSE_OP(TokenType, ASTNodeType)\
         case TokenType: {\
-            ++tokenPtr;\
-            MulExpr * rightExpr = MulExpr::parse(tokenPtr, alloc);\
+            parseCtx.nextTok();\
+            MulExpr * rightExpr = MulExpr::parse(parseCtx);\
             WC_GUARD(rightExpr, nullptr);\
-            return WC_NEW_AST_NODE(alloc, ASTNodeType, *leftExpr, *rightExpr);\
+            return WC_NEW_AST_NODE(parseCtx, ASTNodeType, *leftExpr, *rightExpr);\
         }
 
-    switch (tokenPtr[0].type) {
+    switch (parseCtx.curTok->type) {
         PARSE_OP(TokenType::kAsterisk, MulExprMul)      // *
         PARSE_OP(TokenType::kSlash, MulExprDiv)         // /
         PARSE_OP(TokenType::kPercent, MulExprMod)       // %
@@ -43,7 +43,7 @@ MulExpr * MulExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     }
     
     // Basic no-op expression:
-    return WC_NEW_AST_NODE(alloc, MulExprNoOp, *leftExpr);
+    return WC_NEW_AST_NODE(parseCtx, MulExprNoOp, *leftExpr);
 }
 
 //-----------------------------------------------------------------------------

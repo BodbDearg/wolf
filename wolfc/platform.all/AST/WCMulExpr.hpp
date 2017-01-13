@@ -19,7 +19,7 @@ MulExpr:
 class MulExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static MulExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static MulExpr * parse(ParseCtx & parseCtx);
 };
 
 /* ShiftExpr */

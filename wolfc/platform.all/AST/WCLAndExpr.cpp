@@ -2,10 +2,10 @@
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCNotExpr.hpp"
+#include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -16,24 +16,24 @@ bool LAndExpr::peek(const Token * tokenPtr) {
     return NotExpr::peek(tokenPtr);
 }
 
-LAndExpr * LAndExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+LAndExpr * LAndExpr::parse(ParseCtx & parseCtx) {
     // Parse the initial expression
-    NotExpr * leftExpr = NotExpr::parse(tokenPtr, alloc);
+    NotExpr * leftExpr = NotExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);
     
     // See if there is an 'and' for logical and
-    if (tokenPtr->type == TokenType::kAnd) {
+    if (parseCtx.curTok->type == TokenType::kAnd) {
         // And expression with and. Skip the 'and'
-        ++tokenPtr;
+        parseCtx.nextTok();
         
         // Parse the following and expression and create the AST node
-        LAndExpr * rightExpr = LAndExpr::parse(tokenPtr, alloc);
+        LAndExpr * rightExpr = LAndExpr::parse(parseCtx);
         WC_GUARD(rightExpr, nullptr);
-        return WC_NEW_AST_NODE(alloc, LAndExprAnd, *leftExpr, *rightExpr);
+        return WC_NEW_AST_NODE(parseCtx, LAndExprAnd, *leftExpr, *rightExpr);
     }
 
     // Basic no-op expression
-    return WC_NEW_AST_NODE(alloc, LAndExprNoOp, *leftExpr);
+    return WC_NEW_AST_NODE(parseCtx, LAndExprNoOp, *leftExpr);
 }
 
 //-----------------------------------------------------------------------------

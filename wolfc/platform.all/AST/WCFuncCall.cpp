@@ -1,12 +1,12 @@
 #include "WCFuncCall.hpp"
 
 #include "DataType/WCDataType.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCFuncCallArgList.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -14,37 +14,37 @@ bool FuncCall::peek(const Token * currentToken) {
     return currentToken->type == TokenType::kLParen;
 }
 
-FuncCall * FuncCall::parse(const Token *& currentToken, LinearAlloc & alloc) {
+FuncCall * FuncCall::parse(ParseCtx & parseCtx) {
     // Must open with '('
-    if (currentToken->type != TokenType::kLParen) {
-        parseError(*currentToken, "Expected '(' !");
+    if (parseCtx.curTok->type != TokenType::kLParen) {
+        parseError(parseCtx, "Expected '(' !");
         return nullptr;
     }
     
     // Save and skip '('
-    const Token * startToken = currentToken;
-    ++currentToken;
+    const Token * startToken = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // See if there is an arg list:
     FuncCallArgList * argList = nullptr;
     
-    if (FuncCallArgList::peek(currentToken)) {
-        argList = FuncCallArgList::parse(currentToken, alloc);
+    if (FuncCallArgList::peek(parseCtx.curTok)) {
+        argList = FuncCallArgList::parse(parseCtx);
         WC_GUARD(argList, nullptr);
     }
     
     // Expect ')'
-    if (currentToken->type != TokenType::kRParen) {
-        parseError(*currentToken, "Expected ')' !");
+    if (parseCtx.curTok->type != TokenType::kRParen) {
+        parseError(parseCtx, "Expected ')' !");
         return nullptr;
     }
     
     // Save and skip ')'
-    const Token * endToken = currentToken;
-    ++currentToken;
+    const Token * endToken = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // No args:
-    return WC_NEW_AST_NODE(alloc, FuncCall, *startToken, argList, *endToken);
+    return WC_NEW_AST_NODE(parseCtx, FuncCall, *startToken, argList, *endToken);
 }
 
 FuncCall::FuncCall(const Token & startToken, FuncCallArgList * argList, const Token & endToken) :

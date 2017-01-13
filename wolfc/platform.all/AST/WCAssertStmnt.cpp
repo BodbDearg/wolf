@@ -1,12 +1,12 @@
 #include "WCAssertStmnt.hpp"
 
 #include "DataType/WCDataType.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
+#include "WCParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
@@ -18,38 +18,38 @@ bool AssertStmnt::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kAssert;
 }
 
-AssertStmnt * AssertStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    if (tokenPtr->type != TokenType::kAssert) {
-        parseError(*tokenPtr, "Expected keyword 'assert' for 'assert()' statement!");
+AssertStmnt * AssertStmnt::parse(ParseCtx & parseCtx) {
+    if (parseCtx.curTok->type != TokenType::kAssert) {
+        parseError(parseCtx, "Expected keyword 'assert' for 'assert()' statement!");
         return nullptr;
     }
     
-    const Token * assertTok = tokenPtr;
-    ++tokenPtr;     // Consume 'assert'
+    const Token * assertTok = parseCtx.curTok;
+    parseCtx.nextTok();     // Consume 'assert'
     
-    if (tokenPtr->type != TokenType::kLParen) {
-        parseError(*tokenPtr, "Expected '(' following 'assert'!");
+    if (parseCtx.curTok->type != TokenType::kLParen) {
+        parseError(parseCtx, "Expected '(' following 'assert'!");
         return nullptr;
     }
     
-    ++tokenPtr;     // Consume '('
+    parseCtx.nextTok();     // Consume '('
     
     // Parse the inner expression
-    AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
+    AssignExpr * assignExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(assignExpr, nullptr);
     
     // Expect ')' following all that:
-    if (tokenPtr->type != TokenType::kRParen) {
-        parseError(*tokenPtr, "Expected closing ')' for 'assert()' statement!");
+    if (parseCtx.curTok->type != TokenType::kRParen) {
+        parseError(parseCtx, "Expected closing ')' for 'assert()' statement!");
         return nullptr;
     }
     
     // Consume closing ')' and return parsed expression
-    const Token * closingParenTok = tokenPtr;
-    ++tokenPtr;
+    const Token * closingParenTok = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // Create and return the print statement
-    return WC_NEW_AST_NODE(alloc, AssertStmnt, *assertTok, *assignExpr, *closingParenTok);
+    return WC_NEW_AST_NODE(parseCtx, AssertStmnt, *assertTok, *assignExpr, *closingParenTok);
 }
 
 AssertStmnt::AssertStmnt(const Token & startToken, AssignExpr & expr, const Token & endToken) :

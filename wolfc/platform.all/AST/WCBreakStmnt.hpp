@@ -21,7 +21,7 @@ BreakStmnt:
 class BreakStmnt : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    static BreakStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static BreakStmnt * parse(ParseCtx & parseCtx);
     
     BreakStmnt(const Token & breakToken);
     

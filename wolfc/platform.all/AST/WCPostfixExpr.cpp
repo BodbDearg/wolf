@@ -3,7 +3,6 @@
 #include "DataType/Primitives/WCArrayDataType.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCastExpr.hpp"
@@ -14,6 +13,7 @@
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
+#include "WCParseCtx.hpp"
 #include "WCPrimaryExpr.hpp"
 #include "WCPrimitiveType.hpp"
 
@@ -30,48 +30,48 @@ bool PostfixExpr::peek(const Token * currentToken) {
     return CastExpr::peek(currentToken);
 }
 
-PostfixExpr * PostfixExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
+PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
     // Parse the initial expression
-    CastExpr * expr = CastExpr::parse(currentToken, alloc);
+    CastExpr * expr = CastExpr::parse(parseCtx);
     WC_GUARD(expr, nullptr);
 
     // Save the outermost postfix expression here:
     PostfixExpr * outerPostfixExpr = nullptr;
 
     // See if '++' or '--' follow:
-    if (currentToken->type == TokenType::kIncrement) {
+    if (parseCtx.curTok->type == TokenType::kIncrement) {
         // Consume the '++' token and save
-        const Token * endToken = currentToken;
-        ++currentToken;
+        const Token * endToken = parseCtx.curTok;
+        parseCtx.nextTok();
 
         // Create outer postfix expr
-        outerPostfixExpr = WC_NEW_AST_NODE(alloc, PostfixExprInc, *expr, *endToken);
+        outerPostfixExpr = WC_NEW_AST_NODE(parseCtx, PostfixExprInc, *expr, *endToken);
         WC_ASSERT(outerPostfixExpr);
     }
-    else if (currentToken->type == TokenType::kDecrement) {
+    else if (parseCtx.curTok->type == TokenType::kDecrement) {
         // Consume the '--' token and save
-        const Token * endToken = currentToken;
-        ++currentToken;
+        const Token * endToken = parseCtx.curTok;
+        parseCtx.nextTok();
 
         // Create outer postfix expr
-        outerPostfixExpr = WC_NEW_AST_NODE(alloc, PostfixExprDec, *expr, *endToken);
+        outerPostfixExpr = WC_NEW_AST_NODE(parseCtx, PostfixExprDec, *expr, *endToken);
         WC_ASSERT(outerPostfixExpr);
     }
     else {
         // Basic postfix outer expression with no increment or decrement
-        outerPostfixExpr = WC_NEW_AST_NODE(alloc, PostfixExprNoPostfix, *expr);
+        outerPostfixExpr = WC_NEW_AST_NODE(parseCtx, PostfixExprNoPostfix, *expr);
         WC_ASSERT(outerPostfixExpr);
     }
     
     // Continue parsing and wrapping until one of these conditions breaks
-    while (FuncCall::peek(currentToken) ||
-           currentToken->type == TokenType::kLBrack)
+    while (FuncCall::peek(parseCtx.curTok) ||
+           parseCtx.curTok->type == TokenType::kLBrack)
     {
         // See if function call follows:
-        if (FuncCall::peek(currentToken)) {
-            FuncCall * funcCall = FuncCall::parse(currentToken, alloc);
+        if (FuncCall::peek(parseCtx.curTok)) {
+            FuncCall * funcCall = FuncCall::parse(parseCtx);
             WC_GUARD(funcCall, nullptr);
-            outerPostfixExpr = WC_NEW_AST_NODE(alloc,
+            outerPostfixExpr = WC_NEW_AST_NODE(parseCtx,
                                                PostfixExprFuncCall,
                                                *outerPostfixExpr,
                                                *funcCall);
@@ -80,24 +80,24 @@ PostfixExpr * PostfixExpr::parse(const Token *& currentToken, LinearAlloc & allo
         }
         else {
             // Skip the '['. Expect '[' to be here based on previous if() failing - see while loop.
-            WC_ASSERT(currentToken->type == TokenType::kLBrack);
-            ++currentToken;
+            WC_ASSERT(parseCtx.curTok->type == TokenType::kLBrack);
+            parseCtx.nextTok();
             
             // Parse the assign expression for the array index
-            AssignExpr * arrayIndexExpr = AssignExpr::parse(currentToken, alloc);
+            AssignExpr * arrayIndexExpr = AssignExpr::parse(parseCtx);
             WC_GUARD(arrayIndexExpr, nullptr);
             
             // Expect a closing ']'
-            const Token & endToken = *currentToken;
+            const Token & endToken = *parseCtx.curTok;
             
             if (endToken.type != TokenType::kRBrack) {
-                parseError(endToken, "Expected a closing ']' for array lookup expression!");
+                parseError(parseCtx, "Expected a closing ']' for array lookup expression!");
                 return nullptr;
             }
             
             // Consume the ']' and create the outer postfix expression
-            ++currentToken;
-            outerPostfixExpr = WC_NEW_AST_NODE(alloc,
+            parseCtx.nextTok();
+            outerPostfixExpr = WC_NEW_AST_NODE(parseCtx,
                                                PostfixExprArrayLookup,
                                                *outerPostfixExpr,
                                                *arrayIndexExpr,

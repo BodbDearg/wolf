@@ -1,8 +1,8 @@
 #include "WCFuncArg.hpp"
 
-#include "Lexer/WCToken.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 #include "WCType.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -11,30 +11,30 @@ bool FuncArg::peek(const Token * currentToken) {
     return Identifier::peek(currentToken);
 }
 
-FuncArg * FuncArg::parse(const Token *& currentToken, LinearAlloc & alloc) {
+FuncArg * FuncArg::parse(ParseCtx & parseCtx) {
     // TODO: support non primitive types here eventually (struct etc.)
     // TODO: support arrays eventually
     // TODO: support pointers eventually
     
     // Parse the identifier:
-    Identifier * ident = Identifier::parse(currentToken, alloc);
+    Identifier * ident = Identifier::parse(parseCtx);
     WC_GUARD(ident, nullptr);
     
     // Expect ':' following the identifier
-    if (currentToken->type != TokenType::kColon) {
-        parseError(*currentToken, "expect ':' following argument name for function argument!");
+    if (parseCtx.curTok->type != TokenType::kColon) {
+        parseError(parseCtx, "expect ':' following argument name for function argument!");
         return nullptr;
     }
     
     // Skip ':'
-    ++currentToken;
+    parseCtx.nextTok();
     
     // Parse the data type
-    Type * type = Type::parse(currentToken, alloc);
+    Type * type = Type::parse(parseCtx);
     WC_GUARD(type, nullptr);
     
     // Success, return the node:
-    return WC_NEW_AST_NODE(alloc, FuncArg, *type, *ident);
+    return WC_NEW_AST_NODE(parseCtx, FuncArg, *type, *ident);
 }
 
 FuncArg::FuncArg(Type & type, Identifier & ident) :

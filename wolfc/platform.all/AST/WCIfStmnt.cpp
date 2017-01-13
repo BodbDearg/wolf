@@ -1,11 +1,11 @@
 #include "WCIfStmnt.hpp"
 
 #include "DataType/WCDataType.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 #include "WCScope.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -18,39 +18,41 @@ bool IfStmnt::peek(const Token * tokenPtr) {
     return tokenType == TokenType::kIf || tokenType == TokenType::kUnless;
 }
 
-IfStmnt * IfStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'if' or 'unless' keyword
-    if (!peek(tokenPtr)) {
-        parseError(*tokenPtr, "If statement expected!");
+    if (!peek(parseCtx.curTok)) {
+        parseError(parseCtx, "If statement expected!");
         return nullptr;
     }
     
     // Skip the 'if' or 'unless' token and save location
-    const Token * startToken = tokenPtr;
-    ++tokenPtr;
+    const Token * startToken = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // Parse the if condition:
-    AssignExpr * ifExpr = AssignExpr::parse(tokenPtr, alloc);
+    AssignExpr * ifExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(ifExpr, nullptr);
     
     // See if there is a 'then' following. This keyword is optional, unless the 'then' scope is required
     // to be on the same line as the enclosing if statement:
     bool thenScopeRequiresNL = true;
     
-    if (tokenPtr->type == TokenType::kThen) {
+    if (parseCtx.curTok->type == TokenType::kThen) {
         // Found a 'then' token, skip it. The 'then' scope is allowed to be on the same line
-        ++tokenPtr;
+        parseCtx.nextTok();
         thenScopeRequiresNL = false;
     }
     
     // Expect scope following:
-    Scope * thenScope = Scope::parse(tokenPtr, alloc);
+    Scope * thenScope = Scope::parse(parseCtx);
     WC_GUARD(thenScope, nullptr);
     
     // See if it violates newline rules:
     if (thenScopeRequiresNL) {
         if (thenScope->getStartToken().startLine == ifExpr->getEndToken().endLine) {
-            parseError(thenScope->getStartToken(), "Code following 'if' statement condition must be on a new line unless "
+            parseError(parseCtx,
+                       thenScope->getStartToken(),
+                       "Code following 'if' statement condition must be on a new line unless "
                        "'then' is used after the condition.");
             
             return nullptr;
@@ -63,51 +65,67 @@ IfStmnt * IfStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // 2 - 'or if' for an chained 'elseif' type statement
     // 3 - 'else' for an 'if' statement with an else block
     //
-    if (tokenPtr->type == TokenType::kElse) {
+    if (parseCtx.curTok->type == TokenType::kElse) {
         // (3) if statement with an else, skip the 'else' token.
-        ++tokenPtr;
+        parseCtx.nextTok();
         
         // Parse the scope for the 'else' block:
-        Scope * elseScope = Scope::parse(tokenPtr, alloc);
+        Scope * elseScope = Scope::parse(parseCtx);
         WC_GUARD(elseScope, nullptr);
         
         // Else block should be terminated by an 'end' token:
-        if (tokenPtr->type != TokenType::kEnd) {
-            parseError(*tokenPtr, "'end' expected to terminate 'else' block!");
+        if (parseCtx.curTok->type != TokenType::kEnd) {
+            parseError(parseCtx, "'end' expected to terminate 'else' block!");
             return nullptr;
         }
         
         // Skip 'end' token and save location
-        const Token * endToken = tokenPtr;
-        ++tokenPtr;
+        const Token * endToken = parseCtx.curTok;
+        parseCtx.nextTok();
         
         // Done, return the parsed statement:
-        return WC_NEW_AST_NODE(alloc, IfStmntElse, *ifExpr, *thenScope, *elseScope, *startToken, *endToken);
+        return WC_NEW_AST_NODE(parseCtx,
+                               IfStmntElse,
+                               *ifExpr,
+                               *thenScope,
+                               *elseScope,
+                               *startToken,
+                               *endToken);
     }
-    else if (tokenPtr->type == TokenType::kOr) {
+    else if (parseCtx.curTok->type == TokenType::kOr) {
         // (2) if statement with an 'or if' chained if statement, skip the 'or' token.
-        ++tokenPtr;
+        parseCtx.nextTok();
         
         // Parse the if statement following the 'or':
-        IfStmnt * outerIfStmnt = IfStmnt::parse(tokenPtr, alloc);
+        IfStmnt * outerIfStmnt = IfStmnt::parse(parseCtx);
         WC_GUARD(outerIfStmnt, nullptr);
         
         // Done, return the parsed statement:
-        return WC_NEW_AST_NODE(alloc, IfStmntElseIf, *ifExpr, *thenScope, *outerIfStmnt, *startToken);
+        return WC_NEW_AST_NODE(parseCtx,
+                               IfStmntElseIf,
+                               *ifExpr,
+                               *thenScope,
+                               *outerIfStmnt,
+                               *startToken);
     }
     else {
         // (1) 'if then' type statement: expect closing 'end'
-        if (tokenPtr->type != TokenType::kEnd) {
-            parseError(*tokenPtr, "'end' expected to terminate 'if' block!");
+        if (parseCtx.curTok->type != TokenType::kEnd) {
+            parseError(parseCtx, "'end' expected to terminate 'if' block!");
             return nullptr;
         }
         
         // Skip 'end' token and save location
-        const Token * endToken = tokenPtr;
-        ++tokenPtr;
+        const Token * endToken = parseCtx.curTok;
+        parseCtx.nextTok();
         
         // Done, return the parsed statement
-        return WC_NEW_AST_NODE(alloc, IfStmntNoElse, *ifExpr, *thenScope, *startToken, *endToken);
+        return WC_NEW_AST_NODE(parseCtx,
+                               IfStmntNoElse,
+                               *ifExpr,
+                               *thenScope,
+                               *startToken,
+                               *endToken);
     }
 }
 

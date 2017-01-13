@@ -1,9 +1,9 @@
 #include "WCCastExpr.hpp"
 
 #include "DataType/WCDataType.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 #include "WCPrimaryExpr.hpp"
 #include "WCType.hpp"
 
@@ -20,55 +20,53 @@ bool CastExpr::peek(const Token * currentToken) {
     return PrimaryExpr::peek(currentToken) || currentToken->type == TokenType::kCast;
 }
 
-CastExpr * CastExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
+CastExpr * CastExpr::parse(ParseCtx & parseCtx) {
     // See if 'cast' follows:
-    if (currentToken->type == TokenType::kCast) {
+    if (parseCtx.curTok->type == TokenType::kCast) {
         // Casting expression: skip 'cast'
-        const Token * startToken = currentToken;
-        ++currentToken;
+        const Token * startToken = parseCtx.curTok;
+        parseCtx.nextTok();
         
         // Expect opening '('
-        if (currentToken->type != TokenType::kLParen) {
-            parseError(*currentToken, "Expect '(' following 'cast' for 'cast()' operator!");
+        if (parseCtx.curTok->type != TokenType::kLParen) {
+            parseError(parseCtx, "Expect '(' following 'cast' for 'cast()' operator!");
             return nullptr;
         }
         
         // Skip '('
-        ++currentToken;
+        parseCtx.nextTok();
         
         // Parse the initial assign expression:
-        AssignExpr * expr = AssignExpr::parse(currentToken, alloc);
+        AssignExpr * expr = AssignExpr::parse(parseCtx);
         WC_GUARD(expr, nullptr);
         
         // Expect keyword 'to':
-        if (currentToken->type != TokenType::kTo) {
-            parseError(*currentToken,
+        if (parseCtx.curTok->type != TokenType::kTo) {
+            parseError(parseCtx,
                        "Expecting keyword 'to' following the expression to cast inside 'cast()' operator!");
             
             return nullptr;
         }
         
         // Skip 'to'
-        ++currentToken;
+        parseCtx.nextTok();
         
         // Parse the type to cast to:
-        Type * type = Type::parse(currentToken, alloc);
+        Type * type = Type::parse(parseCtx);
         WC_GUARD(type, nullptr);
         
         // Expect closing ')'
-        if (currentToken->type != TokenType::kRParen) {
-            parseError(*currentToken,
-                       "Expecting closing ')' for 'cast()' operator!");
-            
+        if (parseCtx.curTok->type != TokenType::kRParen) {
+            parseError(parseCtx, "Expecting closing ')' for 'cast()' operator!");
             return nullptr;
         }
         
         // Skip ')'
-        const Token * endToken = currentToken;
-        ++currentToken;
+        const Token * endToken = parseCtx.curTok;
+        parseCtx.nextTok();
         
         // Return the parsed node:
-        return WC_NEW_AST_NODE(alloc,
+        return WC_NEW_AST_NODE(parseCtx,
                                CastExprCast,
                                *startToken,
                                *expr,
@@ -77,9 +75,9 @@ CastExpr * CastExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
     }
     
     // Normal expression that does no cast:
-    PrimaryExpr * primaryExpr = PrimaryExpr::parse(currentToken, alloc);
+    PrimaryExpr * primaryExpr = PrimaryExpr::parse(parseCtx);
     WC_GUARD(primaryExpr, nullptr);
-    return WC_NEW_AST_NODE(alloc, CastExprNoCast, *primaryExpr);
+    return WC_NEW_AST_NODE(parseCtx, CastExprNoCast, *primaryExpr);
 }
 
 //-----------------------------------------------------------------------------

@@ -2,12 +2,12 @@
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
+#include "WCParseCtx.hpp"
 #include "WCScope.hpp"
 #include "WCType.hpp"
 
@@ -20,51 +20,51 @@ bool VarDecl::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kLet;
 }
 
-VarDecl * VarDecl::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+VarDecl * VarDecl::parse(ParseCtx & parseCtx) {
     // Parse 'let' keyword
-    if (tokenPtr->type != TokenType::kLet) {
-        parseError(*tokenPtr, "Expected keyword 'let' at start of a variable declaration!");
+    if (parseCtx.curTok->type != TokenType::kLet) {
+        parseError(parseCtx, "Expected keyword 'let' at start of a variable declaration!");
         return nullptr;
     }
     
     // Save and skip 'let'
-    const Token * varToken = tokenPtr;
-    ++tokenPtr;
+    const Token * varToken = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // Parse the identifier ahead
-    Identifier * ident = Identifier::parse(tokenPtr, alloc);
+    Identifier * ident = Identifier::parse(parseCtx);
     WC_GUARD(ident, nullptr);
     
     // See if the type for the variable is specified:
     Type * type = nullptr;
     
-    if (tokenPtr->type == TokenType::kColon) {
+    if (parseCtx.curTok->type == TokenType::kColon) {
         // Type specified, skip the ':'
-        ++tokenPtr;
+        parseCtx.nextTok();
         
         // Parse the type:
-        type = Type::parse(tokenPtr, alloc);
+        type = Type::parse(parseCtx);
         WC_GUARD(type, nullptr);
     }
     
     // Parse the '='
-    if (tokenPtr->type != TokenType::kAssign) {
-        parseError(*tokenPtr, "Expected '=' following variable name for variable declaration!");
+    if (parseCtx.curTok->type != TokenType::kAssign) {
+        parseError(parseCtx, "Expected '=' following variable name for variable declaration!");
         return nullptr;
     }
     
-    ++tokenPtr;
+    parseCtx.nextTok();
     
     // Parse the init expression and return result of parsing
-    AssignExpr * initExpr = AssignExpr::parse(tokenPtr, alloc);
+    AssignExpr * initExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(initExpr, nullptr);
     
     // Now return the AST node:
     if (type) {
-        return WC_NEW_AST_NODE(alloc, VarDeclExplicitType, *varToken, *ident, *type, *initExpr);
+        return WC_NEW_AST_NODE(parseCtx, VarDeclExplicitType, *varToken, *ident, *type, *initExpr);
     }
     else {
-        return WC_NEW_AST_NODE(alloc, VarDeclInferType, *varToken, *ident, *initExpr);
+        return WC_NEW_AST_NODE(parseCtx, VarDeclInferType, *varToken, *ident, *initExpr);
     }
 }
 

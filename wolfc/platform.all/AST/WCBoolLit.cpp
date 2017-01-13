@@ -2,9 +2,9 @@
 
 #include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Constants.h>
@@ -16,14 +16,14 @@ bool BoolLit::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kTrue || tokenPtr->type == TokenType::kFalse;
 }
 
-BoolLit * BoolLit::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    if (!peek(tokenPtr)) {
-        parseError(*tokenPtr, "Expected 'bool' literal!");
+BoolLit * BoolLit::parse(ParseCtx & parseCtx) {
+    if (!peek(parseCtx.curTok)) {
+        parseError(parseCtx, "Expected 'bool' literal!");
         return nullptr;
     }
     
-    BoolLit * boolLit = WC_NEW_AST_NODE(alloc, BoolLit, *tokenPtr);
-    ++tokenPtr;
+    BoolLit * boolLit = WC_NEW_AST_NODE(parseCtx, BoolLit, *parseCtx.curTok);
+    parseCtx.nextTok();
     return boolLit;
 }
 

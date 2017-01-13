@@ -24,6 +24,7 @@ class Func;
 class LinearAlloc;
 class VarDecl;
 struct CodegenCtx;
+struct ParseCtx;
 
 /* 
 Module:
@@ -40,7 +41,7 @@ public:
     
     // TODO: change this to return a new module, similar to other ASTNodes
     /* Parse the code for the module from the given token array */
-    bool parseCode(const Token * tokenList, LinearAlloc & alloc);
+    bool parse(ParseCtx & parseCtx);
     
     /* Generates the code for the module. Parsing code must have succeeded. */
     bool generateCode();

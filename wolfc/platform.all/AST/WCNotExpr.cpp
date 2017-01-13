@@ -2,10 +2,10 @@
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
-#include "WCCodegenCtx.hpp"
 #include "WCCmpExpr.hpp"
+#include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -18,38 +18,38 @@ bool NotExpr::peek(const Token * tokenPtr) {
             CmpExpr::peek(tokenPtr);
 }
 
-NotExpr * NotExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+NotExpr * NotExpr::parse(ParseCtx & parseCtx) {
     // Save the first token:
-    const Token * startToken = tokenPtr;
+    const Token * startToken = parseCtx.curTok;
     
     // See if an actual 'not' or bitwise not ('~') expression:
     if (startToken->type == TokenType::kNot) {
         // Logical 'not': skip 'not'
-        ++tokenPtr;
+        parseCtx.nextTok();
         
         // Parse the expression following
-        NotExpr * notExpr = NotExpr::parse(tokenPtr, alloc);
+        NotExpr * notExpr = NotExpr::parse(parseCtx);
         WC_GUARD(notExpr, nullptr);
         
         // Alright, return the parsed expr
-        return WC_NEW_AST_NODE(alloc, NotExprLNot, *notExpr, *startToken);
+        return WC_NEW_AST_NODE(parseCtx, NotExprLNot, *notExpr, *startToken);
     }
     else if (startToken->type == TokenType::kTilde) {
         // Bitwise 'not': skip 'not'
-        ++tokenPtr;
+        parseCtx.nextTok();
 
         // Parse the expression following
-        NotExpr * notExpr = NotExpr::parse(tokenPtr, alloc);
+        NotExpr * notExpr = NotExpr::parse(parseCtx);
         WC_GUARD(notExpr, nullptr);
 
         // Alright, return the parsed expr
-        return WC_NEW_AST_NODE(alloc, NotExprBNot, *notExpr, *startToken);
+        return WC_NEW_AST_NODE(parseCtx, NotExprBNot, *notExpr, *startToken);
     }
     
     // No 'not'. Just parse an ordinary no-op expression
-    CmpExpr * addSubExpr = CmpExpr::parse(tokenPtr, alloc);
+    CmpExpr * addSubExpr = CmpExpr::parse(parseCtx);
     WC_GUARD(addSubExpr, nullptr);
-    return WC_NEW_AST_NODE(alloc, NotExprNoOp, *addSubExpr);
+    return WC_NEW_AST_NODE(parseCtx, NotExprNoOp, *addSubExpr);
 }
 
 //-----------------------------------------------------------------------------

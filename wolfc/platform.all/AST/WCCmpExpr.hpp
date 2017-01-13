@@ -24,7 +24,7 @@ CmpExpr:
 class CmpExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static CmpExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static CmpExpr * parse(ParseCtx & parseCtx);
 };
 
 /* AddExpr */

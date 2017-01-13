@@ -16,7 +16,7 @@ LAndExpr:
 class LAndExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static LAndExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static LAndExpr * parse(ParseCtx & parseCtx);
 };
 
 /* NotExpr */

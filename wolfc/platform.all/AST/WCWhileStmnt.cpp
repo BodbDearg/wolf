@@ -1,11 +1,11 @@
 #include "WCWhileStmnt.hpp"
 
 #include "DataType/WCDataType.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 #include "WCScope.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -15,39 +15,41 @@ bool WhileStmnt::peek(const Token * tokenPtr) {
     return tokenType == TokenType::kWhile || tokenType == TokenType::kUntil;
 }
 
-WhileStmnt * WhileStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+WhileStmnt * WhileStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'while' or 'until' keyword
-    if (!peek(tokenPtr)) {
-        parseError(*tokenPtr, "While statement expected!");
+    if (!peek(parseCtx.curTok)) {
+        parseError(parseCtx, "While statement expected!");
         return nullptr;
     }
     
     // Skip the 'while' or 'until' token and save location
-    const Token * startToken = tokenPtr;
-    ++tokenPtr;
+    const Token * startToken = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // Parse the while expression (while condition):
-    AssignExpr * whileExpr = AssignExpr::parse(tokenPtr, alloc);
+    AssignExpr * whileExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(whileExpr, nullptr);
     
     // See if there is a 'do' following. This keyword is optional, unless the body scope is required
     // to be on the same line as the enclosing while statement:
     bool bodyScopeRequiresNL = true;
     
-    if (tokenPtr->type == TokenType::kDo) {
+    if (parseCtx.curTok->type == TokenType::kDo) {
         // Found a 'do' token, skip it. The body scope is allowed to be on the same line
-        ++tokenPtr;
+        parseCtx.nextTok();
         bodyScopeRequiresNL = false;
     }
     
     // Expect scope following:
-    Scope * bodyScope = Scope::parse(tokenPtr, alloc);
+    Scope * bodyScope = Scope::parse(parseCtx);
     WC_GUARD(bodyScope, nullptr);
     
     // See if it violates newline rules:
     if (bodyScopeRequiresNL) {
         if (bodyScope->getStartToken().startLine == whileExpr->getEndToken().endLine) {
-            parseError(bodyScope->getStartToken(), "Code following 'while/until' statement condition must be on a new line unless "
+            parseError(parseCtx,
+                       bodyScope->getStartToken(),
+                       "Code following 'while/until' statement condition must be on a new line unless "
                        "'do' is used after the condition.");
             
             return nullptr;
@@ -55,17 +57,17 @@ WhileStmnt * WhileStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     }
     
     // While block should be terminated by an 'end' token:
-    if (tokenPtr->type != TokenType::kEnd) {
-        parseError(*tokenPtr, "'end' expected to terminate 'while/until' block!");
+    if (parseCtx.curTok->type != TokenType::kEnd) {
+        parseError(parseCtx, "'end' expected to terminate 'while/until' block!");
         return nullptr;
     }
     
     // Skip 'end' token and save location
-    const Token * endToken = tokenPtr;
-    ++tokenPtr;
+    const Token * endToken = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // Done: return the parsed statement
-    return WC_NEW_AST_NODE(alloc, WhileStmnt, *whileExpr, *bodyScope, *startToken, *endToken);
+    return WC_NEW_AST_NODE(parseCtx, WhileStmnt, *whileExpr, *bodyScope, *startToken, *endToken);
 }
 
 WhileStmnt::WhileStmnt(AssignExpr & whileExpr,

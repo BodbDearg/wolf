@@ -24,7 +24,7 @@ PostfixExpr:
 class PostfixExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * currentToken);
-    static PostfixExpr * parse(const Token *& currentToken, LinearAlloc & alloc);
+    static PostfixExpr * parse(ParseCtx & parseCtx);
 };
 
 /* CastExpr */

@@ -1,12 +1,12 @@
 #include "WCPrintStmnt.hpp"
 
 #include "DataType/WCDataType.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
+#include "WCParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
@@ -18,38 +18,38 @@ bool PrintStmnt::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kPrint;
 }
 
-PrintStmnt * PrintStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    if (tokenPtr->type != TokenType::kPrint) {
-        parseError(*tokenPtr, "Expected keyword 'print' for 'print()' statement!");
+PrintStmnt * PrintStmnt::parse(ParseCtx & parseCtx) {
+    if (parseCtx.curTok->type != TokenType::kPrint) {
+        parseError(parseCtx, "Expected keyword 'print' for 'print()' statement!");
         return nullptr;
     }
     
-    const Token * printTok = tokenPtr;
-    ++tokenPtr;     // Consume 'print'
+    const Token * printTok = parseCtx.curTok;
+    parseCtx.nextTok();     // Consume 'print'
     
-    if (tokenPtr->type != TokenType::kLParen) {
-        parseError(*tokenPtr, "Expected '(' following 'print'!");
+    if (parseCtx.curTok->type != TokenType::kLParen) {
+        parseError(parseCtx, "Expected '(' following 'print'!");
         return nullptr;
     }
     
-    ++tokenPtr;     // Consume '('
+    parseCtx.nextTok();     // Consume '('
     
     // Parse the inner expression
-    AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
+    AssignExpr * assignExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(assignExpr, nullptr);
     
     // Expect ')' following all that:
-    if (tokenPtr->type != TokenType::kRParen) {
-        parseError(*tokenPtr, "Expected closing ')' for 'print()' statement!");
+    if (parseCtx.curTok->type != TokenType::kRParen) {
+        parseError(parseCtx, "Expected closing ')' for 'print()' statement!");
         return nullptr;
     }
     
     // Consume closing ')' and return parsed expression
-    const Token * closingParenTok = tokenPtr;
-    ++tokenPtr;
+    const Token * closingParenTok = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // Create and return the print statement
-    return WC_NEW_AST_NODE(alloc, PrintStmnt, *printTok, *assignExpr, *closingParenTok);
+    return WC_NEW_AST_NODE(parseCtx, PrintStmnt, *printTok, *assignExpr, *closingParenTok);
 }
 
 PrintStmnt::PrintStmnt(const Token & startToken, AssignExpr & expr, const Token & endToken) :

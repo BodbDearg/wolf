@@ -24,7 +24,7 @@ FuncCall:
 class FuncCall final : public ASTNode {
 public:
     static bool peek(const Token * currentToken);
-    static FuncCall * parse(const Token *& currentToken, LinearAlloc & alloc);
+    static FuncCall * parse(ParseCtx & parseCtx);
     
     FuncCall(const Token & startToken, FuncCallArgList * argList, const Token & endToken);
     

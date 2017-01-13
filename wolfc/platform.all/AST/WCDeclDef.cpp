@@ -2,6 +2,7 @@
 
 #include "WCFunc.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 #include "WCVarDecl.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -13,23 +14,23 @@ bool DeclDef::peek(const Token * tokenPtr) {
     return Func::peek(tokenPtr) || VarDecl::peek(tokenPtr);
 }
 
-DeclDef * DeclDef::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+DeclDef * DeclDef::parse(ParseCtx & parseCtx) {
     // Check for 'Func':
-    if (Func::peek(tokenPtr)) {
-        Func * func = Func::parse(tokenPtr, alloc);
+    if (Func::peek(parseCtx.curTok)) {
+        Func * func = Func::parse(parseCtx);
         WC_GUARD(func, nullptr);
-        return WC_NEW_AST_NODE(alloc, DeclDefFunc, *func);
+        return WC_NEW_AST_NODE(parseCtx, DeclDefFunc, *func);
     }
     
     // Check for 'VarDecl':
-    if (VarDecl::peek(tokenPtr)) {
-        VarDecl * varDecl = VarDecl::parse(tokenPtr, alloc);
+    if (VarDecl::peek(parseCtx.curTok)) {
+        VarDecl * varDecl = VarDecl::parse(parseCtx);
         WC_GUARD(varDecl, nullptr);
-        return WC_NEW_AST_NODE(alloc, DeclDefVarDecl, *varDecl);
+        return WC_NEW_AST_NODE(parseCtx, DeclDefVarDecl, *varDecl);
     }
     
     // Unknown stuff ahead
-    parseError(*tokenPtr, "Expected declaration or definition!");
+    parseError(parseCtx, "Expected declaration or definition!");
     return nullptr;
 }
 

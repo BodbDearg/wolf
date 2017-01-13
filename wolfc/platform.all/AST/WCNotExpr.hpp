@@ -17,7 +17,7 @@ NotExpr:
 class NotExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static NotExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static NotExpr * parse(ParseCtx & parseCtx);
 };
 
 /* EqExpr */

@@ -22,7 +22,7 @@ Type:
 class Type : public ASTNode {
 public:
     static bool peek(const Token * currentToken);
-    static Type * parse(const Token *& currentToken, LinearAlloc & alloc);
+    static Type * parse(ParseCtx & parseCtx);
     
     virtual DataType & dataType() = 0;
     

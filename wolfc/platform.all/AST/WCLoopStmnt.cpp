@@ -2,11 +2,11 @@
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 #include "WCScope.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -18,41 +18,41 @@ bool LoopStmnt::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kLoop;
 }
 
-LoopStmnt * LoopStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+LoopStmnt * LoopStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'loop' keyword
-    if (!peek(tokenPtr)) {
-        parseError(*tokenPtr, "'loop' statement expected!");
+    if (!peek(parseCtx.curTok)) {
+        parseError(parseCtx, "'loop' statement expected!");
         return nullptr;
     }
     
     // Skip the 'loop' token and save location
-    const Token * startToken = tokenPtr;
-    ++tokenPtr;
+    const Token * startToken = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // Parse the body scope:
-    Scope * bodyScope = Scope::parse(tokenPtr, alloc);
+    Scope * bodyScope = Scope::parse(parseCtx);
     WC_GUARD(bodyScope, nullptr);
     
     // See if the current token is 'repeat', if it is then we have a loop/repeat statement
-    if (tokenPtr->type == TokenType::kRepeat) {
+    if (parseCtx.curTok->type == TokenType::kRepeat) {
         // Loop block with a condition. Skip the 'repeat' token...
-        ++tokenPtr;
+        parseCtx.nextTok();
         
         // Now grab the condition typpe Save the condition type (while/until) and skip this token..
-        const Token * condTypeToken = tokenPtr;
-        ++tokenPtr;
+        const Token * condTypeToken = parseCtx.curTok;
+        parseCtx.nextTok();
         
         if (condTypeToken->type != TokenType::kWhile && condTypeToken->type != TokenType::kUntil) {
-            parseError(*tokenPtr, "'while' or 'until' expected following 'repeat' token!");
+            parseError(parseCtx, "'while' or 'until' expected following 'repeat' token!");
             return nullptr;
         }
         
         // Now expect an assign expression as the condition
-        AssignExpr * loopCondExpr = AssignExpr::parse(tokenPtr, alloc);
+        AssignExpr * loopCondExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(loopCondExpr, nullptr);
         
         // All done, return the parsed expression:
-        return WC_NEW_AST_NODE(alloc,
+        return WC_NEW_AST_NODE(parseCtx,
                                LoopStmntWithCond,
                                *bodyScope,
                                *startToken,
@@ -61,17 +61,17 @@ LoopStmnt * LoopStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     }
     else {
         // Conditionless loop block: should be terminated by an 'end' token:
-        if (tokenPtr->type != TokenType::kEnd) {
-            parseError(*tokenPtr, "'end' expected to terminate 'loop' block!");
+        if (parseCtx.curTok->type != TokenType::kEnd) {
+            parseError(parseCtx, "'end' expected to terminate 'loop' block!");
             return nullptr;
         }
         
         // Skip 'end' token and save location
-        const Token * endToken = tokenPtr;
-        ++tokenPtr;
+        const Token * endToken = parseCtx.curTok;
+        parseCtx.nextTok();
         
         // Done: return the parsed statement
-        return WC_NEW_AST_NODE(alloc, LoopStmntNoCond, *bodyScope, *startToken, *endToken);
+        return WC_NEW_AST_NODE(parseCtx, LoopStmntNoCond, *bodyScope, *startToken, *endToken);
     }
 }
 

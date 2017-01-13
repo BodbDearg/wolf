@@ -3,11 +3,11 @@
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
+#include "WCParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
@@ -23,63 +23,63 @@ bool RandExpr::peek(const Token * tokenPtr) {
             tokenPtr->type == TokenType::kSRand;
 }
 
-RandExpr * RandExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    TokenType tokType = tokenPtr->type;
+RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
+    TokenType tokType = parseCtx.curTok->type;
     
     if (tokType == TokenType::kRand) {
         // rand() call: consume 'rand' and save start token
-        const Token * startToken = tokenPtr;
-        ++tokenPtr;
+        const Token * startToken = parseCtx.curTok;
+        parseCtx.nextTok();
         
         // Expect '('
-        if (tokenPtr->type != TokenType::kLParen) {
-            parseError(*tokenPtr, "Expect '(' following 'rand'!");
+        if (parseCtx.curTok->type != TokenType::kLParen) {
+            parseError(parseCtx, "Expect '(' following 'rand'!");
             return nullptr;
         }
         
-        ++tokenPtr;     // Consume '('
+        parseCtx.nextTok();     // Consume '('
         
         // Expect ')'
-        if (tokenPtr->type != TokenType::kRParen) {
-            parseError(*tokenPtr, "Expect ')' following 'rand('!");
+        if (parseCtx.curTok->type != TokenType::kRParen) {
+            parseError(parseCtx, "Expect ')' following 'rand('!");
             return nullptr;
         }
         
         // Consume ')', save end token and then return parsed node
-        const Token * endToken = tokenPtr;
-        ++tokenPtr;
-        return WC_NEW_AST_NODE(alloc, RandExprRand, *startToken, *endToken);
+        const Token * endToken = parseCtx.curTok;
+        parseCtx.nextTok();
+        return WC_NEW_AST_NODE(parseCtx, RandExprRand, *startToken, *endToken);
     }
     else if (tokType == TokenType::kSRand) {
         // srand() call: consume 'srand' and save start token
-        const Token * startToken = tokenPtr;
-        ++tokenPtr;
+        const Token * startToken = parseCtx.curTok;
+        parseCtx.nextTok();
         
         // Expect '('
-        if (tokenPtr->type != TokenType::kLParen) {
-            parseError(*tokenPtr, "Expect '(' following 'srand'!");
+        if (parseCtx.curTok->type != TokenType::kLParen) {
+            parseError(parseCtx, "Expect '(' following 'srand'!");
             return nullptr;
         }
         
-        ++tokenPtr;     // Consume '('
+        parseCtx.nextTok();     // Consume '('
         
         // Parse the inner assign expression for the seed
-        AssignExpr * seedExpr = AssignExpr::parse(tokenPtr, alloc);
+        AssignExpr * seedExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(seedExpr, nullptr);
         
         // Expect ')'
-        if (tokenPtr->type != TokenType::kRParen) {
-            parseError(*tokenPtr, "Expect ')' to close 'srand()' call!");
+        if (parseCtx.curTok->type != TokenType::kRParen) {
+            parseError(parseCtx, "Expect ')' to close 'srand()' call!");
             return nullptr;
         }
         
         // Consume ')', save end token and then return parsed node
-        const Token * endToken = tokenPtr;
-        ++tokenPtr;
-        return WC_NEW_AST_NODE(alloc, RandExprSRand, *startToken, *seedExpr, *endToken);
+        const Token * endToken = parseCtx.curTok;
+        parseCtx.nextTok();
+        return WC_NEW_AST_NODE(parseCtx, RandExprSRand, *startToken, *seedExpr, *endToken);
     }
     
-    parseError(*tokenPtr, "Expected 'rand' or 'srand' token!");
+    parseError(parseCtx, "Expected 'rand' or 'srand' token!");
     return nullptr;
 }
 

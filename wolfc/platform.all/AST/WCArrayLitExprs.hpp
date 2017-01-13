@@ -20,7 +20,7 @@ ArrayLitExprs:
 class ArrayLitExprs : public ASTNode {
 public:
     static bool peek(const Token * tokenPtr);
-    static ArrayLitExprs * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static ArrayLitExprs * parse(ParseCtx & parseCtx);
     
     virtual bool isConstExpr() const = 0;
     

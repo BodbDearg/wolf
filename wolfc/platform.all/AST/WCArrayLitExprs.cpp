@@ -3,9 +3,9 @@
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -16,26 +16,26 @@ bool ArrayLitExprs::peek(const Token * tokenPtr) {
     return AssignExpr::peek(tokenPtr);
 }
     
-ArrayLitExprs * ArrayLitExprs::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+ArrayLitExprs * ArrayLitExprs::parse(ParseCtx & parseCtx) {
     // Parse the first expression
-    AssignExpr * expr = AssignExpr::parse(tokenPtr, alloc);
+    AssignExpr * expr = AssignExpr::parse(parseCtx);
     WC_GUARD(expr, nullptr);
     
     // See if a comma follows (more args)
-    if (tokenPtr->type == TokenType::kComma) {
+    if (parseCtx.curTok->type == TokenType::kComma) {
         // Expression list with 2 or more expressions, consume the ',':
-        ++tokenPtr;
+        parseCtx.nextTok();
         
         // There should be an expression list following:
-        ArrayLitExprs * exprsList = ArrayLitExprs::parse(tokenPtr, alloc);
+        ArrayLitExprs * exprsList = ArrayLitExprs::parse(parseCtx);
         WC_GUARD(exprsList, nullptr);
         
         // Return the node!
-        return WC_NEW_AST_NODE(alloc, ArrayLitExprsMulti, *expr, *exprsList);
+        return WC_NEW_AST_NODE(parseCtx, ArrayLitExprsMulti, *expr, *exprsList);
     }
     
     // Expression list with just 1 expression:
-    return WC_NEW_AST_NODE(alloc, ArrayLitExprsSingle, *expr);
+    return WC_NEW_AST_NODE(parseCtx, ArrayLitExprsSingle, *expr);
 }
 
 //-----------------------------------------------------------------------------

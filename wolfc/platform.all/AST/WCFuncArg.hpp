@@ -17,7 +17,7 @@ FuncArg:
 class FuncArg final : public ASTNode {
 public:
     static bool peek(const Token * currentToken);
-    static FuncArg * parse(const Token *& currentToken, LinearAlloc & alloc);
+    static FuncArg * parse(ParseCtx & parseCtx);
     
     FuncArg(Type & dataType, Identifier & ident);
     

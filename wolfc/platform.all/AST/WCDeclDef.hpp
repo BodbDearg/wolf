@@ -17,7 +17,7 @@ DeclDef:
 class DeclDef : public ASTNode {
 public:
     static bool peek(const Token * tokenPtr);
-    static DeclDef * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static DeclDef * parse(ParseCtx & parseCtx);
     
     virtual bool codegen(CodegenCtx & cgCtx) = 0;
 };

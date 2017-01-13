@@ -17,7 +17,7 @@ TernaryExpr:
 class TernaryExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static TernaryExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static TernaryExpr * parse(ParseCtx & parseCtx);
 };
 
 /* LOrExpr */

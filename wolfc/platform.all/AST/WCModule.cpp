@@ -1,11 +1,11 @@
 #include "WCModule.hpp"
 
 #include "DataType/WCDataType.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCDeclDef.hpp"
 #include "WCFunc.hpp"
+#include "WCParseCtx.hpp"
 #include "WCVarDecl.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -44,16 +44,16 @@ const Token & Module::getEndToken() const {
     return *mEOFToken;
 }
 
-bool Module::parseCode(const Token * tokenList, LinearAlloc & alloc) {
-    while (DeclDef::peek(tokenList)) {
-        DeclDef * declDef = DeclDef::parse(tokenList, alloc);
+bool Module::parse(ParseCtx & parseCtx) {
+    while (DeclDef::peek(parseCtx.curTok)) {
+        DeclDef * declDef = DeclDef::parse(parseCtx);
         WC_GUARD(declDef, false);
         declDef->mParent = this;
         mDeclDefs.push_back(declDef);
     }
     
-    if (tokenList->type != TokenType::kEOF) {
-        parseError(*tokenList, "Expected EOF at end of module code!");
+    if (parseCtx.curTok->type != TokenType::kEOF) {
+        parseError(parseCtx, "Expected EOF at end of module code!");
         mDeclDefs.clear();
         return false;
     }

@@ -20,7 +20,7 @@ AddExpr:
 class AddExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static AddExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static AddExpr * parse(ParseCtx & parseCtx);
 };
 
 /* MulExpr */

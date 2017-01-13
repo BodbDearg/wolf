@@ -1,12 +1,12 @@
 #include "WCNextStmnt.hpp"
 
 #include "DataType/WCDataType.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCIRepeatableStmnt.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
@@ -21,33 +21,33 @@ bool NextStmnt::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kNext;
 }
 
-NextStmnt * NextStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+NextStmnt * NextStmnt::parse(ParseCtx & parseCtx) {
     // Check the basics
-    if (!peek(tokenPtr)) {
-        parseError(*tokenPtr, "Expected next statement!");
+    if (!peek(parseCtx.curTok)) {
+        parseError(parseCtx, "Expected next statement!");
         return nullptr;
     }
     
     // Consume 'next' and save token for later:
-    const Token * nextTok = tokenPtr;
-    ++tokenPtr;
+    const Token * nextTok = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // See whether 'if' or 'unless' follow, in which case the 'next' statement is conditional:
-    if (tokenPtr->type == TokenType::kIf || tokenPtr->type == TokenType::kUnless) {
+    if (parseCtx.curTok->type == TokenType::kIf || parseCtx.curTok->type == TokenType::kUnless) {
         // Parse the condition token:
-        const Token * condTok = tokenPtr;
-        ++tokenPtr;
+        const Token * condTok = parseCtx.curTok;
+        parseCtx.nextTok();
         
         // Parse the condition assign expression:
-        AssignExpr * condExpr = AssignExpr::parse(tokenPtr, alloc);
+        AssignExpr * condExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(condExpr, nullptr);
         
         // 'next' with a condition:
-        return WC_NEW_AST_NODE(alloc, NextStmntWithCond, *nextTok, *condTok, *condExpr);
+        return WC_NEW_AST_NODE(parseCtx, NextStmntWithCond, *nextTok, *condTok, *condExpr);
     }    
     
     // 'next' without a condition:
-    return WC_NEW_AST_NODE(alloc, NextStmntNoCond, *nextTok);
+    return WC_NEW_AST_NODE(parseCtx, NextStmntNoCond, *nextTok);
 }
 
 NextStmnt::NextStmnt(const Token & nextToken) : mNextToken(nextToken) {

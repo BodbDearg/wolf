@@ -17,7 +17,7 @@ ArrayLit:
 class ArrayLit final : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static ArrayLit * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static ArrayLit * parse(ParseCtx & parseCtx);
     
     ArrayLit(const Token & lBrack,
              ArrayLitExprs & exprs,

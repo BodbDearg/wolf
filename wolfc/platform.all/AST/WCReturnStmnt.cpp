@@ -2,12 +2,12 @@
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCFunc.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
@@ -27,28 +27,28 @@ bool ReturnStmnt::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kReturn;
 }
 
-ReturnStmnt * ReturnStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    if (!peek(tokenPtr)) {
-        parseError(*tokenPtr, "Expected return statement!");
+ReturnStmnt * ReturnStmnt::parse(ParseCtx & parseCtx) {
+    if (!peek(parseCtx.curTok)) {
+        parseError(parseCtx, "Expected return statement!");
         return nullptr;
     }
     
     // Consume 'return' token
-    const Token * returnToken = tokenPtr;
-    ++tokenPtr;
+    const Token * returnToken = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // See if a condition token follows:
-    if (isCondTokenType(tokenPtr->type)) {
+    if (isCondTokenType(parseCtx.curTok->type)) {
         // Save the 'if' or 'unless' token and skip
-        const Token * condToken = tokenPtr;
-        ++tokenPtr;
+        const Token * condToken = parseCtx.curTok;
+        parseCtx.nextTok();
         
         // Parse the assign expression that follows:
-        AssignExpr * condExpr = AssignExpr::parse(tokenPtr, alloc);
+        AssignExpr * condExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(condExpr, nullptr);
         
         // Conditional 'return' without a value:
-        return WC_NEW_AST_NODE(alloc,
+        return WC_NEW_AST_NODE(parseCtx,
                                ReturnStmntWithCondVoid,
                                *returnToken,
                                *condToken,
@@ -56,23 +56,23 @@ ReturnStmnt * ReturnStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     }
     
     // See if assign expression follows:
-    if (AssignExpr::peek(tokenPtr)) {
+    if (AssignExpr::peek(parseCtx.curTok)) {
         // Parse the assign expression for the return value:
-        AssignExpr * returnExpr = AssignExpr::parse(tokenPtr, alloc);
+        AssignExpr * returnExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(returnExpr, nullptr);
         
         // See if a condition token follows:
-        if (isCondTokenType(tokenPtr->type)) {
+        if (isCondTokenType(parseCtx.curTok->type)) {
             // Save the 'if' or 'unless' token and skip
-            const Token * condToken = tokenPtr;
-            ++tokenPtr;
+            const Token * condToken = parseCtx.curTok;
+            parseCtx.nextTok();
             
             // Parse the assign expression that follows:
-            AssignExpr * condExpr = AssignExpr::parse(tokenPtr, alloc);
+            AssignExpr * condExpr = AssignExpr::parse(parseCtx);
             WC_GUARD(condExpr, nullptr);
             
             // Conditional 'return' with a value:
-            return WC_NEW_AST_NODE(alloc,
+            return WC_NEW_AST_NODE(parseCtx,
                                    ReturnStmntWithCondAndValue,
                                    *returnToken,
                                    *returnExpr,
@@ -81,11 +81,11 @@ ReturnStmnt * ReturnStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
         }
         
         // Non conditional 'return' with a return value:
-        return WC_NEW_AST_NODE(alloc, ReturnStmntNoCondWithValue, *returnToken, *returnExpr);
+        return WC_NEW_AST_NODE(parseCtx, ReturnStmntNoCondWithValue, *returnToken, *returnExpr);
     }
     
     // Non conditional 'return' without a value:
-    return WC_NEW_AST_NODE(alloc, ReturnStmntNoCondVoid, *returnToken);
+    return WC_NEW_AST_NODE(parseCtx, ReturnStmntNoCondVoid, *returnToken);
 }
 
 ReturnStmnt::ReturnStmnt(const Token & returnToken) : mReturnToken(returnToken) {

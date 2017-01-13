@@ -38,7 +38,7 @@ Stmnt:
 class Stmnt : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    static Stmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static Stmnt * parse(ParseCtx & parseCtx);
 };
 
 /* NoOpStmnt */

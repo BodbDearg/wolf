@@ -2,12 +2,12 @@
 
 #include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCFunc.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
+#include "WCParseCtx.hpp"
 #include "WCScope.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -16,14 +16,14 @@ bool Identifier::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kIdentifier;
 }
 
-Identifier * Identifier::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    if (tokenPtr->type != TokenType::kIdentifier) {
-        parseError(*tokenPtr, "Expected identifier!");
+Identifier * Identifier::parse(ParseCtx & parseCtx) {
+    if (parseCtx.curTok->type != TokenType::kIdentifier) {
+        parseError(parseCtx, "Expected identifier!");
         return nullptr;
     }
     
-    Identifier * intLit = WC_NEW_AST_NODE(alloc, Identifier, *tokenPtr);
-    ++tokenPtr;
+    Identifier * intLit = WC_NEW_AST_NODE(parseCtx, Identifier, *parseCtx.curTok);
+    parseCtx.nextTok();
     return intLit;
 }
 

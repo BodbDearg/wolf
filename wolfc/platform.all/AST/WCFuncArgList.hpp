@@ -19,7 +19,7 @@ FuncArgList:
 class FuncArgList : public ASTNode {
 public:
     static bool peek(const Token * tokenPtr);
-    static FuncArgList * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static FuncArgList * parse(ParseCtx & parseCtx);
     
     virtual size_t numArgs() const = 0;
     virtual void getArgs(std::vector<FuncArg*> & args) const = 0;

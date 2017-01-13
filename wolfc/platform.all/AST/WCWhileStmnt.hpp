@@ -16,7 +16,7 @@ WhileStmnt:
 class WhileStmnt final : public ASTNode, public IRepeatableStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    static WhileStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static WhileStmnt * parse(ParseCtx & parseCtx);
     
     WhileStmnt(AssignExpr & whileExpr,
                Scope & bodyScope,

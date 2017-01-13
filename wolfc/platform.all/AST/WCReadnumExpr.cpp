@@ -2,10 +2,10 @@
 
 #include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
+#include "WCParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
@@ -17,31 +17,31 @@ bool ReadnumExpr::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kReadnum;
 }
 
-ReadnumExpr * ReadnumExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    if (tokenPtr->type != TokenType::kReadnum) {
-        parseError(*tokenPtr, "Expected 'readnum' at begining of readnum() expression!");
+ReadnumExpr * ReadnumExpr::parse(ParseCtx & parseCtx) {
+    if (parseCtx.curTok->type != TokenType::kReadnum) {
+        parseError(parseCtx, "Expected 'readnum' at begining of readnum() expression!");
         return nullptr;
     }
     
-    const Token * readnumTok = tokenPtr;
-    ++tokenPtr;     // Consume 'readnum'
+    const Token * readnumTok = parseCtx.curTok;
+    parseCtx.nextTok();     // Consume 'readnum'
     
-    if (tokenPtr->type != TokenType::kLParen) {
-        parseError(*tokenPtr, "Expect '(' following 'readnum'!");
+    if (parseCtx.curTok->type != TokenType::kLParen) {
+        parseError(parseCtx, "Expect '(' following 'readnum'!");
         return nullptr;
     }
     
-    ++tokenPtr;     // Consume '('
+    parseCtx.nextTok();     // Consume '('
     
-    if (tokenPtr->type != TokenType::kRParen) {
-        parseError(*tokenPtr, "Expect ')' following '('!");
+    if (parseCtx.curTok->type != TokenType::kRParen) {
+        parseError(parseCtx, "Expect ')' following '('!");
         return nullptr;
     }
     
-    const Token * rparenTok = tokenPtr;
-    ++tokenPtr;     // Consume ')'
+    const Token * rparenTok = parseCtx.curTok;
+    parseCtx.nextTok();     // Consume ')'
     
-    return WC_NEW_AST_NODE(alloc, ReadnumExpr, *readnumTok, *rparenTok);
+    return WC_NEW_AST_NODE(parseCtx, ReadnumExpr, *readnumTok, *rparenTok);
 }
 
 ReadnumExpr::ReadnumExpr(const Token & startToken, const Token & endToken) :

@@ -18,7 +18,7 @@ ShiftExpr:
 class ShiftExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static ShiftExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static ShiftExpr * parse(ParseCtx & parseCtx);
 };
 
 /* UnaryExpr */

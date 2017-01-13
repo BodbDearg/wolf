@@ -1,10 +1,10 @@
 #include "WCAssignExpr.hpp"
 
 #include "DataType/WCDataType.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 #include "WCTernaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -16,9 +16,9 @@ bool AssignExpr::peek(const Token * tokenPtr) {
     return TernaryExpr::peek(tokenPtr);
 }
 
-AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+AssignExpr * AssignExpr::parse(ParseCtx & parseCtx) {
     // Parse the initial expression
-    TernaryExpr * leftExpr = TernaryExpr::parse(tokenPtr, alloc);
+    TernaryExpr * leftExpr = TernaryExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);
 
     // See if there is a known operator ahead.
@@ -26,13 +26,13 @@ AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // return the AST node for the operation.
     #define PARSE_OP(TokenType, ASTNodeType)\
         case TokenType: {\
-            ++tokenPtr;\
-            AssignExpr * rightExpr = AssignExpr::parse(tokenPtr, alloc);\
+            parseCtx.nextTok();\
+            AssignExpr * rightExpr = AssignExpr::parse(parseCtx);\
             WC_GUARD(rightExpr, nullptr);\
-            return WC_NEW_AST_NODE(alloc, ASTNodeType, *leftExpr, *rightExpr);\
+            return WC_NEW_AST_NODE(parseCtx, ASTNodeType, *leftExpr, *rightExpr);\
         }
 
-    switch (tokenPtr[0].type) {
+    switch (parseCtx.curTok->type) {
         PARSE_OP(TokenType::kAssign, AssignExprAssign)                  // =
         PARSE_OP(TokenType::kAssignBOr, AssignExprAssignBOr)            // |=
         PARSE_OP(TokenType::kAssignBXor, AssignExprAssignBXor)          // ^=
@@ -53,7 +53,7 @@ AssignExpr * AssignExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     #undef PARSE_OP
 
     // Assign expression with no assign
-    return WC_NEW_AST_NODE(alloc, AssignExprNoAssign, *leftExpr);
+    return WC_NEW_AST_NODE(parseCtx, AssignExprNoAssign, *leftExpr);
 }
 
 //-----------------------------------------------------------------------------

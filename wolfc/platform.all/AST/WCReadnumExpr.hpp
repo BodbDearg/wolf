@@ -15,7 +15,7 @@ ReadnumExpr:
 class ReadnumExpr final : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static ReadnumExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static ReadnumExpr * parse(ParseCtx & parseCtx);
     
     ReadnumExpr(const Token & startToken, const Token & endToken);
     

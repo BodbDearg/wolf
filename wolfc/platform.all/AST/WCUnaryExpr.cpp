@@ -2,10 +2,10 @@
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 #include "WCPostfixExpr.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -31,34 +31,34 @@ bool UnaryExpr::peek(const Token * currentToken) {
     return PostfixExpr::peek(currentToken);
 }
 
-UnaryExpr * UnaryExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
-    switch (currentToken->type) {
+UnaryExpr * UnaryExpr::parse(ParseCtx & parseCtx) {
+    switch (parseCtx.curTok->type) {
         /* -PostfixExpr */
         case TokenType::kMinus: {
-            const Token * minusTok = currentToken;
-            ++currentToken;     // Skip '-'
-            PostfixExpr * expr = PostfixExpr::parse(currentToken, alloc);
+            const Token * minusTok = parseCtx.curTok;
+            parseCtx.nextTok();     // Skip '-'
+            PostfixExpr * expr = PostfixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
-            return WC_NEW_AST_NODE(alloc, UnaryExprMinus, *expr, *minusTok);
+            return WC_NEW_AST_NODE(parseCtx, UnaryExprMinus, *expr, *minusTok);
         }   break;
             
         /* +PostfixExpr */
         case TokenType::kPlus: {
-            const Token * plusTok = currentToken;
-            ++currentToken;     // Skip '+'
-            PostfixExpr * expr = PostfixExpr::parse(currentToken, alloc);
+            const Token * plusTok = parseCtx.curTok;
+            parseCtx.nextTok();     // Skip '+'
+            PostfixExpr * expr = PostfixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
-            return WC_NEW_AST_NODE(alloc, UnaryExprPlus, *expr, *plusTok);
+            return WC_NEW_AST_NODE(parseCtx, UnaryExprPlus, *expr, *plusTok);
         }   break;
             
         /* (AssignExpr) */
         case TokenType::kLParen: {
-            const Token * lparenTok = currentToken;
-            ++currentToken;     // Skip '('
-            AssignExpr * expr = AssignExpr::parse(currentToken, alloc);
+            const Token * lparenTok = parseCtx.curTok;
+            parseCtx.nextTok();     // Skip '('
+            AssignExpr * expr = AssignExpr::parse(parseCtx);
             
-            if (currentToken->type != TokenType::kRParen) {
-                parseError(*currentToken,
+            if (parseCtx.curTok->type != TokenType::kRParen) {
+                parseError(parseCtx,
                            "Expected closing ')' to match '(' at line %zu and column %zu!",
                            lparenTok->startLine + 1,
                            lparenTok->startCol + 1);
@@ -66,17 +66,17 @@ UnaryExpr * UnaryExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
                 return nullptr;
             }
             
-            const Token * rparenTok = currentToken;
-            ++currentToken;     // Skip ')'
+            const Token * rparenTok = parseCtx.curTok;
+            parseCtx.nextTok();     // Skip ')'
             WC_GUARD(expr, nullptr);
-            return WC_NEW_AST_NODE(alloc, UnaryExprParen, *expr, *lparenTok, *rparenTok);
+            return WC_NEW_AST_NODE(parseCtx, UnaryExprParen, *expr, *lparenTok, *rparenTok);
         }   break;
             
         /* PostfixExpr */
         default: {
-            PostfixExpr * expr = PostfixExpr::parse(currentToken, alloc);
+            PostfixExpr * expr = PostfixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
-            return WC_NEW_AST_NODE(alloc, UnaryExprPrimary, *expr);
+            return WC_NEW_AST_NODE(parseCtx, UnaryExprPrimary, *expr);
         }   break;
     }
     

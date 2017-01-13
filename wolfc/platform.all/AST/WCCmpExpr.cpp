@@ -2,11 +2,11 @@
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAddExpr.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -17,8 +17,8 @@ bool CmpExpr::peek(const Token * tokenPtr) {
     return AddExpr::peek(tokenPtr);
 }
 
-CmpExpr * CmpExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    AddExpr * leftExpr = AddExpr::parse(tokenPtr, alloc);
+CmpExpr * CmpExpr::parse(ParseCtx & parseCtx) {
+    AddExpr * leftExpr = AddExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);
     
     // See if there is a known operator ahead.
@@ -26,13 +26,13 @@ CmpExpr * CmpExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // return the AST node for the operation.
     #define PARSE_OP(TokenType, ASTNodeType)\
         case TokenType: {\
-            ++tokenPtr;\
-            CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);\
+            parseCtx.nextTok();\
+            CmpExpr * rightExpr = CmpExpr::parse(parseCtx);\
             WC_GUARD(rightExpr, nullptr);\
-            return WC_NEW_AST_NODE(alloc, ASTNodeType, *leftExpr, *rightExpr);\
+            return WC_NEW_AST_NODE(parseCtx, ASTNodeType, *leftExpr, *rightExpr);\
         }
 
-    TokenType nextTokType = tokenPtr[0].type;
+    TokenType nextTokType = parseCtx.curTok->type;
     
     switch (nextTokType) {
         PARSE_OP(TokenType::kCmpEQ, CmpExprEQ)  // ==
@@ -50,31 +50,31 @@ CmpExpr * CmpExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
     // Check for them here now
     if (nextTokType == TokenType::kIs) {
         // Skip 'is'
-        ++tokenPtr;
+        parseCtx.nextTok();
         
         // See if 'not' follows, if it does then it inverses the comparison:
         bool cmpNotEq = false;
         
-        if (tokenPtr[0].type == TokenType::kNot) {
+        if (parseCtx.curTok->type == TokenType::kNot) {
             cmpNotEq = true;
-            ++tokenPtr;
+            parseCtx.nextTok();
         }
         
         // Parse the right expression
-        CmpExpr * rightExpr = CmpExpr::parse(tokenPtr, alloc);
+        CmpExpr * rightExpr = CmpExpr::parse(parseCtx);
         WC_GUARD(rightExpr, nullptr);
         
         // Now return the operation:
         if (cmpNotEq) {
-            return WC_NEW_AST_NODE(alloc, CmpExprNE, *leftExpr, *rightExpr);
+            return WC_NEW_AST_NODE(parseCtx, CmpExprNE, *leftExpr, *rightExpr);
         }
         else {
-            return WC_NEW_AST_NODE(alloc, CmpExprEQ, *leftExpr, *rightExpr);
+            return WC_NEW_AST_NODE(parseCtx, CmpExprEQ, *leftExpr, *rightExpr);
         }
     }
 
     // Basic no-op expression:
-    return WC_NEW_AST_NODE(alloc, CmpExprNoOp, *leftExpr);
+    return WC_NEW_AST_NODE(parseCtx, CmpExprNoOp, *leftExpr);
 }
 
 //-----------------------------------------------------------------------------

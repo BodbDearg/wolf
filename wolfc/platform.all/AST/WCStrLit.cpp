@@ -2,10 +2,10 @@
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
+#include "WCParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/GlobalValue.h>
@@ -18,14 +18,14 @@ bool StrLit::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kStrLit;
 }
 
-StrLit * StrLit::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
-    if (!peek(tokenPtr)) {
-        parseError(*tokenPtr, "Expected string literal!");
+StrLit * StrLit::parse(ParseCtx & parseCtx) {
+    if (!peek(parseCtx.curTok)) {
+        parseError(parseCtx, "Expected string literal!");
         return nullptr;
     }
     
-    StrLit * intLit = WC_NEW_AST_NODE(alloc, StrLit, *tokenPtr);
-    ++tokenPtr;
+    StrLit * intLit = WC_NEW_AST_NODE(parseCtx, StrLit, *parseCtx.curTok);
+    parseCtx.nextTok();
     return intLit;
 }
 

@@ -11,7 +11,7 @@ class LinearAlloc;
 class BoolLit final : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static BoolLit * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static BoolLit * parse(ParseCtx & parseCtx);
     
     BoolLit(const Token & token);
     

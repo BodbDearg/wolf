@@ -1,8 +1,8 @@
 #include "WCFuncArgList.hpp"
 
-#include "Lexer/WCToken.hpp"
 #include "WCFuncArg.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -13,26 +13,26 @@ bool FuncArgList::peek(const Token * tokenPtr) {
     return FuncArg::peek(tokenPtr);
 }
     
-FuncArgList * FuncArgList::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+FuncArgList * FuncArgList::parse(ParseCtx & parseCtx) {
     // Parse the first arg
-    FuncArg * arg = FuncArg::parse(tokenPtr, alloc);
+    FuncArg * arg = FuncArg::parse(parseCtx);
     WC_GUARD(arg, nullptr);
     
     // See if a comma follows (more args)
-    if (tokenPtr->type == TokenType::kComma) {
+    if (parseCtx.curTok->type == TokenType::kComma) {
         // Arg list with 2 or more args, consume the ',':
-        ++tokenPtr;
+        parseCtx.nextTok();
         
         // There should be an argument list following:
-        FuncArgList * argList = FuncArgList::parse(tokenPtr, alloc);
+        FuncArgList * argList = FuncArgList::parse(parseCtx);
         WC_GUARD(argList, nullptr);
         
         // Return the node!
-        return WC_NEW_AST_NODE(alloc, FuncArgListMulti, *arg, *argList);
+        return WC_NEW_AST_NODE(parseCtx, FuncArgListMulti, *arg, *argList);
     }
     
     // Arg list with just 1 arg:
-    return WC_NEW_AST_NODE(alloc, FuncArgListSingle, *arg);
+    return WC_NEW_AST_NODE(parseCtx, FuncArgListSingle, *arg);
 }
 
 //-----------------------------------------------------------------------------

@@ -4,9 +4,9 @@
 #include "DataType/Primitives/WCArrayDataType.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Constants.h>
@@ -22,40 +22,40 @@ bool Type::peek(const Token * currentToken) {
             PrimitiveType::peek(currentToken);
 }
 
-Type * Type::parse(const Token *& currentToken, LinearAlloc & alloc) {
+Type * Type::parse(ParseCtx & parseCtx) {
     // See if there is an array type following:
-    if (currentToken->type == TokenType::kLBrack) {
+    if (parseCtx.curTok->type == TokenType::kLBrack) {
         // Array type ahead: skip the '['
-        const Token * startToken = currentToken;
-        ++currentToken;
+        const Token * startToken = parseCtx.curTok;
+        parseCtx.nextTok();
         
         // Parse the inner assign expression for the array size:
-        AssignExpr * arraySizeExpr = AssignExpr::parse(currentToken, alloc);
+        AssignExpr * arraySizeExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(arraySizeExpr, nullptr);
         
         // Expect a ']' next:
-        if (currentToken->type != TokenType::kRBrack) {
-            parseError(*currentToken, "Expected ']' to close array size specifier!");
+        if (parseCtx.curTok->type != TokenType::kRBrack) {
+            parseError(parseCtx, "Expected ']' to close array size specifier!");
             return nullptr;
         }
         
         // Skip ']'
-        ++currentToken;
+        parseCtx.nextTok();
         
         // Parse the inner type following:
-        Type * innerType = Type::parse(currentToken, alloc);
+        Type * innerType = Type::parse(parseCtx);
         WC_GUARD(innerType, nullptr);
         
         // Return the array type:
-        return WC_NEW_AST_NODE(alloc, TypeArray, *startToken, *arraySizeExpr, *innerType);
+        return WC_NEW_AST_NODE(parseCtx, TypeArray, *startToken, *arraySizeExpr, *innerType);
     }
     
     // Primitive type following, parse it:
-    PrimitiveType * primitiveType = PrimitiveType::parse(currentToken, alloc);
+    PrimitiveType * primitiveType = PrimitiveType::parse(parseCtx);
     WC_GUARD(primitiveType, nullptr);
     
     // Return the node parsed
-    return WC_NEW_AST_NODE(alloc, TypePrimitive, *primitiveType);
+    return WC_NEW_AST_NODE(parseCtx, TypePrimitive, *primitiveType);
 }
 
 //-----------------------------------------------------------------------------

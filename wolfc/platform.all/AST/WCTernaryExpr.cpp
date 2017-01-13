@@ -1,12 +1,12 @@
 #include "WCTernaryExpr.hpp"
 
 #include "DataType/WCDataType.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCLOrExpr.hpp"
+#include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -17,39 +17,39 @@ bool TernaryExpr::peek(const Token * tokenPtr) {
     return LOrExpr::peek(tokenPtr);
 }
 
-TernaryExpr * TernaryExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+TernaryExpr * TernaryExpr::parse(ParseCtx & parseCtx) {
     // Parse the initial expression
-    LOrExpr * firstExpr = LOrExpr::parse(tokenPtr, alloc);
+    LOrExpr * firstExpr = LOrExpr::parse(parseCtx);
     WC_GUARD(firstExpr, nullptr);
     
     // See if a '?' follows:
-    if (tokenPtr->type == TokenType::kQMark) {
+    if (parseCtx.curTok->type == TokenType::kQMark) {
         // Alright, consume that '?':
-        ++tokenPtr;
+        parseCtx.nextTok();
         
         // Now parse the 'true' expression:
-        AssignExpr * trueExpr = AssignExpr::parse(tokenPtr, alloc);
+        AssignExpr * trueExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(trueExpr, nullptr);
         
         // Expect a colon to separate 'true' from false:
-        if (tokenPtr->type != TokenType::kColon) {
-            parseError(*tokenPtr, "Expected ':' following 'true' value in ternary expression.");
+        if (parseCtx.curTok->type != TokenType::kColon) {
+            parseError(parseCtx, "Expected ':' following 'true' value in ternary expression.");
             return nullptr;
         }
         
         // Consume the ':'
-        ++tokenPtr;
+        parseCtx.nextTok();
         
         // Now parse the 'false' expression:
-        AssignExpr * falseExpr = AssignExpr::parse(tokenPtr, alloc);
+        AssignExpr * falseExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(falseExpr, nullptr);
         
         // All done: return the parsed node:
-        return WC_NEW_AST_NODE(alloc, TernaryExprWithCond, *firstExpr, *trueExpr, *falseExpr);
+        return WC_NEW_AST_NODE(parseCtx, TernaryExprWithCond, *firstExpr, *trueExpr, *falseExpr);
     }
 
     // Ternary expression with no condition:
-    return WC_NEW_AST_NODE(alloc, TernaryExprNoCond, *firstExpr);
+    return WC_NEW_AST_NODE(parseCtx, TernaryExprNoCond, *firstExpr);
 }
 
 //-----------------------------------------------------------------------------

@@ -20,7 +20,7 @@ VarDecl:
 class VarDecl : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    static VarDecl * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static VarDecl * parse(ParseCtx & parseCtx);
     
     VarDecl(const Token & startToken,
             Identifier & ident,

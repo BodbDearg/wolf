@@ -3,27 +3,28 @@
 #include "DataType/WCDataType.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 #include "WCStmnt.hpp"
 #include "WCStringUtils.hpp"
 #include "WCVarDecl.hpp"
 
 WC_BEGIN_NAMESPACE
 
-Scope * Scope::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+Scope * Scope::parse(ParseCtx & parseCtx) {
     // Save start token:
-    const Token * startToken = tokenPtr;
+    const Token * startToken = parseCtx.curTok;
     
     // Parse all statements we can:
     std::vector<Stmnt*> stmnts;
     
-    while (Stmnt::peek(tokenPtr)) {
-        Stmnt * stmnt = Stmnt::parse(tokenPtr, alloc);
+    while (Stmnt::peek(parseCtx.curTok)) {
+        Stmnt * stmnt = Stmnt::parse(parseCtx);
         WC_GUARD(stmnt, nullptr);
         stmnts.push_back(stmnt);
     }
     
     // Return the parsed scope
-    return WC_NEW_AST_NODE(alloc, Scope, *startToken, std::move(stmnts));
+    return WC_NEW_AST_NODE(parseCtx, Scope, *startToken, std::move(stmnts));
 }
 
 Scope::Scope(const Token & startToken, std::vector<Stmnt*> && stmnts)

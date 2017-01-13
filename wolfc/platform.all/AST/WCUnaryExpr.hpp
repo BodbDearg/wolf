@@ -20,7 +20,7 @@ UnaryExpr:
 class UnaryExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * currentToken);
-    static UnaryExpr * parse(const Token *& currentToken, LinearAlloc & alloc);
+    static UnaryExpr * parse(ParseCtx & parseCtx);
 };
 
 /* PostfixExpr */

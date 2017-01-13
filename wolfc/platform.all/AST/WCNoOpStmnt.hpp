@@ -14,7 +14,7 @@ NoOpStmnt:
 class NoOpStmnt final : public ASTNode, public IStmnt {
 public:
     static bool peek(const Token * tokenPtr);
-    static NoOpStmnt * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static NoOpStmnt * parse(ParseCtx & parseCtx);
     
     NoOpStmnt(const Token & token);
     

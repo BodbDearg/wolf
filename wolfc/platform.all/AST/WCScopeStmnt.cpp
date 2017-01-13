@@ -2,11 +2,11 @@
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 #include "WCScope.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -15,33 +15,33 @@ bool ScopeStmnt::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kScope;
 }
 
-ScopeStmnt * ScopeStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+ScopeStmnt * ScopeStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'scope' keyword
-    if (!peek(tokenPtr)) {
-        parseError(*tokenPtr, "'scope' statement expected!");
+    if (!peek(parseCtx.curTok)) {
+        parseError(parseCtx, "'scope' statement expected!");
         return nullptr;
     }
     
     // Skip the 'scope' token and save location
-    const Token * startToken = tokenPtr;
-    ++tokenPtr;
+    const Token * startToken = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // Parse the body scope:
-    Scope * bodyScope = Scope::parse(tokenPtr, alloc);
+    Scope * bodyScope = Scope::parse(parseCtx);
     WC_GUARD(bodyScope, nullptr);
     
     // Must be terminated by an 'end' token
-    if (tokenPtr->type != TokenType::kEnd) {
-        parseError(*tokenPtr, "'end' expected to terminate 'scope' block!");
+    if (parseCtx.curTok->type != TokenType::kEnd) {
+        parseError(parseCtx, "'end' expected to terminate 'scope' block!");
         return nullptr;
     }
     
     // Skip 'end' token and save location
-    const Token * endToken = tokenPtr;
-    ++tokenPtr;
+    const Token * endToken = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // Done: return the parsed statement
-    return WC_NEW_AST_NODE(alloc, ScopeStmnt, *startToken, *bodyScope, *endToken);
+    return WC_NEW_AST_NODE(parseCtx, ScopeStmnt, *startToken, *bodyScope, *endToken);
 }
 
 ScopeStmnt::ScopeStmnt(const Token & startToken, Scope & bodyScope, const Token & endToken) :

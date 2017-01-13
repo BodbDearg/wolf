@@ -17,7 +17,7 @@ RandExpr:
 class RandExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * tokenPtr);
-    static RandExpr * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static RandExpr * parse(ParseCtx & parseCtx);
     
     RandExpr(const Token & startToken, const Token & endToken);
     

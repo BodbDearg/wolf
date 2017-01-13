@@ -29,7 +29,7 @@ PrimaryExpr:
 class PrimaryExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * currentToken);
-    static PrimaryExpr * parse(const Token *& currentToken, LinearAlloc & alloc);
+    static PrimaryExpr * parse(ParseCtx & parseCtx);
 };
 
 /* IntLit */

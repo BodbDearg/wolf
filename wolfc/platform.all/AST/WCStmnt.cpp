@@ -9,6 +9,7 @@
 #include "WCLoopStmnt.hpp"
 #include "WCNextStmnt.hpp"
 #include "WCNoOpStmnt.hpp"
+#include "WCParseCtx.hpp"
 #include "WCPrintStmnt.hpp"
 #include "WCReturnStmnt.hpp"
 #include "WCScopeStmnt.hpp"
@@ -35,88 +36,88 @@ bool Stmnt::peek(const Token * tokenPtr) {
             AssignExpr::peek(tokenPtr);
 }
     
-Stmnt * Stmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+Stmnt * Stmnt::parse(ParseCtx & parseCtx) {
     // Parse 'noop' statment if ahead
-    if (NoOpStmnt::peek(tokenPtr)) {
-        NoOpStmnt * noOpStmnt = NoOpStmnt::parse(tokenPtr, alloc);
+    if (NoOpStmnt::peek(parseCtx.curTok)) {
+        NoOpStmnt * noOpStmnt = NoOpStmnt::parse(parseCtx);
         WC_GUARD(noOpStmnt, nullptr);
-        return WC_NEW_AST_NODE(alloc, StmntNoOpStmnt, *noOpStmnt);
+        return WC_NEW_AST_NODE(parseCtx, StmntNoOpStmnt, *noOpStmnt);
     }
     
     // Parse print expression if ahead
-    if (PrintStmnt::peek(tokenPtr)) {
-        PrintStmnt * printStmnt = PrintStmnt::parse(tokenPtr, alloc);
+    if (PrintStmnt::peek(parseCtx.curTok)) {
+        PrintStmnt * printStmnt = PrintStmnt::parse(parseCtx);
         WC_GUARD(printStmnt, nullptr);
-        return WC_NEW_AST_NODE(alloc, StmntPrintStmnt, *printStmnt);
+        return WC_NEW_AST_NODE(parseCtx, StmntPrintStmnt, *printStmnt);
     }
     
     // Parse assert expression if ahead
-    if (AssertStmnt::peek(tokenPtr)) {
-        AssertStmnt * assertStmnt = AssertStmnt::parse(tokenPtr, alloc);
+    if (AssertStmnt::peek(parseCtx.curTok)) {
+        AssertStmnt * assertStmnt = AssertStmnt::parse(parseCtx);
         WC_GUARD(assertStmnt, nullptr);
-        return WC_NEW_AST_NODE(alloc, StmntAssertStmnt, *assertStmnt);
+        return WC_NEW_AST_NODE(parseCtx, StmntAssertStmnt, *assertStmnt);
     }
     
     // Parse var decl if ahead
-    if (VarDecl::peek(tokenPtr)) {
-        VarDecl * varDecl = VarDecl::parse(tokenPtr, alloc);
+    if (VarDecl::peek(parseCtx.curTok)) {
+        VarDecl * varDecl = VarDecl::parse(parseCtx);
         WC_GUARD(varDecl, nullptr);
-        return WC_NEW_AST_NODE(alloc, StmntVarDecl, *varDecl);
+        return WC_NEW_AST_NODE(parseCtx, StmntVarDecl, *varDecl);
     }
     
     // Parse if statement if ahead
-    if (IfStmnt::peek(tokenPtr)) {
-        IfStmnt * ifStmnt = IfStmnt::parse(tokenPtr, alloc);
+    if (IfStmnt::peek(parseCtx.curTok)) {
+        IfStmnt * ifStmnt = IfStmnt::parse(parseCtx);
         WC_GUARD(ifStmnt, nullptr);
-        return WC_NEW_AST_NODE(alloc, StmntIfStmnt, *ifStmnt);
+        return WC_NEW_AST_NODE(parseCtx, StmntIfStmnt, *ifStmnt);
     }
     
     // Parse while statement if ahead
-    if (WhileStmnt::peek(tokenPtr)) {
-        WhileStmnt * whileStmnt = WhileStmnt::parse(tokenPtr, alloc);
+    if (WhileStmnt::peek(parseCtx.curTok)) {
+        WhileStmnt * whileStmnt = WhileStmnt::parse(parseCtx);
         WC_GUARD(whileStmnt, nullptr);
-        return WC_NEW_AST_NODE(alloc, StmntWhileStmnt, *whileStmnt);
+        return WC_NEW_AST_NODE(parseCtx, StmntWhileStmnt, *whileStmnt);
     }
     
     // Parse loop statement if ahead
-    if (LoopStmnt::peek(tokenPtr)) {
-        LoopStmnt * loopStmnt = LoopStmnt::parse(tokenPtr, alloc);
+    if (LoopStmnt::peek(parseCtx.curTok)) {
+        LoopStmnt * loopStmnt = LoopStmnt::parse(parseCtx);
         WC_GUARD(loopStmnt, nullptr);
-        return WC_NEW_AST_NODE(alloc, StmntLoopStmnt, *loopStmnt);
+        return WC_NEW_AST_NODE(parseCtx, StmntLoopStmnt, *loopStmnt);
     }
     
     // Parse break statement if ahead
-    if (BreakStmnt::peek(tokenPtr)) {
-        BreakStmnt * breakStmnt = BreakStmnt::parse(tokenPtr, alloc);
+    if (BreakStmnt::peek(parseCtx.curTok)) {
+        BreakStmnt * breakStmnt = BreakStmnt::parse(parseCtx);
         WC_GUARD(breakStmnt, nullptr);
-        return WC_NEW_AST_NODE(alloc, StmntBreakStmnt, *breakStmnt);
+        return WC_NEW_AST_NODE(parseCtx, StmntBreakStmnt, *breakStmnt);
     }
     
     // Parse scope statement if ahead
-    if (ScopeStmnt::peek(tokenPtr)) {
-        ScopeStmnt * scopeStmnt = ScopeStmnt::parse(tokenPtr, alloc);
+    if (ScopeStmnt::peek(parseCtx.curTok)) {
+        ScopeStmnt * scopeStmnt = ScopeStmnt::parse(parseCtx);
         WC_GUARD(scopeStmnt, nullptr);
-        return WC_NEW_AST_NODE(alloc, StmntScopeStmnt, *scopeStmnt);
+        return WC_NEW_AST_NODE(parseCtx, StmntScopeStmnt, *scopeStmnt);
     }
     
     // Parse next statement if ahead
-    if (NextStmnt::peek(tokenPtr)) {
-        NextStmnt * nextStmnt = NextStmnt::parse(tokenPtr, alloc);
+    if (NextStmnt::peek(parseCtx.curTok)) {
+        NextStmnt * nextStmnt = NextStmnt::parse(parseCtx);
         WC_GUARD(nextStmnt, nullptr);
-        return WC_NEW_AST_NODE(alloc, StmntNextStmnt, *nextStmnt);
+        return WC_NEW_AST_NODE(parseCtx, StmntNextStmnt, *nextStmnt);
     }
     
     // Parse return statement if ahead
-    if (ReturnStmnt::peek(tokenPtr)) {
-        ReturnStmnt * returnStmnt = ReturnStmnt::parse(tokenPtr, alloc);
+    if (ReturnStmnt::peek(parseCtx.curTok)) {
+        ReturnStmnt * returnStmnt = ReturnStmnt::parse(parseCtx);
         WC_GUARD(returnStmnt, nullptr);
-        return WC_NEW_AST_NODE(alloc, StmntReturnStmnt, *returnStmnt);
+        return WC_NEW_AST_NODE(parseCtx, StmntReturnStmnt, *returnStmnt);
     }
     
     // Otherwise parse assign expression
-    AssignExpr * assignExpr = AssignExpr::parse(tokenPtr, alloc);
+    AssignExpr * assignExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(assignExpr, nullptr);
-    return WC_NEW_AST_NODE(alloc, StmntAssignExpr, *assignExpr);
+    return WC_NEW_AST_NODE(parseCtx, StmntAssignExpr, *assignExpr);
 }
 
 //-----------------------------------------------------------------------------

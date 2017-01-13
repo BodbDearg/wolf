@@ -15,7 +15,7 @@ PrimitiveType:
 class PrimitiveType final : public ASTNode {
 public:
     static bool peek(const Token * currentToken);
-    static PrimitiveType * parse(const Token *& currentToken, LinearAlloc & alloc);
+    static PrimitiveType * parse(ParseCtx & parseCtx);
     
     PrimitiveType(const Token & token);
     

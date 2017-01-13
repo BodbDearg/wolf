@@ -2,10 +2,10 @@
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCLAndExpr.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -16,14 +16,14 @@ bool LOrExpr::peek(const Token * tokenPtr) {
     return LAndExpr::peek(tokenPtr);
 }
 
-LOrExpr * LOrExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+LOrExpr * LOrExpr::parse(ParseCtx & parseCtx) {
     // Parse the initial expression
-    LAndExpr * andExpr = LAndExpr::parse(tokenPtr, alloc);
+    LAndExpr * andExpr = LAndExpr::parse(parseCtx);
     WC_GUARD(andExpr, nullptr);
     
     // See if there is an 'or' for logical or:
-    if (tokenPtr->type == TokenType::kOr) {
-        TokenType nextTokType = tokenPtr[1].type;
+    if (parseCtx.curTok->type == TokenType::kOr) {
+        TokenType nextTokType = parseCtx.curTok[1].type;
 
         // Note: do not parse if we find 'or if' or 'or unless' since those are block
         // terminators for a 'if / or if / else' chain
@@ -31,17 +31,17 @@ LOrExpr * LOrExpr::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
             nextTokType != TokenType::kUnless)
         {
             // Or expression with or. Skip the 'or'
-            ++tokenPtr;
+            parseCtx.nextTok();
         
             // Parse the following and expression and create the AST node
-            LOrExpr * orExpr = LOrExpr::parse(tokenPtr, alloc);
+            LOrExpr * orExpr = LOrExpr::parse(parseCtx);
             WC_GUARD(orExpr, nullptr);
-            return WC_NEW_AST_NODE(alloc, LOrExprOr, *andExpr, *orExpr);
+            return WC_NEW_AST_NODE(parseCtx, LOrExprOr, *andExpr, *orExpr);
         }
     }
 
     // Basic no-op expression
-    return WC_NEW_AST_NODE(alloc, LOrExprNoOp, *andExpr);
+    return WC_NEW_AST_NODE(parseCtx, LOrExprNoOp, *andExpr);
 }
 
 //-----------------------------------------------------------------------------

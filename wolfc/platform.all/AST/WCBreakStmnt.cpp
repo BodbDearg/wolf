@@ -1,12 +1,12 @@
 #include "WCBreakStmnt.hpp"
 
 #include "DataType/WCDataType.hpp"
-#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCodegenCtx.hpp"
 #include "WCIRepeatableStmnt.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <functional>
@@ -22,33 +22,33 @@ bool BreakStmnt::peek(const Token * tokenPtr) {
     return tokenPtr[0].type == TokenType::kBreak;
 }
 
-BreakStmnt * BreakStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+BreakStmnt * BreakStmnt::parse(ParseCtx & parseCtx) {
     // Check the basics
-    if (!peek(tokenPtr)) {
-        parseError(*tokenPtr, "Expected break statement!");
+    if (!peek(parseCtx.curTok)) {
+        parseError(parseCtx, "Expected break statement!");
         return nullptr;
     }
     
     // Consume 'break' and save token for later:
-    const Token * breakTok = tokenPtr;
-    ++tokenPtr;
+    const Token * breakTok = parseCtx.curTok;
+    parseCtx.nextTok();
     
     // See whether 'if' or 'unless' follow, in which case the 'break' statement is conditional:
-    if (tokenPtr->type == TokenType::kIf || tokenPtr->type == TokenType::kUnless) {
+    if (parseCtx.curTok->type == TokenType::kIf || parseCtx.curTok->type == TokenType::kUnless) {
         // Parse the condition token:
-        const Token * condTok = tokenPtr;
-        ++tokenPtr;
+        const Token * condTok = parseCtx.curTok;
+        parseCtx.nextTok();
         
         // Parse the condition assign expression:
-        AssignExpr * condExpr = AssignExpr::parse(tokenPtr, alloc);
+        AssignExpr * condExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(condExpr, nullptr);
         
         // 'break' with a condition:
-        return WC_NEW_AST_NODE(alloc, BreakStmntWithCond, *breakTok, *condTok, *condExpr);
+        return WC_NEW_AST_NODE(parseCtx, BreakStmntWithCond, *breakTok, *condTok, *condExpr);
     }
     
     // 'break' without a condition:
-    return WC_NEW_AST_NODE(alloc, BreakStmntNoCond, *breakTok);
+    return WC_NEW_AST_NODE(parseCtx, BreakStmntNoCond, *breakTok);
 }
 
 BreakStmnt::BreakStmnt(const Token & breakToken) : mBreakToken(breakToken) {

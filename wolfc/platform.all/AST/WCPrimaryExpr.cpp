@@ -1,11 +1,11 @@
 #include "WCPrimaryExpr.hpp"
 
-#include "Lexer/WCToken.hpp"
 #include "WCArrayLit.hpp"
 #include "WCBoolLit.hpp"
 #include "WCIdentifier.hpp"
 #include "WCIntLit.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 #include "WCRandExpr.hpp"
 #include "WCReadnumExpr.hpp"
 #include "WCStrLit.hpp"
@@ -27,49 +27,49 @@ bool PrimaryExpr::peek(const Token * currentToken) {
             RandExpr::peek(currentToken);
 }
 
-PrimaryExpr * PrimaryExpr::parse(const Token *& currentToken, LinearAlloc & alloc) {
-    if (IntLit::peek(currentToken)) {
-        IntLit * uintLit = IntLit::parse(currentToken, alloc);
+PrimaryExpr * PrimaryExpr::parse(ParseCtx & parseCtx) {
+    if (IntLit::peek(parseCtx.curTok)) {
+        IntLit * uintLit = IntLit::parse(parseCtx);
         WC_GUARD(uintLit, nullptr);
-        return WC_NEW_AST_NODE(alloc, PrimaryExprIntLit, *uintLit);
+        return WC_NEW_AST_NODE(parseCtx, PrimaryExprIntLit, *uintLit);
     }
-    else if (BoolLit::peek(currentToken)) {
-        BoolLit * boolLit = BoolLit::parse(currentToken, alloc);
+    else if (BoolLit::peek(parseCtx.curTok)) {
+        BoolLit * boolLit = BoolLit::parse(parseCtx);
         WC_GUARD(boolLit, nullptr);
-        return WC_NEW_AST_NODE(alloc, PrimaryExprBoolLit, *boolLit);
+        return WC_NEW_AST_NODE(parseCtx, PrimaryExprBoolLit, *boolLit);
     }
-    else if (StrLit::peek(currentToken)) {
-        StrLit * strLit = StrLit::parse(currentToken, alloc);
+    else if (StrLit::peek(parseCtx.curTok)) {
+        StrLit * strLit = StrLit::parse(parseCtx);
         WC_GUARD(strLit, nullptr);
-        return WC_NEW_AST_NODE(alloc, PrimaryExprStrLit, *strLit);
+        return WC_NEW_AST_NODE(parseCtx, PrimaryExprStrLit, *strLit);
     }
-    else if (ArrayLit::peek(currentToken)) {
-        ArrayLit * arrayLit = ArrayLit::parse(currentToken, alloc);
+    else if (ArrayLit::peek(parseCtx.curTok)) {
+        ArrayLit * arrayLit = ArrayLit::parse(parseCtx);
         WC_GUARD(arrayLit, nullptr);
-        return WC_NEW_AST_NODE(alloc, PrimaryExprArrayLit, *arrayLit);
+        return WC_NEW_AST_NODE(parseCtx, PrimaryExprArrayLit, *arrayLit);
     }
-    else if (Identifier::peek(currentToken)) {
-        Identifier * identifier = Identifier::parse(currentToken, alloc);
+    else if (Identifier::peek(parseCtx.curTok)) {
+        Identifier * identifier = Identifier::parse(parseCtx);
         WC_GUARD(identifier, nullptr);
-        return WC_NEW_AST_NODE(alloc, PrimaryExprIdentifier, *identifier);
+        return WC_NEW_AST_NODE(parseCtx, PrimaryExprIdentifier, *identifier);
     }
-    else if (ReadnumExpr::peek(currentToken)) {
-        ReadnumExpr * expr = ReadnumExpr::parse(currentToken, alloc);
+    else if (ReadnumExpr::peek(parseCtx.curTok)) {
+        ReadnumExpr * expr = ReadnumExpr::parse(parseCtx);
         WC_GUARD(expr, nullptr);
-        return WC_NEW_AST_NODE(alloc, PrimaryExprReadnum, *expr);
+        return WC_NEW_AST_NODE(parseCtx, PrimaryExprReadnum, *expr);
     }
-    else if (TimeExpr::peek(currentToken)) {
-        TimeExpr * expr = TimeExpr::parse(currentToken, alloc);
+    else if (TimeExpr::peek(parseCtx.curTok)) {
+        TimeExpr * expr = TimeExpr::parse(parseCtx);
         WC_GUARD(expr, nullptr);
-        return WC_NEW_AST_NODE(alloc, PrimaryExprTime, *expr);
+        return WC_NEW_AST_NODE(parseCtx, PrimaryExprTime, *expr);
     }
-    else if (RandExpr::peek(currentToken)) {
-        RandExpr * expr = RandExpr::parse(currentToken, alloc);
+    else if (RandExpr::peek(parseCtx.curTok)) {
+        RandExpr * expr = RandExpr::parse(parseCtx);
         WC_GUARD(expr, nullptr);
-        return WC_NEW_AST_NODE(alloc, PrimaryExprRandExpr, *expr);
+        return WC_NEW_AST_NODE(parseCtx, PrimaryExprRandExpr, *expr);
     }
     
-    parseError(*currentToken, "Expected primary expression!");
+    parseError(parseCtx, "Expected primary expression!");
     return nullptr;
 }
 

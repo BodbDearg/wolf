@@ -1,7 +1,7 @@
 #include "WCNoOpStmnt.hpp"
 
-#include "Lexer/WCToken.hpp"
 #include "WCLinearAlloc.hpp"
+#include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -9,17 +9,17 @@ bool NoOpStmnt::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kNoOp;
 }
 
-NoOpStmnt * NoOpStmnt::parse(const Token *& tokenPtr, LinearAlloc & alloc) {
+NoOpStmnt * NoOpStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'noop'
-    if (tokenPtr->type != TokenType::kNoOp) {
-        parseError(*tokenPtr, "'noop' statement expected!");
+    if (parseCtx.curTok->type != TokenType::kNoOp) {
+        parseError(parseCtx, "'noop' statement expected!");
         return nullptr;
     }
     
     // Consume and save the token and return the parsed statement
-    const Token * startToken = tokenPtr;
-    ++tokenPtr;
-    return WC_NEW_AST_NODE(alloc, NoOpStmnt, *startToken);
+    const Token * startToken = parseCtx.curTok;
+    parseCtx.nextTok();
+    return WC_NEW_AST_NODE(parseCtx, NoOpStmnt, *startToken);
 }
 
 NoOpStmnt::NoOpStmnt(const Token & token) : mToken(token) {

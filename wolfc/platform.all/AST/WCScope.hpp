@@ -25,7 +25,7 @@ Scope:
 */
 class Scope final : public ASTNode, public IStmnt {
 public:
-    static Scope * parse(const Token *& tokenPtr, LinearAlloc & alloc);
+    static Scope * parse(ParseCtx & parseCtx);
     
     Scope(const Token & startToken, std::vector<Stmnt*> && stmnts);
     

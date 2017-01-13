@@ -1,12 +1,14 @@
 #pragma once
 
-#include "WCToken.hpp"
+#include "WCTokenType.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <vector>
 WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
+
+struct Token;
 
 /**
  * Splits input source text into Wolf tokens.
