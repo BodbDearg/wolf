@@ -15,6 +15,25 @@ WC_THIRD_PARTY_INCLUDES_END
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
+bool Module::parse(ParseCtx & parseCtx) {
+    
+    
+    while (DeclDef::peek(parseCtx.curTok)) {
+        DeclDef * declDef = DeclDef::parse(parseCtx);
+        WC_GUARD(declDef, false);
+        declDef->mParent = this;
+        mDeclDefs.push_back(declDef);
+    }
+    
+    if (parseCtx.curTok->type != TokenType::kEOF) {
+        parseError(parseCtx, "Expected EOF at end of module code!");
+        mDeclDefs.clear();
+        return false;
+    }
+    
+    return true;
+}
+
 Module::Module(llvm::LLVMContext & llvmCtx) :
     mLLVMCtx(llvmCtx),
     mEOFToken(nullptr)
@@ -45,22 +64,7 @@ const Token & Module::getEndToken() const {
     return *mEOFToken;
 }
 
-bool Module::parse(ParseCtx & parseCtx) {
-    while (DeclDef::peek(parseCtx.curTok)) {
-        DeclDef * declDef = DeclDef::parse(parseCtx);
-        WC_GUARD(declDef, false);
-        declDef->mParent = this;
-        mDeclDefs.push_back(declDef);
-    }
-    
-    if (parseCtx.curTok->type != TokenType::kEOF) {
-        parseError(parseCtx, "Expected EOF at end of module code!");
-        mDeclDefs.clear();
-        return false;
-    }
-    
-    return true;
-}
+
 
 bool Module::generateCode() {
     // Clear out previous code and check we parsed ok

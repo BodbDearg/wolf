@@ -1,4 +1,4 @@
-#include "AST/WCModule.hpp"
+#include "AST/Nodes/WCModule.hpp"
 #include "Lexer/WCLexer.hpp"
 #include "WCFileUtils.hpp"
 #include "WCLinearAlloc.hpp"

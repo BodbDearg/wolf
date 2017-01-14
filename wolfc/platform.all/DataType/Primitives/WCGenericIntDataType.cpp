@@ -1,6 +1,6 @@
 #include "WCGenericIntDataType.hpp"
 
-#include "AST/WCASTNode.hpp"
+#include "AST/Nodes/WCASTNode.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 

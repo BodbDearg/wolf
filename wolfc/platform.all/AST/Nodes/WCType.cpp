@@ -1,6 +1,6 @@
 #include "WCType.hpp"
 
-#include "AST/WCPrimitiveType.hpp"
+#include "AST/Nodes/WCPrimitiveType.hpp"
 #include "DataType/Primitives/WCArrayDataType.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"

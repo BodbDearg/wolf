@@ -1,6 +1,6 @@
 #include "WCUnknownDataType.hpp"
 
-#include "AST/WCPrintStmnt.hpp"
+#include "AST/Nodes/WCPrintStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
 

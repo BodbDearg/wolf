@@ -1,6 +1,6 @@
 #include "WCArrayDataType.hpp"
 
-#include "AST/WCPrintStmnt.hpp"
+#include "AST/Nodes/WCPrintStmnt.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
 

@@ -1,7 +1,7 @@
 #include "WCVoidDataType.hpp"
 
-#include "AST/WCASTNode.hpp"
-#include "AST/WCPrintStmnt.hpp"
+#include "AST/Nodes/WCASTNode.hpp"
+#include "AST/Nodes/WCPrintStmnt.hpp"
 #include "WCCodegenCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
