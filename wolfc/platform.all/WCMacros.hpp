@@ -1,13 +1,18 @@
 #pragma once
 
-/* The name of the wolfc namespace */
-#define WC_NAMESPACE_NAME wolfc
+/* The name of the main compiler namespace */
+#define WC_NAMESPACE_NAME Wolfc
 
-/* Begin namespace macro for the compiler. */
+/* The name of the AST namespace */
+#define WC_AST_NAMESPACE_NAME AST
+
+/* Begin namespace macros for different compiler namespaces. */
 #define WC_BEGIN_NAMESPACE namespace WC_NAMESPACE_NAME {
+#define WC_AST_BEGIN_NAMESPACE namespace WC_AST_NAMESPACE_NAME {
 
-/* End namespace macro for the compiler. */
+/* End namespace macros for different compiler namespaces. */
 #define WC_END_NAMESPACE }
+#define WC_AST_END_NAMESPACE }
 
 /* Documentation macro. Clarify an empty function body is intentional. */
 #define WC_EMPTY_FUNC_BODY()\

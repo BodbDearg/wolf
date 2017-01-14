@@ -159,7 +159,7 @@ RandExprSRand::RandExprSRand(const Token & startToken,
                              AssignExpr & seedExpr,
                              const Token & endToken)
 :
-    wolfc::RandExpr(startToken, endToken),
+    RandExpr(startToken, endToken),
     mSeedExpr(seedExpr)
 {
     mSeedExpr.mParent = this;

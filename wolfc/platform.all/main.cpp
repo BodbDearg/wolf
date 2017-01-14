@@ -14,8 +14,6 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
     #endif
 WC_THIRD_PARTY_INCLUDES_END
 
-using namespace wolfc;
-
 /* The actual implementation of main */
 static int mainImpl(int argc, const char * argv[]) {
     // Arg check
@@ -25,7 +23,7 @@ static int mainImpl(int argc, const char * argv[]) {
     }
 
     // Read the input file
-    std::unique_ptr<char[]> inputSrc(wolfc::FileUtils::readTextFileAsCString(argv[1]));
+    std::unique_ptr<char[]> inputSrc(Wolfc::FileUtils::readTextFileAsCString(argv[1]));
 
     if (!inputSrc) {
         std::printf("Failed to read input Wolf source file '%s'!\n", argv[1]);
@@ -36,11 +34,11 @@ static int mainImpl(int argc, const char * argv[]) {
     llvm::LLVMContext llvmContext;
 
     // Run it through the lexer
-    Lexer lexer;
+    Wolfc::Lexer lexer;
     WC_GUARD(lexer.process(inputSrc.get()), -1);
 
     // Linear allocator that we can use
-    LinearAlloc linearAlloc(
+    Wolfc::LinearAlloc linearAlloc(
         1024 * 1024,        /* 1 MB max alloc */
         1024 * 1024 * 16,   /* 16 MB block size */
         128,                /* Space in blocks array to reserve */
@@ -49,10 +47,10 @@ static int mainImpl(int argc, const char * argv[]) {
 
     {
         // Declare the module
-        Module module(llvmContext);
+        Wolfc::Module module(llvmContext);
         
         // Create a parsing context and parse the module
-        ParseCtx parseCtx(lexer.getTokenList(), linearAlloc);
+        Wolfc::ParseCtx parseCtx(lexer.getTokenList(), linearAlloc);
 
         if (!module.parse(parseCtx)) {
             std::printf("Parsing failed for source file '%s'!\n", argv[1]);
