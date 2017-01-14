@@ -10,142 +10,142 @@ public:
     virtual bool isInteger() const final override;
     
     virtual llvm::Value * codegenCmpEQOp(CodegenCtx & cgCtx,
-                                         ASTNode & callingNode,
+                                         AST::ASTNode & callingNode,
                                          llvm::Value & leftVal,
                                          DataType & rightTy,
                                          llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenCmpNEOp(CodegenCtx & cgCtx,
-                                         ASTNode & callingNode,
+                                         AST::ASTNode & callingNode,
                                          llvm::Value & leftVal,
                                          DataType & rightTy,
                                          llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenAddOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
+                                       AST::ASTNode & callingNode,
                                        llvm::Value & leftVal,
                                        DataType & rightTy,
                                        llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenSubOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
+                                       AST::ASTNode & callingNode,
                                        llvm::Value & leftVal,
                                        DataType & rightTy,
                                        llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenBOrOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
+                                       AST::ASTNode & callingNode,
                                        llvm::Value & leftVal,
                                        DataType & rightTy,
                                        llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenBXOrOp(CodegenCtx & cgCtx,
-                                        ASTNode & callingNode,
+                                        AST::ASTNode & callingNode,
                                         llvm::Value & leftVal,
                                         DataType & rightTy,
                                         llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenMulOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
+                                       AST::ASTNode & callingNode,
                                        llvm::Value & leftVal,
                                        DataType & rightTy,
                                        llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenBAndOp(CodegenCtx & cgCtx,
-                                        ASTNode & callingNode,
+                                        AST::ASTNode & callingNode,
                                         llvm::Value & leftVal,
                                         DataType & rightTy,
                                         llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenLShiftOp(CodegenCtx & cgCtx,
-                                          ASTNode & callingNode,
+                                          AST::ASTNode & callingNode,
                                           llvm::Value & leftVal,
                                           DataType & rightTy,
                                           llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenLRShiftOp(CodegenCtx & cgCtx,
-                                           ASTNode & callingNode,
+                                           AST::ASTNode & callingNode,
                                            llvm::Value & leftVal,
                                            DataType & rightTy,
                                            llvm::Value & rightVal) override;
 
     virtual llvm::Value * codegenBNotOp(CodegenCtx & cgCtx,
-                                        ASTNode & callingNode,
+                                        AST::ASTNode & callingNode,
                                         llvm::Value & val) override;
     
     virtual llvm::Value * codegenPlusOp(CodegenCtx & cgCtx,
-                                        ASTNode & callingNode,
+                                        AST::ASTNode & callingNode,
                                         llvm::Value & val) override;
     
     virtual llvm::Value * codegenMinusOp(CodegenCtx & cgCtx,
-                                         ASTNode & callingNode,
+                                         AST::ASTNode & callingNode,
                                          llvm::Value & val) override;
     
     virtual llvm::Value * codegenIncOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
+                                       AST::ASTNode & callingNode,
                                        llvm::Value & val) override;
     
     virtual llvm::Value * codegenDecOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
+                                       AST::ASTNode & callingNode,
                                        llvm::Value & val) override;
 
-    virtual llvm::Constant * codegenConstCmpEQOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstCmpEQOp(AST::ASTNode & callingNode,
                                                  llvm::Constant & leftVal,
                                                  DataType & rightTy,
                                                  llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstCmpNEOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstCmpNEOp(AST::ASTNode & callingNode,
                                                  llvm::Constant & leftVal,
                                                  DataType & rightTy,
                                                  llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstAddOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstAddOp(AST::ASTNode & callingNode,
                                                llvm::Constant & leftVal,
                                                DataType & rightTy,
                                                llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstSubOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstSubOp(AST::ASTNode & callingNode,
                                                llvm::Constant & leftVal,
                                                DataType & rightTy,
                                                llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstBOrOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstBOrOp(AST::ASTNode & callingNode,
                                                llvm::Constant & leftVal,
                                                DataType & rightTy,
                                                llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstBXOrOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstBXOrOp(AST::ASTNode & callingNode,
                                                 llvm::Constant & leftVal,
                                                 DataType & rightTy,
                                                 llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstMulOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstMulOp(AST::ASTNode & callingNode,
                                                llvm::Constant & leftVal,
                                                DataType & rightTy,
                                                llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstBAndOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstBAndOp(AST::ASTNode & callingNode,
                                                 llvm::Constant & leftVal,
                                                 DataType & rightTy,
                                                 llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstLShiftOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstLShiftOp(AST::ASTNode & callingNode,
                                                   llvm::Constant & leftVal,
                                                   DataType & rightTy,
                                                   llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstLRShiftOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstLRShiftOp(AST::ASTNode & callingNode,
                                                    llvm::Constant & leftVal,
                                                    DataType & rightTy,
                                                    llvm::Constant & rightVal) override;
 
-    virtual llvm::Constant * codegenConstBNotOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstBNotOp(AST::ASTNode & callingNode,
                                                 llvm::Constant & val) override;
     
-    virtual llvm::Constant * codegenConstPlusOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstPlusOp(AST::ASTNode & callingNode,
                                                 llvm::Constant & val) override;
     
-    virtual llvm::Constant * codegenConstMinusOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstMinusOp(AST::ASTNode & callingNode,
                                                  llvm::Constant & val) override;
 };
 

@@ -7,11 +7,13 @@
 WC_BEGIN_NAMESPACE
 
 class ArrayDataType;
+
+WC_AST_BEGIN_NAMESPACE
+
 class AssignExpr;
 class CastExpr;
 class Func;
 class FuncCall;
-class LinearAlloc;
 
 /*
 PostfixExpr:
@@ -145,4 +147,5 @@ private:
     llvm::Value * codegenAddrOfArrayElem(CodegenCtx & cgCtx);
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

@@ -6,6 +6,7 @@
 #include "WCVarDecl.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // DeclDef
@@ -72,4 +73,5 @@ bool DeclDefVarDecl::codegen(CodegenCtx & cgCtx) {
     return mVarDecl.codegen(cgCtx);
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

@@ -15,7 +15,7 @@ bool GenericIntDataType::isInteger() const {
 }
 
 llvm::Value * GenericIntDataType::codegenCmpEQOp(CodegenCtx & cgCtx,
-                                                 ASTNode & callingNode,
+                                                 AST::ASTNode & callingNode,
                                                  llvm::Value & leftVal,
                                                  DataType & rightTy,
                                                  llvm::Value & rightVal)
@@ -29,7 +29,7 @@ llvm::Value * GenericIntDataType::codegenCmpEQOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericIntDataType::codegenCmpNEOp(CodegenCtx & cgCtx,
-                                                 ASTNode & callingNode,
+                                                 AST::ASTNode & callingNode,
                                                  llvm::Value & leftVal,
                                                  DataType & rightTy,
                                                  llvm::Value & rightVal)
@@ -43,7 +43,7 @@ llvm::Value * GenericIntDataType::codegenCmpNEOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericIntDataType::codegenAddOp(CodegenCtx & cgCtx,
-                                               ASTNode & callingNode,
+                                               AST::ASTNode & callingNode,
                                                llvm::Value & leftVal,
                                                DataType & rightTy,
                                                llvm::Value & rightVal)
@@ -57,7 +57,7 @@ llvm::Value * GenericIntDataType::codegenAddOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericIntDataType::codegenSubOp(CodegenCtx & cgCtx,
-                                               ASTNode & callingNode,
+                                               AST::ASTNode & callingNode,
                                                llvm::Value & leftVal,
                                                DataType & rightTy,
                                                llvm::Value & rightVal)
@@ -71,7 +71,7 @@ llvm::Value * GenericIntDataType::codegenSubOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericIntDataType::codegenBOrOp(CodegenCtx & cgCtx,
-                                               ASTNode & callingNode,
+                                               AST::ASTNode & callingNode,
                                                llvm::Value & leftVal,
                                                DataType & rightTy,
                                                llvm::Value & rightVal)
@@ -85,7 +85,7 @@ llvm::Value * GenericIntDataType::codegenBOrOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericIntDataType::codegenBXOrOp(CodegenCtx & cgCtx,
-                                                ASTNode & callingNode,
+                                                AST::ASTNode & callingNode,
                                                 llvm::Value & leftVal,
                                                 DataType & rightTy,
                                                 llvm::Value & rightVal)
@@ -99,7 +99,7 @@ llvm::Value * GenericIntDataType::codegenBXOrOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericIntDataType::codegenMulOp(CodegenCtx & cgCtx,
-                                               ASTNode & callingNode,
+                                               AST::ASTNode & callingNode,
                                                llvm::Value & leftVal,
                                                DataType & rightTy,
                                                llvm::Value & rightVal)
@@ -113,7 +113,7 @@ llvm::Value * GenericIntDataType::codegenMulOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericIntDataType::codegenBAndOp(CodegenCtx & cgCtx,
-                                                ASTNode & callingNode,
+                                                AST::ASTNode & callingNode,
                                                 llvm::Value & leftVal,
                                                 DataType & rightTy,
                                                 llvm::Value & rightVal)
@@ -127,7 +127,7 @@ llvm::Value * GenericIntDataType::codegenBAndOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericIntDataType::codegenLShiftOp(CodegenCtx & cgCtx,
-                                                  ASTNode & callingNode,
+                                                  AST::ASTNode & callingNode,
                                                   llvm::Value & leftVal,
                                                   DataType & rightTy,
                                                   llvm::Value & rightVal)
@@ -141,7 +141,7 @@ llvm::Value * GenericIntDataType::codegenLShiftOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericIntDataType::codegenLRShiftOp(CodegenCtx & cgCtx,
-                                                   ASTNode & callingNode,
+                                                   AST::ASTNode & callingNode,
                                                    llvm::Value & leftVal,
                                                    DataType & rightTy,
                                                    llvm::Value & rightVal)
@@ -155,7 +155,7 @@ llvm::Value * GenericIntDataType::codegenLRShiftOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericIntDataType::codegenBNotOp(CodegenCtx & cgCtx,
-                                                ASTNode & callingNode,
+                                                AST::ASTNode & callingNode,
                                                 llvm::Value & val)
 {
     WC_UNUSED_PARAM(callingNode);
@@ -163,7 +163,7 @@ llvm::Value * GenericIntDataType::codegenBNotOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericIntDataType::codegenPlusOp(CodegenCtx & cgCtx,
-                                                ASTNode & callingNode,
+                                                AST::ASTNode & callingNode,
                                                 llvm::Value & val)
 {
     // This is a 'no-op' for numbers - simply return the value passed in
@@ -173,7 +173,7 @@ llvm::Value * GenericIntDataType::codegenPlusOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericIntDataType::codegenMinusOp(CodegenCtx & cgCtx,
-                                                 ASTNode & callingNode,
+                                                 AST::ASTNode & callingNode,
                                                  llvm::Value & val)
 {
     #warning DO NOT ALLOW FOR UNSIGNED
@@ -183,7 +183,7 @@ llvm::Value * GenericIntDataType::codegenMinusOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericIntDataType::codegenIncOp(CodegenCtx & cgCtx,
-                                               ASTNode & callingNode,
+                                               AST::ASTNode & callingNode,
                                                llvm::Value & val)
 {
     WC_UNUSED_PARAM(callingNode);
@@ -193,7 +193,7 @@ llvm::Value * GenericIntDataType::codegenIncOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericIntDataType::codegenDecOp(CodegenCtx & cgCtx,
-                                               ASTNode & callingNode,
+                                               AST::ASTNode & callingNode,
                                                llvm::Value & val)
 {
     WC_UNUSED_PARAM(callingNode);
@@ -202,7 +202,7 @@ llvm::Value * GenericIntDataType::codegenDecOp(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateSub(&val, decBy, "GenericInt_DecOp");
 }
 
-llvm::Constant * GenericIntDataType::codegenConstCmpEQOp(ASTNode & callingNode,
+llvm::Constant * GenericIntDataType::codegenConstCmpEQOp(AST::ASTNode & callingNode,
                                                          llvm::Constant & leftVal,
                                                          DataType & rightTy,
                                                          llvm::Constant & rightVal)
@@ -215,7 +215,7 @@ llvm::Constant * GenericIntDataType::codegenConstCmpEQOp(ASTNode & callingNode,
     return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_EQ, &leftVal, &rightVal);
 }
 
-llvm::Constant * GenericIntDataType::codegenConstCmpNEOp(ASTNode & callingNode,
+llvm::Constant * GenericIntDataType::codegenConstCmpNEOp(AST::ASTNode & callingNode,
                                                          llvm::Constant & leftVal,
                                                          DataType & rightTy,
                                                          llvm::Constant & rightVal)
@@ -228,7 +228,7 @@ llvm::Constant * GenericIntDataType::codegenConstCmpNEOp(ASTNode & callingNode,
     return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_NE, &leftVal, &rightVal);
 }
 
-llvm::Constant * GenericIntDataType::codegenConstAddOp(ASTNode & callingNode,
+llvm::Constant * GenericIntDataType::codegenConstAddOp(AST::ASTNode & callingNode,
                                                        llvm::Constant & leftVal,
                                                        DataType & rightTy,
                                                        llvm::Constant & rightVal)
@@ -241,7 +241,7 @@ llvm::Constant * GenericIntDataType::codegenConstAddOp(ASTNode & callingNode,
     return llvm::ConstantExpr::getAdd(&leftVal, &rightVal);
 }
 
-llvm::Constant * GenericIntDataType::codegenConstSubOp(ASTNode & callingNode,
+llvm::Constant * GenericIntDataType::codegenConstSubOp(AST::ASTNode & callingNode,
                                                        llvm::Constant & leftVal,
                                                        DataType & rightTy,
                                                        llvm::Constant & rightVal)
@@ -254,7 +254,7 @@ llvm::Constant * GenericIntDataType::codegenConstSubOp(ASTNode & callingNode,
     return llvm::ConstantExpr::getSub(&leftVal, &rightVal);
 }
 
-llvm::Constant * GenericIntDataType::codegenConstBOrOp(ASTNode & callingNode,
+llvm::Constant * GenericIntDataType::codegenConstBOrOp(AST::ASTNode & callingNode,
                                                        llvm::Constant & leftVal,
                                                        DataType & rightTy,
                                                        llvm::Constant & rightVal)
@@ -267,7 +267,7 @@ llvm::Constant * GenericIntDataType::codegenConstBOrOp(ASTNode & callingNode,
     return llvm::ConstantExpr::getOr(&leftVal, &rightVal);
 }
 
-llvm::Constant * GenericIntDataType::codegenConstBXOrOp(ASTNode & callingNode,
+llvm::Constant * GenericIntDataType::codegenConstBXOrOp(AST::ASTNode & callingNode,
                                                         llvm::Constant & leftVal,
                                                         DataType & rightTy,
                                                         llvm::Constant & rightVal)
@@ -280,7 +280,7 @@ llvm::Constant * GenericIntDataType::codegenConstBXOrOp(ASTNode & callingNode,
     return llvm::ConstantExpr::getXor(&leftVal, &rightVal);
 }
 
-llvm::Constant * GenericIntDataType::codegenConstMulOp(ASTNode & callingNode,
+llvm::Constant * GenericIntDataType::codegenConstMulOp(AST::ASTNode & callingNode,
                                                        llvm::Constant & leftVal,
                                                        DataType & rightTy,
                                                        llvm::Constant & rightVal)
@@ -293,7 +293,7 @@ llvm::Constant * GenericIntDataType::codegenConstMulOp(ASTNode & callingNode,
     return llvm::ConstantExpr::getMul(&leftVal, &rightVal);
 }
 
-llvm::Constant * GenericIntDataType::codegenConstBAndOp(ASTNode & callingNode,
+llvm::Constant * GenericIntDataType::codegenConstBAndOp(AST::ASTNode & callingNode,
                                                         llvm::Constant & leftVal,
                                                         DataType & rightTy,
                                                         llvm::Constant & rightVal)
@@ -306,7 +306,7 @@ llvm::Constant * GenericIntDataType::codegenConstBAndOp(ASTNode & callingNode,
     return llvm::ConstantExpr::getAnd(&leftVal, &rightVal);
 }
 
-llvm::Constant * GenericIntDataType::codegenConstLShiftOp(ASTNode & callingNode,
+llvm::Constant * GenericIntDataType::codegenConstLShiftOp(AST::ASTNode & callingNode,
                                                           llvm::Constant & leftVal,
                                                           DataType & rightTy,
                                                           llvm::Constant & rightVal)
@@ -319,7 +319,7 @@ llvm::Constant * GenericIntDataType::codegenConstLShiftOp(ASTNode & callingNode,
     return llvm::ConstantExpr::getShl(&leftVal, &rightVal);
 }
 
-llvm::Constant * GenericIntDataType::codegenConstLRShiftOp(ASTNode & callingNode,
+llvm::Constant * GenericIntDataType::codegenConstLRShiftOp(AST::ASTNode & callingNode,
                                                            llvm::Constant & leftVal,
                                                            DataType & rightTy,
                                                            llvm::Constant & rightVal)
@@ -332,14 +332,14 @@ llvm::Constant * GenericIntDataType::codegenConstLRShiftOp(ASTNode & callingNode
     return llvm::ConstantExpr::getLShr(&leftVal, &rightVal);
 }
 
-llvm::Constant * GenericIntDataType::codegenConstBNotOp(ASTNode & callingNode,
+llvm::Constant * GenericIntDataType::codegenConstBNotOp(AST::ASTNode & callingNode,
                                                         llvm::Constant & val)
 {
     WC_UNUSED_PARAM(callingNode);
     return llvm::ConstantExpr::getNot(&val);
 }
 
-llvm::Constant * GenericIntDataType::codegenConstPlusOp(ASTNode & callingNode,
+llvm::Constant * GenericIntDataType::codegenConstPlusOp(AST::ASTNode & callingNode,
                                                         llvm::Constant & val)
 {
     // This is a 'no-op' for numbers - simply return the value passed in
@@ -347,7 +347,7 @@ llvm::Constant * GenericIntDataType::codegenConstPlusOp(ASTNode & callingNode,
     return &val;
 }
 
-llvm::Constant * GenericIntDataType::codegenConstMinusOp(ASTNode & callingNode,
+llvm::Constant * GenericIntDataType::codegenConstMinusOp(AST::ASTNode & callingNode,
                                                          llvm::Constant & val)
 {
     #warning DO NOT ALLOW FOR UNSIGNED

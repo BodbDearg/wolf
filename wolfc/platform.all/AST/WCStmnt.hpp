@@ -4,12 +4,12 @@
 #include "WCIStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 class AssertStmnt;
 class AssignExpr;
 class BreakStmnt;
 class IfStmnt;
-class LinearAlloc;
 class LoopStmnt;
 class NextStmnt;
 class NoOpStmnt;
@@ -18,7 +18,6 @@ class ReturnStmnt;
 class ScopeStmnt;
 class VarDecl;
 class WhileStmnt;
-struct CodegenCtx;
 
 /*
 Stmnt:
@@ -221,4 +220,5 @@ public:
     AssignExpr & mExpr;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

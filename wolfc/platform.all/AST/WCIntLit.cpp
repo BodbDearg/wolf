@@ -11,6 +11,7 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
 WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 // TODO: Make this be for ALL numeric literals
 
@@ -71,4 +72,5 @@ llvm::Constant * IntLit::codegenExprConstEval(CodegenCtx & cgCtx) {
     return llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), mToken.data.intVal);
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

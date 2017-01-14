@@ -9,6 +9,7 @@
 #include "WCPostfixExpr.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // UnaryExpr
@@ -238,4 +239,5 @@ llvm::Constant * UnaryExprParen::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

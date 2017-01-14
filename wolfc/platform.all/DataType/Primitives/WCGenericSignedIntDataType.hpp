@@ -8,78 +8,78 @@ WC_BEGIN_NAMESPACE
 class GenericSignedIntDataType : public GenericIntDataType {
 public:
     virtual llvm::Value * codegenCmpLTOp(CodegenCtx & cgCtx,
-                                         ASTNode & callingNode,
+                                         AST::ASTNode & callingNode,
                                          llvm::Value & leftVal,
                                          DataType & rightTy,
                                          llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenCmpLEOp(CodegenCtx & cgCtx,
-                                         ASTNode & callingNode,
+                                         AST::ASTNode & callingNode,
                                          llvm::Value & leftVal,
                                          DataType & rightTy,
                                          llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenCmpGTOp(CodegenCtx & cgCtx,
-                                         ASTNode & callingNode,
+                                         AST::ASTNode & callingNode,
                                          llvm::Value & leftVal,
                                          DataType & rightTy,
                                          llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenCmpGEOp(CodegenCtx & cgCtx,
-                                         ASTNode & callingNode,
+                                         AST::ASTNode & callingNode,
                                          llvm::Value & leftVal,
                                          DataType & rightTy,
                                          llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenDivOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
+                                       AST::ASTNode & callingNode,
                                        llvm::Value & leftVal,
                                        DataType & rightTy,
                                        llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenModOp(CodegenCtx & cgCtx,
-                                       ASTNode & callingNode,
+                                       AST::ASTNode & callingNode,
                                        llvm::Value & leftVal,
                                        DataType & rightTy,
                                        llvm::Value & rightVal) override;
     
     virtual llvm::Value * codegenARShiftOp(CodegenCtx & cgCtx,
-                                           ASTNode & callingNode,
+                                           AST::ASTNode & callingNode,
                                            llvm::Value & leftVal,
                                            DataType & rightTy,
                                            llvm::Value & rightVal) override;
 
-    virtual llvm::Constant * codegenConstCmpLTOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstCmpLTOp(AST::ASTNode & callingNode,
                                                  llvm::Constant & leftVal,
                                                  DataType & rightTy,
                                                  llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstCmpLEOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstCmpLEOp(AST::ASTNode & callingNode,
                                                  llvm::Constant & leftVal,
                                                  DataType & rightTy,
                                                  llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstCmpGTOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstCmpGTOp(AST::ASTNode & callingNode,
                                                  llvm::Constant & leftVal,
                                                  DataType & rightTy,
                                                  llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstCmpGEOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstCmpGEOp(AST::ASTNode & callingNode,
                                                  llvm::Constant & leftVal,
                                                  DataType & rightTy,
                                                  llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstDivOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstDivOp(AST::ASTNode & callingNode,
                                                llvm::Constant & leftVal,
                                                DataType & rightTy,
                                                llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstModOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstModOp(AST::ASTNode & callingNode,
                                                llvm::Constant & leftVal,
                                                DataType & rightTy,
                                                llvm::Constant & rightVal) override;
     
-    virtual llvm::Constant * codegenConstARShiftOp(ASTNode & callingNode,
+    virtual llvm::Constant * codegenConstARShiftOp(AST::ASTNode & callingNode,
                                                    llvm::Constant & leftVal,
                                                    DataType & rightTy,
                                                    llvm::Constant & rightVal) override;

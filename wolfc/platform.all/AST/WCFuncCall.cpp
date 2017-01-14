@@ -9,6 +9,7 @@
 #include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 bool FuncCall::peek(const Token * currentToken) {
     return currentToken->type == TokenType::kLParen;
@@ -116,4 +117,5 @@ bool FuncCall::codegenArgsListExprs(CodegenCtx & cgCtx) {
     return true;    // All good!
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

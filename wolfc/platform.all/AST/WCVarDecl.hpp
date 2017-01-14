@@ -5,10 +5,12 @@
 
 WC_BEGIN_NAMESPACE
 
-class AssignExpr;
 class DataType;
+
+WC_AST_BEGIN_NAMESPACE
+
+class AssignExpr;
 class Identifier;
-class LinearAlloc;
 class Module;
 class Type;
 
@@ -66,4 +68,5 @@ public:
     Type & mType;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

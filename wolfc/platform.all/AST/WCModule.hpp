@@ -19,12 +19,14 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class DeclDef;
-class Func;
-class LinearAlloc;
-class VarDecl;
 struct CodegenCtx;
 struct ParseCtx;
+
+WC_AST_BEGIN_NAMESPACE
+
+class DeclDef;
+class Func;
+class VarDecl;
 
 /* 
 Module:
@@ -110,4 +112,5 @@ private:
     const Token * mEOFToken;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

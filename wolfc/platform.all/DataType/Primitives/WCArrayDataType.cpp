@@ -64,7 +64,7 @@ bool ArrayDataType::requiresStorage() const {
     return true;
 }
 
-bool ArrayDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
+bool ArrayDataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) {
     // If the type is unknown then give out
     if (mInnerType.isUnknown()) {
         callingNode.compileError("Unable to determine datatype for array! Datatype is ambiguous or unknown!");

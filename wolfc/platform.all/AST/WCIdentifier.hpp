@@ -5,8 +5,9 @@
 
 WC_BEGIN_NAMESPACE
 
-class LinearAlloc;
 struct DataValue;
+
+WC_AST_BEGIN_NAMESPACE
 
 /* Represents TokenType::kIdentifier in the AST tree */
 class Identifier final : public ASTNode, public IExpr {
@@ -35,4 +36,5 @@ public:
     const Token & mToken;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

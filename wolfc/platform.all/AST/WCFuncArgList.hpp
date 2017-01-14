@@ -7,9 +7,9 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
 WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 class FuncArg;
-class LinearAlloc;
 
 /*
 FuncArgList:
@@ -54,4 +54,5 @@ public:
     FuncArgList &   mArgList;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

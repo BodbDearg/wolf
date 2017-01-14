@@ -18,6 +18,7 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
 WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 bool Func::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kFunc;
@@ -349,4 +350,5 @@ bool Func::getLLVMArgTypes(const std::vector<FuncArg*> & funcArgs,
     return true;    // All good!
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

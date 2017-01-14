@@ -7,6 +7,7 @@ namespace llvm {
 }
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 /* An interface that looping constructs (for/while/repeat etc.) must use */
 class IRepeatableStmnt : public IStmnt {
@@ -26,4 +27,5 @@ public:
     virtual llvm::BasicBlock * getBreakStmntTargetBlock() = 0;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

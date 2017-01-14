@@ -6,7 +6,8 @@ WC_BEGIN_NAMESPACE
 
 struct CodegenCtx;
 class DataType;
-class LinearAlloc;
+
+WC_AST_BEGIN_NAMESPACE
 
 /*
 PrimitiveType:
@@ -29,4 +30,5 @@ public:
     const Token & mToken;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

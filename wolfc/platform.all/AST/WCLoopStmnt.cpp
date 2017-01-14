@@ -10,6 +10,7 @@
 #include "WCScope.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // LoopStmnt
@@ -235,4 +236,5 @@ llvm::Value * LoopStmntWithCond::codegenLoopCondExpr(CodegenCtx & cgCtx) const {
     return mLoopCondExpr.codegenExprEval(cgCtx);
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

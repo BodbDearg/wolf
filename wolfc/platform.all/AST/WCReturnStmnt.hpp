@@ -9,10 +9,11 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-struct CodegenCtx;
-class AssignExpr;
 class DataType;
-class LinearAlloc;
+
+WC_AST_BEGIN_NAMESPACE
+
+class AssignExpr;
 
 /*
 ReturnStmnt:
@@ -134,4 +135,5 @@ public:
     AssignExpr & mReturnExpr;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

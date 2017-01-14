@@ -9,6 +9,7 @@
 #include "WCScope.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 bool WhileStmnt::peek(const Token * tokenPtr) {
     TokenType tokenType = tokenPtr->type;
@@ -175,4 +176,5 @@ llvm::Value * WhileStmnt::codegenWhileExpr(CodegenCtx & cgCtx) const {
     return mWhileExpr.codegenExprEval(cgCtx);
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

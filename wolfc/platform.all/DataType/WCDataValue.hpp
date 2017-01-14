@@ -8,8 +8,11 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class ASTNode;
 class DataType;
+
+namespace AST {
+    class ASTNode;
+}
 
 /* Struct holding an LLVM value and it's corresponding data type */
 struct DataValue {
@@ -22,7 +25,7 @@ struct DataValue {
         WC_EMPTY_FUNC_BODY();
     }
     
-    DataValue(ASTNode * _declaringNode,
+    DataValue(AST::ASTNode * _declaringNode,
               llvm::Value * _value,
               DataType * _type,
               bool _requiresLoad)
@@ -39,7 +42,7 @@ struct DataValue {
     DataValue & operator = (const DataValue & other) = default;
     
     /* The node that declared the data value */
-    ASTNode * declaringNode;
+    AST::ASTNode * declaringNode;
     
     /* The llvm value representing the data */
     llvm::Value * value;

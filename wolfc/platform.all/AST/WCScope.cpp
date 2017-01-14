@@ -9,6 +9,7 @@
 #include "WCVarDecl.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 Scope * Scope::parse(ParseCtx & parseCtx) {
     // Save start token:
@@ -127,4 +128,5 @@ DataValue * Scope::getVar(const char * varName) {
     return nullptr;     // Variable not found!
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

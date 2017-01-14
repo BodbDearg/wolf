@@ -24,7 +24,7 @@ bool Int64DataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const Int64DataType*>(&other) != nullptr;
 }
 
-bool Int64DataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
+bool Int64DataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) {
     // Lazy out if already done
     WC_GUARD(!mLLVMType, true);
     mLLVMType = llvm::Type::getInt64Ty(cgCtx.llvmCtx);
@@ -38,7 +38,7 @@ bool Int64DataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
 }
 
 bool Int64DataType::codegenPrintStmnt(CodegenCtx & cgCtx,
-                                      ASTNode & callingNode,
+                                      AST::ASTNode & callingNode,
                                       llvm::Constant & printfFn,
                                       llvm::Value & valToPrint)
 {

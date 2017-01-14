@@ -4,8 +4,7 @@
 #include "WCIStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
-
-class LinearAlloc;
+WC_AST_BEGIN_NAMESPACE
 
 /*
 NoOpStmnt:
@@ -28,4 +27,5 @@ public:
     const Token & mToken;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

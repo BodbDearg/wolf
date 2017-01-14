@@ -5,9 +5,9 @@
 #include "WCIExpr.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 class AssignExpr;
-class LinearAlloc;
 class PostfixExpr;
 
 /*
@@ -99,4 +99,5 @@ public:
     const Token &   mEndToken;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

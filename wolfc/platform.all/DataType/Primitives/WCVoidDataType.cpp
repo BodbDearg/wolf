@@ -29,7 +29,7 @@ bool VoidDataType::isSized() const {
 }
 
 llvm::AllocaInst * VoidDataType::codegenAlloca(CodegenCtx & cgCtx,
-                                               ASTNode & callingNode,
+                                               AST::ASTNode & callingNode,
                                                const std::string & instLabel)
 {
     WC_UNUSED_PARAM(cgCtx);
@@ -38,7 +38,7 @@ llvm::AllocaInst * VoidDataType::codegenAlloca(CodegenCtx & cgCtx,
     return nullptr;
 }
 
-bool VoidDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
+bool VoidDataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) {
     mLLVMType = llvm::Type::getVoidTy(cgCtx.llvmCtx);
     
     if (!mLLVMType) {

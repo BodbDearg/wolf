@@ -12,6 +12,7 @@
 #include "WCType.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // VarDecl
@@ -201,4 +202,5 @@ DataType & VarDeclExplicitType::dataType() const {
     return mType.dataType();
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

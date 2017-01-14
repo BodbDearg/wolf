@@ -9,11 +9,14 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
+struct ParseCtx;
+struct Token;
+
+WC_AST_BEGIN_NAMESPACE
+
 class Func;
 class Module;
 class Scope;
-struct ParseCtx;
-struct Token;
 
 /* Macro for allocating an AST tree node */
 #define WC_NEW_AST_NODE(parseCtx, NodeType, ...)\
@@ -118,4 +121,5 @@ public:
     ASTNode * mParent;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

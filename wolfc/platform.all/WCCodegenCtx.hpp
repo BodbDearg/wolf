@@ -15,7 +15,9 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class Module;
+namespace AST {
+    class Module;
+}
 
 /* Struct holding the context for code generation */
 struct CodegenCtx {
@@ -29,7 +31,7 @@ struct CodegenCtx {
     /* Creates the codegen context from the given llvm objects */
     CodegenCtx(llvm::LLVMContext & llvmCtxIn,
                llvm::IRBuilder<> & irBuilderIn,
-               Module & moduleIn)
+               AST::Module & moduleIn)
     :
         llvmCtx(llvmCtxIn),
         irBuilder(irBuilderIn),
@@ -54,7 +56,7 @@ struct CodegenCtx {
     llvm::IRBuilder<> & irBuilder;
     
     /* The AST node for the module. Also contains the llvm module object. */
-    Module & module;
+    AST::Module & module;
     
     /* A stack of code insert blocks pushed/saved for later restoring. */
     std::vector<llvm::BasicBlock*> insertBlockStack;    // TODO: use the linear allocator for efficiency

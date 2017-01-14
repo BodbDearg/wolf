@@ -5,6 +5,7 @@
 #include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // FuncArgList
@@ -86,4 +87,5 @@ void FuncArgListMulti::getArgs(std::vector<FuncArg*> & args) const {
     mArgList.getArgs(args);
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

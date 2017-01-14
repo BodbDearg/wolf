@@ -8,6 +8,7 @@
 #include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // LAndExpr
@@ -164,4 +165,5 @@ bool LAndExprAnd::compileCheckBothExprsAreBool() const {
     return true;
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

@@ -16,13 +16,15 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
+struct CodegenCtx;
+
+WC_AST_BEGIN_NAMESPACE
+
 class FuncArg;
 class FuncArgList;
 class Identifier;
-class LinearAlloc;
 class Scope;
 class Type;
-struct CodegenCtx;
 
 /*
 Func:
@@ -95,4 +97,5 @@ public:
     std::map<const char*, DataValue, CStrComparator> mArgValues;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

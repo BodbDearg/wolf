@@ -10,7 +10,7 @@ WC_THIRD_PARTY_INCLUDES_END
 WC_BEGIN_NAMESPACE
 
 llvm::Value * GenericSignedIntDataType::codegenCmpLTOp(CodegenCtx & cgCtx,
-                                                       ASTNode & callingNode,
+                                                       AST::ASTNode & callingNode,
                                                        llvm::Value & leftVal,
                                                        DataType & rightTy,
                                                        llvm::Value & rightVal)
@@ -24,7 +24,7 @@ llvm::Value * GenericSignedIntDataType::codegenCmpLTOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericSignedIntDataType::codegenCmpLEOp(CodegenCtx & cgCtx,
-                                                       ASTNode & callingNode,
+                                                       AST::ASTNode & callingNode,
                                                        llvm::Value & leftVal,
                                                        DataType & rightTy,
                                                        llvm::Value & rightVal)
@@ -38,7 +38,7 @@ llvm::Value * GenericSignedIntDataType::codegenCmpLEOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericSignedIntDataType::codegenCmpGTOp(CodegenCtx & cgCtx,
-                                                       ASTNode & callingNode,
+                                                       AST::ASTNode & callingNode,
                                                        llvm::Value & leftVal,
                                                        DataType & rightTy,
                                                        llvm::Value & rightVal)
@@ -52,7 +52,7 @@ llvm::Value * GenericSignedIntDataType::codegenCmpGTOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericSignedIntDataType::codegenCmpGEOp(CodegenCtx & cgCtx,
-                                                       ASTNode & callingNode,
+                                                       AST::ASTNode & callingNode,
                                                        llvm::Value & leftVal,
                                                        DataType & rightTy,
                                                        llvm::Value & rightVal)
@@ -66,7 +66,7 @@ llvm::Value * GenericSignedIntDataType::codegenCmpGEOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericSignedIntDataType::codegenDivOp(CodegenCtx & cgCtx,
-                                                     ASTNode & callingNode,
+                                                     AST::ASTNode & callingNode,
                                                      llvm::Value & leftVal,
                                                      DataType & rightTy,
                                                      llvm::Value & rightVal)
@@ -80,7 +80,7 @@ llvm::Value * GenericSignedIntDataType::codegenDivOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericSignedIntDataType::codegenModOp(CodegenCtx & cgCtx,
-                                                     ASTNode & callingNode,
+                                                     AST::ASTNode & callingNode,
                                                      llvm::Value & leftVal,
                                                      DataType & rightTy,
                                                      llvm::Value & rightVal)
@@ -94,7 +94,7 @@ llvm::Value * GenericSignedIntDataType::codegenModOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * GenericSignedIntDataType::codegenARShiftOp(CodegenCtx & cgCtx,
-                                                         ASTNode & callingNode,
+                                                         AST::ASTNode & callingNode,
                                                          llvm::Value & leftVal,
                                                          DataType & rightTy,
                                                          llvm::Value & rightVal)
@@ -107,7 +107,7 @@ llvm::Value * GenericSignedIntDataType::codegenARShiftOp(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateAShr(&leftVal, &rightVal, "GenericSignedInt_ARShiftOp");
 }
 
-llvm::Constant * GenericSignedIntDataType::codegenConstCmpLTOp(ASTNode & callingNode,
+llvm::Constant * GenericSignedIntDataType::codegenConstCmpLTOp(AST::ASTNode & callingNode,
                                                                llvm::Constant & leftVal,
                                                                DataType & rightTy,
                                                                llvm::Constant & rightVal)
@@ -120,7 +120,7 @@ llvm::Constant * GenericSignedIntDataType::codegenConstCmpLTOp(ASTNode & calling
     return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SLT, &leftVal, &rightVal);
 }
 
-llvm::Constant * GenericSignedIntDataType::codegenConstCmpLEOp(ASTNode & callingNode,
+llvm::Constant * GenericSignedIntDataType::codegenConstCmpLEOp(AST::ASTNode & callingNode,
                                                                llvm::Constant & leftVal,
                                                                DataType & rightTy,
                                                                llvm::Constant & rightVal)
@@ -133,7 +133,7 @@ llvm::Constant * GenericSignedIntDataType::codegenConstCmpLEOp(ASTNode & calling
     return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SLE, &leftVal, &rightVal);
 }
 
-llvm::Constant * GenericSignedIntDataType::codegenConstCmpGTOp(ASTNode & callingNode,
+llvm::Constant * GenericSignedIntDataType::codegenConstCmpGTOp(AST::ASTNode & callingNode,
                                                                llvm::Constant & leftVal,
                                                                DataType & rightTy,
                                                                llvm::Constant & rightVal)
@@ -146,7 +146,7 @@ llvm::Constant * GenericSignedIntDataType::codegenConstCmpGTOp(ASTNode & calling
     return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SGT, &leftVal, &rightVal);
 }
 
-llvm::Constant * GenericSignedIntDataType::codegenConstCmpGEOp(ASTNode & callingNode,
+llvm::Constant * GenericSignedIntDataType::codegenConstCmpGEOp(AST::ASTNode & callingNode,
                                                                llvm::Constant & leftVal,
                                                                DataType & rightTy,
                                                                llvm::Constant & rightVal)
@@ -159,7 +159,7 @@ llvm::Constant * GenericSignedIntDataType::codegenConstCmpGEOp(ASTNode & calling
     return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_SGE, &leftVal, &rightVal);
 }
 
-llvm::Constant * GenericSignedIntDataType::codegenConstDivOp(ASTNode & callingNode,
+llvm::Constant * GenericSignedIntDataType::codegenConstDivOp(AST::ASTNode & callingNode,
                                                              llvm::Constant & leftVal,
                                                              DataType & rightTy,
                                                              llvm::Constant & rightVal)
@@ -172,7 +172,7 @@ llvm::Constant * GenericSignedIntDataType::codegenConstDivOp(ASTNode & callingNo
     return llvm::ConstantExpr::getSDiv(&leftVal, &rightVal);
 }
 
-llvm::Constant * GenericSignedIntDataType::codegenConstModOp(ASTNode & callingNode,
+llvm::Constant * GenericSignedIntDataType::codegenConstModOp(AST::ASTNode & callingNode,
                                                              llvm::Constant & leftVal,
                                                              DataType & rightTy,
                                                              llvm::Constant & rightVal)
@@ -185,7 +185,7 @@ llvm::Constant * GenericSignedIntDataType::codegenConstModOp(ASTNode & callingNo
     return llvm::ConstantExpr::getSRem(&leftVal, &rightVal);
 }
 
-llvm::Constant * GenericSignedIntDataType::codegenConstARShiftOp(ASTNode & callingNode,
+llvm::Constant * GenericSignedIntDataType::codegenConstARShiftOp(AST::ASTNode & callingNode,
                                                                  llvm::Constant & leftVal,
                                                                  DataType & rightTy,
                                                                  llvm::Constant & rightVal)

@@ -20,7 +20,7 @@ public:
     std::string     mName;
     
 protected:
-    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
+    virtual bool codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) override;
 };
 
 WC_END_NAMESPACE

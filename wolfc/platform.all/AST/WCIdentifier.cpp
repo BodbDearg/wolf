@@ -11,6 +11,7 @@
 #include "WCScope.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 bool Identifier::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kIdentifier;
@@ -179,4 +180,5 @@ DataValue * Identifier::lookupDataValue() {
     return parentModule->getVar(identifierName);
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

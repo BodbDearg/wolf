@@ -9,8 +9,10 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class DataType;
 struct CodegenCtx;
+class DataType;
+
+WC_AST_BEGIN_NAMESPACE
 
 /* An interface that all expressions must implement. */
 class IExpr {
@@ -48,4 +50,5 @@ public:
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) = 0;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

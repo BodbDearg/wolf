@@ -5,9 +5,11 @@
 
 WC_BEGIN_NAMESPACE
 
-class AssignExpr;
 class DataType;
-class LinearAlloc;
+
+WC_AST_BEGIN_NAMESPACE
+
+class AssignExpr;
 class Scope;
 
 /*
@@ -97,4 +99,5 @@ public:
     const Token &   mEndToken;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

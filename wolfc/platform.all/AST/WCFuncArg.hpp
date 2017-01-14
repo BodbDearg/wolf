@@ -6,8 +6,10 @@ WC_BEGIN_NAMESPACE
 
 struct CodegenCtx;
 class DataType;
+
+WC_AST_BEGIN_NAMESPACE
+
 class Identifier;
-class LinearAlloc;
 class Type;
 
 /*
@@ -34,4 +36,5 @@ public:
     Type &          mType;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

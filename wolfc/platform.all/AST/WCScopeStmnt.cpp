@@ -10,6 +10,7 @@
 #include "WCScope.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 bool ScopeStmnt::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kScope;
@@ -92,4 +93,5 @@ bool ScopeStmnt::allCodepathsHaveUncondRet() const {
     return mBodyScope.allCodepathsHaveUncondRet();
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

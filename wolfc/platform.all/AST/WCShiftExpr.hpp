@@ -5,8 +5,8 @@
 #include "WCIExpr.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
-class LinearAlloc;
 class UnaryExpr;
 
 /*
@@ -87,4 +87,5 @@ public:
     ShiftExprLRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

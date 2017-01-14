@@ -16,11 +16,11 @@ public:
     virtual bool isSized() const override;
     
     virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,
-                                             ASTNode & callingNode,
+                                             AST::ASTNode & callingNode,
                                              const std::string & instLabel) override;
     
 protected:
-    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
+    virtual bool codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) override;
 };
 
 WC_END_NAMESPACE

@@ -22,7 +22,7 @@ bool BoolDataType::equals(const DataType & other) const {
 }
 
 bool BoolDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
-                                     ASTNode & callingNode,
+                                     AST::ASTNode & callingNode,
                                      llvm::Constant & printfFn,
                                      llvm::Value & valToPrint)
 {
@@ -66,7 +66,7 @@ bool BoolDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
     return true;
 }
 
-bool BoolDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
+bool BoolDataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) {
     mLLVMType = llvm::Type::getInt1Ty(cgCtx.llvmCtx);
     
     if (!mLLVMType) {
@@ -78,7 +78,7 @@ bool BoolDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
 }
 
 llvm::Value * BoolDataType::codegenCmpEQOp(CodegenCtx & cgCtx,
-                                           ASTNode & callingNode,
+                                           AST::ASTNode & callingNode,
                                            llvm::Value & leftVal,
                                            DataType & rightTy,
                                            llvm::Value & rightVal)
@@ -92,7 +92,7 @@ llvm::Value * BoolDataType::codegenCmpEQOp(CodegenCtx & cgCtx,
 }
 
 llvm::Value * BoolDataType::codegenCmpNEOp(CodegenCtx & cgCtx,
-                                           ASTNode & callingNode,
+                                           AST::ASTNode & callingNode,
                                            llvm::Value & leftVal,
                                            DataType & rightTy,
                                            llvm::Value & rightVal)
@@ -105,7 +105,7 @@ llvm::Value * BoolDataType::codegenCmpNEOp(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateICmpNE(&leftVal, &rightVal, "Bool_CmpNEOp");
 }
 
-llvm::Constant * BoolDataType::codegenConstCmpEQOp(ASTNode & callingNode,
+llvm::Constant * BoolDataType::codegenConstCmpEQOp(AST::ASTNode & callingNode,
                                                    llvm::Constant & leftVal,
                                                    DataType & rightTy,
                                                    llvm::Constant & rightVal)
@@ -118,7 +118,7 @@ llvm::Constant * BoolDataType::codegenConstCmpEQOp(ASTNode & callingNode,
     return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_EQ, &leftVal, &rightVal);
 }
 
-llvm::Constant * BoolDataType::codegenConstCmpNEOp(ASTNode & callingNode,
+llvm::Constant * BoolDataType::codegenConstCmpNEOp(AST::ASTNode & callingNode,
                                                    llvm::Constant & leftVal,
                                                    DataType & rightTy,
                                                    llvm::Constant & rightVal)

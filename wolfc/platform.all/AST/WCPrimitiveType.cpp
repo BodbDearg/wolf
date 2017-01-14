@@ -6,6 +6,7 @@
 #include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 bool PrimitiveType::peek(const Token * currentToken) {
     return PrimitiveDataTypes::getUsingLangKeyword(currentToken->type).isValid();
@@ -46,4 +47,5 @@ bool PrimitiveType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     return dataType().codegenLLVMTypeIfRequired(cgCtx, callingNode);
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

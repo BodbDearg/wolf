@@ -8,6 +8,7 @@
 #include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // ArrayLitExprs
@@ -118,4 +119,5 @@ DataType & ArrayLitExprsMulti::getElementType() const {
     return exprDataType;
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

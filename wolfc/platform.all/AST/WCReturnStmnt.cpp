@@ -14,6 +14,7 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
 WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 /* Utility. Tell if a token is a condition token type. */
 static bool isCondTokenType(TokenType tokenType) {
@@ -379,4 +380,5 @@ DataType & ReturnStmntWithCondAndValue::dataType() {
     return mReturnExpr.dataType();
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

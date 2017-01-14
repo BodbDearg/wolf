@@ -47,7 +47,7 @@ static int mainImpl(int argc, const char * argv[]) {
 
     {
         // Declare the module
-        Wolfc::Module module(llvmContext);
+        Wolfc::AST::Module module(llvmContext);
         
         // Create a parsing context and parse the module
         Wolfc::ParseCtx parseCtx(lexer.getTokenList(), linearAlloc);

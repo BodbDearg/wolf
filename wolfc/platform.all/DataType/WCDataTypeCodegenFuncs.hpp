@@ -9,9 +9,12 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class ASTNode;
 class DataType;
 struct CodegenCtx;
+
+namespace AST {
+    class ASTNode;
+}
 
 /** 
  * Typedef for a 'DataType' member function which codegens a runtime binary op.
@@ -19,7 +22,7 @@ struct CodegenCtx;
  */
 typedef llvm::Value * (DataType::*DTCodegenBinaryOpFunc)(
     CodegenCtx & cgCtx,
-    ASTNode & callingNode,
+    AST::ASTNode & callingNode,
     llvm::Value & leftVal,
     DataType & rightTy,
     llvm::Value & rightVal
@@ -30,7 +33,7 @@ typedef llvm::Value * (DataType::*DTCodegenBinaryOpFunc)(
  * For example, a function that generates code for a constant 'add' operation.
  */
 typedef llvm::Constant * (DataType::*DTCodegenConstBinaryOpFunc)(
-    ASTNode & callingNode,
+    AST::ASTNode & callingNode,
     llvm::Constant & leftVal,
     DataType & rightTy,
     llvm::Constant & rightVal
@@ -42,7 +45,7 @@ typedef llvm::Constant * (DataType::*DTCodegenConstBinaryOpFunc)(
  */
 typedef llvm::Value * (DataType::*DTCodegenUnaryOpFunc)(
     CodegenCtx & cgCtx,
-    ASTNode & callingNode,
+    AST::ASTNode & callingNode,
     llvm::Value & val
 );
 
@@ -51,7 +54,7 @@ typedef llvm::Value * (DataType::*DTCodegenUnaryOpFunc)(
  * For example, a function that generates code for a constant 'negate' operation.
  */
 typedef llvm::Constant * (DataType::*DTCodegenConstUnaryOpFunc)(
-    ASTNode & callingNode,
+    AST::ASTNode & callingNode,
     llvm::Constant & val
 );
 

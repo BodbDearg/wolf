@@ -12,10 +12,12 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
+struct CodegenCtx;
+
+WC_AST_BEGIN_NAMESPACE
+
 class AssignExpr;
 class FuncCallArgList;
-class LinearAlloc;
-struct CodegenCtx;
 
 /*
 FuncCall:
@@ -48,4 +50,5 @@ public:
     std::vector<llvm::Value*> mArgListExprsValues;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

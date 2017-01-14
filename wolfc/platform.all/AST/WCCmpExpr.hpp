@@ -5,9 +5,9 @@
 #include "WCIExpr.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 class AddExpr;
-class LinearAlloc;
 
 /*
 CmpExpr:
@@ -117,4 +117,5 @@ public:
     CmpExprGE(AddExpr & leftExpr, CmpExpr & rightExpr);
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

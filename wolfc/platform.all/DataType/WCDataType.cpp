@@ -76,7 +76,7 @@ bool DataType::requiresStorage() const {
     return false;   // False by default for all types
 }
 
-bool DataType::codegenLLVMTypeIfRequired(CodegenCtx & cgCtx, ASTNode & callingNode) {
+bool DataType::codegenLLVMTypeIfRequired(CodegenCtx & cgCtx, AST::ASTNode & callingNode) {
     if (mLLVMType) {
         return true;
     }
@@ -85,7 +85,7 @@ bool DataType::codegenLLVMTypeIfRequired(CodegenCtx & cgCtx, ASTNode & callingNo
 }
 
 llvm::AllocaInst * DataType::codegenAlloca(CodegenCtx & cgCtx,
-                                           ASTNode & callingNode,
+                                           AST::ASTNode & callingNode,
                                            const std::string & instLabel)
 {
     WC_GUARD_ASSERT(mLLVMType, nullptr);
@@ -94,7 +94,7 @@ llvm::AllocaInst * DataType::codegenAlloca(CodegenCtx & cgCtx,
 }
 
 bool DataType::codegenPrintStmnt(CodegenCtx & cgCtx,
-                                 ASTNode & callingNode,
+                                 AST::ASTNode & callingNode,
                                  llvm::Constant & printfFn,
                                  llvm::Value & valToPrint)
 {
@@ -106,7 +106,7 @@ bool DataType::codegenPrintStmnt(CodegenCtx & cgCtx,
 }
 
 llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
-                                      ASTNode & callingNode,
+                                      AST::ASTNode & callingNode,
                                       llvm::Value & valToCast,
                                       DataType & castToTy)
 {
@@ -129,7 +129,7 @@ llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
 /* Default binary op implementations */
 #define IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(OpName)\
     llvm::Value * DataType::codegen ## OpName ## Op(CodegenCtx & cgCtx,\
-                                                    ASTNode & callingNode,\
+                                                    AST::ASTNode & callingNode,\
                                                     llvm::Value & leftVal,\
                                                     DataType & rightTy,\
                                                     llvm::Value & rightVal)\
@@ -165,7 +165,7 @@ IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(LRShift)
 /* Default unary op implementations */
 #define IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(OpName)\
     llvm::Value * DataType::codegen ## OpName ## Op(CodegenCtx & cgCtx,\
-                                                    ASTNode & callingNode,\
+                                                    AST::ASTNode & callingNode,\
                                                     llvm::Value & val)\
     {\
         /* The default impl simply issues an error that the operator is not available */\
@@ -185,7 +185,7 @@ IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Dec)
 
 /* Default const binary op implementations */
 #define IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(OpName)\
-    llvm::Constant * DataType::codegenConst ## OpName ## Op(ASTNode & callingNode,\
+    llvm::Constant * DataType::codegenConst ## OpName ## Op(AST::ASTNode & callingNode,\
                                                             llvm::Constant & leftVal,\
                                                             DataType & rightTy,\
                                                             llvm::Constant & rightVal)\
@@ -219,7 +219,7 @@ IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(LRShift)
 
 /* Default const unary op implementations */
 #define IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(OpName)\
-    llvm::Constant * DataType::codegenConst ## OpName ## Op(ASTNode & callingNode,\
+    llvm::Constant * DataType::codegenConst ## OpName ## Op(AST::ASTNode & callingNode,\
                                                             llvm::Constant & val)\
     {\
         /* The default impl simply issues an error that the operator is not available */\
@@ -234,13 +234,13 @@ IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Minus)
 
 #undef IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC
 
-bool DataType::compileCheckLLVMTypeDefined(ASTNode & callingNode) {
+bool DataType::compileCheckLLVMTypeDefined(AST::ASTNode & callingNode) {
     WC_GUARD(!mLLVMType, true);
     callingNode.compileError("The LLVM type for data type '%s' is undefined!", name().c_str());
     return false;
 }
 
-bool DataType::compileCheckBinaryOpTypesMatch(ASTNode & callingNode,
+bool DataType::compileCheckBinaryOpTypesMatch(AST::ASTNode & callingNode,
                                               const char * opSymbol,
                                               const char * opName,
                                               DataType & rightExprType)
@@ -262,7 +262,7 @@ bool DataType::compileCheckBinaryOpTypesMatch(ASTNode & callingNode,
     return false;
 }
 
-void DataType::issueBinaryOpNotAvailableCompileError(ASTNode & callingNode,
+void DataType::issueBinaryOpNotAvailableCompileError(AST::ASTNode & callingNode,
                                                      const char * opSymbol,
                                                      const char * opName,
                                                      DataType & rightExprType) const
@@ -275,7 +275,7 @@ void DataType::issueBinaryOpNotAvailableCompileError(ASTNode & callingNode,
                              rightExprType.name().c_str());
 }
 
-void DataType::issueUnaryOpNotAvailableCompileError(ASTNode & callingNode,
+void DataType::issueUnaryOpNotAvailableCompileError(AST::ASTNode & callingNode,
                                                     const char * opSymbol,
                                                     const char * opName) const
 {
@@ -286,7 +286,7 @@ void DataType::issueUnaryOpNotAvailableCompileError(ASTNode & callingNode,
                              name().c_str());
 }
 
-void DataType::issueGenericCodegenLLVMTypeError(ASTNode & callingNode) const {
+void DataType::issueGenericCodegenLLVMTypeError(AST::ASTNode & callingNode) const {
     callingNode.compileError("Failed to codegen the llvm type for data type '%s'!", name().c_str());
 }
 

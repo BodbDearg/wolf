@@ -8,9 +8,11 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
-class AssignExpr;
 class DataType;
-class LinearAlloc;
+
+WC_AST_BEGIN_NAMESPACE
+
+class AssignExpr;
 
 /*
 ArrayLitExprs:
@@ -71,4 +73,5 @@ public:
     ArrayLitExprs &     mExprsList;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

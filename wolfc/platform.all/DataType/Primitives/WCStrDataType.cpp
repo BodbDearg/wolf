@@ -25,7 +25,7 @@ bool StrDataType::equals(const DataType & other) const {
 }
 
 bool StrDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
-                                    ASTNode & callingNode,
+                                    AST::ASTNode & callingNode,
                                     llvm::Constant & printfFn,
                                     llvm::Value & valToPrint)
 {
@@ -38,7 +38,7 @@ bool StrDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                       "print_printf_call:string") != nullptr;
 }
 
-bool StrDataType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
+bool StrDataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) {
     mLLVMType = llvm::Type::getInt8PtrTy(cgCtx.llvmCtx);
     
     if (!mLLVMType) {

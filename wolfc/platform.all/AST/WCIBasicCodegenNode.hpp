@@ -10,6 +10,8 @@ WC_BEGIN_NAMESPACE
 
 struct CodegenCtx;
 
+WC_AST_BEGIN_NAMESPACE
+
 /**
  * A node that implements a basic codegen method. 
  * Intended for statements that do not evaluate to a value (non expressions).
@@ -22,4 +24,5 @@ public:
     virtual bool codegen(CodegenCtx & cgCtx) = 0;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

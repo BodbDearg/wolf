@@ -9,6 +9,7 @@
 #include "WCShiftExpr.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // MulExpr
@@ -193,4 +194,5 @@ MulExprBAnd::MulExprBAnd(ShiftExpr & leftExpr, MulExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

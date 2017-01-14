@@ -9,6 +9,7 @@
 #include "WCUnaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // ShiftExpr
@@ -183,4 +184,5 @@ ShiftExprLRShift::ShiftExprLRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) 
     WC_EMPTY_FUNC_BODY();
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

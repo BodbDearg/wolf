@@ -9,6 +9,7 @@
 #include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // CmpExpr
@@ -241,4 +242,5 @@ CmpExprGE::CmpExprGE(AddExpr & leftExpr, CmpExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

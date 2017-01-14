@@ -16,8 +16,11 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class ASTNode;
 struct CodegenCtx;
+
+namespace AST {
+    class ASTNode;
+}
 
 /* Base class for a data type */
 class DataType {
@@ -76,14 +79,14 @@ public:
      * Run code generation for this data type (if required). If not required does nothing
      * Generates the llvm type for the data type and returns true if generation was successful.
      */
-    bool codegenLLVMTypeIfRequired(CodegenCtx & cgCtx, ASTNode & callingNode);
+    bool codegenLLVMTypeIfRequired(CodegenCtx & cgCtx, AST::ASTNode & callingNode);
     
     /**
      * Generate code to allocate space for this type on the stack.
      * Returns the instruction for that when done.
      */
     virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,
-                                             ASTNode & callingNode,
+                                             AST::ASTNode & callingNode,
                                              const std::string & instLabel);
     
     /**
@@ -92,13 +95,13 @@ public:
      * The default implementation of this fails with an 'unsupported op' error.
      */
     virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
-                                   ASTNode & callingNode,
+                                   AST::ASTNode & callingNode,
                                    llvm::Constant & printfFn,
                                    llvm::Value & valToPrint);
     
     /* Codegen a basic cast to the given type */
     virtual llvm::Value * codegenCastTo(CodegenCtx & cgCtx,
-                                        ASTNode & callingNode,
+                                        AST::ASTNode & callingNode,
                                         llvm::Value & valToCast,
                                         DataType & castToTy);
     
@@ -108,7 +111,7 @@ public:
      */
     #define WC_DATA_TYPE_DECL_CODEGEN_BINARY_OP_FUNC(OpName)\
         virtual llvm::Value * codegen ## OpName ## Op(CodegenCtx & cgCtx,\
-                                                      ASTNode & callingNode,\
+                                                      AST::ASTNode & callingNode,\
                                                       llvm::Value & leftVal,\
                                                       DataType & rightTy,\
                                                       llvm::Value & rightVal);
@@ -137,7 +140,7 @@ public:
      */
     #define WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(OpName)\
         virtual llvm::Value * codegen ## OpName ## Op(CodegenCtx & cgCtx,\
-                                                      ASTNode & callingNode,\
+                                                      AST::ASTNode & callingNode,\
                                                       llvm::Value & val);
     
     WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(BNot)
@@ -151,7 +154,7 @@ public:
      * The default impl issues an 'unsupported op' compile error.
      */
     #define WC_DATA_TYPE_DECL_CODEGEN_CONST_BINARY_OP_FUNC(OpName)\
-        virtual llvm::Constant * codegenConst ## OpName ## Op(ASTNode & callingNode,\
+        virtual llvm::Constant * codegenConst ## OpName ## Op(AST::ASTNode & callingNode,\
                                                               llvm::Constant & leftVal,\
                                                               DataType & rightTy,\
                                                               llvm::Constant & rightVal);
@@ -179,7 +182,7 @@ public:
      * The default impl issues an 'unsupported op' compile error.
      */
     #define WC_DATA_TYPE_DECL_CODEGEN_CONST_UNARY_OP_FUNC(OpName)\
-        virtual llvm::Constant * codegenConst ## OpName ## Op(ASTNode & callingNode,\
+        virtual llvm::Constant * codegenConst ## OpName ## Op(AST::ASTNode & callingNode,\
                                                               llvm::Constant & val);
     
     WC_DATA_TYPE_DECL_CODEGEN_CONST_UNARY_OP_FUNC(BNot)
@@ -190,13 +193,13 @@ public:
      * Check that the LLVM type for this data type is defined and issue a compile error if not.
      * Returns false if the LLVM type is not defined and true otherwise.
      */
-    bool compileCheckLLVMTypeDefined(ASTNode & callingNode);
+    bool compileCheckLLVMTypeDefined(AST::ASTNode & callingNode);
     
     /**
      * Does a compile check that the right expression type in a binary operator matches
      * exactly this data type. Issues a compile error and returns false if the check fails.
      */
-    bool compileCheckBinaryOpTypesMatch(ASTNode & callingNode,
+    bool compileCheckBinaryOpTypesMatch(AST::ASTNode & callingNode,
                                         const char * opSymbol,
                                         const char * opName,
                                         DataType & rightExprType);
@@ -205,7 +208,7 @@ public:
      * Issues a compile error that a binary operator is not supported between this 
      * type and an expression of a given type.
      */
-    void issueBinaryOpNotAvailableCompileError(ASTNode & callingNode,
+    void issueBinaryOpNotAvailableCompileError(AST::ASTNode & callingNode,
                                                const char * opSymbol,
                                                const char * opName,
                                                DataType & rightExprType) const;
@@ -213,7 +216,7 @@ public:
     /**
      * Issues a compile error that a binary operator is not supported.
      */
-    void issueUnaryOpNotAvailableCompileError(ASTNode & callingNode,
+    void issueUnaryOpNotAvailableCompileError(AST::ASTNode & callingNode,
                                               const char * opSymbol,
                                               const char * opName) const;
     
@@ -274,10 +277,10 @@ protected:
      * Run code generation for this data type.
      * Generates the llvm type for the data type and returns true if generation was successful.
      */
-    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) = 0;
+    virtual bool codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) = 0;
     
     /* Issue a generic compile error for failing to generate the LLVM type for this data type. */
-    void issueGenericCodegenLLVMTypeError(ASTNode & callingNode) const;
+    void issueGenericCodegenLLVMTypeError(AST::ASTNode & callingNode) const;
 };
 
 WC_END_NAMESPACE

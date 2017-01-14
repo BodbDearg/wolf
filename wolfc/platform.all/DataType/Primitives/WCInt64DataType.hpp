@@ -12,12 +12,12 @@ public:
     virtual bool equals(const DataType & other) const override;
     
     virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
-                                   ASTNode & callingNode,
+                                   AST::ASTNode & callingNode,
                                    llvm::Constant & printfFn,
                                    llvm::Value & valToPrint) override;
     
 protected:
-    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
+    virtual bool codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) override;
 };
 
 WC_END_NAMESPACE

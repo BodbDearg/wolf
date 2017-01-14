@@ -12,6 +12,7 @@
 #include "WCTimeExpr.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // PrimaryExpr
@@ -389,4 +390,5 @@ llvm::Constant * PrimaryExprRandExpr::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

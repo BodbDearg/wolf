@@ -4,6 +4,7 @@
 #include "WCParseCtx.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 bool NoOpStmnt::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kNoOp;
@@ -44,4 +45,5 @@ bool NoOpStmnt::codegen(CodegenCtx & cgCtx) {
     return true;
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

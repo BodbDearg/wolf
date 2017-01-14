@@ -4,12 +4,12 @@
 #include "WCIExpr.hpp"
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 class ArrayLit;
 class BoolLit;
 class Identifier;
 class IntLit;
-class LinearAlloc;
 class RandExpr;
 class ReadnumExpr;
 class StrLit;
@@ -194,4 +194,5 @@ public:
     RandExpr & mExpr;
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

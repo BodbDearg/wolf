@@ -11,6 +11,7 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
 WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
 
 bool BoolLit::peek(const Token * tokenPtr) {
     return tokenPtr->type == TokenType::kTrue || tokenPtr->type == TokenType::kFalse;
@@ -66,4 +67,5 @@ llvm::Constant * BoolLit::codegenExprConstEval(CodegenCtx & cgCtx) {
                                   mToken.type == TokenType::kTrue ? 1 : 0);
 }
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE
