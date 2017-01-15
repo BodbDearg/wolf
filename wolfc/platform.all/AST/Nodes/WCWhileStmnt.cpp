@@ -98,6 +98,8 @@ bool WhileStmnt::allCodepathsHaveUncondRet() const {
     return false;
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::BasicBlock * WhileStmnt::getNextStmntTargetBlock() {
     return mWhileCondBB;
 }
@@ -156,11 +158,14 @@ bool WhileStmnt::codegen(CodegenCtx & cgCtx) {
     cgCtx.irBuilder.SetInsertPoint(mEndBB);
     return true;
 }
+#endif
 
 bool WhileStmnt::isWhileExprInversed() const {
     return mStartToken.type == TokenType::kUntil;
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * WhileStmnt::codegenWhileExpr(CodegenCtx & cgCtx) const {
     // Firstly validate that the while statement condition expression is a bool:
     const DataType & whileExprDataType = mWhileExpr.dataType();
@@ -175,6 +180,7 @@ llvm::Value * WhileStmnt::codegenWhileExpr(CodegenCtx & cgCtx) const {
     // Then generate the code
     return mWhileExpr.codegenExprEval(cgCtx);
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

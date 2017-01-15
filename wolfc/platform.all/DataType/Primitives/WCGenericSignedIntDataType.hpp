@@ -7,6 +7,8 @@ WC_BEGIN_NAMESPACE
 /* Base class for all signed integer data types */
 class GenericSignedIntDataType : public GenericIntDataType {
 public:
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenCmpLTOp(CodegenCtx & cgCtx,
                                          AST::ASTNode & callingNode,
                                          llvm::Value & leftVal,
@@ -83,6 +85,7 @@ public:
                                                    llvm::Constant & leftVal,
                                                    DataType & rightTy,
                                                    llvm::Constant & rightVal) override;
+#endif
 };
 
 WC_END_NAMESPACE

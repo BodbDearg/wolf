@@ -4,7 +4,12 @@
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
+
+#warning FIXME - Codegen
+#if 0
 #include "WCCodegenCtx.hpp"
+#endif
+
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
 #include "WCScope.hpp"
@@ -105,6 +110,8 @@ const Token & LoopStmntNoCond::getEndToken() const {
     return mEndToken;
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::BasicBlock * LoopStmntNoCond::getNextStmntTargetBlock() {
     return mStartBB;
 }
@@ -142,6 +149,7 @@ bool LoopStmntNoCond::codegen(CodegenCtx & cgCtx) {
     cgCtx.irBuilder.SetInsertPoint(mEndBB);
     return true;
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // LoopStmntWithCond
@@ -163,6 +171,8 @@ const Token & LoopStmntWithCond::getEndToken() const {
     return mLoopCondExpr.getEndToken();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::BasicBlock * LoopStmntWithCond::getNextStmntTargetBlock() {
     return mLoopCondBB;
 }
@@ -216,11 +226,14 @@ bool LoopStmntWithCond::codegen(CodegenCtx & cgCtx) {
     cgCtx.irBuilder.SetInsertPoint(mEndBB);
     return true;
 }
+#endif
 
 bool LoopStmntWithCond::isLoopCondInversed() const {
     return mCondTypeToken.type == TokenType::kUntil;
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * LoopStmntWithCond::codegenLoopCondExpr(CodegenCtx & cgCtx) const {
     // Firstly validate that the loop condition expression is a bool:
     const DataType & condExprDataType = mLoopCondExpr.dataType();
@@ -235,6 +248,7 @@ llvm::Value * LoopStmntWithCond::codegenLoopCondExpr(CodegenCtx & cgCtx) const {
     // Then generate the code
     return mLoopCondExpr.codegenExprEval(cgCtx);
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

@@ -1,6 +1,10 @@
 #pragma once
 
+#warning FIXME - Codegen
+#if 0
 #include "DataType/WCDataTypeCodegenFuncs.hpp"
+#endif
+
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
 
@@ -36,9 +40,12 @@ public:
     
     virtual DataType & dataType() override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+#endif
     
     PostfixExpr & mExpr;
 };
@@ -47,22 +54,33 @@ public:
 class UnaryExprPlusMinusBase : public UnaryExprPrimary {
 public:
     UnaryExprPlusMinusBase(PostfixExpr & expr,
-                           const Token & startToken,
-                           DTCodegenUnaryOpFunc codegenUnaryOpFunc,
-                           DTCodegenConstUnaryOpFunc codegenConstUnaryOpFunc);
+                           const Token & startToken
+                        #warning FIXME - Codegen
+                        #if 0
+                           ,DTCodegenUnaryOpFunc codegenUnaryOpFunc,
+                           DTCodegenConstUnaryOpFunc codegenConstUnaryOpFunc
+                        #endif
+                           );
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
     
     virtual bool isLValue() final override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) final override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) final override;
+#endif
     
     const Token &                       mStartToken;
+    
+#warning FIXME - Codegen
+#if 0
     const DTCodegenUnaryOpFunc          mCodegenUnaryOpFunc;
     const DTCodegenConstUnaryOpFunc     mCodegenConstUnaryOpFunc;
+#endif
 };
 
 /* + PostfixExpr */
@@ -90,10 +108,13 @@ public:
     
     virtual DataType & dataType() override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-    
+#endif
+
     AssignExpr &    mExpr;
     const Token &   mStartToken;
     const Token &   mEndToken;

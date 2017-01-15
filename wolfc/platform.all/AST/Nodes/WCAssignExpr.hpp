@@ -1,6 +1,10 @@
 #pragma once
 
+#warning FIXME - Codegen
+#if 0
 #include "DataType/WCDataTypeCodegenFuncs.hpp"
+#endif
+
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
 
@@ -44,9 +48,12 @@ public:
     
     virtual DataType & dataType() override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+#endif
     
     TernaryExpr & mExpr;
 };
@@ -64,9 +71,12 @@ public:
 
     virtual DataType & dataType() final override;
 
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) final override;
-
+#endif
+    
     TernaryExpr &   mLeftExpr;
     AssignExpr &    mRightExpr;
 
@@ -83,19 +93,29 @@ class AssignExprAssign final : public AssignExprAssignBase {
 public:
     AssignExprAssign(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+#endif
 };
 
 /* Base class for an assign expression that does a binary operation (add, mul etc.) */
 class AssignExprBinaryOpBase : public AssignExprAssignBase {
 public:
     AssignExprBinaryOpBase(TernaryExpr & leftExpr,
-                           AssignExpr & rightExpr,
-                           DTCodegenBinaryOpFunc codegenBinaryOpFunc);
+                           AssignExpr & rightExpr
+                        #warning FIXME - Codegen
+                        #if 0
+                           ,DTCodegenBinaryOpFunc codegenBinaryOpFunc
+                        #endif
+                           );
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) final override;
     
     const DTCodegenBinaryOpFunc mCodegenBinaryOpFunc;
+#endif
 };
 
 /* TernaryExpr += AssignExpr */

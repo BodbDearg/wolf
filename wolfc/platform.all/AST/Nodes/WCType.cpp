@@ -8,9 +8,12 @@
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
 
+#warning FIXME - Codegen
+#if 0
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Constants.h>
 WC_THIRD_PARTY_INCLUDES_END
+#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -78,9 +81,12 @@ DataType & TypePrimitive::dataType() {
     return mType.dataType();
 }
 
+#warning FIXME - Codegen
+#if 0
 bool TypePrimitive::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     return mType.codegenLLVMType(cgCtx, callingNode);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // TypeArray
@@ -112,6 +118,8 @@ DataType & TypeArray::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown);
 }
 
+#warning FIXME - Codegen
+#if 0
 bool TypeArray::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     // First codegen the element type:
     WC_GUARD(mElemType.codegenLLVMType(cgCtx, callingNode), false);
@@ -162,6 +170,7 @@ bool TypeArray::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     // If we have reached here then we are all good!
     return true;
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

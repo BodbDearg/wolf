@@ -7,9 +7,12 @@
 #include "WCPrimaryExpr.hpp"
 #include "WCType.hpp"
 
+#warning FIXME - Codegen
+#if 0
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
 WC_THIRD_PARTY_INCLUDES_END
+#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -108,6 +111,8 @@ DataType & CastExprNoCast::dataType() {
     return mExpr.dataType();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * CastExprNoCast::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
@@ -119,6 +124,7 @@ llvm::Value * CastExprNoCast::codegenExprEval(CodegenCtx & cgCtx) {
 llvm::Constant * CastExprNoCast::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // CastExprCast
@@ -158,6 +164,8 @@ DataType & CastExprCast::dataType() {
     return mType.dataType();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * CastExprCast::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Cant take the address of a 'cast()' expression!");
@@ -183,6 +191,7 @@ llvm::Constant * CastExprCast::codegenExprConstEval(CodegenCtx & cgCtx) {
     compileError("'cast()' currently cannot be used in constant expressions!");
     return nullptr;
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

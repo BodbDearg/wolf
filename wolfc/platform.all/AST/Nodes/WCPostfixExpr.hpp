@@ -42,9 +42,12 @@ public:
     
     virtual DataType & dataType() override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+#endif
     
     CastExpr & mExpr;
 };
@@ -53,8 +56,12 @@ public:
 class PostfixExprIncDecBase : public PostfixExpr {
 public:
     PostfixExprIncDecBase(CastExpr & expr,
-                          const Token & endToken,
-                          DTCodegenUnaryOpFunc codegenUnaryOpFunc);
+                          const Token & endToken
+                        #warning FIXME - Codegen
+                        #if 0
+                          ,DTCodegenUnaryOpFunc codegenUnaryOpFunc
+                        #endif
+                          );
 
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -64,15 +71,21 @@ public:
 
     virtual DataType & dataType() final override;
 
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) final override;
-
+#endif
+    
     CastExpr &      mExpr;
     const Token &   mEndToken;
 
 private:
+#warning FIXME - Codegen
+#if 0
     const DTCodegenUnaryOpFunc mCodegenUnaryOpFunc;
+#endif
 };
 
 /* CastExpr ++ */
@@ -100,9 +113,12 @@ public:
     
     virtual DataType & dataType() override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+#endif
     
     PostfixExpr &   mExpr;
     FuncCall &      mFuncCall;
@@ -112,8 +128,11 @@ private:
     
     Func * lookupFuncCalled() const;
     
+#warning FIXME - Codegen
+#if 0
     llvm::Value * mAddrOfResult;
     llvm::Value * mExprEvalResult;
+#endif
 };
 
 /* PostfixExpr [ AssignExpr ] */
@@ -131,9 +150,12 @@ public:
     
     virtual DataType & dataType() override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+#endif
     
     PostfixExpr &   mArrayExpr;
     AssignExpr &    mIndexExpr;
@@ -143,8 +165,11 @@ private:
     /* Gets the array data type for the array expression. Issues a compile error on failure. */
     ArrayDataType * getArrayDataTypeOrIssueError();
     
+#warning FIXME - Codegen
+#if 0
     /* Peform codegen for getting the address of the array element */
     llvm::Value * codegenAddrOfArrayElem(CodegenCtx & cgCtx);
+#endif
 };
 
 WC_AST_END_NAMESPACE

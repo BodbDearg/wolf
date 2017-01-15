@@ -73,6 +73,8 @@ DataType & ShiftExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * ShiftExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
@@ -84,22 +86,33 @@ llvm::Value * ShiftExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
 llvm::Constant * ShiftExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // ShiftExprTwoOps
 //-----------------------------------------------------------------------------
 ShiftExprTwoOps::ShiftExprTwoOps(UnaryExpr & leftExpr,
-                                 ShiftExpr & rightExpr,
-                                 DTCodegenBinaryOpFunc codegenBinaryOpFunc,
-                                 DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc)
+                                 ShiftExpr & rightExpr
+                                #warning FIXME - Codegen
+                                #if 0
+                                 ,DTCodegenBinaryOpFunc codegenBinaryOpFunc,
+                                 DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc
+                                #endif
+                                 )
 :
     mLeftExpr(leftExpr),
-    mRightExpr(rightExpr),
-    mCodegenBinaryOpFunc(codegenBinaryOpFunc),
+    mRightExpr(rightExpr)
+#warning FIXME - Codegen
+#if 0
+    ,mCodegenBinaryOpFunc(codegenBinaryOpFunc),
     mCodegenConstBinaryOpFunc(codegenConstBinaryOpFunc)
+#endif
 {
+#warning FIXME - Codegen
+#if 0
     WC_ASSERT(mCodegenBinaryOpFunc);
     WC_ASSERT(mCodegenConstBinaryOpFunc);
+#endif
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
 }
@@ -125,6 +138,8 @@ DataType & ShiftExprTwoOps::dataType() {
     return mLeftExpr.dataType();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * ShiftExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of a binary expression result!");
@@ -156,12 +171,18 @@ llvm::Constant * ShiftExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
     DataType & rightTy = mRightExpr.dataType();
     return (leftTy.*mCodegenConstBinaryOpFunc)(*this, *leftVal, rightTy, *rightVal);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // ShiftExprLShift
 //-----------------------------------------------------------------------------
 ShiftExprLShift::ShiftExprLShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
-    ShiftExprTwoOps(leftExpr, rightExpr, &DataType::codegenLShiftOp, &DataType::codegenConstLShiftOp)
+    ShiftExprTwoOps(leftExpr, rightExpr
+                #warning FIXME - Codegen
+                #if 0
+                    , &DataType::codegenLShiftOp, &DataType::codegenConstLShiftOp
+                #endif
+                    )
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -170,7 +191,12 @@ ShiftExprLShift::ShiftExprLShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
 // ShiftExprARShift
 //-----------------------------------------------------------------------------
 ShiftExprARShift::ShiftExprARShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
-    ShiftExprTwoOps(leftExpr, rightExpr, &DataType::codegenARShiftOp, &DataType::codegenConstARShiftOp)
+    ShiftExprTwoOps(leftExpr, rightExpr
+                #warning FIXME - Codegen
+                #if 0
+                    , &DataType::codegenARShiftOp, &DataType::codegenConstARShiftOp
+                #endif
+                    )
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -179,7 +205,12 @@ ShiftExprARShift::ShiftExprARShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) 
 // ShiftExprLRShift
 //-----------------------------------------------------------------------------
 ShiftExprLRShift::ShiftExprLRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
-    ShiftExprTwoOps(leftExpr, rightExpr, &DataType::codegenLRShiftOp, &DataType::codegenConstLRShiftOp)
+    ShiftExprTwoOps(leftExpr, rightExpr
+                #warning FIXME - Codegen
+                #if 0
+                    , &DataType::codegenLRShiftOp, &DataType::codegenConstLRShiftOp
+                #endif
+                    )
 {
     WC_EMPTY_FUNC_BODY();
 }

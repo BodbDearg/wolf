@@ -2,11 +2,18 @@
 
 #include "AST/Nodes/WCASTNode.hpp"
 #include "WCAssert.hpp"
-#include "WCCodegenCtx.hpp"
 
+#warning FIXME - Codegen
+#if 0
+#include "WCCodegenCtx.hpp"
+#endif
+
+#warning FIXME - Codegen
+#if 0
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
 WC_THIRD_PARTY_INCLUDES_END
+#endif
 
 WC_BEGIN_NAMESPACE
 
@@ -76,6 +83,8 @@ bool DataType::requiresStorage() const {
     return false;   // False by default for all types
 }
 
+#warning FIXME - Codegen
+#if 0
 bool DataType::codegenLLVMTypeIfRequired(CodegenCtx & cgCtx, AST::ASTNode & callingNode) {
     if (mLLVMType) {
         return true;
@@ -125,7 +134,10 @@ llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
     
     return nullptr;
 }
+#endif
 
+#warning FIXME - Codegen
+#if 0
 /* Default binary op implementations */
 #define IMPL_DEFAULT_CODEGEN_BINARY_OP_FUNC(OpName)\
     llvm::Value * DataType::codegen ## OpName ## Op(CodegenCtx & cgCtx,\
@@ -233,12 +245,16 @@ IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Plus)
 IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Minus)
 
 #undef IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC
+#endif
 
+#warning FIXME - Codegen
+#if 0
 bool DataType::compileCheckLLVMTypeDefined(AST::ASTNode & callingNode) {
     WC_GUARD(!mLLVMType, true);
     callingNode.compileError("The LLVM type for data type '%s' is undefined!", name().c_str());
     return false;
 }
+#endif
 
 bool DataType::compileCheckBinaryOpTypesMatch(AST::ASTNode & callingNode,
                                               const char * opSymbol,
@@ -286,8 +302,11 @@ void DataType::issueUnaryOpNotAvailableCompileError(AST::ASTNode & callingNode,
                              name().c_str());
 }
 
+#warning FIXME - Codegen
+#if 0
 void DataType::issueGenericCodegenLLVMTypeError(AST::ASTNode & callingNode) const {
     callingNode.compileError("Failed to codegen the llvm type for data type '%s'!", name().c_str());
 }
+#endif
 
 WC_END_NAMESPACE

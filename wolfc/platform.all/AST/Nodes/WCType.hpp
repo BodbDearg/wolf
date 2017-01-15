@@ -28,7 +28,10 @@ public:
     
     virtual DataType & dataType() = 0;
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) = 0;
+#endif
 };
 
 /* PrimitiveType */
@@ -41,7 +44,10 @@ public:
     
     virtual DataType & dataType() override;
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
+#endif
     
     PrimitiveType & mType;
 };
@@ -56,7 +62,10 @@ public:
     
     virtual DataType & dataType() override;
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
+#endif
     
     const Token &   mStartToken;
     AssignExpr &    mSizeExpr;

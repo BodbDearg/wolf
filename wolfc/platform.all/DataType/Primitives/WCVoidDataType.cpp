@@ -28,6 +28,8 @@ bool VoidDataType::isSized() const {
     return false;
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::AllocaInst * VoidDataType::codegenAlloca(CodegenCtx & cgCtx,
                                                AST::ASTNode & callingNode,
                                                const std::string & instLabel)
@@ -48,5 +50,6 @@ bool VoidDataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNod
     
     return true;
 }
+#endif
 
 WC_END_NAMESPACE

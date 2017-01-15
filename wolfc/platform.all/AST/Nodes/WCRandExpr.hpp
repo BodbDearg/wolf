@@ -27,8 +27,11 @@ public:
     virtual bool isLValue() final override;
     virtual bool isConstExpr() final override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) final override;
+#endif
     
     const Token & mStartToken;
     const Token & mEndToken;
@@ -41,7 +44,10 @@ public:
     
     virtual DataType & dataType() override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+#endif
 };
 
 /* srand ( AssignExpr ) */
@@ -53,7 +59,10 @@ public:
     
     virtual DataType & dataType() override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
+#endif
     
     AssignExpr & mSeedExpr;
 };

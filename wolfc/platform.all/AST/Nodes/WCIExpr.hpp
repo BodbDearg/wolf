@@ -2,14 +2,21 @@
 
 #include "WCMacros.hpp"
 
+#warning FIXME - Codegen
+#if 0
 namespace llvm {
     class Constant;
     class Value;
 }
+#endif
 
 WC_BEGIN_NAMESPACE
 
+#warning FIXME - Codegen
+#if 0
 struct CodegenCtx;
+#endif
+
 class DataType;
 
 WC_AST_BEGIN_NAMESPACE
@@ -31,8 +38,10 @@ public:
     /* Return the data type that this expression results in after evaluation. */
     virtual DataType & dataType() = 0;
     
+#warning FIXME - Codegen
+#if 0
     /**
-     * Codegen the llvm value that represents the address of this expression. 
+     * Codegen the llvm value that represents the address of this expression.
      * Note: this is only possible for lvalues! For rvalues this should return nullptr.
      */
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) = 0;
@@ -48,6 +57,7 @@ public:
      * Note that not all expressions will support this and may return nullptr if not suported.
      */
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) = 0;
+#endif
 };
 
 WC_AST_END_NAMESPACE

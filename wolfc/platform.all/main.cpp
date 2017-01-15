@@ -47,7 +47,14 @@ static int mainImpl(int argc, const char * argv[]) {
 
     {
         // Declare the module
-        Wolfc::AST::Module module(llvmContext);
+        Wolfc::AST::Module module
+                                #warning FIXME - Codegen
+                                #if 0
+                                (
+                                  llvmContext
+                                )
+                                #endif
+                                  ;
         
         // Create a parsing context and parse the module
         Wolfc::AST::ParseCtx parseCtx(lexer.getTokenList(), linearAlloc);
@@ -57,6 +64,8 @@ static int mainImpl(int argc, const char * argv[]) {
             return -1;
         }
 
+    #warning FIXME - Codegen
+    #if 0
         // Codegen the module
         if (!module.generateCode()) {
             std::printf("Compile failed for source file '%s'!\n", argv[1]);
@@ -65,6 +74,7 @@ static int mainImpl(int argc, const char * argv[]) {
 
         // Dump the code to stdout!
         module.dumpIRCodeToStdout();
+    #endif
     }
 
     return 0;

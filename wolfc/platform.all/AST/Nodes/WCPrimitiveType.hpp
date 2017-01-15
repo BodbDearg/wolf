@@ -4,7 +4,11 @@
 
 WC_BEGIN_NAMESPACE
 
+#warning FIXME - Codegen
+#if 0
 struct CodegenCtx;
+#endif
+
 class DataType;
 
 WC_AST_BEGIN_NAMESPACE
@@ -25,7 +29,10 @@ public:
     
     DataType & dataType();
     
+#warning FIXME - Codegen
+#if 0
     bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode);
+#endif
     
     const Token & mToken;
 };

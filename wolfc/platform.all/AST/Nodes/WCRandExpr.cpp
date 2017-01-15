@@ -9,9 +9,12 @@
 #include "WCModule.hpp"
 #include "WCParseCtx.hpp"
 
+#warning FIXME - Codegen
+#if 0
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
 WC_THIRD_PARTY_INCLUDES_END
+#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -107,6 +110,8 @@ bool RandExpr::isConstExpr() {
     return false;
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * RandExpr::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of a 'rand()' or 'srand()' expression result!");
@@ -118,6 +123,7 @@ llvm::Constant * RandExpr::codegenExprConstEval(CodegenCtx & cgCtx) {
     compileError("Cannot evaluate a 'rand()' or 'srand()' expression at compile time!");
     return nullptr;
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // RandExprRand
@@ -132,6 +138,8 @@ DataType & RandExprRand::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * RandExprRand::codegenExprEval(CodegenCtx & cgCtx) {
     // Get 'rand' C function
     llvm::Constant * randFn = cgCtx.module.getLLVMModuleRef().getFunction("rand");
@@ -152,6 +160,7 @@ llvm::Value * RandExprRand::codegenExprEval(CodegenCtx & cgCtx) {
     WC_ASSERT(extendedResult);
     return extendedResult;
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // RandExprSRand
@@ -170,6 +179,8 @@ DataType & RandExprSRand::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * RandExprSRand::codegenExprEval(CodegenCtx & cgCtx) {
     // Evaluate the seed expression:
     llvm::Value * seedExprVal = mSeedExpr.codegenExprEval(cgCtx);
@@ -204,6 +215,7 @@ llvm::Value * RandExprSRand::codegenExprEval(CodegenCtx & cgCtx) {
     WC_ASSERT(srandResult);
     return srandResult;
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

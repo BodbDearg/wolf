@@ -8,9 +8,12 @@
 #include "WCModule.hpp"
 #include "WCParseCtx.hpp"
 
+#warning FIXME - Codegen
+#if 0
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
 WC_THIRD_PARTY_INCLUDES_END
+#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -69,6 +72,8 @@ const Token & AssertStmnt::getEndToken() const {
     return mEndToken;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool AssertStmnt::codegen(CodegenCtx & cgCtx) {
     // Get 'abort' c library function
     llvm::Constant * abortFn = cgCtx.module.getLLVMModuleRef().getFunction("abort");
@@ -148,6 +153,7 @@ bool AssertStmnt::codegen(CodegenCtx & cgCtx) {
     cgCtx.irBuilder.SetInsertPoint(passBB);
     return true;
 }
+#endif
 
 bool AssertStmnt::allCodepathsHaveUncondRet() const {
     return false;

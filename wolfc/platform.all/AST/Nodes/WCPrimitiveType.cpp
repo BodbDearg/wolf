@@ -43,9 +43,12 @@ DataType & PrimitiveType::dataType() {
     return PrimitiveDataTypes::getUsingLangKeyword(mToken.type);
 }
 
+#warning FIXME - Codegen
+#if 0
 bool PrimitiveType::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
     return dataType().codegenLLVMTypeIfRequired(cgCtx, callingNode);
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

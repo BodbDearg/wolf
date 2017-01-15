@@ -8,9 +8,12 @@
 #include "WCModule.hpp"
 #include "WCParseCtx.hpp"
 
+#warning FIXME - Codegen
+#if 0
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
 WC_THIRD_PARTY_INCLUDES_END
+#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -69,6 +72,8 @@ const Token & PrintStmnt::getEndToken() const {
     return mEndToken;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool PrintStmnt::codegen(CodegenCtx & cgCtx) {
     // Get printf
     llvm::Constant * printfFn = cgCtx.module.getLLVMModuleRef().getFunction("printf");
@@ -83,6 +88,7 @@ bool PrintStmnt::codegen(CodegenCtx & cgCtx) {
     WC_GUARD(exprVal, false);
     return mExpr.dataType().codegenPrintStmnt(cgCtx, *this, *printfFn, *exprVal);
 }
+#endif
 
 bool PrintStmnt::allCodepathsHaveUncondRet() const {
     return false;

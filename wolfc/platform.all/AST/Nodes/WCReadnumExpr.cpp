@@ -7,9 +7,12 @@
 #include "WCModule.hpp"
 #include "WCParseCtx.hpp"
 
+#warning FIXME - Codegen
+#if 0
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
 WC_THIRD_PARTY_INCLUDES_END
+#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -72,6 +75,8 @@ DataType & ReadnumExpr::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * ReadnumExpr::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of a 'readnum()' expression result!");
@@ -127,6 +132,7 @@ llvm::Constant * ReadnumExpr::codegenExprConstEval(CodegenCtx & cgCtx) {
     compileError("Cannot evaluate a 'readnum()' expression at compile time!");
     return nullptr;
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

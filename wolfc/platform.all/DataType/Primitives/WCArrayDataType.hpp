@@ -20,7 +20,11 @@ public:
     std::string     mName;
     
 protected:
+    
+#warning FIXME - Codegen
+#if 0
     virtual bool codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) override;
+#endif
 };
 
 WC_END_NAMESPACE

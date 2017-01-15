@@ -50,16 +50,20 @@ bool Identifier::isConstExpr() {
 }
 
 DataType & Identifier::dataType() {
+#warning FIXME - Codegen
+#if 0
     DataValue * dataValue = lookupDataValue();
     
     if (dataValue) {
         WC_ASSERT(dataValue->type);
         return *dataValue->type;
     }
-    
+#endif
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown);
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * Identifier::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     
@@ -137,11 +141,14 @@ llvm::Constant * Identifier::codegenExprConstEval(CodegenCtx & cgCtx) {
     
     return nullptr;
 }
+#endif
 
 const char * Identifier::name() const {
     return mToken.data.strVal.ptr;
 }
 
+#warning FIXME - Codegen
+#if 0
 DataValue * Identifier::lookupDataValue() {
     // See if there is a parent scope, if so then try to lookup the value within that and
     // all parent scopes of that parent scope...
@@ -179,6 +186,7 @@ DataValue * Identifier::lookupDataValue() {
     WC_ASSERT(parentModule);
     return parentModule->getVar(identifierName);
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

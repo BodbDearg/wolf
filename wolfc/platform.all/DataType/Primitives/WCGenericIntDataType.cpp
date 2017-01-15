@@ -14,6 +14,8 @@ bool GenericIntDataType::isInteger() const {
     return true;
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * GenericIntDataType::codegenCmpEQOp(CodegenCtx & cgCtx,
                                                  AST::ASTNode & callingNode,
                                                  llvm::Value & leftVal,
@@ -355,5 +357,6 @@ llvm::Constant * GenericIntDataType::codegenConstMinusOp(AST::ASTNode & callingN
     WC_UNUSED_PARAM(callingNode);
     return llvm::ConstantExpr::getNeg(&val);
 }
+#endif
 
 WC_END_NAMESPACE

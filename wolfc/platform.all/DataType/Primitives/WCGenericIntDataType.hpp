@@ -9,6 +9,8 @@ class GenericIntDataType : public DataType {
 public:
     virtual bool isInteger() const final override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenCmpEQOp(CodegenCtx & cgCtx,
                                          AST::ASTNode & callingNode,
                                          llvm::Value & leftVal,
@@ -147,6 +149,7 @@ public:
     
     virtual llvm::Constant * codegenConstMinusOp(AST::ASTNode & callingNode,
                                                  llvm::Constant & val) override;
+#endif
 };
 
 WC_END_NAMESPACE

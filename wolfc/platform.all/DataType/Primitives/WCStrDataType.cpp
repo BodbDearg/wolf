@@ -24,6 +24,8 @@ bool StrDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const StrDataType*>(&other) != nullptr;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool StrDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                     AST::ASTNode & callingNode,
                                     llvm::Constant & printfFn,
@@ -48,5 +50,6 @@ bool StrDataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode
     
     return true;
 }
+#endif
 
 WC_END_NAMESPACE

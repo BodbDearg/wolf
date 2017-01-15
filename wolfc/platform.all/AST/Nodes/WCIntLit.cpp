@@ -6,9 +6,12 @@
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
 
+#warning FIXME - Codegen
+#if 0
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Constants.h>
 WC_THIRD_PARTY_INCLUDES_END
+#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -55,6 +58,8 @@ DataType & IntLit::dataType() {
     return PrimitiveDataTypes::getDefaultUIntType();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * IntLit::codegenAddrOf(CodegenCtx & cgCtx) {
     // TODO: update message here when we convert to a more generic numeric literal
     WC_UNUSED_PARAM(cgCtx);
@@ -71,6 +76,7 @@ llvm::Constant * IntLit::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: data type should be based on the numeric literal and precision suffixes used
     return llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), mToken.data.intVal);
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

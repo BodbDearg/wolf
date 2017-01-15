@@ -31,14 +31,20 @@ public:
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegen(CodegenCtx & cgCtx) final override;
+#endif
     
     virtual bool allCodepathsHaveUncondRet() const final override;
     
     virtual DataType & dataType() const = 0;
     
+#warning FIXME - Codegen
+#if 0
     bool codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope);
     bool codegenAsGlobalVar(CodegenCtx & cgCtx);
+#endif
     
     const Token &   mStartToken;
     Identifier &    mIdent;

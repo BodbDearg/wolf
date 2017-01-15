@@ -62,9 +62,12 @@ const char * FuncArg::name() const {
     return mIdent.name();
 }
 
+#warning FIXME - Codegen
+#if 0
 bool FuncArg::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
     return mType.codegenLLVMType(cgCtx, callingNode);
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

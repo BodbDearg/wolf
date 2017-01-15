@@ -1,6 +1,10 @@
 #pragma once
 
+#warning FIXME - Codegen
+#if 0
 #include "DataType/WCDataTypeCodegenFuncs.hpp"
+#endif
+
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
 
@@ -34,9 +38,12 @@ public:
     
     virtual DataType & dataType() override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+#endif
     
     UnaryExpr & mExpr;
 };
@@ -45,9 +52,13 @@ public:
 class ShiftExprTwoOps : public ShiftExpr {
 public:
     ShiftExprTwoOps(UnaryExpr & leftExpr,
-                    ShiftExpr & rightExpr,
-                    DTCodegenBinaryOpFunc codegenBinaryOpFunc,
-                    DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc);
+                    ShiftExpr & rightExpr
+                #warning FIXME - Codegen
+                #if 0
+                    ,DTCodegenBinaryOpFunc codegenBinaryOpFunc,
+                    DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc
+                #endif
+                    );
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -57,16 +68,22 @@ public:
     
     virtual DataType & dataType() final override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+#endif
     
     UnaryExpr & mLeftExpr;
     ShiftExpr & mRightExpr;
     
+#warning FIXME - Codegen
+#if 0
 private:
     const DTCodegenBinaryOpFunc         mCodegenBinaryOpFunc;
     const DTCodegenConstBinaryOpFunc    mCodegenConstBinaryOpFunc;
+#endif
 };
 
 /* UnaryExpr << ShiftExpr */

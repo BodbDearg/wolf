@@ -72,6 +72,8 @@ DataType & LOrExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * LOrExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
@@ -83,6 +85,7 @@ llvm::Value * LOrExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
 llvm::Constant * LOrExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // LOrExprOr
@@ -115,6 +118,8 @@ DataType & LOrExprOr::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * LOrExprOr::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't get the address of 'or' operator result!");
@@ -150,6 +155,7 @@ llvm::Constant * LOrExprOr::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Create the logical operation:
     return llvm::ConstantExpr::getOr(rightValue, leftValue);
 }
+#endif
 
 bool LOrExprOr::compileCheckBothExprsAreBool() const {
     const DataType & leftType = mLeftExpr.dataType();

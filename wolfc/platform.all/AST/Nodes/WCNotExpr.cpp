@@ -80,6 +80,8 @@ DataType & NotExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * NotExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
@@ -91,6 +93,7 @@ llvm::Value * NotExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
 llvm::Constant * NotExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // NotExprLNot
@@ -122,6 +125,8 @@ DataType & NotExprLNot::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * NotExprLNot::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't get the address of 'not' operator result!");
@@ -151,6 +156,7 @@ llvm::Constant * NotExprLNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Create the not operation
     return llvm::ConstantExpr::getNot(value);
 }
+#endif
 
 bool NotExprLNot::compileCheckExprIsBool() const {
     const DataType & exprType = mExpr.dataType();
@@ -195,6 +201,8 @@ DataType & NotExprBNot::dataType() {
     return mExpr.dataType();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * NotExprBNot::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't get the address of '~' (bitwise not) operator result!");
@@ -220,7 +228,10 @@ llvm::Constant * NotExprBNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     DataType & exprTy = mExpr.dataType();
     return exprTy.codegenConstBNotOp(*this, *val);
 }
+#endif
 
+#warning FIXME - Codegen
+#if 0
 bool NotExprBNot::compileCheckExprIsInt() const {
     const DataType & exprType = mExpr.dataType();
 
@@ -233,6 +244,7 @@ bool NotExprBNot::compileCheckExprIsInt() const {
 
     return true;
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

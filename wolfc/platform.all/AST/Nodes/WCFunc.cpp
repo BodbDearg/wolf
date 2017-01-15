@@ -146,11 +146,14 @@ void Func::getArgs(std::vector<FuncArg*> & args) {
     mArgList->getArgs(args);
 }
 
+#warning FIXME - Codegen
+#if 0
 DataValue * Func::getArg(const char * argName) {
     auto iter = mArgValues.find(argName);
     WC_GUARD(iter != mArgValues.end(), nullptr);
     return &iter->second;
 }
+#endif
 
 DataType & Func::returnDataType() const {
     if (mReturnType) {
@@ -161,6 +164,8 @@ DataType & Func::returnDataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
 }
 
+#warning FIXME - Codegen
+#if 0
 bool Func::codegen(CodegenCtx & cgCtx) {
     // TODO: verify all codepaths return a value if there is a return value
     
@@ -285,6 +290,7 @@ bool Func::deferredCodegen(CodegenCtx & cgCtx) {
     
     return true;    // Success!
 }
+#endif
 
 bool Func::compileCheckForDuplicateArgNames(const std::vector<FuncArg*> & funcArgs) const {
     // TODO: handle args without names
@@ -305,6 +311,8 @@ bool Func::compileCheckForDuplicateArgNames(const std::vector<FuncArg*> & funcAr
     return true;    // All good!
 }
 
+#warning FIXME - Codegen
+#if 0
 bool Func::getLLVMArgTypes(const std::vector<FuncArg*> & funcArgs,
                            std::vector<llvm::Type*> & outputArgTypes) const
 {
@@ -349,6 +357,7 @@ bool Func::getLLVMArgTypes(const std::vector<FuncArg*> & funcArgs,
     
     return true;    // All good!
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

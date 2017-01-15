@@ -26,6 +26,8 @@ bool UnknownDataType::isSized() const {
     return false;
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::AllocaInst * UnknownDataType::codegenAlloca(CodegenCtx & cgCtx,
                                                   AST::ASTNode & callingNode,
                                                   const std::string & instLabel)
@@ -43,5 +45,6 @@ bool UnknownDataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & calling
     callingNode.compileError("Cannot generate an llvm data type for the 'unknown' data type!", name().c_str());
     return true;
 }
+#endif
 
 WC_END_NAMESPACE

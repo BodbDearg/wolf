@@ -89,6 +89,8 @@ const Token & VarDecl::getEndToken() const {
     return mInitExpr.getEndToken();
 }
 
+#warning FIXME - Codegen
+#if 0
 bool VarDecl::codegen(CodegenCtx & cgCtx) {
     // See if this is a local or global var. If it is a local var then there will be a parent scope:
     Scope * parentScope = getParentScope();
@@ -99,11 +101,14 @@ bool VarDecl::codegen(CodegenCtx & cgCtx) {
     
     return codegenAsGlobalVar(cgCtx);
 }
+#endif
 
 bool VarDecl::allCodepathsHaveUncondRet() const {
     return false;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool VarDecl::codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope) {
     // Create the variable. If this fails then the variable already exists:
     DataType & varDataType = dataType();
@@ -167,6 +172,7 @@ bool VarDecl::codegenAsGlobalVar(CodegenCtx & cgCtx) {
     
     return true;    // All good!
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // VarDeclInferType

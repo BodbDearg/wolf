@@ -7,10 +7,13 @@
 #include "WCModule.hpp"
 #include "WCParseCtx.hpp"
 
+#warning FIXME - Codegen
+#if 0
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/GlobalValue.h>
     #include <llvm/IR/GlobalVariable.h>
 WC_THIRD_PARTY_INCLUDES_END
+#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -54,6 +57,8 @@ DataType & StrLit::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kStr);
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * StrLit::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of string literal!");
@@ -86,6 +91,7 @@ llvm::Constant * StrLit::codegenExprConstEval(CodegenCtx & cgCtx) {
     std::vector<llvm::Constant*> indices = { firstIndex, firstIndex };
     return llvm::ConstantExpr::getGetElementPtr(strArray->getType(), strGlobalVar, indices);
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

@@ -1,6 +1,10 @@
 #pragma once
 
+#warning FIXME - Codegen
+#if 0
 #include "DataType/WCDataValue.hpp"
+#endif
+
 #include "WCAssert.hpp"
 #include "WCASTNode.hpp"
 #include "WCCStrComparator.hpp"
@@ -11,15 +15,22 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <vector>
 WC_THIRD_PARTY_INCLUDES_END
 
+#warning FIXME - Codegen
+#if 0
 namespace llvm {
     class Constant;
     class LLVMContext;
     class Module;
 }
+#endif
 
 WC_BEGIN_NAMESPACE
 
+#warning FIXME - Codegen
+#if 0
 struct CodegenCtx;
+#endif
+
 struct ParseCtx;
 
 WC_AST_BEGIN_NAMESPACE
@@ -34,7 +45,12 @@ Module:
 */
 class Module final : public ASTNode {
 public:
-    Module(llvm::LLVMContext & llvmCtx);
+    Module(
+        #warning FIXME - Codegen
+        #if 0
+           llvm::LLVMContext & llvmCtx
+        #endif
+           );
     
     ~Module();
     
@@ -45,6 +61,8 @@ public:
     /* Parse the code for the module from the given token array */
     bool parse(ParseCtx & parseCtx);
     
+#warning FIXME - Codegen
+#if 0
     /* Generates the code for the module. Parsing code must have succeeded. */
     bool generateCode();
     
@@ -53,6 +71,7 @@ public:
     
     /* Dump the generated LLVM IR code to stdout */
     void dumpIRCodeToStdout();
+#endif
     
     /** 
      * Register a given function with the module.
@@ -63,6 +82,8 @@ public:
     /* Lookup a module function by name. Returns nullptr if not found. */
     Func * getFunc(const std::string & name) const;
     
+#warning FIXME - Codegen
+#if 0
     /**
      * Create a variable within this scope.
      * If the variable already exists then creation fails and null is returned.
@@ -91,13 +112,17 @@ public:
     
     /* The LLVM context */
     llvm::LLVMContext & mLLVMCtx;
+#endif
     
 private:
+#warning FIXME - Codegen
+#if 0
     /* Declare C standard library functions with the module */
     void declareCStdLibFuncsInModule();
     
     /* The LLVM module */
     std::unique_ptr<llvm::Module> mLLVMModule;
+#endif
     
     /* All declarations and definitions in the module/ */
     std::vector<DeclDef*> mDeclDefs;
@@ -105,8 +130,11 @@ private:
     /* A list of registered functions in the module. Generated during the compile phase. */
     std::map<std::string, Func*> mFuncs;
     
+#warning FIXME - Codegen
+#if 0
     /* A list of registered global variables in the module. Generated during the compile phase. */
     std::map<const char*, DataValue, CStrComparator> mVarValues;
+#endif
     
     /* The EOF token */
     const Token * mEOFToken;

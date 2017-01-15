@@ -9,9 +9,12 @@
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
 
+#warning FIXME - Codegen
+#if 0
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
 WC_THIRD_PARTY_INCLUDES_END
+#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -97,11 +100,16 @@ const Token & ReturnStmnt::getStartToken() const {
     return mReturnToken;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool ReturnStmnt::codegenAndVerifyReturnDataType(CodegenCtx & cgCtx) {
     WC_GUARD(dataType().codegenLLVMTypeIfRequired(cgCtx, *this), false);
     return verifyReturnTypeCorrect();
 }
+#endif
 
+#warning FIXME - Codegen
+#if 0
 bool ReturnStmnt::verifyReturnTypeCorrect() {
     // Get the parent function:
     const Func * parentFunc = firstParentOfType<Func>();
@@ -133,6 +141,7 @@ bool ReturnStmnt::verifyReturnTypeCorrect() {
     // All good!
     return true;
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // ReturnStmntNoCondVoid
@@ -145,6 +154,8 @@ const Token & ReturnStmntNoCondVoid::getEndToken() const {
     return mReturnToken;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool ReturnStmntNoCondVoid::codegen(CodegenCtx & cgCtx) {
     // Codegen the return type (if required) and verify the return type is correct
     WC_GUARD(dataType().codegenLLVMTypeIfRequired(cgCtx, *this), false);
@@ -166,6 +177,7 @@ bool ReturnStmntNoCondVoid::codegen(CodegenCtx & cgCtx) {
     
     return true;    // Success!
 }
+#endif
 
 DataType & ReturnStmntNoCondVoid::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
@@ -189,6 +201,8 @@ const Token & ReturnStmntNoCondWithValue::getEndToken() const {
     return mReturnExpr.getEndToken();
 }
 
+#warning FIXME - Codegen
+#if 0
 bool ReturnStmntNoCondWithValue::codegen(CodegenCtx & cgCtx) {
     // Codegen the return type and verify the return type is correct
     WC_GUARD(codegenAndVerifyReturnDataType(cgCtx), false);
@@ -213,6 +227,7 @@ bool ReturnStmntNoCondWithValue::codegen(CodegenCtx & cgCtx) {
     
     return true;    // Success!
 }
+#endif
 
 DataType & ReturnStmntNoCondWithValue::dataType() {
     return mReturnExpr.dataType();
@@ -259,7 +274,9 @@ ReturnStmntWithCondVoid::ReturnStmntWithCondVoid(const Token & returnToken,
 {
     WC_EMPTY_FUNC_BODY();
 }
-    
+
+#warning FIXME - Codegen
+#if 0
 bool ReturnStmntWithCondVoid::codegen(CodegenCtx & cgCtx) {
     // Codegen the return type and verify the return type is correct
     WC_GUARD(codegenAndVerifyReturnDataType(cgCtx), false);
@@ -304,6 +321,7 @@ bool ReturnStmntWithCondVoid::codegen(CodegenCtx & cgCtx) {
     cgCtx.irBuilder.SetInsertPoint(mContinueBlock);
     return true;
 }
+#endif
     
 DataType & ReturnStmntWithCondVoid::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
@@ -324,7 +342,9 @@ ReturnStmntWithCondAndValue::ReturnStmntWithCondAndValue(const Token & returnTok
 {
     mReturnExpr.mParent = this;
 }
-    
+
+#warning FIXME - Codegen
+#if 0
 bool ReturnStmntWithCondAndValue::codegen(CodegenCtx & cgCtx) {
     // Codegen the return type and verify the return type is correct
     WC_GUARD(codegenAndVerifyReturnDataType(cgCtx), false);
@@ -375,6 +395,7 @@ bool ReturnStmntWithCondAndValue::codegen(CodegenCtx & cgCtx) {
     cgCtx.irBuilder.SetInsertPoint(mContinueBlock);
     return true;
 }
+#endif
     
 DataType & ReturnStmntWithCondAndValue::dataType() {
     return mReturnExpr.dataType();

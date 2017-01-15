@@ -5,7 +5,10 @@
 
 WC_BEGIN_NAMESPACE
 
+#warning FIXME - Codegen
+#if 0
 struct DataValue;
+#endif
 
 WC_AST_BEGIN_NAMESPACE
 
@@ -25,13 +28,19 @@ public:
     
     virtual DataType & dataType() override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
+#endif
     
     const char * name() const;
     
+#warning FIXME - Codegen
+#if 0
     DataValue * lookupDataValue();
+#endif
     
     const Token & mToken;
 };

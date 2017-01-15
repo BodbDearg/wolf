@@ -34,14 +34,21 @@ public:
     
     virtual const Token & getEndToken() const override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::BasicBlock * getNextStmntTargetBlock() override;
     virtual llvm::BasicBlock * getBreakStmntTargetBlock() override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
+#endif
     
     const Token &       mEndToken;
+    
+#warning FIXME - Codegen
+#if 0
     llvm::BasicBlock *  mStartBB = nullptr;
     llvm::BasicBlock *  mEndBB = nullptr;
+#endif
 };
 
 /* loop Scope repeat while|until AssignExpr */
@@ -54,10 +61,13 @@ public:
     
     virtual const Token & getEndToken() const override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::BasicBlock * getNextStmntTargetBlock() override;
     virtual llvm::BasicBlock * getBreakStmntTargetBlock() override;
     
     virtual bool codegen(CodegenCtx & cgCtx) override;
+#endif
     
     /**
      * If true this is a loop 'until' statement rather than loop 'while'. In that case
@@ -65,16 +75,23 @@ public:
      */
     bool isLoopCondInversed() const;
     
+#warning FIXME - Codegen
+#if 0
     /**
      * Generate the code for the loop condition expression and return the value of that expression. 
      * Returns nullptr on failure.
      */
     llvm::Value * codegenLoopCondExpr(CodegenCtx & cgCtx) const;
+#endif
     
     const Token &       mCondTypeToken;
     AssignExpr &        mLoopCondExpr;
+    
+#warning FIXME - Codegen
+#if 0
     llvm::BasicBlock *  mLoopCondBB = nullptr;
     llvm::BasicBlock *  mEndBB = nullptr;
+#endif
 };
 
 WC_AST_END_NAMESPACE

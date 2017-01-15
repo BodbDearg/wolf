@@ -1,6 +1,10 @@
 #include "WCAddExpr.hpp"
 
+#warning FIXME - Codegen
+#if 0
 #include "DataType/WCDataType.hpp"
+#endif
+
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssert.hpp"
 #include "WCCodegenCtx.hpp"
@@ -76,6 +80,8 @@ DataType & AddExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * AddExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
@@ -87,22 +93,33 @@ llvm::Value * AddExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
 llvm::Constant * AddExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // AddExprTwoOps
 //-----------------------------------------------------------------------------
 AddExprTwoOps::AddExprTwoOps(MulExpr & leftExpr,
-                             AddExpr & rightExpr,
-                             DTCodegenBinaryOpFunc codegenBinaryOpFunc,
-                             DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc)
+                             AddExpr & rightExpr
+                            #warning FIXME - Codegen
+                            #if 0
+                             ,DTCodegenBinaryOpFunc codegenBinaryOpFunc,
+                             DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc
+                            #endif
+                             )
 :
     mLeftExpr(leftExpr),
-    mRightExpr(rightExpr),
-    mCodegenBinaryOpFunc(codegenBinaryOpFunc),
+    mRightExpr(rightExpr)
+#warning FIXME - Codegen
+#if 0
+    ,mCodegenBinaryOpFunc(codegenBinaryOpFunc),
     mCodegenConstBinaryOpFunc(codegenConstBinaryOpFunc)
+#endif
 {
+#warning FIXME - Codegen
+#if 0
     WC_ASSERT(mCodegenBinaryOpFunc);
     WC_ASSERT(mCodegenConstBinaryOpFunc);
+#endif
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
 }
@@ -128,6 +145,8 @@ DataType & AddExprTwoOps::dataType() {
     return mLeftExpr.dataType();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * AddExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
     // TODO: would this be true in future for complex types?
     WC_UNUSED_PARAM(cgCtx);
@@ -160,12 +179,19 @@ llvm::Constant * AddExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
     DataType & rightTy = mRightExpr.dataType();
     return (leftTy.*mCodegenConstBinaryOpFunc)(*this, *leftVal, rightTy, *rightVal);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // AddExprAdd
 //-----------------------------------------------------------------------------
 AddExprAdd::AddExprAdd(MulExpr & leftExpr, AddExpr & rightExpr) :
-    AddExprTwoOps(leftExpr, rightExpr, &DataType::codegenAddOp, &DataType::codegenConstAddOp)
+    AddExprTwoOps(leftExpr, rightExpr
+                #warning FIXME - Codegen
+                #if 0
+                  , &DataType::codegenAddOp
+                  , &DataType::codegenConstAddOp
+                #endif
+                  )
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -174,7 +200,13 @@ AddExprAdd::AddExprAdd(MulExpr & leftExpr, AddExpr & rightExpr) :
 // AddExprSub
 //-----------------------------------------------------------------------------
 AddExprSub::AddExprSub(MulExpr & leftExpr, AddExpr & rightExpr) :
-    AddExprTwoOps(leftExpr, rightExpr, &DataType::codegenSubOp, &DataType::codegenConstSubOp)
+    AddExprTwoOps(leftExpr, rightExpr
+                #warning FIXME - Codegen
+                #if 0
+                  , &DataType::codegenSubOp
+                  , &DataType::codegenConstSubOp
+                #endif
+                  )
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -183,7 +215,13 @@ AddExprSub::AddExprSub(MulExpr & leftExpr, AddExpr & rightExpr) :
 // AddExprBOr
 //-----------------------------------------------------------------------------
 AddExprBOr::AddExprBOr(MulExpr & leftExpr, AddExpr & rightExpr) :
-    AddExprTwoOps(leftExpr, rightExpr, &DataType::codegenBOrOp, &DataType::codegenConstBOrOp)
+    AddExprTwoOps(leftExpr, rightExpr
+                #warning FIXME - Codegen
+                #if 0
+                  , &DataType::codegenBOrOp
+                  , &DataType::codegenConstBOrOp
+                #endif
+                  )
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -192,7 +230,13 @@ AddExprBOr::AddExprBOr(MulExpr & leftExpr, AddExpr & rightExpr) :
 // AddExprBXor
 //-----------------------------------------------------------------------------
 AddExprBXor::AddExprBXor(MulExpr & leftExpr, AddExpr & rightExpr) :
-    AddExprTwoOps(leftExpr, rightExpr, &DataType::codegenBXOrOp, &DataType::codegenConstBXOrOp)
+    AddExprTwoOps(leftExpr, rightExpr
+                #warning FIXME - Codegen
+                #if 0
+                  , &DataType::codegenBXOrOp
+                  , &DataType::codegenConstBXOrOp
+                #endif
+                  )
 {
     WC_EMPTY_FUNC_BODY();
 }

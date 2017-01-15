@@ -8,16 +8,17 @@
 #include "WCParseCtx.hpp"
 #include "WCVarDecl.hpp"
 
+#warning FIXME - Codegen
+#if 0
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
 WC_THIRD_PARTY_INCLUDES_END
+#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 bool Module::parse(ParseCtx & parseCtx) {
-    
-    
     while (DeclDef::peek(parseCtx.curTok)) {
         DeclDef * declDef = DeclDef::parse(parseCtx);
         WC_GUARD(declDef, false);
@@ -34,8 +35,16 @@ bool Module::parse(ParseCtx & parseCtx) {
     return true;
 }
 
-Module::Module(llvm::LLVMContext & llvmCtx) :
+Module::Module(
+            #warning FIXME - Codegen
+            #if 0
+               llvm::LLVMContext & llvmCtx
+            #endif
+               ) :
+#warning FIXME - Codegen
+#if 0
     mLLVMCtx(llvmCtx),
+#endif
     mEOFToken(nullptr)
 {
     WC_EMPTY_FUNC_BODY();
@@ -64,8 +73,8 @@ const Token & Module::getEndToken() const {
     return *mEOFToken;
 }
 
-
-
+#warning FIXME - Codegen
+#if 0
 bool Module::generateCode() {
     // Clear out previous code and check we parsed ok
     mLLVMModule.reset();
@@ -114,6 +123,7 @@ void Module::dumpIRCodeToStdout() {
     WC_GUARD_ASSERT(mLLVMModule.get());
     mLLVMModule->dump();
 }
+#endif
 
 bool Module::registerFunc(Func & func) {
     std::string funcName = func.name();
@@ -132,6 +142,8 @@ Func * Module::getFunc(const std::string & name) const {
     return iter->second;
 }
 
+#warning FIXME - Codegen
+#if 0
 DataValue * Module::createVar(const char * varName,
                               DataType & dataType,
                               llvm::Constant * initializer,
@@ -251,6 +263,7 @@ void Module::declareCStdLibFuncsInModule() {
 
     mLLVMModule->getOrInsertFunction("abort", abortFnType);
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

@@ -80,6 +80,8 @@ DataType & TernaryExprNoCond::dataType() {
     return mExpr.dataType();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * TernaryExprNoCond::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
@@ -91,6 +93,7 @@ llvm::Value * TernaryExprNoCond::codegenExprEval(CodegenCtx & cgCtx) {
 llvm::Constant * TernaryExprNoCond::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // TernaryExprWithCond
@@ -132,6 +135,8 @@ DataType & TernaryExprWithCond::dataType() {
     return mTrueExpr.dataType();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * TernaryExprWithCond::codegenAddrOf(CodegenCtx & cgCtx) {
     // FIXME: Address of ternary expr: surely we should be able to do this?
     WC_UNUSED_PARAM(cgCtx);
@@ -197,6 +202,7 @@ llvm::Constant * TernaryExprWithCond::codegenExprConstEval(CodegenCtx & cgCtx) {
     
     return mTrueExpr.codegenExprConstEval(cgCtx);
 }
+#endif
 
 bool TernaryExprWithCond::compileCheckExprDataTypes() const {
     const DataType & condType = mCondExpr.dataType();

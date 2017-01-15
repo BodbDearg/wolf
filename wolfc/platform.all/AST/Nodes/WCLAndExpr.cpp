@@ -64,6 +64,8 @@ DataType & LAndExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * LAndExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
@@ -75,6 +77,7 @@ llvm::Value * LAndExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
 llvm::Constant * LAndExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // LAndExprAnd
@@ -107,6 +110,8 @@ DataType & LAndExprAnd::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * LAndExprAnd::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't get the address of 'and' operator result!");
@@ -142,6 +147,7 @@ llvm::Constant * LAndExprAnd::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Create the logical operation:
     return llvm::ConstantExpr::getAnd(rightValue, leftValue);
 }
+#endif
 
 bool LAndExprAnd::compileCheckBothExprsAreBool() const {
     const DataType & leftType = mLeftExpr.dataType();

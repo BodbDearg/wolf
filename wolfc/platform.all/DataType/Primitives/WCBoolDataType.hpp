@@ -11,6 +11,8 @@ public:
     virtual const std::string & name() const override;
     virtual bool equals(const DataType & other) const override;
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
                                    AST::ASTNode & callingNode,
                                    llvm::Constant & printfFn,
@@ -37,9 +39,14 @@ public:
                                                  llvm::Constant & leftVal,
                                                  DataType & rightTy,
                                                  llvm::Constant & rightVal) override;
+#endif
     
 protected:
+    
+#warning FIXME - Codegen
+#if 0
     virtual bool codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) override;
+#endif
 };
 
 WC_END_NAMESPACE

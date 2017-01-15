@@ -8,9 +8,12 @@
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
 
+#warning FIXME - Codegen
+#if 0
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
 WC_THIRD_PARTY_INCLUDES_END
+#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -59,6 +62,8 @@ const Token & NextStmnt::getStartToken() const {
     return mNextToken;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool NextStmnt::deferredCodegen(CodegenCtx & cgCtx) {
     // Get the parent repeatable statement:
     IRepeatableStmnt * parentRepeatableStmnt = firstParentOfType<IRepeatableStmnt>();
@@ -73,6 +78,7 @@ bool NextStmnt::deferredCodegen(CodegenCtx & cgCtx) {
     cgCtx.irBuilder.CreateBr(parentRepeatableStmnt->getNextStmntTargetBlock());
     return true;
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // NextStmntNoCond
@@ -85,6 +91,8 @@ const Token & NextStmntNoCond::getEndToken() const {
     return mNextToken;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool NextStmntNoCond::codegen(CodegenCtx & cgCtx) {
     // Grab the parent function
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
@@ -104,6 +112,7 @@ bool NextStmntNoCond::codegen(CodegenCtx & cgCtx) {
     
     return true;    // All good so far!
 }
+#endif
 
 bool NextStmntNoCond::allCodepathsHaveUncondRet() const {
     return true;
@@ -126,7 +135,9 @@ NextStmntWithCond::NextStmntWithCond(const Token & nextToken,
 const Token & NextStmntWithCond::getEndToken() const {
     return mCondExpr.getEndToken();
 }
-    
+
+#warning FIXME - Codegen
+#if 0
 bool NextStmntWithCond::codegen(CodegenCtx & cgCtx) {
     // Grab the parent function
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
@@ -170,6 +181,7 @@ bool NextStmntWithCond::codegen(CodegenCtx & cgCtx) {
     
     return true;    // All good so far!
 }
+#endif
 
 bool NextStmntWithCond::allCodepathsHaveUncondRet() const {
     return false;

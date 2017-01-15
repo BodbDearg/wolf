@@ -7,16 +7,22 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <string>
 WC_THIRD_PARTY_INCLUDES_END
 
+#warning FIXME - Codegen
+#if 0
 namespace llvm {
     class AllocaInst;
     class Constant;
     class Type;
     class Value;
 }
+#endif
 
 WC_BEGIN_NAMESPACE
 
+#warning FIXME - Codegen
+#if 0
 struct CodegenCtx;
+#endif
 
 namespace AST {
     class ASTNode;
@@ -75,6 +81,8 @@ public:
      */
     virtual bool requiresStorage() const;
     
+#warning FIXME - Codegen
+#if 0
     /**
      * Run code generation for this data type (if required). If not required does nothing
      * Generates the llvm type for the data type and returns true if generation was successful.
@@ -104,7 +112,10 @@ public:
                                         AST::ASTNode & callingNode,
                                         llvm::Value & valToCast,
                                         DataType & castToTy);
+#endif
     
+#warning FIXME - Codegen
+#if 0
     /**
      * Codegen various runtime binary operations: the two values must to be of the same type.
      * The default impl issues an 'unsupported op' compile error.
@@ -188,12 +199,13 @@ public:
     WC_DATA_TYPE_DECL_CODEGEN_CONST_UNARY_OP_FUNC(BNot)
     WC_DATA_TYPE_DECL_CODEGEN_CONST_UNARY_OP_FUNC(Plus)
     WC_DATA_TYPE_DECL_CODEGEN_CONST_UNARY_OP_FUNC(Minus)
-    
+
     /**
      * Check that the LLVM type for this data type is defined and issue a compile error if not.
      * Returns false if the LLVM type is not defined and true otherwise.
      */
     bool compileCheckLLVMTypeDefined(AST::ASTNode & callingNode);
+#endif
     
     /**
      * Does a compile check that the right expression type in a binary operator matches
@@ -220,11 +232,14 @@ public:
                                               const char * opSymbol,
                                               const char * opName) const;
     
+#warning FIXME - Codegen
+#if 0
     /**
      * The llvm type for the data type. This is filled in during code generation.
      * Note: The unknown data type will not use anything for this field...
      */
     llvm::Type * mLLVMType = nullptr;
+#endif
     
 protected:
     static const char * const kOpSymbol_BNot;
@@ -273,6 +288,8 @@ protected:
     static const char * const kOpName_Inc;
     static const char * const kOpName_Dec;
     
+#warning FIXME - Codegen
+#if 0
     /**
      * Run code generation for this data type.
      * Generates the llvm type for the data type and returns true if generation was successful.
@@ -281,6 +298,7 @@ protected:
     
     /* Issue a generic compile error for failing to generate the LLVM type for this data type. */
     void issueGenericCodegenLLVMTypeError(AST::ASTNode & callingNode) const;
+#endif
 };
 
 WC_END_NAMESPACE

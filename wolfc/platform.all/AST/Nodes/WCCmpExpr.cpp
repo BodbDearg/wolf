@@ -4,7 +4,12 @@
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAddExpr.hpp"
 #include "WCAssert.hpp"
+
+#warning FIXME - Codegen
+#if 0
 #include "WCCodegenCtx.hpp"
+#endif
+
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
 
@@ -105,6 +110,8 @@ DataType & CmpExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * CmpExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
     return mExpr.codegenAddrOf(cgCtx);
 }
@@ -116,22 +123,33 @@ llvm::Value * CmpExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
 llvm::Constant * CmpExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
     return mExpr.codegenExprConstEval(cgCtx);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // CmpExprTwoOps
 //-----------------------------------------------------------------------------
 CmpExprTwoOps::CmpExprTwoOps(AddExpr & leftExpr,
-                             CmpExpr & rightExpr,
-                             DTCodegenBinaryOpFunc codegenBinaryOpFunc,
-                             DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc)
+                             CmpExpr & rightExpr
+                            #warning FIXME - Codegen
+                            #if 0
+                             ,DTCodegenBinaryOpFunc codegenBinaryOpFunc,
+                             DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc
+                            #endif
+                             )
 :
     mLeftExpr(leftExpr),
-    mRightExpr(rightExpr),
-    mCodegenBinaryOpFunc(codegenBinaryOpFunc),
+    mRightExpr(rightExpr)
+#warning FIXME - Codegen
+#if 0
+    ,mCodegenBinaryOpFunc(codegenBinaryOpFunc),
     mCodegenConstBinaryOpFunc(codegenConstBinaryOpFunc)
+#endif
 {
+#warning FIXME - Codegen
+#if 0
     WC_ASSERT(mCodegenBinaryOpFunc);
     WC_ASSERT(mCodegenConstBinaryOpFunc);
+#endif
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
 }
@@ -156,6 +174,8 @@ DataType & CmpExprTwoOps::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * CmpExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     compileError("Can't take the address of relational operation result!");
@@ -187,12 +207,18 @@ llvm::Constant * CmpExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
     DataType & rightTy = mRightExpr.dataType();
     return (leftTy.*mCodegenConstBinaryOpFunc)(*this, *leftVal, rightTy, *rightVal);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // CmpExprEQ
 //-----------------------------------------------------------------------------
 CmpExprEQ::CmpExprEQ(AddExpr & leftExpr, CmpExpr & rightExpr) :
-    CmpExprTwoOps(leftExpr, rightExpr, &DataType::codegenCmpEQOp, &DataType::codegenConstCmpEQOp)
+    CmpExprTwoOps(leftExpr, rightExpr
+                #warning FIXME - Codegen
+                #if 0
+                  , &DataType::codegenCmpEQOp, &DataType::codegenConstCmpEQOp
+                #endif
+                  )
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -201,7 +227,12 @@ CmpExprEQ::CmpExprEQ(AddExpr & leftExpr, CmpExpr & rightExpr) :
 // CmpExprNE
 //-----------------------------------------------------------------------------
 CmpExprNE::CmpExprNE(AddExpr & leftExpr, CmpExpr & rightExpr) :
-    CmpExprTwoOps(leftExpr, rightExpr, &DataType::codegenCmpNEOp, &DataType::codegenConstCmpNEOp)
+    CmpExprTwoOps(leftExpr, rightExpr
+                #warning FIXME - Codegen
+                #if 0
+                  , &DataType::codegenCmpNEOp, &DataType::codegenConstCmpNEOp
+                #endif
+                  )
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -210,7 +241,12 @@ CmpExprNE::CmpExprNE(AddExpr & leftExpr, CmpExpr & rightExpr) :
 // CmpExprLT
 //-----------------------------------------------------------------------------
 CmpExprLT::CmpExprLT(AddExpr & leftExpr, CmpExpr & rightExpr) :
-    CmpExprTwoOps(leftExpr, rightExpr, &DataType::codegenCmpLTOp, &DataType::codegenConstCmpLTOp)
+    CmpExprTwoOps(leftExpr, rightExpr
+                #warning FIXME - Codegen
+                #if 0
+                  , &DataType::codegenCmpLTOp, &DataType::codegenConstCmpLTOp
+                #endif
+                  )
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -219,7 +255,12 @@ CmpExprLT::CmpExprLT(AddExpr & leftExpr, CmpExpr & rightExpr) :
 // CmpExprLE
 //-----------------------------------------------------------------------------
 CmpExprLE::CmpExprLE(AddExpr & leftExpr, CmpExpr & rightExpr) :
-    CmpExprTwoOps(leftExpr, rightExpr, &DataType::codegenCmpLEOp, &DataType::codegenConstCmpLEOp)
+    CmpExprTwoOps(leftExpr, rightExpr
+                #warning FIXME - Codegen
+                #if 0
+                  , &DataType::codegenCmpLEOp, &DataType::codegenConstCmpLEOp
+                #endif
+                  )
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -228,7 +269,12 @@ CmpExprLE::CmpExprLE(AddExpr & leftExpr, CmpExpr & rightExpr) :
 // CmpExprGT
 //-----------------------------------------------------------------------------
 CmpExprGT::CmpExprGT(AddExpr & leftExpr, CmpExpr & rightExpr) :
-    CmpExprTwoOps(leftExpr, rightExpr, &DataType::codegenCmpGTOp, &DataType::codegenConstCmpGTOp)
+    CmpExprTwoOps(leftExpr, rightExpr
+                #warning FIXME - Codegen
+                #if 0
+                  , &DataType::codegenCmpGTOp, &DataType::codegenConstCmpGTOp
+                #endif
+                  )
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -237,7 +283,12 @@ CmpExprGT::CmpExprGT(AddExpr & leftExpr, CmpExpr & rightExpr) :
 // CmpExprGE
 //-----------------------------------------------------------------------------
 CmpExprGE::CmpExprGE(AddExpr & leftExpr, CmpExpr & rightExpr) :
-    CmpExprTwoOps(leftExpr, rightExpr, &DataType::codegenCmpGEOp, &DataType::codegenConstCmpGEOp)
+    CmpExprTwoOps(leftExpr, rightExpr
+                #warning FIXME - Codegen
+                #if 0
+                  , &DataType::codegenCmpGEOp, &DataType::codegenConstCmpGEOp
+                #endif
+                  )
 {
     WC_EMPTY_FUNC_BODY();
 }

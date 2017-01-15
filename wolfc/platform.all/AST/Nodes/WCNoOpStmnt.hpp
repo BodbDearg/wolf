@@ -20,7 +20,10 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegen(CodegenCtx & cgCtx) override;
+#endif
     
     virtual bool allCodepathsHaveUncondRet() const override;
     

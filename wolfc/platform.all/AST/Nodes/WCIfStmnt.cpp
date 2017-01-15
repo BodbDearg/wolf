@@ -150,6 +150,8 @@ bool IfStmnt::isIfExprInversed() const {
     return mStartToken.type == TokenType::kUnless;
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * IfStmnt::codegenIfExpr(CodegenCtx & cgCtx) const {
     // Firstly validate that the if statement condition expression is a bool;
     const DataType & ifExprDataType = mIfExpr.dataType();
@@ -164,6 +166,7 @@ llvm::Value * IfStmnt::codegenIfExpr(CodegenCtx & cgCtx) const {
     // Then generate the code
     return mIfExpr.codegenExprEval(cgCtx);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // IfStmntNoElse
@@ -183,6 +186,8 @@ const Token & IfStmntNoElse::getEndToken() const {
     return mEndToken;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool IfStmntNoElse::codegen(CodegenCtx & cgCtx) {
     // Generate the code for the if statement condition expression:
     llvm::Value * ifExprResult = codegenIfExpr(cgCtx);
@@ -235,6 +240,7 @@ bool IfStmntNoElse::codegen(CodegenCtx & cgCtx) {
     cgCtx.irBuilder.SetInsertPoint(endBB);
     return true;
 }
+#endif
 
 bool IfStmntNoElse::allCodepathsHaveUncondRet() const {
     return false;
@@ -258,6 +264,8 @@ const Token & IfStmntElseIf::getEndToken() const {
     return mElseIfStmnt.getEndToken();
 }
 
+#warning FIXME - Codegen
+#if 0
 bool IfStmntElseIf::codegen(CodegenCtx & cgCtx) {
     // Generate the code for the if statement condition expression:
     llvm::Value * ifExprResult = codegenIfExpr(cgCtx);
@@ -330,6 +338,7 @@ bool IfStmntElseIf::codegen(CodegenCtx & cgCtx) {
     cgCtx.irBuilder.SetInsertPoint(endBB);
     return true;
 }
+#endif
 
 bool IfStmntElseIf::allCodepathsHaveUncondRet() const {
     return  mThenScope.allCodepathsHaveUncondRet() &&
@@ -355,7 +364,9 @@ IfStmntElse::IfStmntElse(AssignExpr & ifExpr,
 const Token & IfStmntElse::getEndToken() const {
     return mEndToken;
 }
-    
+
+#warning FIXME - Codegen
+#if 0
 bool IfStmntElse::codegen(CodegenCtx & cgCtx) {
     // Generate the code for the if statement condition expression:
     llvm::Value * ifExprResult = codegenIfExpr(cgCtx);
@@ -428,6 +439,7 @@ bool IfStmntElse::codegen(CodegenCtx & cgCtx) {
     cgCtx.irBuilder.SetInsertPoint(endBB);
     return true;
 }
+#endif
 
 bool IfStmntElse::allCodepathsHaveUncondRet() const {
     return  mThenScope.allCodepathsHaveUncondRet() &&

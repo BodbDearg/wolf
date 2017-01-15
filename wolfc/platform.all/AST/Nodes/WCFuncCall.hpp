@@ -6,9 +6,12 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <vector>
 WC_THIRD_PARTY_INCLUDES_END
 
+#warning FIXME - Codegen
+#if 0
 namespace llvm {
     class Value;
 }
+#endif
 
 WC_BEGIN_NAMESPACE
 
@@ -36,18 +39,24 @@ public:
     size_t numArgs() const;
     void getArgs(std::vector<AssignExpr*> & args) const;
     
+#warning FIXME - Codegen
+#if 0
     /**
      * Generates the code for the argument list expressions and saves them as a list of 
      * llvm::Value objects on this object.
      */
     bool codegenArgsListExprs(CodegenCtx & cgCtx);
+#endif
     
     const Token &       mStartToken;
     FuncCallArgList *   mArgList;
     const Token &       mEndToken;
     
+#warning FIXME - Codegen
+#if 0
     /* The list of evaluated arg list expressions, created after code generation. */
     std::vector<llvm::Value*> mArgListExprsValues;
+#endif
 };
 
 WC_AST_END_NAMESPACE

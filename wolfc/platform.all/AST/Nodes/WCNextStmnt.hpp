@@ -3,9 +3,12 @@
 #include "WCASTNode.hpp"
 #include "WCIStmnt.hpp"
 
+#warning FIXME - Codegen
+#if 0
 namespace llvm {
     class BasicBlock;
 }
+#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -26,14 +29,20 @@ public:
     
     virtual const Token & getStartToken() const final override;
     
+#warning FIXME - Codegen
+#if 0
     /* Shouldn't be called directly. The statement itself will schedule this. */
     bool deferredCodegen(CodegenCtx & cgCtx);
+#endif
     
     /* The 'next' token */
     const Token & mNextToken;
     
+#warning FIXME - Codegen
+#if 0
     /* Basic block for the 'next' code */
     llvm::BasicBlock * 	mNextBlock = nullptr;
+#endif
 };
 
 /* next */
@@ -43,7 +52,10 @@ public:
     
     virtual const Token & getEndToken() const override;
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegen(CodegenCtx & cgCtx) override;
+#endif
     
     virtual bool allCodepathsHaveUncondRet() const override;
 };
@@ -57,7 +69,10 @@ public:
     
     virtual const Token & getEndToken() const override;
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegen(CodegenCtx & cgCtx) override;
+#endif
     
     virtual bool allCodepathsHaveUncondRet() const override;
     
@@ -70,8 +85,11 @@ public:
     /* The condition expression itself */
     AssignExpr & mCondExpr;
     
+#warning FIXME - Codegen
+#if 0
     /* Basic block for the 'continue' code */
     llvm::BasicBlock * mContinueBlock = nullptr;
+#endif
 };
 
 WC_AST_END_NAMESPACE

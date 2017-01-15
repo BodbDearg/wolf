@@ -28,12 +28,18 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegen(CodegenCtx & cgCtx) override;
+#endif
     
     virtual bool allCodepathsHaveUncondRet() const override;
     
+#warning FIXME - Codegen
+#if 0
     virtual llvm::BasicBlock * getNextStmntTargetBlock() override;
     virtual llvm::BasicBlock * getBreakStmntTargetBlock() override;
+#endif
     
     /**
      * If true this is an 'until' statement rather than 'while'. In that case
@@ -41,18 +47,25 @@ public:
      */
     bool isWhileExprInversed() const;
     
+#warning FIXME - Codegen
+#if 0
     /**
      * Generate the code for the while statment condition expression and return the value of that expression.
      * Returns nullptr on failure.
      */
     llvm::Value * codegenWhileExpr(CodegenCtx & cgCtx) const;
+#endif
     
     AssignExpr &            mWhileExpr;
     Scope &                 mBodyScope;
     const Token &           mStartToken;
     const Token &           mEndToken;
+
+#warning FIXME - Codegen
+#if 0
     llvm::BasicBlock *      mWhileCondBB = nullptr;
     llvm::BasicBlock *      mEndBB = nullptr;
+#endif
 };
 
 WC_AST_END_NAMESPACE

@@ -61,6 +61,8 @@ const Token & ScopeStmnt::getEndToken() const {
     return mEndToken;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool ScopeStmnt::codegen(CodegenCtx & cgCtx) {
     // Grab the parent function
     llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
@@ -88,6 +90,7 @@ bool ScopeStmnt::codegen(CodegenCtx & cgCtx) {
     cgCtx.irBuilder.SetInsertPoint(endBB);
     return true;
 }
+#endif
 
 bool ScopeStmnt::allCodepathsHaveUncondRet() const {
     return mBodyScope.allCodepathsHaveUncondRet();

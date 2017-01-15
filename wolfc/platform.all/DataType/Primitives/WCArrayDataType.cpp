@@ -64,6 +64,8 @@ bool ArrayDataType::requiresStorage() const {
     return true;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool ArrayDataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) {
     // If the type is unknown then give out
     if (mInnerType.isUnknown()) {
@@ -96,5 +98,6 @@ bool ArrayDataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNo
     
     return true;
 }
+#endif
 
 WC_END_NAMESPACE

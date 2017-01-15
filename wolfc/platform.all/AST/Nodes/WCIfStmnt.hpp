@@ -35,11 +35,14 @@ public:
      */
     bool isIfExprInversed() const;
     
+#warning FIXME - Codegen
+#if 0
     /**
      * Generate the code for the if statment condition expression and return the value of that expression.
      * Returns nullptr on failure.
      */
     llvm::Value * codegenIfExpr(CodegenCtx & cgCtx) const;
+#endif
     
     AssignExpr &    mIfExpr;
     Scope &         mThenScope;
@@ -56,7 +59,10 @@ public:
     
     virtual const Token & getEndToken() const override;
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegen(CodegenCtx & cgCtx) override;
+#endif
     
     virtual bool allCodepathsHaveUncondRet() const override;
     
@@ -73,7 +79,10 @@ public:
     
     virtual const Token & getEndToken() const override;
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegen(CodegenCtx & cgCtx) override;
+#endif
     
     virtual bool allCodepathsHaveUncondRet() const override;
     
@@ -91,7 +100,10 @@ public:
     
     virtual const Token & getEndToken() const override;
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegen(CodegenCtx & cgCtx) override;
+#endif
     
     virtual bool allCodepathsHaveUncondRet() const override;
     

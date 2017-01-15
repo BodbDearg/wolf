@@ -3,9 +3,12 @@
 #include "WCASTNode.hpp"
 #include "WCIStmnt.hpp"
 
+#warning FIXME - Codegen
+#if 0
 namespace llvm {
     class BasicBlock;
 }
+#endif
 
 WC_BEGIN_NAMESPACE
 
@@ -38,8 +41,11 @@ public:
     const Token & mReturnToken;
     
 protected:
+#warning FIXME - Codegen
+#if 0
     /* Perform code generation and verification for the return data type */
     bool codegenAndVerifyReturnDataType(CodegenCtx & cgCtx);
+#endif
     
     /**
      * Verifies the return type is correct for the containing function.
@@ -55,7 +61,10 @@ public:
     
     virtual const Token & getEndToken() const override;
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegen(CodegenCtx & cgCtx) override;
+#endif
     
     virtual DataType & dataType() override;
     
@@ -69,7 +78,10 @@ public:
     
     virtual const Token & getEndToken() const override;
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegen(CodegenCtx & cgCtx) override;
+#endif
     
     virtual DataType & dataType() override;
     
@@ -99,12 +111,15 @@ public:
     /* Expression for the return condition */
     AssignExpr & mCondExpr;
     
+#warning FIXME - Codegen
+#if 0
 protected:
     /* The block that does the return statement logic */
     llvm::BasicBlock * mReturnBlock = nullptr;
     
     /* The block that continues and doesn't return */
     llvm::BasicBlock * mContinueBlock = nullptr;
+#endif
 };
 
 /* return if|unless AssignExpr */
@@ -114,7 +129,10 @@ public:
                             const Token & condToken,
                             AssignExpr & condExpr);
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegen(CodegenCtx & cgCtx) override;
+#endif
     
     virtual DataType & dataType() override;
 };
@@ -127,7 +145,10 @@ public:
                                 const Token & condToken,
                                 AssignExpr & condExpr);
     
+#warning FIXME - Codegen
+#if 0
     virtual bool codegen(CodegenCtx & cgCtx) override;
+#endif
     
     virtual DataType & dataType() override;
 

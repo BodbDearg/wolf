@@ -4,13 +4,21 @@
 #include "WCArrayLitExprs.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
+
+#warning FIXME - Codegen
+#if 0
 #include "WCCodegenCtx.hpp"
+#endif
+
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
 
+#warning FIXME - Codegen
+#if 0
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Constants.h>
 WC_THIRD_PARTY_INCLUDES_END
+#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -54,11 +62,14 @@ ArrayLit::ArrayLit(const Token & lBrack,
     mExprs(exprs),
     mRBrack(rBrack),
     mSize(exprs.numExprs()),
-    mDataType(),
-    mStorage(nullptr),
+    mDataType()
+#warning FIXME - Codegen
+#if 0
+    ,mStorage(nullptr),
     mAddrOfResult(nullptr),
     mExprEvalResult(nullptr),
     mExprConstEvalResult(nullptr)
+#endif
 {
     mExprs.mParent = this;
 }
@@ -87,6 +98,8 @@ DataType & ArrayLit::dataType() {
     return mDataType.get();
 }
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * ArrayLit::codegenAddrOf(CodegenCtx & cgCtx) {
     // If already done then just return the previous calculated result
     WC_GUARD(!mAddrOfResult, mAddrOfResult);
@@ -207,6 +220,7 @@ bool ArrayLit::codegenLLVMType(CodegenCtx & cgCtx) {
     
     return true;    // Success!
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

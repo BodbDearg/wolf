@@ -1,14 +1,23 @@
 #include "WCGenericSignedIntDataType.hpp"
 
 #include "AST/Nodes/WCASTNode.hpp"
-#include "WCCodegenCtx.hpp"
 
+#warning FIXME - Codegen
+#if 0
+#include "WCCodegenCtx.hpp"
+#endif
+
+#warning FIXME - Codegen
+#if 0
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
 WC_THIRD_PARTY_INCLUDES_END
+#endif
 
 WC_BEGIN_NAMESPACE
 
+#warning FIXME - Codegen
+#if 0
 llvm::Value * GenericSignedIntDataType::codegenCmpLTOp(CodegenCtx & cgCtx,
                                                        AST::ASTNode & callingNode,
                                                        llvm::Value & leftVal,
@@ -197,5 +206,6 @@ llvm::Constant * GenericSignedIntDataType::codegenConstARShiftOp(AST::ASTNode & 
     
     return llvm::ConstantExpr::getAShr(&leftVal, &rightVal);
 }
+#endif
 
 WC_END_NAMESPACE

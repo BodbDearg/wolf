@@ -54,6 +54,8 @@ const Token & Scope::getEndToken() const {
     return mStartToken;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool Scope::codegen(CodegenCtx & cgCtx) {
     for (Stmnt * stmnt : mStmnts) {
         WC_GUARD(stmnt->codegen(cgCtx), false);
@@ -61,6 +63,7 @@ bool Scope::codegen(CodegenCtx & cgCtx) {
     
     return true;
 }
+#endif
 
 bool Scope::allCodepathsHaveUncondRet() const {
     for (Stmnt * stmnt : mStmnts) {
@@ -72,6 +75,8 @@ bool Scope::allCodepathsHaveUncondRet() const {
     return false;
 }
 
+#warning FIXME - Codegen
+#if 0
 DataValue * Scope::createVar(const char * varName,
                              DataType & dataType,
                              CodegenCtx & cgCtx,
@@ -127,6 +132,7 @@ DataValue * Scope::getVar(const char * varName) {
     
     return nullptr;     // Variable not found!
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

@@ -24,6 +24,8 @@ bool Int64DataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const Int64DataType*>(&other) != nullptr;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool Int64DataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) {
     // Lazy out if already done
     WC_GUARD(!mLLVMType, true);
@@ -50,5 +52,6 @@ bool Int64DataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                       { fmtStr, &valToPrint },
                                       "print_printf_call:int") != nullptr;
 }
+#endif
 
 WC_END_NAMESPACE

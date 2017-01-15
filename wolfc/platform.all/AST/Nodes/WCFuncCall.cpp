@@ -76,6 +76,8 @@ void FuncCall::getArgs(std::vector<AssignExpr*> & args) const {
     mArgList->getArgs(args);
 }
 
+#warning FIXME - Codegen
+#if 0
 bool FuncCall::codegenArgsListExprs(CodegenCtx & cgCtx) {
     // If there is no args list then our job is easy, just return true for success
     WC_GUARD(mArgList, true);
@@ -116,6 +118,7 @@ bool FuncCall::codegenArgsListExprs(CodegenCtx & cgCtx) {
     
     return true;    // All good!
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

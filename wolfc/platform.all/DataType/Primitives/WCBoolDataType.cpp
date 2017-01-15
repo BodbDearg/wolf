@@ -21,6 +21,8 @@ bool BoolDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const BoolDataType*>(&other) != nullptr;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool BoolDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                      AST::ASTNode & callingNode,
                                      llvm::Constant & printfFn,
@@ -65,7 +67,10 @@ bool BoolDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
     cgCtx.irBuilder.SetInsertPoint(continueBB);
     return true;
 }
+#endif
 
+#warning FIXME - Codegen
+#if 0
 bool BoolDataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) {
     mLLVMType = llvm::Type::getInt1Ty(cgCtx.llvmCtx);
     
@@ -130,5 +135,6 @@ llvm::Constant * BoolDataType::codegenConstCmpNEOp(AST::ASTNode & callingNode,
     
     return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_NE, &leftVal, &rightVal);
 }
+#endif
 
 WC_END_NAMESPACE

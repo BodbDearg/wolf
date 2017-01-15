@@ -39,11 +39,14 @@ bool NoOpStmnt::allCodepathsHaveUncondRet() const {
     return false;
 }
 
+#warning FIXME - Codegen
+#if 0
 bool NoOpStmnt::codegen(CodegenCtx & cgCtx) {
     // Like it's name suggests 'noop' actually does nothing... Shock, horror!
     WC_UNUSED_PARAM(cgCtx);
     return true;
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

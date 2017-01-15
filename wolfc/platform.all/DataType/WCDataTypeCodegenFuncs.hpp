@@ -2,20 +2,29 @@
 
 #include "WCMacros.hpp"
 
+#warning FIXME - Codegen
+#if 0
 namespace llvm {
     class Constant;
     class Value;
 }
+#endif
 
 WC_BEGIN_NAMESPACE
 
 class DataType;
+
+#warning FIXME - Codegen
+#if 0
 struct CodegenCtx;
+#endif
 
 namespace AST {
     class ASTNode;
 }
 
+#warning FIXME - Codegen
+#if 0
 /** 
  * Typedef for a 'DataType' member function which codegens a runtime binary op.
  * For example, a function that generates code for an 'add' operation.
@@ -57,5 +66,6 @@ typedef llvm::Constant * (DataType::*DTCodegenConstUnaryOpFunc)(
     AST::ASTNode & callingNode,
     llvm::Constant & val
 );
+#endif
 
 WC_END_NAMESPACE
