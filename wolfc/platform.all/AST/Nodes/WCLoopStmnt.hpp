@@ -27,9 +27,7 @@ public:
     const Token &   mStartToken;
 };
 
-/*
-loop Scope end
-*/
+/* loop Scope end */
 class LoopStmntNoCond final : public LoopStmnt {
 public:
     LoopStmntNoCond(Scope & bodyScope, const Token & startToken, const Token & endToken);
@@ -46,9 +44,7 @@ public:
     llvm::BasicBlock *  mEndBB = nullptr;
 };
 
-/*
-loop Scope repeat while|until AssignExpr
-*/
+/* loop Scope repeat while|until AssignExpr */
 class LoopStmntWithCond final : public LoopStmnt {
 public:
     LoopStmntWithCond(Scope & bodyScope,
