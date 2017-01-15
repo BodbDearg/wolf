@@ -50,7 +50,7 @@ static int mainImpl(int argc, const char * argv[]) {
         Wolfc::AST::Module module(llvmContext);
         
         // Create a parsing context and parse the module
-        Wolfc::ParseCtx parseCtx(lexer.getTokenList(), linearAlloc);
+        Wolfc::AST::ParseCtx parseCtx(lexer.getTokenList(), linearAlloc);
 
         if (!module.parse(parseCtx)) {
             std::printf("Parsing failed for source file '%s'!\n", argv[1]);

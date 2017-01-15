@@ -13,6 +13,8 @@ WC_BEGIN_NAMESPACE
 class LinearAlloc;
 struct Token;
 
+WC_AST_BEGIN_NAMESPACE
+
 /* Struct holding the current context for parsing */
 struct ParseCtx {
     /* The current token we are on. Incremented as parsing happens. */
@@ -47,4 +49,5 @@ struct ParseCtx {
     }
 };
 
+WC_AST_END_NAMESPACE
 WC_END_NAMESPACE
