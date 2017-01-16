@@ -12,19 +12,34 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 Module * Module::parse(ParseCtx & parseCtx) {
-    // Parse a list of decldefs for the module
+    // Parse a list of decldefs for the module.
+    // Try to parse as many as possible so we get multiple error messages for various problems.
     std::vector<DeclDef*> declDefs;
     
-    while (DeclDef::peek(parseCtx.curTok)) {
+    while (parseCtx.curTok->type != TokenType::kEOF) {
+        // Save this in case we need it later
+        const Token * startTok = parseCtx.curTok;
+        
+        // Try to parse the decldef
         DeclDef * declDef = DeclDef::parse(parseCtx);
-        WC_GUARD(declDef, nullptr);
-        declDefs.push_back(declDef);
-    }
-    
-    // Expect to be at EOF at this point
-    if (parseCtx.curTok->type != TokenType::kEOF) {
-        parseCtx.error("Expected EOF at end of module code!");
-        return nullptr;
+        
+        if (declDef) {
+            // Got something from the parse, save:
+            declDefs.push_back(declDef);
+        }
+        else if (!parseCtx.hasErrors()) {
+            // Just in case the code failed to emit an error
+            parseCtx.error(*startTok, "Failed to parse a top level module element! Exact error unknown.");
+        }
+        
+        // Skip junk if getting a DeclDef failed:
+        while (parseCtx.curTok->type != TokenType::kEOF) {
+            if (DeclDef::peek(parseCtx.curTok)) {
+                break;
+            }
+            
+            parseCtx.nextTok();
+        }
     }
     
     // Okay, create and return the module
