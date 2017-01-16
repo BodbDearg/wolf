@@ -68,6 +68,18 @@ struct ParseCtx {
     void error(const Token & atToken, const char * msgFmtStr, ...);
     void error(const char * msgFmtStr, std::va_list msgFmtStrArgs);
     void error(const Token & atToken, const char * msgFmtStr, std::va_list msgFmtStrArgs);
+    
+    /**
+     * Emit a warning message and save to the list of warning messages in the parse context.
+     *
+     * If a token is given to emit the warning message at, then the line and column info for the
+     * warning will be at the given token; otherwise the current token in the parse context will be
+     * used (typical usage).
+     */
+    void warning(const char * msgFmtStr, ...);
+    void warning(const Token & atToken, const char * msgFmtStr, ...);
+    void warning(const char * msgFmtStr, std::va_list msgFmtStrArgs);
+    void warning(const Token & atToken, const char * msgFmtStr, std::va_list msgFmtStrArgs);
 };
 
 WC_AST_END_NAMESPACE
