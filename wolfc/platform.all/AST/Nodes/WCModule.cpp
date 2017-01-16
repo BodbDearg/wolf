@@ -2,18 +2,10 @@
 
 #include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
-#include "WCCodegenCtx.hpp"
 #include "WCDeclDef.hpp"
 #include "WCFunc.hpp"
 #include "WCParseCtx.hpp"
 #include "WCVarDecl.hpp"
-
-#warning FIXME - Codegen
-#if 0
-WC_THIRD_PARTY_INCLUDES_BEGIN
-    #include <llvm/IR/Module.h>
-WC_THIRD_PARTY_INCLUDES_END
-#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -35,23 +27,7 @@ bool Module::parse(ParseCtx & parseCtx) {
     return true;
 }
 
-Module::Module(
-            #warning FIXME - Codegen
-            #if 0
-               llvm::LLVMContext & llvmCtx
-            #endif
-               ) :
-#warning FIXME - Codegen
-#if 0
-    mLLVMCtx(llvmCtx),
-#endif
-    mEOFToken(nullptr)
-{
-    WC_EMPTY_FUNC_BODY();
-}
-
-Module::~Module() {
-    // Defined here so callee doesn't need to know details of objects destroyed by std::unique_ptr...
+Module::Module() : mEOFToken(nullptr) {
     WC_EMPTY_FUNC_BODY();
 }
 
@@ -112,16 +88,6 @@ bool Module::generateCode() {
     }
 
     return true;    // Suceeded!
-}
-
-bool Module::wasCodeGeneratedOk() {
-    // FIXME: this can be not null and still not be generated ok
-    return mLLVMModule.get() != nullptr;
-}
-
-void Module::dumpIRCodeToStdout() {
-    WC_GUARD_ASSERT(mLLVMModule.get());
-    mLLVMModule->dump();
 }
 #endif
 
@@ -196,72 +162,6 @@ DataValue * Module::getVar(const char * varName) const {
     }
     
     return nullptr;     // Variable not found!
-}
-
-void Module::declareCStdLibFuncsInModule() {
-    // Declare the c standard library function 'printf'
-    llvm::FunctionType * printfFnType = llvm::FunctionType::get(
-        llvm::Type::getInt32Ty(mLLVMCtx),
-        llvm::ArrayRef<llvm::Type*>{
-            llvm::Type::getInt8Ty(mLLVMCtx)->getPointerTo()
-        },
-        true);
-
-    mLLVMModule->getOrInsertFunction("printf", printfFnType);
-
-    // Declare the c standard library function 'scanf'
-    llvm::FunctionType * scanfFnType = llvm::FunctionType::get(
-        llvm::Type::getInt32Ty(mLLVMCtx),
-        llvm::ArrayRef<llvm::Type*>{
-            llvm::Type::getInt8Ty(mLLVMCtx)->getPointerTo()
-        },
-        true);
-
-    mLLVMModule->getOrInsertFunction("scanf", scanfFnType);
-
-    // Declare the c standard library function 'getchar'
-    llvm::FunctionType * getcharFnType = llvm::FunctionType::get(
-        llvm::Type::getInt32Ty(mLLVMCtx),
-        llvm::ArrayRef<llvm::Type*>{},
-        false);
-
-    mLLVMModule->getOrInsertFunction("getchar", getcharFnType);
-
-    // Declare the c standard library function 'time'
-    llvm::FunctionType * timeFnType = llvm::FunctionType::get(
-        llvm::Type::getInt64Ty(mLLVMCtx),
-        llvm::ArrayRef<llvm::Type*>{
-            llvm::Type::getInt64Ty(mLLVMCtx)->getPointerTo(),
-        },
-        false);
-
-    mLLVMModule->getOrInsertFunction("time", timeFnType);
-
-    // Declare the c standard library function 'rand'
-    llvm::FunctionType * randFnType = llvm::FunctionType::get(
-        llvm::Type::getInt32Ty(mLLVMCtx),
-        llvm::ArrayRef<llvm::Type*>{},
-        false);
-
-    mLLVMModule->getOrInsertFunction("rand", randFnType);
-
-    // Declare the c standard library function 'srand'
-    llvm::FunctionType * srandFnType = llvm::FunctionType::get(
-        llvm::Type::getVoidTy(mLLVMCtx),
-        llvm::ArrayRef<llvm::Type*>{
-            llvm::Type::getInt32Ty(mLLVMCtx),
-        },
-        false);
-    
-    mLLVMModule->getOrInsertFunction("srand", srandFnType);
-
-    // Declare the c standard library function 'abort'
-    llvm::FunctionType * abortFnType = llvm::FunctionType::get(
-        llvm::Type::getVoidTy(mLLVMCtx),
-        llvm::ArrayRef<llvm::Type*>{},
-        false);
-
-    mLLVMModule->getOrInsertFunction("abort", abortFnType);
 }
 #endif
 

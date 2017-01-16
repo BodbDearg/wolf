@@ -1,4 +1,5 @@
 #include "AST/Nodes/WCModule.hpp"
+#include "Codegen/LLVM/Module.hpp"
 #include "Lexer/WCLexer.hpp"
 #include "WCFileUtils.hpp"
 #include "WCLinearAlloc.hpp"
@@ -6,7 +7,6 @@
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <cstdio>
-    #include <llvm/IR/LLVMContext.h>
     #include <memory>
 
     #ifdef _MSC_VER
@@ -30,9 +30,6 @@ static int mainImpl(int argc, const char * argv[]) {
         return -1;
     }
 
-    // The context for llvm compiler backend
-    llvm::LLVMContext llvmContext;
-
     // Run it through the lexer
     Wolfc::Lexer lexer;
     WC_GUARD(lexer.process(inputSrc.get()), -1);
@@ -46,17 +43,8 @@ static int mainImpl(int argc, const char * argv[]) {
     );
 
     {
-        // Declare the module
-        Wolfc::AST::Module module
-                                #warning FIXME - Codegen
-                                #if 0
-                                (
-                                  llvmContext
-                                )
-                                #endif
-                                  ;
-        
-        // Create a parsing context and parse the module
+        // Declare and parse the module AST
+        Wolfc::AST::Module module;
         Wolfc::AST::ParseCtx parseCtx(lexer.getTokenList(), linearAlloc);
 
         if (!module.parse(parseCtx)) {
