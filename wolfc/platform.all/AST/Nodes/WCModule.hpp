@@ -31,14 +31,13 @@ Module:
 */
 class Module final : public ASTNode {
 public:
-    Module();
+    /* Parse the code for the module from the given parse context */
+    static Module * parse(ParseCtx & parseCtx);
+    
+    Module(std::vector<DeclDef*> && mDeclDefs, const Token & eofToken);
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
-    
-    // TODO: change this to return a new module, similar to other ASTNodes
-    /* Parse the code for the module from the given token array */
-    bool parse(ParseCtx & parseCtx);
     
 #warning FIXME - Codegen
 #if 0
@@ -88,7 +87,7 @@ private:
 #endif
     
     /* The EOF token */
-    const Token * mEOFToken;
+    const Token & mEOFToken;
 };
 
 WC_AST_END_NAMESPACE

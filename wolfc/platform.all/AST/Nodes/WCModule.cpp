@@ -4,30 +4,37 @@
 #include "WCAssert.hpp"
 #include "WCDeclDef.hpp"
 #include "WCFunc.hpp"
+#include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
 #include "WCVarDecl.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
-bool Module::parse(ParseCtx & parseCtx) {
+Module * Module::parse(ParseCtx & parseCtx) {
+    // Parse a list of decldefs for the module
+    std::vector<DeclDef*> declDefs;
+    
     while (DeclDef::peek(parseCtx.curTok)) {
         DeclDef * declDef = DeclDef::parse(parseCtx);
-        WC_GUARD(declDef, false);
-        declDef->mParent = this;
-        mDeclDefs.push_back(declDef);
+        WC_GUARD(declDef, nullptr);
+        declDefs.push_back(declDef);
     }
     
+    // Expect to be at EOF at this point
     if (parseCtx.curTok->type != TokenType::kEOF) {
         parseCtx.error("Expected EOF at end of module code!");
-        mDeclDefs.clear();
-        return false;
+        return nullptr;
     }
     
-    return true;
+    // Okay, create and return the module
+    return WC_NEW_AST_NODE(parseCtx, Module, std::move(declDefs), *parseCtx.curTok);
 }
 
-Module::Module() : mEOFToken(nullptr) {
+Module::Module(std::vector<DeclDef*> && declDefs, const Token & eofToken) :
+    mDeclDefs(declDefs),
+    mEOFToken(eofToken)
+{
     WC_EMPTY_FUNC_BODY();
 }
 
@@ -36,17 +43,11 @@ const Token & Module::getStartToken() const {
         return mDeclDefs.front()->getStartToken();
     }
     
-    WC_ASSERT(mEOFToken);
-    return *mEOFToken;
+    return mEOFToken;
 }
 
 const Token & Module::getEndToken() const {
-    if (!mDeclDefs.empty()) {
-        return mDeclDefs.back()->getEndToken();
-    }
-    
-    WC_ASSERT(mEOFToken);
-    return *mEOFToken;
+    return mEOFToken;
 }
 
 #warning FIXME - Codegen

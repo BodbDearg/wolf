@@ -43,8 +43,8 @@ static int mainImpl(int argc, const char * argv[]) {
     );
 
     // Declare and parse the module AST
-    Wolfc::AST::Module astModule;
     Wolfc::AST::ParseCtx parseCtx(lexer.getTokenList(), linearAlloc);
+    Wolfc::AST::Module * astModule = Wolfc::AST::Module::parse(parseCtx);
     
     // Emit parse warnings to stdout if there are any
     if (parseCtx.hasWarnings()) {
@@ -56,7 +56,7 @@ static int mainImpl(int argc, const char * argv[]) {
     }
 
     // Emit parse errors to stderr if there are any and fail
-    if (!astModule.parse(parseCtx) || parseCtx.hasErrors()) {
+    if (!astModule || parseCtx.hasErrors()) {
         std::printf("Parsing failed for source file '%s'! Error messages follow:\n", argv[1]);
         
         for (const std::string & errorMsg : parseCtx.errorMsgs) {
