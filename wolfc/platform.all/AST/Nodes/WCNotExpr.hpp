@@ -66,12 +66,15 @@ public:
     NotExpr &       mExpr;
     const Token &   mStartToken;
 
+#warning FIXME - Codegen
+#if 0
 private:
     /**
      * TODO: this is a temp function for the moment. Issue a compile error if the expr is not of 'bool'
      * Return false for failure if that is not the case.
      */
     bool compileCheckExprIsBool() const;
+#endif
 };
 
 /* ~ NotExpr */

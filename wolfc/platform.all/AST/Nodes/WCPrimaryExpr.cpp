@@ -70,7 +70,7 @@ PrimaryExpr * PrimaryExpr::parse(ParseCtx & parseCtx) {
         return WC_NEW_AST_NODE(parseCtx, PrimaryExprRandExpr, *expr);
     }
     
-    parseError(parseCtx, "Expected primary expression!");
+    parseCtx.error("Expected primary expression!");
     return nullptr;
 }
 

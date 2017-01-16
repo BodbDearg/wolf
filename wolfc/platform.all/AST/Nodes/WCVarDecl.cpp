@@ -24,7 +24,7 @@ bool VarDecl::peek(const Token * tokenPtr) {
 VarDecl * VarDecl::parse(ParseCtx & parseCtx) {
     // Parse 'let' keyword
     if (parseCtx.curTok->type != TokenType::kLet) {
-        parseError(parseCtx, "Expected keyword 'let' at start of a variable declaration!");
+        parseCtx.error("Expected keyword 'let' at start of a variable declaration!");
         return nullptr;
     }
     
@@ -50,7 +50,7 @@ VarDecl * VarDecl::parse(ParseCtx & parseCtx) {
     
     // Parse the '='
     if (parseCtx.curTok->type != TokenType::kAssign) {
-        parseError(parseCtx, "Expected '=' following variable name for variable declaration!");
+        parseCtx.error("Expected '=' following variable name for variable declaration!");
         return nullptr;
     }
     

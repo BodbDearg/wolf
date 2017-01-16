@@ -23,7 +23,7 @@ bool ReadnumExpr::peek(const Token * tokenPtr) {
 
 ReadnumExpr * ReadnumExpr::parse(ParseCtx & parseCtx) {
     if (parseCtx.curTok->type != TokenType::kReadnum) {
-        parseError(parseCtx, "Expected 'readnum' at begining of readnum() expression!");
+        parseCtx.error("Expected 'readnum' at begining of readnum() expression!");
         return nullptr;
     }
     
@@ -31,14 +31,14 @@ ReadnumExpr * ReadnumExpr::parse(ParseCtx & parseCtx) {
     parseCtx.nextTok();     // Consume 'readnum'
     
     if (parseCtx.curTok->type != TokenType::kLParen) {
-        parseError(parseCtx, "Expect '(' following 'readnum'!");
+        parseCtx.error("Expect '(' following 'readnum'!");
         return nullptr;
     }
     
     parseCtx.nextTok();     // Consume '('
     
     if (parseCtx.curTok->type != TokenType::kRParen) {
-        parseError(parseCtx, "Expect ')' following '('!");
+        parseCtx.error("Expect ')' following '('!");
         return nullptr;
     }
     

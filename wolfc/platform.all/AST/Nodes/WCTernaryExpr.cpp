@@ -34,7 +34,7 @@ TernaryExpr * TernaryExpr::parse(ParseCtx & parseCtx) {
         
         // Expect a colon to separate 'true' from false:
         if (parseCtx.curTok->type != TokenType::kColon) {
-            parseError(parseCtx, "Expected ':' following 'true' value in ternary expression.");
+            parseCtx.error("Expected ':' following 'true' value in ternary expression.");
             return nullptr;
         }
         
@@ -204,6 +204,8 @@ llvm::Constant * TernaryExprWithCond::codegenExprConstEval(CodegenCtx & cgCtx) {
 }
 #endif
 
+#warning FIXME - Codegen
+#if 0
 bool TernaryExprWithCond::compileCheckExprDataTypes() const {
     const DataType & condType = mCondExpr.dataType();
     
@@ -229,6 +231,7 @@ bool TernaryExprWithCond::compileCheckExprDataTypes() const {
     
     return true;
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

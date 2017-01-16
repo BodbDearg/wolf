@@ -24,7 +24,7 @@ bool AssertStmnt::peek(const Token * tokenPtr) {
 
 AssertStmnt * AssertStmnt::parse(ParseCtx & parseCtx) {
     if (parseCtx.curTok->type != TokenType::kAssert) {
-        parseError(parseCtx, "Expected keyword 'assert' for 'assert()' statement!");
+        parseCtx.error("Expected keyword 'assert' for 'assert()' statement!");
         return nullptr;
     }
     
@@ -32,7 +32,7 @@ AssertStmnt * AssertStmnt::parse(ParseCtx & parseCtx) {
     parseCtx.nextTok();     // Consume 'assert'
     
     if (parseCtx.curTok->type != TokenType::kLParen) {
-        parseError(parseCtx, "Expected '(' following 'assert'!");
+        parseCtx.error("Expected '(' following 'assert'!");
         return nullptr;
     }
     
@@ -44,7 +44,7 @@ AssertStmnt * AssertStmnt::parse(ParseCtx & parseCtx) {
     
     // Expect ')' following all that:
     if (parseCtx.curTok->type != TokenType::kRParen) {
-        parseError(parseCtx, "Expected closing ')' for 'assert()' statement!");
+        parseCtx.error("Expected closing ')' for 'assert()' statement!");
         return nullptr;
     }
     

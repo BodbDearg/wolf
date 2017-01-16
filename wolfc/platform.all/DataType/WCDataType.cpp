@@ -254,7 +254,6 @@ bool DataType::compileCheckLLVMTypeDefined(AST::ASTNode & callingNode) {
     callingNode.compileError("The LLVM type for data type '%s' is undefined!", name().c_str());
     return false;
 }
-#endif
 
 bool DataType::compileCheckBinaryOpTypesMatch(AST::ASTNode & callingNode,
                                               const char * opSymbol,
@@ -302,8 +301,6 @@ void DataType::issueUnaryOpNotAvailableCompileError(AST::ASTNode & callingNode,
                              name().c_str());
 }
 
-#warning FIXME - Codegen
-#if 0
 void DataType::issueGenericCodegenLLVMTypeError(AST::ASTNode & callingNode) const {
     callingNode.compileError("Failed to codegen the llvm type for data type '%s'!", name().c_str());
 }

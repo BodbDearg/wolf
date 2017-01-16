@@ -155,7 +155,6 @@ llvm::Constant * LOrExprOr::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Create the logical operation:
     return llvm::ConstantExpr::getOr(rightValue, leftValue);
 }
-#endif
 
 bool LOrExprOr::compileCheckBothExprsAreBool() const {
     const DataType & leftType = mLeftExpr.dataType();
@@ -178,6 +177,7 @@ bool LOrExprOr::compileCheckBothExprsAreBool() const {
     
     return true;
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

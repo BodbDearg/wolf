@@ -27,7 +27,7 @@ bool LoopStmnt::peek(const Token * tokenPtr) {
 LoopStmnt * LoopStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'loop' keyword
     if (!peek(parseCtx.curTok)) {
-        parseError(parseCtx, "'loop' statement expected!");
+        parseCtx.error("'loop' statement expected!");
         return nullptr;
     }
     
@@ -49,7 +49,7 @@ LoopStmnt * LoopStmnt::parse(ParseCtx & parseCtx) {
         parseCtx.nextTok();
         
         if (condTypeToken->type != TokenType::kWhile && condTypeToken->type != TokenType::kUntil) {
-            parseError(parseCtx, "'while' or 'until' expected following 'repeat' token!");
+            parseCtx.error("'while' or 'until' expected following 'repeat' token!");
             return nullptr;
         }
         
@@ -68,7 +68,7 @@ LoopStmnt * LoopStmnt::parse(ParseCtx & parseCtx) {
     else {
         // Conditionless loop block: should be terminated by an 'end' token:
         if (parseCtx.curTok->type != TokenType::kEnd) {
-            parseError(parseCtx, "'end' expected to terminate 'loop' block!");
+            parseCtx.error("'end' expected to terminate 'loop' block!");
             return nullptr;
         }
         

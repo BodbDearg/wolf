@@ -19,7 +19,7 @@ bool Identifier::peek(const Token * tokenPtr) {
 
 Identifier * Identifier::parse(ParseCtx & parseCtx) {
     if (parseCtx.curTok->type != TokenType::kIdentifier) {
-        parseError(parseCtx, "Expected identifier!");
+        parseCtx.error("Expected identifier!");
         return nullptr;
     }
     

@@ -7,13 +7,6 @@
 #include "WCModule.hpp"
 #include "WCParseCtx.hpp"
 
-#warning FIXME - Codegen
-#if 0
-WC_THIRD_PARTY_INCLUDES_BEGIN
-    #include <llvm/IR/Module.h>
-WC_THIRD_PARTY_INCLUDES_END
-#endif
-
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
@@ -23,7 +16,7 @@ bool TimeExpr::peek(const Token * tokenPtr) {
 
 TimeExpr * TimeExpr::parse(ParseCtx & parseCtx) {
     if (parseCtx.curTok->type != TokenType::kTime) {
-        parseError(parseCtx, "Expected 'time' at begining of time() expression!");
+        parseCtx.error("Expected 'time' at begining of time() expression!");
         return nullptr;
     }
     
@@ -31,14 +24,14 @@ TimeExpr * TimeExpr::parse(ParseCtx & parseCtx) {
     parseCtx.nextTok();     // Consume 'time'
     
     if (parseCtx.curTok->type != TokenType::kLParen) {
-        parseError(parseCtx, "Expect '(' following 'time'!");
+        parseCtx.error("Expect '(' following 'time'!");
         return nullptr;
     }
     
     parseCtx.nextTok();     // Consume '('
     
     if (parseCtx.curTok->type != TokenType::kRParen) {
-        parseError(parseCtx, "Expect ')' following '('!");
+        parseCtx.error("Expect ')' following '('!");
         return nullptr;
     }
     

@@ -59,10 +59,9 @@ UnaryExpr * UnaryExpr::parse(ParseCtx & parseCtx) {
             AssignExpr * expr = AssignExpr::parse(parseCtx);
             
             if (parseCtx.curTok->type != TokenType::kRParen) {
-                parseError(parseCtx,
-                           "Expected closing ')' to match '(' at line %zu and column %zu!",
-                           lparenTok->startLine + 1,
-                           lparenTok->startCol + 1);
+                parseCtx.error("Expected closing ')' to match '(' at line %zu and column %zu!",
+                               lparenTok->startLine + 1,
+                               lparenTok->startCol + 1);
                 
                 return nullptr;
             }

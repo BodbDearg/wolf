@@ -39,7 +39,7 @@ Type * Type::parse(ParseCtx & parseCtx) {
         
         // Expect a ']' next:
         if (parseCtx.curTok->type != TokenType::kRBrack) {
-            parseError(parseCtx, "Expected ']' to close array size specifier!");
+            parseCtx.error("Expected ']' to close array size specifier!");
             return nullptr;
         }
         

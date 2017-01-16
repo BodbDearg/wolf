@@ -37,7 +37,7 @@ RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
         
         // Expect '('
         if (parseCtx.curTok->type != TokenType::kLParen) {
-            parseError(parseCtx, "Expect '(' following 'rand'!");
+            parseCtx.error("Expect '(' following 'rand'!");
             return nullptr;
         }
         
@@ -45,7 +45,7 @@ RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
         
         // Expect ')'
         if (parseCtx.curTok->type != TokenType::kRParen) {
-            parseError(parseCtx, "Expect ')' following 'rand('!");
+            parseCtx.error("Expect ')' following 'rand('!");
             return nullptr;
         }
         
@@ -61,7 +61,7 @@ RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
         
         // Expect '('
         if (parseCtx.curTok->type != TokenType::kLParen) {
-            parseError(parseCtx, "Expect '(' following 'srand'!");
+            parseCtx.error("Expect '(' following 'srand'!");
             return nullptr;
         }
         
@@ -73,7 +73,7 @@ RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
         
         // Expect ')'
         if (parseCtx.curTok->type != TokenType::kRParen) {
-            parseError(parseCtx, "Expect ')' to close 'srand()' call!");
+            parseCtx.error("Expect ')' to close 'srand()' call!");
             return nullptr;
         }
         
@@ -83,7 +83,7 @@ RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
         return WC_NEW_AST_NODE(parseCtx, RandExprSRand, *startToken, *seedExpr, *endToken);
     }
     
-    parseError(parseCtx, "Expected 'rand' or 'srand' token!");
+    parseCtx.error("Expected 'rand' or 'srand' token!");
     return nullptr;
 }
 

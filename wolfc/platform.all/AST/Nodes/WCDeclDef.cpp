@@ -31,7 +31,7 @@ DeclDef * DeclDef::parse(ParseCtx & parseCtx) {
     }
     
     // Unknown stuff ahead
-    parseError(parseCtx, "Expected declaration or definition!");
+    parseCtx.error("Expected declaration or definition!");
     return nullptr;
 }
 

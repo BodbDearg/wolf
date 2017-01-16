@@ -28,7 +28,7 @@ bool NextStmnt::peek(const Token * tokenPtr) {
 NextStmnt * NextStmnt::parse(ParseCtx & parseCtx) {
     // Check the basics
     if (!peek(parseCtx.curTok)) {
-        parseError(parseCtx, "Expected next statement!");
+        parseCtx.error("Expected next statement!");
         return nullptr;
     }
     

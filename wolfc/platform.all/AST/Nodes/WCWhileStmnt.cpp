@@ -19,7 +19,7 @@ bool WhileStmnt::peek(const Token * tokenPtr) {
 WhileStmnt * WhileStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'while' or 'until' keyword
     if (!peek(parseCtx.curTok)) {
-        parseError(parseCtx, "While statement expected!");
+        parseCtx.error("While statement expected!");
         return nullptr;
     }
     
@@ -48,10 +48,9 @@ WhileStmnt * WhileStmnt::parse(ParseCtx & parseCtx) {
     // See if it violates newline rules:
     if (bodyScopeRequiresNL) {
         if (bodyScope->getStartToken().startLine == whileExpr->getEndToken().endLine) {
-            parseError(parseCtx,
-                       bodyScope->getStartToken(),
-                       "Code following 'while/until' statement condition must be on a new line unless "
-                       "'do' is used after the condition.");
+            parseCtx.error(bodyScope->getStartToken(),
+                           "Code following 'while/until' statement condition must be on a new line unless "
+                           "'do' is used after the condition.");
             
             return nullptr;
         }
@@ -59,7 +58,7 @@ WhileStmnt * WhileStmnt::parse(ParseCtx & parseCtx) {
     
     // While block should be terminated by an 'end' token:
     if (parseCtx.curTok->type != TokenType::kEnd) {
-        parseError(parseCtx, "'end' expected to terminate 'while/until' block!");
+        parseCtx.error("'end' expected to terminate 'while/until' block!");
         return nullptr;
     }
     

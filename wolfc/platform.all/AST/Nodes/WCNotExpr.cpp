@@ -156,7 +156,6 @@ llvm::Constant * NotExprLNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Create the not operation
     return llvm::ConstantExpr::getNot(value);
 }
-#endif
 
 bool NotExprLNot::compileCheckExprIsBool() const {
     const DataType & exprType = mExpr.dataType();
@@ -170,6 +169,7 @@ bool NotExprLNot::compileCheckExprIsBool() const {
     
     return true;
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // NotExprBNot

@@ -22,7 +22,7 @@ bool IfStmnt::peek(const Token * tokenPtr) {
 IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'if' or 'unless' keyword
     if (!peek(parseCtx.curTok)) {
-        parseError(parseCtx, "If statement expected!");
+        parseCtx.error("If statement expected!");
         return nullptr;
     }
     
@@ -51,10 +51,9 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
     // See if it violates newline rules:
     if (thenScopeRequiresNL) {
         if (thenScope->getStartToken().startLine == ifExpr->getEndToken().endLine) {
-            parseError(parseCtx,
-                       thenScope->getStartToken(),
-                       "Code following 'if' statement condition must be on a new line unless "
-                       "'then' is used after the condition.");
+            parseCtx.error(thenScope->getStartToken(),
+                           "Code following 'if' statement condition must be on a new line unless "
+                           "'then' is used after the condition.");
             
             return nullptr;
         }
@@ -76,7 +75,7 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
         
         // Else block should be terminated by an 'end' token:
         if (parseCtx.curTok->type != TokenType::kEnd) {
-            parseError(parseCtx, "'end' expected to terminate 'else' block!");
+            parseCtx.error("'end' expected to terminate 'else' block!");
             return nullptr;
         }
         
@@ -112,7 +111,7 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
     else {
         // (1) 'if then' type statement: expect closing 'end'
         if (parseCtx.curTok->type != TokenType::kEnd) {
-            parseError(parseCtx, "'end' expected to terminate 'if' block!");
+            parseCtx.error("'end' expected to terminate 'if' block!");
             return nullptr;
         }
         

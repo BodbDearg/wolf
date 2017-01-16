@@ -29,7 +29,7 @@ bool BreakStmnt::peek(const Token * tokenPtr) {
 BreakStmnt * BreakStmnt::parse(ParseCtx & parseCtx) {
     // Check the basics
     if (!peek(parseCtx.curTok)) {
-        parseError(parseCtx, "Expected break statement!");
+        parseCtx.error("Expected break statement!");
         return nullptr;
     }
     

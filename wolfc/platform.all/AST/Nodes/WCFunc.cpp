@@ -27,7 +27,7 @@ bool Func::peek(const Token * tokenPtr) {
 Func * Func::parse(ParseCtx & parseCtx) {
     // Must be a function ahead:
     if (!peek(parseCtx.curTok)) {
-        parseError(parseCtx, "Expected function!");
+        parseCtx.error("Expected function!");
         return nullptr;
     }
     
@@ -41,7 +41,7 @@ Func * Func::parse(ParseCtx & parseCtx) {
     
     // Expect '('
     if (parseCtx.curTok->type != TokenType::kLParen) {
-        parseError(parseCtx, "'(' expected following function name!");
+        parseCtx.error("'(' expected following function name!");
         return nullptr;
     }
     
@@ -57,7 +57,7 @@ Func * Func::parse(ParseCtx & parseCtx) {
     
     // Expect ')'
     if (parseCtx.curTok->type != TokenType::kRParen) {
-        parseError(parseCtx, "')' expected to close args list of function!");
+        parseCtx.error("')' expected to close args list of function!");
         return nullptr;
     }
     
@@ -82,7 +82,7 @@ Func * Func::parse(ParseCtx & parseCtx) {
     
     // Must be terminated by an 'end' token
     if (parseCtx.curTok->type != TokenType::kEnd) {
-        parseError(parseCtx, "'end' expected to terminate function definition!");
+        parseCtx.error("'end' expected to terminate function definition!");
         return nullptr;
     }
     
@@ -290,7 +290,6 @@ bool Func::deferredCodegen(CodegenCtx & cgCtx) {
     
     return true;    // Success!
 }
-#endif
 
 bool Func::compileCheckForDuplicateArgNames(const std::vector<FuncArg*> & funcArgs) const {
     // TODO: handle args without names
@@ -311,8 +310,6 @@ bool Func::compileCheckForDuplicateArgNames(const std::vector<FuncArg*> & funcAr
     return true;    // All good!
 }
 
-#warning FIXME - Codegen
-#if 0
 bool Func::getLLVMArgTypes(const std::vector<FuncArg*> & funcArgs,
                            std::vector<llvm::Type*> & outputArgTypes) const
 {

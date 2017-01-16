@@ -24,7 +24,7 @@ bool StrLit::peek(const Token * tokenPtr) {
 
 StrLit * StrLit::parse(ParseCtx & parseCtx) {
     if (!peek(parseCtx.curTok)) {
-        parseError(parseCtx, "Expected string literal!");
+        parseCtx.error("Expected string literal!");
         return nullptr;
     }
     

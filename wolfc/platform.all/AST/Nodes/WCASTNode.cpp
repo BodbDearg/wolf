@@ -13,70 +13,6 @@ WC_THIRD_PARTY_INCLUDES_END
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
-void ASTNode::parseError(ParseCtx & parseCtx,
-                         const char * msgFmtStr,
-                         ...)
-{
-    va_list msgFmtStrArgs;
-    va_start(msgFmtStrArgs, msgFmtStr);
-    parseError(parseCtx, msgFmtStr, msgFmtStrArgs);
-    va_end(msgFmtStrArgs);
-}
-
-void ASTNode::parseError(ParseCtx & parseCtx,
-                         const Token & atTok,
-                         const char * msgFmtStr,
-                         ...)
-{
-    va_list msgFmtStrArgs;
-    va_start(msgFmtStrArgs, msgFmtStr);
-    parseError(parseCtx, atTok, msgFmtStr, msgFmtStrArgs);
-    va_end(msgFmtStrArgs);
-}
-
-void ASTNode::parseError(ParseCtx & parseCtx,
-                         const char * msgFmtStr,
-                         std::va_list msgFmtStrArgs)
-{
-    WC_ASSERT(parseCtx.curTok);
-    parseError(parseCtx, *parseCtx.curTok, msgFmtStr, msgFmtStrArgs);
-}
-
-void ASTNode::parseError(ParseCtx & parseCtx,
-                         const Token & atTok,
-                         const char * msgFmtStr,
-                         std::va_list msgFmtStrArgs)
-{
-    WC_ASSERT(msgFmtStr);
-    
-    // TODO: support really really long strings here, larger than 16K
-    // For super long strings we should try to allocate on the heap
-    const size_t kMaxMsgLen = 1024 * 16;
-    char msgBuf[kMaxMsgLen];
-    
-    // Print the start of the message
-    std::sprintf(msgBuf,
-                 "Error! Parsing failed at line %zu, column %zu! Message:\n",
-                 atTok.startLine + 1,
-                 atTok.startCol + 1);
-    
-    // Get how long the message is so far:
-    size_t msgPrefixLen = std::strlen(msgBuf);
-    
-    // Print the message to the buffer
-    vsnprintf(msgBuf + msgPrefixLen, kMaxMsgLen - msgPrefixLen, msgFmtStr, msgFmtStrArgs);
-    
-    // Ensure it is terminated
-    msgBuf[kMaxMsgLen - 1] = 0;
-    
-    // Save the message:
-    parseCtx.errorMsgs.push_back(msgBuf);
-    
-    // TODO: Remove this and just save the message to the given list
-    // Print it to stderr:
-    std::fprintf(stderr, "%s", msgBuf);
-}
-
 ASTNode::ASTNode() : mParent(nullptr) {
     WC_EMPTY_FUNC_BODY();
 }
@@ -109,6 +45,8 @@ const Module * ASTNode::getParentModule() const {
     return firstParentOfType<Module>();
 }
 
+#warning FIXME - Codegen
+#if 0
 void ASTNode::compileError(const char * msg, ...) const {
     // Get the start and end tokens:
     const Token & startToken = getStartToken();
@@ -140,6 +78,7 @@ std::string ASTNode::makeLLVMLabelForTok(const char * labelText, const Token & t
     label += std::to_string(token.startCol + 1);
     return label;
 }
+#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

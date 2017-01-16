@@ -95,7 +95,7 @@ PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
             const Token & endToken = *parseCtx.curTok;
             
             if (endToken.type != TokenType::kRBrack) {
-                parseError(parseCtx, "Expected a closing ']' for array lookup expression!");
+                parseCtx.error("Expected a closing ']' for array lookup expression!");
                 return nullptr;
             }
             
@@ -591,7 +591,6 @@ llvm::Constant * PostfixExprArrayLookup::codegenExprConstEval(CodegenCtx & cgCtx
     // Right, now get the constant
     return llvm::ConstantExpr::getExtractValue(arrayConstant, { static_cast<unsigned>(index) });
 }
-#endif
 
 ArrayDataType * PostfixExprArrayLookup::getArrayDataTypeOrIssueError() {
     ArrayDataType * arrayDataType = dynamic_cast<ArrayDataType*>(&mArrayExpr.dataType());
@@ -604,8 +603,6 @@ ArrayDataType * PostfixExprArrayLookup::getArrayDataTypeOrIssueError() {
     return arrayDataType;
 }
 
-#warning FIXME - Codegen
-#if 0
 llvm::Value * PostfixExprArrayLookup::codegenAddrOfArrayElem(CodegenCtx & cgCtx) {
     
     // TODO: support this operator on custom types eventually

@@ -82,7 +82,6 @@ public:
     
     /* Deferred code generation for the function. Generate the actual function body. */
     bool deferredCodegen(CodegenCtx & cgCtx);
-#endif
     
     /**
      * Checks for duplicate argument names in the given args list and issues a compile
@@ -90,8 +89,6 @@ public:
      */
     bool compileCheckForDuplicateArgNames(const std::vector<FuncArg*> & funcArgs) const;
     
-#warning FIXME - Codegen
-#if 0
     /**
      * Get a list of llvm argument types for this function and save in the given list.
      * Returns false on failure and issues a compile error.

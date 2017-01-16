@@ -161,12 +161,12 @@ public:
     AssignExpr &    mIndexExpr;
     const Token &   mEndToken;
 
+#warning FIXME - Codegen
+#if 0
 private:
     /* Gets the array data type for the array expression. Issues a compile error on failure. */
     ArrayDataType * getArrayDataTypeOrIssueError();
     
-#warning FIXME - Codegen
-#if 0
     /* Peform codegen for getting the address of the array element */
     llvm::Value * codegenAddrOfArrayElem(CodegenCtx & cgCtx);
 #endif

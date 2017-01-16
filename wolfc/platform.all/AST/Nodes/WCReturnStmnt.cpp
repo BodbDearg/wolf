@@ -33,7 +33,7 @@ bool ReturnStmnt::peek(const Token * tokenPtr) {
 
 ReturnStmnt * ReturnStmnt::parse(ParseCtx & parseCtx) {
     if (!peek(parseCtx.curTok)) {
-        parseError(parseCtx, "Expected return statement!");
+        parseCtx.error("Expected return statement!");
         return nullptr;
     }
     

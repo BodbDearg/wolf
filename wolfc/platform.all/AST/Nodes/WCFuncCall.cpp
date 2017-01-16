@@ -18,7 +18,7 @@ bool FuncCall::peek(const Token * currentToken) {
 FuncCall * FuncCall::parse(ParseCtx & parseCtx) {
     // Must open with '('
     if (parseCtx.curTok->type != TokenType::kLParen) {
-        parseError(parseCtx, "Expected '(' !");
+        parseCtx.error("Expected '(' !");
         return nullptr;
     }
     
@@ -36,7 +36,7 @@ FuncCall * FuncCall::parse(ParseCtx & parseCtx) {
     
     // Expect ')'
     if (parseCtx.curTok->type != TokenType::kRParen) {
-        parseError(parseCtx, "Expected ')' !");
+        parseCtx.error("Expected ')' !");
         return nullptr;
     }
     

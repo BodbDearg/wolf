@@ -19,7 +19,7 @@ bool ScopeStmnt::peek(const Token * tokenPtr) {
 ScopeStmnt * ScopeStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'scope' keyword
     if (!peek(parseCtx.curTok)) {
-        parseError(parseCtx, "'scope' statement expected!");
+        parseCtx.error("'scope' statement expected!");
         return nullptr;
     }
     
@@ -33,7 +33,7 @@ ScopeStmnt * ScopeStmnt::parse(ParseCtx & parseCtx) {
     
     // Must be terminated by an 'end' token
     if (parseCtx.curTok->type != TokenType::kEnd) {
-        parseError(parseCtx, "'end' expected to terminate 'scope' block!");
+        parseCtx.error("'end' expected to terminate 'scope' block!");
         return nullptr;
     }
     

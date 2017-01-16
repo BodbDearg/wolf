@@ -63,7 +63,6 @@ public:
     virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
     virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
     virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
     
     /**
      * TODO: this is a temp function for the moment. Verify the types of the sub-expressions
@@ -71,6 +70,7 @@ public:
      * expressions should equate to the same type.
      */
     bool compileCheckExprDataTypes() const;
+#endif
     
     LOrExpr &       mCondExpr;
     AssignExpr &    mTrueExpr;

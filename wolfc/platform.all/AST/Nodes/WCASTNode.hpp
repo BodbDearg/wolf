@@ -25,29 +25,6 @@ struct ParseCtx;
 /* Abstract base class for all AST nodes. */
 class ASTNode {
 public:
-    /**
-     * Emit a formatted error message followed by a newline to stderr for a parse error.
-     * Line and column information from are added also. If a parse context is given the 
-     * line and column info included is for the current token.
-     */
-    static void parseError(ParseCtx & parseCtx,
-                           const char * msgFmtStr,
-                           ...);
-    
-    static void parseError(ParseCtx & parseCtx,
-                           const Token & atTok,
-                           const char * msgFmtStr,
-                           ...);
-    
-    static void parseError(ParseCtx & parseCtx,
-                           const char * msgFmtStr,
-                           std::va_list msgFmtStrArgs);
-    
-    static void parseError(ParseCtx & parseCtx,
-                           const Token & atTok,
-                           const char * msgFmtStr,
-                           std::va_list msgFmtStrArgs);
-    
     ASTNode();
     
     virtual ~ASTNode();
@@ -108,6 +85,8 @@ public:
         return nullptr;
     }
     
+#warning FIXME - Codegen
+#if 0
     /**
      * Emit a formatted compile error message followed by a newline to stderr for a compile error.
      * The line and column information for this node are output also.
@@ -116,6 +95,7 @@ public:
     
     /* Makeup an LLVM label for something and include the line number and column number info of the given token */
     std::string makeLLVMLabelForTok(const char * labelText, const Token & token);
+#endif
     
     /* The parent of this AST node. This should be set by the parent itself in the constructor. */
     ASTNode * mParent;

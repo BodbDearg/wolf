@@ -23,7 +23,7 @@ FuncArg * FuncArg::parse(ParseCtx & parseCtx) {
     
     // Expect ':' following the identifier
     if (parseCtx.curTok->type != TokenType::kColon) {
-        parseError(parseCtx, "expect ':' following argument name for function argument!");
+        parseCtx.error("expect ':' following argument name for function argument!");
         return nullptr;
     }
     

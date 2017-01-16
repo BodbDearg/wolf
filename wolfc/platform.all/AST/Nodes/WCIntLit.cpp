@@ -24,7 +24,7 @@ bool IntLit::peek(const Token * tokenPtr) {
 
 IntLit * IntLit::parse(ParseCtx & parseCtx) {
     if (!peek(parseCtx.curTok)) {
-        parseError(parseCtx, "Expected integer literal!");
+        parseCtx.error("Expected integer literal!");
         return nullptr;
     }
     

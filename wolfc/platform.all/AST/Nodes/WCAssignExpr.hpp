@@ -80,12 +80,15 @@ public:
     TernaryExpr &   mLeftExpr;
     AssignExpr &    mRightExpr;
 
+#warning FIXME - Codegen
+#if 0
 protected:
     /**
      * Does basic checks at compile time to make sure the assign can be performed.
      * Returns false and issues a compile error if the assign is illegal.
      */
      bool compileCheckAssignIsLegal();
+#endif
 };
 
 /* TernaryExpr = AssignExpr */

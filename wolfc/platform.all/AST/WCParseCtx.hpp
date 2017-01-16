@@ -4,6 +4,7 @@
 #include "WCMacros.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <cstdarg>
     #include <string>
     #include <vector>
 WC_THIRD_PARTY_INCLUDES_END
@@ -47,6 +48,26 @@ struct ParseCtx {
     inline void nextToks(size_t count) {
         curTok += count;
     }
+    
+    /* Tells if there are errors in the parse context */
+    bool hasErrors() const;
+    
+    /* Tells if there are warnings in the parse context */
+    bool hasWarnings() const;
+    
+    /**
+     * Emit an error message and save to the list of error messages in the parse context.
+     *
+     * If a token is given to emit the error message at, then the line and column info for the 
+     * error will be at the given token; otherwise the current token in the parse context will be
+     * used (typical usage).
+     *
+     * Emitting an error will put the parse context into an error state.
+     */
+    void error(const char * msgFmtStr, ...);
+    void error(const Token & atToken, const char * msgFmtStr, ...);
+    void error(const char * msgFmtStr, std::va_list msgFmtStrArgs);
+    void error(const Token & atToken, const char * msgFmtStr, std::va_list msgFmtStrArgs);
 };
 
 WC_AST_END_NAMESPACE

@@ -19,7 +19,7 @@ bool Module::parse(ParseCtx & parseCtx) {
     }
     
     if (parseCtx.curTok->type != TokenType::kEOF) {
-        parseError(parseCtx, "Expected EOF at end of module code!");
+        parseCtx.error("Expected EOF at end of module code!");
         mDeclDefs.clear();
         return false;
     }

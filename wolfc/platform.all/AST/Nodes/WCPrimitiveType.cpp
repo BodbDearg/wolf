@@ -15,7 +15,7 @@ bool PrimitiveType::peek(const Token * currentToken) {
 PrimitiveType * PrimitiveType::parse(ParseCtx & parseCtx) {
     // Must be a valid token ahead
     if (!peek(parseCtx.curTok)) {
-        parseError(parseCtx, "Expected primitive data type!");
+        parseCtx.error("Expected primitive data type!");
         return nullptr;
     }
     

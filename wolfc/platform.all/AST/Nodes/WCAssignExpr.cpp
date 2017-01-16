@@ -152,6 +152,8 @@ llvm::Constant * AssignExprAssignBase::codegenExprConstEval(CodegenCtx & cgCtx) 
 }
 #endif
 
+#warning FIXME - Codegen
+#if 0
 bool AssignExprAssignBase::compileCheckAssignIsLegal() {
     // Left side of expression must be an lvalue!
     if (!mLeftExpr.isLValue()) {
@@ -176,6 +178,7 @@ bool AssignExprAssignBase::compileCheckAssignIsLegal() {
     // All good!
     return true;
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // AssignExprBinaryOpBase

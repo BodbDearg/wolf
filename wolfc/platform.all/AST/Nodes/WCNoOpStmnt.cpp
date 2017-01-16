@@ -13,7 +13,7 @@ bool NoOpStmnt::peek(const Token * tokenPtr) {
 NoOpStmnt * NoOpStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'noop'
     if (parseCtx.curTok->type != TokenType::kNoOp) {
-        parseError(parseCtx, "'noop' statement expected!");
+        parseCtx.error("'noop' statement expected!");
         return nullptr;
     }
     

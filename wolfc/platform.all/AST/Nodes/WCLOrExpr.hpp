@@ -65,12 +65,15 @@ public:
     LAndExpr &  mLeftExpr;
     LOrExpr &   mRightExpr;
     
+#warning FIXME - Codegen
+#if 0
 private:
     /**
      * TODO: this is a temp function for the moment. Issue a compile error either the left or right expr is not of 'bool'
      * Return false for failure if that is the case.
      */
     bool compileCheckBothExprsAreBool() const;
+#endif
 };
 
 WC_AST_END_NAMESPACE

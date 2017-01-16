@@ -205,7 +205,6 @@ public:
      * Returns false if the LLVM type is not defined and true otherwise.
      */
     bool compileCheckLLVMTypeDefined(AST::ASTNode & callingNode);
-#endif
     
     /**
      * Does a compile check that the right expression type in a binary operator matches
@@ -231,9 +230,7 @@ public:
     void issueUnaryOpNotAvailableCompileError(AST::ASTNode & callingNode,
                                               const char * opSymbol,
                                               const char * opName) const;
-    
-#warning FIXME - Codegen
-#if 0
+
     /**
      * The llvm type for the data type. This is filled in during code generation.
      * Note: The unknown data type will not use anything for this field...

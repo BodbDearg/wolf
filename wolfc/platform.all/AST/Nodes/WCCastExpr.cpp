@@ -33,7 +33,7 @@ CastExpr * CastExpr::parse(ParseCtx & parseCtx) {
         
         // Expect opening '('
         if (parseCtx.curTok->type != TokenType::kLParen) {
-            parseError(parseCtx, "Expect '(' following 'cast' for 'cast()' operator!");
+            parseCtx.error("Expect '(' following 'cast' for 'cast()' operator!");
             return nullptr;
         }
         
@@ -46,9 +46,7 @@ CastExpr * CastExpr::parse(ParseCtx & parseCtx) {
         
         // Expect keyword 'to':
         if (parseCtx.curTok->type != TokenType::kTo) {
-            parseError(parseCtx,
-                       "Expecting keyword 'to' following the expression to cast inside 'cast()' operator!");
-            
+            parseCtx.error("Expecting keyword 'to' following the expression to cast inside 'cast()' operator!");
             return nullptr;
         }
         
@@ -61,7 +59,7 @@ CastExpr * CastExpr::parse(ParseCtx & parseCtx) {
         
         // Expect closing ')'
         if (parseCtx.curTok->type != TokenType::kRParen) {
-            parseError(parseCtx, "Expecting closing ')' for 'cast()' operator!");
+            parseCtx.error("Expecting closing ')' for 'cast()' operator!");
             return nullptr;
         }
         

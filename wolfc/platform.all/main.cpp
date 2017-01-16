@@ -42,28 +42,41 @@ static int mainImpl(int argc, const char * argv[]) {
         1024 * 4            /* Space in sys blocks array to reserve */
     );
 
-    {
-        // Declare and parse the module AST
-        Wolfc::AST::Module module;
-        Wolfc::AST::ParseCtx parseCtx(lexer.getTokenList(), linearAlloc);
-
-        if (!module.parse(parseCtx)) {
-            std::printf("Parsing failed for source file '%s'!\n", argv[1]);
-            return -1;
+    // Declare and parse the module AST
+    Wolfc::AST::Module astModule;
+    Wolfc::AST::ParseCtx parseCtx(lexer.getTokenList(), linearAlloc);
+    
+    // Emit parse warnings to stdout if there are any
+    if (parseCtx.hasWarnings()) {
+        std::printf("Warnings emitted for source file '%s'! Warning messages follow:\n", argv[1]);
+        
+        for (const std::string & warningMsg : parseCtx.warningMsgs) {
+            std::fprintf(stdout, "%s\n", warningMsg.c_str());
         }
-
-    #warning FIXME - Codegen
-    #if 0
-        // Codegen the module
-        if (!module.generateCode()) {
-            std::printf("Compile failed for source file '%s'!\n", argv[1]);
-            return -1;
-        }
-
-        // Dump the code to stdout!
-        module.dumpIRCodeToStdout();
-    #endif
     }
+
+    // Emit parse errors to stderr if there are any and fail
+    if (!astModule.parse(parseCtx) || parseCtx.hasErrors()) {
+        std::printf("Parsing failed for source file '%s'! Error messages follow:\n", argv[1]);
+        
+        for (const std::string & errorMsg : parseCtx.errorMsgs) {
+            std::fprintf(stderr, "%s\n", errorMsg.c_str());
+        }
+        
+        return -1;
+    }
+
+#warning FIXME - Codegen
+#if 0
+    // Codegen the module
+    if (!module.generateCode()) {
+        std::printf("Compile failed for source file '%s'!\n", argv[1]);
+        return -1;
+    }
+
+    // Dump the code to stdout!
+    module.dumpIRCodeToStdout();
+#endif
 
     return 0;
 }

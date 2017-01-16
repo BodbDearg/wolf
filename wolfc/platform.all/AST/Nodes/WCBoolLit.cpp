@@ -22,7 +22,7 @@ bool BoolLit::peek(const Token * tokenPtr) {
 
 BoolLit * BoolLit::parse(ParseCtx & parseCtx) {
     if (!peek(parseCtx.curTok)) {
-        parseError(parseCtx, "Expected 'bool' literal!");
+        parseCtx.error("Expected 'bool' literal!");
         return nullptr;
     }
     
