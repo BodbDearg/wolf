@@ -4,17 +4,9 @@
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
-#include "WCCodegenCtx.hpp"
 #include "WCFunc.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
-
-#warning FIXME - Codegen
-#if 0
-WC_THIRD_PARTY_INCLUDES_BEGIN
-    #include <llvm/IR/Module.h>
-WC_THIRD_PARTY_INCLUDES_END
-#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE

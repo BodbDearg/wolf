@@ -1,5 +1,6 @@
 #pragma once
 
+#include "VisitorMacros.hpp"
 #include "WCASTNode.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -8,6 +9,7 @@ struct CodegenCtx;
 
 WC_AST_BEGIN_NAMESPACE
 
+class DeclDefVisitor;
 class Func;
 class VarDecl;
 
@@ -20,6 +22,8 @@ class DeclDef : public ASTNode {
 public:
     static bool peek(const Token * tokenPtr);
     static DeclDef * parse(ParseCtx & parseCtx);
+    
+    WC_MUST_ACCEPT_VISTOR(DeclDefVisitor);
     
 #warning FIXME - Codegen
 #if 0
@@ -34,6 +38,8 @@ public:
     
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
+    
+    WC_WILL_ACCEPT_VISITOR(DeclDefVisitor);
     
 #warning FIXME - Codegen
 #if 0
@@ -51,6 +57,8 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
+    WC_WILL_ACCEPT_VISITOR(DeclDefVisitor);
+    
 #warning FIXME - Codegen
 #if 0
     virtual bool codegen(CodegenCtx & cgCtx) override;
@@ -58,6 +66,11 @@ public:
     
     VarDecl & mVarDecl;
 };
+
+/* Visitor interface */
+WC_DECLARE_VISITOR_INTERFACE(DeclDefVisitor,
+                             DeclDefFunc,
+                             DeclDefVarDecl);
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

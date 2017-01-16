@@ -2,7 +2,6 @@
 
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
-#include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCNotExpr.hpp"
 #include "WCParseCtx.hpp"

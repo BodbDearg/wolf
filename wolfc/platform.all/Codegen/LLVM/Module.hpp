@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AST/Nodes/WCDeclDef.hpp"
 #include "WCAssert.hpp"
 #include "WCMacros.hpp"
 
@@ -21,7 +22,7 @@ namespace AST {
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 /* Class responsible for generating code with LLVM for a module */
-class Module final {
+class Module final : public AST::DeclDefVisitor {
 public:
     Module(AST::Module & astModule);
     
@@ -36,6 +37,16 @@ public:
      */
     void dumpIRCodeToStdout();
     
+    /* Get the LLVM context */
+    inline llvm::LLVMContext * getLLVMCtx() const {
+        return mLLVMCtx.get();
+    }
+    
+    inline llvm::LLVMContext & getLLVMCtxRef() const {
+        WC_ASSERT(mLLVMCtx.get());
+        return *mLLVMCtx.get();
+    }
+    
     /* Get the LLVM module for this module */
     inline llvm::Module * getLLVMModule() const {
         return mLLVMModule.get();
@@ -49,6 +60,10 @@ public:
 private:
     /* Do the code generation for the module. Returns false if failed. */
     bool doCodegen();
+    
+    /* Do codegen for various nodes */
+    virtual void visit(AST::DeclDefFunc & node) override;
+    virtual void visit(AST::DeclDefVarDecl & node) override;
     
     /**
      * Declare C standard library functions with the module.

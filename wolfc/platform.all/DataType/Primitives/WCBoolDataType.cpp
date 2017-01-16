@@ -3,7 +3,6 @@
 #include "AST/Nodes/WCASTNode.hpp"
 #include "AST/Nodes/WCPrintStmnt.hpp"
 #include "WCAssert.hpp"
-#include "WCCodegenCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 

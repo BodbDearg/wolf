@@ -50,6 +50,8 @@ const Token & DeclDefFunc::getEndToken() const {
     return mFunc.getEndToken();
 }
 
+WC_IMPL_ACCEPT_VISITOR(DeclDefFunc, DeclDefVisitor)
+
 #warning FIXME - Codegen
 #if 0
 bool DeclDefFunc::codegen(CodegenCtx & cgCtx) {
@@ -71,6 +73,8 @@ const Token & DeclDefVarDecl::getStartToken() const {
 const Token & DeclDefVarDecl::getEndToken() const {
     return mVarDecl.getEndToken();
 }
+
+WC_IMPL_ACCEPT_VISITOR(DeclDefVarDecl, DeclDefVisitor)
 
 #warning FIXME - Codegen
 #if 0

@@ -3,18 +3,6 @@
 #include "AST/Nodes/WCASTNode.hpp"
 #include "WCAssert.hpp"
 
-#warning FIXME - Codegen
-#if 0
-#include "WCCodegenCtx.hpp"
-#endif
-
-#warning FIXME - Codegen
-#if 0
-WC_THIRD_PARTY_INCLUDES_BEGIN
-    #include <llvm/IR/Module.h>
-WC_THIRD_PARTY_INCLUDES_END
-#endif
-
 WC_BEGIN_NAMESPACE
 
 const char * const DataType::kOpSymbol_BNot = "~";

@@ -11,56 +11,38 @@ WC_THIRD_PARTY_INCLUDES_END
 
 namespace llvm {
     class LLVMContext;
-}
-
-WC_BEGIN_NAMESPACE
-
-namespace AST {
     class Module;
 }
 
+WC_BEGIN_NAMESPACE
+WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+
 /* Struct holding the context for code generation */
 struct CodegenCtx {
+#warning FIXME - Codegen
+#if 0
     /**
      * Type for a deferred code generation lambda callback.
      * The parameter given is this code generation context and the return value is whether the code generated
      * successfully or not.
      */
     typedef std::function<bool (CodegenCtx & cgCtx)> DeferredCodegenCallback;
-    
-    /* Creates the codegen context from the given llvm objects */
-    CodegenCtx(llvm::LLVMContext & llvmCtxIn,
-               llvm::IRBuilder<> & irBuilderIn,
-               AST::Module & moduleIn)
-    :
-        llvmCtx(llvmCtxIn),
-        irBuilder(irBuilderIn),
-        module(moduleIn)
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-    
-    /* Push the current codegen basic block to the stack and save for later popping. */
-    void pushInsertBlock();
-    
-    /**
-     * Pop a previous insert block from the stack.
-     * There MUST be an insert block on the stack, assumes this is the case (undefined behavior otherwise).
-     */
-    void popInsertBlock();
+#endif
     
     /* The llvm context. */
     llvm::LLVMContext & llvmCtx;
     
-    /* The llvm IR builder object. Used for creating most instructions. */
-    llvm::IRBuilder<> & irBuilder;
+    /* The llvm module. */
+    llvm::Module & llvmModule;
     
-    /* The AST node for the module. Also contains the llvm module object. */
-    AST::Module & module;
+    /* The llvm IR builder object. Used for creating most instructions. */
+    llvm::IRBuilder<> irBuilder;
     
     /* A stack of code insert blocks pushed/saved for later restoring. */
-    std::vector<llvm::BasicBlock*> insertBlockStack;    // TODO: use the linear allocator for efficiency
+    std::vector<llvm::BasicBlock*> insertBlockStack;
     
+#warning FIXME - Codegen
+#if 0
     /**
      * A list of callbacks that will be called in order to perform deferred code generation.
      *
@@ -78,7 +60,27 @@ struct CodegenCtx {
      * Deferred code generation is perfomed in FIFO (queue) order, with the first item in the
      * list being generated first.
      */
-    std::list<DeferredCodegenCallback> deferredCodegenCallbacks;    // TODO: use the linear allocator for efficiency
+    std::list<DeferredCodegenCallback> deferredCodegenCallbacks;
+#endif
+    
+    /* Creates the codegen context using the given llvm context */
+    CodegenCtx(llvm::LLVMContext & llvmCtxIn, llvm::Module & llvmModuleIn) :
+        llvmCtx(llvmCtxIn),
+        llvmModule(llvmModuleIn),
+        irBuilder(llvmCtxIn)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+    
+    /* Push the current codegen basic block to the stack and save for later popping. */
+    void pushInsertBlock();
+    
+    /**
+     * Pop a previous insert block from the stack.
+     * There MUST be an insert block on the stack, assumes this is the case (undefined behavior otherwise).
+     */
+    void popInsertBlock();
 };
 
+WC_LLVM_CODEGEN_END_NAMESPACE
 WC_END_NAMESPACE

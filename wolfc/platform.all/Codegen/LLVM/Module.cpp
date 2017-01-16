@@ -5,6 +5,8 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/Module.h>
 WC_THIRD_PARTY_INCLUDES_END
 
+#include "CodegenCtx.hpp"
+
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
@@ -14,6 +16,10 @@ Module::Module(AST::Module & astModule) :
     // Create the LLVM context. Abort if that fails (shouldn't):
     mLLVMCtx.reset(new llvm::LLVMContext());
     WC_GUARD_ASSERT(mLLVMCtx.get());
+    
+    // Create the LLVM module object. Abort if that fails (shouldn't):
+    mLLVMModule.reset(new llvm::Module("WolfTest", *mLLVMCtx.get()));
+    WC_GUARD_ASSERT(mLLVMModule.get());
     
     // Do code generation, if failed then cleanup
     if (!doCodegen()) {
@@ -36,10 +42,22 @@ void Module::dumpIRCodeToStdout() {
 }
 
 bool Module::doCodegen() {
-    // Create the LLVM module object
-    mLLVMModule.reset(new llvm::Module("WolfTest", *mLLVMCtx.get()));
+    
+    // Create the codegen context and declare C standard library functions we require
+    CodegenCtx codegenCtx(getLLVMCtxRef(), getLLVMModuleRef());
+    declareCStdLibFuncsInModule();
+    
+    // 
     
     return true;
+}
+
+void Module::visit(AST::DeclDefFunc & node) {
+    
+}
+
+void Module::visit(AST::DeclDefVarDecl & node) {
+    
 }
 
 void Module::declareCStdLibFuncsInModule() {

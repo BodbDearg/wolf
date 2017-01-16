@@ -2,11 +2,6 @@
 
 #include "AST/Nodes/WCASTNode.hpp"
 #include "AST/Nodes/WCPrintStmnt.hpp"
-#include "WCCodegenCtx.hpp"
-
-WC_THIRD_PARTY_INCLUDES_BEGIN
-    #include <llvm/IR/Module.h>
-WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 

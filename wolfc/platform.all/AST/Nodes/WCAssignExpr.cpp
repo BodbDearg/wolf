@@ -2,7 +2,6 @@
 
 #include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
-#include "WCCodegenCtx.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
 #include "WCTernaryExpr.hpp"

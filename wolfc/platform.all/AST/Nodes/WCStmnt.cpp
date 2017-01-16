@@ -3,7 +3,6 @@
 #include "WCAssertStmnt.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCBreakStmnt.hpp"
-#include "WCCodegenCtx.hpp"
 #include "WCIfStmnt.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCLoopStmnt.hpp"

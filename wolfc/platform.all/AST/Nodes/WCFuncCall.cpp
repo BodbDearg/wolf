@@ -3,7 +3,6 @@
 #include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
-#include "WCCodegenCtx.hpp"
 #include "WCFuncCallArgList.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"

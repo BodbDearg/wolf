@@ -6,7 +6,6 @@
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCCastExpr.hpp"
-#include "WCCodegenCtx.hpp"
 #include "WCFunc.hpp"
 #include "WCFuncArg.hpp"
 #include "WCFuncCall.hpp"
@@ -16,13 +15,6 @@
 #include "WCParseCtx.hpp"
 #include "WCPrimaryExpr.hpp"
 #include "WCPrimitiveType.hpp"
-
-#warning FIXME - Codegen
-#if 0
-WC_THIRD_PARTY_INCLUDES_BEGIN
-    #include <llvm/IR/Module.h>
-WC_THIRD_PARTY_INCLUDES_END
-#endif
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
