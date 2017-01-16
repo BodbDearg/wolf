@@ -443,8 +443,6 @@ const char * PostfixExprFuncCall::nameOfFuncCalled() const {
 }
 
 Func * PostfixExprFuncCall::lookupFuncCalled() const {
-    // TODO: can we avoid a string construct here?
-    
     // Get the function name
     const char * funcName = nameOfFuncCalled();
     WC_GUARD(funcName, nullptr);
