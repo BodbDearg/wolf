@@ -20,7 +20,7 @@ bool NotExpr::peek(const Token * tokenPtr) {
 
 NotExpr * NotExpr::parse(ParseCtx & parseCtx) {
     // Save the first token:
-    const Token * startToken = parseCtx.curTok;
+    const Token * startToken = parseCtx.tok();
     
     // See if an actual 'not' or bitwise not ('~') expression:
     if (startToken->type == TokenType::kNot) {

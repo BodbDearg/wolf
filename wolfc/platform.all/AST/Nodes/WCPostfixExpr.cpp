@@ -35,18 +35,18 @@ PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
     PostfixExpr * outerPostfixExpr = nullptr;
 
     // See if '++' or '--' follow:
-    if (parseCtx.curTok->type == TokenType::kIncrement) {
+    if (parseCtx.tok()->type == TokenType::kIncrement) {
         // Consume the '++' token and save
-        const Token * endToken = parseCtx.curTok;
+        const Token * endToken = parseCtx.tok();
         parseCtx.nextTok();
 
         // Create outer postfix expr
         outerPostfixExpr = WC_NEW_AST_NODE(parseCtx, PostfixExprInc, *expr, *endToken);
         WC_ASSERT(outerPostfixExpr);
     }
-    else if (parseCtx.curTok->type == TokenType::kDecrement) {
+    else if (parseCtx.tok()->type == TokenType::kDecrement) {
         // Consume the '--' token and save
-        const Token * endToken = parseCtx.curTok;
+        const Token * endToken = parseCtx.tok();
         parseCtx.nextTok();
 
         // Create outer postfix expr
@@ -60,11 +60,11 @@ PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
     }
     
     // Continue parsing and wrapping until one of these conditions breaks
-    while (FuncCall::peek(parseCtx.curTok) ||
-           parseCtx.curTok->type == TokenType::kLBrack)
+    while (FuncCall::peek(parseCtx.tok()) ||
+           parseCtx.tok()->type == TokenType::kLBrack)
     {
         // See if function call follows:
-        if (FuncCall::peek(parseCtx.curTok)) {
+        if (FuncCall::peek(parseCtx.tok())) {
             FuncCall * funcCall = FuncCall::parse(parseCtx);
             WC_GUARD(funcCall, nullptr);
             outerPostfixExpr = WC_NEW_AST_NODE(parseCtx,
@@ -76,7 +76,7 @@ PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
         }
         else {
             // Skip the '['. Expect '[' to be here based on previous if() failing - see while loop.
-            WC_ASSERT(parseCtx.curTok->type == TokenType::kLBrack);
+            WC_ASSERT(parseCtx.tok()->type == TokenType::kLBrack);
             parseCtx.nextTok();
             
             // Parse the assign expression for the array index
@@ -84,7 +84,7 @@ PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
             WC_GUARD(arrayIndexExpr, nullptr);
             
             // Expect a closing ']'
-            const Token & endToken = *parseCtx.curTok;
+            const Token & endToken = *parseCtx.tok();
             
             if (endToken.type != TokenType::kRBrack) {
                 parseCtx.error("Expected a closing ']' for array lookup expression!");

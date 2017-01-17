@@ -32,10 +32,10 @@ bool UnaryExpr::peek(const Token * currentToken) {
 }
 
 UnaryExpr * UnaryExpr::parse(ParseCtx & parseCtx) {
-    switch (parseCtx.curTok->type) {
+    switch (parseCtx.tok()->type) {
         /* -PostfixExpr */
         case TokenType::kMinus: {
-            const Token * minusTok = parseCtx.curTok;
+            const Token * minusTok = parseCtx.tok();
             parseCtx.nextTok();     // Skip '-'
             PostfixExpr * expr = PostfixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
@@ -44,7 +44,7 @@ UnaryExpr * UnaryExpr::parse(ParseCtx & parseCtx) {
             
         /* +PostfixExpr */
         case TokenType::kPlus: {
-            const Token * plusTok = parseCtx.curTok;
+            const Token * plusTok = parseCtx.tok();
             parseCtx.nextTok();     // Skip '+'
             PostfixExpr * expr = PostfixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
@@ -53,11 +53,11 @@ UnaryExpr * UnaryExpr::parse(ParseCtx & parseCtx) {
             
         /* (AssignExpr) */
         case TokenType::kLParen: {
-            const Token * lparenTok = parseCtx.curTok;
+            const Token * lparenTok = parseCtx.tok();
             parseCtx.nextTok();     // Skip '('
             AssignExpr * expr = AssignExpr::parse(parseCtx);
             
-            if (parseCtx.curTok->type != TokenType::kRParen) {
+            if (parseCtx.tok()->type != TokenType::kRParen) {
                 parseCtx.error("Expected closing ')' to match '(' at line %zu and column %zu!",
                                lparenTok->startLine + 1,
                                lparenTok->startCol + 1);
@@ -65,7 +65,7 @@ UnaryExpr * UnaryExpr::parse(ParseCtx & parseCtx) {
                 return nullptr;
             }
             
-            const Token * rparenTok = parseCtx.curTok;
+            const Token * rparenTok = parseCtx.tok();
             parseCtx.nextTok();     // Skip ')'
             WC_GUARD(expr, nullptr);
             return WC_NEW_AST_NODE(parseCtx, UnaryExprParen, *expr, *lparenTok, *rparenTok);

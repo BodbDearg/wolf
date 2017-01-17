@@ -14,27 +14,27 @@ bool ReadnumExpr::peek(const Token * tokenPtr) {
 }
 
 ReadnumExpr * ReadnumExpr::parse(ParseCtx & parseCtx) {
-    if (parseCtx.curTok->type != TokenType::kReadnum) {
+    if (parseCtx.tok()->type != TokenType::kReadnum) {
         parseCtx.error("Expected 'readnum' at begining of readnum() expression!");
         return nullptr;
     }
     
-    const Token * readnumTok = parseCtx.curTok;
+    const Token * readnumTok = parseCtx.tok();
     parseCtx.nextTok();     // Consume 'readnum'
     
-    if (parseCtx.curTok->type != TokenType::kLParen) {
+    if (parseCtx.tok()->type != TokenType::kLParen) {
         parseCtx.error("Expect '(' following 'readnum'!");
         return nullptr;
     }
     
     parseCtx.nextTok();     // Consume '('
     
-    if (parseCtx.curTok->type != TokenType::kRParen) {
+    if (parseCtx.tok()->type != TokenType::kRParen) {
         parseCtx.error("Expect ')' following '('!");
         return nullptr;
     }
     
-    const Token * rparenTok = parseCtx.curTok;
+    const Token * rparenTok = parseCtx.tok();
     parseCtx.nextTok();     // Consume ')'
     
     return WC_NEW_AST_NODE(parseCtx, ReadnumExpr, *readnumTok, *rparenTok);

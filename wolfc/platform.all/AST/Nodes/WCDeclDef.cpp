@@ -17,14 +17,14 @@ bool DeclDef::peek(const Token * tokenPtr) {
 
 DeclDef * DeclDef::parse(ParseCtx & parseCtx) {
     // Check for 'Func':
-    if (Func::peek(parseCtx.curTok)) {
+    if (Func::peek(parseCtx.tok())) {
         Func * func = Func::parse(parseCtx);
         WC_GUARD(func, nullptr);
         return WC_NEW_AST_NODE(parseCtx, DeclDefFunc, *func);
     }
     
     // Check for 'VarDecl':
-    if (VarDecl::peek(parseCtx.curTok)) {
+    if (VarDecl::peek(parseCtx.tok())) {
         VarDecl * varDecl = VarDecl::parse(parseCtx);
         WC_GUARD(varDecl, nullptr);
         return WC_NEW_AST_NODE(parseCtx, DeclDefVarDecl, *varDecl);

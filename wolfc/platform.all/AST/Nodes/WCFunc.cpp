@@ -25,13 +25,13 @@ bool Func::peek(const Token * tokenPtr) {
 
 Func * Func::parse(ParseCtx & parseCtx) {
     // Must be a function ahead:
-    if (!peek(parseCtx.curTok)) {
+    if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected function!");
         return nullptr;
     }
     
     // Skip the 'func' token and save location
-    const Token * startToken = parseCtx.curTok;
+    const Token * startToken = parseCtx.tok();
     parseCtx.nextTok();
     
     // Parse the function identifier:
@@ -39,7 +39,7 @@ Func * Func::parse(ParseCtx & parseCtx) {
     WC_GUARD(identifier, nullptr);
     
     // Expect '('
-    if (parseCtx.curTok->type != TokenType::kLParen) {
+    if (parseCtx.tok()->type != TokenType::kLParen) {
         parseCtx.error("'(' expected following function name!");
         return nullptr;
     }
@@ -49,13 +49,13 @@ Func * Func::parse(ParseCtx & parseCtx) {
     // See if an argument list follows:
     FuncArgList * argList = nullptr;
     
-    if (FuncArgList::peek(parseCtx.curTok)) {
+    if (FuncArgList::peek(parseCtx.tok())) {
         argList = FuncArgList::parse(parseCtx);
         WC_GUARD(argList, nullptr);
     }
     
     // Expect ')'
-    if (parseCtx.curTok->type != TokenType::kRParen) {
+    if (parseCtx.tok()->type != TokenType::kRParen) {
         parseCtx.error("')' expected to close args list of function!");
         return nullptr;
     }
@@ -66,7 +66,7 @@ Func * Func::parse(ParseCtx & parseCtx) {
     // If it is not present then a 'void' return type is assumed.
     Type * returnType = nullptr;
     
-    if (parseCtx.curTok->type == TokenType::kOpArrow) {
+    if (parseCtx.tok()->type == TokenType::kOpArrow) {
         // Explicit return type, skip the '->' first
         parseCtx.nextTok();
         
@@ -80,13 +80,13 @@ Func * Func::parse(ParseCtx & parseCtx) {
     WC_GUARD(scope, nullptr);
     
     // Must be terminated by an 'end' token
-    if (parseCtx.curTok->type != TokenType::kEnd) {
+    if (parseCtx.tok()->type != TokenType::kEnd) {
         parseCtx.error("'end' expected to terminate function definition!");
         return nullptr;
     }
     
     // Skip 'end' token and save location
-    const Token * endToken = parseCtx.curTok;
+    const Token * endToken = parseCtx.tok();
     parseCtx.nextTok();
     
     // Done: return the parsed function

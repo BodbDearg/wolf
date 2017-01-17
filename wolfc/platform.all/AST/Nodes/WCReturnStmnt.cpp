@@ -24,19 +24,19 @@ bool ReturnStmnt::peek(const Token * tokenPtr) {
 }
 
 ReturnStmnt * ReturnStmnt::parse(ParseCtx & parseCtx) {
-    if (!peek(parseCtx.curTok)) {
+    if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected return statement!");
         return nullptr;
     }
     
     // Consume 'return' token
-    const Token * returnToken = parseCtx.curTok;
+    const Token * returnToken = parseCtx.tok();
     parseCtx.nextTok();
     
     // See if a condition token follows:
-    if (isCondTokenType(parseCtx.curTok->type)) {
+    if (isCondTokenType(parseCtx.tok()->type)) {
         // Save the 'if' or 'unless' token and skip
-        const Token * condToken = parseCtx.curTok;
+        const Token * condToken = parseCtx.tok();
         parseCtx.nextTok();
         
         // Parse the assign expression that follows:
@@ -52,15 +52,15 @@ ReturnStmnt * ReturnStmnt::parse(ParseCtx & parseCtx) {
     }
     
     // See if assign expression follows:
-    if (AssignExpr::peek(parseCtx.curTok)) {
+    if (AssignExpr::peek(parseCtx.tok())) {
         // Parse the assign expression for the return value:
         AssignExpr * returnExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(returnExpr, nullptr);
         
         // See if a condition token follows:
-        if (isCondTokenType(parseCtx.curTok->type)) {
+        if (isCondTokenType(parseCtx.tok()->type)) {
             // Save the 'if' or 'unless' token and skip
-            const Token * condToken = parseCtx.curTok;
+            const Token * condToken = parseCtx.tok();
             parseCtx.nextTok();
             
             // Parse the assign expression that follows:

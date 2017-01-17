@@ -17,13 +17,13 @@ bool ScopeStmnt::peek(const Token * tokenPtr) {
 
 ScopeStmnt * ScopeStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'scope' keyword
-    if (!peek(parseCtx.curTok)) {
+    if (!peek(parseCtx.tok())) {
         parseCtx.error("'scope' statement expected!");
         return nullptr;
     }
     
     // Skip the 'scope' token and save location
-    const Token * startToken = parseCtx.curTok;
+    const Token * startToken = parseCtx.tok();
     parseCtx.nextTok();
     
     // Parse the body scope:
@@ -31,13 +31,13 @@ ScopeStmnt * ScopeStmnt::parse(ParseCtx & parseCtx) {
     WC_GUARD(bodyScope, nullptr);
     
     // Must be terminated by an 'end' token
-    if (parseCtx.curTok->type != TokenType::kEnd) {
+    if (parseCtx.tok()->type != TokenType::kEnd) {
         parseCtx.error("'end' expected to terminate 'scope' block!");
         return nullptr;
     }
     
     // Skip 'end' token and save location
-    const Token * endToken = parseCtx.curTok;
+    const Token * endToken = parseCtx.tok();
     parseCtx.nextTok();
     
     // Done: return the parsed statement

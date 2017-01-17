@@ -19,19 +19,19 @@ bool NextStmnt::peek(const Token * tokenPtr) {
 
 NextStmnt * NextStmnt::parse(ParseCtx & parseCtx) {
     // Check the basics
-    if (!peek(parseCtx.curTok)) {
+    if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected next statement!");
         return nullptr;
     }
     
     // Consume 'next' and save token for later:
-    const Token * nextTok = parseCtx.curTok;
+    const Token * nextTok = parseCtx.tok();
     parseCtx.nextTok();
     
     // See whether 'if' or 'unless' follow, in which case the 'next' statement is conditional:
-    if (parseCtx.curTok->type == TokenType::kIf || parseCtx.curTok->type == TokenType::kUnless) {
+    if (parseCtx.tok()->type == TokenType::kIf || parseCtx.tok()->type == TokenType::kUnless) {
         // Parse the condition token:
-        const Token * condTok = parseCtx.curTok;
+        const Token * condTok = parseCtx.tok();
         parseCtx.nextTok();
         
         // Parse the condition assign expression:

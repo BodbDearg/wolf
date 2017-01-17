@@ -22,12 +22,12 @@ bool ArrayLit::peek(const Token * tokenPtr) {
 
 ArrayLit * ArrayLit::parse(ParseCtx & parseCtx) {
     // Parse the initial '[':
-    if (parseCtx.curTok->type != TokenType::kLBrack) {
+    if (parseCtx.tok()->type != TokenType::kLBrack) {
         parseCtx.error("Expected integer literal!");
         return nullptr;
     }
     
-    const Token * lBrack = parseCtx.curTok;
+    const Token * lBrack = parseCtx.tok();
     parseCtx.nextTok();
     
     // Parse the array literal expressions
@@ -35,12 +35,12 @@ ArrayLit * ArrayLit::parse(ParseCtx & parseCtx) {
     WC_GUARD(exprs, nullptr);
     
     // Parse the closing ']'
-    if (parseCtx.curTok->type != TokenType::kRBrack) {
+    if (parseCtx.tok()->type != TokenType::kRBrack) {
         parseCtx.error("Expected closing ']' for array literal!");
         return nullptr;
     }
     
-    const Token * rBrack = parseCtx.curTok;
+    const Token * rBrack = parseCtx.tok();
     parseCtx.nextTok();
     
     // Now return the parsed node:

@@ -22,13 +22,13 @@ bool VarDecl::peek(const Token * tokenPtr) {
 
 VarDecl * VarDecl::parse(ParseCtx & parseCtx) {
     // Parse 'let' keyword
-    if (parseCtx.curTok->type != TokenType::kLet) {
+    if (parseCtx.tok()->type != TokenType::kLet) {
         parseCtx.error("Expected keyword 'let' at start of a variable declaration!");
         return nullptr;
     }
     
     // Save and skip 'let'
-    const Token * varToken = parseCtx.curTok;
+    const Token * varToken = parseCtx.tok();
     parseCtx.nextTok();
     
     // Parse the identifier ahead
@@ -38,7 +38,7 @@ VarDecl * VarDecl::parse(ParseCtx & parseCtx) {
     // See if the type for the variable is specified:
     Type * type = nullptr;
     
-    if (parseCtx.curTok->type == TokenType::kColon) {
+    if (parseCtx.tok()->type == TokenType::kColon) {
         // Type specified, skip the ':'
         parseCtx.nextTok();
         
@@ -48,7 +48,7 @@ VarDecl * VarDecl::parse(ParseCtx & parseCtx) {
     }
     
     // Parse the '='
-    if (parseCtx.curTok->type != TokenType::kAssign) {
+    if (parseCtx.tok()->type != TokenType::kAssign) {
         parseCtx.error("Expected '=' following variable name for variable declaration!");
         return nullptr;
     }
@@ -137,7 +137,7 @@ bool VarDecl::codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope) {
     return cgCtx.irBuilder.CreateStore(rightValue, leftValue->value) != nullptr;
 }
 
-bool VarDecl::codegenAsGlobalVar(CodegenCtx & cgCtx) {
+bool VarDecl::codegenAsGlobalVar(CodegenCtx & cgCtx) { 
     // Now evaluate the right expression:
     llvm::Constant * rightValue = mInitExpr.codegenExprConstEval(cgCtx);
     WC_GUARD(rightValue, false);

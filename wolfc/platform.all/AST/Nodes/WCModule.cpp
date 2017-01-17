@@ -16,9 +16,9 @@ Module * Module::parse(ParseCtx & parseCtx) {
     // Try to parse as many as possible so we get multiple error messages for various problems.
     std::vector<DeclDef*> declDefs;
     
-    while (parseCtx.curTok->type != TokenType::kEOF) {
+    while (parseCtx.tok()->type != TokenType::kEOF) {
         // Save this in case we need it later
-        const Token * startTok = parseCtx.curTok;
+        const Token * startTok = parseCtx.tok();
         
         // Try to parse the decldef
         DeclDef * declDef = DeclDef::parse(parseCtx);
@@ -33,8 +33,8 @@ Module * Module::parse(ParseCtx & parseCtx) {
         }
         
         // Skip junk if getting a DeclDef failed:
-        while (parseCtx.curTok->type != TokenType::kEOF) {
-            if (DeclDef::peek(parseCtx.curTok)) {
+        while (parseCtx.tok()->type != TokenType::kEOF) {
+            if (DeclDef::peek(parseCtx.tok())) {
                 break;
             }
             
@@ -43,7 +43,7 @@ Module * Module::parse(ParseCtx & parseCtx) {
     }
     
     // Okay, create and return the module
-    return WC_NEW_AST_NODE(parseCtx, Module, std::move(declDefs), *parseCtx.curTok);
+    return WC_NEW_AST_NODE(parseCtx, Module, std::move(declDefs), *parseCtx.tok());
 }
 
 Module::Module(std::vector<DeclDef*> && declDefs, const Token & eofToken) :

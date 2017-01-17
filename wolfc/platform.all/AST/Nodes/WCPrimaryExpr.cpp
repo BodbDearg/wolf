@@ -29,42 +29,42 @@ bool PrimaryExpr::peek(const Token * currentToken) {
 }
 
 PrimaryExpr * PrimaryExpr::parse(ParseCtx & parseCtx) {
-    if (IntLit::peek(parseCtx.curTok)) {
+    if (IntLit::peek(parseCtx.tok())) {
         IntLit * uintLit = IntLit::parse(parseCtx);
         WC_GUARD(uintLit, nullptr);
         return WC_NEW_AST_NODE(parseCtx, PrimaryExprIntLit, *uintLit);
     }
-    else if (BoolLit::peek(parseCtx.curTok)) {
+    else if (BoolLit::peek(parseCtx.tok())) {
         BoolLit * boolLit = BoolLit::parse(parseCtx);
         WC_GUARD(boolLit, nullptr);
         return WC_NEW_AST_NODE(parseCtx, PrimaryExprBoolLit, *boolLit);
     }
-    else if (StrLit::peek(parseCtx.curTok)) {
+    else if (StrLit::peek(parseCtx.tok())) {
         StrLit * strLit = StrLit::parse(parseCtx);
         WC_GUARD(strLit, nullptr);
         return WC_NEW_AST_NODE(parseCtx, PrimaryExprStrLit, *strLit);
     }
-    else if (ArrayLit::peek(parseCtx.curTok)) {
+    else if (ArrayLit::peek(parseCtx.tok())) {
         ArrayLit * arrayLit = ArrayLit::parse(parseCtx);
         WC_GUARD(arrayLit, nullptr);
         return WC_NEW_AST_NODE(parseCtx, PrimaryExprArrayLit, *arrayLit);
     }
-    else if (Identifier::peek(parseCtx.curTok)) {
+    else if (Identifier::peek(parseCtx.tok())) {
         Identifier * identifier = Identifier::parse(parseCtx);
         WC_GUARD(identifier, nullptr);
         return WC_NEW_AST_NODE(parseCtx, PrimaryExprIdentifier, *identifier);
     }
-    else if (ReadnumExpr::peek(parseCtx.curTok)) {
+    else if (ReadnumExpr::peek(parseCtx.tok())) {
         ReadnumExpr * expr = ReadnumExpr::parse(parseCtx);
         WC_GUARD(expr, nullptr);
         return WC_NEW_AST_NODE(parseCtx, PrimaryExprReadnum, *expr);
     }
-    else if (TimeExpr::peek(parseCtx.curTok)) {
+    else if (TimeExpr::peek(parseCtx.tok())) {
         TimeExpr * expr = TimeExpr::parse(parseCtx);
         WC_GUARD(expr, nullptr);
         return WC_NEW_AST_NODE(parseCtx, PrimaryExprTime, *expr);
     }
-    else if (RandExpr::peek(parseCtx.curTok)) {
+    else if (RandExpr::peek(parseCtx.tok())) {
         RandExpr * expr = RandExpr::parse(parseCtx);
         WC_GUARD(expr, nullptr);
         return WC_NEW_AST_NODE(parseCtx, PrimaryExprRandExpr, *expr);

@@ -23,7 +23,7 @@ TernaryExpr * TernaryExpr::parse(ParseCtx & parseCtx) {
     WC_GUARD(firstExpr, nullptr);
     
     // See if a '?' follows:
-    if (parseCtx.curTok->type == TokenType::kQMark) {
+    if (parseCtx.tok()->type == TokenType::kQMark) {
         // Alright, consume that '?':
         parseCtx.nextTok();
         
@@ -32,7 +32,7 @@ TernaryExpr * TernaryExpr::parse(ParseCtx & parseCtx) {
         WC_GUARD(trueExpr, nullptr);
         
         // Expect a colon to separate 'true' from false:
-        if (parseCtx.curTok->type != TokenType::kColon) {
+        if (parseCtx.tok()->type != TokenType::kColon) {
             parseCtx.error("Expected ':' following 'true' value in ternary expression.");
             return nullptr;
         }

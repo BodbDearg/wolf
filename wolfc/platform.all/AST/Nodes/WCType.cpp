@@ -28,9 +28,9 @@ bool Type::peek(const Token * currentToken) {
 
 Type * Type::parse(ParseCtx & parseCtx) {
     // See if there is an array type following:
-    if (parseCtx.curTok->type == TokenType::kLBrack) {
+    if (parseCtx.tok()->type == TokenType::kLBrack) {
         // Array type ahead: skip the '['
-        const Token * startToken = parseCtx.curTok;
+        const Token * startToken = parseCtx.tok();
         parseCtx.nextTok();
         
         // Parse the inner assign expression for the array size:
@@ -38,7 +38,7 @@ Type * Type::parse(ParseCtx & parseCtx) {
         WC_GUARD(arraySizeExpr, nullptr);
         
         // Expect a ']' next:
-        if (parseCtx.curTok->type != TokenType::kRBrack) {
+        if (parseCtx.tok()->type != TokenType::kRBrack) {
             parseCtx.error("Expected ']' to close array size specifier!");
             return nullptr;
         }

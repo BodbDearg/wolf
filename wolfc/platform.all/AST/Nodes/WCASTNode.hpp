@@ -15,11 +15,12 @@ WC_AST_BEGIN_NAMESPACE
 
 class Func;
 class Module;
+class ParseCtx;
 class Scope;
 
 /* Macro for allocating an AST tree node */
 #define WC_NEW_AST_NODE(parseCtx, NodeType, ...)\
-    new(parseCtx.alloc.allocSizeOf<NodeType>()) NodeType(__VA_ARGS__)
+    new(parseCtx.getAlloc().allocSizeOf<NodeType>()) NodeType(__VA_ARGS__)
 
 /* Abstract base class for all AST nodes. */
 class ASTNode {

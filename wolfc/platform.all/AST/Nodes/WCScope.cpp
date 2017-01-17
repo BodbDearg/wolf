@@ -12,12 +12,12 @@ WC_AST_BEGIN_NAMESPACE
 
 Scope * Scope::parse(ParseCtx & parseCtx) {
     // Save start token:
-    const Token * startToken = parseCtx.curTok;
+    const Token * startToken = parseCtx.tok();
     
     // Parse all statements we can:
     std::vector<Stmnt*> stmnts;
     
-    while (Stmnt::peek(parseCtx.curTok)) {
+    while (Stmnt::peek(parseCtx.tok())) {
         Stmnt * stmnt = Stmnt::parse(parseCtx);
         WC_GUARD(stmnt, nullptr);
         stmnts.push_back(stmnt);

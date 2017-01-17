@@ -15,15 +15,15 @@ bool AssertStmnt::peek(const Token * tokenPtr) {
 }
 
 AssertStmnt * AssertStmnt::parse(ParseCtx & parseCtx) {
-    if (parseCtx.curTok->type != TokenType::kAssert) {
+    if (parseCtx.tok()->type != TokenType::kAssert) {
         parseCtx.error("Expected keyword 'assert' for 'assert()' statement!");
         return nullptr;
     }
     
-    const Token * assertTok = parseCtx.curTok;
+    const Token * assertTok = parseCtx.tok();
     parseCtx.nextTok();     // Consume 'assert'
     
-    if (parseCtx.curTok->type != TokenType::kLParen) {
+    if (parseCtx.tok()->type != TokenType::kLParen) {
         parseCtx.error("Expected '(' following 'assert'!");
         return nullptr;
     }
@@ -35,13 +35,13 @@ AssertStmnt * AssertStmnt::parse(ParseCtx & parseCtx) {
     WC_GUARD(assignExpr, nullptr);
     
     // Expect ')' following all that:
-    if (parseCtx.curTok->type != TokenType::kRParen) {
+    if (parseCtx.tok()->type != TokenType::kRParen) {
         parseCtx.error("Expected closing ')' for 'assert()' statement!");
         return nullptr;
     }
     
     // Consume closing ')' and return parsed expression
-    const Token * closingParenTok = parseCtx.curTok;
+    const Token * closingParenTok = parseCtx.tok();
     parseCtx.nextTok();
     
     // Create and return the print statement

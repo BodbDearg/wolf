@@ -26,13 +26,13 @@ bool CastExpr::peek(const Token * currentToken) {
 
 CastExpr * CastExpr::parse(ParseCtx & parseCtx) {
     // See if 'cast' follows:
-    if (parseCtx.curTok->type == TokenType::kCast) {
+    if (parseCtx.tok()->type == TokenType::kCast) {
         // Casting expression: skip 'cast'
-        const Token * startToken = parseCtx.curTok;
+        const Token * startToken = parseCtx.tok();
         parseCtx.nextTok();
         
         // Expect opening '('
-        if (parseCtx.curTok->type != TokenType::kLParen) {
+        if (parseCtx.tok()->type != TokenType::kLParen) {
             parseCtx.error("Expect '(' following 'cast' for 'cast()' operator!");
             return nullptr;
         }
@@ -45,7 +45,7 @@ CastExpr * CastExpr::parse(ParseCtx & parseCtx) {
         WC_GUARD(expr, nullptr);
         
         // Expect keyword 'to':
-        if (parseCtx.curTok->type != TokenType::kTo) {
+        if (parseCtx.tok()->type != TokenType::kTo) {
             parseCtx.error("Expecting keyword 'to' following the expression to cast inside 'cast()' operator!");
             return nullptr;
         }
@@ -58,13 +58,13 @@ CastExpr * CastExpr::parse(ParseCtx & parseCtx) {
         WC_GUARD(type, nullptr);
         
         // Expect closing ')'
-        if (parseCtx.curTok->type != TokenType::kRParen) {
+        if (parseCtx.tok()->type != TokenType::kRParen) {
             parseCtx.error("Expecting closing ')' for 'cast()' operator!");
             return nullptr;
         }
         
         // Skip ')'
-        const Token * endToken = parseCtx.curTok;
+        const Token * endToken = parseCtx.tok();
         parseCtx.nextTok();
         
         // Return the parsed node:

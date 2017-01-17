@@ -20,13 +20,13 @@ bool IfStmnt::peek(const Token * tokenPtr) {
 
 IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'if' or 'unless' keyword
-    if (!peek(parseCtx.curTok)) {
+    if (!peek(parseCtx.tok())) {
         parseCtx.error("If statement expected!");
         return nullptr;
     }
     
     // Skip the 'if' or 'unless' token and save location
-    const Token * startToken = parseCtx.curTok;
+    const Token * startToken = parseCtx.tok();
     parseCtx.nextTok();
     
     // Parse the if condition:
@@ -37,7 +37,7 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
     // to be on the same line as the enclosing if statement:
     bool thenScopeRequiresNL = true;
     
-    if (parseCtx.curTok->type == TokenType::kThen) {
+    if (parseCtx.tok()->type == TokenType::kThen) {
         // Found a 'then' token, skip it. The 'then' scope is allowed to be on the same line
         parseCtx.nextTok();
         thenScopeRequiresNL = false;
@@ -64,7 +64,7 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
     // 2 - 'or if' for an chained 'elseif' type statement
     // 3 - 'else' for an 'if' statement with an else block
     //
-    if (parseCtx.curTok->type == TokenType::kElse) {
+    if (parseCtx.tok()->type == TokenType::kElse) {
         // (3) if statement with an else, skip the 'else' token.
         parseCtx.nextTok();
         
@@ -73,13 +73,13 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
         WC_GUARD(elseScope, nullptr);
         
         // Else block should be terminated by an 'end' token:
-        if (parseCtx.curTok->type != TokenType::kEnd) {
+        if (parseCtx.tok()->type != TokenType::kEnd) {
             parseCtx.error("'end' expected to terminate 'else' block!");
             return nullptr;
         }
         
         // Skip 'end' token and save location
-        const Token * endToken = parseCtx.curTok;
+        const Token * endToken = parseCtx.tok();
         parseCtx.nextTok();
         
         // Done, return the parsed statement:
@@ -91,7 +91,7 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
                                *startToken,
                                *endToken);
     }
-    else if (parseCtx.curTok->type == TokenType::kOr) {
+    else if (parseCtx.tok()->type == TokenType::kOr) {
         // (2) if statement with an 'or if' chained if statement, skip the 'or' token.
         parseCtx.nextTok();
         
@@ -109,13 +109,13 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
     }
     else {
         // (1) 'if then' type statement: expect closing 'end'
-        if (parseCtx.curTok->type != TokenType::kEnd) {
+        if (parseCtx.tok()->type != TokenType::kEnd) {
             parseCtx.error("'end' expected to terminate 'if' block!");
             return nullptr;
         }
         
         // Skip 'end' token and save location
-        const Token * endToken = parseCtx.curTok;
+        const Token * endToken = parseCtx.tok();
         parseCtx.nextTok();
         
         // Done, return the parsed statement

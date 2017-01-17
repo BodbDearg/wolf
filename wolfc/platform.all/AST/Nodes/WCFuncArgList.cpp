@@ -20,7 +20,7 @@ FuncArgList * FuncArgList::parse(ParseCtx & parseCtx) {
     WC_GUARD(arg, nullptr);
     
     // See if a comma follows (more args)
-    if (parseCtx.curTok->type == TokenType::kComma) {
+    if (parseCtx.tok()->type == TokenType::kComma) {
         // Arg list with 2 or more args, consume the ',':
         parseCtx.nextTok();
         

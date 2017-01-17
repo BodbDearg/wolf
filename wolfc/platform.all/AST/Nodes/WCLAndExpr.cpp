@@ -22,7 +22,7 @@ LAndExpr * LAndExpr::parse(ParseCtx & parseCtx) {
     WC_GUARD(leftExpr, nullptr);
     
     // See if there is an 'and' for logical and
-    if (parseCtx.curTok->type == TokenType::kAnd) {
+    if (parseCtx.tok()->type == TokenType::kAnd) {
         // And expression with and. Skip the 'and'
         parseCtx.nextTok();
         

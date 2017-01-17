@@ -20,12 +20,12 @@ bool BoolLit::peek(const Token * tokenPtr) {
 }
 
 BoolLit * BoolLit::parse(ParseCtx & parseCtx) {
-    if (!peek(parseCtx.curTok)) {
+    if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected 'bool' literal!");
         return nullptr;
     }
     
-    BoolLit * boolLit = WC_NEW_AST_NODE(parseCtx, BoolLit, *parseCtx.curTok);
+    BoolLit * boolLit = WC_NEW_AST_NODE(parseCtx, BoolLit, *parseCtx.tok());
     parseCtx.nextTok();
     return boolLit;
 }

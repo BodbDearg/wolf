@@ -22,8 +22,8 @@ LOrExpr * LOrExpr::parse(ParseCtx & parseCtx) {
     WC_GUARD(andExpr, nullptr);
     
     // See if there is an 'or' for logical or:
-    if (parseCtx.curTok->type == TokenType::kOr) {
-        TokenType nextTokType = parseCtx.curTok[1].type;
+    if (parseCtx.tok()->type == TokenType::kOr) {
+        TokenType nextTokType = parseCtx.tok()[1].type;
 
         // Note: do not parse if we find 'or if' or 'or unless' since those are block
         // terminators for a 'if / or if / else' chain

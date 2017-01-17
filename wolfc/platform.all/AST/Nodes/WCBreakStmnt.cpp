@@ -19,19 +19,19 @@ bool BreakStmnt::peek(const Token * tokenPtr) {
 
 BreakStmnt * BreakStmnt::parse(ParseCtx & parseCtx) {
     // Check the basics
-    if (!peek(parseCtx.curTok)) {
+    if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected break statement!");
         return nullptr;
     }
     
     // Consume 'break' and save token for later:
-    const Token * breakTok = parseCtx.curTok;
+    const Token * breakTok = parseCtx.tok();
     parseCtx.nextTok();
     
     // See whether 'if' or 'unless' follow, in which case the 'break' statement is conditional:
-    if (parseCtx.curTok->type == TokenType::kIf || parseCtx.curTok->type == TokenType::kUnless) {
+    if (parseCtx.tok()->type == TokenType::kIf || parseCtx.tok()->type == TokenType::kUnless) {
         // Parse the condition token:
-        const Token * condTok = parseCtx.curTok;
+        const Token * condTok = parseCtx.tok();
         parseCtx.nextTok();
         
         // Parse the condition assign expression:

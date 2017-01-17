@@ -20,15 +20,15 @@ bool RandExpr::peek(const Token * tokenPtr) {
 }
 
 RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
-    TokenType tokType = parseCtx.curTok->type;
+    TokenType tokType = parseCtx.tok()->type;
     
     if (tokType == TokenType::kRand) {
         // rand() call: consume 'rand' and save start token
-        const Token * startToken = parseCtx.curTok;
+        const Token * startToken = parseCtx.tok();
         parseCtx.nextTok();
         
         // Expect '('
-        if (parseCtx.curTok->type != TokenType::kLParen) {
+        if (parseCtx.tok()->type != TokenType::kLParen) {
             parseCtx.error("Expect '(' following 'rand'!");
             return nullptr;
         }
@@ -36,23 +36,23 @@ RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
         parseCtx.nextTok();     // Consume '('
         
         // Expect ')'
-        if (parseCtx.curTok->type != TokenType::kRParen) {
+        if (parseCtx.tok()->type != TokenType::kRParen) {
             parseCtx.error("Expect ')' following 'rand('!");
             return nullptr;
         }
         
         // Consume ')', save end token and then return parsed node
-        const Token * endToken = parseCtx.curTok;
+        const Token * endToken = parseCtx.tok();
         parseCtx.nextTok();
         return WC_NEW_AST_NODE(parseCtx, RandExprRand, *startToken, *endToken);
     }
     else if (tokType == TokenType::kSRand) {
         // srand() call: consume 'srand' and save start token
-        const Token * startToken = parseCtx.curTok;
+        const Token * startToken = parseCtx.tok();
         parseCtx.nextTok();
         
         // Expect '('
-        if (parseCtx.curTok->type != TokenType::kLParen) {
+        if (parseCtx.tok()->type != TokenType::kLParen) {
             parseCtx.error("Expect '(' following 'srand'!");
             return nullptr;
         }
@@ -64,13 +64,13 @@ RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
         WC_GUARD(seedExpr, nullptr);
         
         // Expect ')'
-        if (parseCtx.curTok->type != TokenType::kRParen) {
+        if (parseCtx.tok()->type != TokenType::kRParen) {
             parseCtx.error("Expect ')' to close 'srand()' call!");
             return nullptr;
         }
         
         // Consume ')', save end token and then return parsed node
-        const Token * endToken = parseCtx.curTok;
+        const Token * endToken = parseCtx.tok();
         parseCtx.nextTok();
         return WC_NEW_AST_NODE(parseCtx, RandExprSRand, *startToken, *seedExpr, *endToken);
     }

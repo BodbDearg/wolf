@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Lexer/WCToken.hpp"
+#include "WCAssert.hpp"
 #include "WCMacros.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -16,36 +17,39 @@ struct Token;
 
 WC_AST_BEGIN_NAMESPACE
 
-/* Struct holding the current context for parsing */
-struct ParseCtx {
-    /* The current token we are on. Incremented as parsing happens. */
-    const Token * curTok;
-    
-    /* A linear allocator that can be used during parsing. Used to allocate AST nodes */
-    LinearAlloc & alloc;
-    
-    /* A list of error messages emitted during parsing */
-    std::vector<std::string> errorMsgs;
-    
-    /* A list of warning messages emitted during parsing */
-    std::vector<std::string> warningMsgs;
-    
+/* Class holding the current context for parsing */
+class ParseCtx {
+public:
     /* Creates the parse context */
-    ParseCtx(const Token * startToken, LinearAlloc & linearAlloc) :
-        curTok(startToken),
-        alloc(linearAlloc)
-    {
-        WC_EMPTY_FUNC_BODY();
+    ParseCtx(const Token * startToken, LinearAlloc & linearAlloc);
+    
+    /**
+     * Get the pointer to the current token we are on.
+     * Note that subsequent tokens can be accessed using array indexing if lookahead is required, 
+     * since the tokens are stored in a regular C style array.
+     */
+    inline const Token * tok() {
+        return mCurrentToken;
     }
     
-    /* Skip onto the next token */
+    /* Skip onto the next token. Will not move past the current token if we are on EOF */
     inline void nextTok() {
-        ++curTok;
+        if (mCurrentToken->type != TokenType::kEOF) {
+            ++mCurrentToken;
+        }
     }
     
     /* Skip 'N' tokens */
     inline void nextToks(size_t count) {
-        curTok += count;
+        while (count > 0) {
+            nextTok();
+            --count;
+        }
+    }
+    
+    /* Get the liner allocator for the parse context */
+    inline LinearAlloc & getAlloc() {
+        return mLinearAlloc;
     }
     
     /* Tells if there are errors in the parse context */
@@ -79,6 +83,19 @@ struct ParseCtx {
     void warning(const Token & atToken, const char * msgFmtStr, ...);
     void warning(const char * msgFmtStr, std::va_list msgFmtStrArgs);
     void warning(const Token & atToken, const char * msgFmtStr, std::va_list msgFmtStrArgs);
+    
+private:
+    /* The current token we are on. Incremented as parsing happens. */
+    const Token * mCurrentToken;
+    
+    /* A linear allocator that can be used during parsing. Used to allocate AST nodes */
+    LinearAlloc & mLinearAlloc;
+    
+    /* A list of error messages emitted during parsing */
+    std::vector<std::string> errorMsgs;
+    
+    /* A list of warning messages emitted during parsing */
+    std::vector<std::string> warningMsgs;
 };
 
 WC_AST_END_NAMESPACE

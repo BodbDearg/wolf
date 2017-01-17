@@ -23,7 +23,7 @@ ArrayLitExprs * ArrayLitExprs::parse(ParseCtx & parseCtx) {
     WC_GUARD(expr, nullptr);
     
     // See if a comma follows (more args)
-    if (parseCtx.curTok->type == TokenType::kComma) {
+    if (parseCtx.tok()->type == TokenType::kComma) {
         // Expression list with 2 or more expressions, consume the ',':
         parseCtx.nextTok();
         

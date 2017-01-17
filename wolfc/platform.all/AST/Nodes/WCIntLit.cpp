@@ -15,12 +15,12 @@ bool IntLit::peek(const Token * tokenPtr) {
 }
 
 IntLit * IntLit::parse(ParseCtx & parseCtx) {
-    if (!peek(parseCtx.curTok)) {
+    if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected integer literal!");
         return nullptr;
     }
     
-    IntLit * intLit = WC_NEW_AST_NODE(parseCtx, IntLit, *parseCtx.curTok);
+    IntLit * intLit = WC_NEW_AST_NODE(parseCtx, IntLit, *parseCtx.tok());
     parseCtx.nextTok();
     return intLit;
 }

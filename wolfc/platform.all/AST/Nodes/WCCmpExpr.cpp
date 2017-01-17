@@ -38,7 +38,7 @@ CmpExpr * CmpExpr::parse(ParseCtx & parseCtx) {
             return WC_NEW_AST_NODE(parseCtx, ASTNodeType, *leftExpr, *rightExpr);\
         }
 
-    TokenType nextTokType = parseCtx.curTok->type;
+    TokenType nextTokType = parseCtx.tok()->type;
     
     switch (nextTokType) {
         PARSE_OP(TokenType::kCmpEQ, CmpExprEQ)  // ==
@@ -61,7 +61,7 @@ CmpExpr * CmpExpr::parse(ParseCtx & parseCtx) {
         // See if 'not' follows, if it does then it inverses the comparison:
         bool cmpNotEq = false;
         
-        if (parseCtx.curTok->type == TokenType::kNot) {
+        if (parseCtx.tok()->type == TokenType::kNot) {
             cmpNotEq = true;
             parseCtx.nextTok();
         }

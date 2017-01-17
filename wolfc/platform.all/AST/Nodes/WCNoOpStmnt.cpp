@@ -12,13 +12,13 @@ bool NoOpStmnt::peek(const Token * tokenPtr) {
 
 NoOpStmnt * NoOpStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'noop'
-    if (parseCtx.curTok->type != TokenType::kNoOp) {
+    if (parseCtx.tok()->type != TokenType::kNoOp) {
         parseCtx.error("'noop' statement expected!");
         return nullptr;
     }
     
     // Consume and save the token and return the parsed statement
-    const Token * startToken = parseCtx.curTok;
+    const Token * startToken = parseCtx.tok();
     parseCtx.nextTok();
     return WC_NEW_AST_NODE(parseCtx, NoOpStmnt, *startToken);
 }

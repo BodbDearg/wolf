@@ -17,13 +17,13 @@ bool WhileStmnt::peek(const Token * tokenPtr) {
 
 WhileStmnt * WhileStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'while' or 'until' keyword
-    if (!peek(parseCtx.curTok)) {
+    if (!peek(parseCtx.tok())) {
         parseCtx.error("While statement expected!");
         return nullptr;
     }
     
     // Skip the 'while' or 'until' token and save location
-    const Token * startToken = parseCtx.curTok;
+    const Token * startToken = parseCtx.tok();
     parseCtx.nextTok();
     
     // Parse the while expression (while condition):
@@ -34,7 +34,7 @@ WhileStmnt * WhileStmnt::parse(ParseCtx & parseCtx) {
     // to be on the same line as the enclosing while statement:
     bool bodyScopeRequiresNL = true;
     
-    if (parseCtx.curTok->type == TokenType::kDo) {
+    if (parseCtx.tok()->type == TokenType::kDo) {
         // Found a 'do' token, skip it. The body scope is allowed to be on the same line
         parseCtx.nextTok();
         bodyScopeRequiresNL = false;
@@ -56,13 +56,13 @@ WhileStmnt * WhileStmnt::parse(ParseCtx & parseCtx) {
     }
     
     // While block should be terminated by an 'end' token:
-    if (parseCtx.curTok->type != TokenType::kEnd) {
+    if (parseCtx.tok()->type != TokenType::kEnd) {
         parseCtx.error("'end' expected to terminate 'while/until' block!");
         return nullptr;
     }
     
     // Skip 'end' token and save location
-    const Token * endToken = parseCtx.curTok;
+    const Token * endToken = parseCtx.tok();
     parseCtx.nextTok();
     
     // Done: return the parsed statement

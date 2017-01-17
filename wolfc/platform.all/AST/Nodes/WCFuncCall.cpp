@@ -16,31 +16,31 @@ bool FuncCall::peek(const Token * currentToken) {
 
 FuncCall * FuncCall::parse(ParseCtx & parseCtx) {
     // Must open with '('
-    if (parseCtx.curTok->type != TokenType::kLParen) {
+    if (parseCtx.tok()->type != TokenType::kLParen) {
         parseCtx.error("Expected '(' !");
         return nullptr;
     }
     
     // Save and skip '('
-    const Token * startToken = parseCtx.curTok;
+    const Token * startToken = parseCtx.tok();
     parseCtx.nextTok();
     
     // See if there is an arg list:
     FuncCallArgList * argList = nullptr;
     
-    if (FuncCallArgList::peek(parseCtx.curTok)) {
+    if (FuncCallArgList::peek(parseCtx.tok())) {
         argList = FuncCallArgList::parse(parseCtx);
         WC_GUARD(argList, nullptr);
     }
     
     // Expect ')'
-    if (parseCtx.curTok->type != TokenType::kRParen) {
+    if (parseCtx.tok()->type != TokenType::kRParen) {
         parseCtx.error("Expected ')' !");
         return nullptr;
     }
     
     // Save and skip ')'
-    const Token * endToken = parseCtx.curTok;
+    const Token * endToken = parseCtx.tok();
     parseCtx.nextTok();
     
     // No args:

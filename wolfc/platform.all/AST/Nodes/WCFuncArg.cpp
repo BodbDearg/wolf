@@ -22,7 +22,7 @@ FuncArg * FuncArg::parse(ParseCtx & parseCtx) {
     WC_GUARD(ident, nullptr);
     
     // Expect ':' following the identifier
-    if (parseCtx.curTok->type != TokenType::kColon) {
+    if (parseCtx.tok()->type != TokenType::kColon) {
         parseCtx.error("expect ':' following argument name for function argument!");
         return nullptr;
     }

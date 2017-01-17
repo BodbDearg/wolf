@@ -5,6 +5,13 @@
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
+ParseCtx::ParseCtx(const Token * startToken, LinearAlloc & linearAlloc) :
+    mCurrentToken(startToken),
+    mLinearAlloc(linearAlloc)
+{
+    WC_ASSERT(mCurrentToken);
+}
+
 bool ParseCtx::hasErrors() const {
     return !errorMsgs.empty();
 }
@@ -28,8 +35,7 @@ void ParseCtx::error(const Token & atToken, const char * msgFmtStr, ...) {
 }
 
 void ParseCtx::error(const char * msgFmtStr, std::va_list msgFmtStrArgs) {
-    WC_ASSERT(curTok);
-    error(*curTok, msgFmtStr, msgFmtStrArgs);
+    error(*mCurrentToken, msgFmtStr, msgFmtStrArgs);
 }
 
 void ParseCtx::error(const Token & atToken, const char * msgFmtStr, std::va_list msgFmtStrArgs) {
@@ -74,8 +80,7 @@ void ParseCtx::warning(const Token & atToken, const char * msgFmtStr, ...) {
 }
 
 void ParseCtx::warning(const char * msgFmtStr, std::va_list msgFmtStrArgs) {
-    WC_ASSERT(curTok);
-    warning(*curTok, msgFmtStr, msgFmtStrArgs);
+    warning(*mCurrentToken, msgFmtStr, msgFmtStrArgs);
 }
 
 void ParseCtx::warning(const Token & atToken, const char * msgFmtStr, std::va_list msgFmtStrArgs) {

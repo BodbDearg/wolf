@@ -26,13 +26,13 @@ bool LoopStmnt::peek(const Token * tokenPtr) {
 
 LoopStmnt * LoopStmnt::parse(ParseCtx & parseCtx) {
     // Parse the initial 'loop' keyword
-    if (!peek(parseCtx.curTok)) {
+    if (!peek(parseCtx.tok())) {
         parseCtx.error("'loop' statement expected!");
         return nullptr;
     }
     
     // Skip the 'loop' token and save location
-    const Token * startToken = parseCtx.curTok;
+    const Token * startToken = parseCtx.tok();
     parseCtx.nextTok();
     
     // Parse the body scope:
@@ -40,12 +40,12 @@ LoopStmnt * LoopStmnt::parse(ParseCtx & parseCtx) {
     WC_GUARD(bodyScope, nullptr);
     
     // See if the current token is 'repeat', if it is then we have a loop/repeat statement
-    if (parseCtx.curTok->type == TokenType::kRepeat) {
+    if (parseCtx.tok()->type == TokenType::kRepeat) {
         // Loop block with a condition. Skip the 'repeat' token...
         parseCtx.nextTok();
         
         // Now grab the condition typpe Save the condition type (while/until) and skip this token..
-        const Token * condTypeToken = parseCtx.curTok;
+        const Token * condTypeToken = parseCtx.tok();
         parseCtx.nextTok();
         
         if (condTypeToken->type != TokenType::kWhile && condTypeToken->type != TokenType::kUntil) {
@@ -67,13 +67,13 @@ LoopStmnt * LoopStmnt::parse(ParseCtx & parseCtx) {
     }
     else {
         // Conditionless loop block: should be terminated by an 'end' token:
-        if (parseCtx.curTok->type != TokenType::kEnd) {
+        if (parseCtx.tok()->type != TokenType::kEnd) {
             parseCtx.error("'end' expected to terminate 'loop' block!");
             return nullptr;
         }
         
         // Skip 'end' token and save location
-        const Token * endToken = parseCtx.curTok;
+        const Token * endToken = parseCtx.tok();
         parseCtx.nextTok();
         
         // Done: return the parsed statement

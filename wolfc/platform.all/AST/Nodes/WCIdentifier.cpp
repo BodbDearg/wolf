@@ -17,12 +17,12 @@ bool Identifier::peek(const Token * tokenPtr) {
 }
 
 Identifier * Identifier::parse(ParseCtx & parseCtx) {
-    if (parseCtx.curTok->type != TokenType::kIdentifier) {
+    if (parseCtx.tok()->type != TokenType::kIdentifier) {
         parseCtx.error("Expected identifier!");
         return nullptr;
     }
     
-    Identifier * intLit = WC_NEW_AST_NODE(parseCtx, Identifier, *parseCtx.curTok);
+    Identifier * intLit = WC_NEW_AST_NODE(parseCtx, Identifier, *parseCtx.tok());
     parseCtx.nextTok();
     return intLit;
 }

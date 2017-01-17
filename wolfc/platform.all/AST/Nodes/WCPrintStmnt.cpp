@@ -15,15 +15,15 @@ bool PrintStmnt::peek(const Token * tokenPtr) {
 }
 
 PrintStmnt * PrintStmnt::parse(ParseCtx & parseCtx) {
-    if (parseCtx.curTok->type != TokenType::kPrint) {
+    if (parseCtx.tok()->type != TokenType::kPrint) {
         parseCtx.error("Expected keyword 'print' for 'print()' statement!");
         return nullptr;
     }
     
-    const Token * printTok = parseCtx.curTok;
+    const Token * printTok = parseCtx.tok();
     parseCtx.nextTok();     // Consume 'print'
     
-    if (parseCtx.curTok->type != TokenType::kLParen) {
+    if (parseCtx.tok()->type != TokenType::kLParen) {
         parseCtx.error("Expected '(' following 'print'!");
         return nullptr;
     }
@@ -35,13 +35,13 @@ PrintStmnt * PrintStmnt::parse(ParseCtx & parseCtx) {
     WC_GUARD(assignExpr, nullptr);
     
     // Expect ')' following all that:
-    if (parseCtx.curTok->type != TokenType::kRParen) {
+    if (parseCtx.tok()->type != TokenType::kRParen) {
         parseCtx.error("Expected closing ')' for 'print()' statement!");
         return nullptr;
     }
     
     // Consume closing ')' and return parsed expression
-    const Token * closingParenTok = parseCtx.curTok;
+    const Token * closingParenTok = parseCtx.tok();
     parseCtx.nextTok();
     
     // Create and return the print statement

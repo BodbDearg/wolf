@@ -32,7 +32,7 @@ ShiftExpr * ShiftExpr::parse(ParseCtx & parseCtx) {
             return WC_NEW_AST_NODE(parseCtx, ASTNodeType, *leftExpr, *rightExpr);\
         }
 
-    switch (parseCtx.curTok->type) {
+    switch (parseCtx.tok()->type) {
         PARSE_OP(TokenType::kLShift, ShiftExprLShift)       // <<
         PARSE_OP(TokenType::kARShift, ShiftExprARShift)     // >>
         PARSE_OP(TokenType::kLRShift, ShiftExprLRShift)     // >>>

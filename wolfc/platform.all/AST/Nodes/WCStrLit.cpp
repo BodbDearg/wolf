@@ -14,12 +14,12 @@ bool StrLit::peek(const Token * tokenPtr) {
 }
 
 StrLit * StrLit::parse(ParseCtx & parseCtx) {
-    if (!peek(parseCtx.curTok)) {
+    if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected string literal!");
         return nullptr;
     }
     
-    StrLit * intLit = WC_NEW_AST_NODE(parseCtx, StrLit, *parseCtx.curTok);
+    StrLit * intLit = WC_NEW_AST_NODE(parseCtx, StrLit, *parseCtx.tok());
     parseCtx.nextTok();
     return intLit;
 }

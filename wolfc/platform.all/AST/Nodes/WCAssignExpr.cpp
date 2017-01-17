@@ -32,7 +32,7 @@ AssignExpr * AssignExpr::parse(ParseCtx & parseCtx) {
             return WC_NEW_AST_NODE(parseCtx, ASTNodeType, *leftExpr, *rightExpr);\
         }
 
-    switch (parseCtx.curTok->type) {
+    switch (parseCtx.tok()->type) {
         PARSE_OP(TokenType::kAssign, AssignExprAssign)                  // =
         PARSE_OP(TokenType::kAssignBOr, AssignExprAssignBOr)            // |=
         PARSE_OP(TokenType::kAssignBXor, AssignExprAssignBXor)          // ^=

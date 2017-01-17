@@ -14,13 +14,13 @@ bool PrimitiveType::peek(const Token * currentToken) {
 
 PrimitiveType * PrimitiveType::parse(ParseCtx & parseCtx) {
     // Must be a valid token ahead
-    if (!peek(parseCtx.curTok)) {
+    if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected primitive data type!");
         return nullptr;
     }
     
     // Save the token and skip
-    const Token * token = parseCtx.curTok;
+    const Token * token = parseCtx.tok();
     parseCtx.nextTok();
 
     // Return the node:
