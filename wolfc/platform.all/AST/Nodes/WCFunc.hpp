@@ -1,10 +1,5 @@
 #pragma once
 
-#warning FIXME - Codegen
-#if 0
-#include "DataType/WCDataValue.hpp"
-#endif
-
 #include "WCASTNode.hpp"
 #include "WCCStrComparator.hpp"
 
@@ -13,20 +8,7 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <map>
 WC_THIRD_PARTY_INCLUDES_END
 
-#warning FIXME - Codegen
-#if 0
-namespace llvm {
-    class Type;
-    class Function;
-}
-#endif
-
 WC_BEGIN_NAMESPACE
-
-#warning FIXME - Codegen
-#if 0
-struct CodegenCtx;
-#endif
 
 class DataType;
 

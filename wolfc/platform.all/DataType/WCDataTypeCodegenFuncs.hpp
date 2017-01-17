@@ -2,22 +2,9 @@
 
 #include "WCMacros.hpp"
 
-#warning FIXME - Codegen
-#if 0
-namespace llvm {
-    class Constant;
-    class Value;
-}
-#endif
-
 WC_BEGIN_NAMESPACE
 
 class DataType;
-
-#warning FIXME - Codegen
-#if 0
-struct CodegenCtx;
-#endif
 
 namespace AST {
     class ASTNode;

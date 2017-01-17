@@ -7,22 +7,7 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <string>
 WC_THIRD_PARTY_INCLUDES_END
 
-#warning FIXME - Codegen
-#if 0
-namespace llvm {
-    class AllocaInst;
-    class Constant;
-    class Type;
-    class Value;
-}
-#endif
-
 WC_BEGIN_NAMESPACE
-
-#warning FIXME - Codegen
-#if 0
-struct CodegenCtx;
-#endif
 
 namespace AST {
     class ASTNode;

@@ -4,9 +4,6 @@
 #include "WCASTNode.hpp"
 
 WC_BEGIN_NAMESPACE
-
-struct CodegenCtx;
-
 WC_AST_BEGIN_NAMESPACE
 
 class DeclDefVisitor;

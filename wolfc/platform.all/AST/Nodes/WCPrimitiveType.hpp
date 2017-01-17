@@ -4,11 +4,6 @@
 
 WC_BEGIN_NAMESPACE
 
-#warning FIXME - Codegen
-#if 0
-struct CodegenCtx;
-#endif
-
 class DataType;
 
 WC_AST_BEGIN_NAMESPACE

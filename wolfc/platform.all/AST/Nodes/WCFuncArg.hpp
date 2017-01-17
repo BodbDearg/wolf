@@ -4,7 +4,6 @@
 
 WC_BEGIN_NAMESPACE
 
-struct CodegenCtx;
 class DataType;
 
 WC_AST_BEGIN_NAMESPACE

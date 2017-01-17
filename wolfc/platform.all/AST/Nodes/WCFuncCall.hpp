@@ -6,17 +6,7 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <vector>
 WC_THIRD_PARTY_INCLUDES_END
 
-#warning FIXME - Codegen
-#if 0
-namespace llvm {
-    class Value;
-}
-#endif
-
 WC_BEGIN_NAMESPACE
-
-struct CodegenCtx;
-
 WC_AST_BEGIN_NAMESPACE
 
 class AssignExpr;

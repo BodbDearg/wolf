@@ -3,12 +3,6 @@
 #include "WCIBasicCodegenNode.hpp"
 
 WC_BEGIN_NAMESPACE
-
-#warning FIXME - Codegen
-#if 0
-struct CodegenCtx;
-#endif
-
 WC_AST_BEGIN_NAMESPACE
 
 /* An interface that all statements must implement. */
