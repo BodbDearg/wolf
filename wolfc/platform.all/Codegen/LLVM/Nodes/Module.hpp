@@ -21,6 +21,8 @@ namespace AST {
 
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
+class CodegenCtx;
+
 /* Class responsible for generating code with LLVM for a module */
 class Module final : public AST::DeclDefVisitor {
 public:
@@ -36,6 +38,11 @@ public:
      * @pre This should only be called if wasCodeGeneratedOk() returns true.
      */
     void dumpIRCodeToStdout();
+    
+    /* Get the AST module */
+    inline AST::Module & getASTModule() const {
+        return mASTModule;
+    }
     
     /* Get the LLVM context */
     inline llvm::LLVMContext * getLLVMCtx() const {
@@ -57,9 +64,19 @@ public:
         return *mLLVMModule.get();
     }
     
+    /* Get the codegen context for this module */
+    inline CodegenCtx * getCodgenCtx() const {
+        return mCodegenCtx.get();
+    }
+    
+    inline CodegenCtx & getCodegenCtxRef() const {
+        WC_ASSERT(mCodegenCtx.get());
+        return *mCodegenCtx.get();
+    }
+    
 private:
-    /* Do the code generation for the module. Returns false if failed. */
-    bool doCodegen();
+    /* Do the code generation for the module */
+    void doCodegen();
     
     /* Do codegen for various nodes */
     virtual void visit(AST::DeclDefFunc & node) override;
@@ -76,11 +93,8 @@ private:
     /* The AST for the module */
     AST::Module & mASTModule;
     
-    /* The LLVM context */
-    std::unique_ptr<llvm::LLVMContext> mLLVMCtx;
-    
-    /* The LLVM module */
-    std::unique_ptr<llvm::Module> mLLVMModule;
+    /* The codegen context */
+    std::unique_ptr<CodegenCtx> mCodegenCtx;
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE

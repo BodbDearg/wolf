@@ -13,18 +13,15 @@ WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 Module::Module(AST::Module & astModule) :
     mASTModule(astModule)
 {
-    // Create the LLVM context. Abort if that fails (shouldn't):
+    // Create the LLVM context and module
     mLLVMCtx.reset(new llvm::LLVMContext());
-    WC_GUARD_ASSERT(mLLVMCtx.get());
-    
-    // Create the LLVM module object. Abort if that fails (shouldn't):
     mLLVMModule.reset(new llvm::Module("WolfTest", *mLLVMCtx.get()));
-    WC_GUARD_ASSERT(mLLVMModule.get());
     
-    // Do code generation, if failed then cleanup
-    if (!doCodegen()) {
-        mLLVMModule.reset();
-    }
+    // Create the codegen context
+    mCodegenCtx.reset(new CodegenCtx(getLLVMCtxRef(), getLLVMModuleRef()));
+    
+    // Do code generation
+    doCodegen();
 }
 
 Module::~Module() {
@@ -33,7 +30,7 @@ Module::~Module() {
 }
 
 bool Module::wasCodeGeneratedOk() {
-    return mLLVMModule.get() != nullptr;
+    return mLLVMModule.get() != nullptr && mCodegenCtx->errorMsgs.empty();
 }
 
 void Module::dumpIRCodeToStdout() {
@@ -41,23 +38,12 @@ void Module::dumpIRCodeToStdout() {
     mLLVMModule->dump();
 }
 
-bool Module::doCodegen() {
-    
-    // Create the codegen context and declare C standard library functions we require
-    CodegenCtx codegenCtx(getLLVMCtxRef(), getLLVMModuleRef());
+void Module::doCodegen() {
+    // Declare C standard library functions we require
     declareCStdLibFuncsInModule();
     
-    // 
-    
-    return true;
-}
-
-void Module::visit(AST::DeclDefFunc & node) {
-    
-}
-
-void Module::visit(AST::DeclDefVarDecl & node) {
-    
+    // Codegen all decldefs
+    //for (mASTModule.md)
 }
 
 void Module::declareCStdLibFuncsInModule() {
