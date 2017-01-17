@@ -15,6 +15,11 @@ namespace llvm {
 }
 
 WC_BEGIN_NAMESPACE
+
+namespace AST {
+    class ASTNode;
+}
+
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 /* Struct holding the context for code generation */
@@ -63,6 +68,12 @@ struct CodegenCtx {
     std::list<DeferredCodegenCallback> deferredCodegenCallbacks;
 #endif
     
+    /* A list of error messages emitted during parsing */
+    std::vector<std::string> errorMsgs;
+    
+    /* A list of warning messages emitted during parsing */
+    std::vector<std::string> warningMsgs;
+    
     /* Creates the codegen context using the given llvm context */
     CodegenCtx(llvm::LLVMContext & llvmCtxIn, llvm::Module & llvmModuleIn) :
         llvmCtx(llvmCtxIn),
@@ -71,6 +82,28 @@ struct CodegenCtx {
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    /* Tells if there are errors in the codegen context */
+    bool hasErrors() const;
+    
+    /* Tells if there are warnings in the codegen context */
+    bool hasWarnings() const;
+    
+    /**
+     * Emit an error message and save to the list of error messages in the codegen context.
+     * The line and column info for the error source include the range of the specified AST node.
+     *
+     * Emitting an error will put the codegen context into an error state.
+     */
+    void error(const AST::ASTNode & atNode, const char * msgFmtStr, ...);
+    void error(const AST::ASTNode & atNode, const char * msgFmtStr, std::va_list msgFmtStrArgs);
+    
+    /**
+     * Emit a warning message and save to the list of warning messages in the parse context.
+     * The line and column info for the warning source include the range of the specified AST node.
+     */
+    void warning(const AST::ASTNode & atNode, const char * msgFmtStr, ...);
+    void warning(const AST::ASTNode & atNode, const char * msgFmtStr, std::va_list msgFmtStrArgs);
     
     /* Push the current codegen basic block to the stack and save for later popping. */
     void pushInsertBlock();
