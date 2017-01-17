@@ -107,6 +107,8 @@ bool Module::generateCode() {
 }
 #endif
 
+#warning FIXME - Codegen
+#if 0
 bool Module::registerFunc(Func & func) {
     std::string funcName = func.name();
     
@@ -124,8 +126,6 @@ Func * Module::getFunc(const std::string & name) const {
     return iter->second;
 }
 
-#warning FIXME - Codegen
-#if 0
 DataValue * Module::createVar(const char * varName,
                               DataType & dataType,
                               llvm::Constant * initializer,

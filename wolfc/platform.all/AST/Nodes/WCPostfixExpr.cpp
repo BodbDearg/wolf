@@ -298,11 +298,14 @@ bool PostfixExprFuncCall::isConstExpr() {
 }
 
 DataType & PostfixExprFuncCall::dataType() {
+#warning FIXME - Codegen
+#if 0
     Func * funcCalled = lookupFuncCalled();
     
     if (funcCalled) {
         return funcCalled->returnDataType();
     }
+#endif
     
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown);
 }
@@ -434,6 +437,8 @@ const char * PostfixExprFuncCall::nameOfFuncCalled() const {
     return primaryExprIdentifier->name();
 }
 
+#warning FIXME - Codegen
+#if 0
 Func * PostfixExprFuncCall::lookupFuncCalled() const {
     // Get the function name
     const char * funcName = nameOfFuncCalled();
@@ -444,6 +449,7 @@ Func * PostfixExprFuncCall::lookupFuncCalled() const {
     WC_ASSERT(parentModule);
     return parentModule->getFunc(funcName);
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // PostfixExprArrayLookup

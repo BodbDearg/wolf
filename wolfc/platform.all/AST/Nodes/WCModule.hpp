@@ -45,6 +45,8 @@ public:
     bool generateCode();
 #endif
     
+#warning FIXME - Codegen
+#if 0
     /** 
      * Register a given function with the module.
      * Returns false on failure if the function is already registered. 
@@ -54,8 +56,6 @@ public:
     /* Lookup a module function by name. Returns nullptr if not found. */
     Func * getFunc(const std::string & name) const;
     
-#warning FIXME - Codegen
-#if 0
     /**
      * Create a variable within this scope.
      * If the variable already exists then creation fails and null is returned.
@@ -75,13 +75,13 @@ public:
     
 private:
     /* All declarations and definitions in the module/ */
-    std::vector<DeclDef*> mDeclDefs;
-    
-    /* A list of registered functions in the module. Generated during the compile phase. */
-    std::map<std::string, Func*> mFuncs;
+    const std::vector<DeclDef*> mDeclDefs;
     
 #warning FIXME - Codegen
 #if 0
+    /* A list of registered functions in the module. Generated during the compile phase. */
+    std::map<std::string, Func*> mFuncs;
+    
     /* A list of registered global variables in the module. Generated during the compile phase. */
     std::map<const char*, DataValue, CStrComparator> mVarValues;
 #endif

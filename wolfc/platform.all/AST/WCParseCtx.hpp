@@ -31,8 +31,7 @@ struct ParseCtx {
     std::vector<std::string> warningMsgs;
     
     /* Creates the parse context */
-    ParseCtx(const Token * startToken, LinearAlloc & linearAlloc)
-    :
+    ParseCtx(const Token * startToken, LinearAlloc & linearAlloc) :
         curTok(startToken),
         alloc(linearAlloc)
     {

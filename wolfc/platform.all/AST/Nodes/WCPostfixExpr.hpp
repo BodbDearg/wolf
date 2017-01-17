@@ -126,7 +126,10 @@ public:
 private:
     const char * nameOfFuncCalled() const;
     
+#warning FIXME - Codegen
+#if 0
     Func * lookupFuncCalled() const;
+#endif
     
 #warning FIXME - Codegen
 #if 0
