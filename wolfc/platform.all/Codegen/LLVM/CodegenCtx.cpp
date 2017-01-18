@@ -1,13 +1,18 @@
 #include "CodegenCtx.hpp"
 
-#if 0
-
 #include "AST/Nodes/WCASTNode.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+
+CodegenCtx::CodegenCtx() :
+    llvmCtx(),
+    irBuilder(llvmCtx)
+{
+    WC_EMPTY_FUNC_BODY();
+}
 
 void CodegenCtx::error(const AST::ASTNode & atNode, const char * msgFmtStr, ...) {
     va_list msgFmtStrArgs;
@@ -45,7 +50,7 @@ void CodegenCtx::error(const AST::ASTNode & atNode, const char * msgFmtStr, std:
     msgBuf[kMaxMsgLen - 1] = 0;
     
     // Save the message:
-    errorMsgs.push_back(msgBuf);
+    mErrorMsgs.push_back(msgBuf);
 }
 
 void CodegenCtx::warning(const AST::ASTNode & atNode, const char * msgFmtStr, ...) {
@@ -84,21 +89,20 @@ void CodegenCtx::warning(const AST::ASTNode & atNode, const char * msgFmtStr, st
     msgBuf[kMaxMsgLen - 1] = 0;
     
     // Save the message:
-    warningMsgs.push_back(msgBuf);
+    mWarningMsgs.push_back(msgBuf);
 }
 
 void CodegenCtx::pushInsertBlock() {
-    insertBlockStack.push_back(irBuilder.GetInsertBlock());
-    WC_ASSERT(insertBlockStack.back() != nullptr);
+    mInsertBlockStack.push_back(irBuilder.GetInsertBlock());
+    WC_ASSERT(mInsertBlockStack.back() != nullptr);
 }
 
 void CodegenCtx::popInsertBlock() {
-    WC_ASSERT(!insertBlockStack.empty());
-    llvm::BasicBlock * basicBlock = insertBlockStack.back();
-    insertBlockStack.pop_back();
+    WC_ASSERT(!mInsertBlockStack.empty());
+    llvm::BasicBlock * basicBlock = mInsertBlockStack.back();
+    mInsertBlockStack.pop_back();
     irBuilder.SetInsertPoint(basicBlock);
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE
 WC_END_NAMESPACE
-#endif
