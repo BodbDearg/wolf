@@ -9,11 +9,6 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <vector>
 WC_THIRD_PARTY_INCLUDES_END
 
-namespace llvm {
-    class LLVMContext;
-    class Module;
-}
-
 WC_BEGIN_NAMESPACE
 
 namespace AST {
@@ -24,14 +19,25 @@ WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 /* Class holding the context for code generation */
 class CodegenCtx {
+public:
     /* Creates the codegen context */
     CodegenCtx();
     
     /* Tells if there are errors in the codegen context */
     bool hasErrors() const;
     
+    /* Get the error messages stored in the parse context */
+    inline const auto & getErrorMsgs() const {
+        return mErrorMsgs;
+    }    
+    
     /* Tells if there are warnings in the codegen context */
     bool hasWarnings() const;
+    
+    /* Get the warning messages stored in the parse context */
+    inline const auto & getWarningMsgs() const {
+        return mWarningMsgs;
+    }    
     
     /**
      * Emit an error message and save to the list of error messages in the codegen context.

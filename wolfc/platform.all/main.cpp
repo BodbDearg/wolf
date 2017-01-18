@@ -1,6 +1,7 @@
 #include "AST/Nodes/WCModule.hpp"
 #include "Codegen/LLVM/Nodes/Module.hpp"
 #include "Codegen/LLVM/CodegenCtx.hpp"
+#include "Codegen/LLVM/Codegen.hpp"
 #include "Lexer/WCLexer.hpp"
 #include "WCFileUtils.hpp"
 #include "WCLinearAlloc.hpp"
@@ -17,8 +18,34 @@ WC_THIRD_PARTY_INCLUDES_END
 
 /* Compiles the given AST */
 static bool compileAST(const Wolfc::AST::Module * astModule, const char * fromSrcFile) {
-    // Create a codegen node for the module to generate the code:
+    // Create a codegen context
+    Wolfc::LLVMCodeGen::CodegenCtx codegenCtx;
     
+    // Do the codegen
+    Wolfc::LLVMCodeGen::Codegen codegen(codegenCtx, "WolfTest");
+    codegen.visit(*astModule);
+    
+    // Emit compile warnings to stdout if there are any
+    if (codegenCtx.hasWarnings()) {
+        std::printf("Compile warnings emitted for source file '%s'! Warning messages follow:\n", fromSrcFile);
+        
+        for (const std::string & warningMsg : codegenCtx.getWarningMsgs()) {
+            std::fprintf(stdout, "%s\n", warningMsg.c_str());
+        }
+    }
+    
+    // Emit compile errors to stderr if there are any and fail
+    if (!codegenCtx.llvmModule.get() || codegenCtx.hasErrors()) {
+        std::printf("Parsing failed for source file '%s'! Error messages follow:\n", fromSrcFile);
+        
+        for (const std::string & errorMsg : codegenCtx.getErrorMsgs()) {
+            std::fprintf(stderr, "%s\n", errorMsg.c_str());
+        }
+        
+        return false;
+    }
+    
+    #warning TODO: Dump IR code to STD out
     
     // Success!
     return true;
