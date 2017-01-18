@@ -1,5 +1,6 @@
 #include "WCAddExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssert.hpp"
 #include "WCLinearAlloc.hpp"
@@ -31,7 +32,7 @@ AddExpr * AddExpr::parse(ParseCtx & parseCtx) {
             return WC_NEW_AST_NODE(parseCtx, ASTNodeType, *leftExpr, *rightExpr);\
         }
 
-    switch (parseCtx.curTok->type) {
+    switch (parseCtx.tok()->type) {
         PARSE_OP(TokenType::kPlus, AddExprAdd)      // +
         PARSE_OP(TokenType::kMinus, AddExprSub)     // -
         PARSE_OP(TokenType::kVBar, AddExprBOr)      // |
@@ -52,6 +53,10 @@ AddExpr * AddExpr::parse(ParseCtx & parseCtx) {
 //-----------------------------------------------------------------------------
 AddExprNoOp::AddExprNoOp(MulExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
+}
+
+void AddExprNoOp::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & AddExprNoOp::getStartToken() const {
@@ -190,6 +195,10 @@ AddExprAdd::AddExprAdd(MulExpr & leftExpr, AddExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
+void AddExprAdd::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // AddExprSub
 //-----------------------------------------------------------------------------
@@ -203,6 +212,10 @@ AddExprSub::AddExprSub(MulExpr & leftExpr, AddExpr & rightExpr) :
                   )
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void AddExprSub::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 //-----------------------------------------------------------------------------
@@ -220,6 +233,10 @@ AddExprBOr::AddExprBOr(MulExpr & leftExpr, AddExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
+void AddExprBOr::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // AddExprBXor
 //-----------------------------------------------------------------------------
@@ -233,6 +250,10 @@ AddExprBXor::AddExprBXor(MulExpr & leftExpr, AddExpr & rightExpr) :
                   )
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void AddExprBXor::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 WC_AST_END_NAMESPACE

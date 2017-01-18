@@ -1,5 +1,7 @@
 #pragma once
 
+#if 0
+
 #include "AST/Nodes/WCDeclDef.hpp"
 #include "WCAssert.hpp"
 #include "WCMacros.hpp"
@@ -99,3 +101,5 @@ private:
 
 WC_LLVM_CODEGEN_END_NAMESPACE
 WC_END_NAMESPACE
+
+#endif

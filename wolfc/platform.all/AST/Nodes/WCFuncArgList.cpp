@@ -1,5 +1,6 @@
 #include "WCFuncArgList.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "WCFuncArg.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
@@ -43,6 +44,10 @@ FuncArgListSingle::FuncArgListSingle(FuncArg & arg) : mArg(arg) {
     mArg.mParent = this;
 }
 
+void FuncArgListSingle::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & FuncArgListSingle::getStartToken() const {
     return mArg.getStartToken();
 }
@@ -68,6 +73,10 @@ FuncArgListMulti::FuncArgListMulti(FuncArg & arg, FuncArgList & argList) :
 {
     mArg.mParent = this;
     mArgList.mParent = this;
+}
+
+void FuncArgListMulti::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & FuncArgListMulti::getStartToken() const {

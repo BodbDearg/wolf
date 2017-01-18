@@ -1,5 +1,6 @@
 #include "WCUnaryExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssignExpr.hpp"
@@ -87,6 +88,10 @@ UnaryExpr * UnaryExpr::parse(ParseCtx & parseCtx) {
 //-----------------------------------------------------------------------------
 UnaryExprPrimary::UnaryExprPrimary(PostfixExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
+}
+
+void UnaryExprPrimary::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & UnaryExprPrimary::getStartToken() const {
@@ -203,6 +208,10 @@ UnaryExprPlus::UnaryExprPlus(PostfixExpr & expr, const Token & startToken) :
     WC_EMPTY_FUNC_BODY();
 }
 
+void UnaryExprPlus::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // UnaryExprMinus
 //-----------------------------------------------------------------------------
@@ -217,6 +226,10 @@ UnaryExprMinus::UnaryExprMinus(PostfixExpr & expr, const Token & startToken) :
     WC_EMPTY_FUNC_BODY();
 }
 
+void UnaryExprMinus::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // UnaryExprParen
 //-----------------------------------------------------------------------------
@@ -226,6 +239,10 @@ UnaryExprParen::UnaryExprParen(AssignExpr & expr, const Token & startToken, cons
     mEndToken(endToken)
 {
     mExpr.mParent = this;
+}
+
+void UnaryExprParen::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & UnaryExprParen::getStartToken() const {

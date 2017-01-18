@@ -1,5 +1,6 @@
 #include "WCCmpExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAddExpr.hpp"
@@ -88,6 +89,10 @@ CmpExpr * CmpExpr::parse(ParseCtx & parseCtx) {
 //-----------------------------------------------------------------------------
 CmpExprNoOp::CmpExprNoOp(AddExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
+}
+
+void CmpExprNoOp::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & CmpExprNoOp::getStartToken() const {
@@ -223,6 +228,10 @@ CmpExprEQ::CmpExprEQ(AddExpr & leftExpr, CmpExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
+void CmpExprEQ::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // CmpExprNE
 //-----------------------------------------------------------------------------
@@ -235,6 +244,10 @@ CmpExprNE::CmpExprNE(AddExpr & leftExpr, CmpExpr & rightExpr) :
                   )
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void CmpExprNE::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 //-----------------------------------------------------------------------------
@@ -251,6 +264,10 @@ CmpExprLT::CmpExprLT(AddExpr & leftExpr, CmpExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
+void CmpExprLT::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // CmpExprLE
 //-----------------------------------------------------------------------------
@@ -263,6 +280,10 @@ CmpExprLE::CmpExprLE(AddExpr & leftExpr, CmpExpr & rightExpr) :
                   )
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void CmpExprLE::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 //-----------------------------------------------------------------------------
@@ -279,6 +300,10 @@ CmpExprGT::CmpExprGT(AddExpr & leftExpr, CmpExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
+void CmpExprGT::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // CmpExprGE
 //-----------------------------------------------------------------------------
@@ -291,6 +316,10 @@ CmpExprGE::CmpExprGE(AddExpr & leftExpr, CmpExpr & rightExpr) :
                   )
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void CmpExprGE::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 WC_AST_END_NAMESPACE

@@ -36,6 +36,7 @@ class CmpExprNoOp final : public CmpExpr {
 public:
     CmpExprNoOp(AddExpr & expr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -99,6 +100,8 @@ private:
 class CmpExprEQ final : public CmpExprTwoOps {
 public:
     CmpExprEQ(AddExpr & leftExpr, CmpExpr & rightExpr);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
 };
 
 /** 
@@ -108,30 +111,40 @@ public:
 class CmpExprNE final : public CmpExprTwoOps {
 public:
     CmpExprNE(AddExpr & leftExpr, CmpExpr & rightExpr);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
 };
 
 /* AddExpr < CmpExpr */
 class CmpExprLT final : public CmpExprTwoOps {
 public:
     CmpExprLT(AddExpr & leftExpr, CmpExpr & rightExpr);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
 };
 
 /* AddExpr <= CmpExpr */
 class CmpExprLE final : public CmpExprTwoOps {
 public:
     CmpExprLE(AddExpr & leftExpr, CmpExpr & rightExpr);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
 };
 
 /* AddExpr > CmpExpr */
 class CmpExprGT final : public CmpExprTwoOps {
 public:
     CmpExprGT(AddExpr & leftExpr, CmpExpr & rightExpr);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
 };
 
 /* AddExpr >= CmpExpr */
 class CmpExprGE final : public CmpExprTwoOps {
 public:
     CmpExprGE(AddExpr & leftExpr, CmpExpr & rightExpr);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
 };
 
 WC_AST_END_NAMESPACE

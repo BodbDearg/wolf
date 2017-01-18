@@ -24,6 +24,7 @@ class LOrExprNoOp final : public LOrExpr {
 public:
     LOrExprNoOp(LAndExpr & expr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -47,6 +48,7 @@ class LOrExprOr final : public LOrExpr {
 public:
     LOrExprOr(LAndExpr & leftExpr, LOrExpr & rightExpr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     

@@ -25,6 +25,7 @@ class NotExprNoOp final : public NotExpr {
 public:
     NotExprNoOp(CmpExpr & expr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -48,6 +49,7 @@ class NotExprLNot final : public NotExpr {
 public:
     NotExprLNot(NotExpr & expr, const Token & startToken);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -82,6 +84,7 @@ class NotExprBNot final : public NotExpr {
 public:
     NotExprBNot(NotExpr & expr, const Token & startToken);
 
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
 

@@ -1,5 +1,6 @@
 #include "WCModule.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
 #include "WCDeclDef.hpp"
@@ -51,6 +52,10 @@ Module::Module(std::vector<DeclDef*> && declDefs, const Token & eofToken) :
     mEOFToken(eofToken)
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void Module::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & Module::getStartToken() const {

@@ -1,5 +1,6 @@
 #include "WCPrintStmnt.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
@@ -54,6 +55,10 @@ PrintStmnt::PrintStmnt(const Token & startToken, AssignExpr & expr, const Token 
     mEndToken(endToken)
 {
     mExpr.mParent = this;
+}
+
+void PrintStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & PrintStmnt::getStartToken() const {

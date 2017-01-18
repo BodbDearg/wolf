@@ -1,5 +1,6 @@
 #include "WCFuncArg.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
@@ -44,6 +45,10 @@ FuncArg::FuncArg(Type & type, Identifier & ident) :
 {
     mType.mParent = this;
     mIdent.mParent = this;
+}
+
+void FuncArg::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & FuncArg::getStartToken() const {

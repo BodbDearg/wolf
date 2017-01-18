@@ -1,5 +1,6 @@
 #include "WCWhileStmnt.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
@@ -82,6 +83,10 @@ WhileStmnt::WhileStmnt(AssignExpr & whileExpr,
     WC_ASSERT(mStartToken.type == TokenType::kWhile || mStartToken.type == TokenType::kUntil);
     mWhileExpr.mParent = this;
     mBodyScope.mParent = this;
+}
+
+void WhileStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & WhileStmnt::getStartToken() const {

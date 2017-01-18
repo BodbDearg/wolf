@@ -1,15 +1,10 @@
 #include "WCLoopStmnt.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
-
-#warning FIXME - Codegen
-#if 0
-#include "WCCodegenCtx.hpp"
-#endif
-
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
 #include "WCScope.hpp"
@@ -106,6 +101,10 @@ LoopStmntNoCond::LoopStmntNoCond(Scope & bodyScope, const Token & startToken, co
     WC_EMPTY_FUNC_BODY();
 }
 
+void LoopStmntNoCond::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & LoopStmntNoCond::getEndToken() const {
     return mEndToken;
 }
@@ -165,6 +164,10 @@ LoopStmntWithCond::LoopStmntWithCond(Scope & bodyScope,
 {
     WC_ASSERT(mCondTypeToken.type == TokenType::kWhile || mCondTypeToken.type == TokenType::kUntil);
     mLoopCondExpr.mParent = this;
+}
+
+void LoopStmntWithCond::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & LoopStmntWithCond::getEndToken() const {

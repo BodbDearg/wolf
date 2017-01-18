@@ -1,5 +1,6 @@
 #include "WCBoolLit.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCLinearAlloc.hpp"
@@ -32,6 +33,10 @@ BoolLit * BoolLit::parse(ParseCtx & parseCtx) {
 
 BoolLit::BoolLit(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY();
+}
+
+void BoolLit::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & BoolLit::getStartToken() const {

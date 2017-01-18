@@ -1,5 +1,6 @@
 #include "WCRandExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
@@ -126,6 +127,10 @@ RandExprRand::RandExprRand(const Token & startToken, const Token & endToken) :
     WC_EMPTY_FUNC_BODY();
 }
 
+void RandExprRand::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 DataType & RandExprRand::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
 }
@@ -165,6 +170,10 @@ RandExprSRand::RandExprSRand(const Token & startToken,
     mSeedExpr(seedExpr)
 {
     mSeedExpr.mParent = this;
+}
+
+void RandExprSRand::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 DataType & RandExprSRand::dataType() {

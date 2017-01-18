@@ -1,5 +1,6 @@
 #include "WCMulExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssert.hpp"
@@ -51,6 +52,10 @@ MulExpr * MulExpr::parse(ParseCtx & parseCtx) {
 //-----------------------------------------------------------------------------
 MulExprNoOp::MulExprNoOp(ShiftExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
+}
+
+void MulExprNoOp::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & MulExprNoOp::getStartToken() const {
@@ -187,6 +192,10 @@ MulExprMul::MulExprMul(ShiftExpr & leftExpr, MulExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
+void MulExprMul::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // MulExprDiv
 //-----------------------------------------------------------------------------
@@ -199,6 +208,10 @@ MulExprDiv::MulExprDiv(ShiftExpr & leftExpr, MulExpr & rightExpr) :
                   )
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void MulExprDiv::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 //-----------------------------------------------------------------------------
@@ -215,6 +228,10 @@ MulExprMod::MulExprMod(ShiftExpr & leftExpr, MulExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
+void MulExprMod::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // MulExprBAnd
 //-----------------------------------------------------------------------------
@@ -227,6 +244,10 @@ MulExprBAnd::MulExprBAnd(ShiftExpr & leftExpr, MulExpr & rightExpr) :
                   )
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void MulExprBAnd::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 WC_AST_END_NAMESPACE

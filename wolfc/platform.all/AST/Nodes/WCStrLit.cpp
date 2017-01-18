@@ -1,5 +1,6 @@
 #include "WCStrLit.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCLinearAlloc.hpp"
@@ -26,6 +27,10 @@ StrLit * StrLit::parse(ParseCtx & parseCtx) {
 
 StrLit::StrLit(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY();
+}
+
+void StrLit::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & StrLit::getStartToken() const {

@@ -1,5 +1,6 @@
 #include "AST/Nodes/WCModule.hpp"
-#include "Codegen/LLVM/Module.hpp"
+#include "Codegen/LLVM/Nodes/Module.hpp"
+#include "Codegen/LLVM/CodegenCtx.hpp"
 #include "Lexer/WCLexer.hpp"
 #include "WCFileUtils.hpp"
 #include "WCLinearAlloc.hpp"
@@ -14,26 +15,17 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
     #endif
 WC_THIRD_PARTY_INCLUDES_END
 
-/* The actual implementation of main */
-static int mainImpl(int argc, const char * argv[]) {
-    // Arg check
-    if (argc != 2) {
-        std::printf("Usage: %s <Input Wolf File>\n", argv[0]);        
-        return -1;
-    }
+/* Compiles the given AST */
+static bool compileAST(const Wolfc::AST::Module * astModule, const char * fromSrcFile) {
+    // Create a codegen node for the module to generate the code:
+    
+    
+    // Success!
+    return true;
+}
 
-    // Read the input file
-    std::unique_ptr<char[]> inputSrc(Wolfc::FileUtils::readTextFileAsCString(argv[1]));
-
-    if (!inputSrc) {
-        std::printf("Failed to read input Wolf source file '%s'!\n", argv[1]);
-        return -1;
-    }
-
-    // Run it through the lexer
-    Wolfc::Lexer lexer;
-    WC_GUARD(lexer.process(inputSrc.get()), -1);
-
+/* Compiles the given list of tokens */
+static bool compileTokens(const Wolfc::Token * tokenList, const char * fromSrcFile) {
     // Linear allocator that we can use
     Wolfc::LinearAlloc linearAlloc(
         1024 * 1024,        /* 1 MB max alloc */
@@ -43,28 +35,74 @@ static int mainImpl(int argc, const char * argv[]) {
     );
 
     // Declare and parse the module AST
-    Wolfc::AST::ParseCtx parseCtx(lexer.getTokenList(), linearAlloc);
+    Wolfc::AST::ParseCtx parseCtx(tokenList, linearAlloc);
     Wolfc::AST::Module * astModule = Wolfc::AST::Module::parse(parseCtx);
     
     // Emit parse warnings to stdout if there are any
     if (parseCtx.hasWarnings()) {
-        std::printf("Warnings emitted for source file '%s'! Warning messages follow:\n", argv[1]);
+        std::printf("Parse warnings emitted for source file '%s'! Warning messages follow:\n", fromSrcFile);
         
-        for (const std::string & warningMsg : parseCtx.warningMsgs) {
+        for (const std::string & warningMsg : parseCtx.getWarningMsgs()) {
             std::fprintf(stdout, "%s\n", warningMsg.c_str());
         }
     }
-
+    
     // Emit parse errors to stderr if there are any and fail
     if (!astModule || parseCtx.hasErrors()) {
-        std::printf("Parsing failed for source file '%s'! Error messages follow:\n", argv[1]);
+        std::printf("Parsing failed for source file '%s'! Error messages follow:\n", fromSrcFile);
         
-        for (const std::string & errorMsg : parseCtx.errorMsgs) {
+        for (const std::string & errorMsg : parseCtx.getErrorMsgs()) {
             std::fprintf(stderr, "%s\n", errorMsg.c_str());
         }
         
+        return false;
+    }
+    
+    // Compile the AST
+    return compileAST(astModule, fromSrcFile);
+}
+
+/* Compiles the given source text */
+static bool compileSourceText(const char * srcText, const char * fromSrcFile) {
+    // Split the text up into language tokens with the lexer
+    Wolfc::Lexer lexer;
+    
+    if (!lexer.process(srcText)) {
+        return false;
+    }
+    
+    // Compile the list of tokens generated
+    return compileTokens(lexer.getTokenList(), fromSrcFile);
+}
+
+/* Compiles the given source file */
+static bool compileSourceFile(const char * srcFilePath) {
+    // Read the source file
+    std::unique_ptr<char[]> inputSrc(Wolfc::FileUtils::readTextFileAsCString(srcFilePath));
+    
+    if (!inputSrc) {
+        std::printf("Failed to read input Wolf source file '%s'!\n", srcFilePath);
+        return false;
+    }
+    
+    // Compile the source text
+    return compileSourceText(inputSrc.get(), srcFilePath);
+}
+
+/* The actual implementation of main */
+static int mainImpl(int argc, const char * argv[]) {
+    // Arg check
+    if (argc != 2) {
+        std::printf("Usage: %s <Input Wolf File>\n", argv[0]);        
         return -1;
     }
+
+    // Begin the compiler pipeline
+    if (!compileSourceFile(argv[1])) {
+        return -1;
+    }
+    
+    // Do code generation
 
 #warning FIXME - Codegen
 #if 0
@@ -78,6 +116,7 @@ static int mainImpl(int argc, const char * argv[]) {
     module.dumpIRCodeToStdout();
 #endif
 
+    // Everything went well!
     return 0;
 }
 

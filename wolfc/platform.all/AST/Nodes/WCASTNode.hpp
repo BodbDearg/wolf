@@ -13,6 +13,7 @@ struct Token;
 
 WC_AST_BEGIN_NAMESPACE
 
+class ASTNodeVisitor;
 class Func;
 class Module;
 class ParseCtx;
@@ -28,6 +29,9 @@ public:
     ASTNode();
     
     virtual ~ASTNode();
+    
+    /* Accept an AST node visitor */
+    virtual void accept(ASTNodeVisitor & visitor) = 0;
     
     /* Return the token that the AST node starts at. */
     virtual const Token & getStartToken() const = 0;

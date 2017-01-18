@@ -1,5 +1,6 @@
 #include "WCVarDecl.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssignExpr.hpp"
@@ -185,6 +186,10 @@ VarDeclInferType::VarDeclInferType(const Token & startToken,
     WC_EMPTY_FUNC_BODY();
 }
 
+void VarDeclInferType::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 DataType & VarDeclInferType::dataType() const {
     return mInitExpr.dataType();
 }
@@ -201,6 +206,10 @@ VarDeclExplicitType::VarDeclExplicitType(const Token & startToken,
     mType(type)
 {
     mType.mParent = this;
+}
+
+void VarDeclExplicitType::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 DataType & VarDeclExplicitType::dataType() const {

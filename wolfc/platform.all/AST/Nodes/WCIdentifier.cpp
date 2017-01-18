@@ -1,5 +1,6 @@
 #include "WCIdentifier.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssert.hpp"
@@ -29,6 +30,10 @@ Identifier * Identifier::parse(ParseCtx & parseCtx) {
 
 Identifier::Identifier(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY();
+}
+
+void Identifier::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & Identifier::getStartToken() const {

@@ -1,5 +1,6 @@
 #include "WCFuncCallArgList.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
@@ -43,6 +44,10 @@ FuncCallArgListSingle::FuncCallArgListSingle(AssignExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
+void FuncCallArgListSingle::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & FuncCallArgListSingle::getStartToken() const {
     return mExpr.getStartToken();
 }
@@ -68,6 +73,10 @@ FuncCallArgListMulti::FuncCallArgListMulti(AssignExpr & expr, FuncCallArgList & 
 {
     mExpr.mParent = this;
     mArgList.mParent = this;
+}
+
+void FuncCallArgListMulti::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & FuncCallArgListMulti::getStartToken() const {

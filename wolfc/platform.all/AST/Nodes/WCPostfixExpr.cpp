@@ -1,5 +1,6 @@
 #include "WCPostfixExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/Primitives/WCArrayDataType.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
@@ -111,6 +112,10 @@ PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
 //-----------------------------------------------------------------------------
 PostfixExprNoPostfix::PostfixExprNoPostfix(CastExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
+}
+
+void PostfixExprNoPostfix::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & PostfixExprNoPostfix::getStartToken() const {
@@ -248,6 +253,10 @@ PostfixExprInc::PostfixExprInc(CastExpr & expr, const Token & endToken) :
     WC_EMPTY_FUNC_BODY();
 }
 
+void PostfixExprInc::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // PostfixExprDec
 //-----------------------------------------------------------------------------
@@ -260,6 +269,10 @@ PostfixExprDec::PostfixExprDec(CastExpr & expr, const Token & endToken) :
                           )
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void PostfixExprDec::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 //-----------------------------------------------------------------------------
@@ -276,6 +289,10 @@ PostfixExprFuncCall::PostfixExprFuncCall(PostfixExpr & expr, FuncCall & funcCall
 {
     mExpr.mParent = this;
     mFuncCall.mParent = this;
+}
+
+void PostfixExprFuncCall::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & PostfixExprFuncCall::getStartToken() const {
@@ -464,6 +481,10 @@ PostfixExprArrayLookup::PostfixExprArrayLookup(PostfixExpr & arrayExpr,
 {
     mArrayExpr.mParent = this;
     mIndexExpr.mParent = this;
+}
+
+void PostfixExprArrayLookup::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & PostfixExprArrayLookup::getStartToken() const {

@@ -1,5 +1,6 @@
 #include "WCStmnt.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "WCAssertStmnt.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCBreakStmnt.hpp"
@@ -127,6 +128,10 @@ StmntNoOpStmnt::StmntNoOpStmnt(NoOpStmnt & stmnt) : mStmnt(stmnt) {
     mStmnt.mParent = this;
 }
 
+void StmntNoOpStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & StmntNoOpStmnt::getStartToken() const {
     return mStmnt.getStartToken();
 }
@@ -151,6 +156,10 @@ bool StmntNoOpStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 StmntPrintStmnt::StmntPrintStmnt(PrintStmnt & stmnt) : mStmnt(stmnt) {
     mStmnt.mParent = this;
+}
+
+void StmntPrintStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & StmntPrintStmnt::getStartToken() const {
@@ -179,6 +188,10 @@ StmntAssertStmnt::StmntAssertStmnt(AssertStmnt & stmnt) : mStmnt(stmnt) {
     mStmnt.mParent = this;
 }
 
+void StmntAssertStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & StmntAssertStmnt::getStartToken() const {
     return mStmnt.getStartToken();
 }
@@ -203,6 +216,10 @@ bool StmntAssertStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 StmntIfStmnt::StmntIfStmnt(IfStmnt & ifStmnt) : mIfStmnt(ifStmnt) {
     mIfStmnt.mParent = this;
+}
+
+void StmntIfStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & StmntIfStmnt::getStartToken() const {
@@ -231,6 +248,10 @@ StmntWhileStmnt::StmntWhileStmnt(WhileStmnt & whileStmnt) : mWhileStmnt(whileStm
     mWhileStmnt.mParent = this;
 }
 
+void StmntWhileStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & StmntWhileStmnt::getStartToken() const {
     return mWhileStmnt.getStartToken();
 }
@@ -255,6 +276,10 @@ bool StmntWhileStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 StmntLoopStmnt::StmntLoopStmnt(LoopStmnt & loopStmnt) : mLoopStmnt(loopStmnt) {
     mLoopStmnt.mParent = this;
+}
+
+void StmntLoopStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & StmntLoopStmnt::getStartToken() const {
@@ -283,6 +308,10 @@ StmntScopeStmnt::StmntScopeStmnt(ScopeStmnt & scopeStmnt) : mScopeStmnt(scopeStm
     mScopeStmnt.mParent = this;
 }
 
+void StmntScopeStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & StmntScopeStmnt::getStartToken() const {
     return mScopeStmnt.getStartToken();
 }
@@ -307,6 +336,10 @@ bool StmntScopeStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 StmntBreakStmnt::StmntBreakStmnt(BreakStmnt & breakStmnt) : mBreakStmnt(breakStmnt) {
     mBreakStmnt.mParent = this;
+}
+
+void StmntBreakStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & StmntBreakStmnt::getStartToken() const {
@@ -335,6 +368,10 @@ StmntNextStmnt::StmntNextStmnt(NextStmnt & nextStmnt) : mNextStmnt(nextStmnt) {
     mNextStmnt.mParent = this;
 }
 
+void StmntNextStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & StmntNextStmnt::getStartToken() const {
     return mNextStmnt.getStartToken();
 }
@@ -359,6 +396,10 @@ bool StmntNextStmnt::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 StmntReturnStmnt::StmntReturnStmnt(ReturnStmnt & returnStmnt) : mReturnStmnt(returnStmnt) {
     mReturnStmnt.mParent = this;
+}
+
+void StmntReturnStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & StmntReturnStmnt::getStartToken() const {
@@ -387,6 +428,10 @@ StmntVarDecl::StmntVarDecl(VarDecl & decl) : mDecl(decl) {
     mDecl.mParent = this;
 }
 
+void StmntVarDecl::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & StmntVarDecl::getStartToken() const {
     return mDecl.getStartToken();
 }
@@ -411,6 +456,10 @@ bool StmntVarDecl::allCodepathsHaveUncondRet() const {
 //-----------------------------------------------------------------------------
 StmntAssignExpr::StmntAssignExpr(AssignExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
+}
+
+void StmntAssignExpr::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & StmntAssignExpr::getStartToken() const {

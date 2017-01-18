@@ -1,5 +1,6 @@
 #include "WCLOrExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCLAndExpr.hpp"
@@ -51,6 +52,10 @@ LOrExprNoOp::LOrExprNoOp(LAndExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
+void LOrExprNoOp::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & LOrExprNoOp::getStartToken() const {
     return mExpr.getStartToken();
 }
@@ -95,6 +100,10 @@ LOrExprOr::LOrExprOr(LAndExpr & leftExpr, LOrExpr & rightExpr) :
 {
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
+}
+
+void LOrExprOr::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & LOrExprOr::getStartToken() const {

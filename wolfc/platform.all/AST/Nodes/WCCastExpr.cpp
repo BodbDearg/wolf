@@ -1,5 +1,6 @@
 #include "WCCastExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCLinearAlloc.hpp"
@@ -89,6 +90,10 @@ CastExprNoCast::CastExprNoCast(PrimaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
+void CastExprNoCast::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & CastExprNoCast::getStartToken() const {
     return mExpr.getStartToken();
 }
@@ -139,6 +144,10 @@ CastExprCast::CastExprCast(const Token & startToken,
 {
     mExpr.mParent = this;
     mType.mParent = this;
+}
+
+void CastExprCast::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & CastExprCast::getStartToken() const {

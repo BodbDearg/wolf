@@ -1,5 +1,7 @@
 #include "CodegenCtx.hpp"
 
+#if 0
+
 #include "AST/Nodes/WCASTNode.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
@@ -99,3 +101,4 @@ void CodegenCtx::popInsertBlock() {
 
 WC_LLVM_CODEGEN_END_NAMESPACE
 WC_END_NAMESPACE
+#endif

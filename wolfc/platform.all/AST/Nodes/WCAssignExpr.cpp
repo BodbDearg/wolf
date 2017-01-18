@@ -1,5 +1,6 @@
 #include "WCAssignExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
 #include "WCLinearAlloc.hpp"
@@ -61,6 +62,10 @@ AssignExpr * AssignExpr::parse(ParseCtx & parseCtx) {
 //-----------------------------------------------------------------------------
 AssignExprNoAssign::AssignExprNoAssign(TernaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
+}
+
+void AssignExprNoAssign::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & AssignExprNoAssign::getStartToken() const {
@@ -244,6 +249,10 @@ AssignExprAssign::AssignExprAssign(TernaryExpr & leftExpr, AssignExpr & rightExp
     WC_EMPTY_FUNC_BODY();
 }
 
+void AssignExprAssign::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 #warning FIXME - Codegen
 #if 0
 llvm::Value * AssignExprAssign::codegenExprEval(CodegenCtx & cgCtx) {
@@ -280,6 +289,10 @@ AssignExprAssignAdd::AssignExprAssignAdd(TernaryExpr & leftExpr, AssignExpr & ri
     WC_EMPTY_FUNC_BODY();
 }
 
+void AssignExprAssignAdd::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // AssignExprAssignSub
 //-----------------------------------------------------------------------------
@@ -292,6 +305,10 @@ AssignExprAssignSub::AssignExprAssignSub(TernaryExpr & leftExpr, AssignExpr & ri
                            )
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void AssignExprAssignSub::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 //-----------------------------------------------------------------------------
@@ -308,6 +325,10 @@ AssignExprAssignBOr::AssignExprAssignBOr(TernaryExpr & leftExpr, AssignExpr & ri
     WC_EMPTY_FUNC_BODY();
 }
 
+void AssignExprAssignBOr::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // AssignExprAssignBXor
 //-----------------------------------------------------------------------------
@@ -320,6 +341,10 @@ AssignExprAssignBXor::AssignExprAssignBXor(TernaryExpr & leftExpr, AssignExpr & 
                            )
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void AssignExprAssignBXor::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 //-----------------------------------------------------------------------------
@@ -336,6 +361,10 @@ AssignExprAssignMul::AssignExprAssignMul(TernaryExpr & leftExpr, AssignExpr & ri
     WC_EMPTY_FUNC_BODY();
 }
 
+void AssignExprAssignMul::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // AssignExprAssignDiv
 //-----------------------------------------------------------------------------
@@ -348,6 +377,10 @@ AssignExprAssignDiv::AssignExprAssignDiv(TernaryExpr & leftExpr, AssignExpr & ri
                            )
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void AssignExprAssignDiv::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 //-----------------------------------------------------------------------------
@@ -364,6 +397,10 @@ AssignExprAssignMod::AssignExprAssignMod(TernaryExpr & leftExpr, AssignExpr & ri
     WC_EMPTY_FUNC_BODY();
 }
 
+void AssignExprAssignMod::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // AssignExprAssignBAnd
 //-----------------------------------------------------------------------------
@@ -376,6 +413,10 @@ AssignExprAssignBAnd::AssignExprAssignBAnd(TernaryExpr & leftExpr, AssignExpr & 
                            )
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void AssignExprAssignBAnd::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 //-----------------------------------------------------------------------------
@@ -392,6 +433,10 @@ AssignExprAssignLShift::AssignExprAssignLShift(TernaryExpr & leftExpr, AssignExp
     WC_EMPTY_FUNC_BODY();
 }
 
+void AssignExprAssignLShift::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // AssignExprAssignARShift
 //-----------------------------------------------------------------------------
@@ -406,6 +451,10 @@ AssignExprAssignARShift::AssignExprAssignARShift(TernaryExpr & leftExpr, AssignE
     WC_EMPTY_FUNC_BODY();
 }
 
+void AssignExprAssignARShift::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // AssignExprAssignLRShift
 //-----------------------------------------------------------------------------
@@ -418,6 +467,10 @@ AssignExprAssignLRShift::AssignExprAssignLRShift(TernaryExpr & leftExpr, AssignE
                            )
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void AssignExprAssignLRShift::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 WC_AST_END_NAMESPACE

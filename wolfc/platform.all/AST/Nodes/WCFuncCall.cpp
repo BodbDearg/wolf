@@ -1,5 +1,6 @@
 #include "WCFuncCall.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
@@ -55,6 +56,10 @@ FuncCall::FuncCall(const Token & startToken, FuncCallArgList * argList, const To
     if (mArgList) {
         mArgList->mParent = this;
     }
+}
+
+void FuncCall::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & FuncCall::getStartToken() const {

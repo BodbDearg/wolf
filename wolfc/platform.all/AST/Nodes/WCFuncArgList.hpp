@@ -30,6 +30,7 @@ class FuncArgListSingle final : public FuncArgList {
 public:
     FuncArgListSingle(FuncArg & arg);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -44,6 +45,7 @@ class FuncArgListMulti final : public FuncArgList {
 public:
     FuncArgListMulti(FuncArg & arg, FuncArgList & argList);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     

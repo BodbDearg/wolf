@@ -57,6 +57,8 @@ public:
                   const Token & startToken,
                   const Token & endToken);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
+    
     virtual const Token & getEndToken() const override;
     
 #warning FIXME - Codegen
@@ -76,6 +78,8 @@ public:
                   Scope & thenScope,
                   IfStmnt & elseIfStmnt,
                   const Token & startToken);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
     
     virtual const Token & getEndToken() const override;
     
@@ -97,6 +101,8 @@ public:
                 Scope & elseScope,
                 const Token & startToken,
                 const Token & endToken);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
     
     virtual const Token & getEndToken() const override;
     

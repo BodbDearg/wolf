@@ -1,5 +1,6 @@
 #include "WCFunc.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssert.hpp"
@@ -121,6 +122,10 @@ Func::Func(const Token & startToken,
     }
     
     mScope.mParent = this;
+}
+
+void Func::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & Func::getStartToken() const {

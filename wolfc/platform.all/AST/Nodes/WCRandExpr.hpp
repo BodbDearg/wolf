@@ -42,6 +42,8 @@ class RandExprRand final : public RandExpr {
 public:
     RandExprRand(const Token & startToken, const Token & endToken);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
+    
     virtual DataType & dataType() override;
     
 #warning FIXME - Codegen
@@ -56,6 +58,8 @@ public:
     RandExprSRand(const Token & startToken,
                   AssignExpr & seedExpr,
                   const Token & endToken);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
     
     virtual DataType & dataType() override;
     

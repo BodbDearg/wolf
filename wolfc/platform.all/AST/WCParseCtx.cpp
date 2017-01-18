@@ -13,11 +13,11 @@ ParseCtx::ParseCtx(const Token * startToken, LinearAlloc & linearAlloc) :
 }
 
 bool ParseCtx::hasErrors() const {
-    return !errorMsgs.empty();
+    return !mErrorMsgs.empty();
 }
 
 bool ParseCtx::hasWarnings() const {
-    return !warningMsgs.empty();
+    return !mWarningMsgs.empty();
 }
 
 void ParseCtx::error(const char * msgFmtStr, ...) {
@@ -62,7 +62,7 @@ void ParseCtx::error(const Token & atToken, const char * msgFmtStr, std::va_list
     msgBuf[kMaxMsgLen - 1] = 0;
     
     // Save the message:
-    errorMsgs.push_back(msgBuf);
+    mErrorMsgs.push_back(msgBuf);
 }
 
 void ParseCtx::warning(const char * msgFmtStr, ...) {
@@ -107,7 +107,7 @@ void ParseCtx::warning(const Token & atToken, const char * msgFmtStr, std::va_li
     msgBuf[kMaxMsgLen - 1] = 0;
     
     // Save the message:
-    warningMsgs.push_back(msgBuf);
+    mWarningMsgs.push_back(msgBuf);
 }
 
 WC_AST_END_NAMESPACE

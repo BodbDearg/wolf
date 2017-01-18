@@ -1,5 +1,6 @@
 #include "WCReadnumExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCLinearAlloc.hpp"
@@ -45,6 +46,10 @@ ReadnumExpr::ReadnumExpr(const Token & startToken, const Token & endToken) :
     mEndToken(endToken)
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void ReadnumExpr::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & ReadnumExpr::getStartToken() const {

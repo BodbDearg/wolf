@@ -1,5 +1,6 @@
 #include "WCPrimitiveType.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCLinearAlloc.hpp"
@@ -29,6 +30,10 @@ PrimitiveType * PrimitiveType::parse(ParseCtx & parseCtx) {
 
 PrimitiveType::PrimitiveType(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY();
+}
+
+void PrimitiveType::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & PrimitiveType::getStartToken() const {

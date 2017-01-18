@@ -41,6 +41,7 @@ class ArrayLitExprsSingle final : public ArrayLitExprs {
 public:
     ArrayLitExprsSingle(AssignExpr & expr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -59,6 +60,7 @@ class ArrayLitExprsMulti final : public ArrayLitExprs {
 public:
     ArrayLitExprsMulti(AssignExpr & expr, ArrayLitExprs & exprsList);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     

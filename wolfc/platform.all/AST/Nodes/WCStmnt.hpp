@@ -45,6 +45,7 @@ class StmntNoOpStmnt final : public Stmnt {
 public:
     StmntNoOpStmnt(NoOpStmnt & stmnt);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -63,6 +64,7 @@ class StmntPrintStmnt final : public Stmnt {
 public:
     StmntPrintStmnt(PrintStmnt & stmnt);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -81,6 +83,7 @@ class StmntAssertStmnt final : public Stmnt {
 public:
     StmntAssertStmnt(AssertStmnt & stmnt);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -99,6 +102,7 @@ class StmntIfStmnt final : public Stmnt {
 public:
     StmntIfStmnt(IfStmnt & ifStmnt);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
 
@@ -117,6 +121,7 @@ class StmntWhileStmnt final : public Stmnt {
 public:
     StmntWhileStmnt(WhileStmnt & ifStmnt);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
 
@@ -135,6 +140,7 @@ class StmntLoopStmnt final : public Stmnt {
 public:
     StmntLoopStmnt(LoopStmnt & loopStmnt);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
 
@@ -153,6 +159,7 @@ class StmntScopeStmnt final : public Stmnt {
 public:
     StmntScopeStmnt(ScopeStmnt & scopeStmnt);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
 
@@ -171,6 +178,7 @@ class StmntBreakStmnt final : public Stmnt {
 public:
     StmntBreakStmnt(BreakStmnt & breakStmnt);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
 
@@ -189,6 +197,7 @@ class StmntNextStmnt final : public Stmnt {
 public:
     StmntNextStmnt(NextStmnt & nextStmnt);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
 
@@ -207,6 +216,7 @@ class StmntReturnStmnt final : public Stmnt {
 public:
     StmntReturnStmnt(ReturnStmnt & returnStmnt);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
 
@@ -225,6 +235,7 @@ class StmntVarDecl final : public Stmnt {
 public:
     StmntVarDecl(VarDecl & decl);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
 
@@ -243,6 +254,7 @@ class StmntAssignExpr final : public Stmnt {
 public:
     StmntAssignExpr(AssignExpr & expr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     

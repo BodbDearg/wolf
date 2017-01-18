@@ -38,6 +38,7 @@ class TypePrimitive final : public Type {
 public:
     TypePrimitive(PrimitiveType & type);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -56,6 +57,7 @@ class TypeArray final : public Type {
 public:
     TypeArray(const Token & startToken, AssignExpr & sizeExpr, Type & elemType);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     

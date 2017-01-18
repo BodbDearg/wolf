@@ -28,6 +28,7 @@ class AddExprNoOp final : public AddExpr {
 public:
     AddExprNoOp(MulExpr & expr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -88,24 +89,32 @@ private:
 class AddExprAdd final : public AddExprTwoOps {
 public:
     AddExprAdd(MulExpr & leftExpr, AddExpr & rightExpr);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
 };
 
 /* MulExpr - AddExpr */
 class AddExprSub final : public AddExprTwoOps {
 public:
     AddExprSub(MulExpr & leftExpr, AddExpr & rightExpr);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
 };
 
 /* MulExpr | AddExpr */
 class AddExprBOr final : public AddExprTwoOps {
 public:
     AddExprBOr(MulExpr & leftExpr, AddExpr & rightExpr);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
 };
 
 /* MulExpr ^ AddExpr */
 class AddExprBXor final : public AddExprTwoOps {
 public:
     AddExprBXor(MulExpr & leftExpr, AddExpr & rightExpr);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
 };
 
 WC_AST_END_NAMESPACE

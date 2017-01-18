@@ -11,6 +11,7 @@ class AssignExpr;
 /*
 LoopStmnt:
     loop Scope end
+	loop Scope repeat while|until AssignExpr
 */
 class LoopStmnt : public ASTNode, public IRepeatableStmnt {
 public:
@@ -32,6 +33,7 @@ class LoopStmntNoCond final : public LoopStmnt {
 public:
     LoopStmntNoCond(Scope & bodyScope, const Token & startToken, const Token & endToken);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getEndToken() const override;
     
 #warning FIXME - Codegen
@@ -59,6 +61,7 @@ public:
                       const Token & condTypeToken,
                       AssignExpr & loopCondExpr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getEndToken() const override;
     
 #warning FIXME - Codegen

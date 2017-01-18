@@ -1,5 +1,6 @@
 #include "WCPrimaryExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "WCArrayLit.hpp"
 #include "WCBoolLit.hpp"
 #include "WCIdentifier.hpp"
@@ -81,6 +82,10 @@ PrimaryExprIntLit::PrimaryExprIntLit(IntLit & lit) : mLit(lit) {
     mLit.mParent = this;
 }
 
+void PrimaryExprIntLit::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & PrimaryExprIntLit::getStartToken() const {
     return mLit.getStartToken();
 }
@@ -121,6 +126,10 @@ llvm::Constant * PrimaryExprIntLit::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 PrimaryExprBoolLit::PrimaryExprBoolLit(BoolLit & lit) : mLit(lit) {
     mLit.mParent = this;
+}
+
+void PrimaryExprBoolLit::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & PrimaryExprBoolLit::getStartToken() const {
@@ -165,6 +174,10 @@ PrimaryExprStrLit::PrimaryExprStrLit(StrLit & lit) : mLit(lit) {
     mLit.mParent = this;
 }
 
+void PrimaryExprStrLit::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & PrimaryExprStrLit::getStartToken() const {
     return mLit.getStartToken();
 }
@@ -207,6 +220,10 @@ PrimaryExprArrayLit::PrimaryExprArrayLit(ArrayLit & lit) : mLit(lit) {
     mLit.mParent = this;
 }
 
+void PrimaryExprArrayLit::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & PrimaryExprArrayLit::getStartToken() const {
     return mLit.getStartToken();
 }
@@ -247,6 +264,10 @@ llvm::Constant * PrimaryExprArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 PrimaryExprIdentifier::PrimaryExprIdentifier(Identifier & ident) : mIdent(ident) {
     mIdent.mParent = this;
+}
+
+void PrimaryExprIdentifier::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & PrimaryExprIdentifier::getStartToken() const {
@@ -294,6 +315,10 @@ const char * PrimaryExprIdentifier::name() const {
 PrimaryExprReadnum::PrimaryExprReadnum(ReadnumExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
+
+void PrimaryExprReadnum::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
     
 const Token & PrimaryExprReadnum::getStartToken() const {
     return mExpr.getStartToken();
@@ -337,6 +362,10 @@ PrimaryExprTime::PrimaryExprTime(TimeExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
+void PrimaryExprTime::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & PrimaryExprTime::getStartToken() const {
     return mExpr.getStartToken();
 }
@@ -377,6 +406,10 @@ llvm::Constant * PrimaryExprTime::codegenExprConstEval(CodegenCtx & cgCtx) {
 //-----------------------------------------------------------------------------
 PrimaryExprRandExpr::PrimaryExprRandExpr(RandExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
+}
+
+void PrimaryExprRandExpr::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & PrimaryExprRandExpr::getStartToken() const {

@@ -32,6 +32,7 @@ class UnaryExprPrimary : public UnaryExpr {
 public:
     UnaryExprPrimary(PostfixExpr & expr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -87,12 +88,16 @@ public:
 class UnaryExprPlus final : public UnaryExprPlusMinusBase {
 public:
     UnaryExprPlus(PostfixExpr & expr, const Token & startToken);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
 };
 
 /* - PostfixExpr */
 class UnaryExprMinus final : public UnaryExprPlusMinusBase {
 public:
     UnaryExprMinus(PostfixExpr & expr, const Token & startToken);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
 };
 
 /* ( AssignExpr ) */
@@ -100,6 +105,7 @@ class UnaryExprParen final : public UnaryExpr {
 public:
     UnaryExprParen(AssignExpr & expr, const Token & startToken, const Token & endToken);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     

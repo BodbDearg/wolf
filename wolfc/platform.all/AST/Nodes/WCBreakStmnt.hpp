@@ -52,6 +52,7 @@ class BreakStmntNoCond final : public BreakStmnt {
 public:
     BreakStmntNoCond(const Token & breakToken);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getEndToken() const override;
     
 #warning FIXME - Codegen
@@ -67,6 +68,7 @@ public:
                        const Token & condToken,
                        AssignExpr & condExpr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getEndToken() const override;
     
 #warning FIXME - Codegen

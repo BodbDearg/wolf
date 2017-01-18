@@ -55,8 +55,18 @@ public:
     /* Tells if there are errors in the parse context */
     bool hasErrors() const;
     
+    /* Get the error messages stored in the parse context */
+    inline const auto & getErrorMsgs() const {
+        return mErrorMsgs;
+    }
+    
     /* Tells if there are warnings in the parse context */
     bool hasWarnings() const;
+    
+    /* Get the warning messages stored in the parse context */
+    inline const auto & getWarningMsgs() const {
+        return mWarningMsgs;
+    }
     
     /**
      * Emit an error message and save to the list of error messages in the parse context.
@@ -92,10 +102,10 @@ private:
     LinearAlloc & mLinearAlloc;
     
     /* A list of error messages emitted during parsing */
-    std::vector<std::string> errorMsgs;
+    std::vector<std::string> mErrorMsgs;
     
     /* A list of warning messages emitted during parsing */
-    std::vector<std::string> warningMsgs;
+    std::vector<std::string> mWarningMsgs;
 };
 
 WC_AST_END_NAMESPACE

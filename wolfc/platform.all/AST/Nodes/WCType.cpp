@@ -1,6 +1,7 @@
 #include "WCType.hpp"
 
 #include "AST/Nodes/WCPrimitiveType.hpp"
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/Primitives/WCArrayDataType.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
@@ -69,6 +70,10 @@ TypePrimitive::TypePrimitive(PrimitiveType & type) : mType(type) {
     mParent = this;
 }
 
+void TypePrimitive::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & TypePrimitive::getStartToken() const {
     return mType.getStartToken();
 }
@@ -98,6 +103,10 @@ TypeArray::TypeArray(const Token & startToken, AssignExpr & sizeExpr, Type & ele
 {
     mSizeExpr.mParent = this;
     mElemType.mParent = this;
+}
+
+void TypeArray::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & TypeArray::getStartToken() const {

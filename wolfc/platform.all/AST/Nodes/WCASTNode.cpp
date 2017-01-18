@@ -1,5 +1,6 @@
 #include "WCASTNode.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "WCFunc.hpp"
 #include "WCModule.hpp"
 #include "WCParseCtx.hpp"

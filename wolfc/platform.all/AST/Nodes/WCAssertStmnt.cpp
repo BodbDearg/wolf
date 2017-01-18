@@ -1,5 +1,6 @@
 #include "WCAssertStmnt.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
@@ -54,6 +55,10 @@ AssertStmnt::AssertStmnt(const Token & startToken, AssignExpr & expr, const Toke
     mEndToken(endToken)
 {
     mExpr.mParent = this;
+}
+
+void AssertStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & AssertStmnt::getStartToken() const {

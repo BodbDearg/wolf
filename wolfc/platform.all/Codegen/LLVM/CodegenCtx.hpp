@@ -1,5 +1,6 @@
 #pragma once
 
+#if 0
 #include "WCMacros.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -34,11 +35,11 @@ struct CodegenCtx {
     typedef std::function<bool (CodegenCtx & cgCtx)> DeferredCodegenCallback;
 #endif
     
-    /* The llvm context. */
-    llvm::LLVMContext & llvmCtx;
+    /* The LLVM context */
+    std::unique_ptr<llvm::LLVMContext> mLLVMCtx;
     
-    /* The llvm module. */
-    llvm::Module & llvmModule;
+    /* The LLVM module */
+    std::unique_ptr<llvm::Module> mLLVMModule;
     
     /* The llvm IR builder object. Used for creating most instructions. */
     llvm::IRBuilder<> irBuilder;
@@ -69,10 +70,10 @@ struct CodegenCtx {
 #endif
     
     /* A list of error messages emitted during parsing */
-    std::vector<std::string> errorMsgs;
+    std::vector<std::string> mErrorMsgs;
     
     /* A list of warning messages emitted during parsing */
-    std::vector<std::string> warningMsgs;
+    std::vector<std::string> mEarningMsgs;
     
     /* Creates the codegen context using the given llvm context */
     CodegenCtx(llvm::LLVMContext & llvmCtxIn, llvm::Module & llvmModuleIn) :
@@ -117,3 +118,4 @@ struct CodegenCtx {
 
 WC_LLVM_CODEGEN_END_NAMESPACE
 WC_END_NAMESPACE
+#endif

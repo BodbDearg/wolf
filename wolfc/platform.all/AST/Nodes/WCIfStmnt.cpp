@@ -1,5 +1,6 @@
 #include "WCIfStmnt.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
@@ -180,6 +181,10 @@ IfStmntNoElse::IfStmntNoElse(AssignExpr & ifExpr,
     WC_EMPTY_FUNC_BODY();
 }
 
+void IfStmntNoElse::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & IfStmntNoElse::getEndToken() const {
     return mEndToken;
 }
@@ -256,6 +261,10 @@ IfStmntElseIf::IfStmntElseIf(AssignExpr & ifExpr,
     mElseIfStmnt(outerIfStmnt)
 {
     mElseIfStmnt.mParent = this;
+}
+
+void IfStmntElseIf::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & IfStmntElseIf::getEndToken() const {
@@ -357,6 +366,10 @@ IfStmntElse::IfStmntElse(AssignExpr & ifExpr,
     mEndToken(endToken)
 {
     mElseScope.mParent = this;
+}
+
+void IfStmntElse::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
     
 const Token & IfStmntElse::getEndToken() const {

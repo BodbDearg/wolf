@@ -1,5 +1,7 @@
 #include "Module.hpp"
 
+#if 0
+
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/LLVMContext.h>
     #include <llvm/IR/Module.h>
@@ -108,3 +110,5 @@ void Module::declareCStdLibFuncsInModule() {
 
 WC_LLVM_CODEGEN_END_NAMESPACE
 WC_END_NAMESPACE
+
+#endif

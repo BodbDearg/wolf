@@ -1,5 +1,6 @@
 #include "WCTernaryExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
@@ -59,6 +60,10 @@ TernaryExprNoCond::TernaryExprNoCond(LOrExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
+void TernaryExprNoCond::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & TernaryExprNoCond::getStartToken() const {
     return mExpr.getStartToken();
 }
@@ -108,6 +113,10 @@ TernaryExprWithCond::TernaryExprWithCond(LOrExpr & condExpr,
     mCondExpr.mParent = this;
     mTrueExpr.mParent = this;
     mFalseExpr.mParent = this;
+}
+
+void TernaryExprWithCond::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & TernaryExprWithCond::getStartToken() const {

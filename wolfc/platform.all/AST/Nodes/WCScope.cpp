@@ -1,5 +1,6 @@
 #include "WCScope.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
@@ -35,6 +36,10 @@ Scope::Scope(const Token & startToken, std::vector<Stmnt*> && stmnts)
     for (Stmnt * stmnt : mStmnts) {
         stmnt->mParent = this;
     }
+}
+
+void Scope::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & Scope::getStartToken() const {

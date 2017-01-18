@@ -1,5 +1,6 @@
 #include "WCReturnStmnt.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssert.hpp"
@@ -142,6 +143,10 @@ ReturnStmntNoCondVoid::ReturnStmntNoCondVoid(const Token & returnToken) : Return
     WC_EMPTY_FUNC_BODY();
 }
 
+void ReturnStmntNoCondVoid::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & ReturnStmntNoCondVoid::getEndToken() const {
     return mReturnToken;
 }
@@ -187,6 +192,10 @@ ReturnStmntNoCondWithValue::ReturnStmntNoCondWithValue(const Token & returnToken
     mReturnExpr(returnExpr)
 {
     mReturnExpr.mParent = this;
+}
+
+void ReturnStmntNoCondWithValue::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & ReturnStmntNoCondWithValue::getEndToken() const {
@@ -267,6 +276,10 @@ ReturnStmntWithCondVoid::ReturnStmntWithCondVoid(const Token & returnToken,
     WC_EMPTY_FUNC_BODY();
 }
 
+void ReturnStmntWithCondVoid::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 #warning FIXME - Codegen
 #if 0
 bool ReturnStmntWithCondVoid::codegen(CodegenCtx & cgCtx) {
@@ -333,6 +346,10 @@ ReturnStmntWithCondAndValue::ReturnStmntWithCondAndValue(const Token & returnTok
     mReturnExpr(returnExpr)
 {
     mReturnExpr.mParent = this;
+}
+
+void ReturnStmntWithCondAndValue::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 #warning FIXME - Codegen

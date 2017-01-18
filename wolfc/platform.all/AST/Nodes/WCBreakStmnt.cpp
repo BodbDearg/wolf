@@ -1,5 +1,6 @@
 #include "WCBreakStmnt.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
@@ -83,6 +84,10 @@ BreakStmntNoCond::BreakStmntNoCond(const Token & breakToken) : BreakStmnt(breakT
     WC_EMPTY_FUNC_BODY();
 }
 
+void BreakStmntNoCond::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & BreakStmntNoCond::getEndToken() const {
     return mBreakToken;
 }
@@ -122,6 +127,10 @@ BreakStmntWithCond::BreakStmntWithCond(const Token & breakToken,
     mCondExpr(condExpr)
 {
     mCondExpr.mParent = this;
+}
+
+void BreakStmntWithCond::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
     
 const Token & BreakStmntWithCond::getEndToken() const {

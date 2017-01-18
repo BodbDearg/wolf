@@ -59,6 +59,7 @@ class ReturnStmntNoCondVoid final : public ReturnStmnt {
 public:
     ReturnStmntNoCondVoid(const Token & returnToken);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getEndToken() const override;
     
 #warning FIXME - Codegen
@@ -76,6 +77,7 @@ class ReturnStmntNoCondWithValue final : public ReturnStmnt {
 public:
     ReturnStmntNoCondWithValue(const Token & returnToken, AssignExpr & returnExpr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getEndToken() const override;
     
 #warning FIXME - Codegen
@@ -129,6 +131,8 @@ public:
                             const Token & condToken,
                             AssignExpr & condExpr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
+    
 #warning FIXME - Codegen
 #if 0
     virtual bool codegen(CodegenCtx & cgCtx) override;
@@ -144,6 +148,8 @@ public:
                                 AssignExpr & returnExpr,
                                 const Token & condToken,
                                 AssignExpr & condExpr);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
     
 #warning FIXME - Codegen
 #if 0

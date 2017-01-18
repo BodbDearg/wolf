@@ -25,6 +25,7 @@ class TernaryExprNoCond final : public TernaryExpr {
 public:
     TernaryExprNoCond(LOrExpr & expr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -50,6 +51,7 @@ public:
                         AssignExpr & trueExpr,
                         AssignExpr & falseExpr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     

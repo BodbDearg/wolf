@@ -1,5 +1,6 @@
 #include "WCArrayLit.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCArrayLitExprs.hpp"
 #include "WCAssert.hpp"
@@ -65,6 +66,10 @@ ArrayLit::ArrayLit(const Token & lBrack,
 #endif
 {
     mExprs.mParent = this;
+}
+
+void ArrayLit::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & ArrayLit::getStartToken() const {

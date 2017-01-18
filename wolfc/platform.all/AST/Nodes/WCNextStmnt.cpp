@@ -1,5 +1,6 @@
 #include "WCNextStmnt.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
 #include "WCAssignExpr.hpp"
@@ -79,6 +80,10 @@ NextStmntNoCond::NextStmntNoCond(const Token & nextToken) : NextStmnt(nextToken)
     WC_EMPTY_FUNC_BODY();
 }
 
+void NextStmntNoCond::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & NextStmntNoCond::getEndToken() const {
     return mNextToken;
 }
@@ -122,6 +127,10 @@ NextStmntWithCond::NextStmntWithCond(const Token & nextToken,
     mCondExpr(condExpr)
 {
     mCondExpr.mParent = this;
+}
+
+void NextStmntWithCond::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
     
 const Token & NextStmntWithCond::getEndToken() const {

@@ -58,6 +58,8 @@ public:
                      Identifier & ident,
                      AssignExpr & initExpr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
+    
     virtual DataType & dataType() const final override;
 };
 
@@ -68,6 +70,8 @@ public:
                         Identifier & ident,
                         Type & type,
                         AssignExpr & initExpr);
+    
+    virtual void accept(ASTNodeVisitor & visitor) override;
     
     virtual DataType & dataType() const final override;
     

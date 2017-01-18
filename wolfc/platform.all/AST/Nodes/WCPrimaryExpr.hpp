@@ -37,6 +37,7 @@ class PrimaryExprIntLit final : public PrimaryExpr {
 public:
     PrimaryExprIntLit(IntLit & lit);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -60,6 +61,7 @@ class PrimaryExprBoolLit final : public PrimaryExpr {
 public:
     PrimaryExprBoolLit(BoolLit & lit);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -83,6 +85,7 @@ class PrimaryExprStrLit final : public PrimaryExpr {
 public:
     PrimaryExprStrLit(StrLit & lit);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -106,6 +109,7 @@ class PrimaryExprArrayLit final : public PrimaryExpr {
 public:
     PrimaryExprArrayLit(ArrayLit & lit);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -129,6 +133,7 @@ class PrimaryExprIdentifier final : public PrimaryExpr {
 public:
     PrimaryExprIdentifier(Identifier & ident);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -154,6 +159,7 @@ class PrimaryExprReadnum final : public PrimaryExpr {
 public:
     PrimaryExprReadnum(ReadnumExpr & expr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -177,6 +183,7 @@ class PrimaryExprTime final : public PrimaryExpr {
 public:
     PrimaryExprTime(TimeExpr & expr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -200,6 +207,7 @@ class PrimaryExprRandExpr final : public PrimaryExpr {
 public:
     PrimaryExprRandExpr(RandExpr & expr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     

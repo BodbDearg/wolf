@@ -1,5 +1,6 @@
 #include "WCTimeExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCLinearAlloc.hpp"
@@ -45,6 +46,10 @@ TimeExpr::TimeExpr(const Token & startToken, const Token & endToken) :
     mEndToken(endToken)
 {
     
+}
+
+void TimeExpr::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & TimeExpr::getStartToken() const {

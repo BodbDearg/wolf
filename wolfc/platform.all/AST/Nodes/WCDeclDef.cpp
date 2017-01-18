@@ -1,5 +1,6 @@
 #include "WCDeclDef.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "WCFunc.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
@@ -42,6 +43,10 @@ DeclDefFunc::DeclDefFunc(Func & func) : mFunc(func) {
     mFunc.mParent = this;
 }
 
+void DeclDefFunc::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & DeclDefFunc::getStartToken() const {
     return mFunc.getStartToken();
 }
@@ -49,8 +54,6 @@ const Token & DeclDefFunc::getStartToken() const {
 const Token & DeclDefFunc::getEndToken() const {
     return mFunc.getEndToken();
 }
-
-WC_IMPL_ACCEPT_VISITOR(DeclDefFunc, DeclDefVisitor)
 
 #warning FIXME - Codegen
 #if 0
@@ -66,6 +69,10 @@ DeclDefVarDecl::DeclDefVarDecl(VarDecl & varDecl) : mVarDecl(varDecl) {
     mVarDecl.mParent = this;
 }
 
+void DeclDefVarDecl::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & DeclDefVarDecl::getStartToken() const {
     return mVarDecl.getStartToken();
 }
@@ -73,8 +80,6 @@ const Token & DeclDefVarDecl::getStartToken() const {
 const Token & DeclDefVarDecl::getEndToken() const {
     return mVarDecl.getEndToken();
 }
-
-WC_IMPL_ACCEPT_VISITOR(DeclDefVarDecl, DeclDefVisitor)
 
 #warning FIXME - Codegen
 #if 0

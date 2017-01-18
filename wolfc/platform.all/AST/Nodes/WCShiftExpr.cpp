@@ -1,5 +1,6 @@
 #include "WCShiftExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssert.hpp"
@@ -50,6 +51,10 @@ ShiftExpr * ShiftExpr::parse(ParseCtx & parseCtx) {
 //-----------------------------------------------------------------------------
 ShiftExprNoOp::ShiftExprNoOp(UnaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
+}
+
+void ShiftExprNoOp::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & ShiftExprNoOp::getStartToken() const {
@@ -186,6 +191,10 @@ ShiftExprLShift::ShiftExprLShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
+void ShiftExprLShift::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // ShiftExprARShift
 //-----------------------------------------------------------------------------
@@ -200,6 +209,10 @@ ShiftExprARShift::ShiftExprARShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) 
     WC_EMPTY_FUNC_BODY();
 }
 
+void ShiftExprARShift::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 //-----------------------------------------------------------------------------
 // ShiftExprLRShift
 //-----------------------------------------------------------------------------
@@ -212,6 +225,10 @@ ShiftExprLRShift::ShiftExprLRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) 
                     )
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void ShiftExprLRShift::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 WC_AST_END_NAMESPACE

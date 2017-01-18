@@ -1,5 +1,6 @@
 #include "WCLAndExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCLinearAlloc.hpp"
@@ -41,6 +42,10 @@ LAndExpr * LAndExpr::parse(ParseCtx & parseCtx) {
 //-----------------------------------------------------------------------------
 LAndExprNoOp::LAndExprNoOp(NotExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
+}
+
+void LAndExprNoOp::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & LAndExprNoOp::getStartToken() const {
@@ -87,6 +92,10 @@ LAndExprAnd::LAndExprAnd(NotExpr & leftExpr, LAndExpr & rightExpr) :
 {
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
+}
+
+void LAndExprAnd::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & LAndExprAnd::getStartToken() const {

@@ -24,6 +24,7 @@ class LAndExprNoOp final : public LAndExpr {
 public:
     LAndExprNoOp(NotExpr & expr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -47,6 +48,7 @@ class LAndExprAnd final : public LAndExpr {
 public:
     LAndExprAnd(NotExpr & leftExpr, LAndExpr & rightExpr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     

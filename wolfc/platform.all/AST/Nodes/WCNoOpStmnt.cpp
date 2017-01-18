@@ -1,5 +1,6 @@
 #include "WCNoOpStmnt.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
 
@@ -25,6 +26,10 @@ NoOpStmnt * NoOpStmnt::parse(ParseCtx & parseCtx) {
 
 NoOpStmnt::NoOpStmnt(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY();
+}
+
+void NoOpStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & NoOpStmnt::getStartToken() const {

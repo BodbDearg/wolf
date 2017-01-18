@@ -1,5 +1,6 @@
 #include "WCNotExpr.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCCmpExpr.hpp"
@@ -59,6 +60,10 @@ NotExprNoOp::NotExprNoOp(CmpExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
+void NotExprNoOp::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & NotExprNoOp::getStartToken() const {
     return mExpr.getStartToken();
 }
@@ -102,6 +107,10 @@ NotExprLNot::NotExprLNot(NotExpr & expr, const Token & startToken) :
     mStartToken(startToken)
 {
     mExpr.mParent = this;
+}
+
+void NotExprLNot::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & NotExprLNot::getStartToken() const {
@@ -178,6 +187,10 @@ NotExprBNot::NotExprBNot(NotExpr & expr, const Token & startToken) :
     mStartToken(startToken)
 {
     mExpr.mParent = this;
+}
+
+void NotExprBNot::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & NotExprBNot::getStartToken() const {

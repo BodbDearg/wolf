@@ -50,6 +50,7 @@ class NextStmntNoCond final : public NextStmnt {
 public:
     NextStmntNoCond(const Token & nextToken);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getEndToken() const override;
     
 #warning FIXME - Codegen
@@ -67,6 +68,7 @@ public:
                       const Token & condToken,
                       AssignExpr & condExpr);
     
+    virtual void accept(ASTNodeVisitor & visitor) override;
     virtual const Token & getEndToken() const override;
     
 #warning FIXME - Codegen

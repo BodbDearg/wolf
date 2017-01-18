@@ -1,5 +1,6 @@
 #include "WCScopeStmnt.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssert.hpp"
@@ -50,6 +51,10 @@ ScopeStmnt::ScopeStmnt(const Token & startToken, Scope & bodyScope, const Token 
     mEndToken(endToken)
 {
     mBodyScope.mParent = this;
+}
+
+void ScopeStmnt::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & ScopeStmnt::getStartToken() const {

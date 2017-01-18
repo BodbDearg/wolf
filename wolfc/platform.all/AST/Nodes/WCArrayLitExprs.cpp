@@ -1,5 +1,6 @@
 #include "WCArrayLitExprs.hpp"
 
+#include "AST/WCASTNodeVisitor.hpp"
 #include "DataType/WCDataType.hpp"
 #include "DataType/WCDataTypeId.hpp"
 #include "DataType/WCPrimitiveDataTypes.hpp"
@@ -46,6 +47,10 @@ ArrayLitExprsSingle::ArrayLitExprsSingle(AssignExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
+void ArrayLitExprsSingle::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
+}
+
 const Token & ArrayLitExprsSingle::getStartToken() const {
     return mExpr.getStartToken();
 }
@@ -79,6 +84,10 @@ ArrayLitExprsMulti::ArrayLitExprsMulti(AssignExpr & expr, ArrayLitExprs & exprsL
 {
     mExpr.mParent = this;
     mExprsList.mParent = this;
+}
+
+void ArrayLitExprsMulti::accept(ASTNodeVisitor & visitor) {
+    visitor.visit(*this);
 }
 
 const Token & ArrayLitExprsMulti::getStartToken() const {
