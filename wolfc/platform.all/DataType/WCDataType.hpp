@@ -13,10 +13,15 @@ namespace AST {
     class ASTNode;
 }
 
+class DataTypeVisitor;
+
 /* Base class for a data type */
 class DataType {
 public:
     virtual ~DataType();
+    
+    /* Visitor pattern accept function */
+    virtual void accept(DataTypeVisitor & visitor) const = 0;
     
     /* Get the id of the data type */
     virtual DataTypeId getTypeId() const = 0;

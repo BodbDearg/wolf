@@ -10,6 +10,7 @@ public:
     ArrayDataType(DataType & innerType, size_t size);
     virtual ~ArrayDataType() override;
     
+    virtual void accept(DataTypeVisitor & visitor) const override;
     virtual DataTypeId getTypeId() const override;
     virtual const std::string & name() const override;
     virtual bool equals(const DataType & other) const override;

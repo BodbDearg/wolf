@@ -1,6 +1,7 @@
 #include "WCArrayDataType.hpp"
 
 #include "AST/Nodes/WCPrintStmnt.hpp"
+#include "DataType/DataTypeVisitor.hpp"
 #include "WCAssert.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -28,6 +29,10 @@ ArrayDataType::ArrayDataType(DataType & innerType, size_t size) :
 ArrayDataType::~ArrayDataType() {
     // Defined here so llvm::Type can be forward referenced in the header.
     WC_EMPTY_FUNC_BODY();
+}
+
+void ArrayDataType::accept(DataTypeVisitor & visitor) const {
+    visitor.visit(*this);
 }
 
 DataTypeId ArrayDataType::getTypeId() const {

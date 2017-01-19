@@ -1,11 +1,16 @@
 #include "WCStrDataType.hpp"
 
 #include "AST/Nodes/WCASTNode.hpp"
+#include "DataType/DataTypeVisitor.hpp"
 #include "WCAssert.hpp"
 
 WC_BEGIN_NAMESPACE
 
 static const std::string kName = "string";
+
+void StrDataType::accept(DataTypeVisitor & visitor) const {
+    visitor.visit(*this);
+}
 
 DataTypeId StrDataType::getTypeId() const {
     return DataTypeId::kStr;

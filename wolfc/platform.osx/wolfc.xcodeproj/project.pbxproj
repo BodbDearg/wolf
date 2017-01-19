@@ -254,6 +254,7 @@
 		1F7E19421E30A16400C82867 /* Function.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Function.hpp; sourceTree = "<group>"; };
 		1F7E19441E30A72400C82867 /* Codegen_DeclDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_DeclDef.cpp; sourceTree = "<group>"; };
 		1F7E19461E30A81400C82867 /* Codegen_Func.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_Func.cpp; sourceTree = "<group>"; };
+		1F7E19481E30AE6100C82867 /* DataTypeVisitor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DataTypeVisitor.hpp; sourceTree = "<group>"; };
 		1F7E6C4E1E2F5DA800719A99 /* Codegen.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Codegen.hpp; sourceTree = "<group>"; };
 		1F7E6C4F1E2F5F0E00719A99 /* Codegen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen.cpp; sourceTree = "<group>"; };
 		1F843D1A1CE9474E0065FB7A /* WCLexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCLexer.cpp; sourceTree = "<group>"; };
@@ -460,6 +461,7 @@
 		1FCD4DF11D0136360076E358 /* DataType */ = {
 			isa = PBXGroup;
 			children = (
+				1F7E19481E30AE6100C82867 /* DataTypeVisitor.hpp */,
 				1FCD4E011D0160DB0076E358 /* Primitives */,
 				1FCD4DF21D0136360076E358 /* WCDataType.cpp */,
 				1FCD4DF31D0136360076E358 /* WCDataType.hpp */,

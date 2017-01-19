@@ -1,10 +1,15 @@
 #include "WCUnknownDataType.hpp"
 
 #include "AST/Nodes/WCPrintStmnt.hpp"
+#include "DataType/DataTypeVisitor.hpp"
 
 WC_BEGIN_NAMESPACE
 
 static const std::string kName = "<Unknown>";
+
+void UnknownDataType::accept(DataTypeVisitor & visitor) const {
+    visitor.visit(*this);
+}
 
 DataTypeId UnknownDataType::getTypeId() const {
     return DataTypeId::kUnknown;

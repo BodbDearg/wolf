@@ -17,7 +17,7 @@ class Codegen : public AST::ASTNodeVisitor {
 public:
     Codegen(CodegenCtx & ctx, const char * moduleName);
     
-    /* Visitor functions */
+    /* AST node visitor functions */
     virtual void visit(const AST::AddExprAdd & node) override;
     virtual void visit(const AST::AddExprBOr & node) override;
     virtual void visit(const AST::AddExprBXor & node) override;

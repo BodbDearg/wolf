@@ -2,11 +2,16 @@
 
 #include "AST/Nodes/WCASTNode.hpp"
 #include "AST/Nodes/WCPrintStmnt.hpp"
+#include "DataType/DataTypeVisitor.hpp"
 #include "WCAssert.hpp"
 
 WC_BEGIN_NAMESPACE
 
 static const std::string kName = "bool";
+
+void BoolDataType::accept(DataTypeVisitor & visitor) const {
+    visitor.visit(*this);
+}
 
 DataTypeId BoolDataType::getTypeId() const {
     return DataTypeId::kBool;
