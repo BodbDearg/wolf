@@ -35,7 +35,7 @@ public:
     
     Scope(const Token & startToken, std::vector<Stmnt*> && stmnts);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     

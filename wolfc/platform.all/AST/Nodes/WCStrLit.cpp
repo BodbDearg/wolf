@@ -29,7 +29,7 @@ StrLit::StrLit(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY();
 }
 
-void StrLit::accept(ASTNodeVisitor & visitor) {
+void StrLit::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

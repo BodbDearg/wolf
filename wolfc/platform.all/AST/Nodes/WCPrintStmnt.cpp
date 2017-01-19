@@ -57,7 +57,7 @@ PrintStmnt::PrintStmnt(const Token & startToken, AssignExpr & expr, const Token 
     mExpr.mParent = this;
 }
 
-void PrintStmnt::accept(ASTNodeVisitor & visitor) {
+void PrintStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

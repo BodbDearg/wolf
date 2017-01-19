@@ -43,7 +43,7 @@ DeclDefFunc::DeclDefFunc(Func & func) : mFunc(func) {
     mFunc.mParent = this;
 }
 
-void DeclDefFunc::accept(ASTNodeVisitor & visitor) {
+void DeclDefFunc::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -69,7 +69,7 @@ DeclDefVarDecl::DeclDefVarDecl(VarDecl & varDecl) : mVarDecl(varDecl) {
     mVarDecl.mParent = this;
 }
 
-void DeclDefVarDecl::accept(ASTNodeVisitor & visitor) {
+void DeclDefVarDecl::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

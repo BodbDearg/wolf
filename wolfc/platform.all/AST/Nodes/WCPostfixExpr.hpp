@@ -34,7 +34,7 @@ class PostfixExprNoPostfix final : public PostfixExpr {
 public:
     PostfixExprNoPostfix(CastExpr & expr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -94,7 +94,7 @@ class PostfixExprInc final : public PostfixExprIncDecBase {
 public:
     PostfixExprInc(CastExpr & expr, const Token & endToken);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* CastExpr -- */
@@ -102,7 +102,7 @@ class PostfixExprDec final : public PostfixExprIncDecBase {
 public:
     PostfixExprDec(CastExpr & expr, const Token & endToken);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* PostfixExpr FuncCall */
@@ -110,7 +110,7 @@ class PostfixExprFuncCall final : public PostfixExpr {
 public:
     PostfixExprFuncCall(PostfixExpr & expr, FuncCall & funcInvocation);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -151,7 +151,7 @@ public:
                            AssignExpr & indexExpr,
                            const Token & endToken);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     

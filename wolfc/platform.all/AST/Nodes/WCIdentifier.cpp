@@ -32,7 +32,7 @@ Identifier::Identifier(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY();
 }
 
-void Identifier::accept(ASTNodeVisitor & visitor) {
+void Identifier::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

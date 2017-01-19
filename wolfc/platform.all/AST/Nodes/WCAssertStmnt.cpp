@@ -57,7 +57,7 @@ AssertStmnt::AssertStmnt(const Token & startToken, AssignExpr & expr, const Toke
     mExpr.mParent = this;
 }
 
-void AssertStmnt::accept(ASTNodeVisitor & visitor) {
+void AssertStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

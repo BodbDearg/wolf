@@ -7,7 +7,6 @@
 
 #include "WCAssert.hpp"
 #include "WCASTNode.hpp"
-#include "WCCStrComparator.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <map>
@@ -36,7 +35,7 @@ public:
     
     Module(std::vector<DeclDef*> && mDeclDefs, const Token & eofToken);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -74,10 +73,10 @@ public:
     DataValue * getVar(const char * varName) const;
 #endif
     
-private:
     /* All declarations and definitions in the module/ */
     const std::vector<DeclDef*> mDeclDefs;
     
+private:
 #warning FIXME - Codegen
 #if 0
     /* A list of registered functions in the module. Generated during the compile phase. */

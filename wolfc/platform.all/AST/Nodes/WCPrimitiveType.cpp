@@ -32,7 +32,7 @@ PrimitiveType::PrimitiveType(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY();
 }
 
-void PrimitiveType::accept(ASTNodeVisitor & visitor) {
+void PrimitiveType::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

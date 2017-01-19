@@ -186,7 +186,7 @@ VarDeclInferType::VarDeclInferType(const Token & startToken,
     WC_EMPTY_FUNC_BODY();
 }
 
-void VarDeclInferType::accept(ASTNodeVisitor & visitor) {
+void VarDeclInferType::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -208,7 +208,7 @@ VarDeclExplicitType::VarDeclExplicitType(const Token & startToken,
     mType.mParent = this;
 }
 
-void VarDeclExplicitType::accept(ASTNodeVisitor & visitor) {
+void VarDeclExplicitType::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

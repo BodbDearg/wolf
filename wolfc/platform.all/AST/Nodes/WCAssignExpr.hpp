@@ -40,7 +40,7 @@ class AssignExprNoAssign final : public AssignExpr {
 public:
     AssignExprNoAssign(TernaryExpr & expr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -97,7 +97,7 @@ class AssignExprAssign final : public AssignExprAssignBase {
 public:
     AssignExprAssign(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     
 #warning FIXME - Codegen
 #if 0
@@ -129,7 +129,7 @@ class AssignExprAssignAdd final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignAdd(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* TernaryExpr -= AssignExpr */
@@ -137,7 +137,7 @@ class AssignExprAssignSub final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignSub(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* TernaryExpr |= AssignExpr */
@@ -145,7 +145,7 @@ class AssignExprAssignBOr final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignBOr(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* TernaryExpr ^= AssignExpr */
@@ -153,7 +153,7 @@ class AssignExprAssignBXor final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignBXor(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* TernaryExpr *= AssignExpr */
@@ -161,7 +161,7 @@ class AssignExprAssignMul final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignMul(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* TernaryExpr /= AssignExpr */
@@ -169,7 +169,7 @@ class AssignExprAssignDiv final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignDiv(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* TernaryExpr %= AssignExpr */
@@ -177,7 +177,7 @@ class AssignExprAssignMod final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignMod(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* TernaryExpr &= AssignExpr */
@@ -185,7 +185,7 @@ class AssignExprAssignBAnd final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignBAnd(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* TernaryExpr <<= AssignExpr */
@@ -193,7 +193,7 @@ class AssignExprAssignLShift final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignLShift(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* TernaryExpr >>= AssignExpr */
@@ -201,7 +201,7 @@ class AssignExprAssignARShift final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignARShift(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* TernaryExpr >>>= AssignExpr */
@@ -209,7 +209,7 @@ class AssignExprAssignLRShift final : public AssignExprBinaryOpBase {
 public:
     AssignExprAssignLRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 WC_AST_END_NAMESPACE

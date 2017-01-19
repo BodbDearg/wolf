@@ -30,7 +30,7 @@ class ShiftExprNoOp final : public ShiftExpr {
 public:
     ShiftExprNoOp(UnaryExpr & expr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -92,7 +92,7 @@ class ShiftExprLShift final : public ShiftExprTwoOps {
 public:
     ShiftExprLShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* UnaryExpr >> ShiftExpr */
@@ -100,7 +100,7 @@ class ShiftExprARShift final : public ShiftExprTwoOps {
 public:
     ShiftExprARShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* UnaryExpr >>> ShiftExpr */
@@ -108,7 +108,7 @@ class ShiftExprLRShift final : public ShiftExprTwoOps {
 public:
     ShiftExprLRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 WC_AST_END_NAMESPACE

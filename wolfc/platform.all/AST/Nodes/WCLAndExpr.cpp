@@ -44,7 +44,7 @@ LAndExprNoOp::LAndExprNoOp(NotExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void LAndExprNoOp::accept(ASTNodeVisitor & visitor) {
+void LAndExprNoOp::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -94,7 +94,7 @@ LAndExprAnd::LAndExprAnd(NotExpr & leftExpr, LAndExpr & rightExpr) :
     mRightExpr.mParent = this;
 }
 
-void LAndExprAnd::accept(ASTNodeVisitor & visitor) {
+void LAndExprAnd::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

@@ -64,7 +64,7 @@ AssignExprNoAssign::AssignExprNoAssign(TernaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void AssignExprNoAssign::accept(ASTNodeVisitor & visitor) {
+void AssignExprNoAssign::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -249,7 +249,7 @@ AssignExprAssign::AssignExprAssign(TernaryExpr & leftExpr, AssignExpr & rightExp
     WC_EMPTY_FUNC_BODY();
 }
 
-void AssignExprAssign::accept(ASTNodeVisitor & visitor) {
+void AssignExprAssign::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -289,7 +289,7 @@ AssignExprAssignAdd::AssignExprAssignAdd(TernaryExpr & leftExpr, AssignExpr & ri
     WC_EMPTY_FUNC_BODY();
 }
 
-void AssignExprAssignAdd::accept(ASTNodeVisitor & visitor) {
+void AssignExprAssignAdd::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -307,7 +307,7 @@ AssignExprAssignSub::AssignExprAssignSub(TernaryExpr & leftExpr, AssignExpr & ri
     WC_EMPTY_FUNC_BODY();
 }
 
-void AssignExprAssignSub::accept(ASTNodeVisitor & visitor) {
+void AssignExprAssignSub::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -325,7 +325,7 @@ AssignExprAssignBOr::AssignExprAssignBOr(TernaryExpr & leftExpr, AssignExpr & ri
     WC_EMPTY_FUNC_BODY();
 }
 
-void AssignExprAssignBOr::accept(ASTNodeVisitor & visitor) {
+void AssignExprAssignBOr::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -343,7 +343,7 @@ AssignExprAssignBXor::AssignExprAssignBXor(TernaryExpr & leftExpr, AssignExpr & 
     WC_EMPTY_FUNC_BODY();
 }
 
-void AssignExprAssignBXor::accept(ASTNodeVisitor & visitor) {
+void AssignExprAssignBXor::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -361,7 +361,7 @@ AssignExprAssignMul::AssignExprAssignMul(TernaryExpr & leftExpr, AssignExpr & ri
     WC_EMPTY_FUNC_BODY();
 }
 
-void AssignExprAssignMul::accept(ASTNodeVisitor & visitor) {
+void AssignExprAssignMul::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -379,7 +379,7 @@ AssignExprAssignDiv::AssignExprAssignDiv(TernaryExpr & leftExpr, AssignExpr & ri
     WC_EMPTY_FUNC_BODY();
 }
 
-void AssignExprAssignDiv::accept(ASTNodeVisitor & visitor) {
+void AssignExprAssignDiv::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -397,7 +397,7 @@ AssignExprAssignMod::AssignExprAssignMod(TernaryExpr & leftExpr, AssignExpr & ri
     WC_EMPTY_FUNC_BODY();
 }
 
-void AssignExprAssignMod::accept(ASTNodeVisitor & visitor) {
+void AssignExprAssignMod::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -415,7 +415,7 @@ AssignExprAssignBAnd::AssignExprAssignBAnd(TernaryExpr & leftExpr, AssignExpr & 
     WC_EMPTY_FUNC_BODY();
 }
 
-void AssignExprAssignBAnd::accept(ASTNodeVisitor & visitor) {
+void AssignExprAssignBAnd::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -433,7 +433,7 @@ AssignExprAssignLShift::AssignExprAssignLShift(TernaryExpr & leftExpr, AssignExp
     WC_EMPTY_FUNC_BODY();
 }
 
-void AssignExprAssignLShift::accept(ASTNodeVisitor & visitor) {
+void AssignExprAssignLShift::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -451,7 +451,7 @@ AssignExprAssignARShift::AssignExprAssignARShift(TernaryExpr & leftExpr, AssignE
     WC_EMPTY_FUNC_BODY();
 }
 
-void AssignExprAssignARShift::accept(ASTNodeVisitor & visitor) {
+void AssignExprAssignARShift::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -469,7 +469,7 @@ AssignExprAssignLRShift::AssignExprAssignLRShift(TernaryExpr & leftExpr, AssignE
     WC_EMPTY_FUNC_BODY();
 }
 
-void AssignExprAssignLRShift::accept(ASTNodeVisitor & visitor) {
+void AssignExprAssignLRShift::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

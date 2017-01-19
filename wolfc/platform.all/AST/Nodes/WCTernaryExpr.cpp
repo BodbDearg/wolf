@@ -60,7 +60,7 @@ TernaryExprNoCond::TernaryExprNoCond(LOrExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void TernaryExprNoCond::accept(ASTNodeVisitor & visitor) {
+void TernaryExprNoCond::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -115,7 +115,7 @@ TernaryExprWithCond::TernaryExprWithCond(LOrExpr & condExpr,
     mFalseExpr.mParent = this;
 }
 
-void TernaryExprWithCond::accept(ASTNodeVisitor & visitor) {
+void TernaryExprWithCond::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

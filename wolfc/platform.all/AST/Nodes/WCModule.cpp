@@ -54,7 +54,7 @@ Module::Module(std::vector<DeclDef*> && declDefs, const Token & eofToken) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void Module::accept(ASTNodeVisitor & visitor) {
+void Module::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

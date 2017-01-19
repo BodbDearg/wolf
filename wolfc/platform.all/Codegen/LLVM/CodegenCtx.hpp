@@ -1,5 +1,6 @@
 #pragma once
 
+#include "WCCStrComparator.hpp"
 #include "WCMacros.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -13,15 +14,19 @@ WC_BEGIN_NAMESPACE
 
 namespace AST {
     class ASTNode;
+    class Func;
 }
 
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
+class Function;
+
 /* Class holding the context for code generation */
 class CodegenCtx {
 public:
-    /* Creates the codegen context */
     CodegenCtx();
+    
+    ~CodegenCtx();
     
     /* Tells if there are errors in the codegen context */
     bool hasErrors() const;
@@ -63,15 +68,21 @@ public:
      * There MUST be an insert block on the stack, assumes this is the case (undefined behavior otherwise).
      */
     void popInsertBlock();
+
+    /**
+     * Dump the IR code for the module to stdout.
+     * Returns false if this is not possible.
+     */
+    bool dumpIRCodeToStdout();
     
     /* The LLVM context */
-    llvm::LLVMContext llvmCtx;
+    llvm::LLVMContext mLLVMCtx;
     
     /* The llvm IR builder object. Used for creating most instructions. */
-    llvm::IRBuilder<> irBuilder;
+    llvm::IRBuilder<> mIRBuilder;
     
     /* The LLVM module */
-    std::unique_ptr<llvm::Module> llvmModule;
+    std::unique_ptr<llvm::Module> mLLVMModule;
     
 #warning FIXME - Codegen
 #if 0
@@ -102,6 +113,13 @@ public:
     std::list<DeferredCodegenCallback> deferredCodegenCallbacks;
 #endif
     
+    /* Register the given function in the module. Issues a compile error if already registered. */
+    bool registerModuleFunc(const AST::Func & astNode);
+    
+    /* Retrieve the function of the specified name in the module. Returns nullptr if not found. */
+    Function * getModuleFunc(const char * name);
+    Function * getModuleFunc(const std::string & name);
+    
 private:
     /* A list of error messages emitted during parsing */
     std::vector<std::string> mErrorMsgs;
@@ -109,8 +127,12 @@ private:
     /* A list of warning messages emitted during parsing */
     std::vector<std::string> mWarningMsgs;
     
+#warning STILL required?
     /* A stack of code insert blocks pushed/saved for later restoring. */
     std::vector<llvm::BasicBlock*> mInsertBlockStack;
+    
+    /* A list of registered functions in the module by name. */
+    std::map<std::string, std::unique_ptr<Function>> mFuncs;
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE

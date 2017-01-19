@@ -53,7 +53,7 @@ ScopeStmnt::ScopeStmnt(const Token & startToken, Scope & bodyScope, const Token 
     mBodyScope.mParent = this;
 }
 
-void ScopeStmnt::accept(ASTNodeVisitor & visitor) {
+void ScopeStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

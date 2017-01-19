@@ -143,7 +143,7 @@ ReturnStmntNoCondVoid::ReturnStmntNoCondVoid(const Token & returnToken) : Return
     WC_EMPTY_FUNC_BODY();
 }
 
-void ReturnStmntNoCondVoid::accept(ASTNodeVisitor & visitor) {
+void ReturnStmntNoCondVoid::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -194,7 +194,7 @@ ReturnStmntNoCondWithValue::ReturnStmntNoCondWithValue(const Token & returnToken
     mReturnExpr.mParent = this;
 }
 
-void ReturnStmntNoCondWithValue::accept(ASTNodeVisitor & visitor) {
+void ReturnStmntNoCondWithValue::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -276,7 +276,7 @@ ReturnStmntWithCondVoid::ReturnStmntWithCondVoid(const Token & returnToken,
     WC_EMPTY_FUNC_BODY();
 }
 
-void ReturnStmntWithCondVoid::accept(ASTNodeVisitor & visitor) {
+void ReturnStmntWithCondVoid::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -348,7 +348,7 @@ ReturnStmntWithCondAndValue::ReturnStmntWithCondAndValue(const Token & returnTok
     mReturnExpr.mParent = this;
 }
 
-void ReturnStmntWithCondAndValue::accept(ASTNodeVisitor & visitor) {
+void ReturnStmntWithCondAndValue::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

@@ -47,7 +47,7 @@ FuncArg::FuncArg(Type & type, Identifier & ident) :
     mIdent.mParent = this;
 }
 
-void FuncArg::accept(ASTNodeVisitor & visitor) {
+void FuncArg::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

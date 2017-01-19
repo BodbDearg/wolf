@@ -3,8 +3,8 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-Codegen::Codegen(CodegenCtx & codegenCtx, const char * moduleName) :
-    mCodegenCtx(codegenCtx),
+Codegen::Codegen(CodegenCtx & ctx, const char * moduleName) :
+    mCtx(ctx),
     mModuleName(moduleName)
 {
     WC_EMPTY_FUNC_BODY();
@@ -166,18 +166,6 @@ void Codegen::visit(const AST::CmpExprTwoOps & node) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::DeclDefFunc & node) {
-     #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::DeclDefVarDecl & node) {
-     #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::Func & node) {
-     #warning TODO: Codegen this node
-}
-
 void Codegen::visit(const AST::FuncArg & node) {
      #warning TODO: Codegen this node
 }
@@ -243,10 +231,6 @@ void Codegen::visit(const AST::LOrExprNoOp & node) {
 }
 
 void Codegen::visit(const AST::LOrExprOr & node) {
-     #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::Module & node) {
      #warning TODO: Codegen this node
 }
 

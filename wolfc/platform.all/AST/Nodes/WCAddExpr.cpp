@@ -55,7 +55,7 @@ AddExprNoOp::AddExprNoOp(MulExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void AddExprNoOp::accept(ASTNodeVisitor & visitor) {
+void AddExprNoOp::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -195,7 +195,7 @@ AddExprAdd::AddExprAdd(MulExpr & leftExpr, AddExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void AddExprAdd::accept(ASTNodeVisitor & visitor) {
+void AddExprAdd::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -214,7 +214,7 @@ AddExprSub::AddExprSub(MulExpr & leftExpr, AddExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void AddExprSub::accept(ASTNodeVisitor & visitor) {
+void AddExprSub::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -233,7 +233,7 @@ AddExprBOr::AddExprBOr(MulExpr & leftExpr, AddExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void AddExprBOr::accept(ASTNodeVisitor & visitor) {
+void AddExprBOr::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -252,7 +252,7 @@ AddExprBXor::AddExprBXor(MulExpr & leftExpr, AddExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void AddExprBXor::accept(ASTNodeVisitor & visitor) {
+void AddExprBXor::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

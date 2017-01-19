@@ -44,7 +44,7 @@ FuncCallArgListSingle::FuncCallArgListSingle(AssignExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void FuncCallArgListSingle::accept(ASTNodeVisitor & visitor) {
+void FuncCallArgListSingle::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -75,7 +75,7 @@ FuncCallArgListMulti::FuncCallArgListMulti(AssignExpr & expr, FuncCallArgList & 
     mArgList.mParent = this;
 }
 
-void FuncCallArgListMulti::accept(ASTNodeVisitor & visitor) {
+void FuncCallArgListMulti::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

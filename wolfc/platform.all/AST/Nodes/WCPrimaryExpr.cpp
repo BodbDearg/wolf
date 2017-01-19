@@ -82,7 +82,7 @@ PrimaryExprIntLit::PrimaryExprIntLit(IntLit & lit) : mLit(lit) {
     mLit.mParent = this;
 }
 
-void PrimaryExprIntLit::accept(ASTNodeVisitor & visitor) {
+void PrimaryExprIntLit::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -128,7 +128,7 @@ PrimaryExprBoolLit::PrimaryExprBoolLit(BoolLit & lit) : mLit(lit) {
     mLit.mParent = this;
 }
 
-void PrimaryExprBoolLit::accept(ASTNodeVisitor & visitor) {
+void PrimaryExprBoolLit::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -174,7 +174,7 @@ PrimaryExprStrLit::PrimaryExprStrLit(StrLit & lit) : mLit(lit) {
     mLit.mParent = this;
 }
 
-void PrimaryExprStrLit::accept(ASTNodeVisitor & visitor) {
+void PrimaryExprStrLit::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -220,7 +220,7 @@ PrimaryExprArrayLit::PrimaryExprArrayLit(ArrayLit & lit) : mLit(lit) {
     mLit.mParent = this;
 }
 
-void PrimaryExprArrayLit::accept(ASTNodeVisitor & visitor) {
+void PrimaryExprArrayLit::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -266,7 +266,7 @@ PrimaryExprIdentifier::PrimaryExprIdentifier(Identifier & ident) : mIdent(ident)
     mIdent.mParent = this;
 }
 
-void PrimaryExprIdentifier::accept(ASTNodeVisitor & visitor) {
+void PrimaryExprIdentifier::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -316,7 +316,7 @@ PrimaryExprReadnum::PrimaryExprReadnum(ReadnumExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void PrimaryExprReadnum::accept(ASTNodeVisitor & visitor) {
+void PrimaryExprReadnum::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
     
@@ -362,7 +362,7 @@ PrimaryExprTime::PrimaryExprTime(TimeExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void PrimaryExprTime::accept(ASTNodeVisitor & visitor) {
+void PrimaryExprTime::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -408,7 +408,7 @@ PrimaryExprRandExpr::PrimaryExprRandExpr(RandExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void PrimaryExprRandExpr::accept(ASTNodeVisitor & visitor) {
+void PrimaryExprRandExpr::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

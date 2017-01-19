@@ -47,7 +47,7 @@ ArrayLitExprsSingle::ArrayLitExprsSingle(AssignExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void ArrayLitExprsSingle::accept(ASTNodeVisitor & visitor) {
+void ArrayLitExprsSingle::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -86,7 +86,7 @@ ArrayLitExprsMulti::ArrayLitExprsMulti(AssignExpr & expr, ArrayLitExprs & exprsL
     mExprsList.mParent = this;
 }
 
-void ArrayLitExprsMulti::accept(ASTNodeVisitor & visitor) {
+void ArrayLitExprsMulti::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

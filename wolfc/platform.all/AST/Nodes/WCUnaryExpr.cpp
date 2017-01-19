@@ -90,7 +90,7 @@ UnaryExprPrimary::UnaryExprPrimary(PostfixExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void UnaryExprPrimary::accept(ASTNodeVisitor & visitor) {
+void UnaryExprPrimary::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -208,7 +208,7 @@ UnaryExprPlus::UnaryExprPlus(PostfixExpr & expr, const Token & startToken) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void UnaryExprPlus::accept(ASTNodeVisitor & visitor) {
+void UnaryExprPlus::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -226,7 +226,7 @@ UnaryExprMinus::UnaryExprMinus(PostfixExpr & expr, const Token & startToken) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void UnaryExprMinus::accept(ASTNodeVisitor & visitor) {
+void UnaryExprMinus::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -241,7 +241,7 @@ UnaryExprParen::UnaryExprParen(AssignExpr & expr, const Token & startToken, cons
     mExpr.mParent = this;
 }
 
-void UnaryExprParen::accept(ASTNodeVisitor & visitor) {
+void UnaryExprParen::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

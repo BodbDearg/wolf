@@ -30,7 +30,7 @@ IntLit::IntLit(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY();
 }
 
-void IntLit::accept(ASTNodeVisitor & visitor) {
+void IntLit::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

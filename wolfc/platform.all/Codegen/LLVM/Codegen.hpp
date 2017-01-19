@@ -15,8 +15,9 @@ class CodegenCtx;
 /* Generates code for the LLVM backend */
 class Codegen : public AST::ASTNodeVisitor {
 public:
-    Codegen(CodegenCtx & codegenCtx, const char * moduleName);
+    Codegen(CodegenCtx & ctx, const char * moduleName);
     
+    /* Visitor functions */
     virtual void visit(const AST::AddExprAdd & node) override;
     virtual void visit(const AST::AddExprBOr & node) override;
     virtual void visit(const AST::AddExprBXor & node) override;
@@ -148,7 +149,7 @@ public:
     virtual void visit(const AST::WhileStmnt & node) override;
     
 private:
-    CodegenCtx &    mCodegenCtx;
+    CodegenCtx &    mCtx;
     std::string     mModuleName;
 };
 

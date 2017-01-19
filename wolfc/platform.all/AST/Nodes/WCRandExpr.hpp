@@ -42,7 +42,7 @@ class RandExprRand final : public RandExpr {
 public:
     RandExprRand(const Token & startToken, const Token & endToken);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     
     virtual DataType & dataType() override;
     
@@ -59,7 +59,7 @@ public:
                   AssignExpr & seedExpr,
                   const Token & endToken);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     
     virtual DataType & dataType() override;
     

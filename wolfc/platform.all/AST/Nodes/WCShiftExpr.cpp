@@ -53,7 +53,7 @@ ShiftExprNoOp::ShiftExprNoOp(UnaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void ShiftExprNoOp::accept(ASTNodeVisitor & visitor) {
+void ShiftExprNoOp::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -191,7 +191,7 @@ ShiftExprLShift::ShiftExprLShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void ShiftExprLShift::accept(ASTNodeVisitor & visitor) {
+void ShiftExprLShift::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -209,7 +209,7 @@ ShiftExprARShift::ShiftExprARShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) 
     WC_EMPTY_FUNC_BODY();
 }
 
-void ShiftExprARShift::accept(ASTNodeVisitor & visitor) {
+void ShiftExprARShift::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -227,7 +227,7 @@ ShiftExprLRShift::ShiftExprLRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) 
     WC_EMPTY_FUNC_BODY();
 }
 
-void ShiftExprLRShift::accept(ASTNodeVisitor & visitor) {
+void ShiftExprLRShift::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

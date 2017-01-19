@@ -68,7 +68,7 @@ ArrayLit::ArrayLit(const Token & lBrack,
     mExprs.mParent = this;
 }
 
-void ArrayLit::accept(ASTNodeVisitor & visitor) {
+void ArrayLit::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

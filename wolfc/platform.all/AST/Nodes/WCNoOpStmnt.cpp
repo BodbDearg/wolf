@@ -28,7 +28,7 @@ NoOpStmnt::NoOpStmnt(const Token & token) : mToken(token) {
     WC_EMPTY_FUNC_BODY();
 }
 
-void NoOpStmnt::accept(ASTNodeVisitor & visitor) {
+void NoOpStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

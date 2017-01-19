@@ -29,7 +29,7 @@ class DeclDefFunc final : public DeclDef {
 public:
     DeclDefFunc(Func & declDef);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -46,7 +46,7 @@ class DeclDefVarDecl final : public DeclDef {
 public:
     DeclDefVarDecl(VarDecl & varDecl);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     

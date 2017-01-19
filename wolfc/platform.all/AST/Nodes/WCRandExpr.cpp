@@ -127,7 +127,7 @@ RandExprRand::RandExprRand(const Token & startToken, const Token & endToken) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void RandExprRand::accept(ASTNodeVisitor & visitor) {
+void RandExprRand::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -172,7 +172,7 @@ RandExprSRand::RandExprSRand(const Token & startToken,
     mSeedExpr.mParent = this;
 }
 
-void RandExprSRand::accept(ASTNodeVisitor & visitor) {
+void RandExprSRand::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

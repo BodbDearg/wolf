@@ -38,7 +38,7 @@ Scope::Scope(const Token & startToken, std::vector<Stmnt*> && stmnts)
     }
 }
 
-void Scope::accept(ASTNodeVisitor & visitor) {
+void Scope::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

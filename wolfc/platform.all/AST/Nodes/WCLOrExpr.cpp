@@ -52,7 +52,7 @@ LOrExprNoOp::LOrExprNoOp(LAndExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void LOrExprNoOp::accept(ASTNodeVisitor & visitor) {
+void LOrExprNoOp::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -102,7 +102,7 @@ LOrExprOr::LOrExprOr(LAndExpr & leftExpr, LOrExpr & rightExpr) :
     mRightExpr.mParent = this;
 }
 
-void LOrExprOr::accept(ASTNodeVisitor & visitor) {
+void LOrExprOr::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

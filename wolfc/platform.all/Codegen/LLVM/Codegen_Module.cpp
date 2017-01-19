@@ -1,66 +1,23 @@
-#include "Module.hpp"
+#include "Codegen.hpp"
 
-#if 0
-
-WC_THIRD_PARTY_INCLUDES_BEGIN
-    #include <llvm/IR/LLVMContext.h>
-    #include <llvm/IR/Module.h>
-WC_THIRD_PARTY_INCLUDES_END
-
+#include "AST/Nodes/WCDeclDef.hpp"
+#include "AST/Nodes/WCModule.hpp"
+#include "WCAssert.hpp"
 #include "CodegenCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-Module::Module(AST::Module & astModule) :
-    mASTModule(astModule)
-{
-    // Create the LLVM context and module
-    mLLVMCtx.reset(new llvm::LLVMContext());
-    mLLVMModule.reset(new llvm::Module("WolfTest", *mLLVMCtx.get()));
-    
-    // Create the codegen context
-    mCodegenCtx.reset(new CodegenCtx(getLLVMCtxRef(), getLLVMModuleRef()));
-    
-    // Do code generation
-    doCodegen();
-}
-
-Module::~Module() {
-    // Defined here so callee doesn't need to know details of objects destroyed by std::unique_ptr...
-    WC_EMPTY_FUNC_BODY();
-}
-
-bool Module::wasCodeGeneratedOk() {
-    return mLLVMModule.get() != nullptr && mCodegenCtx->errorMsgs.empty();
-}
-
-void Module::dumpIRCodeToStdout() {
-    WC_GUARD_ASSERT(mLLVMModule.get());
-    mLLVMModule->dump();
-}
-
-void Module::doCodegen() {
-    // Declare C standard library functions we require
-    declareCStdLibFuncsInModule();
-    
-    // Codegen all decldefs
-    //for (mASTModule.md)
-}
-
-void Module::declareCStdLibFuncsInModule() {
-    // We expect these objects to be created at this point
-    WC_ASSERT(mLLVMCtx.get());
-    WC_ASSERT(mLLVMModule.get());
-    
-    // For convienience
-    llvm::LLVMContext & llvmCtx = *mLLVMCtx.get();
-    
+/**
+ * Declare all the standard C functions required by codegen
+ * in the given llvm module.
+ */
+static void declareCStdLibFuncsInModule(llvm::LLVMContext & llvmCtx, llvm::Module & llvmModule) {
     #define DECL_STD_C_FUNC(FuncName, ...)\
         {\
             llvm::FunctionType * FuncName##FnType = llvm::FunctionType::get(__VA_ARGS__);\
             WC_ASSERT(FuncName##FnType);\
-            WC_ASSERTED_OP(mLLVMModule->getOrInsertFunction(#FuncName, FuncName##FnType));\
+            WC_ASSERTED_OP(llvmModule.getOrInsertFunction(#FuncName, FuncName##FnType));\
         }
     
     // Declare the required functions
@@ -108,7 +65,19 @@ void Module::declareCStdLibFuncsInModule() {
                     false);
 }
 
+void Codegen::visit(const AST::Module & node) {
+    // Create the LLVM module
+    mCtx.mLLVMModule.reset(new llvm::Module("WolfTest", mCtx.mLLVMCtx));
+    WC_ASSERT(mCtx.mLLVMModule);
+    
+    // Add required standard C functions to the module
+    declareCStdLibFuncsInModule(mCtx.mLLVMCtx, *mCtx.mLLVMModule.get());
+    
+    // Codegen all stuff in the module:
+    for (const AST::DeclDef * declDef : node.mDeclDefs) {
+        declDef->accept(*this);
+    }
+}
+
 WC_LLVM_CODEGEN_END_NAMESPACE
 WC_END_NAMESPACE
-
-#endif

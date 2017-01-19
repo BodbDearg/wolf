@@ -60,7 +60,7 @@ NotExprNoOp::NotExprNoOp(CmpExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void NotExprNoOp::accept(ASTNodeVisitor & visitor) {
+void NotExprNoOp::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -109,7 +109,7 @@ NotExprLNot::NotExprLNot(NotExpr & expr, const Token & startToken) :
     mExpr.mParent = this;
 }
 
-void NotExprLNot::accept(ASTNodeVisitor & visitor) {
+void NotExprLNot::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -189,7 +189,7 @@ NotExprBNot::NotExprBNot(NotExpr & expr, const Token & startToken) :
     mExpr.mParent = this;
 }
 
-void NotExprBNot::accept(ASTNodeVisitor & visitor) {
+void NotExprBNot::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

@@ -101,7 +101,7 @@ LoopStmntNoCond::LoopStmntNoCond(Scope & bodyScope, const Token & startToken, co
     WC_EMPTY_FUNC_BODY();
 }
 
-void LoopStmntNoCond::accept(ASTNodeVisitor & visitor) {
+void LoopStmntNoCond::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -166,7 +166,7 @@ LoopStmntWithCond::LoopStmntWithCond(Scope & bodyScope,
     mLoopCondExpr.mParent = this;
 }
 
-void LoopStmntWithCond::accept(ASTNodeVisitor & visitor) {
+void LoopStmntWithCond::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

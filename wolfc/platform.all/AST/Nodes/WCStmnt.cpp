@@ -128,7 +128,7 @@ StmntNoOpStmnt::StmntNoOpStmnt(NoOpStmnt & stmnt) : mStmnt(stmnt) {
     mStmnt.mParent = this;
 }
 
-void StmntNoOpStmnt::accept(ASTNodeVisitor & visitor) {
+void StmntNoOpStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -158,7 +158,7 @@ StmntPrintStmnt::StmntPrintStmnt(PrintStmnt & stmnt) : mStmnt(stmnt) {
     mStmnt.mParent = this;
 }
 
-void StmntPrintStmnt::accept(ASTNodeVisitor & visitor) {
+void StmntPrintStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -188,7 +188,7 @@ StmntAssertStmnt::StmntAssertStmnt(AssertStmnt & stmnt) : mStmnt(stmnt) {
     mStmnt.mParent = this;
 }
 
-void StmntAssertStmnt::accept(ASTNodeVisitor & visitor) {
+void StmntAssertStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -218,7 +218,7 @@ StmntIfStmnt::StmntIfStmnt(IfStmnt & ifStmnt) : mIfStmnt(ifStmnt) {
     mIfStmnt.mParent = this;
 }
 
-void StmntIfStmnt::accept(ASTNodeVisitor & visitor) {
+void StmntIfStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -248,7 +248,7 @@ StmntWhileStmnt::StmntWhileStmnt(WhileStmnt & whileStmnt) : mWhileStmnt(whileStm
     mWhileStmnt.mParent = this;
 }
 
-void StmntWhileStmnt::accept(ASTNodeVisitor & visitor) {
+void StmntWhileStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -278,7 +278,7 @@ StmntLoopStmnt::StmntLoopStmnt(LoopStmnt & loopStmnt) : mLoopStmnt(loopStmnt) {
     mLoopStmnt.mParent = this;
 }
 
-void StmntLoopStmnt::accept(ASTNodeVisitor & visitor) {
+void StmntLoopStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -308,7 +308,7 @@ StmntScopeStmnt::StmntScopeStmnt(ScopeStmnt & scopeStmnt) : mScopeStmnt(scopeStm
     mScopeStmnt.mParent = this;
 }
 
-void StmntScopeStmnt::accept(ASTNodeVisitor & visitor) {
+void StmntScopeStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -338,7 +338,7 @@ StmntBreakStmnt::StmntBreakStmnt(BreakStmnt & breakStmnt) : mBreakStmnt(breakStm
     mBreakStmnt.mParent = this;
 }
 
-void StmntBreakStmnt::accept(ASTNodeVisitor & visitor) {
+void StmntBreakStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -368,7 +368,7 @@ StmntNextStmnt::StmntNextStmnt(NextStmnt & nextStmnt) : mNextStmnt(nextStmnt) {
     mNextStmnt.mParent = this;
 }
 
-void StmntNextStmnt::accept(ASTNodeVisitor & visitor) {
+void StmntNextStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -398,7 +398,7 @@ StmntReturnStmnt::StmntReturnStmnt(ReturnStmnt & returnStmnt) : mReturnStmnt(ret
     mReturnStmnt.mParent = this;
 }
 
-void StmntReturnStmnt::accept(ASTNodeVisitor & visitor) {
+void StmntReturnStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -428,7 +428,7 @@ StmntVarDecl::StmntVarDecl(VarDecl & decl) : mDecl(decl) {
     mDecl.mParent = this;
 }
 
-void StmntVarDecl::accept(ASTNodeVisitor & visitor) {
+void StmntVarDecl::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -458,7 +458,7 @@ StmntAssignExpr::StmntAssignExpr(AssignExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void StmntAssignExpr::accept(ASTNodeVisitor & visitor) {
+void StmntAssignExpr::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

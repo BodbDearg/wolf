@@ -31,7 +31,7 @@ class MulExprNoOp final : public MulExpr {
 public:
     MulExprNoOp(ShiftExpr & expr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -93,7 +93,7 @@ class MulExprMul final : public MulExprTwoOps {
 public:
     MulExprMul(ShiftExpr & leftExpr, MulExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* ShiftExpr / MulExpr */
@@ -101,7 +101,7 @@ class MulExprDiv final : public MulExprTwoOps {
 public:
     MulExprDiv(ShiftExpr & leftExpr, MulExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* ShiftExpr % MulExpr */
@@ -109,7 +109,7 @@ class MulExprMod final : public MulExprTwoOps {
 public:
     MulExprMod(ShiftExpr & leftExpr, MulExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* ShiftExpr & MulExpr */
@@ -117,7 +117,7 @@ class MulExprBAnd final : public MulExprTwoOps {
 public:
     MulExprBAnd(ShiftExpr & leftExpr, MulExpr & rightExpr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 WC_AST_END_NAMESPACE

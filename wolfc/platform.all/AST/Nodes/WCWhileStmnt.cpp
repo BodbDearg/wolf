@@ -85,7 +85,7 @@ WhileStmnt::WhileStmnt(AssignExpr & whileExpr,
     mBodyScope.mParent = this;
 }
 
-void WhileStmnt::accept(ASTNodeVisitor & visitor) {
+void WhileStmnt::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

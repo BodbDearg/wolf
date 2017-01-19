@@ -1,5 +1,4 @@
 #include "AST/Nodes/WCModule.hpp"
-#include "Codegen/LLVM/Nodes/Module.hpp"
 #include "Codegen/LLVM/CodegenCtx.hpp"
 #include "Codegen/LLVM/Codegen.hpp"
 #include "Lexer/WCLexer.hpp"
@@ -35,7 +34,7 @@ static bool compileAST(const Wolfc::AST::Module * astModule, const char * fromSr
     }
     
     // Emit compile errors to stderr if there are any and fail
-    if (!codegenCtx.llvmModule.get() || codegenCtx.hasErrors()) {
+    if (!codegenCtx.mLLVMModule.get() || codegenCtx.hasErrors()) {
         std::printf("Parsing failed for source file '%s'! Error messages follow:\n", fromSrcFile);
         
         for (const std::string & errorMsg : codegenCtx.getErrorMsgs()) {
@@ -45,7 +44,10 @@ static bool compileAST(const Wolfc::AST::Module * astModule, const char * fromSr
         return false;
     }
     
-    #warning TODO: Dump IR code to STD out
+    // Dump the IR code for the module to stdout
+    if (!codegenCtx.dumpIRCodeToStdout()) {
+        return false;
+    }
     
     // Success!
     return true;

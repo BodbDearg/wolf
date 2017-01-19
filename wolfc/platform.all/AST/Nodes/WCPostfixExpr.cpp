@@ -114,7 +114,7 @@ PostfixExprNoPostfix::PostfixExprNoPostfix(CastExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void PostfixExprNoPostfix::accept(ASTNodeVisitor & visitor) {
+void PostfixExprNoPostfix::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -253,7 +253,7 @@ PostfixExprInc::PostfixExprInc(CastExpr & expr, const Token & endToken) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void PostfixExprInc::accept(ASTNodeVisitor & visitor) {
+void PostfixExprInc::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -271,7 +271,7 @@ PostfixExprDec::PostfixExprDec(CastExpr & expr, const Token & endToken) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void PostfixExprDec::accept(ASTNodeVisitor & visitor) {
+void PostfixExprDec::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -291,7 +291,7 @@ PostfixExprFuncCall::PostfixExprFuncCall(PostfixExpr & expr, FuncCall & funcCall
     mFuncCall.mParent = this;
 }
 
-void PostfixExprFuncCall::accept(ASTNodeVisitor & visitor) {
+void PostfixExprFuncCall::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -483,7 +483,7 @@ PostfixExprArrayLookup::PostfixExprArrayLookup(PostfixExpr & arrayExpr,
     mIndexExpr.mParent = this;
 }
 
-void PostfixExprArrayLookup::accept(ASTNodeVisitor & visitor) {
+void PostfixExprArrayLookup::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

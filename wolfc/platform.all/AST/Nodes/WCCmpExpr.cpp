@@ -91,7 +91,7 @@ CmpExprNoOp::CmpExprNoOp(AddExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void CmpExprNoOp::accept(ASTNodeVisitor & visitor) {
+void CmpExprNoOp::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -228,7 +228,7 @@ CmpExprEQ::CmpExprEQ(AddExpr & leftExpr, CmpExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void CmpExprEQ::accept(ASTNodeVisitor & visitor) {
+void CmpExprEQ::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -246,7 +246,7 @@ CmpExprNE::CmpExprNE(AddExpr & leftExpr, CmpExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void CmpExprNE::accept(ASTNodeVisitor & visitor) {
+void CmpExprNE::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -264,7 +264,7 @@ CmpExprLT::CmpExprLT(AddExpr & leftExpr, CmpExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void CmpExprLT::accept(ASTNodeVisitor & visitor) {
+void CmpExprLT::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -282,7 +282,7 @@ CmpExprLE::CmpExprLE(AddExpr & leftExpr, CmpExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void CmpExprLE::accept(ASTNodeVisitor & visitor) {
+void CmpExprLE::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -300,7 +300,7 @@ CmpExprGT::CmpExprGT(AddExpr & leftExpr, CmpExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void CmpExprGT::accept(ASTNodeVisitor & visitor) {
+void CmpExprGT::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -318,7 +318,7 @@ CmpExprGE::CmpExprGE(AddExpr & leftExpr, CmpExpr & rightExpr) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void CmpExprGE::accept(ASTNodeVisitor & visitor) {
+void CmpExprGE::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

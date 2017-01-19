@@ -26,7 +26,7 @@ class CastExprNoCast final : public CastExpr {
 public:
     CastExprNoCast(PrimaryExpr & expr);
     
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
@@ -53,7 +53,7 @@ public:
                  Type & type,
                  const Token & endToken);
 
-    virtual void accept(ASTNodeVisitor & visitor) override;
+    virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
 

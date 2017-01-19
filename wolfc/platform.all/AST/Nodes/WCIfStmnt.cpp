@@ -181,7 +181,7 @@ IfStmntNoElse::IfStmntNoElse(AssignExpr & ifExpr,
     WC_EMPTY_FUNC_BODY();
 }
 
-void IfStmntNoElse::accept(ASTNodeVisitor & visitor) {
+void IfStmntNoElse::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -263,7 +263,7 @@ IfStmntElseIf::IfStmntElseIf(AssignExpr & ifExpr,
     mElseIfStmnt.mParent = this;
 }
 
-void IfStmntElseIf::accept(ASTNodeVisitor & visitor) {
+void IfStmntElseIf::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -368,7 +368,7 @@ IfStmntElse::IfStmntElse(AssignExpr & ifExpr,
     mElseScope.mParent = this;
 }
 
-void IfStmntElse::accept(ASTNodeVisitor & visitor) {
+void IfStmntElse::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
     

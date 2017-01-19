@@ -124,7 +124,7 @@ Func::Func(const Token & startToken,
     mScope.mParent = this;
 }
 
-void Func::accept(ASTNodeVisitor & visitor) {
+void Func::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

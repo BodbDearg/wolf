@@ -44,7 +44,7 @@ FuncArgListSingle::FuncArgListSingle(FuncArg & arg) : mArg(arg) {
     mArg.mParent = this;
 }
 
-void FuncArgListSingle::accept(ASTNodeVisitor & visitor) {
+void FuncArgListSingle::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -75,7 +75,7 @@ FuncArgListMulti::FuncArgListMulti(FuncArg & arg, FuncArgList & argList) :
     mArgList.mParent = this;
 }
 
-void FuncArgListMulti::accept(ASTNodeVisitor & visitor) {
+void FuncArgListMulti::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

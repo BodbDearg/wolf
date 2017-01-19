@@ -58,7 +58,7 @@ FuncCall::FuncCall(const Token & startToken, FuncCallArgList * argList, const To
     }
 }
 
-void FuncCall::accept(ASTNodeVisitor & visitor) {
+void FuncCall::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

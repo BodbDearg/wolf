@@ -80,7 +80,7 @@ NextStmntNoCond::NextStmntNoCond(const Token & nextToken) : NextStmnt(nextToken)
     WC_EMPTY_FUNC_BODY();
 }
 
-void NextStmntNoCond::accept(ASTNodeVisitor & visitor) {
+void NextStmntNoCond::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -129,7 +129,7 @@ NextStmntWithCond::NextStmntWithCond(const Token & nextToken,
     mCondExpr.mParent = this;
 }
 
-void NextStmntWithCond::accept(ASTNodeVisitor & visitor) {
+void NextStmntWithCond::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
     

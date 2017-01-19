@@ -84,7 +84,7 @@ BreakStmntNoCond::BreakStmntNoCond(const Token & breakToken) : BreakStmnt(breakT
     WC_EMPTY_FUNC_BODY();
 }
 
-void BreakStmntNoCond::accept(ASTNodeVisitor & visitor) {
+void BreakStmntNoCond::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -129,7 +129,7 @@ BreakStmntWithCond::BreakStmntWithCond(const Token & breakToken,
     mCondExpr.mParent = this;
 }
 
-void BreakStmntWithCond::accept(ASTNodeVisitor & visitor) {
+void BreakStmntWithCond::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
     

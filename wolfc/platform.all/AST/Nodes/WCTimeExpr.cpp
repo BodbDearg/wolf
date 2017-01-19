@@ -48,7 +48,7 @@ TimeExpr::TimeExpr(const Token & startToken, const Token & endToken) :
     
 }
 
-void TimeExpr::accept(ASTNodeVisitor & visitor) {
+void TimeExpr::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

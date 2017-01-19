@@ -48,7 +48,7 @@ ReadnumExpr::ReadnumExpr(const Token & startToken, const Token & endToken) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void ReadnumExpr::accept(ASTNodeVisitor & visitor) {
+void ReadnumExpr::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

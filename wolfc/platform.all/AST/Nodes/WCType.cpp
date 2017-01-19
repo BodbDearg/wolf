@@ -70,7 +70,7 @@ TypePrimitive::TypePrimitive(PrimitiveType & type) : mType(type) {
     mParent = this;
 }
 
-void TypePrimitive::accept(ASTNodeVisitor & visitor) {
+void TypePrimitive::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -105,7 +105,7 @@ TypeArray::TypeArray(const Token & startToken, AssignExpr & sizeExpr, Type & ele
     mElemType.mParent = this;
 }
 
-void TypeArray::accept(ASTNodeVisitor & visitor) {
+void TypeArray::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

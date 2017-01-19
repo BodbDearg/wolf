@@ -90,7 +90,7 @@ CastExprNoCast::CastExprNoCast(PrimaryExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void CastExprNoCast::accept(ASTNodeVisitor & visitor) {
+void CastExprNoCast::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
@@ -146,7 +146,7 @@ CastExprCast::CastExprCast(const Token & startToken,
     mType.mParent = this;
 }
 
-void CastExprCast::accept(ASTNodeVisitor & visitor) {
+void CastExprCast::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
