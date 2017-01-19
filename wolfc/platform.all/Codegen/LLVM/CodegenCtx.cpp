@@ -14,6 +14,14 @@ CodegenCtx::CodegenCtx() :
     WC_EMPTY_FUNC_BODY();
 }
 
+bool CodegenCtx::hasErrors() const {
+    return mErrorMsgs.size() > 0;
+}
+
+bool CodegenCtx::hasWarnings() const {
+    return mWarningMsgs.size() > 0;
+}
+
 void CodegenCtx::error(const AST::ASTNode & atNode, const char * msgFmtStr, ...) {
     va_list msgFmtStrArgs;
     va_start(msgFmtStrArgs, msgFmtStr);

@@ -13,11 +13,11 @@ ParseCtx::ParseCtx(const Token * startToken, LinearAlloc & linearAlloc) :
 }
 
 bool ParseCtx::hasErrors() const {
-    return !mErrorMsgs.empty();
+    return mErrorMsgs.size() > 0;
 }
 
 bool ParseCtx::hasWarnings() const {
-    return !mWarningMsgs.empty();
+    return mWarningMsgs.size() > 0;
 }
 
 void ParseCtx::error(const char * msgFmtStr, ...) {
