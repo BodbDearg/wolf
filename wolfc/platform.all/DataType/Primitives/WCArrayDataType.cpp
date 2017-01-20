@@ -59,6 +59,16 @@ bool ArrayDataType::equals(const DataType & other) const {
     return mInnerType.equals(otherArray->mInnerType);
 }
 
+bool ArrayDataType::isValid() const {
+    // Only valid if the inner type is valid!
+    return mInnerType.isValid();
+}
+
+bool ArrayDataType::isUnknown() const {
+    // Only known if the inner type is not unknown
+    return mInnerType.isUnknown();
+}
+
 bool ArrayDataType::isArray() const {
     return true;
 }
