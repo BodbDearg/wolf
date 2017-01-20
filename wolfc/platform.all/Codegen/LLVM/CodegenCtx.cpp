@@ -148,5 +148,14 @@ Function * CodegenCtx::getModuleFunc(const std::string & name) {
     return iter->second.get();
 }
 
+void CodegenCtx::pushASTNode(const AST::ASTNode & node) {
+    mASTNodeStack.push_back(&node);
+}
+
+void CodegenCtx::popASTNode() {
+    WC_ASSERT(!mASTNodeStack.empty());
+    mASTNodeStack.pop_back();
+}
+
 WC_LLVM_CODEGEN_END_NAMESPACE
 WC_END_NAMESPACE

@@ -82,12 +82,15 @@ public:
     Function * getModuleFunc(const char * name);
     Function * getModuleFunc(const std::string & name);
     
-    /* Push/pop the current node being visited during code generation from the node visitation stack. */
-    void pushVisitedNode(AST::ASTNode & node);
-    void popVisitedNode();
+    /**
+     * Push/pop the current node being visited during code generation from the node visitation stack.
+     * The behavior of pop is undefined if the visited node stack is empty.
+     */
+    void pushASTNode(const AST::ASTNode & node);
+    void popASTNode();
     
-    inline const std::vector<AST::ASTNode*> getVisitedNodeStack() const {
-        return mVisitedNodeStack;
+    inline const std::vector<const AST::ASTNode*> getASTNodeStack() const {
+        return mASTNodeStack;
     }
     
     /* The LLVM context */
@@ -130,7 +133,7 @@ public:
     
 private:
     /* The stack of AST nodes being visited */
-    std::vector<AST::ASTNode*> mVisitedNodeStack;
+    std::vector<const AST::ASTNode*> mASTNodeStack;
     
     /* A list of error messages emitted during parsing */
     std::vector<std::string> mErrorMsgs;
@@ -145,6 +148,25 @@ private:
     /* A list of registered functions in the module by name. */
     std::map<std::string, std::unique_ptr<Function>> mFuncs;
 };
+
+/* A helper RAII object which pushes and pops a node from the given codegen context. */
+class CodegenCtxPushASTNode {
+public:
+    CodegenCtxPushASTNode(const AST::ASTNode & astNode, CodegenCtx & codegenCtx) : mCodegenCtx(codegenCtx) {
+        mCodegenCtx.pushASTNode(astNode);
+    }
+    
+    ~CodegenCtxPushASTNode() {
+        mCodegenCtx.popASTNode();
+    }
+    
+private:
+    CodegenCtx & mCodegenCtx;
+};
+
+/* A helper macro for using the 'CodegenCtxPushASTNode' object within a code generator */
+#define WC_CODEGEN_RECORD_VISITED_NODE()\
+    CodegenCtxPushASTNode pushASTNode(astNode, mCtx)
 
 WC_LLVM_CODEGEN_END_NAMESPACE
 WC_END_NAMESPACE

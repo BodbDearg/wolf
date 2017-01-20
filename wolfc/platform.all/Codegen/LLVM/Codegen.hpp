@@ -3,6 +3,7 @@
 #include "AST/WCASTNodeVisitor.hpp"
 #include "CodegenDataType.hpp"
 #include "ConstCodegen.hpp"
+#include "WCFinally.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <string>

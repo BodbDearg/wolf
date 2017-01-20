@@ -9,6 +9,8 @@ WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 void Codegen::visit(const AST::Func & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    
     // Firstly register the function with the module.
     // If this function is a duplicate then a compile error will occur.
     mCtx.registerModuleFunc(astNode);

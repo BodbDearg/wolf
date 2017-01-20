@@ -66,6 +66,8 @@ static void declareCStdLibFuncsInModule(llvm::LLVMContext & llvmCtx, llvm::Modul
 }
 
 void Codegen::visit(const AST::Module & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    
     // Create the LLVM module
     mCtx.mLLVMModule.reset(new llvm::Module("WolfTest", mCtx.mLLVMCtx));
     WC_ASSERT(mCtx.mLLVMModule);
