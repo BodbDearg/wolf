@@ -12,503 +12,503 @@ Codegen::Codegen(CodegenCtx & ctx, const char * moduleName) :
     WC_EMPTY_FUNC_BODY();
 }
 
-void Codegen::visit(const AST::AddExprAdd & node) {
+void Codegen::visit(const AST::AddExprAdd & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AddExprBOr & node) {
+void Codegen::visit(const AST::AddExprBOr & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AddExprBXor & node) {
+void Codegen::visit(const AST::AddExprBXor & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AddExprNoOp & node) {
+void Codegen::visit(const AST::AddExprNoOp & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AddExprSub & node) {
+void Codegen::visit(const AST::AddExprSub & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AddExprTwoOps & node) {
+void Codegen::visit(const AST::AddExprTwoOps & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ArrayLit & node) {
+void Codegen::visit(const AST::ArrayLit & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ArrayLitExprs & node) {
+void Codegen::visit(const AST::ArrayLitExprs & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ArrayLitExprsMulti & node) {
+void Codegen::visit(const AST::ArrayLitExprsMulti & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ArrayLitExprsSingle & node) {
+void Codegen::visit(const AST::ArrayLitExprsSingle & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssertStmnt & node) {
+void Codegen::visit(const AST::AssertStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprAssign & node) {
+void Codegen::visit(const AST::AssignExprAssign & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprAssignAdd & node) {
+void Codegen::visit(const AST::AssignExprAssignAdd & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprAssignARShift & node) {
+void Codegen::visit(const AST::AssignExprAssignARShift & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprAssignBAnd & node) {
+void Codegen::visit(const AST::AssignExprAssignBAnd & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprAssignBase & node) {
+void Codegen::visit(const AST::AssignExprAssignBase & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprAssignBOr & node) {
+void Codegen::visit(const AST::AssignExprAssignBOr & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprAssignBXor & node) {
+void Codegen::visit(const AST::AssignExprAssignBXor & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprAssignDiv & node) {
+void Codegen::visit(const AST::AssignExprAssignDiv & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprAssignLRShift & node) {
+void Codegen::visit(const AST::AssignExprAssignLRShift & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprAssignLShift & node) {
+void Codegen::visit(const AST::AssignExprAssignLShift & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprAssignMod & node) {
+void Codegen::visit(const AST::AssignExprAssignMod & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprAssignMul & node) {
+void Codegen::visit(const AST::AssignExprAssignMul & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprAssignSub & node) {
+void Codegen::visit(const AST::AssignExprAssignSub & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprBinaryOpBase & node) {
+void Codegen::visit(const AST::AssignExprBinaryOpBase & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::AssignExprNoAssign & node) {
+void Codegen::visit(const AST::AssignExprNoAssign & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::BoolLit & node) {
+void Codegen::visit(const AST::BoolLit & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::BreakStmntNoCond & node) {
+void Codegen::visit(const AST::BreakStmntNoCond & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::BreakStmntWithCond & node) {
+void Codegen::visit(const AST::BreakStmntWithCond & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::CastExprCast & node) {
+void Codegen::visit(const AST::CastExprCast & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::CastExprNoCast & node) {
+void Codegen::visit(const AST::CastExprNoCast & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::CmpExprEQ & node) {
+void Codegen::visit(const AST::CmpExprEQ & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::CmpExprGE & node) {
+void Codegen::visit(const AST::CmpExprGE & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::CmpExprGT & node) {
+void Codegen::visit(const AST::CmpExprGT & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::CmpExprLE & node) {
+void Codegen::visit(const AST::CmpExprLE & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::CmpExprLT & node) {
+void Codegen::visit(const AST::CmpExprLT & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::CmpExprNE & node) {
+void Codegen::visit(const AST::CmpExprNE & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::CmpExprNoOp & node) {
+void Codegen::visit(const AST::CmpExprNoOp & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::CmpExprTwoOps & node) {
+void Codegen::visit(const AST::CmpExprTwoOps & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::FuncArg & node) {
+void Codegen::visit(const AST::FuncArg & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::FuncArgListMulti & node) {
+void Codegen::visit(const AST::FuncArgListMulti & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::FuncArgListSingle & node) {
+void Codegen::visit(const AST::FuncArgListSingle & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::FuncCall & node) {
+void Codegen::visit(const AST::FuncCall & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::FuncCallArgListMulti & node) {
+void Codegen::visit(const AST::FuncCallArgListMulti & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::FuncCallArgListSingle & node) {
+void Codegen::visit(const AST::FuncCallArgListSingle & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::Identifier & node) {
+void Codegen::visit(const AST::Identifier & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::IfStmntElse & node) {
+void Codegen::visit(const AST::IfStmntElse & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::IfStmntElseIf & node) {
+void Codegen::visit(const AST::IfStmntElseIf & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::IfStmntNoElse & node) {
+void Codegen::visit(const AST::IfStmntNoElse & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::IntLit & node) {
+void Codegen::visit(const AST::IntLit & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::LAndExprAnd & node) {
+void Codegen::visit(const AST::LAndExprAnd & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::LAndExprNoOp & node) {
+void Codegen::visit(const AST::LAndExprNoOp & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::LoopStmntNoCond & node) {
+void Codegen::visit(const AST::LoopStmntNoCond & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::LoopStmntWithCond & node) {
+void Codegen::visit(const AST::LoopStmntWithCond & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::LOrExprNoOp & node) {
+void Codegen::visit(const AST::LOrExprNoOp & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::LOrExprOr & node) {
+void Codegen::visit(const AST::LOrExprOr & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::MulExprBAnd & node) {
+void Codegen::visit(const AST::MulExprBAnd & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::MulExprDiv & node) {
+void Codegen::visit(const AST::MulExprDiv & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::MulExprMod & node) {
+void Codegen::visit(const AST::MulExprMod & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::MulExprMul & node) {
+void Codegen::visit(const AST::MulExprMul & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::MulExprNoOp & node) {
+void Codegen::visit(const AST::MulExprNoOp & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::MulExprTwoOps & node) {
+void Codegen::visit(const AST::MulExprTwoOps & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::NextStmntNoCond & node) {
+void Codegen::visit(const AST::NextStmntNoCond & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::NextStmntWithCond & node) {
+void Codegen::visit(const AST::NextStmntWithCond & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::NoOpStmnt & node) {
+void Codegen::visit(const AST::NoOpStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::NotExprBNot & node) {
+void Codegen::visit(const AST::NotExprBNot & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::NotExprLNot & node) {
+void Codegen::visit(const AST::NotExprLNot & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::NotExprNoOp & node) {
+void Codegen::visit(const AST::NotExprNoOp & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PostfixExprArrayLookup & node) {
+void Codegen::visit(const AST::PostfixExprArrayLookup & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PostfixExprDec & node) {
+void Codegen::visit(const AST::PostfixExprDec & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PostfixExprFuncCall & node) {
+void Codegen::visit(const AST::PostfixExprFuncCall & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PostfixExprInc & node) {
+void Codegen::visit(const AST::PostfixExprInc & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PostfixExprIncDecBase & node) {
+void Codegen::visit(const AST::PostfixExprIncDecBase & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PostfixExprNoPostfix & node) {
+void Codegen::visit(const AST::PostfixExprNoPostfix & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PrimaryExprArrayLit & node) {
+void Codegen::visit(const AST::PrimaryExprArrayLit & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PrimaryExprBoolLit & node) {
+void Codegen::visit(const AST::PrimaryExprBoolLit & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PrimaryExprIdentifier & node) {
+void Codegen::visit(const AST::PrimaryExprIdentifier & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PrimaryExprIntLit & node) {
+void Codegen::visit(const AST::PrimaryExprIntLit & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PrimaryExprRandExpr & node) {
+void Codegen::visit(const AST::PrimaryExprRandExpr & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PrimaryExprReadnum & node) {
+void Codegen::visit(const AST::PrimaryExprReadnum & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PrimaryExprStrLit & node) {
+void Codegen::visit(const AST::PrimaryExprStrLit & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PrimaryExprTime & node) {
+void Codegen::visit(const AST::PrimaryExprTime & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PrimitiveType & node) {
+void Codegen::visit(const AST::PrimitiveType & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PrintStmnt & node) {
+void Codegen::visit(const AST::PrintStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::RandExprRand & node) {
+void Codegen::visit(const AST::RandExprRand & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::RandExprSRand & node) {
+void Codegen::visit(const AST::RandExprSRand & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ReadnumExpr & node) {
+void Codegen::visit(const AST::ReadnumExpr & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ReturnStmntNoCondVoid & node) {
+void Codegen::visit(const AST::ReturnStmntNoCondVoid & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ReturnStmntNoCondWithValue & node) {
+void Codegen::visit(const AST::ReturnStmntNoCondWithValue & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ReturnStmntWithCondAndValue & node) {
+void Codegen::visit(const AST::ReturnStmntWithCondAndValue & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ReturnStmntWithCondBase & node) {
+void Codegen::visit(const AST::ReturnStmntWithCondBase & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ReturnStmntWithCondVoid & node) {
+void Codegen::visit(const AST::ReturnStmntWithCondVoid & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::Scope & node) {
+void Codegen::visit(const AST::Scope & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ScopeStmnt & node) {
+void Codegen::visit(const AST::ScopeStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ShiftExprARShift & node) {
+void Codegen::visit(const AST::ShiftExprARShift & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ShiftExprLRShift & node) {
+void Codegen::visit(const AST::ShiftExprLRShift & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ShiftExprLShift & node) {
+void Codegen::visit(const AST::ShiftExprLShift & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ShiftExprNoOp & node) {
+void Codegen::visit(const AST::ShiftExprNoOp & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ShiftExprTwoOps & node) {
+void Codegen::visit(const AST::ShiftExprTwoOps & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::StmntAssertStmnt & node) {
+void Codegen::visit(const AST::StmntAssertStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::StmntAssignExpr & node) {
+void Codegen::visit(const AST::StmntAssignExpr & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::StmntBreakStmnt & node) {
+void Codegen::visit(const AST::StmntBreakStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::StmntIfStmnt & node) {
+void Codegen::visit(const AST::StmntIfStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::StmntLoopStmnt & node) {
+void Codegen::visit(const AST::StmntLoopStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::StmntNextStmnt & node) {
+void Codegen::visit(const AST::StmntNextStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::StmntNoOpStmnt & node) {
+void Codegen::visit(const AST::StmntNoOpStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::StmntPrintStmnt & node) {
+void Codegen::visit(const AST::StmntPrintStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::StmntReturnStmnt & node) {
+void Codegen::visit(const AST::StmntReturnStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::StmntScopeStmnt & node) {
+void Codegen::visit(const AST::StmntScopeStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::StmntVarDecl & node) {
+void Codegen::visit(const AST::StmntVarDecl & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::StmntWhileStmnt & node) {
+void Codegen::visit(const AST::StmntWhileStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::StrLit & node) {
+void Codegen::visit(const AST::StrLit & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::TernaryExprNoCond & node) {
+void Codegen::visit(const AST::TernaryExprNoCond & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::TernaryExprWithCond & node) {
+void Codegen::visit(const AST::TernaryExprWithCond & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::TimeExpr & node) {
+void Codegen::visit(const AST::TimeExpr & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::TypeArray & node) {
+void Codegen::visit(const AST::TypeArray & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::TypePrimitive & node) {
+void Codegen::visit(const AST::TypePrimitive & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::UnaryExprMinus & node) {
+void Codegen::visit(const AST::UnaryExprMinus & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::UnaryExprParen & node) {
+void Codegen::visit(const AST::UnaryExprParen & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::UnaryExprPlus & node) {
+void Codegen::visit(const AST::UnaryExprPlus & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::UnaryExprPlusMinusBase & node) {
+void Codegen::visit(const AST::UnaryExprPlusMinusBase & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::UnaryExprPrimary & node) {
+void Codegen::visit(const AST::UnaryExprPrimary & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::VarDeclExplicitType & node) {
+void Codegen::visit(const AST::VarDeclExplicitType & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::VarDeclInferType & node) {
+void Codegen::visit(const AST::VarDeclInferType & astNode) {
      #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::WhileStmnt & node) {
+void Codegen::visit(const AST::WhileStmnt & astNode) {
      #warning TODO: Codegen this node
 }
 

@@ -10,31 +10,31 @@ CodegenDataType::CodegenDataType(CodegenCtx & ctx, ConstCodegen & constCodegen) 
     WC_EMPTY_FUNC_BODY();
 }
 
-void CodegenDataType::visit(const ArrayDataType & node) {
+void CodegenDataType::visit(const ArrayDataType & dataType) {
     #warning TODO: Codegen this data type
 }
 
-void CodegenDataType::visit(const BoolDataType & node) {
+void CodegenDataType::visit(const BoolDataType & dataType) {
     #warning TODO: Codegen this data type
 }
 
-void CodegenDataType::visit(const Int64DataType & node) {
+void CodegenDataType::visit(const Int64DataType & dataType) {
     #warning TODO: Codegen this data type
 }
 
-void CodegenDataType::visit(const StrDataType & node) {
+void CodegenDataType::visit(const StrDataType & dataType) {
     #warning TODO: Codegen this data type
 }
 
-void CodegenDataType::visit(const UnknownArrayDataType & node) {
+void CodegenDataType::visit(const UnknownArrayDataType & dataType) {
     #warning TODO: Codegen this data type
 }
 
-void CodegenDataType::visit(const UnknownDataType & node) {
+void CodegenDataType::visit(const UnknownDataType & dataType) {
     #warning TODO: Codegen this data type
 }
 
-void CodegenDataType::visit(const VoidDataType & node) {
+void CodegenDataType::visit(const VoidDataType & dataType) {
     #warning TODO: Codegen this data type
 }
 

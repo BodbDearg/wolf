@@ -14,13 +14,13 @@ public:
     CodegenDataType(CodegenCtx & ctx, ConstCodegen & constCodegen);
     
     /* DataType visitor functions */
-    virtual void visit(const ArrayDataType & node) override;
-    virtual void visit(const BoolDataType & node) override;
-    virtual void visit(const Int64DataType & node) override;
-    virtual void visit(const StrDataType & node) override;
-    virtual void visit(const UnknownArrayDataType & node) override;
-    virtual void visit(const UnknownDataType & node) override;
-    virtual void visit(const VoidDataType & node) override;
+    virtual void visit(const ArrayDataType & dataType) override;
+    virtual void visit(const BoolDataType & dataType) override;
+    virtual void visit(const Int64DataType & dataType) override;
+    virtual void visit(const StrDataType & dataType) override;
+    virtual void visit(const UnknownArrayDataType & dataType) override;
+    virtual void visit(const UnknownDataType & dataType) override;
+    virtual void visit(const VoidDataType & dataType) override;
     
 private:
     CodegenCtx &    mCtx;

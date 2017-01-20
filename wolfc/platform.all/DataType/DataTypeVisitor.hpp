@@ -17,13 +17,13 @@ class DataTypeVisitor {
 public:
     virtual ~DataTypeVisitor() = default;
     
-    virtual void visit(const ArrayDataType & node) = 0;
-    virtual void visit(const BoolDataType & node) = 0;
-    virtual void visit(const Int64DataType & node) = 0;
-    virtual void visit(const StrDataType & node) = 0;
-    virtual void visit(const UnknownArrayDataType & node) = 0;
-    virtual void visit(const UnknownDataType & node) = 0;
-    virtual void visit(const VoidDataType & node) = 0;
+    virtual void visit(const ArrayDataType & dataType) = 0;
+    virtual void visit(const BoolDataType & dataType) = 0;
+    virtual void visit(const Int64DataType & dataType) = 0;
+    virtual void visit(const StrDataType & dataType) = 0;
+    virtual void visit(const UnknownArrayDataType & dataType) = 0;
+    virtual void visit(const UnknownDataType & dataType) = 0;
+    virtual void visit(const VoidDataType & dataType) = 0;
 };
 
 WC_END_NAMESPACE

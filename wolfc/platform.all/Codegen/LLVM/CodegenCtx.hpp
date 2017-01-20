@@ -75,6 +75,21 @@ public:
      */
     bool dumpIRCodeToStdout();
     
+    /* Register the given function in the module. Issues a compile error if already registered. */
+    bool registerModuleFunc(const AST::Func & astNode);
+    
+    /* Retrieve the function of the specified name in the module. Returns nullptr if not found. */
+    Function * getModuleFunc(const char * name);
+    Function * getModuleFunc(const std::string & name);
+    
+    /* Push/pop the current node being visited during code generation from the node visitation stack. */
+    void pushVisitedNode(AST::ASTNode & node);
+    void popVisitedNode();
+    
+    inline const std::vector<AST::ASTNode*> getVisitedNodeStack() const {
+        return mVisitedNodeStack;
+    }
+    
     /* The LLVM context */
     llvm::LLVMContext mLLVMCtx;
     
@@ -113,14 +128,10 @@ public:
     std::list<DeferredCodegenCallback> deferredCodegenCallbacks;
 #endif
     
-    /* Register the given function in the module. Issues a compile error if already registered. */
-    bool registerModuleFunc(const AST::Func & astNode);
-    
-    /* Retrieve the function of the specified name in the module. Returns nullptr if not found. */
-    Function * getModuleFunc(const char * name);
-    Function * getModuleFunc(const std::string & name);
-    
 private:
+    /* The stack of AST nodes being visited */
+    std::vector<AST::ASTNode*> mVisitedNodeStack;
+    
     /* A list of error messages emitted during parsing */
     std::vector<std::string> mErrorMsgs;
     
