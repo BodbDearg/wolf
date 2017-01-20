@@ -231,5 +231,33 @@ void CodegenCtx::popASTNode() {
     mASTNodeStack.pop_back();
 }
 
+void CodegenCtx::pushLLVMType(llvm::Type & llvmType) {
+    mLLVMTypes.push_back(&llvmType);
+}
+
+llvm::Type * CodegenCtx::popLLVMType() {
+    if (mLLVMTypes.empty()) {
+        return nullptr;
+    }
+    
+    llvm::Type * llvmType = mLLVMTypes.back();
+    mLLVMTypes.pop_back();
+    return llvmType;
+}
+
+void CodegenCtx::pushLLVMValue(llvm::Value & llvmValue) {
+    mLLVMValues.push_back(&llvmValue);
+}
+
+llvm::Value * CodegenCtx::popLLVMValue() {
+    if (mLLVMValues.empty()) {
+        return nullptr;
+    }
+    
+    llvm::Value * llvmValue = mLLVMValues.back();
+    mLLVMValues.pop_back();
+    return llvmValue;
+}
+
 WC_LLVM_CODEGEN_END_NAMESPACE
 WC_END_NAMESPACE

@@ -99,6 +99,20 @@ public:
         return mASTNodeStack;
     }
     
+    /**
+     * Push/pop an llvm::Type object to the stack.
+     * If popping and the stack is emtpy, a null pointer will be returned.
+     */
+    void pushLLVMType(llvm::Type & llvmType);
+    llvm::Type * popLLVMType();
+    
+    /**
+     * Push/pop an llvm::Value object to the stack.
+     * If popping and the stack is emtpy, a null pointer will be returned.
+     */
+    void pushLLVMValue(llvm::Value & llvmValue);
+    llvm::Value * popLLVMValue();
+    
     /* The LLVM context */
     llvm::LLVMContext mLLVMCtx;
     
@@ -140,6 +154,12 @@ public:
 private:
     /* The stack of AST nodes being visited */
     std::vector<const AST::ASTNode*> mASTNodeStack;
+    
+    /* A stack of llvm types created during codegen. Used for communication, like the stack in LUA. */
+    std::vector<llvm::Type*> mLLVMTypes;
+    
+    /* A stack of values types created during codegen. Used for communication, like the stack in LUA. */
+    std::vector<llvm::Value*> mLLVMValues;
     
     /* A list of error messages emitted during parsing */
     std::vector<std::string> mErrorMsgs;
