@@ -12,7 +12,7 @@ class ConstCodegen : public AST::ASTNodeVisitor {
 public:
     ConstCodegen(CodegenCtx & ctx);
     
-    /* AST node visitor functions */
+    /* ASTNode visitor functions */
     virtual void visit(const AST::AddExprAdd & node) override;
     virtual void visit(const AST::AddExprBOr & node) override;
     virtual void visit(const AST::AddExprBXor & node) override;

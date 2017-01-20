@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AST/WCASTNodeVisitor.hpp"
+#include "CodegenDataType.hpp"
 #include "ConstCodegen.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -17,7 +18,7 @@ class Codegen : public AST::ASTNodeVisitor {
 public:
     Codegen(CodegenCtx & ctx, const char * moduleName);
     
-    /* AST node visitor functions */
+    /* ASTNode visitor functions */
     virtual void visit(const AST::AddExprAdd & node) override;
     virtual void visit(const AST::AddExprBOr & node) override;
     virtual void visit(const AST::AddExprBXor & node) override;
@@ -149,9 +150,10 @@ public:
     virtual void visit(const AST::WhileStmnt & node) override;
     
 private:
-    CodegenCtx &    mCtx;
-    ConstCodegen    mConstCodegen;
-    std::string     mModuleName;
+    CodegenCtx &        mCtx;
+    ConstCodegen        mConstCodegen;
+    CodegenDataType     mCodegenDataType;
+    std::string         mModuleName;
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE
