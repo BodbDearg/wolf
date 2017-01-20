@@ -1,21 +1,16 @@
 #pragma once
 
 #include "AST/WCASTNodeVisitor.hpp"
-#include "ConstCodegen.hpp"
-
-WC_THIRD_PARTY_INCLUDES_BEGIN
-    #include <string>
-WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 class CodegenCtx;
 
-/* Generates code for the LLVM backend */
-class Codegen : public AST::ASTNodeVisitor {
+/* Similar to the 'Codegen' class but for compile time evaluation. */
+class ConstCodegen : public AST::ASTNodeVisitor {
 public:
-    Codegen(CodegenCtx & ctx, const char * moduleName);
+    ConstCodegen(CodegenCtx & ctx);
     
     /* AST node visitor functions */
     virtual void visit(const AST::AddExprAdd & node) override;
@@ -149,9 +144,7 @@ public:
     virtual void visit(const AST::WhileStmnt & node) override;
     
 private:
-    CodegenCtx &    mCtx;
-    ConstCodegen    mConstCodegen;
-    std::string     mModuleName;
+    CodegenCtx & mCtx;
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE

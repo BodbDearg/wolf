@@ -5,7 +5,8 @@ WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 Codegen::Codegen(CodegenCtx & ctx, const char * moduleName) :
     mCtx(ctx),
-    mModuleName(moduleName)
+    mModuleName(moduleName),
+    mConstCodegen(ctx)
 {
     WC_EMPTY_FUNC_BODY();
 }
