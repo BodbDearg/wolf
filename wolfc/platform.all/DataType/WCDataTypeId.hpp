@@ -25,6 +25,8 @@ enum class DataTypeId : uint8_t {
     kStr,
     /* Array type */
     kArray,
+    /* Array type whose size is unknown or unevaluated */
+    kUnknownArray,
     /* The number of data type ids */
     kNumTypes
 };

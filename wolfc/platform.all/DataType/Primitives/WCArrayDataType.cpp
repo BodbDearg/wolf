@@ -11,7 +11,6 @@ ArrayDataType::ArrayDataType(DataType & innerType, size_t size) :
     mSize(size)
 {
     // TODO: allocate the name elsewhere?
-    
     // Makeup the name:
     mName.reserve(mInnerType.name().size() + 16);
     mName += mInnerType.name();
@@ -58,6 +57,10 @@ bool ArrayDataType::equals(const DataType & other) const {
     
     // Lastly see if the inner types match:
     return mInnerType.equals(otherArray->mInnerType);
+}
+
+bool ArrayDataType::isArray() const {
+    return true;
 }
 
 bool ArrayDataType::requiresStorage() const {

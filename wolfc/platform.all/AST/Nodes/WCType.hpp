@@ -1,6 +1,7 @@
 #pragma once
 
 #include "WCASTNode.hpp"
+#include "WCUnknownArrayDataType.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <cstddef>
@@ -72,14 +73,11 @@ public:
     AssignExpr &    mSizeExpr;
     Type &          mElemType;
     
-    /* The data type of the type array. This is generated during code generation. */
-    DataType * mDataType = nullptr;
-    
-    /* The size of the array. This is evaluated when compiling. */
-    size_t mArraySize = 0;
-    
-    /* True if the array size expression has been evaluated. */
-    bool mArraySizeEvaluated = false;
+    /**
+     * The data type of the type array. 
+     * It has to converted to a concrete array type during compiling.
+     */
+    UnknownArrayDataType mDataType;
 };
 
 WC_AST_END_NAMESPACE

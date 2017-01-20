@@ -5,8 +5,8 @@
 WC_BEGIN_NAMESPACE
 
 /**
- * Data type that represents an unknown type. Cannot be declared by the user. Used internally by the
- * compiler in the case of an error.
+ * Data type that represents an unknown scalar type. 
+ * Cannot be declared by the user, used internally by the compiler.
  */
 class UnknownDataType final : public DataType {
 public:
@@ -16,6 +16,7 @@ public:
     virtual bool equals(const DataType & other) const override;
     virtual bool isValid() const override;
     virtual bool isSized() const override;
+    virtual bool isUnknown() const override;
     
 #warning FIXME - Codegen
 #if 0

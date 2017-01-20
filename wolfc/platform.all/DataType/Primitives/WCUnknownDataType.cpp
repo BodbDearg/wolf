@@ -24,10 +24,14 @@ bool UnknownDataType::equals(const DataType & other) const {
 }
 
 bool UnknownDataType::isValid() const {
-    return false;   // The unknown data type is the only type which is not valid
+    return false;
 }
 
 bool UnknownDataType::isSized() const {
+    return false;
+}
+
+bool UnknownDataType::isUnknown() const {
     return false;
 }
 

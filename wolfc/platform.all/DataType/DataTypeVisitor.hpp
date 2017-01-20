@@ -8,6 +8,7 @@ class ArrayDataType;
 class BoolDataType;
 class Int64DataType;
 class StrDataType;
+class UnknownArrayDataType;
 class UnknownDataType;
 class VoidDataType;
 
@@ -20,6 +21,7 @@ public:
     virtual void visit(const BoolDataType & node) = 0;
     virtual void visit(const Int64DataType & node) = 0;
     virtual void visit(const StrDataType & node) = 0;
+    virtual void visit(const UnknownArrayDataType & node) = 0;
     virtual void visit(const UnknownDataType & node) = 0;
     virtual void visit(const VoidDataType & node) = 0;
 };

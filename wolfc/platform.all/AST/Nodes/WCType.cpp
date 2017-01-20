@@ -99,7 +99,8 @@ bool TypePrimitive::codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) {
 TypeArray::TypeArray(const Token & startToken, AssignExpr & sizeExpr, Type & elemType) :
     mStartToken(startToken),
     mSizeExpr(sizeExpr),
-    mElemType(elemType)
+    mElemType(elemType),
+    mDataType(elemType.dataType(), sizeExpr)
 {
     mSizeExpr.mParent = this;
     mElemType.mParent = this;
@@ -118,13 +119,7 @@ const Token & TypeArray::getEndToken() const {
 }
 
 DataType & TypeArray::dataType() {
-    // See if we have evaluated the data type yet, if so then return it:
-    if (mDataType) {
-        return *mDataType;
-    }
-    
-    // Don't know what our exact data type is yet:
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown);
+    return mDataType;
 }
 
 #warning FIXME - Codegen

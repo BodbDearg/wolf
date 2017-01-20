@@ -32,7 +32,10 @@ public:
     /* Tells if this data type matches another. */
     virtual bool equals(const DataType & other) const = 0;
     
-    /* Tells if the data type is valid. Returns 'true' for all data types except 'unknown' */
+    /**
+     * Tells if the data type is valid. 
+     * Returns 'true' for all data types except unknown data types.
+     */
     virtual bool isValid() const;
     
     /**
@@ -41,10 +44,12 @@ public:
      */
     virtual bool isSized() const;
     
-    /* Utility. Tell if this data type is the unknown data type. */
-    inline bool isUnknown() const {
-        return getTypeId() == DataTypeId::kUnknown;
-    }
+    /**
+     * Utility. Tell if this data type is an unknown form of data type such 
+     * as the 'Unknown' data type itself or an array data type with an 
+     * unknown/unevaluated size.
+     */
+    virtual bool isUnknown() const;
     
     /* Utility. Tell if this data type is the 'void' data type. */
     inline bool isVoid() const {
@@ -59,10 +64,12 @@ public:
     /* Utility. Tell if this data type is an integer data type. */
     virtual bool isInteger() const;
     
-    /* Utility. Tell if this data type is an array data type. */
-    inline bool isArray() const {
-        return getTypeId() == DataTypeId::kArray;
-    }
+    /**
+     * Utility. Tell if this data type is an array data type.
+     * Returns true if the array is either an array with a known type
+     * or an unknown type.
+     */
+    virtual bool isArray() const;
     
     /**
      * If true then the data type requires a storage area to hold it's data since it is
