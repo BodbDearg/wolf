@@ -7,12 +7,12 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-void Codegen::visit(const AST::DeclDefFunc & node) {
-    node.mFunc.accept(*this);
+void Codegen::visit(const AST::DeclDefFunc & astNode) {
+    astNode.mFunc.accept(*this);
 }
 
-void Codegen::visit(const AST::DeclDefVarDecl & node) {
-    node.mVarDecl.accept(*this);
+void Codegen::visit(const AST::DeclDefVarDecl & astNode) {
+    astNode.mVarDecl.accept(*this);
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE

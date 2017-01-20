@@ -8,14 +8,14 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-void Codegen::visit(const AST::Func & node) {
+void Codegen::visit(const AST::Func & astNode) {
     // Firstly register the function with the module.
     // If this function is a duplicate then a compile error will occur.
-    mCtx.registerModuleFunc(node);
+    mCtx.registerModuleFunc(astNode);
     
     // Get the function object in the module.
     // It should now exist, but if it's not found then bail out...
-    Function * func = mCtx.getModuleFunc(node.name());
+    Function * func = mCtx.getModuleFunc(astNode.name());
     WC_GUARD(func);
     
     #warning FIXME: FUNC codegen
@@ -52,7 +52,7 @@ void Codegen::visit(const AST::Func & node) {
     WC_ASSERT(mCtx.mLLVMModule);
     func->mLLVMFunc = llvm::Function::Create(llvmFnType,
                                              llvm::Function::ExternalLinkage,
-                                             node.name(),
+                                             astNode.name(),
                                              mCtx.mLLVMModule.get());
     
     WC_ASSERT(func->mLLVMFunc);

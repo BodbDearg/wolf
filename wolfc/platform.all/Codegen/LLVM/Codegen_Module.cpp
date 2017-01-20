@@ -65,7 +65,7 @@ static void declareCStdLibFuncsInModule(llvm::LLVMContext & llvmCtx, llvm::Modul
                     false);
 }
 
-void Codegen::visit(const AST::Module & node) {
+void Codegen::visit(const AST::Module & astNode) {
     // Create the LLVM module
     mCtx.mLLVMModule.reset(new llvm::Module("WolfTest", mCtx.mLLVMCtx));
     WC_ASSERT(mCtx.mLLVMModule);
@@ -74,7 +74,7 @@ void Codegen::visit(const AST::Module & node) {
     declareCStdLibFuncsInModule(mCtx.mLLVMCtx, *mCtx.mLLVMModule.get());
     
     // Codegen all stuff in the module:
-    for (const AST::DeclDef * declDef : node.mDeclDefs) {
+    for (const AST::DeclDef * declDef : astNode.mDeclDefs) {
         declDef->accept(*this);
     }
 }
