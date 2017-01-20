@@ -47,18 +47,24 @@ public:
     /**
      * Emit an error message and save to the list of error messages in the codegen context.
      * The line and column info for the error source include the range of the specified AST node.
+     * If the source node is not specified, the AST node stack will be used for location info (if possible).
      *
      * Emitting an error will put the codegen context into an error state.
      */
     void error(const AST::ASTNode & atNode, const char * msgFmtStr, ...);
     void error(const AST::ASTNode & atNode, const char * msgFmtStr, std::va_list msgFmtStrArgs);
+    void error(const char * msgFmtStr, ...);
+    void error(const char * msgFmtStr, std::va_list msgFmtStrArgs);
     
     /**
      * Emit a warning message and save to the list of warning messages in the parse context.
      * The line and column info for the warning source include the range of the specified AST node.
+     * If the source node is not specified, the AST node stack will be used for location info (if possible).
      */
     void warning(const AST::ASTNode & atNode, const char * msgFmtStr, ...);
     void warning(const AST::ASTNode & atNode, const char * msgFmtStr, std::va_list msgFmtStrArgs);
+    void warning(const char * msgFmtStr, ...);
+    void warning(const char * msgFmtStr, std::va_list msgFmtStrArgs);
     
     /* Push the current codegen basic block to the stack and save for later popping. */
     void pushInsertBlock();
