@@ -47,7 +47,6 @@
 		1F0308941E2AF2510097D223 /* WCDeclDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308401E2AF2510097D223 /* WCDeclDef.cpp */; };
 		1F0308951E2AF2510097D223 /* WCFunc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308421E2AF2510097D223 /* WCFunc.cpp */; };
 		1F0308961E2AF2510097D223 /* WCFuncArg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308441E2AF2510097D223 /* WCFuncArg.cpp */; };
-		1F0308971E2AF2510097D223 /* WCFuncArgList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308461E2AF2510097D223 /* WCFuncArgList.cpp */; };
 		1F0308981E2AF2510097D223 /* WCFuncCall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308481E2AF2510097D223 /* WCFuncCall.cpp */; };
 		1F0308991E2AF2510097D223 /* WCFuncCallArgList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F03084A1E2AF2510097D223 /* WCFuncCallArgList.cpp */; };
 		1F03089A1E2AF2510097D223 /* WCIdentifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F03084D1E2AF2510097D223 /* WCIdentifier.cpp */; };
@@ -168,8 +167,6 @@
 		1F0308431E2AF2510097D223 /* WCFunc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCFunc.hpp; sourceTree = "<group>"; };
 		1F0308441E2AF2510097D223 /* WCFuncArg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCFuncArg.cpp; sourceTree = "<group>"; };
 		1F0308451E2AF2510097D223 /* WCFuncArg.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCFuncArg.hpp; sourceTree = "<group>"; };
-		1F0308461E2AF2510097D223 /* WCFuncArgList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCFuncArgList.cpp; sourceTree = "<group>"; };
-		1F0308471E2AF2510097D223 /* WCFuncArgList.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCFuncArgList.hpp; sourceTree = "<group>"; };
 		1F0308481E2AF2510097D223 /* WCFuncCall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCFuncCall.cpp; sourceTree = "<group>"; };
 		1F0308491E2AF2510097D223 /* WCFuncCall.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCFuncCall.hpp; sourceTree = "<group>"; };
 		1F03084A1E2AF2510097D223 /* WCFuncCallArgList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCFuncCallArgList.cpp; sourceTree = "<group>"; };
@@ -349,8 +346,6 @@
 				1F0308431E2AF2510097D223 /* WCFunc.hpp */,
 				1F0308441E2AF2510097D223 /* WCFuncArg.cpp */,
 				1F0308451E2AF2510097D223 /* WCFuncArg.hpp */,
-				1F0308461E2AF2510097D223 /* WCFuncArgList.cpp */,
-				1F0308471E2AF2510097D223 /* WCFuncArgList.hpp */,
 				1F0308481E2AF2510097D223 /* WCFuncCall.cpp */,
 				1F0308491E2AF2510097D223 /* WCFuncCall.hpp */,
 				1F03084A1E2AF2510097D223 /* WCFuncCallArgList.cpp */,
@@ -730,7 +725,6 @@
 				1F39144E1E31E1A0001925BE /* CodegenDataType.cpp in Sources */,
 				1F0308A51E2AF2510097D223 /* WCPostfixExpr.cpp in Sources */,
 				1F0308A31E2AF2510097D223 /* WCNoOpStmnt.cpp in Sources */,
-				1F0308971E2AF2510097D223 /* WCFuncArgList.cpp in Sources */,
 				1F7E6C501E2F5F0E00719A99 /* Codegen.cpp in Sources */,
 				1F54B4B21D02A4DB0016BF70 /* WCStrDataType.cpp in Sources */,
 				1F0308A41E2AF2510097D223 /* WCNotExpr.cpp in Sources */,

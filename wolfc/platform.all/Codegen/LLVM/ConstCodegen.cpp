@@ -10,7 +10,6 @@
 #include "AST/Nodes/WCCastExpr.hpp"
 #include "AST/Nodes/WCCmpExpr.hpp"
 #include "AST/Nodes/WCFuncArg.hpp"
-#include "AST/Nodes/WCFuncArgList.hpp"
 #include "AST/Nodes/WCFuncCall.hpp"
 #include "AST/Nodes/WCFuncCallArgList.hpp"
 #include "AST/Nodes/WCIBasicCodegenNode.hpp"
@@ -262,16 +261,6 @@ void ConstCodegen::visit(const AST::Func & astNode) {
 }
 
 void ConstCodegen::visit(const AST::FuncArg & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void ConstCodegen::visit(const AST::FuncArgListMulti & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void ConstCodegen::visit(const AST::FuncArgListSingle & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }

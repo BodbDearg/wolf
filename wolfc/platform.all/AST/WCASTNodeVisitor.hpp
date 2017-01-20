@@ -48,8 +48,6 @@ class DeclDefFunc;
 class DeclDefVarDecl;
 class Func;
 class FuncArg;
-class FuncArgListMulti;
-class FuncArgListSingle;
 class FuncCall;
 class FuncCallArgListMulti;
 class FuncCallArgListSingle;
@@ -183,8 +181,6 @@ public:
     virtual void visit(const DeclDefVarDecl & astNode) = 0;
     virtual void visit(const Func & astNode) = 0;
     virtual void visit(const FuncArg & astNode) = 0;
-    virtual void visit(const FuncArgListMulti & astNode) = 0;
-    virtual void visit(const FuncArgListSingle & astNode) = 0;
     virtual void visit(const FuncCall & astNode) = 0;
     virtual void visit(const FuncCallArgListMulti & astNode) = 0;
     virtual void visit(const FuncCallArgListSingle & astNode) = 0;

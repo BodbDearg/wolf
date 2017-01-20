@@ -5,7 +5,6 @@
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssert.hpp"
 #include "WCFuncArg.hpp"
-#include "WCFuncArgList.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
 #include "WCModule.hpp"
@@ -47,12 +46,27 @@ Func * Func::parse(ParseCtx & parseCtx) {
     
     parseCtx.nextTok();     // Skip '('
     
-    // See if an argument list follows:
-    FuncArgList * argList = nullptr;
+    // Parse any function arguments that follow:
+    std::vector<FuncArg*> funcArgs;
     
-    if (FuncArgList::peek(parseCtx.tok())) {
-        argList = FuncArgList::parse(parseCtx);
-        WC_GUARD(argList, nullptr);
+    while (FuncArg::peek(parseCtx.tok())) {
+        // Parse the arg
+        FuncArg * funcArg = FuncArg::parse(parseCtx);
+        
+        if (funcArg) {
+            funcArgs.push_back(funcArg);
+        }
+        
+        // See if a ',' follows
+        if (parseCtx.tok()->type == TokenType::kComma) {
+            // Skip the ','
+            parseCtx.nextTok();
+            
+            // Expect an argument following
+            if (!FuncArg::peek(parseCtx.tok())) {
+                parseCtx.error("Expect an argument following ','!");
+            }
+        }
     }
     
     // Expect ')'
@@ -95,7 +109,7 @@ Func * Func::parse(ParseCtx & parseCtx) {
                            Func,
                            *startToken,
                            *identifier,
-                           argList,
+                           std::move(funcArgs),
                            returnType,
                            *scope,
                            *endToken);
@@ -103,22 +117,22 @@ Func * Func::parse(ParseCtx & parseCtx) {
 
 Func::Func(const Token & startToken,
            Identifier & identifier,
-           FuncArgList * argList,
+           std::vector<FuncArg*> && funcArgs,
            Type * returnType,
            Scope & scope,
            const Token & endToken)
 :
     mStartToken(startToken),
     mIdentifier(identifier),
-    mArgList(argList),
+    mFuncArgs(funcArgs),
     mReturnType(returnType),
     mScope(scope),
     mEndToken(endToken)
 {
     mIdentifier.mParent = this;
     
-    if (mArgList) {
-        mArgList->mParent = this;
+    for (FuncArg * funcArg : mFuncArgs) {
+        funcArg->mParent = this;
     }
     
     mScope.mParent = this;
@@ -138,16 +152,6 @@ const Token & Func::getEndToken() const {
 
 const char * Func::name() const {
     return mIdentifier.name();
-}
-
-size_t Func::numArgs() const {
-    WC_GUARD(mArgList, 0);
-    return mArgList->numArgs();
-}
-
-void Func::getArgs(std::vector<FuncArg*> & args) {
-    WC_GUARD(mArgList);
-    mArgList->getArgs(args);
 }
 
 #warning FIXME - Codegen

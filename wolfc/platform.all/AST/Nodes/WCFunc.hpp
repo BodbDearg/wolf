@@ -15,14 +15,13 @@ class DataType;
 WC_AST_BEGIN_NAMESPACE
 
 class FuncArg;
-class FuncArgList;
 class Identifier;
 class Scope;
 class Type;
 
 /*
 Func:
-	func Identifier ( [FuncArgList] ) [ -> Type ] Scope end
+	func Identifier ( [0..N: FuncArg ,][FuncArg] ) [-> Type] Scope end
 */
 class Func final : public ASTNode {
 public:
@@ -31,7 +30,7 @@ public:
     
     Func(const Token & startToken,
          Identifier & identifier,
-         FuncArgList * argList,
+         std::vector<FuncArg*> && funcArgs,
          Type * returnType,
          Scope & scope,
          const Token & endToken);
@@ -42,8 +41,9 @@ public:
     
     const char * name() const;
     
-    size_t numArgs() const;
-    void getArgs(std::vector<FuncArg*> & args);
+    inline const std::vector<FuncArg*> & getArgs() const {
+        return mFuncArgs;
+    }
     
 #warning FIXME - Codegen
 #if 0
@@ -82,9 +82,12 @@ public:
     
     const Token &       mStartToken;
     Identifier &        mIdentifier;
-    FuncArgList *       mArgList;
     Scope &             mScope;
     const Token &       mEndToken;
+    
+private:
+    /* The list of function arguments parsed */
+    std::vector<FuncArg*> mFuncArgs;
     
     /**
      * The explicitly specified return type for this function. 

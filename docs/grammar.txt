@@ -6,7 +6,7 @@ DeclDef:
 	VarDecl
 
 Func:
-	func Identifier ( [FuncArgList] ) [ -> Type ] Scope end
+	func Identifier ( [0..N: FuncArg ,][FuncArg] ) [-> Type] Scope end
 
 FuncArgList:
 	FuncArg
