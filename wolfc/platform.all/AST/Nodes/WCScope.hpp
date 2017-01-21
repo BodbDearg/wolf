@@ -39,11 +39,6 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegen(CodegenCtx & cgCtx) override;
-#endif
-    
     virtual bool allCodepathsHaveUncondRet() const override;
     
 #warning FIXME - Codegen
@@ -60,6 +55,11 @@ public:
     /* Get a variable within this scope. Returns null if not found within this scope. */
     DataValue * getVar(const char * varName);
 #endif
+    
+    /* Get all the statements in the scope */
+    inline const std::vector<Stmnt*> & getStmnts() const {
+        return mStmnts;
+    }
     
 private:
     /* All the statements in the scope. */

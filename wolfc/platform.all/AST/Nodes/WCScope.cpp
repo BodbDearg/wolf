@@ -58,17 +58,6 @@ const Token & Scope::getEndToken() const {
     return mStartToken;
 }
 
-#warning FIXME - Codegen
-#if 0
-bool Scope::codegen(CodegenCtx & cgCtx) {
-    for (Stmnt * stmnt : mStmnts) {
-        WC_GUARD(stmnt->codegen(cgCtx), false);
-    }
-    
-    return true;
-}
-#endif
-
 bool Scope::allCodepathsHaveUncondRet() const {
     for (Stmnt * stmnt : mStmnts) {
         if (stmnt->allCodepathsHaveUncondRet()) {

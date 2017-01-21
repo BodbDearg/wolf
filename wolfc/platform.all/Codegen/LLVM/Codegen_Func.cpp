@@ -36,7 +36,7 @@ static void compileCheckForDuplicateArgNames(CodegenCtx & ctx, const std::vector
         std::string argName = arg->name();
         
         if (argNames.count(argName) > 0) {
-            ctx.error("Duplicate argument named '%s' in function argument list!", argName.c_str());
+            ctx.error(*arg, "Duplicate argument named '%s' in function argument list!", argName.c_str());
         }
     }
 }

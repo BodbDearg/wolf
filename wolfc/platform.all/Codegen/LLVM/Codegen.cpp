@@ -25,14 +25,11 @@
 #include "AST/Nodes/WCNotExpr.hpp"
 #include "AST/Nodes/WCPostfixExpr.hpp"
 #include "AST/Nodes/WCPrimaryExpr.hpp"
-#include "AST/Nodes/WCPrintStmnt.hpp"
 #include "AST/Nodes/WCRandExpr.hpp"
 #include "AST/Nodes/WCReadnumExpr.hpp"
 #include "AST/Nodes/WCReturnStmnt.hpp"
-#include "AST/Nodes/WCScope.hpp"
 #include "AST/Nodes/WCScopeStmnt.hpp"
 #include "AST/Nodes/WCShiftExpr.hpp"
-#include "AST/Nodes/WCStmnt.hpp"
 #include "AST/Nodes/WCStrLit.hpp"
 #include "AST/Nodes/WCTernaryExpr.hpp"
 #include "AST/Nodes/WCTimeExpr.hpp"
@@ -448,11 +445,6 @@ void Codegen::visit(const AST::PrimaryExprTime & astNode) {
     #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PrintStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void Codegen::visit(const AST::RandExprRand & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
@@ -493,11 +485,6 @@ void Codegen::visit(const AST::ReturnStmntWithCondVoid & astNode) {
     #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::Scope & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void Codegen::visit(const AST::ScopeStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
@@ -524,66 +511,6 @@ void Codegen::visit(const AST::ShiftExprNoOp & astNode) {
 }
 
 void Codegen::visit(const AST::ShiftExprTwoOps & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::StmntAssertStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::StmntAssignExpr & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::StmntBreakStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::StmntIfStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::StmntLoopStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::StmntNextStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::StmntNoOpStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::StmntPrintStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::StmntReturnStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::StmntScopeStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::StmntVarDecl & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::StmntWhileStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }
