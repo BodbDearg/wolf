@@ -250,11 +250,6 @@ void Codegen::visit(const AST::CmpExprTwoOps & astNode) {
     #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::FuncArg & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void Codegen::visit(const AST::FuncCall & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
