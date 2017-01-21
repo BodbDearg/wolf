@@ -25,7 +25,6 @@
 #include "AST/Nodes/WCNotExpr.hpp"
 #include "AST/Nodes/WCPostfixExpr.hpp"
 #include "AST/Nodes/WCPrimaryExpr.hpp"
-#include "AST/Nodes/WCPrimitiveType.hpp"
 #include "AST/Nodes/WCPrintStmnt.hpp"
 #include "AST/Nodes/WCRandExpr.hpp"
 #include "AST/Nodes/WCReadnumExpr.hpp"
@@ -37,7 +36,6 @@
 #include "AST/Nodes/WCStrLit.hpp"
 #include "AST/Nodes/WCTernaryExpr.hpp"
 #include "AST/Nodes/WCTimeExpr.hpp"
-#include "AST/Nodes/WCType.hpp"
 #include "AST/Nodes/WCUnaryExpr.hpp"
 #include "AST/Nodes/WCVarDecl.hpp"
 #include "AST/Nodes/WCWhileStmnt.hpp"
@@ -450,11 +448,6 @@ void Codegen::visit(const AST::PrimaryExprTime & astNode) {
     #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::PrimitiveType & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void Codegen::visit(const AST::PrintStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
@@ -611,16 +604,6 @@ void Codegen::visit(const AST::TernaryExprWithCond & astNode) {
 }
 
 void Codegen::visit(const AST::TimeExpr & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::TypeArray & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::TypePrimitive & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }

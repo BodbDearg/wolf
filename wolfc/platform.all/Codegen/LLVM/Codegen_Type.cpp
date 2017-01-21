@@ -1,15 +1,19 @@
 #include "Codegen.hpp"
 
-#include "AST/Nodes/WCFuncArg.hpp"
 #include "AST/Nodes/WCType.hpp"
+#include "AST/Nodes/WCPrimitiveType.hpp"
 #include "CodegenCtx.hpp"
 #include "WCAssert.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-void Codegen::visit(const AST::FuncArg & astNode) {
-    // Codegen the type for the func arg and save it on the stack for other codegen functions
+void Codegen::visit(const AST::TypeArray & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    #warning TODO: Codegen this node
+}
+
+void Codegen::visit(const AST::TypePrimitive & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mType.accept(*this);
 }

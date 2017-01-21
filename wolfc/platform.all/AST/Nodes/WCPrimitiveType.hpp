@@ -23,12 +23,7 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    DataType & dataType();
-    
-#warning FIXME - Codegen
-#if 0
-    bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode);
-#endif
+    DataType & dataType() const;
     
     const Token & mToken;
 };
