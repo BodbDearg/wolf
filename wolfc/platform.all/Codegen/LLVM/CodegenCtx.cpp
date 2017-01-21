@@ -259,5 +259,13 @@ llvm::Value * CodegenCtx::popLLVMValue() {
     return llvmValue;
 }
 
+void CodegenCtx::handleDeferredCodegenCallbacks(std::vector<std::function<void ()>> & callbacks) {
+    while (!callbacks.empty()) {
+        const auto & callback = callbacks.back();
+        callback();
+        callbacks.pop_back();
+    }
+}
+
 WC_LLVM_CODEGEN_END_NAMESPACE
 WC_END_NAMESPACE

@@ -13,6 +13,7 @@ WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 class CodegenCtx;
+class Function;
 
 /* Generates code for the LLVM backend */
 class Codegen : public AST::ASTNodeVisitor {
@@ -149,6 +150,14 @@ public:
     virtual void visit(const AST::WhileStmnt & astNode) override;
     
 private:
+    /**
+     * Deferred function codegen. Generates the code for the function body.
+     * This codegen is deferred until after top level module declarations so we can declare and use
+     * functions in any order, unlike C where the function must be declared in a prior source line 
+     * before being used.
+     */
+    void doDeferredFunctionCodegen(const AST::Func & astNode, Function & function);
+    
     CodegenCtx &        mCtx;
     ConstCodegen        mConstCodegen;
     CodegenDataType     mCodegenDataType;

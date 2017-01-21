@@ -113,6 +113,12 @@ public:
     void pushLLVMValue(llvm::Value & llvmValue);
     llvm::Value * popLLVMValue();
     
+    /**
+     * Handles the given list of deferred codegen callbacks.
+     * Calls each callback and drains the list.
+     */
+    void handleDeferredCodegenCallbacks(std::vector<std::function<void ()>> & callbacks);
+    
     /* The LLVM context */
     llvm::LLVMContext mLLVMCtx;
     
@@ -122,36 +128,19 @@ public:
     /* The LLVM module */
     std::unique_ptr<llvm::Module> mLLVMModule;
     
-#warning FIXME - Codegen
-#if 0
+    /* The current Function we are visiting during codegen. */
+    Function * mCurFunction = nullptr;
+    
     /**
-     * Type for a deferred code generation lambda callback.
-     * The parameter given is this code generation context and the return value is whether the code generated
-     * successfully or not.
+     * Deferred codegen callbacks called after visiting AST::Module.
+     * Used to generate the inner bodies of functions and allows the functions to be declared
+     * and used in any order (unlike C).
      */
-    typedef std::function<bool (CodegenCtx & cgCtx)> DeferredCodegenCallback;
-
-    /**
-     * A list of callbacks that will be called in order to perform deferred code generation.
-     *
-     * For certain parts of the code generation, we must break our work into stages and defer
-     * parts of the code generation until later. For example statements that modify normal program 
-     * flow such as 'break' and 'next' need to have their code generation deferred because they
-     * need to refer to basic blocks around them that may not exist at the time code generation is invoked.
-     * Similiarly so, we must define all functions in a module before doing code generation for the function
-     * bodies themselves so that we don't have the C/C++ limitation of having to define or forward declare
-     * a function within a module before it is used.
-     *
-     * Note that deferred generation callbacks may themselves generate further deferred code generation
-     * requests, allowing for a multi-pass complimation pipeline.
-     *
-     * Deferred code generation is perfomed in FIFO (queue) order, with the first item in the
-     * list being generated first.
-     */
-    std::list<DeferredCodegenCallback> deferredCodegenCallbacks;
-#endif
+    std::vector<std::function<void ()>> mDeferredCgCallbacks_Module;
     
 private:
+    WC_DISALLOW_COPY_AND_ASSIGN(CodegenCtx)
+    
     /* The stack of AST nodes being visited */
     std::vector<const AST::ASTNode*> mASTNodeStack;
     

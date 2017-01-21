@@ -79,6 +79,9 @@ void Codegen::visit(const AST::Module & astNode) {
     for (const AST::DeclDef * declDef : astNode.mDeclDefs) {
         declDef->accept(*this);
     }
+    
+    // Do any deferred codegen required:
+    mCtx.handleDeferredCodegenCallbacks(mCtx.mDeferredCgCallbacks_Module);
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE

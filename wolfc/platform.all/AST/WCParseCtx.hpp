@@ -95,6 +95,8 @@ public:
     void warning(const Token & atToken, const char * msgFmtStr, std::va_list msgFmtStrArgs);
     
 private:
+    WC_DISALLOW_COPY_AND_ASSIGN(ParseCtx)
+    
     /* The current token we are on. Incremented as parsing happens. */
     const Token * mCurrentToken;
     
