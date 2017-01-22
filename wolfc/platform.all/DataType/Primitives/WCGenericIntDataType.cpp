@@ -39,62 +39,6 @@ llvm::Value * GenericIntDataType::codegenCmpNEOp(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateICmpNE(&leftVal, &rightVal, "GenericInt_CmpNEOp");
 }
 
-llvm::Value * GenericIntDataType::codegenAddOp(CodegenCtx & cgCtx,
-                                               AST::ASTNode & callingNode,
-                                               llvm::Value & leftVal,
-                                               DataType & rightTy,
-                                               llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_Add,
-                                            kOpName_Add,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateAdd(&leftVal, &rightVal, "GenericInt_AddOp");
-}
-
-llvm::Value * GenericIntDataType::codegenSubOp(CodegenCtx & cgCtx,
-                                               AST::ASTNode & callingNode,
-                                               llvm::Value & leftVal,
-                                               DataType & rightTy,
-                                               llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_Sub,
-                                            kOpName_Sub,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateSub(&leftVal, &rightVal, "GenericInt_SubOp");
-}
-
-llvm::Value * GenericIntDataType::codegenBOrOp(CodegenCtx & cgCtx,
-                                               AST::ASTNode & callingNode,
-                                               llvm::Value & leftVal,
-                                               DataType & rightTy,
-                                               llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_BOr,
-                                            kOpName_BOr,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateOr(&leftVal, &rightVal, "GenericInt_BOrOp");
-}
-
-llvm::Value * GenericIntDataType::codegenBXOrOp(CodegenCtx & cgCtx,
-                                                AST::ASTNode & callingNode,
-                                                llvm::Value & leftVal,
-                                                DataType & rightTy,
-                                                llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_BXOr,
-                                            kOpName_BXOr,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateXor(&leftVal, &rightVal, "GenericInt_BXOrOp");
-}
-
 llvm::Value * GenericIntDataType::codegenMulOp(CodegenCtx & cgCtx,
                                                AST::ASTNode & callingNode,
                                                llvm::Value & leftVal,

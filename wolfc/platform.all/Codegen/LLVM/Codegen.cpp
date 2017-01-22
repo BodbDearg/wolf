@@ -9,6 +9,7 @@
 #include "AST/Nodes/WCFuncCallArgList.hpp"
 #include "AST/Nodes/WCIBasicCodegenNode.hpp"
 #include "AST/Nodes/WCIdentifier.hpp"
+#include "AST/Nodes/WCIExpr.hpp"
 #include "AST/Nodes/WCIfStmnt.hpp"
 #include "AST/Nodes/WCLoopStmnt.hpp"
 #include "AST/Nodes/WCNextStmnt.hpp"
@@ -193,6 +194,93 @@ void Codegen::visit(const AST::VarDeclInferType & astNode) {
 void Codegen::visit(const AST::WhileStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
+}
+
+void Codegen::codegenBinaryOp(AST::ASTNode & leftExpr,
+                              AST::ASTNode & rightExpr,
+                              CodegenBinaryOpFunc codegenFunc,
+                              const char * opName,
+                              const char * opSymbol)
+{
+    WC_ASSERT(codegenFunc);
+    WC_ASSERT(opName);
+    WC_ASSERT(opSymbol);
+    
+    // Both left and right must be expressions:
+    AST::IExpr * leftAsExpr = dynamic_cast<AST::IExpr*>(&leftExpr);
+    
+    if (!leftAsExpr) {
+        mCtx.error(leftExpr,
+                   "Left side of '%s' (%s) operator must be an expression with a value result!",
+                   opSymbol,
+                   opName);
+    }
+    
+    AST::IExpr * rightAsExpr = dynamic_cast<AST::IExpr*>(&rightExpr);
+    
+    if (!rightAsExpr) {
+        mCtx.error(leftExpr,
+                   "Right side of '%s' (%s) operator must be an expression with a value result!",
+                   opSymbol,
+                   opName);
+    }
+    
+    WC_GUARD(leftAsExpr && rightAsExpr);
+    
+    // Okay, codegen both the left and right expressions
+    leftExpr.accept(*this);
+    llvm::Value * leftValue = mCtx.popLLVMValue();
+    rightExpr.accept(*this);
+    llvm::Value * rightValue = mCtx.popLLVMValue();
+    
+    // If both are okay then call the codegen function
+    if (leftValue && rightValue) {
+        DataType & exprDataType = leftAsExpr->dataType();
+        codegenFunc(*this,
+                    exprDataType,
+                    leftExpr,
+                    *leftValue,
+                    rightExpr,
+                    *rightValue,
+                    opName,
+                    opSymbol);
+    }
+}
+
+void Codegen::issueBinaryOpNotSupportedError(AST::ASTNode & leftExpr,
+                                             AST::ASTNode & rightExpr,
+                                             const char * opName,
+                                             const char * opSymbol)
+{
+    // Both left and right must be expressions:
+    AST::IExpr * leftAsExpr = dynamic_cast<AST::IExpr*>(&leftExpr);
+    
+    if (!leftAsExpr) {
+        mCtx.error(leftExpr,
+                   "Left side of '%s' (%s) operator must be an expression with a value result!",
+                   opSymbol,
+                   opName);
+    }
+    
+    AST::IExpr * rightAsExpr = dynamic_cast<AST::IExpr*>(&rightExpr);
+    
+    if (!rightAsExpr) {
+        mCtx.error(leftExpr,
+                   "Right side of '%s' (%s) operator must be an expression with a value result!",
+                   opSymbol,
+                   opName);
+    }
+    
+    WC_GUARD(leftAsExpr && rightAsExpr);
+    
+    // Issue the error. Issue it at the parent of the binary pair:
+    AST::ASTNode * parent = leftExpr.mParent;
+    WC_ASSERT(parent);
+    mCtx.error(*parent,
+               "Binary operator '%s' (%s) is not supported for a left expression "
+               "of type '%s' and right expression of type '%s'!",
+               leftAsExpr->dataType().name().c_str(),
+               rightAsExpr->dataType().name().c_str());
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE

@@ -30,10 +30,6 @@ DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
         // All these types are created or customized by the user, hence non-primitive:
         case DataTypeId::kArray:
             break;
-            
-        // This is not a valid value!
-        case DataTypeId::kNumTypes:
-            break;
     }
     
     return gUnknownDataType;

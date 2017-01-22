@@ -98,10 +98,9 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprValue, "%s");
                 break;
                 
+            case DataTypeId::kUnknown:                
             case DataTypeId::kVoid:
             case DataTypeId::kArray:
-            case DataTypeId::kUnknown:
-            case DataTypeId::kNumTypes:
             case DataTypeId::kUnknownArray:
                 mCtx.error(astNode,
                            "print() not supported/implemented for expression of type '%s'!",
