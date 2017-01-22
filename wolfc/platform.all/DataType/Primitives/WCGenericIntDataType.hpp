@@ -22,54 +22,6 @@ public:
                                          llvm::Value & leftVal,
                                          DataType & rightTy,
                                          llvm::Value & rightVal) override;
-    
-    virtual llvm::Value * codegenAddOp(CodegenCtx & cgCtx,
-                                       AST::ASTNode & callingNode,
-                                       llvm::Value & leftVal,
-                                       DataType & rightTy,
-                                       llvm::Value & rightVal) override;
-    
-    virtual llvm::Value * codegenSubOp(CodegenCtx & cgCtx,
-                                       AST::ASTNode & callingNode,
-                                       llvm::Value & leftVal,
-                                       DataType & rightTy,
-                                       llvm::Value & rightVal) override;
-    
-    virtual llvm::Value * codegenBOrOp(CodegenCtx & cgCtx,
-                                       AST::ASTNode & callingNode,
-                                       llvm::Value & leftVal,
-                                       DataType & rightTy,
-                                       llvm::Value & rightVal) override;
-    
-    virtual llvm::Value * codegenBXOrOp(CodegenCtx & cgCtx,
-                                        AST::ASTNode & callingNode,
-                                        llvm::Value & leftVal,
-                                        DataType & rightTy,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Value * codegenMulOp(CodegenCtx & cgCtx,
-                                       AST::ASTNode & callingNode,
-                                       llvm::Value & leftVal,
-                                       DataType & rightTy,
-                                       llvm::Value & rightVal) override;
-    
-    virtual llvm::Value * codegenBAndOp(CodegenCtx & cgCtx,
-                                        AST::ASTNode & callingNode,
-                                        llvm::Value & leftVal,
-                                        DataType & rightTy,
-                                        llvm::Value & rightVal) override;
-    
-    virtual llvm::Value * codegenLShiftOp(CodegenCtx & cgCtx,
-                                          AST::ASTNode & callingNode,
-                                          llvm::Value & leftVal,
-                                          DataType & rightTy,
-                                          llvm::Value & rightVal) override;
-    
-    virtual llvm::Value * codegenLRShiftOp(CodegenCtx & cgCtx,
-                                           AST::ASTNode & callingNode,
-                                           llvm::Value & leftVal,
-                                           DataType & rightTy,
-                                           llvm::Value & rightVal) override;
 
     virtual llvm::Value * codegenBNotOp(CodegenCtx & cgCtx,
                                         AST::ASTNode & callingNode,

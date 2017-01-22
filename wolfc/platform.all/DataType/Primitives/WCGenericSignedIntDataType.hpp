@@ -32,24 +32,6 @@ public:
                                          llvm::Value & leftVal,
                                          DataType & rightTy,
                                          llvm::Value & rightVal) override;
-    
-    virtual llvm::Value * codegenDivOp(CodegenCtx & cgCtx,
-                                       AST::ASTNode & callingNode,
-                                       llvm::Value & leftVal,
-                                       DataType & rightTy,
-                                       llvm::Value & rightVal) override;
-    
-    virtual llvm::Value * codegenModOp(CodegenCtx & cgCtx,
-                                       AST::ASTNode & callingNode,
-                                       llvm::Value & leftVal,
-                                       DataType & rightTy,
-                                       llvm::Value & rightVal) override;
-    
-    virtual llvm::Value * codegenARShiftOp(CodegenCtx & cgCtx,
-                                           AST::ASTNode & callingNode,
-                                           llvm::Value & leftVal,
-                                           DataType & rightTy,
-                                           llvm::Value & rightVal) override;
 
     virtual llvm::Constant * codegenConstCmpLTOp(AST::ASTNode & callingNode,
                                                  llvm::Constant & leftVal,
