@@ -82,9 +82,7 @@ DataType & AddExprNoOp::dataType() {
 //-----------------------------------------------------------------------------
 // AddExprTwoOps
 //-----------------------------------------------------------------------------
-AddExprTwoOps::AddExprTwoOps(MulExpr & leftExpr,
-                             AddExpr & rightExpr)
-:
+AddExprTwoOps::AddExprTwoOps(MulExpr & leftExpr, AddExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {

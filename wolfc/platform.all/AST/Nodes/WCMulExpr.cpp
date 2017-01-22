@@ -78,46 +78,13 @@ DataType & MulExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * MulExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mExpr.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * MulExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * MulExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprConstEval(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // MulExprTwoOps
 //-----------------------------------------------------------------------------
-MulExprTwoOps::MulExprTwoOps(ShiftExpr & leftExpr,
-                             MulExpr & rightExpr
-                            #warning FIXME - Codegen
-                            #if 0
-                             ,DTCodegenBinaryOpFunc codegenBinaryOpFunc,
-                             DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc
-                            #endif
-                             )
-:
+MulExprTwoOps::MulExprTwoOps(ShiftExpr & leftExpr, MulExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
-#warning FIXME - Codegen
-#if 0
-    ,mCodegenBinaryOpFunc(codegenBinaryOpFunc),
-    mCodegenConstBinaryOpFunc(codegenConstBinaryOpFunc)
-#endif
 {
-#warning FIXME - Codegen
-#if 0
-    WC_ASSERT(mCodegenBinaryOpFunc);
-    WC_ASSERT(mCodegenConstBinaryOpFunc);
-#endif
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
 }
@@ -143,51 +110,11 @@ DataType & MulExprTwoOps::dataType() {
     return mLeftExpr.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * MulExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of a binary expression result!");
-    return nullptr;
-}
-
-llvm::Value * MulExprTwoOps::codegenExprEval(CodegenCtx & cgCtx) {
-    // Evaluate left and right expressions
-    llvm::Value * leftVal = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(leftVal, nullptr);
-    llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightVal, nullptr);
-    
-    // Do the operation and return the result
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    return (leftTy.*mCodegenBinaryOpFunc)(cgCtx, *this, *leftVal, rightTy, *rightVal);
-}
-
-llvm::Constant * MulExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // Evaluate left and right expressions
-    llvm::Constant * leftVal = mLeftExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(leftVal, nullptr);
-    llvm::Constant * rightVal = mRightExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(rightVal, nullptr);
-    
-    // Do the operation and return the result
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    return (leftTy.*mCodegenConstBinaryOpFunc)(*this, *leftVal, rightTy, *rightVal);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // MulExprMul
 //-----------------------------------------------------------------------------
 MulExprMul::MulExprMul(ShiftExpr & leftExpr, MulExpr & rightExpr) :
-    MulExprTwoOps(leftExpr, rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                  , &DataType::codegenMulOp, &DataType::codegenConstMulOp
-                #endif
-                  )
+    MulExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -200,12 +127,7 @@ void MulExprMul::accept(ASTNodeVisitor & visitor) const {
 // MulExprDiv
 //-----------------------------------------------------------------------------
 MulExprDiv::MulExprDiv(ShiftExpr & leftExpr, MulExpr & rightExpr) :
-    MulExprTwoOps(leftExpr, rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                  , &DataType::codegenDivOp, &DataType::codegenConstDivOp
-                #endif
-                  )
+    MulExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -218,12 +140,7 @@ void MulExprDiv::accept(ASTNodeVisitor & visitor) const {
 // MulExprMod
 //-----------------------------------------------------------------------------
 MulExprMod::MulExprMod(ShiftExpr & leftExpr, MulExpr & rightExpr) :
-    MulExprTwoOps(leftExpr, rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                  , &DataType::codegenModOp, &DataType::codegenConstModOp
-                #endif
-                  )
+    MulExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -236,12 +153,7 @@ void MulExprMod::accept(ASTNodeVisitor & visitor) const {
 // MulExprBAnd
 //-----------------------------------------------------------------------------
 MulExprBAnd::MulExprBAnd(ShiftExpr & leftExpr, MulExpr & rightExpr) :
-    MulExprTwoOps(leftExpr, rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                  , &DataType::codegenBAndOp, &DataType::codegenConstBAndOp
-                #endif
-                  )
+    MulExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
