@@ -77,46 +77,13 @@ DataType & ShiftExprNoOp::dataType() {
     return mExpr.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * ShiftExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mExpr.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * ShiftExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * ShiftExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprConstEval(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // ShiftExprTwoOps
 //-----------------------------------------------------------------------------
-ShiftExprTwoOps::ShiftExprTwoOps(UnaryExpr & leftExpr,
-                                 ShiftExpr & rightExpr
-                                #warning FIXME - Codegen
-                                #if 0
-                                 ,DTCodegenBinaryOpFunc codegenBinaryOpFunc,
-                                 DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc
-                                #endif
-                                 )
-:
+ShiftExprTwoOps::ShiftExprTwoOps(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
-#warning FIXME - Codegen
-#if 0
-    ,mCodegenBinaryOpFunc(codegenBinaryOpFunc),
-    mCodegenConstBinaryOpFunc(codegenConstBinaryOpFunc)
-#endif
 {
-#warning FIXME - Codegen
-#if 0
-    WC_ASSERT(mCodegenBinaryOpFunc);
-    WC_ASSERT(mCodegenConstBinaryOpFunc);
-#endif
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
 }
@@ -142,51 +109,11 @@ DataType & ShiftExprTwoOps::dataType() {
     return mLeftExpr.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * ShiftExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of a binary expression result!");
-    return nullptr;
-}
-
-llvm::Value * ShiftExprTwoOps::codegenExprEval(CodegenCtx & cgCtx) {
-    // Evaluate left and right expressions
-    llvm::Value * leftVal = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(leftVal, nullptr);
-    llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightVal, nullptr);
-    
-    // Do the operation and return the result
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    return (leftTy.*mCodegenBinaryOpFunc)(cgCtx, *this, *leftVal, rightTy, *rightVal);
-}
-
-llvm::Constant * ShiftExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // Evaluate left and right expressions
-    llvm::Constant * leftVal = mLeftExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(leftVal, nullptr);
-    llvm::Constant * rightVal = mRightExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(rightVal, nullptr);
-    
-    // Do the operation and return the result
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    return (leftTy.*mCodegenConstBinaryOpFunc)(*this, *leftVal, rightTy, *rightVal);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // ShiftExprLShift
 //-----------------------------------------------------------------------------
 ShiftExprLShift::ShiftExprLShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
-    ShiftExprTwoOps(leftExpr, rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                    , &DataType::codegenLShiftOp, &DataType::codegenConstLShiftOp
-                #endif
-                    )
+    ShiftExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -199,12 +126,7 @@ void ShiftExprLShift::accept(ASTNodeVisitor & visitor) const {
 // ShiftExprARShift
 //-----------------------------------------------------------------------------
 ShiftExprARShift::ShiftExprARShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
-    ShiftExprTwoOps(leftExpr, rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                    , &DataType::codegenARShiftOp, &DataType::codegenConstARShiftOp
-                #endif
-                    )
+    ShiftExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -217,12 +139,7 @@ void ShiftExprARShift::accept(ASTNodeVisitor & visitor) const {
 // ShiftExprLRShift
 //-----------------------------------------------------------------------------
 ShiftExprLRShift::ShiftExprLRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
-    ShiftExprTwoOps(leftExpr, rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                    , &DataType::codegenLRShiftOp, &DataType::codegenConstLRShiftOp
-                #endif
-                    )
+    ShiftExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }

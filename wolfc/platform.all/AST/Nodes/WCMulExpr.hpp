@@ -1,10 +1,5 @@
 #pragma once
 
-#warning FIXME - Codegen
-#if 0
-#include "DataType/WCDataTypeCodegenFuncs.hpp"
-#endif
-
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
 
