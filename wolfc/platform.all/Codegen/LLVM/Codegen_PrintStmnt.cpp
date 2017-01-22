@@ -31,23 +31,37 @@ static void codegenBoolPrintStmnt(CodegenCtx & ctx,
     // Generate code for print 'true' block
     {
         ctx.mIRBuilder.SetInsertPoint(trueBB);
-        llvm::Value * fmtStr = ctx.mIRBuilder.CreateGlobalStringPtr("true", "print_fmt_str:bool:true");
+        llvm::Value * fmtStr = ctx.mIRBuilder.CreateGlobalStringPtr("true", "print:fmt_str");
         WC_ASSERT(fmtStr);
-        WC_ASSERTED_OP(ctx.mIRBuilder.CreateCall(&printfFn, fmtStr, "print_printf_call:bool:true"));
+        WC_ASSERTED_OP(ctx.mIRBuilder.CreateCall(&printfFn, fmtStr, "print:printf_call:true"));
         WC_ASSERTED_OP(ctx.mIRBuilder.CreateBr(continueBB));
     }
     
     // Generate code for print 'false' block
     {
         ctx.mIRBuilder.SetInsertPoint(falseBB);
-        llvm::Value * fmtStr = ctx.mIRBuilder.CreateGlobalStringPtr("false", "print_fmt_str:bool:false");
+        llvm::Value * fmtStr = ctx.mIRBuilder.CreateGlobalStringPtr("false", "print:fmt_str");
         WC_ASSERT(fmtStr);
-        WC_ASSERTED_OP(ctx.mIRBuilder.CreateCall(&printfFn, fmtStr, "print_printf_call:bool:false"));
+        WC_ASSERTED_OP(ctx.mIRBuilder.CreateCall(&printfFn, fmtStr, "print:printf_call:false"));
         WC_ASSERTED_OP(ctx.mIRBuilder.CreateBr(continueBB));
     }
     
     // Restore the previous insert point
     ctx.mIRBuilder.SetInsertPoint(continueBB);
+}
+
+/* Generate the code for a print statement for an arbitrary value */
+static void codegenGenericValuePrintStmnt(CodegenCtx & ctx,
+                                          llvm::Constant & printfFn,
+                                          llvm::Value & valToPrint,
+                                          const char * formatStr)
+{
+    // Create a format string for printf and call
+    llvm::Value * fmtStr = ctx.mIRBuilder.CreateGlobalStringPtr(formatStr, "print:fmt_str");
+    WC_ASSERT(fmtStr);
+    WC_ASSERTED_OP(ctx.mIRBuilder.CreateCall(&printfFn,
+                                             { fmtStr, &valToPrint },
+                                             "print:printf_call"));
 }
 
 void Codegen::visit(const AST::PrintStmnt & astNode) {
@@ -72,13 +86,23 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
         
         // See which type we are dealing with:
         switch (exprDataType.getTypeId()) {
+            case DataTypeId::kInt64:
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprValue, "%lld");
+                break;
+                
             case DataTypeId::kBool:
                 codegenBoolPrintStmnt(mCtx, *printfFn, *exprValue);
                 break;
                 
-            #warning TODO: other types
+            case DataTypeId::kStr:
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprValue, "%s");
+                break;
                 
-            default:
+            case DataTypeId::kVoid:
+            case DataTypeId::kArray:
+            case DataTypeId::kUnknown:
+            case DataTypeId::kNumTypes:
+            case DataTypeId::kUnknownArray:
                 mCtx.error(astNode,
                            "print() not supported/implemented for expression of type '%s'!",
                            exprDataType.name().c_str());

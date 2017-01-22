@@ -1,4 +1,3 @@
-func main() -> int
-    print(true)
-    return 0
+func main() -> void
+    print(456)
 end

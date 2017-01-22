@@ -14,11 +14,6 @@ public:
     
 #warning FIXME - Codegen
 #if 0
-    virtual bool codegenPrintStmnt(CodegenCtx & cgCtx,
-                                   AST::ASTNode & callingNode,
-                                   llvm::Constant & printfFn,
-                                   llvm::Value & valToPrint) override;
-    
     virtual llvm::Value * codegenCmpEQOp(CodegenCtx & cgCtx,
                                          AST::ASTNode & callingNode,
                                          llvm::Value & leftVal,
@@ -40,13 +35,6 @@ public:
                                                  llvm::Constant & leftVal,
                                                  DataType & rightTy,
                                                  llvm::Constant & rightVal) override;
-#endif
-    
-protected:
-    
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) override;
 #endif
 };
 

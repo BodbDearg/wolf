@@ -60,10 +60,6 @@ llvm::Value * BoolLit::codegenAddrOf(CodegenCtx & cgCtx) {
     return nullptr;
 }
 
-llvm::Value * BoolLit::codegenExprEval(CodegenCtx & cgCtx) {
-    return cgCtx.irBuilder.getInt1(mToken.type == TokenType::kTrue);
-}
-
 llvm::Constant * BoolLit::codegenExprConstEval(CodegenCtx & cgCtx) {
     return llvm::ConstantInt::get(llvm::Type::getInt1Ty(cgCtx.llvmCtx),
                                   mToken.type == TokenType::kTrue ? 1 : 0);

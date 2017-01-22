@@ -64,11 +64,6 @@ llvm::Value * IntLit::codegenAddrOf(CodegenCtx & cgCtx) {
     return nullptr;
 }
 
-llvm::Value * IntLit::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: data type should be based on the numeric literal and precision suffixes used
-    return cgCtx.irBuilder.getInt64(mToken.data.intVal);
-}
-
 llvm::Constant * IntLit::codegenExprConstEval(CodegenCtx & cgCtx) {
     // TODO: data type should be based on the numeric literal and precision suffixes used
     return llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), mToken.data.intVal);

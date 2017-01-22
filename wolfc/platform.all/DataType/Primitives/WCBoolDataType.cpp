@@ -27,65 +27,6 @@ bool BoolDataType::equals(const DataType & other) const {
 
 #warning FIXME - Codegen
 #if 0
-bool BoolDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
-                                     AST::ASTNode & callingNode,
-                                     llvm::Constant & printfFn,
-                                     llvm::Value & valToPrint)
-{
-    WC_UNUSED_PARAM(callingNode);
-    WC_UNUSED_PARAM(printfFn);
-    
-    // Create the two blocks for true & false and a branch
-    llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
-
-    llvm::BasicBlock * trueBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "print:true", parentFn);
-    WC_GUARD_ASSERT(trueBB, false);
-    llvm::BasicBlock * falseBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "print:false", parentFn);
-    WC_GUARD_ASSERT(falseBB, false);
-    
-    // Generate the branch
-    llvm::Value * branch = cgCtx.irBuilder.CreateCondBr(&valToPrint, trueBB, falseBB);
-    WC_GUARD_ASSERT(branch, false);
-    llvm::BasicBlock * continueBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "print:continue", parentFn);
-    WC_GUARD_ASSERT(continueBB, false);
-    
-    // Generate code for print 'true' block
-    {
-        cgCtx.irBuilder.SetInsertPoint(trueBB);
-        llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("true", "print_fmt_str:bool:true");
-        WC_GUARD_ASSERT(fmtStr, false);
-        WC_GUARD_ASSERT(cgCtx.irBuilder.CreateCall(&printfFn, fmtStr, "print_printf_call:bool:true"), false);
-        WC_GUARD_ASSERT(cgCtx.irBuilder.CreateBr(continueBB), false);
-    }
-    
-    // Generate code for print 'false' block
-    {
-        cgCtx.irBuilder.SetInsertPoint(falseBB);
-        llvm::Value * fmtStr = cgCtx.irBuilder.CreateGlobalStringPtr("false", "print_fmt_str:bool:false");
-        WC_GUARD_ASSERT(fmtStr, false);
-        WC_GUARD_ASSERT(cgCtx.irBuilder.CreateCall(&printfFn, fmtStr, "print_printf_call:bool:false"), false);
-        WC_GUARD_ASSERT(cgCtx.irBuilder.CreateBr(continueBB), false);
-    }
-    
-    // Restore the previous insert point
-    cgCtx.irBuilder.SetInsertPoint(continueBB);
-    return true;
-}
-#endif
-
-#warning FIXME - Codegen
-#if 0
-bool BoolDataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) {
-    mLLVMType = llvm::Type::getInt1Ty(cgCtx.llvmCtx);
-    
-    if (!mLLVMType) {
-        issueGenericCodegenLLVMTypeError(callingNode);
-        return false;
-    }
-    
-    return true;
-}
-
 llvm::Value * BoolDataType::codegenCmpEQOp(CodegenCtx & cgCtx,
                                            AST::ASTNode & callingNode,
                                            llvm::Value & leftVal,

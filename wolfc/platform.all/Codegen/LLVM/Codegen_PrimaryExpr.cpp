@@ -1,6 +1,7 @@
 #include "Codegen.hpp"
 
 #include "AST/Nodes/WCBoolLit.hpp"
+#include "AST/Nodes/WCIntLit.hpp"
 #include "AST/Nodes/WCPrimaryExpr.hpp"
 #include "CodegenCtx.hpp"
 
@@ -9,7 +10,7 @@ WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 void Codegen::visit(const AST::PrimaryExprIntLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mLit.accept(*this);
 }
 
 void Codegen::visit(const AST::PrimaryExprBoolLit & astNode) {

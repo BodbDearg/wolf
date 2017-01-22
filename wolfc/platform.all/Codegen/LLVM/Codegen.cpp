@@ -10,7 +10,6 @@
 #include "AST/Nodes/WCIBasicCodegenNode.hpp"
 #include "AST/Nodes/WCIdentifier.hpp"
 #include "AST/Nodes/WCIfStmnt.hpp"
-#include "AST/Nodes/WCIntLit.hpp"
 #include "AST/Nodes/WCLoopStmnt.hpp"
 #include "AST/Nodes/WCNextStmnt.hpp"
 #include "AST/Nodes/WCNoOpStmnt.hpp"
@@ -102,11 +101,6 @@ void Codegen::visit(const AST::IfStmntElseIf & astNode) {
 }
 
 void Codegen::visit(const AST::IfStmntNoElse & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::IntLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }
