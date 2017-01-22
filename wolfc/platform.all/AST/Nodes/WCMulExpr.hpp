@@ -40,27 +40,13 @@ public:
     
     virtual DataType & dataType() override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
-    
     ShiftExpr & mExpr;
 };
 
 /* Base class for an MulExpr with two operands */
 class MulExprTwoOps : public MulExpr {
 public:
-    MulExprTwoOps(ShiftExpr & leftExpr,
-                  MulExpr & rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                  ,DTCodegenBinaryOpFunc codegenBinaryOpFunc,
-                  DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc
-                #endif
-                  );
+    MulExprTwoOps(ShiftExpr & leftExpr, MulExpr & rightExpr);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -70,22 +56,8 @@ public:
     
     virtual DataType & dataType() final override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
-    
     ShiftExpr & mLeftExpr;
     MulExpr &   mRightExpr;
-    
-#warning FIXME - Codegen
-#if 0
-private:
-    const DTCodegenBinaryOpFunc         mCodegenBinaryOpFunc;
-    const DTCodegenConstBinaryOpFunc    mCodegenConstBinaryOpFunc;
-#endif
 };
 
 /* ShiftExpr * MulExpr */
