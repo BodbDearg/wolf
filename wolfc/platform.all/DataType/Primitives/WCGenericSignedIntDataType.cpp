@@ -62,34 +62,6 @@ llvm::Value * GenericSignedIntDataType::codegenCmpGEOp(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateICmpSGE(&leftVal, &rightVal, "GenericSignedInt_CmpGEOp");
 }
 
-llvm::Value * GenericSignedIntDataType::codegenDivOp(CodegenCtx & cgCtx,
-                                                     AST::ASTNode & callingNode,
-                                                     llvm::Value & leftVal,
-                                                     DataType & rightTy,
-                                                     llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_Div,
-                                            kOpName_Div,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateSDiv(&leftVal, &rightVal, "GenericSignedInt_DivOp");
-}
-
-llvm::Value * GenericSignedIntDataType::codegenModOp(CodegenCtx & cgCtx,
-                                                     AST::ASTNode & callingNode,
-                                                     llvm::Value & leftVal,
-                                                     DataType & rightTy,
-                                                     llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_Mod,
-                                            kOpName_Mod,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateSRem(&leftVal, &rightVal, "GenericSignedInt_ModOp");
-}
-
 llvm::Value * GenericSignedIntDataType::codegenARShiftOp(CodegenCtx & cgCtx,
                                                          AST::ASTNode & callingNode,
                                                          llvm::Value & leftVal,

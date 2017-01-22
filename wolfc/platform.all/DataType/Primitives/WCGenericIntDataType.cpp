@@ -39,34 +39,6 @@ llvm::Value * GenericIntDataType::codegenCmpNEOp(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateICmpNE(&leftVal, &rightVal, "GenericInt_CmpNEOp");
 }
 
-llvm::Value * GenericIntDataType::codegenMulOp(CodegenCtx & cgCtx,
-                                               AST::ASTNode & callingNode,
-                                               llvm::Value & leftVal,
-                                               DataType & rightTy,
-                                               llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_Mul,
-                                            kOpName_Mul,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateMul(&leftVal, &rightVal, "GenericInt_MulOp");
-}
-
-llvm::Value * GenericIntDataType::codegenBAndOp(CodegenCtx & cgCtx,
-                                                AST::ASTNode & callingNode,
-                                                llvm::Value & leftVal,
-                                                DataType & rightTy,
-                                                llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_BAnd,
-                                            kOpName_BAnd,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateAnd(&leftVal, &rightVal, "GenericInt_BAndOp");
-}
-
 llvm::Value * GenericIntDataType::codegenLShiftOp(CodegenCtx & cgCtx,
                                                   AST::ASTNode & callingNode,
                                                   llvm::Value & leftVal,
