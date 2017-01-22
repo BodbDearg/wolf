@@ -20,7 +20,7 @@ public:
     static NotExpr * parse(ParseCtx & parseCtx);
 };
 
-/* EqExpr */
+/* CmpExpr */
 class NotExprNoOp final : public NotExpr {
 public:
     NotExprNoOp(CmpExpr & expr);

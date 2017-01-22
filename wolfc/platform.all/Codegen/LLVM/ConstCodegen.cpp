@@ -78,11 +78,6 @@ void ConstCodegen::visit(const AST::AddExprSub & astNode) {
     #warning TODO: Codegen this node
 }
 
-void ConstCodegen::visit(const AST::AddExprTwoOps & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void ConstCodegen::visit(const AST::ArrayLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
@@ -128,11 +123,6 @@ void ConstCodegen::visit(const AST::AssignExprAssignBAnd & astNode) {
     #warning TODO: Codegen this node
 }
 
-void ConstCodegen::visit(const AST::AssignExprAssignBase & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void ConstCodegen::visit(const AST::AssignExprAssignBOr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
@@ -169,11 +159,6 @@ void ConstCodegen::visit(const AST::AssignExprAssignMul & astNode) {
 }
 
 void ConstCodegen::visit(const AST::AssignExprAssignSub & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void ConstCodegen::visit(const AST::AssignExprBinaryOpBase & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }
@@ -239,11 +224,6 @@ void ConstCodegen::visit(const AST::CmpExprNE & astNode) {
 }
 
 void ConstCodegen::visit(const AST::CmpExprNoOp & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void ConstCodegen::visit(const AST::CmpExprTwoOps & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }
@@ -365,11 +345,6 @@ void ConstCodegen::visit(const AST::MulExprNoOp & astNode) {
     #warning TODO: Codegen this node
 }
 
-void ConstCodegen::visit(const AST::MulExprTwoOps & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void ConstCodegen::visit(const AST::NextStmntNoCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
@@ -416,11 +391,6 @@ void ConstCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
 }
 
 void ConstCodegen::visit(const AST::PostfixExprInc & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void ConstCodegen::visit(const AST::PostfixExprIncDecBase & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }
@@ -510,11 +480,6 @@ void ConstCodegen::visit(const AST::ReturnStmntWithCondAndValue & astNode) {
     #warning TODO: Codegen this node
 }
 
-void ConstCodegen::visit(const AST::ReturnStmntWithCondBase & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void ConstCodegen::visit(const AST::ReturnStmntWithCondVoid & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
@@ -546,11 +511,6 @@ void ConstCodegen::visit(const AST::ShiftExprLShift & astNode) {
 }
 
 void ConstCodegen::visit(const AST::ShiftExprNoOp & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void ConstCodegen::visit(const AST::ShiftExprTwoOps & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }
@@ -656,11 +616,6 @@ void ConstCodegen::visit(const AST::UnaryExprParen & astNode) {
 }
 
 void ConstCodegen::visit(const AST::UnaryExprPlus & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void ConstCodegen::visit(const AST::UnaryExprPlusMinusBase & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }

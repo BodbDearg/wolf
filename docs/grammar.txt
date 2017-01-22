@@ -139,6 +139,7 @@ MulExpr:
 	ShiftExpr & MulExpr
 
 ShiftExpr:
+	UnaryExpr
 	UnaryExpr << ShiftExpr
 	UnaryExpr >> ShiftExpr
 	UnaryExpr >>> ShiftExpr

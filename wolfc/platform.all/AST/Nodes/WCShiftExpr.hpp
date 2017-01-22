@@ -15,6 +15,7 @@ class UnaryExpr;
 
 /*
 ShiftExpr:
+    UnaryExpr
 	UnaryExpr << ShiftExpr
 	UnaryExpr >> ShiftExpr
 	UnaryExpr >>> ShiftExpr
