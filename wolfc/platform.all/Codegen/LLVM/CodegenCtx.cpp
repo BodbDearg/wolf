@@ -46,14 +46,11 @@ void CodegenCtx::error(const AST::ASTNode & atNode, const char * msgFmtStr, std:
     
     // Print the start of the message
     const Token & startToken = atNode.getStartToken();
-    const Token & endToken = atNode.getEndToken();
     
-    std::fprintf(stderr,
-                 "Error! Compile failed at (line %zu, col %zu)-(line %zu, col %zu)!:\n",
+    std::sprintf(msgBuf,
+                 "@line %zu, col %zu: Error! ",
                  startToken.startLine + 1,
-                 startToken.startCol + 1,
-                 endToken.endLine + 1,
-                 endToken.endCol + 1);
+                 startToken.startCol + 1);
     
     // Get how long the message is so far:
     size_t msgPrefixLen = std::strlen(msgBuf);
@@ -90,7 +87,7 @@ void CodegenCtx::error(const char * msgFmtStr, std::va_list msgFmtStrArgs) {
     char msgBuf[kMaxMsgLen];
     
     // Print the start of the message
-    std::fprintf(stderr, "Error! Compile failed at an unknown location!:\n");
+    std::sprintf(msgBuf, "@Unknown location: Error! ");
     
     // Get how long the message is so far:
     size_t msgPrefixLen = std::strlen(msgBuf);
@@ -122,14 +119,11 @@ void CodegenCtx::warning(const AST::ASTNode & atNode, const char * msgFmtStr, st
     
     // Print the start of the message
     const Token & startToken = atNode.getStartToken();
-    const Token & endToken = atNode.getEndToken();
     
-    std::fprintf(stderr,
-                 "Compile warning at (line %zu, col %zu)-(line %zu, col %zu):\n",
+    std::sprintf(msgBuf,
+                 "@line %zu, col %zu: Warning: ",
                  startToken.startLine + 1,
-                 startToken.startCol + 1,
-                 endToken.endLine + 1,
-                 endToken.endCol + 1);
+                 startToken.startCol + 1);
     
     // Get how long the message is so far:
     size_t msgPrefixLen = std::strlen(msgBuf);
@@ -166,7 +160,7 @@ void CodegenCtx::warning(const char * msgFmtStr, std::va_list msgFmtStrArgs) {
     char msgBuf[kMaxMsgLen];
     
     // Print the start of the message
-    std::fprintf(stderr, "Compile warning at an unknown location!:\n");
+    std::sprintf(msgBuf, "@Unknown location: Warning: ");
     
     // Get how long the message is so far:
     size_t msgPrefixLen = std::strlen(msgBuf);

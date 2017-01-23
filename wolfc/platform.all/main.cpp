@@ -26,7 +26,7 @@ static bool compileAST(const Wolfc::AST::Module * astModule, const char * fromSr
     
     // Emit compile warnings to stdout if there are any
     if (codegenCtx.hasWarnings()) {
-        std::printf("Compile warnings emitted for source file '%s'! Warning messages follow:\n", fromSrcFile);
+        std::fprintf(stdout, "Compile warnings emitted for source file '%s'! Warning messages follow:\n", fromSrcFile);
         
         for (const std::string & warningMsg : codegenCtx.getWarningMsgs()) {
             std::fprintf(stdout, "%s\n", warningMsg.c_str());
@@ -35,7 +35,7 @@ static bool compileAST(const Wolfc::AST::Module * astModule, const char * fromSr
     
     // Emit compile errors to stderr if there are any and fail
     if (!codegenCtx.mLLVMModule.get() || codegenCtx.hasErrors()) {
-        std::printf("Parsing failed for source file '%s'! Error messages follow:\n", fromSrcFile);
+        std::fprintf(stderr, "Compile failed for source file '%s'! Error messages follow:\n", fromSrcFile);
         
         for (const std::string & errorMsg : codegenCtx.getErrorMsgs()) {
             std::fprintf(stderr, "%s\n", errorMsg.c_str());
@@ -69,7 +69,7 @@ static bool compileTokens(const Wolfc::Token * tokenList, const char * fromSrcFi
     
     // Emit parse warnings to stdout if there are any
     if (parseCtx.hasWarnings()) {
-        std::printf("Parse warnings emitted for source file '%s'! Warning messages follow:\n", fromSrcFile);
+        std::fprintf(stdout, "Parse warnings emitted for source file '%s'! Warning messages follow:\n", fromSrcFile);
         
         for (const std::string & warningMsg : parseCtx.getWarningMsgs()) {
             std::fprintf(stdout, "%s\n", warningMsg.c_str());
@@ -78,7 +78,7 @@ static bool compileTokens(const Wolfc::Token * tokenList, const char * fromSrcFi
     
     // Emit parse errors to stderr if there are any and fail
     if (!astModule || parseCtx.hasErrors()) {
-        std::printf("Parsing failed for source file '%s'! Error messages follow:\n", fromSrcFile);
+        std::fprintf(stderr, "Parsing failed for source file '%s'! Error messages follow:\n", fromSrcFile);
         
         for (const std::string & errorMsg : parseCtx.getErrorMsgs()) {
             std::fprintf(stderr, "%s\n", errorMsg.c_str());

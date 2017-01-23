@@ -48,7 +48,7 @@ void ParseCtx::error(const Token & atToken, const char * msgFmtStr, std::va_list
     
     // Print the start of the message
     std::sprintf(msgBuf,
-                 "Error! Parse failed at line %zu, col %zu!: ",
+                 "@line %zu, col %zu: Error! ",
                  atToken.startLine + 1,
                  atToken.startCol + 1);
     
@@ -93,7 +93,7 @@ void ParseCtx::warning(const Token & atToken, const char * msgFmtStr, std::va_li
     
     // Print the start of the message
     std::sprintf(msgBuf,
-                 "Parse warning at line %zu, col %zu!: ",
+                 "@line %zu, col %zu: Warning: ",
                  atToken.startLine + 1,
                  atToken.startCol + 1);
     
