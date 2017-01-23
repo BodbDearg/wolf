@@ -2,7 +2,6 @@
 
 #include "AST/Nodes/WCArrayLit.hpp"
 #include "AST/Nodes/WCArrayLitExprs.hpp"
-#include "AST/Nodes/WCAssertStmnt.hpp"
 #include "AST/Nodes/WCBreakStmnt.hpp"
 #include "AST/Nodes/WCFuncArg.hpp"
 #include "AST/Nodes/WCFuncCall.hpp"
@@ -52,11 +51,6 @@ void Codegen::visit(const AST::ArrayLitExprsMulti & astNode) {
 }
 
 void Codegen::visit(const AST::ArrayLitExprsSingle & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::AssertStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }
