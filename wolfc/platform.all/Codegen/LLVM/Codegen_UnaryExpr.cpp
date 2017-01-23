@@ -1,5 +1,6 @@
 #include "Codegen.hpp"
 
+#include "AST/Nodes/WCAssignExpr.hpp"
 #include "AST/Nodes/WCPostfixExpr.hpp"
 #include "AST/Nodes/WCUnaryExpr.hpp"
 #include "CodegenCtx.hpp"
@@ -24,7 +25,7 @@ void Codegen::visit(const AST::UnaryExprMinus & astNode) {
 
 void Codegen::visit(const AST::UnaryExprParen & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mExpr.accept(*this);
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE
