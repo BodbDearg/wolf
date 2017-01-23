@@ -26,7 +26,7 @@ public:
     static bool peek(const Token * currentToken);
     static Type * parse(ParseCtx & parseCtx);
     
-    virtual DataType & dataType() = 0;
+    virtual const DataType & dataType() = 0;
     
 #warning FIXME - Codegen
 #if 0
@@ -43,7 +43,7 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual DataType & dataType() override;
+    virtual const DataType & dataType() override;
     
 #warning FIXME - Codegen
 #if 0
@@ -62,7 +62,7 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual DataType & dataType() override;
+    virtual const DataType & dataType() override;
     
 #warning FIXME - Codegen
 #if 0

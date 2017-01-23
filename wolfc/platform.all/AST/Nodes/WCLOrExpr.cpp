@@ -64,15 +64,15 @@ const Token & LOrExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool LOrExprNoOp::isLValue() {
+bool LOrExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-bool LOrExprNoOp::isConstExpr() {
+bool LOrExprNoOp::isConstExpr() const {
     return mExpr.isConstExpr();
 }
 
-DataType & LOrExprNoOp::dataType() {
+const DataType & LOrExprNoOp::dataType() const {
     return mExpr.dataType();
 }
 
@@ -114,15 +114,15 @@ const Token & LOrExprOr::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-bool LOrExprOr::isLValue() {
+bool LOrExprOr::isLValue() const {
     return false;
 }
 
-bool LOrExprOr::isConstExpr() {
+bool LOrExprOr::isConstExpr() const {
     return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
-DataType & LOrExprOr::dataType() {
+const DataType & LOrExprOr::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 

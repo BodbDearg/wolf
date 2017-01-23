@@ -72,15 +72,15 @@ const Token & TernaryExprNoCond::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool TernaryExprNoCond::isLValue() {
+bool TernaryExprNoCond::isLValue() const {
     return mExpr.isLValue();
 }
 
-bool TernaryExprNoCond::isConstExpr() {
+bool TernaryExprNoCond::isConstExpr() const {
     return mExpr.isConstExpr();
 }
 
-DataType & TernaryExprNoCond::dataType() {
+const DataType & TernaryExprNoCond::dataType() const {
     return mExpr.dataType();
 }
 
@@ -127,17 +127,17 @@ const Token & TernaryExprWithCond::getEndToken() const {
     return mFalseExpr.getEndToken();
 }
 
-bool TernaryExprWithCond::isLValue() {
+bool TernaryExprWithCond::isLValue() const {
     return false;
 }
 
-bool TernaryExprWithCond::isConstExpr() {
+bool TernaryExprWithCond::isConstExpr() const {
     return  mCondExpr.isConstExpr() &&
             mTrueExpr.isConstExpr() &&
             mFalseExpr.isConstExpr();
 }
 
-DataType & TernaryExprWithCond::dataType() {
+const DataType & TernaryExprWithCond::dataType() const {
     // Assume the data type is that of the 'true' expression.
     // When we compile we will verify that the 'false' expression matches...
     return mTrueExpr.dataType();

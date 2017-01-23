@@ -94,15 +94,15 @@ const Token & PrimaryExprIntLit::getEndToken() const {
     return mLit.getEndToken();
 }
 
-bool PrimaryExprIntLit::isLValue() {
+bool PrimaryExprIntLit::isLValue() const {
     return mLit.isLValue();
 }
 
-bool PrimaryExprIntLit::isConstExpr() {
+bool PrimaryExprIntLit::isConstExpr() const {
     return mLit.isConstExpr();
 }
 
-DataType & PrimaryExprIntLit::dataType() {
+const DataType & PrimaryExprIntLit::dataType() const {
     return mLit.dataType();
 }
 
@@ -140,15 +140,15 @@ const Token & PrimaryExprBoolLit::getEndToken() const {
     return mLit.getEndToken();
 }
 
-bool PrimaryExprBoolLit::isLValue() {
+bool PrimaryExprBoolLit::isLValue() const {
     return mLit.isLValue();
 }
 
-bool PrimaryExprBoolLit::isConstExpr() {
+bool PrimaryExprBoolLit::isConstExpr() const {
     return mLit.isConstExpr();
 }
 
-DataType & PrimaryExprBoolLit::dataType() {
+const DataType & PrimaryExprBoolLit::dataType() const {
     return mLit.dataType();
 }
 
@@ -186,15 +186,15 @@ const Token & PrimaryExprStrLit::getEndToken() const {
     return mLit.getEndToken();
 }
 
-bool PrimaryExprStrLit::isLValue() {
+bool PrimaryExprStrLit::isLValue() const {
     return mLit.isLValue();
 }
 
-bool PrimaryExprStrLit::isConstExpr() {
+bool PrimaryExprStrLit::isConstExpr() const {
     return mLit.isConstExpr();
 }
 
-DataType & PrimaryExprStrLit::dataType() {
+const DataType & PrimaryExprStrLit::dataType() const {
     return mLit.dataType();
 }
 
@@ -232,15 +232,15 @@ const Token & PrimaryExprArrayLit::getEndToken() const {
     return mLit.getEndToken();
 }
 
-bool PrimaryExprArrayLit::isLValue() {
+bool PrimaryExprArrayLit::isLValue() const {
     return mLit.isLValue();
 }
 
-bool PrimaryExprArrayLit::isConstExpr() {
+bool PrimaryExprArrayLit::isConstExpr() const {
     return mLit.isConstExpr();
 }
 
-DataType & PrimaryExprArrayLit::dataType() {
+const DataType & PrimaryExprArrayLit::dataType() const {
     return mLit.dataType();
 }
 
@@ -278,15 +278,15 @@ const Token & PrimaryExprIdentifier::getEndToken() const {
     return mIdent.getEndToken();
 }
 
-bool PrimaryExprIdentifier::isLValue() {
+bool PrimaryExprIdentifier::isLValue() const {
     return mIdent.isLValue();
 }
 
-bool PrimaryExprIdentifier::isConstExpr() {
+bool PrimaryExprIdentifier::isConstExpr() const {
     return mIdent.isConstExpr();
 }
 
-DataType & PrimaryExprIdentifier::dataType() {
+const DataType & PrimaryExprIdentifier::dataType() const {
     return mIdent.dataType();
 }
 
@@ -328,15 +328,15 @@ const Token & PrimaryExprReadnum::getEndToken() const {
     return mExpr.getEndToken();
 }
     
-bool PrimaryExprReadnum::isLValue() {
+bool PrimaryExprReadnum::isLValue() const {
     return mExpr.isLValue();
 }
 
-bool PrimaryExprReadnum::isConstExpr() {
+bool PrimaryExprReadnum::isConstExpr() const {
     return mExpr.isConstExpr();
 }
 
-DataType & PrimaryExprReadnum::dataType() {
+const DataType & PrimaryExprReadnum::dataType() const {
     return mExpr.dataType();
 }
 
@@ -374,15 +374,15 @@ const Token & PrimaryExprTime::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool PrimaryExprTime::isLValue() {
+bool PrimaryExprTime::isLValue() const {
     return mExpr.isLValue();
 }
 
-bool PrimaryExprTime::isConstExpr() {
+bool PrimaryExprTime::isConstExpr() const {
     return mExpr.isConstExpr();
 }
 
-DataType & PrimaryExprTime::dataType() {
+const DataType & PrimaryExprTime::dataType() const {
     return mExpr.dataType();
 }
 
@@ -420,15 +420,15 @@ const Token & PrimaryExprRandExpr::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool PrimaryExprRandExpr::isLValue() {
+bool PrimaryExprRandExpr::isLValue() const {
     return mExpr.isLValue();
 }
 
-bool PrimaryExprRandExpr::isConstExpr() {
+bool PrimaryExprRandExpr::isConstExpr() const {
     return mExpr.isConstExpr();
 }
 
-DataType & PrimaryExprRandExpr::dataType() {
+const DataType & PrimaryExprRandExpr::dataType() const {
     return mExpr.dataType();
 }
 

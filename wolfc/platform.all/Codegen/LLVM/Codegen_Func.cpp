@@ -83,7 +83,7 @@ void Codegen::visit(const AST::Func & astNode) {
     
     // Get the return data type for the function and codegen the llvm type.
     // If we fail to codegen the llvm type, just use 'int64' as a placeholder.
-    DataType & returnDataType = astNode.returnDataType();
+    const DataType & returnDataType = astNode.returnDataType();
     returnDataType.accept(mCodegenDataType);
     llvm::Type * llvmReturnType = mCtx.popLLVMType();
     

@@ -151,12 +151,6 @@ public:
     virtual void visit(const AST::VarDeclInferType & astNode) override;
     virtual void visit(const AST::WhileStmnt & astNode) override;
     
-    /* Issue a compile error that a binary operation is not supported for the given left and right expressions. */
-    void issueBinaryOpNotSupportedError(AST::ASTNode & leftExpr,
-                                        AST::ASTNode & rightExpr,
-                                        const char * opName,
-                                        const char * opSymbol);
-    
     /* The codegen context */
     CodegenCtx & mCtx;
     
@@ -167,29 +161,6 @@ public:
     CodegenDataType mCodegenDataType;
      
 private:
-    /**
-     * Format for a function which actually does the work of code generating a binary operation for a specific type.
-     * Both the left and right value must be of the same type
-     */
-    typedef void (*CodegenBinaryOpFunc)(Codegen & cg,
-                                        DataType & exprDataType,
-                                        AST::ASTNode & leftExprASTNode,
-                                        llvm::Value & leftValue,
-                                        AST::ASTNode & rightExprASTNode,
-                                        llvm::Value & rightValue,
-                                        const char * opName,
-                                        const char * opSymbol);
-    
-    /**
-     * Code generates a binary operation with the specified function.
-     * Verifies first that both expressions have the same type and does most of the work common to all binary ops.
-     */
-    void codegenBinaryOp(AST::ASTNode & leftExpr,
-                         AST::ASTNode & rightExpr,
-                         CodegenBinaryOpFunc codegenFunc,
-                         const char * opName,
-                         const char * opSymbol);
-    
     /**
      * Deferred function codegen. Generates the code for the function body.
      * This codegen is deferred until after top level module declarations so we can declare and use

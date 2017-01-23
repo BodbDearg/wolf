@@ -1,9 +1,8 @@
 #pragma once
 
 #include "AST/Nodes/WCASTNode.hpp"
-#include "DataType/Primitives/WCArrayDataType.hpp"
+#include "DataType/Primitives/WCUnknownDataType.hpp"
 #include "WCIExpr.hpp"
-#include "WCLazyInit.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -27,10 +26,10 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual bool isLValue() override;
-    virtual bool isConstExpr() override;
+    virtual bool isLValue() const override;
+    virtual bool isConstExpr() const override;
     
-    virtual DataType & dataType() override;
+    virtual const DataType & dataType() const override;
     
 #warning FIXME - Codegen
 #if 0
@@ -50,11 +49,11 @@ private:
     bool codegenLLVMType(CodegenCtx & cgCtx);
 #endif
     
-    const Token &               mLBrack;
-    ArrayLitExprs &             mExprs;
-    const Token &               mRBrack;
-    size_t                      mSize;
-    LazyInit<ArrayDataType>     mDataType;
+    const Token &      mLBrack;
+    ArrayLitExprs &    mExprs;
+    const Token &      mRBrack;
+    size_t             mSize;
+    UnknownDataType    mDataType;
     
 #warning FIXME - Codegen
 #if 0

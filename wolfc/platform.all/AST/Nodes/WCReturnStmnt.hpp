@@ -35,7 +35,7 @@ public:
     virtual const Token & getStartToken() const final override;
     
     /* Gives the data type of the value returned */
-    virtual DataType & dataType() = 0;
+    virtual const DataType & dataType() = 0;
     
     /* The token for 'return' */
     const Token & mReturnToken;
@@ -67,7 +67,7 @@ public:
     virtual bool codegen(CodegenCtx & cgCtx) override;
 #endif
     
-    virtual DataType & dataType() override;
+    virtual const DataType & dataType() override;
     
     virtual bool allCodepathsHaveUncondRet() const override;
 };
@@ -85,7 +85,7 @@ public:
     virtual bool codegen(CodegenCtx & cgCtx) override;
 #endif
     
-    virtual DataType & dataType() override;
+    virtual const DataType & dataType() override;
     
     virtual bool allCodepathsHaveUncondRet() const override;
     
@@ -138,7 +138,7 @@ public:
     virtual bool codegen(CodegenCtx & cgCtx) override;
 #endif
     
-    virtual DataType & dataType() override;
+    virtual const DataType & dataType() override;
 };
 
 /* return AssignExpr if|unless AssignExpr */
@@ -156,7 +156,7 @@ public:
     virtual bool codegen(CodegenCtx & cgCtx) override;
 #endif
     
-    virtual DataType & dataType() override;
+    virtual const DataType & dataType() override;
 
     /* Expression for the value to return */
     AssignExpr & mReturnExpr;

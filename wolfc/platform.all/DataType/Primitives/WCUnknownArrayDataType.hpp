@@ -15,7 +15,7 @@ namespace AST {
  */
 class UnknownArrayDataType final : public DataType {
 public:
-    UnknownArrayDataType(DataType & innerType, AST::AssignExpr & sizeExpr);
+    UnknownArrayDataType(const DataType & innerType, AST::AssignExpr & sizeExpr);
     
     virtual ~UnknownArrayDataType() override;
     
@@ -28,7 +28,7 @@ public:
     virtual bool isArray() const override;
     virtual bool requiresStorage() const override;
 
-    DataType &          mInnerType;
+    const DataType &    mInnerType;
     AST::AssignExpr &   mSizeExpr;
     std::string         mName;
 };

@@ -82,7 +82,7 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
     if (printfFn && exprValue) {
         // Get the data type of the expression:
         #warning Eval data type first
-        DataType & exprDataType = astNode.mExpr.dataType();
+        const DataType & exprDataType = astNode.mExpr.dataType();
         
         // See which type we are dealing with:
         switch (exprDataType.getTypeId()) {

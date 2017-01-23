@@ -4,90 +4,52 @@
 #include "AST/Nodes/WCUnaryExpr.hpp"
 #include "CodegenCtx.hpp"
 #include "DataType/WCDataType.hpp"
+#include "DataTypeCodegenBinaryOp.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-static void codegenLShiftOp(Codegen & cg,
-                            DataType & exprDataType,
-                            AST::ASTNode & leftExprASTNode,
-                            llvm::Value & leftValue,
-                            AST::ASTNode & rightExprASTNode,
-                            llvm::Value & rightValue,
-                            const char * opName,
-                            const char * opSymbol)
-{
-    switch (exprDataType.getTypeId()) {
-        case DataTypeId::kInt64: {
-            llvm::Value * value = cg.mCtx.mIRBuilder.CreateShl(&leftValue, &rightValue, "Int:LShift:Result");
-            WC_ASSERT(value);
-            cg.mCtx.pushLLVMValue(*value);
-        }   break;
-            
-        case DataTypeId::kUnknown:
-        case DataTypeId::kVoid:
-        case DataTypeId::kBool:
-        case DataTypeId::kStr:
-        case DataTypeId::kArray:
-        case DataTypeId::kUnknownArray:
-            cg.issueBinaryOpNotSupportedError(leftExprASTNode, rightExprASTNode, opName, opSymbol);
-            break;
+class CodegenLShiftBinaryOp : public DataTypeCodegenBinaryOp {
+public:
+    CodegenLShiftBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
+        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "<<", "left shift")
+    {
+        WC_EMPTY_FUNC_BODY();
     }
-}
+    
+    void visit(const Int64DataType & dataType) override {
+        WC_UNUSED_PARAM(dataType);
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateShl(mLeftVal, mRightVal, "Int64:LShift:Result"));
+    }
+};
 
-static void codegenARShiftOp(Codegen & cg,
-                             DataType & exprDataType,
-                             AST::ASTNode & leftExprASTNode,
-                             llvm::Value & leftValue,
-                             AST::ASTNode & rightExprASTNode,
-                             llvm::Value & rightValue,
-                             const char * opName,
-                             const char * opSymbol)
-{
-    switch (exprDataType.getTypeId()) {
-        case DataTypeId::kInt64: {
-            llvm::Value * value = cg.mCtx.mIRBuilder.CreateAShr(&leftValue, &rightValue, "Int:ARShift:Result");
-            WC_ASSERT(value);
-            cg.mCtx.pushLLVMValue(*value);
-        }   break;
-            
-        case DataTypeId::kUnknown:
-        case DataTypeId::kVoid:
-        case DataTypeId::kBool:
-        case DataTypeId::kStr:
-        case DataTypeId::kArray:
-        case DataTypeId::kUnknownArray:
-            cg.issueBinaryOpNotSupportedError(leftExprASTNode, rightExprASTNode, opName, opSymbol);
-            break;
+class CodegenARShiftBinaryOp : public DataTypeCodegenBinaryOp {
+public:
+    CodegenARShiftBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
+        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, ">>", "arithmetic right shift")
+    {
+        WC_EMPTY_FUNC_BODY();
     }
-}
+    
+    void visit(const Int64DataType & dataType) override {
+        WC_UNUSED_PARAM(dataType);
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateAShr(mLeftVal, mRightVal, "Int64:ARShift:Result"));
+    }
+};
 
-static void codegenLRShiftOp(Codegen & cg,
-                             DataType & exprDataType,
-                             AST::ASTNode & leftExprASTNode,
-                             llvm::Value & leftValue,
-                             AST::ASTNode & rightExprASTNode,
-                             llvm::Value & rightValue,
-                             const char * opName,
-                             const char * opSymbol)
-{
-    switch (exprDataType.getTypeId()) {
-        case DataTypeId::kInt64: {
-            llvm::Value * value = cg.mCtx.mIRBuilder.CreateLShr(&leftValue, &rightValue, "Int::LRShift:Result");
-            WC_ASSERT(value);
-            cg.mCtx.pushLLVMValue(*value);
-        }   break;
-            
-        case DataTypeId::kUnknown:
-        case DataTypeId::kVoid:
-        case DataTypeId::kBool:
-        case DataTypeId::kStr:
-        case DataTypeId::kArray:
-        case DataTypeId::kUnknownArray:
-            cg.issueBinaryOpNotSupportedError(leftExprASTNode, rightExprASTNode, opName, opSymbol);
-            break;
+class CodegenLRShiftBinaryOp : public DataTypeCodegenBinaryOp {
+public:
+    CodegenLRShiftBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
+        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, ">>>", "logical right shift")
+    {
+        WC_EMPTY_FUNC_BODY();
     }
-}
+    
+    void visit(const Int64DataType & dataType) override {
+        WC_UNUSED_PARAM(dataType);
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateLShr(mLeftVal, mRightVal, "Int64:LRShift:Result"));
+    }
+};
 
 void Codegen::visit(const AST::ShiftExprNoOp & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
@@ -96,17 +58,17 @@ void Codegen::visit(const AST::ShiftExprNoOp & astNode) {
 
 void Codegen::visit(const AST::ShiftExprLShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenBinaryOp(astNode.mLeftExpr, astNode.mRightExpr, codegenLShiftOp, "left shift", "<<");
+    CodegenLShiftBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
 }
 
 void Codegen::visit(const AST::ShiftExprARShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenBinaryOp(astNode.mLeftExpr, astNode.mRightExpr, codegenARShiftOp, "arithmetic right shift", ">>");
+    CodegenARShiftBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
 }
 
 void Codegen::visit(const AST::ShiftExprLRShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenBinaryOp(astNode.mLeftExpr, astNode.mRightExpr, codegenLRShiftOp, "logical right shift", ">>>");
+    CodegenLRShiftBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE

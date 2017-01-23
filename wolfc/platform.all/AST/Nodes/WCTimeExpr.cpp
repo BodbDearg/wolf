@@ -60,15 +60,15 @@ const Token & TimeExpr::getEndToken() const {
     return mEndToken;
 }
 
-bool TimeExpr::isLValue() {
+bool TimeExpr::isLValue() const {
     return false;
 }
 
-bool TimeExpr::isConstExpr() {
+bool TimeExpr::isConstExpr() const {
     return false;
 }
 
-DataType & TimeExpr::dataType() {
+const DataType & TimeExpr::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
 }
 

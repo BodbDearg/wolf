@@ -38,7 +38,7 @@ public:
     
     virtual bool allCodepathsHaveUncondRet() const final override;
     
-    virtual DataType & dataType() const = 0;
+    virtual const DataType & dataType() const = 0;
     
 #warning FIXME - Codegen
 #if 0
@@ -60,7 +60,7 @@ public:
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     
-    virtual DataType & dataType() const final override;
+    virtual const DataType & dataType() const final override;
 };
 
 /* let Identifier : Type = AssignExpr */
@@ -73,7 +73,7 @@ public:
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     
-    virtual DataType & dataType() const final override;
+    virtual const DataType & dataType() const final override;
     
     Type & mType;
 };

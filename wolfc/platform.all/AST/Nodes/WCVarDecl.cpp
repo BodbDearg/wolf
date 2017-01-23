@@ -190,7 +190,7 @@ void VarDeclInferType::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
-DataType & VarDeclInferType::dataType() const {
+const DataType & VarDeclInferType::dataType() const {
     return mInitExpr.dataType();
 }
 
@@ -212,7 +212,7 @@ void VarDeclExplicitType::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
-DataType & VarDeclExplicitType::dataType() const {
+const DataType & VarDeclExplicitType::dataType() const {
     return mType.dataType();
 }
 

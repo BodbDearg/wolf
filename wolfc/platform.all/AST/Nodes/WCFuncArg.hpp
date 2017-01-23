@@ -26,7 +26,7 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    DataType & dataType();
+    const DataType & dataType() const;
     
     const char * name() const;
     

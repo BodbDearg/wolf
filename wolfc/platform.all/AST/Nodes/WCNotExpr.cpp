@@ -72,15 +72,15 @@ const Token & NotExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool NotExprNoOp::isLValue() {
+bool NotExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-bool NotExprNoOp::isConstExpr() {
+bool NotExprNoOp::isConstExpr() const {
     return mExpr.isConstExpr();
 }
 
-DataType & NotExprNoOp::dataType() {
+const DataType & NotExprNoOp::dataType() const {
     return mExpr.dataType();
 }
 
@@ -121,15 +121,15 @@ const Token & NotExprLNot::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool NotExprLNot::isLValue() {
+bool NotExprLNot::isLValue() const {
     return false;
 }
 
-bool NotExprLNot::isConstExpr() {
+bool NotExprLNot::isConstExpr() const {
     return mExpr.isConstExpr();
 }
 
-DataType & NotExprLNot::dataType() {
+const DataType & NotExprLNot::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
@@ -201,15 +201,15 @@ const Token & NotExprBNot::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool NotExprBNot::isLValue() {
+bool NotExprBNot::isLValue() const {
     return false;
 }
 
-bool NotExprBNot::isConstExpr() {
+bool NotExprBNot::isConstExpr() const {
     return mExpr.isConstExpr();
 }
 
-DataType & NotExprBNot::dataType() {
+const DataType & NotExprBNot::dataType() const {
     return mExpr.dataType();
 }
 

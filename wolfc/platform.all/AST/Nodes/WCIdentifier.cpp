@@ -44,16 +44,16 @@ const Token & Identifier::getEndToken() const {
     return mToken;
 }
 
-bool Identifier::isLValue() {
+bool Identifier::isLValue() const {
     return true;
 }
 
-bool Identifier::isConstExpr() {
+bool Identifier::isConstExpr() const {
     // FIXME: Implement this
     return false;
 }
 
-DataType & Identifier::dataType() {
+const DataType & Identifier::dataType() const {
 #warning FIXME - Codegen
 #if 0
     DataValue * dataValue = lookupDataValue();

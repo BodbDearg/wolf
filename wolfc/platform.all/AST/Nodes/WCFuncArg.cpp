@@ -59,7 +59,7 @@ const Token & FuncArg::getEndToken() const {
     return mIdent.getEndToken();
 }
 
-DataType & FuncArg::dataType() {
+const DataType & FuncArg::dataType() const {
     return mType.dataType();
 }
 

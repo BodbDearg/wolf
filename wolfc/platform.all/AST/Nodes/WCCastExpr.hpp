@@ -30,10 +30,10 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual bool isLValue() override;
-    virtual bool isConstExpr() override;
+    virtual bool isLValue() const override;
+    virtual bool isConstExpr() const override;
     
-    virtual DataType & dataType() override;
+    virtual const DataType & dataType() const override;
     
 #warning FIXME - Codegen
 #if 0
@@ -57,10 +57,10 @@ public:
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
 
-    virtual bool isLValue() final override;
-    virtual bool isConstExpr() final override;
+    virtual bool isLValue() const final override;
+    virtual bool isConstExpr() const final override;
 
-    virtual DataType & dataType() final override;
+    virtual const DataType & dataType() const final override;
 
 #warning FIXME - Codegen
 #if 0

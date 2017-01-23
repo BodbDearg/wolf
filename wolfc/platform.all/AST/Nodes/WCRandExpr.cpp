@@ -95,11 +95,11 @@ const Token & RandExpr::getEndToken() const {
     return mEndToken;
 }
 
-bool RandExpr::isLValue() {
+bool RandExpr::isLValue() const {
     return false;
 }
 
-bool RandExpr::isConstExpr() {
+bool RandExpr::isConstExpr() const {
     return false;
 }
 
@@ -131,7 +131,7 @@ void RandExprRand::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
-DataType & RandExprRand::dataType() {
+const DataType & RandExprRand::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
 }
 
@@ -176,7 +176,7 @@ void RandExprSRand::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
-DataType & RandExprSRand::dataType() {
+const DataType & RandExprSRand::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
 }
 

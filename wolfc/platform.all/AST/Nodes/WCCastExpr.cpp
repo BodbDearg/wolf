@@ -102,15 +102,15 @@ const Token & CastExprNoCast::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool CastExprNoCast::isLValue() {
+bool CastExprNoCast::isLValue() const {
     return mExpr.isLValue();
 }
 
-bool CastExprNoCast::isConstExpr() {
+bool CastExprNoCast::isConstExpr() const {
     return mExpr.isConstExpr();
 }
 
-DataType & CastExprNoCast::dataType() {
+const DataType & CastExprNoCast::dataType() const {
     return mExpr.dataType();
 }
 
@@ -158,16 +158,16 @@ const Token & CastExprCast::getEndToken() const {
     return mEndToken;
 }
 
-bool CastExprCast::isLValue() {
+bool CastExprCast::isLValue() const {
     return false;
 }
 
-bool CastExprCast::isConstExpr() {
+bool CastExprCast::isConstExpr() const {
     // TODO: allow some casting at compile time in future
     return false;
 }
 
-DataType & CastExprCast::dataType() {
+const DataType & CastExprCast::dataType() const {
     return mType.dataType();
 }
 

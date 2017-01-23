@@ -4,117 +4,66 @@
 #include "AST/Nodes/WCMulExpr.hpp"
 #include "CodegenCtx.hpp"
 #include "DataType/WCDataType.hpp"
+#include "DataTypeCodegenBinaryOp.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-static void codegenAddOp(Codegen & cg,
-                         DataType & exprDataType,
-                         AST::ASTNode & leftExprASTNode,
-                         llvm::Value & leftValue,
-                         AST::ASTNode & rightExprASTNode,
-                         llvm::Value & rightValue,
-                         const char * opName,
-                         const char * opSymbol)
-{
-    switch (exprDataType.getTypeId()) {
-        case DataTypeId::kInt64: {
-            llvm::Value * value = cg.mCtx.mIRBuilder.CreateAdd(&leftValue, &rightValue, "Int:Add:Result");
-            WC_ASSERT(value);
-            cg.mCtx.pushLLVMValue(*value);
-        }   break;
-            
-        case DataTypeId::kUnknown:
-        case DataTypeId::kVoid:
-        case DataTypeId::kBool:
-        case DataTypeId::kStr:
-        case DataTypeId::kArray:
-        case DataTypeId::kUnknownArray:
-            cg.issueBinaryOpNotSupportedError(leftExprASTNode, rightExprASTNode, opName, opSymbol);
-            break;
+class CodegenAddBinaryOp : public DataTypeCodegenBinaryOp {
+public:
+    CodegenAddBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
+        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "+", "add")
+    {
+        WC_EMPTY_FUNC_BODY();
     }
-}
+    
+    void visit(const Int64DataType & dataType) override {
+        WC_UNUSED_PARAM(dataType);
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateAdd(mLeftVal, mRightVal, "Int64:Add:Result"));
+    }
+};
 
-static void codegenSubOp(Codegen & cg,
-                         DataType & exprDataType,
-                         AST::ASTNode & leftExprASTNode,
-                         llvm::Value & leftValue,
-                         AST::ASTNode & rightExprASTNode,
-                         llvm::Value & rightValue,
-                         const char * opName,
-                         const char * opSymbol)
-{
-    switch (exprDataType.getTypeId()) {
-        case DataTypeId::kInt64: {
-            llvm::Value * value = cg.mCtx.mIRBuilder.CreateSub(&leftValue, &rightValue, "Int:Sub:Result");
-            WC_ASSERT(value);
-            cg.mCtx.pushLLVMValue(*value);
-        }   break;
-            
-        case DataTypeId::kUnknown:
-        case DataTypeId::kVoid:
-        case DataTypeId::kBool:
-        case DataTypeId::kStr:
-        case DataTypeId::kArray:
-        case DataTypeId::kUnknownArray:
-            cg.issueBinaryOpNotSupportedError(leftExprASTNode, rightExprASTNode, opName, opSymbol);
-            break;
+class CodegenSubBinaryOp : public DataTypeCodegenBinaryOp {
+public:
+    CodegenSubBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
+        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "-", "subtract")
+    {
+        WC_EMPTY_FUNC_BODY();
     }
-}
+    
+    void visit(const Int64DataType & dataType) override {
+        WC_UNUSED_PARAM(dataType);
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateSub(mLeftVal, mRightVal, "Int64:Sub:Result"));
+    }
+};
 
-static void codegenBOrOp(Codegen & cg,
-                         DataType & exprDataType,
-                         AST::ASTNode & leftExprASTNode,
-                         llvm::Value & leftValue,
-                         AST::ASTNode & rightExprASTNode,
-                         llvm::Value & rightValue,
-                         const char * opName,
-                         const char * opSymbol)
-{
-    switch (exprDataType.getTypeId()) {
-        case DataTypeId::kInt64: {
-            llvm::Value * value = cg.mCtx.mIRBuilder.CreateOr(&leftValue, &rightValue, "Int:BOr:Result");
-            WC_ASSERT(value);
-            cg.mCtx.pushLLVMValue(*value);
-        }   break;
-            
-        case DataTypeId::kUnknown:
-        case DataTypeId::kVoid:
-        case DataTypeId::kBool:
-        case DataTypeId::kStr:
-        case DataTypeId::kArray:
-        case DataTypeId::kUnknownArray:
-            cg.issueBinaryOpNotSupportedError(leftExprASTNode, rightExprASTNode, opName, opSymbol);
-            break;
+class CodegenBOrBinaryOp : public DataTypeCodegenBinaryOp {
+public:
+    CodegenBOrBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
+        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "|", "bitwise or")
+    {
+        WC_EMPTY_FUNC_BODY();
     }
-}
+    
+    void visit(const Int64DataType & dataType) override {
+        WC_UNUSED_PARAM(dataType);
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateOr(mLeftVal, mRightVal, "Int64:BOr:Result"));
+    }
+};
 
-static void codegenBXOrOp(Codegen & cg,
-                          DataType & exprDataType,
-                          AST::ASTNode & leftExprASTNode,
-                          llvm::Value & leftValue,
-                          AST::ASTNode & rightExprASTNode,
-                          llvm::Value & rightValue,
-                          const char * opName,
-                          const char * opSymbol)
-{
-    switch (exprDataType.getTypeId()) {
-        case DataTypeId::kInt64: {
-            llvm::Value * value = cg.mCtx.mIRBuilder.CreateXor(&leftValue, &rightValue, "Int:BXor:Result");
-            WC_ASSERT(value);
-            cg.mCtx.pushLLVMValue(*value);
-        }   break;
-            
-        case DataTypeId::kUnknown:
-        case DataTypeId::kVoid:
-        case DataTypeId::kBool:
-        case DataTypeId::kStr:
-        case DataTypeId::kArray:
-        case DataTypeId::kUnknownArray:
-            cg.issueBinaryOpNotSupportedError(leftExprASTNode, rightExprASTNode, opName, opSymbol);
-            break;
+class CodegenBXOrBinaryOp : public DataTypeCodegenBinaryOp {
+public:
+    CodegenBXOrBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
+        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "^", "bitwise xor")
+    {
+        WC_EMPTY_FUNC_BODY();
     }
-}
+    
+    void visit(const Int64DataType & dataType) override {
+        WC_UNUSED_PARAM(dataType);
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateXor(mLeftVal, mRightVal, "Int64:BXOr:Result"));
+    }
+};
 
 void Codegen::visit(const AST::AddExprNoOp & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
@@ -123,22 +72,22 @@ void Codegen::visit(const AST::AddExprNoOp & astNode) {
 
 void Codegen::visit(const AST::AddExprAdd & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenBinaryOp(astNode.mLeftExpr, astNode.mRightExpr, codegenAddOp, "add", "+");
+    CodegenAddBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
 }
 
 void Codegen::visit(const AST::AddExprSub & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenBinaryOp(astNode.mLeftExpr, astNode.mRightExpr, codegenSubOp, "subtract", "-");
+    CodegenSubBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
 }
 
 void Codegen::visit(const AST::AddExprBOr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenBinaryOp(astNode.mLeftExpr, astNode.mRightExpr, codegenBOrOp, "bitwise or", "|");
+    CodegenBOrBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
 }
 
 void Codegen::visit(const AST::AddExprBXor & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenBinaryOp(astNode.mLeftExpr, astNode.mRightExpr, codegenBXOrOp, "bitwise xor", "^");
+    CodegenBXOrBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE

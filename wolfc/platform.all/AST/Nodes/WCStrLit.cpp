@@ -41,15 +41,15 @@ const Token & StrLit::getEndToken() const {
     return mToken;
 }
 
-bool StrLit::isLValue() {
+bool StrLit::isLValue() const {
     return false;
 }
 
-bool StrLit::isConstExpr() {
+bool StrLit::isConstExpr() const {
     return true;
 }
 
-DataType & StrLit::dataType() {
+const DataType & StrLit::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kStr);
 }
 

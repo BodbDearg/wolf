@@ -33,7 +33,7 @@ public:
      * Return the element type for each element. Will return the 'unknown' type if we can't
      * determine due to ambiguity.
      */
-    virtual DataType & getElementType() const = 0;
+    virtual const DataType & getElementType() const = 0;
 };
 
 /* AssignExpr */
@@ -50,7 +50,7 @@ public:
     virtual size_t numExprs() const override;
     virtual void getExprs(std::vector<AssignExpr*> & exprs) const override;
     
-    virtual DataType & getElementType() const override;
+    virtual const DataType & getElementType() const override;
     
     AssignExpr & mExpr;
 };
@@ -69,7 +69,7 @@ public:
     virtual size_t numExprs() const override;
     virtual void getExprs(std::vector<AssignExpr*> & exprs) const override;
     
-    virtual DataType & getElementType() const override;
+    virtual const DataType & getElementType() const override;
     
     AssignExpr &        mExpr;
     ArrayLitExprs &     mExprsList;

@@ -80,20 +80,16 @@ const Token & ArrayLit::getEndToken() const {
     return mRBrack;
 }
 
-bool ArrayLit::isLValue() {
+bool ArrayLit::isLValue() const {
     return true;
 }
 
-bool ArrayLit::isConstExpr() {
+bool ArrayLit::isConstExpr() const {
     return mExprs.isConstExpr();
 }
 
-DataType & ArrayLit::dataType() {
-    if (!mDataType.wasInitialized()) {
-        mDataType.init(mExprs.getElementType(), mSize);
-    }
-    
-    return mDataType.get();
+const DataType & ArrayLit::dataType() const {
+    return mDataType;
 }
 
 #warning FIXME - Codegen

@@ -126,15 +126,15 @@ const Token & PostfixExprNoPostfix::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool PostfixExprNoPostfix::isLValue() {
+bool PostfixExprNoPostfix::isLValue() const {
     return mExpr.isLValue();
 }
 
-bool PostfixExprNoPostfix::isConstExpr() {
+bool PostfixExprNoPostfix::isConstExpr() const {
     return mExpr.isConstExpr();
 }
 
-DataType & PostfixExprNoPostfix::dataType() {
+const DataType & PostfixExprNoPostfix::dataType() const {
     return mExpr.dataType();
 }
 
@@ -186,17 +186,17 @@ const Token & PostfixExprIncDecBase::getEndToken() const {
     return mEndToken;
 }
 
-bool PostfixExprIncDecBase::isLValue() {
+bool PostfixExprIncDecBase::isLValue() const {
     return false;
 }
 
-bool PostfixExprIncDecBase::isConstExpr() {
+bool PostfixExprIncDecBase::isConstExpr() const {
     // Not allowed to use in constant expressions
     // TODO: can this be relaxed in future for functions that can be evaluated at compile time?
     return false;
 }
 
-DataType & PostfixExprIncDecBase::dataType() {
+const DataType & PostfixExprIncDecBase::dataType() const {
     // Unlike C/C++ increment and decrement expressions do not return a value. This removes the need for prefix/postfix 
     // increment and prevents them from being used in a confusing way in expressions.
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
@@ -303,18 +303,18 @@ const Token & PostfixExprFuncCall::getEndToken() const {
     return mFuncCall.getEndToken();
 }
 
-bool PostfixExprFuncCall::isLValue() {
+bool PostfixExprFuncCall::isLValue() const {
     // Can treat arrays returned from a function as an l-value, which can be dereferenced,
     // but not simple types that are stored in registers..
     return dataType().requiresStorage();
 }
 
-bool PostfixExprFuncCall::isConstExpr() {
+bool PostfixExprFuncCall::isConstExpr() const {
     // TODO: Someday support calling functions that can be evaluated at compile time
     return false;
 }
 
-DataType & PostfixExprFuncCall::dataType() {
+const DataType & PostfixExprFuncCall::dataType() const {
 #warning FIXME - Codegen
 #if 0
     Func * funcCalled = lookupFuncCalled();
@@ -495,18 +495,18 @@ const Token & PostfixExprArrayLookup::getEndToken() const {
     return mEndToken;
 }
 
-bool PostfixExprArrayLookup::isLValue() {
+bool PostfixExprArrayLookup::isLValue() const {
     return mArrayExpr.isLValue();
 }
 
-bool PostfixExprArrayLookup::isConstExpr() {
+bool PostfixExprArrayLookup::isConstExpr() const {
     return mArrayExpr.isConstExpr() && mIndexExpr.isConstExpr();
 }
 
-DataType & PostfixExprArrayLookup::dataType() {
+const DataType & PostfixExprArrayLookup::dataType() const {
     // Expect the array expression to have the array data type.
     // If it doesn't have this type then we don't know what the element type is..
-    const ArrayDataType * arrayDataType = dynamic_cast<ArrayDataType*>(&mArrayExpr.dataType());
+    const ArrayDataType * arrayDataType = dynamic_cast<const ArrayDataType*>(&mArrayExpr.dataType());
     WC_GUARD(arrayDataType, PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown));
     
     // Return the element data type

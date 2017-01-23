@@ -50,7 +50,7 @@ public:
     DataValue * getArg(const char * argName);
 #endif
     
-    DataType & returnDataType() const;
+    const DataType & returnDataType() const;
     
 #warning FIXME - Codegen
 #if 0

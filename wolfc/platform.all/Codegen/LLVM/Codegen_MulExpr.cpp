@@ -4,117 +4,66 @@
 #include "AST/Nodes/WCShiftExpr.hpp"
 #include "CodegenCtx.hpp"
 #include "DataType/WCDataType.hpp"
+#include "DataTypeCodegenBinaryOp.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-static void codegenMulOp(Codegen & cg,
-                         DataType & exprDataType,
-                         AST::ASTNode & leftExprASTNode,
-                         llvm::Value & leftValue,
-                         AST::ASTNode & rightExprASTNode,
-                         llvm::Value & rightValue,
-                         const char * opName,
-                         const char * opSymbol)
-{
-    switch (exprDataType.getTypeId()) {
-        case DataTypeId::kInt64: {
-            llvm::Value * value = cg.mCtx.mIRBuilder.CreateMul(&leftValue, &rightValue, "Int:Mul:Result");
-            WC_ASSERT(value);
-            cg.mCtx.pushLLVMValue(*value);
-        }   break;
-            
-        case DataTypeId::kUnknown:
-        case DataTypeId::kVoid:
-        case DataTypeId::kBool:
-        case DataTypeId::kStr:
-        case DataTypeId::kArray:
-        case DataTypeId::kUnknownArray:
-            cg.issueBinaryOpNotSupportedError(leftExprASTNode, rightExprASTNode, opName, opSymbol);
-            break;
+class CodegenMulBinaryOp : public DataTypeCodegenBinaryOp {
+public:
+    CodegenMulBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
+        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "*", "multiply")
+    {
+        WC_EMPTY_FUNC_BODY();
     }
-}
+    
+    void visit(const Int64DataType & dataType) override {
+        WC_UNUSED_PARAM(dataType);
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateMul(mLeftVal, mRightVal, "Int64:Mul:Result"));
+    }
+};
 
-static void codegenDivOp(Codegen & cg,
-                         DataType & exprDataType,
-                         AST::ASTNode & leftExprASTNode,
-                         llvm::Value & leftValue,
-                         AST::ASTNode & rightExprASTNode,
-                         llvm::Value & rightValue,
-                         const char * opName,
-                         const char * opSymbol)
-{
-    switch (exprDataType.getTypeId()) {
-        case DataTypeId::kInt64: {
-            llvm::Value * value = cg.mCtx.mIRBuilder.CreateSDiv(&leftValue, &rightValue, "Int:Div:Result");
-            WC_ASSERT(value);
-            cg.mCtx.pushLLVMValue(*value);
-        }   break;
-            
-        case DataTypeId::kUnknown:
-        case DataTypeId::kVoid:
-        case DataTypeId::kBool:
-        case DataTypeId::kStr:
-        case DataTypeId::kArray:
-        case DataTypeId::kUnknownArray:
-            cg.issueBinaryOpNotSupportedError(leftExprASTNode, rightExprASTNode, opName, opSymbol);
-            break;
+class CodegenDivBinaryOp : public DataTypeCodegenBinaryOp {
+public:
+    CodegenDivBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
+        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "/", "divide")
+    {
+        WC_EMPTY_FUNC_BODY();
     }
-}
+    
+    void visit(const Int64DataType & dataType) override {
+        WC_UNUSED_PARAM(dataType);
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateSDiv(mLeftVal, mRightVal, "Int64:Div:Result"));
+    }
+};
 
-static void codegenModOp(Codegen & cg,
-                         DataType & exprDataType,
-                         AST::ASTNode & leftExprASTNode,
-                         llvm::Value & leftValue,
-                         AST::ASTNode & rightExprASTNode,
-                         llvm::Value & rightValue,
-                         const char * opName,
-                         const char * opSymbol)
-{
-    switch (exprDataType.getTypeId()) {
-        case DataTypeId::kInt64: {
-            llvm::Value * value = cg.mCtx.mIRBuilder.CreateSRem(&leftValue, &rightValue, "Int:Mod:Result");
-            WC_ASSERT(value);
-            cg.mCtx.pushLLVMValue(*value);
-        }   break;
-            
-        case DataTypeId::kUnknown:
-        case DataTypeId::kVoid:
-        case DataTypeId::kBool:
-        case DataTypeId::kStr:
-        case DataTypeId::kArray:
-        case DataTypeId::kUnknownArray:
-            cg.issueBinaryOpNotSupportedError(leftExprASTNode, rightExprASTNode, opName, opSymbol);
-            break;
+class CodegenModBinaryOp : public DataTypeCodegenBinaryOp {
+public:
+    CodegenModBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
+        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "%", "modulus")
+    {
+        WC_EMPTY_FUNC_BODY();
     }
-}
+    
+    void visit(const Int64DataType & dataType) override {
+        WC_UNUSED_PARAM(dataType);
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateSRem(mLeftVal, mRightVal, "Int64:Mod:Result"));
+    }
+};
 
-static void codegenBAndOp(Codegen & cg,
-                          DataType & exprDataType,
-                          AST::ASTNode & leftExprASTNode,
-                          llvm::Value & leftValue,
-                          AST::ASTNode & rightExprASTNode,
-                          llvm::Value & rightValue,
-                          const char * opName,
-                          const char * opSymbol)
-{
-    switch (exprDataType.getTypeId()) {
-        case DataTypeId::kInt64: {
-            llvm::Value * value = cg.mCtx.mIRBuilder.CreateAnd(&leftValue, &rightValue, "Int:BAnd:Result");
-            WC_ASSERT(value);
-            cg.mCtx.pushLLVMValue(*value);
-        }   break;
-            
-        case DataTypeId::kUnknown:
-        case DataTypeId::kVoid:
-        case DataTypeId::kBool:
-        case DataTypeId::kStr:
-        case DataTypeId::kArray:
-        case DataTypeId::kUnknownArray:
-            cg.issueBinaryOpNotSupportedError(leftExprASTNode, rightExprASTNode, opName, opSymbol);
-            break;
+class CodegenBAndBinaryOp : public DataTypeCodegenBinaryOp {
+public:
+    CodegenBAndBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
+        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "&", "bitwise and")
+    {
+        WC_EMPTY_FUNC_BODY();
     }
-}
+    
+    void visit(const Int64DataType & dataType) override {
+        WC_UNUSED_PARAM(dataType);
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateAnd(mLeftVal, mRightVal, "Int64:BAnd:Result"));
+    }
+};
 
 void Codegen::visit(const AST::MulExprNoOp & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
@@ -123,22 +72,22 @@ void Codegen::visit(const AST::MulExprNoOp & astNode) {
 
 void Codegen::visit(const AST::MulExprMul & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenBinaryOp(astNode.mLeftExpr, astNode.mRightExpr, codegenMulOp, "multiply", "*");
+    CodegenMulBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
 }
 
 void Codegen::visit(const AST::MulExprDiv & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenBinaryOp(astNode.mLeftExpr, astNode.mRightExpr, codegenDivOp, "divide", "/");
+    CodegenDivBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
 }
 
 void Codegen::visit(const AST::MulExprMod & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenBinaryOp(astNode.mLeftExpr, astNode.mRightExpr, codegenModOp, "modulus", "%");
+    CodegenModBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
 }
 
 void Codegen::visit(const AST::MulExprBAnd & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenBinaryOp(astNode.mLeftExpr, astNode.mRightExpr, codegenBAndOp, "bitwise and", "&");
+    CodegenBAndBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE

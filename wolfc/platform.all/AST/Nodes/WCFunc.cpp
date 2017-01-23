@@ -163,7 +163,7 @@ DataValue * Func::getArg(const char * argName) {
 }
 #endif
 
-DataType & Func::returnDataType() const {
+const DataType & Func::returnDataType() const {
     if (mReturnType) {
         return mReturnType->dataType();
     }

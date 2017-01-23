@@ -76,15 +76,15 @@ const Token & AssignExprNoAssign::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool AssignExprNoAssign::isLValue() {
+bool AssignExprNoAssign::isLValue() const {
     return mExpr.isLValue();
 }
 
-bool AssignExprNoAssign::isConstExpr() {
+bool AssignExprNoAssign::isConstExpr() const {
     return mExpr.isConstExpr();
 }
 
-DataType & AssignExprNoAssign::dataType() {
+const DataType & AssignExprNoAssign::dataType() const {
     return mExpr.dataType();
 }
 
@@ -122,18 +122,18 @@ const Token & AssignExprAssignBase::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-bool AssignExprAssignBase::isLValue() {
+bool AssignExprAssignBase::isLValue() const {
     return false;
 }
 
-bool AssignExprAssignBase::isConstExpr() {
+bool AssignExprAssignBase::isConstExpr() const {
     // TODO: eventually we could relax this perhaps and allow for full constant evaluation of a
     // function provided it does not rely on something that can externally vary.
     // For now however, you must use functional type programming if you want constant evaluation.
     return false;
 }
 
-DataType & AssignExprAssignBase::dataType() {
+const DataType & AssignExprAssignBase::dataType() const {
     // TODO: Handle auto type promotion eventually
     return mLeftExpr.dataType();
 }

@@ -67,15 +67,15 @@ const Token & AddExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool AddExprNoOp::isLValue() {
+bool AddExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-bool AddExprNoOp::isConstExpr() {
+bool AddExprNoOp::isConstExpr() const {
     return mExpr.isConstExpr();
 }
 
-DataType & AddExprNoOp::dataType() {
+const DataType & AddExprNoOp::dataType() const {
     return mExpr.dataType();
 }
 
@@ -98,15 +98,15 @@ const Token & AddExprTwoOps::getEndToken() const {
     return mRightExpr.getEndToken();
 }
 
-bool AddExprTwoOps::isLValue() {
+bool AddExprTwoOps::isLValue() const {
     return false;
 }
 
-bool AddExprTwoOps::isConstExpr() {
+bool AddExprTwoOps::isConstExpr() const {
     return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
-DataType & AddExprTwoOps::dataType() {
+const DataType & AddExprTwoOps::dataType() const {
     // TODO: handle auto type promotion
     return mLeftExpr.dataType();
 }

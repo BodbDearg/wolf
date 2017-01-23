@@ -71,7 +71,7 @@ void ArrayLitExprsSingle::getExprs(std::vector<AssignExpr*> & exprs) const {
     exprs.push_back(&mExpr);
 }
 
-DataType & ArrayLitExprsSingle::getElementType() const {
+const DataType & ArrayLitExprsSingle::getElementType() const {
     return mExpr.dataType();
 }
 
@@ -111,13 +111,13 @@ void ArrayLitExprsMulti::getExprs(std::vector<AssignExpr*> & exprs) const {
     mExprsList.getExprs(exprs);
 }
 
-DataType & ArrayLitExprsMulti::getElementType() const {
+const DataType & ArrayLitExprsMulti::getElementType() const {
     // Get the data type of the expression
-    DataType & exprDataType = mExpr.dataType();
+    const DataType & exprDataType = mExpr.dataType();
     
     // Now get the type of the other expressions and see if they match.
     // If we can't match types the overall element type of the array is ambiguous/unknown.
-    DataType & exprsListDataType = mExprsList.getElementType();
+    const DataType & exprsListDataType = mExprsList.getElementType();
     
     if (!exprDataType.equals(exprsListDataType)) {
         // Can't determine element type, ambiguous!

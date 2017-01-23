@@ -176,7 +176,7 @@ bool ReturnStmntNoCondVoid::codegen(CodegenCtx & cgCtx) {
 }
 #endif
 
-DataType & ReturnStmntNoCondVoid::dataType() {
+const DataType & ReturnStmntNoCondVoid::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
 }
 
@@ -230,7 +230,7 @@ bool ReturnStmntNoCondWithValue::codegen(CodegenCtx & cgCtx) {
 }
 #endif
 
-DataType & ReturnStmntNoCondWithValue::dataType() {
+const DataType & ReturnStmntNoCondWithValue::dataType() {
     return mReturnExpr.dataType();
 }
 
@@ -328,7 +328,7 @@ bool ReturnStmntWithCondVoid::codegen(CodegenCtx & cgCtx) {
 }
 #endif
     
-DataType & ReturnStmntWithCondVoid::dataType() {
+const DataType & ReturnStmntWithCondVoid::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
 }
 
@@ -406,7 +406,7 @@ bool ReturnStmntWithCondAndValue::codegen(CodegenCtx & cgCtx) {
 }
 #endif
     
-DataType & ReturnStmntWithCondAndValue::dataType() {
+const DataType & ReturnStmntWithCondAndValue::dataType() {
     return mReturnExpr.dataType();
 }
 

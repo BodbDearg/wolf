@@ -42,15 +42,15 @@ const Token & IntLit::getEndToken() const {
     return mToken;
 }
 
-bool IntLit::isLValue() {
+bool IntLit::isLValue() const {
     return false;
 }
 
-bool IntLit::isConstExpr() {
+bool IntLit::isConstExpr() const {
     return true;
 }
 
-DataType & IntLit::dataType() {
+const DataType & IntLit::dataType() const {
     // TODO: data type should be based on the numeric literal and precision suffixes used
     return PrimitiveDataTypes::getDefaultUIntType();
 }
