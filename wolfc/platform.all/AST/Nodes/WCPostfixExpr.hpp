@@ -1,6 +1,5 @@
 #pragma once
 
-#include "DataType/WCDataTypeCodegenFuncs.hpp"
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
 
