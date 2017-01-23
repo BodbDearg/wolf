@@ -68,21 +68,6 @@ const DataType & LAndExprNoOp::dataType() const {
     return mExpr.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * LAndExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mExpr.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * LAndExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * LAndExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprConstEval(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // LAndExprAnd
 //-----------------------------------------------------------------------------
@@ -117,67 +102,6 @@ bool LAndExprAnd::isConstExpr() const {
 const DataType & LAndExprAnd::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
-
-#warning FIXME - Codegen
-#if 0
-llvm::Value * LAndExprAnd::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't get the address of 'and' operator result!");
-    return nullptr;
-}
-
-llvm::Value * LAndExprAnd::codegenExprEval(CodegenCtx & cgCtx) {
-    // TODO: add support for lazy evaluation
-    // Evaluate the sub expressions first:
-    llvm::Value * leftValue = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(leftValue, nullptr);
-    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightValue, nullptr);
-    
-    // Verify data types used by operator:
-    WC_GUARD(compileCheckBothExprsAreBool(), nullptr);
-
-    // Create the logical operation:
-    return cgCtx.irBuilder.CreateAnd(rightValue, leftValue, "LAndExprAnd_AndOp");
-}
-
-llvm::Constant * LAndExprAnd::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: add support for lazy evaluation
-    // Evaluate the sub expressions first:
-    llvm::Constant * leftValue = mLeftExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(leftValue, nullptr);
-    llvm::Constant * rightValue = mRightExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(rightValue, nullptr);
-    
-    // Verify data types used by operator:
-    WC_GUARD(compileCheckBothExprsAreBool(), nullptr);
-    
-    // Create the logical operation:
-    return llvm::ConstantExpr::getAnd(rightValue, leftValue);
-}
-
-bool LAndExprAnd::compileCheckBothExprsAreBool() const {
-    const DataType & leftType = mLeftExpr.dataType();
-    
-    if (!leftType.isBool()) {
-        compileError("Left side of logical 'and' expression must evaluate to 'bool', not '%s'!",
-                     leftType.name().c_str());
-        
-        return false;
-    }
-    
-    const DataType & rightType = mRightExpr.dataType();
-    
-    if (!rightType.isBool()) {
-        compileError("Right side of logical 'and' expression must evaluate to 'bool', not '%s'!",
-                     rightType.name().c_str());
-        
-        return false;
-    }
-    
-    return true;
-}
-#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

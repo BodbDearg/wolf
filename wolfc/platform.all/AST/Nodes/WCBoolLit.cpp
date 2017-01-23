@@ -52,19 +52,5 @@ const DataType & BoolLit::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * BoolLit::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of 'bool' literal!");
-    return nullptr;
-}
-
-llvm::Constant * BoolLit::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return llvm::ConstantInt::get(llvm::Type::getInt1Ty(cgCtx.llvmCtx),
-                                  mToken.type == TokenType::kTrue ? 1 : 0);
-}
-#endif
-
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

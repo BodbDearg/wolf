@@ -23,12 +23,6 @@ public:
     
     virtual const DataType & dataType() const override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
-    
     const Token & mToken;
 };
 

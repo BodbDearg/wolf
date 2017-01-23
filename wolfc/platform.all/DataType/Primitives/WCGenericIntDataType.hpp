@@ -11,18 +11,6 @@ public:
     
 #warning FIXME - Codegen
 #if 0
-    virtual llvm::Value * codegenCmpEQOp(CodegenCtx & cgCtx,
-                                         AST::ASTNode & callingNode,
-                                         llvm::Value & leftVal,
-                                         DataType & rightTy,
-                                         llvm::Value & rightVal) override;
-    
-    virtual llvm::Value * codegenCmpNEOp(CodegenCtx & cgCtx,
-                                         AST::ASTNode & callingNode,
-                                         llvm::Value & leftVal,
-                                         DataType & rightTy,
-                                         llvm::Value & rightVal) override;
-
     virtual llvm::Value * codegenBNotOp(CodegenCtx & cgCtx,
                                         AST::ASTNode & callingNode,
                                         llvm::Value & val) override;
