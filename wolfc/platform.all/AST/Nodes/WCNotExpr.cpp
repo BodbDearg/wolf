@@ -135,24 +135,6 @@ const DataType & NotExprLNot::dataType() const {
 
 #warning FIXME - Codegen
 #if 0
-llvm::Value * NotExprLNot::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't get the address of 'not' operator result!");
-    return nullptr;
-}
-
-llvm::Value * NotExprLNot::codegenExprEval(CodegenCtx & cgCtx) {
-    // Evaluate the expression to be 'notted'
-    llvm::Value * value = mExpr.codegenExprEval(cgCtx);
-    WC_GUARD(value, nullptr);
-    
-    // Expression must evaluate to a boolean:
-    WC_GUARD(compileCheckExprIsBool(), nullptr);
-    
-    // Create the not operation
-    return cgCtx.irBuilder.CreateNot(value, "NotExprNot_NotOp");
-}
-
 llvm::Constant * NotExprLNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Evaluate the expression to be 'notted'
     llvm::Constant * value = mExpr.codegenExprConstEval(cgCtx);
@@ -163,19 +145,6 @@ llvm::Constant * NotExprLNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     
     // Create the not operation
     return llvm::ConstantExpr::getNot(value);
-}
-
-bool NotExprLNot::compileCheckExprIsBool() const {
-    const DataType & exprType = mExpr.dataType();
-    
-    if (!exprType.isBool()) {
-        compileError("Expression following logical 'not' must evaluate to 'bool', not '%s'!",
-                     exprType.name().c_str());
-        
-        return false;
-    }
-    
-    return true;
 }
 #endif
 
@@ -215,22 +184,6 @@ const DataType & NotExprBNot::dataType() const {
 
 #warning FIXME - Codegen
 #if 0
-llvm::Value * NotExprBNot::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't get the address of '~' (bitwise not) operator result!");
-    return nullptr;
-}
-
-llvm::Value * NotExprBNot::codegenExprEval(CodegenCtx & cgCtx) {
-    // Evaluate the expression to be 'notted'
-    llvm::Value * val = mExpr.codegenExprEval(cgCtx);
-    WC_GUARD(val, nullptr);
-    
-    // Do the operation and return the result:
-    DataType & exprTy = mExpr.dataType();
-    return exprTy.codegenBNotOp(cgCtx, *this, *val);
-}
-
 llvm::Constant * NotExprBNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Evaluate the expression to be 'notted'
     llvm::Constant * val = mExpr.codegenExprConstEval(cgCtx);
@@ -239,22 +192,6 @@ llvm::Constant * NotExprBNot::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Do the operation and return the result:
     DataType & exprTy = mExpr.dataType();
     return exprTy.codegenConstBNotOp(*this, *val);
-}
-#endif
-
-#warning FIXME - Codegen
-#if 0
-bool NotExprBNot::compileCheckExprIsInt() const {
-    const DataType & exprType = mExpr.dataType();
-
-    if (!exprType.isInteger()) {
-        compileError("Expression following '~' (bitwise not) must evaluate to 'int', not '%s'!",
-            exprType.name().c_str());
-
-        return false;
-    }
-
-    return true;
 }
 #endif
 

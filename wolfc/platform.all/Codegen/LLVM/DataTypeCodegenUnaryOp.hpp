@@ -23,22 +23,21 @@ WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 class Codegen;
 
 /**
- * Class that generates code for a binary operation for a specific data type.
+ * Class that generates code for a unary operation for a specific data type.
  * The default implementation of each visitor function says that the op is
  * not supported for the data type.
  */
-class DataTypeCodegenBinaryOp : public DataTypeVisitor {
+class DataTypeCodegenUnaryOp : public DataTypeVisitor {
 public:
-    DataTypeCodegenBinaryOp(Codegen & cg,
-                            const AST::ASTNode & leftExpr,
-                            const AST::ASTNode & rightExpr,
-                            const char * opSymbol,
-                            const char * opName);
+    DataTypeCodegenUnaryOp(Codegen & cg,
+                           const AST::ASTNode & expr,
+                           const char * opSymbol,
+                           const char * opName);
     
     /**
-     * Kicks off the codegen for the binary op.
-     * Evaluates the left and right sides of the expression and makes sure both types match etc.
-     * before calling the visitor functions with the values needed (if everything is ok).
+     * Kicks off the codegen for the unary op.
+     * Evaluates the operand of the expression before calling the visitor functions 
+     * with the value needed (if everything is ok).
      */
     void codegen();
     
@@ -52,24 +51,21 @@ public:
     virtual void visit(const VoidDataType & dataType) override;
     
 protected:
-    /* Issue a compile error that a binary operation is not supported! */
-    void issueBinaryOpNotSupportedError();
+    /* Issue a compile error that a unary operation is not supported! */
+    void issueUnaryOpNotSupportedError();
     
     /* Save the operator result in the codegen context */
     void pushOpResult(llvm::Value * result);
     
     /* Various vars needed as input to the code generator */
     Codegen &               mCG;
-    const AST::ASTNode &    mLeftExpr;
-    const AST::ASTNode &    mRightExpr;
+    const AST::ASTNode &    mExpr;
     const char *            mOpSymbol;
     const char *            mOpName;
     
     /* These are generated and cached by the codegen() function */
-    const DataType *    mLeftType = nullptr;
-    const DataType *    mRightType = nullptr;
-    llvm::Value *       mLeftVal = nullptr;
-    llvm::Value *       mRightVal = nullptr;
+    const DataType *    mExprType = nullptr;
+    llvm::Value *       mExprVal = nullptr;
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE

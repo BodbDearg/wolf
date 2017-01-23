@@ -81,7 +81,6 @@ llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
         return nullptr;\
     }
 
-IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(BNot)
 IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Plus)
 IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Minus)
 IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Inc)
@@ -139,24 +138,6 @@ IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Plus)
 IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Minus)
 
 #undef IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC
-#endif
-
-#warning FIXME - Codegen
-#if 0
-void DataType::issueUnaryOpNotAvailableCompileError(AST::ASTNode & callingNode,
-                                                    const char * opSymbol,
-                                                    const char * opName) const
-{
-    callingNode.compileError("The '%s' (%s) unary operator is not supported for an "
-                             "expression of type '%s'!",
-                             opSymbol,
-                             opName,
-                             name().c_str());
-}
-
-void DataType::issueGenericCodegenLLVMTypeError(AST::ASTNode & callingNode) const {
-    callingNode.compileError("Failed to codegen the llvm type for data type '%s'!", name().c_str());
-}
 #endif
 
 WC_END_NAMESPACE

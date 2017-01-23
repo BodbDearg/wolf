@@ -11,14 +11,6 @@ bool GenericIntDataType::isInteger() const {
 
 #warning FIXME - Codegen
 #if 0
-llvm::Value * GenericIntDataType::codegenBNotOp(CodegenCtx & cgCtx,
-                                                AST::ASTNode & callingNode,
-                                                llvm::Value & val)
-{
-    WC_UNUSED_PARAM(callingNode);
-    return cgCtx.irBuilder.CreateNot(&val);
-}
-
 llvm::Value * GenericIntDataType::codegenPlusOp(CodegenCtx & cgCtx,
                                                 AST::ASTNode & callingNode,
                                                 llvm::Value & val)

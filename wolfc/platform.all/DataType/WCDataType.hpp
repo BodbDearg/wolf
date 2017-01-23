@@ -109,7 +109,6 @@ public:
                                                       AST::ASTNode & callingNode,\
                                                       llvm::Value & val);
     
-    WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(BNot)
     WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(Plus)
     WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(Minus)
     WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(Inc)
@@ -154,13 +153,6 @@ public:
     WC_DATA_TYPE_DECL_CODEGEN_CONST_UNARY_OP_FUNC(BNot)
     WC_DATA_TYPE_DECL_CODEGEN_CONST_UNARY_OP_FUNC(Plus)
     WC_DATA_TYPE_DECL_CODEGEN_CONST_UNARY_OP_FUNC(Minus)
-
-    /**
-     * Issues a compile error that a binary operator is not supported.
-     */
-    void issueUnaryOpNotAvailableCompileError(AST::ASTNode & callingNode,
-                                              const char * opSymbol,
-                                              const char * opName) const;
 #endif
 };
 

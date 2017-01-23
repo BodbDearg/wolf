@@ -34,13 +34,6 @@ public:
     
     virtual const DataType & dataType() const override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
-    
     CmpExpr & mExpr;
 };
 
@@ -57,26 +50,9 @@ public:
     virtual bool isConstExpr() const override;
     
     virtual const DataType & dataType() const override;
-
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
     
     NotExpr &       mExpr;
     const Token &   mStartToken;
-
-#warning FIXME - Codegen
-#if 0
-private:
-    /**
-     * TODO: this is a temp function for the moment. Issue a compile error if the expr is not of 'bool'
-     * Return false for failure if that is not the case.
-     */
-    bool compileCheckExprIsBool() const;
-#endif
 };
 
 /* ~ NotExpr */
@@ -93,26 +69,8 @@ public:
 
     virtual const DataType & dataType() const override;
 
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
-    
     NotExpr &       mExpr;
     const Token &   mStartToken;
-
-private:
-    
-#warning FIXME - Codegen
-#if 0
-    /**
-     * TODO: this is a temp function for the moment. Issue a compile error if the expr is not of 'int'
-     * Return false for failure if that is not the case.
-     */
-    bool compileCheckExprIsInt() const;
-#endif
 };
 
 WC_AST_END_NAMESPACE
