@@ -1,5 +1,7 @@
 func main() -> void
-    if 1
-        print(true + false)
+    if false
+        print(1)
+    else
+        print(2)
     end
 end
