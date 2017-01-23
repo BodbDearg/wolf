@@ -3,6 +3,11 @@
 #include "AST/WCASTNodeVisitor.hpp"
 
 WC_BEGIN_NAMESPACE
+
+namespace AST {
+    class ASTNode;
+}
+
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 class CodegenCtx;
@@ -133,6 +138,9 @@ public:
     virtual void visit(const AST::WhileStmnt & astNode) override;
     
 private:
+    void codegenNotSupportedForNodeTypeError(const AST::ASTNode & node,
+                                             const char * nodeClassName);
+    
     CodegenCtx & mCtx;
 };
 

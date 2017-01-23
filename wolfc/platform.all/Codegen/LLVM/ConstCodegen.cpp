@@ -9,6 +9,8 @@
 #include "AST/Nodes/WCBreakStmnt.hpp"
 #include "AST/Nodes/WCCastExpr.hpp"
 #include "AST/Nodes/WCCmpExpr.hpp"
+#include "AST/Nodes/WCDeclDef.hpp"
+#include "AST/Nodes/WCFunc.hpp"
 #include "AST/Nodes/WCFuncArg.hpp"
 #include "AST/Nodes/WCFuncCall.hpp"
 #include "AST/Nodes/WCFuncCallArgList.hpp"
@@ -100,67 +102,67 @@ void ConstCodegen::visit(const AST::ArrayLitExprsSingle & astNode) {
 
 void ConstCodegen::visit(const AST::AssertStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "AssertStmnt");
 }
 
 void ConstCodegen::visit(const AST::AssignExprAssign & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssign");
 }
 
 void ConstCodegen::visit(const AST::AssignExprAssignAdd & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssignAdd");
 }
 
 void ConstCodegen::visit(const AST::AssignExprAssignARShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssignARShift");
 }
 
 void ConstCodegen::visit(const AST::AssignExprAssignBAnd & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssignBAnd");
 }
 
 void ConstCodegen::visit(const AST::AssignExprAssignBOr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssignBOr");
 }
 
 void ConstCodegen::visit(const AST::AssignExprAssignBXor & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssignBXor");
 }
 
 void ConstCodegen::visit(const AST::AssignExprAssignDiv & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssignDiv");
 }
 
 void ConstCodegen::visit(const AST::AssignExprAssignLRShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssignLRShift");
 }
 
 void ConstCodegen::visit(const AST::AssignExprAssignLShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssignLShift");
 }
 
 void ConstCodegen::visit(const AST::AssignExprAssignMod & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssignMod");
 }
 
 void ConstCodegen::visit(const AST::AssignExprAssignMul & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssignMul");
 }
 
 void ConstCodegen::visit(const AST::AssignExprAssignSub & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssignSub");
 }
 
 void ConstCodegen::visit(const AST::AssignExprNoAssign & astNode) {
@@ -175,12 +177,12 @@ void ConstCodegen::visit(const AST::BoolLit & astNode) {
 
 void ConstCodegen::visit(const AST::BreakStmntNoCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "BreakStmntNoCond");
 }
 
 void ConstCodegen::visit(const AST::BreakStmntWithCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "BreakStmntWithCond");
 }
 
 void ConstCodegen::visit(const AST::CastExprCast & astNode) {
@@ -229,35 +231,38 @@ void ConstCodegen::visit(const AST::CmpExprNoOp & astNode) {
 }
 
 void ConstCodegen::visit(const AST::DeclDefFunc & astNode) {
-    #warning TODO: Codegen this node
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    codegenNotSupportedForNodeTypeError(astNode, "DeclDefFunc");
 }
 
 void ConstCodegen::visit(const AST::DeclDefVarDecl & astNode) {
-    #warning TODO: Codegen this node
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    codegenNotSupportedForNodeTypeError(astNode, "DeclDefVarDecl");
 }
 
 void ConstCodegen::visit(const AST::Func & astNode) {
-    #warning TODO: Codegen this node
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    codegenNotSupportedForNodeTypeError(astNode, "Func");
 }
 
 void ConstCodegen::visit(const AST::FuncArg & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "FuncArg");
 }
 
 void ConstCodegen::visit(const AST::FuncCall & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "FuncCall");
 }
 
 void ConstCodegen::visit(const AST::FuncCallArgListMulti & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "FuncCallArgListMulti");
 }
 
 void ConstCodegen::visit(const AST::FuncCallArgListSingle & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "FuncCallArgListSingle");
 }
 
 void ConstCodegen::visit(const AST::Identifier & astNode) {
@@ -267,17 +272,17 @@ void ConstCodegen::visit(const AST::Identifier & astNode) {
 
 void ConstCodegen::visit(const AST::IfStmntElse & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "IfStmntElse");
 }
 
 void ConstCodegen::visit(const AST::IfStmntElseIf & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "IfStmntElseIf");
 }
 
 void ConstCodegen::visit(const AST::IfStmntNoElse & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "IfStmntNoElse");
 }
 
 void ConstCodegen::visit(const AST::IntLit & astNode) {
@@ -297,17 +302,17 @@ void ConstCodegen::visit(const AST::LAndExprNoOp & astNode) {
 
 void ConstCodegen::visit(const AST::LoopStmntNoCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "LoopStmntNoCond");
 }
 
 void ConstCodegen::visit(const AST::LoopStmntWithCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "LoopStmntWithCond");
 }
 
 void ConstCodegen::visit(const AST::Module & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "Module");
 }
 
 void ConstCodegen::visit(const AST::LOrExprNoOp & astNode) {
@@ -347,17 +352,17 @@ void ConstCodegen::visit(const AST::MulExprNoOp & astNode) {
 
 void ConstCodegen::visit(const AST::NextStmntNoCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "NextStmntNoCond");
 }
 
 void ConstCodegen::visit(const AST::NextStmntWithCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "NextStmntWithCond");
 }
 
 void ConstCodegen::visit(const AST::NoOpStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "NoOpStmnt");
 }
 
 void ConstCodegen::visit(const AST::NotExprBNot & astNode) {
@@ -382,17 +387,17 @@ void ConstCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
 
 void ConstCodegen::visit(const AST::PostfixExprDec & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "PostfixExprDec");
 }
 
 void ConstCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "PostfixExprFuncCall");
 }
 
 void ConstCodegen::visit(const AST::PostfixExprInc & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "PostfixExprInc");
 }
 
 void ConstCodegen::visit(const AST::PostfixExprNoPostfix & astNode) {
@@ -422,12 +427,12 @@ void ConstCodegen::visit(const AST::PrimaryExprIntLit & astNode) {
 
 void ConstCodegen::visit(const AST::PrimaryExprRandExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "PrimaryExprRandExpr");
 }
 
 void ConstCodegen::visit(const AST::PrimaryExprReadnum & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "PrimaryExprReadnum");
 }
 
 void ConstCodegen::visit(const AST::PrimaryExprStrLit & astNode) {
@@ -437,7 +442,7 @@ void ConstCodegen::visit(const AST::PrimaryExprStrLit & astNode) {
 
 void ConstCodegen::visit(const AST::PrimaryExprTime & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "PrimaryExprTime");
 }
 
 void ConstCodegen::visit(const AST::PrimitiveType & astNode) {
@@ -447,52 +452,52 @@ void ConstCodegen::visit(const AST::PrimitiveType & astNode) {
 
 void ConstCodegen::visit(const AST::PrintStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "PrintStmnt");
 }
 
 void ConstCodegen::visit(const AST::RandExprRand & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "RandExprRand");
 }
 
 void ConstCodegen::visit(const AST::RandExprSRand & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "RandExprSRand");
 }
 
 void ConstCodegen::visit(const AST::ReadnumExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "ReadnumExpr");
 }
 
 void ConstCodegen::visit(const AST::ReturnStmntNoCondVoid & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "ReturnStmntNoCondVoid");
 }
 
 void ConstCodegen::visit(const AST::ReturnStmntNoCondWithValue & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "ReturnStmntNoCondWithValue");
 }
 
 void ConstCodegen::visit(const AST::ReturnStmntWithCondAndValue & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "ReturnStmntWithCondAndValue");
 }
 
 void ConstCodegen::visit(const AST::ReturnStmntWithCondVoid & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "ReturnStmntWithCondVoid");
 }
 
 void ConstCodegen::visit(const AST::Scope & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "Scope");
 }
 
 void ConstCodegen::visit(const AST::ScopeStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "ScopeStmnt");
 }
 
 void ConstCodegen::visit(const AST::ShiftExprARShift & astNode) {
@@ -517,62 +522,62 @@ void ConstCodegen::visit(const AST::ShiftExprNoOp & astNode) {
 
 void ConstCodegen::visit(const AST::StmntAssertStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "StmntAssertStmnt");
 }
 
 void ConstCodegen::visit(const AST::StmntAssignExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "StmntAssignExpr");
 }
 
 void ConstCodegen::visit(const AST::StmntBreakStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "StmntBreakStmnt");
 }
 
 void ConstCodegen::visit(const AST::StmntIfStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "StmntIfStmnt");
 }
 
 void ConstCodegen::visit(const AST::StmntLoopStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "StmntLoopStmnt");
 }
 
 void ConstCodegen::visit(const AST::StmntNextStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "StmntNextStmnt");
 }
 
 void ConstCodegen::visit(const AST::StmntNoOpStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "StmntNoOpStmnt");
 }
 
 void ConstCodegen::visit(const AST::StmntPrintStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "StmntPrintStmnt");
 }
 
 void ConstCodegen::visit(const AST::StmntReturnStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "StmntReturnStmnt");
 }
 
 void ConstCodegen::visit(const AST::StmntScopeStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "StmntScopeStmnt");
 }
 
 void ConstCodegen::visit(const AST::StmntVarDecl & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "StmntVarDecl");
 }
 
 void ConstCodegen::visit(const AST::StmntWhileStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "StmntWhileStmnt");
 }
 
 void ConstCodegen::visit(const AST::StrLit & astNode) {
@@ -592,7 +597,7 @@ void ConstCodegen::visit(const AST::TernaryExprWithCond & astNode) {
 
 void ConstCodegen::visit(const AST::TimeExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "TimeExpr");
 }
 
 void ConstCodegen::visit(const AST::TypeArray & astNode) {
@@ -627,17 +632,25 @@ void ConstCodegen::visit(const AST::UnaryExprPrimary & astNode) {
 
 void ConstCodegen::visit(const AST::VarDeclExplicitType & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "VarDeclExplicitType");
 }
 
 void ConstCodegen::visit(const AST::VarDeclInferType & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "VarDeclInferType");
 }
 
 void ConstCodegen::visit(const AST::WhileStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "WhileStmnt");
+}
+
+void ConstCodegen::codegenNotSupportedForNodeTypeError(const AST::ASTNode & node,
+                                                       const char * nodeClassName)
+{
+    mCtx.error(node,
+               "Constant code generation not supported for a node of type '%s'!",
+               nodeClassName);
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE
