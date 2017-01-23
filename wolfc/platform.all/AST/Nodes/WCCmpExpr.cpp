@@ -5,12 +5,6 @@
 #include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAddExpr.hpp"
 #include "WCAssert.hpp"
-
-#warning FIXME - Codegen
-#if 0
-#include "WCCodegenCtx.hpp"
-#endif
-
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
 
@@ -115,46 +109,13 @@ const DataType & CmpExprNoOp::dataType() const {
     return mExpr.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * CmpExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mExpr.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * CmpExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * CmpExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprConstEval(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // CmpExprTwoOps
 //-----------------------------------------------------------------------------
-CmpExprTwoOps::CmpExprTwoOps(AddExpr & leftExpr,
-                             CmpExpr & rightExpr
-                            #warning FIXME - Codegen
-                            #if 0
-                             ,DTCodegenBinaryOpFunc codegenBinaryOpFunc,
-                             DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc
-                            #endif
-                             )
-:
+CmpExprTwoOps::CmpExprTwoOps(AddExpr & leftExpr, CmpExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
-#warning FIXME - Codegen
-#if 0
-    ,mCodegenBinaryOpFunc(codegenBinaryOpFunc),
-    mCodegenConstBinaryOpFunc(codegenConstBinaryOpFunc)
-#endif
 {
-#warning FIXME - Codegen
-#if 0
-    WC_ASSERT(mCodegenBinaryOpFunc);
-    WC_ASSERT(mCodegenConstBinaryOpFunc);
-#endif
     mLeftExpr.mParent = this;
     mRightExpr.mParent = this;
 }
@@ -179,51 +140,11 @@ const DataType & CmpExprTwoOps::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * CmpExprTwoOps::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of relational operation result!");
-    return nullptr;
-}
-
-llvm::Value * CmpExprTwoOps::codegenExprEval(CodegenCtx & cgCtx) {
-    // Evaluate left and right expressions
-    llvm::Value * leftVal = mLeftExpr.codegenExprEval(cgCtx);
-    WC_GUARD(leftVal, nullptr);
-    llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightVal, nullptr);
-    
-    // Perform the op:
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    return (leftTy.*mCodegenBinaryOpFunc)(cgCtx, *this, *leftVal, rightTy, *rightVal);
-}
-
-llvm::Constant * CmpExprTwoOps::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // Evaluate left and right expressions
-    llvm::Constant * leftVal = mLeftExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(leftVal, nullptr);
-    llvm::Constant * rightVal = mRightExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(rightVal, nullptr);
-    
-    // Perform the op:
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    return (leftTy.*mCodegenConstBinaryOpFunc)(*this, *leftVal, rightTy, *rightVal);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // CmpExprEQ
 //-----------------------------------------------------------------------------
 CmpExprEQ::CmpExprEQ(AddExpr & leftExpr, CmpExpr & rightExpr) :
-    CmpExprTwoOps(leftExpr, rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                  , &DataType::codegenCmpEQOp, &DataType::codegenConstCmpEQOp
-                #endif
-                  )
+    CmpExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -236,12 +157,7 @@ void CmpExprEQ::accept(ASTNodeVisitor & visitor) const {
 // CmpExprNE
 //-----------------------------------------------------------------------------
 CmpExprNE::CmpExprNE(AddExpr & leftExpr, CmpExpr & rightExpr) :
-    CmpExprTwoOps(leftExpr, rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                  , &DataType::codegenCmpNEOp, &DataType::codegenConstCmpNEOp
-                #endif
-                  )
+    CmpExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -254,12 +170,7 @@ void CmpExprNE::accept(ASTNodeVisitor & visitor) const {
 // CmpExprLT
 //-----------------------------------------------------------------------------
 CmpExprLT::CmpExprLT(AddExpr & leftExpr, CmpExpr & rightExpr) :
-    CmpExprTwoOps(leftExpr, rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                  , &DataType::codegenCmpLTOp, &DataType::codegenConstCmpLTOp
-                #endif
-                  )
+    CmpExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -272,12 +183,7 @@ void CmpExprLT::accept(ASTNodeVisitor & visitor) const {
 // CmpExprLE
 //-----------------------------------------------------------------------------
 CmpExprLE::CmpExprLE(AddExpr & leftExpr, CmpExpr & rightExpr) :
-    CmpExprTwoOps(leftExpr, rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                  , &DataType::codegenCmpLEOp, &DataType::codegenConstCmpLEOp
-                #endif
-                  )
+    CmpExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -290,12 +196,7 @@ void CmpExprLE::accept(ASTNodeVisitor & visitor) const {
 // CmpExprGT
 //-----------------------------------------------------------------------------
 CmpExprGT::CmpExprGT(AddExpr & leftExpr, CmpExpr & rightExpr) :
-    CmpExprTwoOps(leftExpr, rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                  , &DataType::codegenCmpGTOp, &DataType::codegenConstCmpGTOp
-                #endif
-                  )
+    CmpExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -308,12 +209,7 @@ void CmpExprGT::accept(ASTNodeVisitor & visitor) const {
 // CmpExprGE
 //-----------------------------------------------------------------------------
 CmpExprGE::CmpExprGE(AddExpr & leftExpr, CmpExpr & rightExpr) :
-    CmpExprTwoOps(leftExpr, rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                  , &DataType::codegenCmpGEOp, &DataType::codegenConstCmpGEOp
-                #endif
-                  )
+    CmpExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }

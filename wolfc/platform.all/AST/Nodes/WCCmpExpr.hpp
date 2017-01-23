@@ -1,10 +1,5 @@
 #pragma once
 
-#warning FIXME - Codegen
-#if 0
-#include "DataType/WCDataTypeCodegenFuncs.hpp"
-#endif
-
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
 
@@ -45,27 +40,13 @@ public:
     
     virtual const DataType & dataType() const override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
-    
     AddExpr & mExpr;
 };
 
 /* Base for relational expressions with two operators. */
 class CmpExprTwoOps : public CmpExpr {
 public:
-    CmpExprTwoOps(AddExpr & leftExpr,
-                  CmpExpr & rightExpr
-                #warning FIXME - Codegen
-                #if 0
-                  ,DTCodegenBinaryOpFunc codegenBinaryOpFunc,
-                  DTCodegenConstBinaryOpFunc codegenConstBinaryOpFunc
-                #endif
-                  );
+    CmpExprTwoOps(AddExpr & leftExpr, CmpExpr & rightExpr);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -75,22 +56,8 @@ public:
     
     virtual const DataType & dataType() const final override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
-    
-    AddExpr &   mLeftExpr;
-    CmpExpr &   mRightExpr;
-    
-#warning FIXME - Codegen
-#if 0
-private:
-    const DTCodegenBinaryOpFunc         mCodegenBinaryOpFunc;
-    const DTCodegenConstBinaryOpFunc    mCodegenConstBinaryOpFunc;
-#endif
+    AddExpr & mLeftExpr;
+    CmpExpr & mRightExpr;
 };
 
 /**
