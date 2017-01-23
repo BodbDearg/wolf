@@ -6,62 +6,6 @@ WC_BEGIN_NAMESPACE
 
 #warning FIXME - Codegen
 #if 0
-llvm::Value * GenericSignedIntDataType::codegenCmpLTOp(CodegenCtx & cgCtx,
-                                                       AST::ASTNode & callingNode,
-                                                       llvm::Value & leftVal,
-                                                       DataType & rightTy,
-                                                       llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_CmpLT,
-                                            kOpName_CmpLT,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateICmpSLT(&leftVal, &rightVal, "GenericSignedInt_CmpLTOp");
-}
-
-llvm::Value * GenericSignedIntDataType::codegenCmpLEOp(CodegenCtx & cgCtx,
-                                                       AST::ASTNode & callingNode,
-                                                       llvm::Value & leftVal,
-                                                       DataType & rightTy,
-                                                       llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_CmpLE,
-                                            kOpName_CmpLE,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateICmpSLE(&leftVal, &rightVal, "GenericSignedInt_CmpLEOp");
-}
-
-llvm::Value * GenericSignedIntDataType::codegenCmpGTOp(CodegenCtx & cgCtx,
-                                                       AST::ASTNode & callingNode,
-                                                       llvm::Value & leftVal,
-                                                       DataType & rightTy,
-                                                       llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_CmpGT,
-                                            kOpName_CmpGT,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateICmpSGT(&leftVal, &rightVal, "GenericSignedInt_CmpGTOp");
-}
-
-llvm::Value * GenericSignedIntDataType::codegenCmpGEOp(CodegenCtx & cgCtx,
-                                                       AST::ASTNode & callingNode,
-                                                       llvm::Value & leftVal,
-                                                       DataType & rightTy,
-                                                       llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_CmpGE,
-                                            kOpName_CmpGE,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateICmpSGE(&leftVal, &rightVal, "GenericSignedInt_CmpGEOp");
-}
-
 llvm::Constant * GenericSignedIntDataType::codegenConstCmpLTOp(AST::ASTNode & callingNode,
                                                                llvm::Constant & leftVal,
                                                                DataType & rightTy,

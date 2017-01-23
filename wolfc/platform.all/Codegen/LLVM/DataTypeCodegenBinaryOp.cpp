@@ -121,6 +121,8 @@ void DataTypeCodegenBinaryOp::issueBinaryOpNotSupportedError() {
         mCG.mCtx.error(*parent,
                        "Binary operator '%s' (%s) is not supported for a left expression "
                        "of type '%s' and right expression of type '%s'!",
+                       mOpSymbol,
+                       mOpName,
                        mLeftType->name().c_str(),
                        mRightType->name().c_str());
     }

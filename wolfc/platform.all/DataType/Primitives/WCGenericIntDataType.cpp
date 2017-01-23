@@ -11,34 +11,6 @@ bool GenericIntDataType::isInteger() const {
 
 #warning FIXME - Codegen
 #if 0
-llvm::Value * GenericIntDataType::codegenCmpEQOp(CodegenCtx & cgCtx,
-                                                 AST::ASTNode & callingNode,
-                                                 llvm::Value & leftVal,
-                                                 DataType & rightTy,
-                                                 llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_CmpEQ,
-                                            kOpName_CmpEQ,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateICmpEQ(&leftVal, &rightVal, "GenericInt_CmpEQOp");
-}
-
-llvm::Value * GenericIntDataType::codegenCmpNEOp(CodegenCtx & cgCtx,
-                                                 AST::ASTNode & callingNode,
-                                                 llvm::Value & leftVal,
-                                                 DataType & rightTy,
-                                                 llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_CmpNE,
-                                            kOpName_CmpNE,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateICmpNE(&leftVal, &rightVal, "GenericInt_CmpNEOp");
-}
-
 llvm::Value * GenericIntDataType::codegenBNotOp(CodegenCtx & cgCtx,
                                                 AST::ASTNode & callingNode,
                                                 llvm::Value & val)

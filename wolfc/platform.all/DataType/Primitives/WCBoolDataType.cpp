@@ -27,34 +27,6 @@ bool BoolDataType::equals(const DataType & other) const {
 
 #warning FIXME - Codegen
 #if 0
-llvm::Value * BoolDataType::codegenCmpEQOp(CodegenCtx & cgCtx,
-                                           AST::ASTNode & callingNode,
-                                           llvm::Value & leftVal,
-                                           DataType & rightTy,
-                                           llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_CmpEQ,
-                                            kOpName_CmpEQ,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateICmpEQ(&leftVal, &rightVal, "Bool_CmpEQOp");
-}
-
-llvm::Value * BoolDataType::codegenCmpNEOp(CodegenCtx & cgCtx,
-                                           AST::ASTNode & callingNode,
-                                           llvm::Value & leftVal,
-                                           DataType & rightTy,
-                                           llvm::Value & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_CmpNE,
-                                            kOpName_CmpNE,
-                                            rightTy), nullptr);
-    
-    return cgCtx.irBuilder.CreateICmpNE(&leftVal, &rightVal, "Bool_CmpNEOp");
-}
-
 llvm::Constant * BoolDataType::codegenConstCmpEQOp(AST::ASTNode & callingNode,
                                                    llvm::Constant & leftVal,
                                                    DataType & rightTy,
