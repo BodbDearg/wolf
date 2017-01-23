@@ -149,24 +149,6 @@ bool IfStmnt::isIfExprInversed() const {
     return mStartToken.type == TokenType::kUnless;
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * IfStmnt::codegenIfExpr(CodegenCtx & cgCtx) const {
-    // Firstly validate that the if statement condition expression is a bool;
-    const DataType & ifExprDataType = mIfExpr.dataType();
-    
-    if (!ifExprDataType.isBool()) {
-        compileError("Condition for if statement must evaluate to type 'bool', not '%s'!",
-                     ifExprDataType.name().c_str());
-        
-        return nullptr;
-    }
-    
-    // Then generate the code
-    return mIfExpr.codegenExprEval(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // IfStmntNoElse
 //-----------------------------------------------------------------------------
@@ -188,62 +170,6 @@ void IfStmntNoElse::accept(ASTNodeVisitor & visitor) const {
 const Token & IfStmntNoElse::getEndToken() const {
     return mEndToken;
 }
-
-#warning FIXME - Codegen
-#if 0
-bool IfStmntNoElse::codegen(CodegenCtx & cgCtx) {
-    // Generate the code for the if statement condition expression:
-    llvm::Value * ifExprResult = codegenIfExpr(cgCtx);
-    WC_GUARD(ifExprResult, false);
-    
-    // Grab the parent function
-    llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
-    WC_ASSERT(parentFn);
-    
-    // Save basic block that the 'if' branch will go into:
-    llvm::BasicBlock * ifBranchBB = cgCtx.irBuilder.GetInsertBlock();
-    WC_ASSERT(ifBranchBB);
-    
-    // Create the start basic block for the 'then' scope:
-    std::string thenBBLbl = makeLLVMLabelForTok("IfStmntNoElse:then", mThenScope.getStartToken());
-    llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, thenBBLbl, parentFn);
-    WC_ASSERT(thenBB);
-
-    // Codegen the 'then' scope
-    cgCtx.irBuilder.SetInsertPoint(thenBB);
-    WC_GUARD(mThenScope.codegen(cgCtx), false);
-    
-    // Get the current block, this is the end block for the 'then' scope:
-    llvm::BasicBlock * thenEndBB = cgCtx.irBuilder.GetInsertBlock();
-    WC_ASSERT(thenEndBB);
-    
-    // Create the end basic block for the if statement:
-    std::string endBBLbl = makeLLVMLabelForTok("IfStmntNoElse:end", getEndToken());
-    llvm::BasicBlock * endBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, endBBLbl, parentFn);
-    WC_ASSERT(endBB);
-    
-    // Generate the branch for the if statement
-    cgCtx.irBuilder.SetInsertPoint(ifBranchBB);
-    
-    if (isIfExprInversed()) {
-        WC_ASSERTED_OP(cgCtx.irBuilder.CreateCondBr(ifExprResult, endBB, thenBB));
-    }
-    else {
-        WC_ASSERTED_OP(cgCtx.irBuilder.CreateCondBr(ifExprResult, thenBB, endBB));
-    }
-    
-    // Tie the end of the 'then' scope to the end of this if statement,
-    // that is if it is not already terminated:
-    if (!thenEndBB->getTerminator()) {
-        cgCtx.irBuilder.SetInsertPoint(thenEndBB);
-        cgCtx.irBuilder.CreateBr(endBB);
-    }
-    
-    // Insert future code past the end of this if statement
-    cgCtx.irBuilder.SetInsertPoint(endBB);
-    return true;
-}
-#endif
 
 bool IfStmntNoElse::allCodepathsHaveUncondRet() const {
     return false;

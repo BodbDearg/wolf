@@ -1,0 +1,93 @@
+#include "Codegen.hpp"
+
+#include "AST/Nodes/WCAssignExpr.hpp"
+#include "AST/Nodes/WCIfStmnt.hpp"
+#include "AST/Nodes/WCScope.hpp"
+#include "CodegenCtx.hpp"
+#include "DataType/WCDataType.hpp"
+#include "WCStringUtils.hpp"
+
+WC_BEGIN_NAMESPACE
+WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+
+void Codegen::visit(const AST::IfStmntNoElse & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    
+    // Generate the code for the if statement condition expression:
+    const AST::AssignExpr & ifExpr = astNode.mIfExpr;
+    ifExpr.accept(*this);
+    llvm::Value * ifExprVal = mCtx.popLLVMValue();
+    
+    // If the statement condition expression must be of type bool
+    const DataType & ifExprDataType = ifExpr.dataType();
+    bool ifExprIsBool = ifExprDataType.isBool();
+    
+    if (!ifExprIsBool) {
+        mCtx.error(ifExpr,
+                   "Conditional expression for 'if' statement must evaluate to type 'bool' not '%s'!",
+                   ifExprDataType.name().c_str());
+    }
+    
+    // Grab the parent function
+    auto & irb = mCtx.mIRBuilder;
+    llvm::Function * parentFn = irb.GetInsertBlock()->getParent();
+    WC_ASSERT(parentFn);
+    
+    // Save basic block that the 'if' branch will go into:
+    llvm::BasicBlock * ifBranchBB = irb.GetInsertBlock();
+    WC_ASSERT(ifBranchBB);
+    
+    // Create the start basic block for the 'then' scope:
+    const AST::Scope & thenScope = astNode.mThenScope;
+    std::string thenBBLbl = StringUtils::appendLineInfo("IfStmntNoElse:then", thenScope.getStartToken());
+    llvm::BasicBlock * thenBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, thenBBLbl, parentFn);
+    WC_ASSERT(thenBB);
+
+    // Codegen the 'then' scope
+    irb.SetInsertPoint(thenBB);
+    thenScope.accept(*this);
+    
+    // Get the current block, this is the end block for the 'then' scope:
+    llvm::BasicBlock * thenEndBB = irb.GetInsertBlock();
+    WC_ASSERT(thenEndBB);
+    
+    // Create the end basic block for the if statement:
+    std::string endBBLbl = StringUtils::appendLineInfo("IfStmntNoElse:end", astNode.getEndToken());
+    llvm::BasicBlock * endBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, endBBLbl, parentFn);
+    WC_ASSERT(endBB);
+    
+    // Generate the branch for the if statement, if we have a valid value and it is a bool type
+    if (ifExprVal && ifExprIsBool) {
+        irb.SetInsertPoint(ifBranchBB);
+        
+        if (astNode.isIfExprInversed()) {
+            WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal, endBB, thenBB));
+        }
+        else {
+            WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal, thenBB, endBB));
+        }
+    }
+    
+    // Tie the end of the 'then' scope to the end of this if statement,
+    // that is if it is not already terminated:
+    if (!thenEndBB->getTerminator()) {
+        irb.SetInsertPoint(thenEndBB);
+        irb.CreateBr(endBB);
+    }
+    
+    // Insert future code past the end of this if statement
+    irb.SetInsertPoint(endBB);
+}
+
+void Codegen::visit(const AST::IfStmntElseIf & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    #warning TODO: Codegen this node
+}
+
+void Codegen::visit(const AST::IfStmntElse & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    #warning TODO: Codegen this node
+}
+
+WC_LLVM_CODEGEN_END_NAMESPACE
+WC_END_NAMESPACE

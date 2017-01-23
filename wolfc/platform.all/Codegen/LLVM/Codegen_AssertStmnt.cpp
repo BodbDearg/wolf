@@ -41,13 +41,10 @@ void Codegen::visit(const AST::AssertStmnt & astNode) {
     // Grab the parent function
     auto & irb = mCtx.mIRBuilder;
     llvm::Function * parentFn = irb.GetInsertBlock()->getParent();
-    
-    if (!parentFn) {
-        mCtx.error(astNode, "Can't find llvm parent function for assert statement!");
-    }
+    WC_ASSERT(parentFn);
     
     // Okay, proceed no further if any of these are bad
-    WC_GUARD(abortFn && printfFn && exprVal && exprIsBool && parentFn);
+    WC_GUARD(abortFn && printfFn && exprVal && exprIsBool);
     
     // Create basic blocks for assert failed and assert succeeded:
     llvm::BasicBlock * failBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, "AssertStmnt:fail", parentFn);

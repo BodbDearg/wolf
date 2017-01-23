@@ -5,9 +5,12 @@
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <cstddef>
     #include <cstdint>
+    #include <string>
 WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
+
+struct Token;
 
 namespace StringUtils {
     /* Tells if the 1st string starts with the 2nd string */
@@ -40,6 +43,9 @@ namespace StringUtils {
      * N.B Returned pointer must be freed with delete[].
      */
     char * convertUtf32ToUtf8(const char32_t * utf32Str, size_t stringLength);
+    
+    /* Appends line and column info for the given token to the given string */
+    std::string appendLineInfo(const char * str, const Token & atToken);
 }
 
 WC_END_NAMESPACE

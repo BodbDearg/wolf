@@ -85,21 +85,6 @@ void Codegen::visit(const AST::Identifier & astNode) {
     #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::IfStmntElse & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::IfStmntElseIf & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::IfStmntNoElse & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void Codegen::visit(const AST::LoopStmntNoCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node

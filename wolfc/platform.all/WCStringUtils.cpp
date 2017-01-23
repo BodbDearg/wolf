@@ -1,5 +1,6 @@
 #include "WCStringUtils.hpp"
 
+#include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -417,6 +418,22 @@ char * StringUtils::convertUtf32ToUtf8(const char32_t * utf32Str, size_t stringL
     // Null terminate the utf8 string and return
     *utf8StrPtr = 0;
     return utf8StrBuffer;
+}
+
+std::string StringUtils::appendLineInfo(const char * str, const Token & atToken) {
+    // Get the length of the string
+    WC_ASSERT(str);
+    size_t strLen = std::strlen(str);
+    
+    // Do the append
+    std::string returnStr;
+    returnStr.reserve(strLen + 24);
+    returnStr.append(str, strLen);
+    returnStr += "@l";
+    returnStr += std::to_string(atToken.startLine + 1);
+    returnStr += ",c";
+    returnStr += std::to_string(atToken.startCol + 1);
+    return returnStr;
 }
 
 WC_END_NAMESPACE
