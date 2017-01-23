@@ -2,17 +2,17 @@
 
 #include "AST/Nodes/WCShiftExpr.hpp"
 #include "AST/Nodes/WCUnaryExpr.hpp"
+#include "CodegenBinaryOp.hpp"
 #include "CodegenCtx.hpp"
 #include "DataType/WCDataType.hpp"
-#include "DataTypeCodegenBinaryOp.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-class CodegenLShiftBinaryOp : public DataTypeCodegenBinaryOp {
+class CodegenLShiftBinaryOp : public CodegenBinaryOp {
 public:
     CodegenLShiftBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "<<", "left shift")
+        CodegenBinaryOp(cg, leftExpr, rightExpr, "<<", "left shift")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -23,10 +23,10 @@ public:
     }
 };
 
-class CodegenARShiftBinaryOp : public DataTypeCodegenBinaryOp {
+class CodegenARShiftBinaryOp : public CodegenBinaryOp {
 public:
     CodegenARShiftBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, ">>", "arithmetic right shift")
+        CodegenBinaryOp(cg, leftExpr, rightExpr, ">>", "arithmetic right shift")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -37,10 +37,10 @@ public:
     }
 };
 
-class CodegenLRShiftBinaryOp : public DataTypeCodegenBinaryOp {
+class CodegenLRShiftBinaryOp : public CodegenBinaryOp {
 public:
     CodegenLRShiftBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, ">>>", "logical right shift")
+        CodegenBinaryOp(cg, leftExpr, rightExpr, ">>>", "logical right shift")
     {
         WC_EMPTY_FUNC_BODY();
     }

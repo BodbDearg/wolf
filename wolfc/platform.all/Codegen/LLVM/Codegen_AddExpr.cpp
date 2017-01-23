@@ -2,17 +2,17 @@
 
 #include "AST/Nodes/WCAddExpr.hpp"
 #include "AST/Nodes/WCMulExpr.hpp"
+#include "CodegenBinaryOp.hpp"
 #include "CodegenCtx.hpp"
 #include "DataType/WCDataType.hpp"
-#include "DataTypeCodegenBinaryOp.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-class CodegenAddBinaryOp : public DataTypeCodegenBinaryOp {
+class CodegenAddBinaryOp : public CodegenBinaryOp {
 public:
     CodegenAddBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "+", "add")
+        CodegenBinaryOp(cg, leftExpr, rightExpr, "+", "add")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -23,10 +23,10 @@ public:
     }
 };
 
-class CodegenSubBinaryOp : public DataTypeCodegenBinaryOp {
+class CodegenSubBinaryOp : public CodegenBinaryOp {
 public:
     CodegenSubBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "-", "subtract")
+        CodegenBinaryOp(cg, leftExpr, rightExpr, "-", "subtract")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -37,10 +37,10 @@ public:
     }
 };
 
-class CodegenBOrBinaryOp : public DataTypeCodegenBinaryOp {
+class CodegenBOrBinaryOp : public CodegenBinaryOp {
 public:
     CodegenBOrBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "|", "bitwise or")
+        CodegenBinaryOp(cg, leftExpr, rightExpr, "|", "bitwise or")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -51,10 +51,10 @@ public:
     }
 };
 
-class CodegenBXOrBinaryOp : public DataTypeCodegenBinaryOp {
+class CodegenBXOrBinaryOp : public CodegenBinaryOp {
 public:
     CodegenBXOrBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "^", "bitwise xor")
+        CodegenBinaryOp(cg, leftExpr, rightExpr, "^", "bitwise xor")
     {
         WC_EMPTY_FUNC_BODY();
     }

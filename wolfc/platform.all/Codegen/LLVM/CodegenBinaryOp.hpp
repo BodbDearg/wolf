@@ -27,13 +27,13 @@ class Codegen;
  * The default implementation of each visitor function says that the op is
  * not supported for the data type.
  */
-class DataTypeCodegenBinaryOp : public DataTypeVisitor {
+class CodegenBinaryOp : public DataTypeVisitor {
 public:
-    DataTypeCodegenBinaryOp(Codegen & cg,
-                            const AST::ASTNode & leftExpr,
-                            const AST::ASTNode & rightExpr,
-                            const char * opSymbol,
-                            const char * opName);
+    CodegenBinaryOp(Codegen & cg,
+                    const AST::ASTNode & leftExpr,
+                    const AST::ASTNode & rightExpr,
+                    const char * opSymbol,
+                    const char * opName);
     
     /**
      * Kicks off the codegen for the binary op.

@@ -2,17 +2,17 @@
 
 #include "AST/Nodes/WCMulExpr.hpp"
 #include "AST/Nodes/WCShiftExpr.hpp"
+#include "CodegenBinaryOp.hpp"
 #include "CodegenCtx.hpp"
 #include "DataType/WCDataType.hpp"
-#include "DataTypeCodegenBinaryOp.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-class CodegenMulBinaryOp : public DataTypeCodegenBinaryOp {
+class CodegenMulBinaryOp : public CodegenBinaryOp {
 public:
     CodegenMulBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "*", "multiply")
+        CodegenBinaryOp(cg, leftExpr, rightExpr, "*", "multiply")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -23,10 +23,10 @@ public:
     }
 };
 
-class CodegenDivBinaryOp : public DataTypeCodegenBinaryOp {
+class CodegenDivBinaryOp : public CodegenBinaryOp {
 public:
     CodegenDivBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "/", "divide")
+        CodegenBinaryOp(cg, leftExpr, rightExpr, "/", "divide")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -37,10 +37,10 @@ public:
     }
 };
 
-class CodegenModBinaryOp : public DataTypeCodegenBinaryOp {
+class CodegenModBinaryOp : public CodegenBinaryOp {
 public:
     CodegenModBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "%", "modulus")
+        CodegenBinaryOp(cg, leftExpr, rightExpr, "%", "modulus")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -51,10 +51,10 @@ public:
     }
 };
 
-class CodegenBAndBinaryOp : public DataTypeCodegenBinaryOp {
+class CodegenBAndBinaryOp : public CodegenBinaryOp {
 public:
     CodegenBAndBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        DataTypeCodegenBinaryOp(cg, leftExpr, rightExpr, "&", "bitwise and")
+        CodegenBinaryOp(cg, leftExpr, rightExpr, "&", "bitwise and")
     {
         WC_EMPTY_FUNC_BODY();
     }
