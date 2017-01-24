@@ -50,7 +50,8 @@ WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 ConstCodegen::ConstCodegen(CodegenCtx & ctx) :
-    mCtx(ctx)
+    mCtx(ctx),
+    mCodegenDataType(ctx)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -447,7 +448,10 @@ void ConstCodegen::visit(const AST::PrimaryExprTime & astNode) {
 
 void ConstCodegen::visit(const AST::PrimitiveType & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    
+    // Generate the data type
+    const DataType & dataType = astNode.dataType();
+    dataType.accept(mCodegenDataType);
 }
 
 void ConstCodegen::visit(const AST::PrintStmnt & astNode) {

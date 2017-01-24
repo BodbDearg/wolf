@@ -16,7 +16,7 @@ static Int64DataType    gInt64DataType;
 static BoolDataType     gBoolDataType;
 static StrDataType      gStrDataType;   // TODO: remove, this is a temporary data type
 
-DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
+const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
     switch (type) {
         // If 'Unknown' is specifically asked for
         case DataTypeId::kUnknown: return gUnknownDataType;
@@ -35,7 +35,7 @@ DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
     return gUnknownDataType;
 }
 
-DataType & PrimitiveDataTypes::getUsingLangKeyword(TokenType tokenType) {
+const DataType & PrimitiveDataTypes::getUsingLangKeyword(TokenType tokenType) {
     switch (tokenType) {
         case TokenType::kVoid: return gVoidDataType;
         case TokenType::kInt: return getDefaultIntType();
@@ -50,7 +50,11 @@ DataType & PrimitiveDataTypes::getUsingLangKeyword(TokenType tokenType) {
     return gUnknownDataType;
 }
 
-DataType & PrimitiveDataTypes::getDefaultUIntType() {
+const UnknownDataType & PrimitiveDataTypes::getUnknownDataType() {
+    return gUnknownDataType;
+}
+
+const DataType & PrimitiveDataTypes::getDefaultUIntType() {
     return getUsingTypeId(getDefaultUIntTypeId());
 }
 
@@ -59,7 +63,7 @@ DataTypeId PrimitiveDataTypes::getDefaultUIntTypeId() {
     return DataTypeId::kInt64;
 }
 
-DataType & PrimitiveDataTypes::getDefaultIntType() {
+const DataType & PrimitiveDataTypes::getDefaultIntType() {
     return getUsingTypeId(getDefaultIntTypeId());
 }
 
@@ -68,7 +72,7 @@ DataTypeId PrimitiveDataTypes::getDefaultIntTypeId() {
     return DataTypeId::kInt64;
 }
 
-DataType & PrimitiveDataTypes::getDefaultFloatType() {
+const DataType & PrimitiveDataTypes::getDefaultFloatType() {
     return getUsingTypeId(getDefaultFloatTypeId());
 }
 

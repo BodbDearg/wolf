@@ -264,6 +264,7 @@
 		1F09BD811E371B160072CF0B /* VarContainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VarContainer.cpp; sourceTree = "<group>"; };
 		1F09BD821E371B160072CF0B /* VarContainer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VarContainer.hpp; sourceTree = "<group>"; };
 		1F09BD841E371DD20072CF0B /* DataValue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DataValue.hpp; sourceTree = "<group>"; };
+		1F09BD851E37313D0072CF0B /* CompiledDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CompiledDataType.hpp; sourceTree = "<group>"; };
 		1F1E99081DDC47B800FFB94C /* WCLazyInit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCLazyInit.hpp; sourceTree = "<group>"; };
 		1F231DAD1CE165AD0085E1C6 /* docs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = docs; path = ../../docs; sourceTree = "<group>"; };
 		1F23527F1E33D7EF0055A5E5 /* Codegen_FuncArg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_FuncArg.cpp; sourceTree = "<group>"; };
@@ -542,6 +543,7 @@
 				1F39144D1E31E1A0001925BE /* CodegenDataType.hpp */,
 				1F2352AC1E35A0F30055A5E5 /* CodegenUnaryOp.cpp */,
 				1F2352AD1E35A0F30055A5E5 /* CodegenUnaryOp.hpp */,
+				1F09BD851E37313D0072CF0B /* CompiledDataType.hpp */,
 				1F3914491E31DC23001925BE /* ConstCodegen.cpp */,
 				1F39144A1E31DC23001925BE /* ConstCodegen.hpp */,
 				1F09BD841E371DD20072CF0B /* DataValue.hpp */,

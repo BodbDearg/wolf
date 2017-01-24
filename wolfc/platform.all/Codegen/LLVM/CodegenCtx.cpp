@@ -2,6 +2,8 @@
 
 #include "AST/Nodes/WCASTNode.hpp"
 #include "AST/Nodes/WCFunc.hpp"
+#include "DataType/Primitives/WCUnknownDataType.hpp"
+#include "DataType/WCPrimitiveDataTypes.hpp"
 #include "Function.hpp"
 #include "Lexer/WCToken.hpp"
 #include "WCAssert.hpp"
@@ -225,20 +227,6 @@ void CodegenCtx::popASTNode() {
     mASTNodeStack.pop_back();
 }
 
-void CodegenCtx::pushLLVMType(llvm::Type & llvmType) {
-    mLLVMTypes.push_back(&llvmType);
-}
-
-llvm::Type * CodegenCtx::popLLVMType() {
-    if (mLLVMTypes.empty()) {
-        return nullptr;
-    }
-    
-    llvm::Type * llvmType = mLLVMTypes.back();
-    mLLVMTypes.pop_back();
-    return llvmType;
-}
-
 void CodegenCtx::pushLLVMValue(llvm::Value & llvmValue) {
     mLLVMValues.push_back(&llvmValue);
 }
@@ -253,12 +241,38 @@ llvm::Value * CodegenCtx::popLLVMValue() {
     return llvmValue;
 }
 
+void CodegenCtx::pushCompiledDataType(const CompiledDataType & dataType) {
+    mCompiledDataTypes.push_back(dataType);
+}
+
+CompiledDataType CodegenCtx::popCompiledDataType() {
+    if (!mCompiledDataTypes.empty()) {
+        CompiledDataType type = mCompiledDataTypes.back();
+        mCompiledDataTypes.pop_back();
+        return type;
+    }
+    
+    return CompiledDataType(PrimitiveDataTypes::getUnknownDataType(), nullptr);
+}
+
 void CodegenCtx::handleDeferredCodegenCallbacks(std::vector<std::function<void ()>> & callbacks) {
     while (!callbacks.empty()) {
         const auto & callback = callbacks.back();
         callback();
         callbacks.pop_back();
     }
+}
+
+void CodegenCtx::setNodeEvaluatedDataType(const AST::ASTNode & astNode,
+                                          std::unique_ptr<const DataType> & dataType)
+{
+    mNodeEvaluatedDataTypes[&astNode].reset(dataType.release());
+}
+
+const DataType * CodegenCtx::getNodeEvaluatedDataType(const AST::ASTNode & astNode) const {
+    auto iter = mNodeEvaluatedDataTypes.find(&astNode);
+    WC_GUARD(iter != mNodeEvaluatedDataTypes.end(), nullptr);
+    return iter->second.get();
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE

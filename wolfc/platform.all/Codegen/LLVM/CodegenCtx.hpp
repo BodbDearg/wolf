@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CompiledDataType.hpp"
 #include "WCMacros.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -10,6 +11,8 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
 WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
+
+class DataType;
 
 namespace AST {
     class ASTNode;
@@ -99,13 +102,6 @@ public:
     }
     
     /**
-     * Push/pop an llvm::Type object to the stack.
-     * If popping and the stack is emtpy, a null pointer will be returned.
-     */
-    void pushLLVMType(llvm::Type & llvmType);
-    llvm::Type * popLLVMType();
-    
-    /**
      * Push/pop an llvm::Value object to the stack.
      * If popping and the stack is emtpy, a null pointer will be returned.
      */
@@ -113,10 +109,38 @@ public:
     llvm::Value * popLLVMValue();
     
     /**
+     * Push/pop a compiled data type to the stack.
+     * If popping and the stack is emtpy, an unknown data type will be returned.
+     */
+    void pushCompiledDataType(const CompiledDataType & dataType);
+    CompiledDataType popCompiledDataType();
+    
+    /**
      * Handles the given list of deferred codegen callbacks.
      * Calls each callback and drains the list.
      */
     void handleDeferredCodegenCallbacks(std::vector<std::function<void ()>> & callbacks);
+    
+    /**
+     * Get or set the evaluated data type for the given AST node.
+     * This allows code generators to store what the actual type of an AST node is, after
+     * complex array size expressions etc. have been evaluated.
+     *
+     * For primitive types that do not need evaluation, this method of storing the evaluated
+     * data type will not be used; as a result this method should NOT be used to query what
+     * data type for a node is. Use the methods to get the compiled data type in the constant
+     * code generator instead for this purpose.
+     *
+     * Note: 'nullptr' will be returned by the getter if the evaluated data type has not yet
+     * been set for the given AST node.
+     *
+     * Memory: the function requires that ownership of the 'DataType' class memory be passed
+     * along to this object. It will null out the pointer passed in.
+     */
+    void setNodeEvaluatedDataType(const AST::ASTNode & astNode,
+                                  std::unique_ptr<const DataType> & dataType);
+    
+    const DataType * getNodeEvaluatedDataType(const AST::ASTNode & astNode) const;
     
     /* The LLVM context */
     llvm::LLVMContext mLLVMCtx;
@@ -143,11 +167,11 @@ private:
     /* The stack of AST nodes being visited */
     std::vector<const AST::ASTNode*> mASTNodeStack;
     
-    /* A stack of llvm types created during codegen. Used for communication, like the stack in LUA. */
-    std::vector<llvm::Type*> mLLVMTypes;
-    
     /* A stack of values types created during codegen. Used for communication, like the stack in LUA. */
     std::vector<llvm::Value*> mLLVMValues;
+    
+    /* A stack of compiled data types created during codegen. Used for communication, like the stack in LUA. */
+    std::vector<CompiledDataType> mCompiledDataTypes;
     
     /* A list of error messages emitted during parsing */
     std::vector<std::string> mErrorMsgs;
@@ -161,6 +185,13 @@ private:
     
     /* A list of registered functions in the module by name. */
     std::map<std::string, std::unique_ptr<Function>> mFuncs;
+    
+    /**
+     * An LUT of AST nodes to compiled data types for these nodes.
+     * Used to save the result of complicated data types that have to be evaluated at compile
+     * time such as arrays with size expressions.
+     */
+    std::map<const AST::ASTNode*, std::unique_ptr<const DataType>> mNodeEvaluatedDataTypes;
 };
 
 /* A helper RAII object which pushes and pops a node from the given codegen context. */

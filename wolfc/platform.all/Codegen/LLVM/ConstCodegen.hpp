@@ -1,6 +1,8 @@
 #pragma once
 
 #include "AST/WCASTNodeVisitor.hpp"
+#include "CodegenDataType.hpp"
+#include "CompiledDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -137,11 +139,16 @@ public:
     virtual void visit(const AST::VarDeclInferType & astNode) override;
     virtual void visit(const AST::WhileStmnt & astNode) override;
     
+    /* The codegen context */
+    CodegenCtx & mCtx;
+    
+    /* Code generator for data types */
+    CodegenDataType mCodegenDataType;
+    
 private:
+    /* Issue a codegen not supported error for the given ASTNode type */
     void codegenNotSupportedForNodeTypeError(const AST::ASTNode & node,
                                              const char * nodeClassName);
-    
-    CodegenCtx & mCtx;
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE

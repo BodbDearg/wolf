@@ -58,24 +58,28 @@ void Codegen::visit(const AST::Func & astNode) {
     
     // Codegen all the function arguments and save their llvm types
     const auto & astFuncArgs = astNode.getArgs();
+    
+    std::vector<CompiledDataType> funcArgTypes;
+    funcArgTypes.reserve(astFuncArgs.size());
     std::vector<llvm::Type*> funcArgLLVMTypes;
     funcArgLLVMTypes.reserve(astFuncArgs.size());
     
     for (const AST::FuncArg * astArg : astFuncArgs) {
-        // Visit the arg, which will codegen it's type and push it onto the type stack.
-        // If the type was not generated okay, just substitute with 'int64' so we can
-        // roughly get it right and continue:
+        // Visit the arg, which will codegen it's type and push it onto the type stack:
         WC_ASSERT(astArg);
         astArg->accept(*this);
-        llvm::Type * llvmArgType = mCtx.popLLVMType();
+        funcArgTypes.push_back(mCtx.popCompiledDataType());
+        llvm::Type * llvmArgType = funcArgTypes.back().getLLVMType();
         
         // Fallback to 'int64' just to get the right arg count, if codegenning the arg fails
-        if (!llvmArgType) {
+        if (llvmArgType) {
+            funcArgLLVMTypes.push_back(llvmArgType);
+        }
+        else {
             llvmArgType = llvm::Type::getInt64Ty(mCtx.mLLVMCtx);
             WC_ASSERT(llvmArgType);
+            funcArgLLVMTypes.push_back(llvmArgType);
         }
-        
-        funcArgLLVMTypes.push_back(llvmArgType);
     }
     
     // Compile check for duplicate argument names
@@ -84,8 +88,9 @@ void Codegen::visit(const AST::Func & astNode) {
     // Get the return data type for the function and codegen the llvm type.
     // If we fail to codegen the llvm type, just use 'int64' as a placeholder.
     const DataType & returnDataType = astNode.returnDataType();
-    returnDataType.accept(mCodegenDataType);
-    llvm::Type * llvmReturnType = mCtx.popLLVMType();
+    returnDataType.accept(mConstCodegen.mCodegenDataType);
+    CompiledDataType returnType = mCtx.popCompiledDataType();
+    llvm::Type * llvmReturnType = returnType.getLLVMType();
     
     if (!llvmReturnType) {
         llvmReturnType = llvm::Type::getInt64Ty(mCtx.mLLVMCtx);

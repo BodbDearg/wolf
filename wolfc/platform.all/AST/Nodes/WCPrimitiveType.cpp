@@ -44,7 +44,7 @@ const Token & PrimitiveType::getEndToken() const {
     return mToken;
 }
 
-DataType & PrimitiveType::dataType() const {
+const DataType & PrimitiveType::dataType() const {
     return PrimitiveDataTypes::getUsingLangKeyword(mToken.type);
 }
 

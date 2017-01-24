@@ -1,7 +1,6 @@
 #pragma once
 
 #include "AST/WCASTNodeVisitor.hpp"
-#include "CodegenDataType.hpp"
 #include "ConstCodegen.hpp"
 #include "WCFinally.hpp"
 
@@ -156,9 +155,6 @@ public:
     
     /* Code generator in charge of constant code generation */
     ConstCodegen mConstCodegen;
-    
-    /* Code generator for data types */
-    CodegenDataType mCodegenDataType;
      
 private:
     /**
