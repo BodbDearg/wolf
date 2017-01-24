@@ -6,7 +6,11 @@
 
 WC_BEGIN_NAMESPACE
 
-UnknownArrayDataType::UnknownArrayDataType(const DataType & innerType, AST::AssignExpr & sizeExpr) :
+UnknownArrayDataType::UnknownArrayDataType(const AST::ASTNode & declaringNode,
+                                           const DataType & innerType,
+                                           AST::AssignExpr & sizeExpr)
+:
+    mDeclaringNode(declaringNode),
     mInnerType(innerType),
     mSizeExpr(sizeExpr)
 {

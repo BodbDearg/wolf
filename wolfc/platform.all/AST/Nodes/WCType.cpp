@@ -100,7 +100,7 @@ TypeArray::TypeArray(const Token & startToken, AssignExpr & sizeExpr, Type & ele
     mStartToken(startToken),
     mSizeExpr(sizeExpr),
     mElemType(elemType),
-    mDataType(elemType.dataType(), sizeExpr)
+    mDataType(*this, elemType.dataType(), sizeExpr)
 {
     mSizeExpr.mParent = this;
     mElemType.mParent = this;

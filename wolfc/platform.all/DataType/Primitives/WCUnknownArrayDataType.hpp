@@ -6,6 +6,7 @@ WC_BEGIN_NAMESPACE
 
 namespace AST {
     class AssignExpr;
+    class ASTNode;
 }
 
 /**
@@ -15,7 +16,9 @@ namespace AST {
  */
 class UnknownArrayDataType final : public DataType {
 public:
-    UnknownArrayDataType(const DataType & innerType, AST::AssignExpr & sizeExpr);
+    UnknownArrayDataType(const AST::ASTNode & declaringNode,
+                         const DataType & innerType,
+                         AST::AssignExpr & sizeExpr);
     
     virtual ~UnknownArrayDataType() override;
     
@@ -28,9 +31,17 @@ public:
     virtual bool isArray() const override;
     virtual bool requiresStorage() const override;
 
-    const DataType &    mInnerType;
-    AST::AssignExpr &   mSizeExpr;
-    std::string         mName;
+    /* The node that declared this type */
+    const AST::ASTNode & mDeclaringNode;
+    
+    /* The element type for hte array */
+    const DataType & mInnerType;
+    
+    /* The size expression determining the size of the array */
+    AST::AssignExpr & mSizeExpr;
+    
+    /* The name of the array data type */
+    std::string mName;
 };
 
 WC_END_NAMESPACE
