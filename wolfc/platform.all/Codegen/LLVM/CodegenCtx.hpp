@@ -1,6 +1,5 @@
 #pragma once
 
-#include "WCCStrComparator.hpp"
 #include "WCMacros.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
