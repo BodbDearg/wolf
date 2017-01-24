@@ -5,7 +5,7 @@
 
 WC_BEGIN_NAMESPACE
 
-static const std::string kName = "<Unknown>";
+static const std::string kName = "?";
 
 void UnknownDataType::accept(DataTypeVisitor & visitor) const {
     visitor.visit(*this);

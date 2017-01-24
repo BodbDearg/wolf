@@ -17,8 +17,8 @@ UnknownArrayDataType::UnknownArrayDataType(const AST::ASTNode & declaringNode,
     // TODO: allocate the name elsewhere?
     // Makeup the name:
     mName.reserve(mInnerType.name().size() + 16);
+    mName += "[?]";    
     mName += mInnerType.name();
-    mName += "[?]";
 }
 
 UnknownArrayDataType::~UnknownArrayDataType() {
