@@ -1,10 +1,5 @@
 #pragma once
 
-#warning FIXME - Codegen
-#if 0
-#include "DataType/WCDataTypeCodegenFuncs.hpp"
-#endif
-
 #include "WCASTNode.hpp"
 #include "WCIExpr.hpp"
 
@@ -49,13 +44,6 @@ public:
     
     virtual const DataType & dataType() const override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
-    
     TernaryExpr & mExpr;
 };
 
@@ -71,25 +59,9 @@ public:
     virtual bool isConstExpr() const final override;
 
     virtual const DataType & dataType() const final override;
-
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) final override;
-#endif
     
     TernaryExpr &   mLeftExpr;
     AssignExpr &    mRightExpr;
-
-#warning FIXME - Codegen
-#if 0
-protected:
-    /**
-     * Does basic checks at compile time to make sure the assign can be performed.
-     * Returns false and issues a compile error if the assign is illegal.
-     */
-     bool compileCheckAssignIsLegal();
-#endif
 };
 
 /* TernaryExpr = AssignExpr */
@@ -98,30 +70,12 @@ public:
     AssignExprAssign(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-#endif
 };
 
 /* Base class for an assign expression that does a binary operation (add, mul etc.) */
 class AssignExprBinaryOpBase : public AssignExprAssignBase {
 public:
-    AssignExprBinaryOpBase(TernaryExpr & leftExpr,
-                           AssignExpr & rightExpr
-                        #warning FIXME - Codegen
-                        #if 0
-                           ,DTCodegenBinaryOpFunc codegenBinaryOpFunc
-                        #endif
-                           );
-    
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) final override;
-    
-    const DTCodegenBinaryOpFunc mCodegenBinaryOpFunc;
-#endif
+    AssignExprBinaryOpBase(TernaryExpr & leftExpr, AssignExpr & rightExpr);
 };
 
 /* TernaryExpr += AssignExpr */

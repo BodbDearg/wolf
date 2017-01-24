@@ -4,9 +4,6 @@
 #include "WCIStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
-
-class DataType;
-
 WC_AST_BEGIN_NAMESPACE
 
 class AssignExpr;
@@ -68,11 +65,6 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     
     virtual const Token & getEndToken() const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegen(CodegenCtx & cgCtx) override;
-#endif
     
     virtual bool allCodepathsHaveUncondRet() const override;
     
