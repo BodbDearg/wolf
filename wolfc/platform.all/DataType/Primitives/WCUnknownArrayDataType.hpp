@@ -9,6 +9,7 @@ namespace AST {
     class ASTNode;
 }
 
+#warning TODO: rename to 'UnevalSize'
 /**
  * A data type that represents an array where the size element is unknown/unevaluated.
  * At compile time the assign expression for the array size must be evaluated to get
