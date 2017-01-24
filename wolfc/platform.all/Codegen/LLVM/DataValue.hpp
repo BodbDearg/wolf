@@ -2,12 +2,9 @@
 
 #include "WCMacros.hpp"
 
-#warning FIXME - Codegen
-#if 0
 namespace llvm {
     class Value;
 }
-#endif
 
 WC_BEGIN_NAMESPACE
 
@@ -47,11 +44,8 @@ struct DataValue {
     /* The node that declared the data value */
     AST::ASTNode * declaringNode;
     
-#warning FIXME - Codegen
-#if 0
     /* The llvm value representing the data */
     llvm::Value * value;
-#endif
     
     /* The data type object for this type */
     DataType * type;
