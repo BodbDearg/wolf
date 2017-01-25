@@ -15,7 +15,6 @@
 #include "AST/Nodes/WCModule.hpp"
 #include "AST/Nodes/WCNextStmnt.hpp"
 #include "AST/Nodes/WCNoOpStmnt.hpp"
-#include "AST/Nodes/WCPrimitiveType.hpp"
 #include "AST/Nodes/WCPrintStmnt.hpp"
 #include "AST/Nodes/WCRandExpr.hpp"
 #include "AST/Nodes/WCReadnumExpr.hpp"
@@ -25,7 +24,6 @@
 #include "AST/Nodes/WCStmnt.hpp"
 #include "AST/Nodes/WCStrLit.hpp"
 #include "AST/Nodes/WCTimeExpr.hpp"
-#include "AST/Nodes/WCType.hpp"
 #include "AST/Nodes/WCVarDecl.hpp"
 #include "AST/Nodes/WCWhileStmnt.hpp"
 #include "CodegenCtx.hpp"
@@ -160,14 +158,6 @@ void ConstCodegen::visit(const AST::NoOpStmnt & astNode) {
     codegenNotSupportedForNodeTypeError(astNode, "NoOpStmnt");
 }
 
-void ConstCodegen::visit(const AST::PrimitiveType & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    
-    // Generate the data type
-    const DataType & dataType = astNode.dataType();
-    dataType.accept(mCodegenDataType);
-}
-
 void ConstCodegen::visit(const AST::PrintStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "PrintStmnt");
@@ -286,16 +276,6 @@ void ConstCodegen::visit(const AST::StrLit & astNode) {
 void ConstCodegen::visit(const AST::TimeExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "TimeExpr");
-}
-
-void ConstCodegen::visit(const AST::TypeArray & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void ConstCodegen::visit(const AST::TypePrimitive & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
 }
 
 void ConstCodegen::visit(const AST::VarDeclExplicitType & astNode) {

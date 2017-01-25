@@ -137,6 +137,8 @@
 		1FB3F91F1E387A0D00616753 /* ConstCodegen_PrimaryExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3F91E1E387A0D00616753 /* ConstCodegen_PrimaryExpr.cpp */; };
 		1FB3F9211E387C4F00616753 /* ConstCodegen_IntLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3F9201E387C4F00616753 /* ConstCodegen_IntLit.cpp */; };
 		1FB3F9231E387D3000616753 /* ConstCodegen_BoolLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3F9221E387D3000616753 /* ConstCodegen_BoolLit.cpp */; };
+		1FB3F9251E38803100616753 /* ConstCodegen_Type.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3F9241E38803100616753 /* ConstCodegen_Type.cpp */; };
+		1FB3F9271E3880FC00616753 /* ConstCodegen_PrimitiveType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3F9261E3880FC00616753 /* ConstCodegen_PrimitiveType.cpp */; };
 		1FB40C671E0AFE4000D34587 /* WCGenericIntDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB40C651E0AFE4000D34587 /* WCGenericIntDataType.cpp */; };
 		1FB40C6A1E0B3E5200D34587 /* WCGenericSignedIntDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB40C681E0B3E5200D34587 /* WCGenericSignedIntDataType.cpp */; };
 		1FCD4DF41D0136360076E358 /* WCDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD4DF21D0136360076E358 /* WCDataType.cpp */; };
@@ -361,6 +363,8 @@
 		1FB3F91E1E387A0D00616753 /* ConstCodegen_PrimaryExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConstCodegen_PrimaryExpr.cpp; sourceTree = "<group>"; };
 		1FB3F9201E387C4F00616753 /* ConstCodegen_IntLit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConstCodegen_IntLit.cpp; sourceTree = "<group>"; };
 		1FB3F9221E387D3000616753 /* ConstCodegen_BoolLit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConstCodegen_BoolLit.cpp; sourceTree = "<group>"; };
+		1FB3F9241E38803100616753 /* ConstCodegen_Type.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConstCodegen_Type.cpp; sourceTree = "<group>"; };
+		1FB3F9261E3880FC00616753 /* ConstCodegen_PrimitiveType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConstCodegen_PrimitiveType.cpp; sourceTree = "<group>"; };
 		1FB40C651E0AFE4000D34587 /* WCGenericIntDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCGenericIntDataType.cpp; sourceTree = "<group>"; };
 		1FB40C661E0AFE4000D34587 /* WCGenericIntDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCGenericIntDataType.hpp; sourceTree = "<group>"; };
 		1FB40C681E0B3E5200D34587 /* WCGenericSignedIntDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCGenericSignedIntDataType.cpp; sourceTree = "<group>"; };
@@ -586,8 +590,10 @@
 				1FB3F90E1E386F8000616753 /* ConstCodegen_NotExpr.cpp */,
 				1FB3F91A1E38763B00616753 /* ConstCodegen_PostfixExpr.cpp */,
 				1FB3F91E1E387A0D00616753 /* ConstCodegen_PrimaryExpr.cpp */,
+				1FB3F9261E3880FC00616753 /* ConstCodegen_PrimitiveType.cpp */,
 				1FB3F9161E3873C900616753 /* ConstCodegen_ShiftExpr.cpp */,
 				1FB3F9081E386D4700616753 /* ConstCodegen_TernaryExpr.cpp */,
+				1FB3F9241E38803100616753 /* ConstCodegen_Type.cpp */,
 				1FB3F9181E3874B500616753 /* ConstCodegen_UnaryExpr.cpp */,
 				1F3914491E31DC23001925BE /* ConstCodegen.cpp */,
 				1F39144A1E31DC23001925BE /* ConstCodegen.hpp */,
@@ -861,6 +867,7 @@
 				1F3914481E31CBAF001925BE /* WCArrayUnevalSizeDataType.cpp in Sources */,
 				1FB3F9191E3874B500616753 /* ConstCodegen_UnaryExpr.cpp in Sources */,
 				1F2352B21E35EC420055A5E5 /* Codegen_IfStmnt.cpp in Sources */,
+				1FB3F9251E38803100616753 /* ConstCodegen_Type.cpp in Sources */,
 				1F0308951E2AF2510097D223 /* WCFunc.cpp in Sources */,
 				1F03088B1E2AF2510097D223 /* WCArrayLit.cpp in Sources */,
 				1F2352861E34170C0055A5E5 /* Codegen_Scope.cpp in Sources */,
@@ -870,6 +877,7 @@
 				1F03088A1E2AF2510097D223 /* WCAddExpr.cpp in Sources */,
 				1FCD4E0A1D0160DB0076E358 /* WCVoidDataType.cpp in Sources */,
 				1FCD4E091D0160DB0076E358 /* WCUnknownDataType.cpp in Sources */,
+				1FB3F9271E3880FC00616753 /* ConstCodegen_PrimitiveType.cpp in Sources */,
 				1F09BD831E371B160072CF0B /* VarContainer.cpp in Sources */,
 				1F0308A61E2AF2510097D223 /* WCPrimaryExpr.cpp in Sources */,
 				1F7E19471E30A81400C82867 /* Codegen_Func.cpp in Sources */,
