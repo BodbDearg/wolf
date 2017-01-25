@@ -2,7 +2,6 @@
 
 #include "AST/WCASTNodeVisitor.hpp"
 #include "CodegenDataType.hpp"
-#include "CompiledDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 

@@ -82,7 +82,7 @@ const Token & TypePrimitive::getEndToken() const {
     return mType.getEndToken();
 }
 
-const DataType & TypePrimitive::dataType() {
+const DataType & TypePrimitive::dataType() const {
     return mType.dataType();
 }
 
@@ -118,7 +118,7 @@ const Token & TypeArray::getEndToken() const {
     return mElemType.getEndToken();
 }
 
-const DataType & TypeArray::dataType() {
+const DataType & TypeArray::dataType() const {
     return mDataType;
 }
 

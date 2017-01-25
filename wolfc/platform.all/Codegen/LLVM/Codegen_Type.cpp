@@ -3,6 +3,7 @@
 #include "AST/Nodes/WCType.hpp"
 #include "AST/Nodes/WCPrimitiveType.hpp"
 #include "CodegenCtx.hpp"
+#include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -10,7 +11,7 @@ WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 void Codegen::visit(const AST::TypeArray & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.dataType().accept(mConstCodegen.mCodegenDataType);
 }
 
 void Codegen::visit(const AST::TypePrimitive & astNode) {
