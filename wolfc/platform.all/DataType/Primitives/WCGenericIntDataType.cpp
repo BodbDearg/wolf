@@ -11,26 +11,6 @@ bool GenericIntDataType::isInteger() const {
 
 #warning FIXME - Codegen
 #if 0
-llvm::Value * GenericIntDataType::codegenPlusOp(CodegenCtx & cgCtx,
-                                                AST::ASTNode & callingNode,
-                                                llvm::Value & val)
-{
-    // This is a 'no-op' for numbers - simply return the value passed in
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(callingNode);
-    return &val;
-}
-
-llvm::Value * GenericIntDataType::codegenMinusOp(CodegenCtx & cgCtx,
-                                                 AST::ASTNode & callingNode,
-                                                 llvm::Value & val)
-{
-    #warning DO NOT ALLOW FOR UNSIGNED
-    // FIXME: Should this be an error for unsigned integers?
-    WC_UNUSED_PARAM(callingNode);
-    return cgCtx.irBuilder.CreateNeg(&val);
-}
-
 llvm::Value * GenericIntDataType::codegenIncOp(CodegenCtx & cgCtx,
                                                AST::ASTNode & callingNode,
                                                llvm::Value & val)

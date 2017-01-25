@@ -27,11 +27,6 @@ public:
     static Type * parse(ParseCtx & parseCtx);
     
     virtual const DataType & dataType() const = 0;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) = 0;
-#endif
 };
 
 /* PrimitiveType */
@@ -44,11 +39,6 @@ public:
     virtual const Token & getEndToken() const override;
     
     virtual const DataType & dataType() const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
-#endif
     
     PrimitiveType & mType;
 };
@@ -63,11 +53,6 @@ public:
     virtual const Token & getEndToken() const override;
     
     virtual const DataType & dataType() const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegenLLVMType(CodegenCtx & cgCtx, ASTNode & callingNode) override;
-#endif
     
     const Token &   mStartToken;
     AssignExpr &    mSizeExpr;

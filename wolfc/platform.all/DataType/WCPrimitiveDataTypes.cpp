@@ -29,6 +29,8 @@ const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
             
         // All these types are created or customized by the user, hence non-primitive:
         case DataTypeId::kArray:
+        case DataTypeId::kArrayUnevalSize:
+        case DataTypeId::kArrayBadSize:
             break;
     }
     
