@@ -43,6 +43,7 @@ public:
     void codegen();
     
     /* DataType visitor functions */
+    virtual void visit(const ArrayBadSizeDataType & dataType) override;
     virtual void visit(const ArrayDataType & dataType) override;
     virtual void visit(const ArrayUnevalSizeDataType & dataType) override;
     virtual void visit(const BoolDataType & dataType) override;

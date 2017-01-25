@@ -28,28 +28,4 @@ bool VoidDataType::isSized() const {
     return false;
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::AllocaInst * VoidDataType::codegenAlloca(CodegenCtx & cgCtx,
-                                               AST::ASTNode & callingNode,
-                                               const std::string & instLabel)
-{
-    WC_UNUSED_PARAM(cgCtx);
-    WC_UNUSED_PARAM(instLabel);
-    callingNode.compileError("Can't allocate type '%s' on the stack!", name().c_str());
-    return nullptr;
-}
-
-bool VoidDataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) {
-    mLLVMType = llvm::Type::getVoidTy(cgCtx.llvmCtx);
-    
-    if (!mLLVMType) {
-        issueGenericCodegenLLVMTypeError(callingNode);
-        return false;
-    }
-    
-    return true;
-}
-#endif
-
 WC_END_NAMESPACE

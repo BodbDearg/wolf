@@ -39,17 +39,6 @@ bool StrDataType::codegenPrintStmnt(CodegenCtx & cgCtx,
                                       { fmtStr, &valToPrint },
                                       "print_printf_call:string") != nullptr;
 }
-
-bool StrDataType::codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) {
-    mLLVMType = llvm::Type::getInt8PtrTy(cgCtx.llvmCtx);
-    
-    if (!mLLVMType) {
-        issueGenericCodegenLLVMTypeError(callingNode);
-        return false;
-    }
-    
-    return true;
-}
 #endif
 
 WC_END_NAMESPACE

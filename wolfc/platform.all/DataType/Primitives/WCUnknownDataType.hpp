@@ -17,20 +17,6 @@ public:
     virtual bool isValid() const override;
     virtual bool isSized() const override;
     virtual bool isUnknown() const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::AllocaInst * codegenAlloca(CodegenCtx & cgCtx,
-                                             AST::ASTNode & callingNode,
-                                             const std::string & instLabel) override;
-#endif
-    
-protected:
-    
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) override;
-#endif
 };
 
 WC_END_NAMESPACE

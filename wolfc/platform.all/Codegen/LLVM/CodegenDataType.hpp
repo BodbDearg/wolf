@@ -11,9 +11,10 @@ class ConstCodegen;
 /* Generates code for the LLVM backend */
 class CodegenDataType : public DataTypeVisitor {
 public:
-    CodegenDataType(CodegenCtx & ctx);
+    CodegenDataType(CodegenCtx & ctx, ConstCodegen & constCodegen);
     
     /* DataType visitor functions */
+    virtual void visit(const ArrayBadSizeDataType & dataType) override;
     virtual void visit(const ArrayDataType & dataType) override;
     virtual void visit(const ArrayUnevalSizeDataType & dataType) override;
     virtual void visit(const BoolDataType & dataType) override;
@@ -23,7 +24,8 @@ public:
     virtual void visit(const VoidDataType & dataType) override;
     
 private:
-    CodegenCtx & mCtx;
+    CodegenCtx &    mCtx;
+    ConstCodegen &  mConstCodegen;
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE

@@ -14,28 +14,28 @@ namespace AST {
  * At compile time the assign expression for the array size must be evaluated to get
  * the concrete array type.
  */
-class ArrayUnevalSizeDataType final : public DataType {
+class ArrayUnevalSizeDataType : public DataType {
 public:
     ArrayUnevalSizeDataType(const AST::ASTNode & declaringNode,
-                            const DataType & innerType,
+                            const DataType & elemType,
                             AST::AssignExpr & sizeExpr);
     
     virtual ~ArrayUnevalSizeDataType() override;
     
     virtual void accept(DataTypeVisitor & visitor) const override;
     virtual DataTypeId getTypeId() const override;
-    virtual const std::string & name() const override;
+    virtual const std::string & name() const final override;
     virtual bool equals(const DataType & other) const override;
-    virtual bool isValid() const override;
-    virtual bool isUnknown() const override;
-    virtual bool isArray() const override;
-    virtual bool requiresStorage() const override;
+    virtual bool isValid() const final override;
+    virtual bool isUnknown() const final override;
+    virtual bool isArray() const final override;
+    virtual bool requiresStorage() const final override;
 
     /* The node that declared this type */
     const AST::ASTNode & mDeclaringNode;
     
-    /* The element type for hte array */
-    const DataType & mInnerType;
+    /* The element type for the array */
+    const DataType & mElemType;
     
     /* The size expression determining the size of the array */
     AST::AssignExpr & mSizeExpr;

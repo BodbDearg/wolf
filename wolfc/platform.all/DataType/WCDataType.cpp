@@ -81,8 +81,6 @@ llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
         return nullptr;\
     }
 
-IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Plus)
-IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Minus)
 IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Inc)
 IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Dec)
 

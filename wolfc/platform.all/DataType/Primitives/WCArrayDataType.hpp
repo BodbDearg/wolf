@@ -7,7 +7,7 @@ WC_BEGIN_NAMESPACE
 /* A data type that represents an array. */
 class ArrayDataType final : public DataType {
 public:
-    ArrayDataType(DataType & innerType, size_t size);
+    ArrayDataType(const DataType & elemType, size_t size);
     virtual ~ArrayDataType() override;
     
     virtual void accept(DataTypeVisitor & visitor) const override;
@@ -19,16 +19,9 @@ public:
     virtual bool isArray() const override;
     virtual bool requiresStorage() const override;
 
-    DataType &      mInnerType;
-    size_t          mSize;
-    std::string     mName;
-    
-protected:
-    
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegenLLVMType(CodegenCtx & cgCtx, AST::ASTNode & callingNode) override;
-#endif
+    const DataType &    mElemType;
+    size_t              mSize;
+    std::string         mName;
 };
 
 WC_END_NAMESPACE

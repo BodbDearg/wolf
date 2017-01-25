@@ -7,18 +7,18 @@
 WC_BEGIN_NAMESPACE
 
 ArrayUnevalSizeDataType::ArrayUnevalSizeDataType(const AST::ASTNode & declaringNode,
-                                                 const DataType & innerType,
+                                                 const DataType & elemType,
                                                  AST::AssignExpr & sizeExpr)
 :
     mDeclaringNode(declaringNode),
-    mInnerType(innerType),
+    mElemType(elemType),
     mSizeExpr(sizeExpr)
 {
     // TODO: allocate the name elsewhere?
     // Makeup the name:
-    mName.reserve(mInnerType.name().size() + 16);
+    mName.reserve(mElemType.name().size() + 16);
     mName += "[?]";    
-    mName += mInnerType.name();
+    mName += mElemType.name();
 }
 
 ArrayUnevalSizeDataType::~ArrayUnevalSizeDataType() {
@@ -44,8 +44,7 @@ bool ArrayUnevalSizeDataType::equals(const DataType & other) const {
         return true;
     }
     
-    // Get the other type as an unknown array type,
-    // if it is not an unknown array type then the types do not match:
+    // Check that dynamic types match:
     auto otherArrayType = dynamic_cast<const ArrayUnevalSizeDataType*>(&other);
     WC_GUARD(otherArrayType, false);
     
@@ -53,8 +52,8 @@ bool ArrayUnevalSizeDataType::equals(const DataType & other) const {
     // Even the same expression evaluated at different points could mean different things.
     WC_GUARD(&mSizeExpr == &otherArrayType->mSizeExpr, false);
     
-    // Lastly see if the inner types match:
-    return mInnerType.equals(otherArrayType->mInnerType);
+    // Lastly see if the element types match:
+    return mElemType.equals(otherArrayType->mElemType);
 }
 
 bool ArrayUnevalSizeDataType::isValid() const {
@@ -62,8 +61,8 @@ bool ArrayUnevalSizeDataType::isValid() const {
 }
 
 bool ArrayUnevalSizeDataType::isUnknown() const {
-    // Only known if the inner type is not unknown
-    return mInnerType.isUnknown();
+    // Only known if the element type is not unknown
+    return mElemType.isUnknown();
 }
 
 bool ArrayUnevalSizeDataType::isArray() const {

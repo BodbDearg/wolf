@@ -241,6 +241,20 @@ llvm::Value * CodegenCtx::popLLVMValue() {
     return llvmValue;
 }
 
+void CodegenCtx::pushLLVMConstant(llvm::Constant & llvmConstant) {
+    mLLVMConstants.push_back(&llvmConstant);
+}
+
+llvm::Constant * CodegenCtx::popLLVMConstant() {
+    if (mLLVMConstants.empty()) {
+        return nullptr;
+    }
+    
+    llvm::Constant * llvmConstant = mLLVMConstants.back();
+    mLLVMConstants.pop_back();
+    return llvmConstant;
+}
+
 void CodegenCtx::pushCompiledDataType(const CompiledDataType & dataType) {
     mCompiledDataTypes.push_back(dataType);
 }
@@ -266,7 +280,12 @@ void CodegenCtx::handleDeferredCodegenCallbacks(std::vector<std::function<void (
 void CodegenCtx::setNodeEvaluatedDataType(const AST::ASTNode & astNode,
                                           std::unique_ptr<const DataType> & dataType)
 {
-    mNodeEvaluatedDataTypes[&astNode].reset(dataType.release());
+    // This can't be set twice for the same node:
+    auto & evaluatedType = mNodeEvaluatedDataTypes[&astNode];
+    WC_GUARD_ASSERT(!evaluatedType.get());
+    
+    // Transer ownership of the data type object
+    evaluatedType.reset(dataType.release());
 }
 
 const DataType * CodegenCtx::getNodeEvaluatedDataType(const AST::ASTNode & astNode) const {

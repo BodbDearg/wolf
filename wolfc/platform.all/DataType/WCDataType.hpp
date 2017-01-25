@@ -109,8 +109,6 @@ public:
                                                       AST::ASTNode & callingNode,\
                                                       llvm::Value & val);
     
-    WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(Plus)
-    WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(Minus)
     WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(Inc)
     WC_DATA_TYPE_DECL_CODEGEN_UNARY_OP_FUNC(Dec)
     

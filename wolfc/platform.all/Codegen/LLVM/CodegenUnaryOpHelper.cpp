@@ -46,6 +46,11 @@ void CodegenUnaryOpHelper::codegen() {
     mExprType->accept(*this);
 }
 
+void CodegenUnaryOpHelper::visit(const ArrayBadSizeDataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    issueUnaryOpNotSupportedError();
+}
+
 void CodegenUnaryOpHelper::visit(const ArrayDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();

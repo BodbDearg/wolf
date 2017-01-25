@@ -139,6 +139,7 @@
 		1FB3F9231E387D3000616753 /* ConstCodegen_BoolLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3F9221E387D3000616753 /* ConstCodegen_BoolLit.cpp */; };
 		1FB3F9251E38803100616753 /* ConstCodegen_Type.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3F9241E38803100616753 /* ConstCodegen_Type.cpp */; };
 		1FB3F9271E3880FC00616753 /* ConstCodegen_PrimitiveType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3F9261E3880FC00616753 /* ConstCodegen_PrimitiveType.cpp */; };
+		1FB3F92A1E3898AF00616753 /* WCArrayBadSizeDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB3F9281E3898AF00616753 /* WCArrayBadSizeDataType.cpp */; };
 		1FB40C671E0AFE4000D34587 /* WCGenericIntDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB40C651E0AFE4000D34587 /* WCGenericIntDataType.cpp */; };
 		1FB40C6A1E0B3E5200D34587 /* WCGenericSignedIntDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB40C681E0B3E5200D34587 /* WCGenericSignedIntDataType.cpp */; };
 		1FCD4DF41D0136360076E358 /* WCDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD4DF21D0136360076E358 /* WCDataType.cpp */; };
@@ -365,6 +366,8 @@
 		1FB3F9221E387D3000616753 /* ConstCodegen_BoolLit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConstCodegen_BoolLit.cpp; sourceTree = "<group>"; };
 		1FB3F9241E38803100616753 /* ConstCodegen_Type.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConstCodegen_Type.cpp; sourceTree = "<group>"; };
 		1FB3F9261E3880FC00616753 /* ConstCodegen_PrimitiveType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConstCodegen_PrimitiveType.cpp; sourceTree = "<group>"; };
+		1FB3F9281E3898AF00616753 /* WCArrayBadSizeDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCArrayBadSizeDataType.cpp; sourceTree = "<group>"; };
+		1FB3F9291E3898AF00616753 /* WCArrayBadSizeDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCArrayBadSizeDataType.hpp; sourceTree = "<group>"; };
 		1FB40C651E0AFE4000D34587 /* WCGenericIntDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCGenericIntDataType.cpp; sourceTree = "<group>"; };
 		1FB40C661E0AFE4000D34587 /* WCGenericIntDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCGenericIntDataType.hpp; sourceTree = "<group>"; };
 		1FB40C681E0B3E5200D34587 /* WCGenericSignedIntDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCGenericSignedIntDataType.cpp; sourceTree = "<group>"; };
@@ -623,6 +626,8 @@
 		1FCD4E011D0160DB0076E358 /* Primitives */ = {
 			isa = PBXGroup;
 			children = (
+				1FB3F9281E3898AF00616753 /* WCArrayBadSizeDataType.cpp */,
+				1FB3F9291E3898AF00616753 /* WCArrayBadSizeDataType.hpp */,
 				1F5FB1251D4B119D002C8F15 /* WCArrayDataType.cpp */,
 				1F5FB1261D4B119D002C8F15 /* WCArrayDataType.hpp */,
 				1F3914461E31CBAE001925BE /* WCArrayUnevalSizeDataType.cpp */,
@@ -924,6 +929,7 @@
 				1F0308AA1E2AF2510097D223 /* WCReadnumExpr.cpp in Sources */,
 				1F2352801E33D7EF0055A5E5 /* Codegen_FuncArg.cpp in Sources */,
 				1F0308B01E2AF2510097D223 /* WCStrLit.cpp in Sources */,
+				1FB3F92A1E3898AF00616753 /* WCArrayBadSizeDataType.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

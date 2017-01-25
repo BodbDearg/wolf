@@ -27,13 +27,14 @@
 #include "AST/Nodes/WCVarDecl.hpp"
 #include "AST/Nodes/WCWhileStmnt.hpp"
 #include "CodegenCtx.hpp"
+#include "CodegenDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 ConstCodegen::ConstCodegen(CodegenCtx & ctx) :
     mCtx(ctx),
-    mCodegenDataType(ctx)
+    mCodegenDataType(ctx, *this)
 {
     WC_EMPTY_FUNC_BODY();
 }

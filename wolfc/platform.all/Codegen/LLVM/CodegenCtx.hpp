@@ -102,11 +102,18 @@ public:
     }
     
     /**
-     * Push/pop an llvm::Value object to the stack.
+     * Push/pop an llvm::Value object to the value stack.
      * If popping and the stack is emtpy, a null pointer will be returned.
      */
     void pushLLVMValue(llvm::Value & llvmValue);
     llvm::Value * popLLVMValue();
+    
+    /**
+     * Push/pop an llvm::Constant object to the value stack.
+     * If popping and the stack is emtpy, a null pointer will be returned.
+     */
+    void pushLLVMConstant(llvm::Constant & llvmConstant);
+    llvm::Constant * popLLVMConstant();
     
     /**
      * Push/pop a compiled data type to the stack.
@@ -134,8 +141,11 @@ public:
      * Note: 'nullptr' will be returned by the getter if the evaluated data type has not yet
      * been set for the given AST node.
      *
-     * Memory: the function requires that ownership of the 'DataType' class memory be passed
+     * N.B! Memory: the function requires that ownership of the 'DataType' class memory be passed
      * along to this object. It will null out the pointer passed in.
+     *
+     * N.B! Memory: since external code may retain references to the 'DataType' objects stored here,
+     * this function may NOT be called multiple times for the same node.
      */
     void setNodeEvaluatedDataType(const AST::ASTNode & astNode,
                                   std::unique_ptr<const DataType> & dataType);
@@ -167,10 +177,22 @@ private:
     /* The stack of AST nodes being visited */
     std::vector<const AST::ASTNode*> mASTNodeStack;
     
-    /* A stack of values types created during codegen. Used for communication, like the stack in LUA. */
+    /**
+     * A stack of llvm values created during codegen. 
+     * Used for communication between code sections, and storing results temporarily, like the stack in LUA. 
+     */
     std::vector<llvm::Value*> mLLVMValues;
     
-    /* A stack of compiled data types created during codegen. Used for communication, like the stack in LUA. */
+    /** 
+     * A stack of llvm constants created during codegen. 
+     * Used for communication between code sections, and storing results temporarily, like the stack in LUA.
+     */
+    std::vector<llvm::Constant*> mLLVMConstants;
+    
+    /**
+     * A stack of compiled data types created during codegen. 
+     * Used for communication between code sections, and storing results temporarily, like the stack in LUA.
+     */
     std::vector<CompiledDataType> mCompiledDataTypes;
     
     /* A list of error messages emitted during parsing */

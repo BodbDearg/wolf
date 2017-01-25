@@ -2,13 +2,19 @@
 
 #include "AST/Nodes/WCIntLit.hpp"
 #include "CodegenCtx.hpp"
+#include "Lexer/WCToken.hpp"
+#include "WCAssert.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 void ConstCodegen::visit(const AST::IntLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    
+    // TODO: data type should be based on the numeric literal and precision suffixes used
+    llvm::Constant * constant = llvm::ConstantInt::get(llvm::Type::getInt64Ty(mCtx.mLLVMCtx), astNode.mToken.data.intVal);
+    WC_ASSERT(constant);
+    mCtx.pushLLVMConstant(*constant);
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE

@@ -4,6 +4,7 @@
 
 WC_BEGIN_NAMESPACE
 
+class ArrayBadSizeDataType;
 class ArrayDataType;
 class ArrayUnevalSizeDataType;
 class BoolDataType;
@@ -17,6 +18,7 @@ class DataTypeVisitor {
 public:
     virtual ~DataTypeVisitor() = default;
     
+    virtual void visit(const ArrayBadSizeDataType & dataType) = 0;
     virtual void visit(const ArrayDataType & dataType) = 0;
     virtual void visit(const ArrayUnevalSizeDataType & dataType) = 0;
     virtual void visit(const BoolDataType & dataType) = 0;

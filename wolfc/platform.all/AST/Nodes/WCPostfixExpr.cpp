@@ -510,7 +510,7 @@ const DataType & PostfixExprArrayLookup::dataType() const {
     WC_GUARD(arrayDataType, PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown));
     
     // Return the element data type
-    return arrayDataType->mInnerType;
+    return arrayDataType->mElemType;
 }
 
 #warning FIXME - Codegen

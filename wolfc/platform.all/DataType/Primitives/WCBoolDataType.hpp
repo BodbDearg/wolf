@@ -11,19 +11,6 @@ public:
     virtual DataTypeId getTypeId() const override;
     virtual const std::string & name() const override;
     virtual bool equals(const DataType & other) const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Constant * codegenConstCmpEQOp(AST::ASTNode & callingNode,
-                                                 llvm::Constant & leftVal,
-                                                 DataType & rightTy,
-                                                 llvm::Constant & rightVal) override;
-    
-    virtual llvm::Constant * codegenConstCmpNEOp(AST::ASTNode & callingNode,
-                                                 llvm::Constant & leftVal,
-                                                 DataType & rightTy,
-                                                 llvm::Constant & rightVal) override;
-#endif
 };
 
 WC_END_NAMESPACE
