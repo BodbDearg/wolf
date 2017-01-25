@@ -101,8 +101,8 @@
 		1F2352A41E343C9F0055A5E5 /* Codegen_PrimaryExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2352A31E343C9F0055A5E5 /* Codegen_PrimaryExpr.cpp */; };
 		1F2352A61E343E760055A5E5 /* Codegen_BoolLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2352A51E343E760055A5E5 /* Codegen_BoolLit.cpp */; };
 		1F2352A81E3441DC0055A5E5 /* Codegen_IntLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2352A71E3441DC0055A5E5 /* Codegen_IntLit.cpp */; };
-		1F2352AB1E355FC60055A5E5 /* CodegenBinaryOp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2352AA1E355FC60055A5E5 /* CodegenBinaryOp.cpp */; };
-		1F2352AE1E35A0F30055A5E5 /* CodegenUnaryOp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2352AC1E35A0F30055A5E5 /* CodegenUnaryOp.cpp */; };
+		1F2352AB1E355FC60055A5E5 /* CodegenBinaryOpHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2352AA1E355FC60055A5E5 /* CodegenBinaryOpHelper.cpp */; };
+		1F2352AE1E35A0F30055A5E5 /* CodegenUnaryOpHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2352AC1E35A0F30055A5E5 /* CodegenUnaryOpHelper.cpp */; };
 		1F2352B01E35D2EB0055A5E5 /* Codegen_AssertStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2352AF1E35D2EB0055A5E5 /* Codegen_AssertStmnt.cpp */; };
 		1F2352B21E35EC420055A5E5 /* Codegen_IfStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2352B11E35EC420055A5E5 /* Codegen_IfStmnt.cpp */; };
 		1F3914481E31CBAF001925BE /* WCArrayUnevalSizeDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F3914461E31CBAE001925BE /* WCArrayUnevalSizeDataType.cpp */; };
@@ -288,10 +288,10 @@
 		1F2352A31E343C9F0055A5E5 /* Codegen_PrimaryExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_PrimaryExpr.cpp; sourceTree = "<group>"; };
 		1F2352A51E343E760055A5E5 /* Codegen_BoolLit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_BoolLit.cpp; sourceTree = "<group>"; };
 		1F2352A71E3441DC0055A5E5 /* Codegen_IntLit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_IntLit.cpp; sourceTree = "<group>"; };
-		1F2352A91E3546580055A5E5 /* CodegenBinaryOp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CodegenBinaryOp.hpp; sourceTree = "<group>"; };
-		1F2352AA1E355FC60055A5E5 /* CodegenBinaryOp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodegenBinaryOp.cpp; sourceTree = "<group>"; };
-		1F2352AC1E35A0F30055A5E5 /* CodegenUnaryOp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodegenUnaryOp.cpp; sourceTree = "<group>"; };
-		1F2352AD1E35A0F30055A5E5 /* CodegenUnaryOp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CodegenUnaryOp.hpp; sourceTree = "<group>"; };
+		1F2352A91E3546580055A5E5 /* CodegenBinaryOpHelper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CodegenBinaryOpHelper.hpp; sourceTree = "<group>"; };
+		1F2352AA1E355FC60055A5E5 /* CodegenBinaryOpHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodegenBinaryOpHelper.cpp; sourceTree = "<group>"; };
+		1F2352AC1E35A0F30055A5E5 /* CodegenUnaryOpHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodegenUnaryOpHelper.cpp; sourceTree = "<group>"; };
+		1F2352AD1E35A0F30055A5E5 /* CodegenUnaryOpHelper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CodegenUnaryOpHelper.hpp; sourceTree = "<group>"; };
 		1F2352AF1E35D2EB0055A5E5 /* Codegen_AssertStmnt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_AssertStmnt.cpp; sourceTree = "<group>"; };
 		1F2352B11E35EC420055A5E5 /* Codegen_IfStmnt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_IfStmnt.cpp; sourceTree = "<group>"; };
 		1F3914461E31CBAE001925BE /* WCArrayUnevalSizeDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCArrayUnevalSizeDataType.cpp; sourceTree = "<group>"; };
@@ -535,14 +535,14 @@
 				1F23529D1E3438B80055A5E5 /* Codegen_UnaryExpr.cpp */,
 				1F7E6C4F1E2F5F0E00719A99 /* Codegen.cpp */,
 				1F7E6C4E1E2F5DA800719A99 /* Codegen.hpp */,
-				1F2352AA1E355FC60055A5E5 /* CodegenBinaryOp.cpp */,
-				1F2352A91E3546580055A5E5 /* CodegenBinaryOp.hpp */,
+				1F2352AA1E355FC60055A5E5 /* CodegenBinaryOpHelper.cpp */,
+				1F2352A91E3546580055A5E5 /* CodegenBinaryOpHelper.hpp */,
 				1F5B59281E2D773000609CDD /* CodegenCtx.cpp */,
 				1F5B59291E2D773000609CDD /* CodegenCtx.hpp */,
 				1F39144C1E31E1A0001925BE /* CodegenDataType.cpp */,
 				1F39144D1E31E1A0001925BE /* CodegenDataType.hpp */,
-				1F2352AC1E35A0F30055A5E5 /* CodegenUnaryOp.cpp */,
-				1F2352AD1E35A0F30055A5E5 /* CodegenUnaryOp.hpp */,
+				1F2352AC1E35A0F30055A5E5 /* CodegenUnaryOpHelper.cpp */,
+				1F2352AD1E35A0F30055A5E5 /* CodegenUnaryOpHelper.hpp */,
 				1F09BD851E37313D0072CF0B /* CompiledDataType.hpp */,
 				1F3914491E31DC23001925BE /* ConstCodegen.cpp */,
 				1F39144A1E31DC23001925BE /* ConstCodegen.hpp */,
@@ -824,7 +824,7 @@
 				1F72313C1DD0762D00D9E50D /* WCDebugBreak.cpp in Sources */,
 				1F2352A61E343E760055A5E5 /* Codegen_BoolLit.cpp in Sources */,
 				1FCD4E0D1D0161A60076E358 /* WCInt64DataType.cpp in Sources */,
-				1F2352AE1E35A0F30055A5E5 /* CodegenUnaryOp.cpp in Sources */,
+				1F2352AE1E35A0F30055A5E5 /* CodegenUnaryOpHelper.cpp in Sources */,
 				1F0308B61E2AF2510097D223 /* WCWhileStmnt.cpp in Sources */,
 				1F03089F1E2AF2510097D223 /* WCLOrExpr.cpp in Sources */,
 				1F0308981E2AF2510097D223 /* WCFuncCall.cpp in Sources */,
@@ -847,7 +847,7 @@
 				1F0308A11E2AF2510097D223 /* WCMulExpr.cpp in Sources */,
 				1F0308961E2AF2510097D223 /* WCFuncArg.cpp in Sources */,
 				1F0308A91E2AF2510097D223 /* WCRandExpr.cpp in Sources */,
-				1F2352AB1E355FC60055A5E5 /* CodegenBinaryOp.cpp in Sources */,
+				1F2352AB1E355FC60055A5E5 /* CodegenBinaryOpHelper.cpp in Sources */,
 				1F03089D1E2AF2510097D223 /* WCLAndExpr.cpp in Sources */,
 				1F2352921E3434490055A5E5 /* Codegen_LAndExpr.cpp in Sources */,
 				1FA292611D000FF600B0F975 /* WCLinearAlloc.cpp in Sources */,

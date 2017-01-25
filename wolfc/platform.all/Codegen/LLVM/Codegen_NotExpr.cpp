@@ -3,16 +3,16 @@
 #include "AST/Nodes/WCCmpExpr.hpp"
 #include "AST/Nodes/WCNotExpr.hpp"
 #include "CodegenCtx.hpp"
-#include "CodegenUnaryOp.hpp"
+#include "CodegenUnaryOpHelper.hpp"
 #include "DataType/WCDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-class CodegenLNotUnaryOp : public CodegenUnaryOp {
+class CodegenLNotUnaryOp : public CodegenUnaryOpHelper {
 public:
     CodegenLNotUnaryOp(Codegen & cg, const AST::ASTNode & expr) :
-        CodegenUnaryOp(cg, expr, "not", "logical not")
+        CodegenUnaryOpHelper(cg, expr, "not", "logical not")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -23,10 +23,10 @@ public:
     }
 };
 
-class CodegenBNotUnaryOp : public CodegenUnaryOp {
+class CodegenBNotUnaryOp : public CodegenUnaryOpHelper {
 public:
     CodegenBNotUnaryOp(Codegen & cg, const AST::ASTNode & expr) :
-        CodegenUnaryOp(cg, expr, "~", "bitwise not")
+        CodegenUnaryOpHelper(cg, expr, "~", "bitwise not")
     {
         WC_EMPTY_FUNC_BODY();
     }

@@ -27,12 +27,12 @@ class Codegen;
  * The default implementation of each visitor function says that the op is
  * not supported for the data type.
  */
-class CodegenUnaryOp : public DataTypeVisitor {
+class CodegenUnaryOpHelper : public DataTypeVisitor {
 public:
-    CodegenUnaryOp(Codegen & cg,
-                   const AST::ASTNode & expr,
-                   const char * opSymbol,
-                   const char * opName);
+    CodegenUnaryOpHelper(Codegen & cg,
+                         const AST::ASTNode & expr,
+                         const char * opSymbol,
+                         const char * opName);
     
     /**
      * Kicks off the codegen for the unary op.

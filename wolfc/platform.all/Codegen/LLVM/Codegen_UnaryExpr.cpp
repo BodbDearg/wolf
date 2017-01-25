@@ -4,16 +4,16 @@
 #include "AST/Nodes/WCPostfixExpr.hpp"
 #include "AST/Nodes/WCUnaryExpr.hpp"
 #include "CodegenCtx.hpp"
-#include "CodegenUnaryOp.hpp"
+#include "CodegenUnaryOpHelper.hpp"
 #include "DataType/WCDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-class CodegenPlusUnaryOp : public CodegenUnaryOp {
+class CodegenPlusUnaryOp : public CodegenUnaryOpHelper {
 public:
     CodegenPlusUnaryOp(Codegen & cg, const AST::ASTNode & expr) :
-        CodegenUnaryOp(cg, expr, "+", "plus")
+        CodegenUnaryOpHelper(cg, expr, "+", "plus")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -24,10 +24,10 @@ public:
     }
 };
 
-class CodegenMinusUnaryOp : public CodegenUnaryOp {
+class CodegenMinusUnaryOp : public CodegenUnaryOpHelper {
 public:
     CodegenMinusUnaryOp(Codegen & cg, const AST::ASTNode & expr) :
-        CodegenUnaryOp(cg, expr, "-", "minus")
+        CodegenUnaryOpHelper(cg, expr, "-", "minus")
     {
         WC_EMPTY_FUNC_BODY();
     }

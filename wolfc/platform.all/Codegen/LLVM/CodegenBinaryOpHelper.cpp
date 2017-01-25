@@ -1,4 +1,4 @@
-#include "CodegenBinaryOp.hpp"
+#include "CodegenBinaryOpHelper.hpp"
 
 #include "AST/Nodes/WCASTNode.hpp"
 #include "AST/Nodes/WCIExpr.hpp"
@@ -9,11 +9,11 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-CodegenBinaryOp::CodegenBinaryOp(Codegen & cg,
-                                 const AST::ASTNode & leftExpr,
-                                 const AST::ASTNode & rightExpr,
-                                 const char * opSymbol,
-                                 const char * opName)
+CodegenBinaryOpHelper::CodegenBinaryOpHelper(Codegen & cg,
+                                             const AST::ASTNode & leftExpr,
+                                             const AST::ASTNode & rightExpr,
+                                             const char * opSymbol,
+                                             const char * opName)
 :
     mCG(cg),
     mLeftExpr(leftExpr),
@@ -27,7 +27,7 @@ CodegenBinaryOp::CodegenBinaryOp(Codegen & cg,
     WC_ASSERT(mLeftExpr.mParent == mRightExpr.mParent);
 }
 
-void CodegenBinaryOp::codegen() {
+void CodegenBinaryOpHelper::codegen() {
     // Get the type for both left and right expressions:
     const AST::IExpr * leftAsExpr = dynamic_cast<const AST::IExpr*>(&mLeftExpr);
     
@@ -79,42 +79,42 @@ void CodegenBinaryOp::codegen() {
     }
 }
 
-void CodegenBinaryOp::visit(const ArrayDataType & dataType) {
+void CodegenBinaryOpHelper::visit(const ArrayDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenBinaryOp::visit(const ArrayUnevalSizeDataType & dataType) {
+void CodegenBinaryOpHelper::visit(const ArrayUnevalSizeDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenBinaryOp::visit(const BoolDataType & dataType) {
+void CodegenBinaryOpHelper::visit(const BoolDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenBinaryOp::visit(const Int64DataType & dataType) {
+void CodegenBinaryOpHelper::visit(const Int64DataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenBinaryOp::visit(const StrDataType & dataType) {
+void CodegenBinaryOpHelper::visit(const StrDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenBinaryOp::visit(const UnknownDataType & dataType) {
+void CodegenBinaryOpHelper::visit(const UnknownDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenBinaryOp::visit(const VoidDataType & dataType) {
+void CodegenBinaryOpHelper::visit(const VoidDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenBinaryOp::issueBinaryOpNotSupportedError() {
+void CodegenBinaryOpHelper::issueBinaryOpNotSupportedError() {
     WC_GUARD(mLeftType && mRightType);
     AST::ASTNode * parent = mLeftExpr.mParent;
     WC_ASSERT(parent);
@@ -127,7 +127,7 @@ void CodegenBinaryOp::issueBinaryOpNotSupportedError() {
                    mRightType->name().c_str());
 }
 
-void CodegenBinaryOp::pushOpResult(llvm::Value * result) {
+void CodegenBinaryOpHelper::pushOpResult(llvm::Value * result) {
     WC_GUARD_ASSERT(result);
     mCG.mCtx.pushLLVMValue(*result);
 }

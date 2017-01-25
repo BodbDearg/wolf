@@ -2,17 +2,17 @@
 
 #include "AST/Nodes/WCAddExpr.hpp"
 #include "AST/Nodes/WCCmpExpr.hpp"
-#include "CodegenBinaryOp.hpp"
+#include "CodegenBinaryOpHelper.hpp"
 #include "CodegenCtx.hpp"
 #include "DataType/WCDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-class CodegenCmpEQBinaryOp : public CodegenBinaryOp {
+class CodegenCmpEQBinaryOp : public CodegenBinaryOpHelper {
 public:
     CodegenCmpEQBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenBinaryOp(cg, leftExpr, rightExpr, "==", "equals")
+        CodegenBinaryOpHelper(cg, leftExpr, rightExpr, "==", "equals")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -28,10 +28,10 @@ public:
     }
 };
 
-class CodegenCmpNEBinaryOp : public CodegenBinaryOp {
+class CodegenCmpNEBinaryOp : public CodegenBinaryOpHelper {
 public:
     CodegenCmpNEBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenBinaryOp(cg, leftExpr, rightExpr, "!=", "not equals")
+        CodegenBinaryOpHelper(cg, leftExpr, rightExpr, "!=", "not equals")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -47,10 +47,10 @@ public:
     }
 };
 
-class CodegenCmpLTBinaryOp : public CodegenBinaryOp {
+class CodegenCmpLTBinaryOp : public CodegenBinaryOpHelper {
 public:
     CodegenCmpLTBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenBinaryOp(cg, leftExpr, rightExpr, "<", "less than")
+        CodegenBinaryOpHelper(cg, leftExpr, rightExpr, "<", "less than")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -61,10 +61,10 @@ public:
     }
 };
 
-class CodegenCmpLEBinaryOp : public CodegenBinaryOp {
+class CodegenCmpLEBinaryOp : public CodegenBinaryOpHelper {
 public:
     CodegenCmpLEBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenBinaryOp(cg, leftExpr, rightExpr, "<=", "less than or equal to")
+        CodegenBinaryOpHelper(cg, leftExpr, rightExpr, "<=", "less than or equal to")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -75,10 +75,10 @@ public:
     }
 };
 
-class CodegenCmpGTBinaryOp : public CodegenBinaryOp {
+class CodegenCmpGTBinaryOp : public CodegenBinaryOpHelper {
 public:
     CodegenCmpGTBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenBinaryOp(cg, leftExpr, rightExpr, ">", "greater than")
+        CodegenBinaryOpHelper(cg, leftExpr, rightExpr, ">", "greater than")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -89,10 +89,10 @@ public:
     }
 };
 
-class CodegenCmpGEBinaryOp : public CodegenBinaryOp {
+class CodegenCmpGEBinaryOp : public CodegenBinaryOpHelper {
 public:
     CodegenCmpGEBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenBinaryOp(cg, leftExpr, rightExpr, ">", "greater than or equal to")
+        CodegenBinaryOpHelper(cg, leftExpr, rightExpr, ">", "greater than or equal to")
     {
         WC_EMPTY_FUNC_BODY();
     }

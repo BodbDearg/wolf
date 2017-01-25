@@ -2,17 +2,17 @@
 
 #include "AST/Nodes/WCMulExpr.hpp"
 #include "AST/Nodes/WCShiftExpr.hpp"
-#include "CodegenBinaryOp.hpp"
+#include "CodegenBinaryOpHelper.hpp"
 #include "CodegenCtx.hpp"
 #include "DataType/WCDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-class CodegenMulBinaryOp : public CodegenBinaryOp {
+class CodegenMulBinaryOp : public CodegenBinaryOpHelper {
 public:
     CodegenMulBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenBinaryOp(cg, leftExpr, rightExpr, "*", "multiply")
+        CodegenBinaryOpHelper(cg, leftExpr, rightExpr, "*", "multiply")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -23,10 +23,10 @@ public:
     }
 };
 
-class CodegenDivBinaryOp : public CodegenBinaryOp {
+class CodegenDivBinaryOp : public CodegenBinaryOpHelper {
 public:
     CodegenDivBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenBinaryOp(cg, leftExpr, rightExpr, "/", "divide")
+        CodegenBinaryOpHelper(cg, leftExpr, rightExpr, "/", "divide")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -37,10 +37,10 @@ public:
     }
 };
 
-class CodegenModBinaryOp : public CodegenBinaryOp {
+class CodegenModBinaryOp : public CodegenBinaryOpHelper {
 public:
     CodegenModBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenBinaryOp(cg, leftExpr, rightExpr, "%", "modulus")
+        CodegenBinaryOpHelper(cg, leftExpr, rightExpr, "%", "modulus")
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -51,10 +51,10 @@ public:
     }
 };
 
-class CodegenBAndBinaryOp : public CodegenBinaryOp {
+class CodegenBAndBinaryOp : public CodegenBinaryOpHelper {
 public:
     CodegenBAndBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenBinaryOp(cg, leftExpr, rightExpr, "&", "bitwise and")
+        CodegenBinaryOpHelper(cg, leftExpr, rightExpr, "&", "bitwise and")
     {
         WC_EMPTY_FUNC_BODY();
     }

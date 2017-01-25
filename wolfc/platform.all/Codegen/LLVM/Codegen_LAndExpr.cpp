@@ -2,17 +2,17 @@
 
 #include "AST/Nodes/WCLAndExpr.hpp"
 #include "AST/Nodes/WCNotExpr.hpp"
-#include "CodegenBinaryOp.hpp"
+#include "CodegenBinaryOpHelper.hpp"
 #include "CodegenCtx.hpp"
 #include "DataType/WCDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-class CodegenLAndBinaryOp : public CodegenBinaryOp {
+class CodegenLAndBinaryOp : public CodegenBinaryOpHelper {
 public:
     CodegenLAndBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenBinaryOp(cg, leftExpr, rightExpr, "and", "logical and")
+        CodegenBinaryOpHelper(cg, leftExpr, rightExpr, "and", "logical and")
     {
         WC_EMPTY_FUNC_BODY();
     }
