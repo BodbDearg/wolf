@@ -84,6 +84,11 @@ void CodegenBinaryOp::visit(const ArrayDataType & dataType) {
     issueBinaryOpNotSupportedError();
 }
 
+void CodegenBinaryOp::visit(const ArrayUnevalSizeDataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    issueBinaryOpNotSupportedError();
+}
+
 void CodegenBinaryOp::visit(const BoolDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
@@ -95,11 +100,6 @@ void CodegenBinaryOp::visit(const Int64DataType & dataType) {
 }
 
 void CodegenBinaryOp::visit(const StrDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueBinaryOpNotSupportedError();
-}
-
-void CodegenBinaryOp::visit(const UnknownArrayDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }

@@ -19,6 +19,13 @@ void CodegenDataType::visit(const ArrayDataType & dataType) {
     #warning TODO: Codegen this data type
 }
 
+void CodegenDataType::visit(const ArrayUnevalSizeDataType & dataType) {
+    #warning TODO: Implement this
+    // We can't codegen an unknown array data type
+    WC_UNUSED_PARAM(dataType);
+    mCtx.error("Unable to generate the llvm type for an array with an unknown size!");
+}
+
 void CodegenDataType::visit(const BoolDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     llvm::Type * llvmType = llvm::Type::getInt1Ty(mCtx.mLLVMCtx);
@@ -38,13 +45,6 @@ void CodegenDataType::visit(const StrDataType & dataType) {
     llvm::Type * llvmType = llvm::Type::getInt8PtrTy(mCtx.mLLVMCtx);
     WC_ASSERT(llvmType);
     mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
-}
-
-void CodegenDataType::visit(const UnknownArrayDataType & dataType) {
-    #warning TODO: Implement this
-    // We can't codegen an unknown array data type
-    WC_UNUSED_PARAM(dataType);
-    mCtx.error("Unable to generate the llvm type for an array with an unknown size!");
 }
 
 void CodegenDataType::visit(const UnknownDataType & dataType) {

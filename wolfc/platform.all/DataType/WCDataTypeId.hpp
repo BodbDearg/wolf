@@ -25,8 +25,8 @@ enum class DataTypeId : uint8_t {
     kStr,
     /* Array type */
     kArray,
-    /* Array type whose size is unknown or unevaluated */
-    kUnknownArray
+    /* Array type whose size expression has not yet been evaluated */
+    kArrayUnevalSize
 };
 
 WC_END_NAMESPACE

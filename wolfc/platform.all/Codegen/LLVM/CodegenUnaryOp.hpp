@@ -43,10 +43,10 @@ public:
     
     /* DataType visitor functions */
     virtual void visit(const ArrayDataType & dataType) override;
+    virtual void visit(const ArrayUnevalSizeDataType & dataType) override;    
     virtual void visit(const BoolDataType & dataType) override;
     virtual void visit(const Int64DataType & dataType) override;
     virtual void visit(const StrDataType & dataType) override;
-    virtual void visit(const UnknownArrayDataType & dataType) override;
     virtual void visit(const UnknownDataType & dataType) override;
     virtual void visit(const VoidDataType & dataType) override;
     

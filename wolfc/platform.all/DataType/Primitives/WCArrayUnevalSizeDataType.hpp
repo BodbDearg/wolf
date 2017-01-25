@@ -9,19 +9,18 @@ namespace AST {
     class ASTNode;
 }
 
-#warning TODO: rename to 'UnevalSize'
 /**
  * A data type that represents an array where the size element is unknown/unevaluated.
  * At compile time the assign expression for the array size must be evaluated to get
  * the concrete array type.
  */
-class UnknownArrayDataType final : public DataType {
+class ArrayUnevalSizeDataType final : public DataType {
 public:
-    UnknownArrayDataType(const AST::ASTNode & declaringNode,
-                         const DataType & innerType,
-                         AST::AssignExpr & sizeExpr);
+    ArrayUnevalSizeDataType(const AST::ASTNode & declaringNode,
+                            const DataType & innerType,
+                            AST::AssignExpr & sizeExpr);
     
-    virtual ~UnknownArrayDataType() override;
+    virtual ~ArrayUnevalSizeDataType() override;
     
     virtual void accept(DataTypeVisitor & visitor) const override;
     virtual DataTypeId getTypeId() const override;

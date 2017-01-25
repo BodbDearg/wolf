@@ -1,7 +1,7 @@
 #pragma once
 
+#include "DataType/Primitives/WCArrayUnevalSizeDataType.hpp"
 #include "WCASTNode.hpp"
-#include "WCUnknownArrayDataType.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <cstddef>
@@ -77,7 +77,7 @@ public:
      * The data type of the type array. 
      * It has to converted to a concrete array type during compiling.
      */
-    UnknownArrayDataType mDataType;
+    ArrayUnevalSizeDataType mDataType;
 };
 
 WC_AST_END_NAMESPACE

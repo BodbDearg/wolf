@@ -84,6 +84,7 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
         #warning Eval data type first
         const DataType & exprDataType = astNode.mExpr.dataType();
         
+        #warning Use visitor interface instead
         // See which type we are dealing with:
         switch (exprDataType.getTypeId()) {
             case DataTypeId::kInt64:
@@ -101,7 +102,7 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
             case DataTypeId::kUnknown:                
             case DataTypeId::kVoid:
             case DataTypeId::kArray:
-            case DataTypeId::kUnknownArray:
+            case DataTypeId::kArrayUnevalSize:
                 mCtx.error(astNode,
                            "print() not supported/implemented for expression of type '%s'!",
                            exprDataType.name().c_str());

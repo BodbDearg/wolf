@@ -51,6 +51,11 @@ void CodegenUnaryOp::visit(const ArrayDataType & dataType) {
     issueUnaryOpNotSupportedError();
 }
 
+void CodegenUnaryOp::visit(const ArrayUnevalSizeDataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    issueUnaryOpNotSupportedError();
+}
+
 void CodegenUnaryOp::visit(const BoolDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();
@@ -62,11 +67,6 @@ void CodegenUnaryOp::visit(const Int64DataType & dataType) {
 }
 
 void CodegenUnaryOp::visit(const StrDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueUnaryOpNotSupportedError();
-}
-
-void CodegenUnaryOp::visit(const UnknownArrayDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();
 }
