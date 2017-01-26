@@ -31,32 +31,6 @@ llvm::Value * GenericIntDataType::codegenDecOp(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateSub(&val, decBy, "GenericInt_DecOp");
 }
 
-llvm::Constant * GenericIntDataType::codegenConstMulOp(AST::ASTNode & callingNode,
-                                                       llvm::Constant & leftVal,
-                                                       DataType & rightTy,
-                                                       llvm::Constant & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_Mul,
-                                            kOpName_Mul,
-                                            rightTy), nullptr);
-    
-    return llvm::ConstantExpr::getMul(&leftVal, &rightVal);
-}
-
-llvm::Constant * GenericIntDataType::codegenConstBAndOp(AST::ASTNode & callingNode,
-                                                        llvm::Constant & leftVal,
-                                                        DataType & rightTy,
-                                                        llvm::Constant & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_BAnd,
-                                            kOpName_BAnd,
-                                            rightTy), nullptr);
-    
-    return llvm::ConstantExpr::getAnd(&leftVal, &rightVal);
-}
-
 llvm::Constant * GenericIntDataType::codegenConstLShiftOp(AST::ASTNode & callingNode,
                                                           llvm::Constant & leftVal,
                                                           DataType & rightTy,

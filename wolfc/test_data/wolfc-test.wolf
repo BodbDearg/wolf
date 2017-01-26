@@ -1,4 +1,4 @@
-let v : int = 2 ^ 4
+let v : int = 3 & 1
 
 func main() -> void
     if 1 is not 2
