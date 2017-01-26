@@ -12,43 +12,6 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-/*
-bool VarDecl::codegenAsGlobalVar(CodegenCtx & cgCtx) { 
-    // Now evaluate the right expression:
-    llvm::Constant * rightValue = mInitExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(rightValue, false);
-    
-    // Create the variable. If this fails then the variable already exists:
-    DataType & varDataType = dataType();
-    
-    // Data type for the var must equal the data type of the expression:
-    DataType & exprDataType = mInitExpr.dataType();
-    
-    if (!varDataType.equals(exprDataType)) {
-        // TODO: Handle auto type promotion here
-        compileError("Initializing expression for variable declaration must be of type '%s', not '%s'!",
-                     varDataType.name().c_str(),
-                     exprDataType.name().c_str());
-        
-        return false;
-    }
-    
-    // Create the value
-    DataValue * leftValue = cgCtx.module.createVar(mIdent.mToken.data.strVal.ptr,
-                                                   varDataType,
-                                                   rightValue,
-                                                   cgCtx,
-                                                   *this);
-    
-    if (!leftValue) {
-        compileError("The global variable '%s' has been redefined!", mIdent.mToken.data.strVal.ptr);
-        return false;
-    }
-    
-    return true;    // All good!
-}
-*/
-
 static void codegenLocalVarDeclWithType(Codegen & cg,
                                         const AST::VarDecl & varDecl,
                                         const CompiledDataType & varCompiledType,

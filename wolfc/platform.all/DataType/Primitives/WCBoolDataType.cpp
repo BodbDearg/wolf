@@ -25,33 +25,4 @@ bool BoolDataType::equals(const DataType & other) const {
     return this == &other || dynamic_cast<const BoolDataType*>(&other) != nullptr;
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Constant * BoolDataType::codegenConstCmpEQOp(AST::ASTNode & callingNode,
-                                                   llvm::Constant & leftVal,
-                                                   DataType & rightTy,
-                                                   llvm::Constant & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_CmpEQ,
-                                            kOpName_CmpEQ,
-                                            rightTy), nullptr);
-    
-    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_EQ, &leftVal, &rightVal);
-}
-
-llvm::Constant * BoolDataType::codegenConstCmpNEOp(AST::ASTNode & callingNode,
-                                                   llvm::Constant & leftVal,
-                                                   DataType & rightTy,
-                                                   llvm::Constant & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_CmpNE,
-                                            kOpName_CmpNE,
-                                            rightTy), nullptr);
-    
-    return llvm::ConstantExpr::getICmp(llvm::ICmpInst::Predicate::ICMP_NE, &leftVal, &rightVal);
-}
-#endif
-
 WC_END_NAMESPACE
