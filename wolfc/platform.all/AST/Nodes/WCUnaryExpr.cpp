@@ -7,6 +7,7 @@
 #include "WCLinearAlloc.hpp"
 #include "WCParseCtx.hpp"
 #include "WCPostfixExpr.hpp"
+#include "WCUnaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -16,8 +17,8 @@ WC_AST_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 bool UnaryExpr::peek(const Token * currentToken) {
     /* 
-    -PostfixExpr
-    +PostfixExpr
+    - UnaryExpr
+    + UnaryExpr
     */
     if (currentToken->type == TokenType::kMinus || currentToken->type == TokenType::kPlus) {
         return PostfixExpr::peek(currentToken + 1);
@@ -34,25 +35,25 @@ bool UnaryExpr::peek(const Token * currentToken) {
 
 UnaryExpr * UnaryExpr::parse(ParseCtx & parseCtx) {
     switch (parseCtx.tok()->type) {
-        /* -PostfixExpr */
+        /* - PostfixExpr */
         case TokenType::kMinus: {
             const Token * minusTok = parseCtx.tok();
             parseCtx.nextTok();     // Skip '-'
-            PostfixExpr * expr = PostfixExpr::parse(parseCtx);
+            UnaryExpr * expr = UnaryExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
-            return WC_NEW_AST_NODE(parseCtx, UnaryExprMinus, *expr, *minusTok);
+            return WC_NEW_AST_NODE(parseCtx, UnaryExprMinus, *minusTok, *expr);
         }   break;
             
-        /* +PostfixExpr */
+        /* + PostfixExpr */
         case TokenType::kPlus: {
             const Token * plusTok = parseCtx.tok();
             parseCtx.nextTok();     // Skip '+'
-            PostfixExpr * expr = PostfixExpr::parse(parseCtx);
+            UnaryExpr * expr = UnaryExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
-            return WC_NEW_AST_NODE(parseCtx, UnaryExprPlus, *expr, *plusTok);
+            return WC_NEW_AST_NODE(parseCtx, UnaryExprPlus, *plusTok, *expr);
         }   break;
             
-        /* (AssignExpr) */
+        /* ( AssignExpr ) */
         case TokenType::kLParen: {
             const Token * lparenTok = parseCtx.tok();
             parseCtx.nextTok();     // Skip '('
@@ -69,7 +70,7 @@ UnaryExpr * UnaryExpr::parse(ParseCtx & parseCtx) {
             const Token * rparenTok = parseCtx.tok();
             parseCtx.nextTok();     // Skip ')'
             WC_GUARD(expr, nullptr);
-            return WC_NEW_AST_NODE(parseCtx, UnaryExprParen, *expr, *lparenTok, *rparenTok);
+            return WC_NEW_AST_NODE(parseCtx, UnaryExprParen, *lparenTok, *expr, *rparenTok);
         }   break;
             
         /* PostfixExpr */
@@ -117,11 +118,11 @@ const DataType & UnaryExprPrimary::dataType() const {
 //-----------------------------------------------------------------------------
 // UnaryExprPlusMinusBase
 //-----------------------------------------------------------------------------
-UnaryExprPlusMinusBase::UnaryExprPlusMinusBase(PostfixExpr & expr, const Token & startToken) :
-    UnaryExprPrimary(expr),
-    mStartToken(startToken)
+UnaryExprPlusMinusBase::UnaryExprPlusMinusBase(const Token & startToken, UnaryExpr & expr) :
+    mStartToken(startToken),
+    mExpr(expr)
 {
-    WC_EMPTY_FUNC_BODY();
+    mExpr.mParent = this;
 }
 
 const Token & UnaryExprPlusMinusBase::getStartToken() const {
@@ -136,24 +137,19 @@ bool UnaryExprPlusMinusBase::isLValue() const {
     return false;
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Constant * UnaryExprPlusMinusBase::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // Generate the code for the expression value first
-    llvm::Constant * exprValue = mExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(exprValue, nullptr);
-    
-    // Now do the operation
-    DataType & exprType = mExpr.dataType();
-    return (exprType.*mCodegenConstUnaryOpFunc)(*this, *exprValue);
+bool UnaryExprPlusMinusBase::isConstExpr() const {
+    return mExpr.isConstExpr();
 }
-#endif
+
+const DataType & UnaryExprPlusMinusBase::dataType() const {
+    return mExpr.dataType();
+}
 
 //-----------------------------------------------------------------------------
 // UnaryExprPlus
 //-----------------------------------------------------------------------------
-UnaryExprPlus::UnaryExprPlus(PostfixExpr & expr, const Token & startToken) :
-    UnaryExprPlusMinusBase(expr, startToken)
+UnaryExprPlus::UnaryExprPlus(const Token & startToken, UnaryExpr & expr) :
+    UnaryExprPlusMinusBase(startToken, expr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -165,8 +161,8 @@ void UnaryExprPlus::accept(ASTNodeVisitor & visitor) const {
 //-----------------------------------------------------------------------------
 // UnaryExprMinus
 //-----------------------------------------------------------------------------
-UnaryExprMinus::UnaryExprMinus(PostfixExpr & expr, const Token & startToken) :
-    UnaryExprPlusMinusBase(expr, startToken)
+UnaryExprMinus::UnaryExprMinus(const Token & startToken, UnaryExpr & expr) :
+    UnaryExprPlusMinusBase(startToken, expr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -178,9 +174,9 @@ void UnaryExprMinus::accept(ASTNodeVisitor & visitor) const {
 //-----------------------------------------------------------------------------
 // UnaryExprParen
 //-----------------------------------------------------------------------------
-UnaryExprParen::UnaryExprParen(AssignExpr & expr, const Token & startToken, const Token & endToken) :
-    mExpr(expr),
+UnaryExprParen::UnaryExprParen(const Token & startToken, AssignExpr & expr, const Token & endToken) :
     mStartToken(startToken),
+    mExpr(expr),
     mEndToken(endToken)
 {
     mExpr.mParent = this;
@@ -203,7 +199,7 @@ bool UnaryExprParen::isLValue() const {
 }
 
 bool UnaryExprParen::isConstExpr() const {
-    return mExpr.isLValue();
+    return mExpr.isConstExpr();
 }
 
 const DataType & UnaryExprParen::dataType() const {

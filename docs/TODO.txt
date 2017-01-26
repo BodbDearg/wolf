@@ -1,4 +1,5 @@
 - Fix recursion on unary expression (should be able to do - - 1 for example)
+	- Just need to implement unit test now
 - Make logical statements lazy evaluate
 - Allow 'do' to open function body
 - Make newline a token and terminate statements on newline

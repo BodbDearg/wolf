@@ -146,8 +146,8 @@ ShiftExpr:
 
 UnaryExpr:
 	PostfixExpr
-	+ PostfixExpr
-	- PostfixExpr
+	+ UnaryExpr
+	- UnaryExpr
 	( AssignExpr )
 
 PostfixExpr:

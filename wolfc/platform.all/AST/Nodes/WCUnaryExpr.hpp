@@ -13,8 +13,8 @@ class PostfixExpr;
 /*
 UnaryExpr:
 	PostfixExpr
-	+ PostfixExpr
-	- PostfixExpr
+	+ UnaryExpr
+	- UnaryExpr
 	( AssignExpr )
 */
 class UnaryExpr : public ASTNode, public IExpr {
@@ -42,30 +42,34 @@ public:
 };
 
 /* Base class for '+' or '-' unary expression */
-class UnaryExprPlusMinusBase : public UnaryExprPrimary {
+class UnaryExprPlusMinusBase : public UnaryExpr {
 public:
-    UnaryExprPlusMinusBase(PostfixExpr & expr, const Token & startToken);
+    UnaryExprPlusMinusBase(const Token & startToken, UnaryExpr & expr);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
     
     virtual bool isLValue() const final override;
+    virtual bool isConstExpr() const override;
     
-    const Token & mStartToken;
+    virtual const DataType & dataType() const override;
+    
+    const Token &   mStartToken;
+    UnaryExpr &     mExpr;
 };
 
-/* + PostfixExpr */
+/* + UnaryExpr */
 class UnaryExprPlus final : public UnaryExprPlusMinusBase {
 public:
-    UnaryExprPlus(PostfixExpr & expr, const Token & startToken);
+    UnaryExprPlus(const Token & startToken, UnaryExpr & expr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
-/* - PostfixExpr */
+/* - UnaryExpr */
 class UnaryExprMinus final : public UnaryExprPlusMinusBase {
 public:
-    UnaryExprMinus(PostfixExpr & expr, const Token & startToken);
+    UnaryExprMinus(const Token & startToken, UnaryExpr & expr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
 };
@@ -73,7 +77,7 @@ public:
 /* ( AssignExpr ) */
 class UnaryExprParen final : public UnaryExpr {
 public:
-    UnaryExprParen(AssignExpr & expr, const Token & startToken, const Token & endToken);
+    UnaryExprParen(const Token & startToken, AssignExpr & expr, const Token & endToken);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
@@ -84,8 +88,8 @@ public:
     
     virtual const DataType & dataType() const override;
 
+    const Token &   mStartToken;    
     AssignExpr &    mExpr;
-    const Token &   mStartToken;
     const Token &   mEndToken;
 };
 
