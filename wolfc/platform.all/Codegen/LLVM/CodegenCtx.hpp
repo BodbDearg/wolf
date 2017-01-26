@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CompiledDataType.hpp"
+#include "VarContainer.hpp"
 #include "WCMacros.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -160,6 +161,9 @@ public:
     
     /* The LLVM module */
     std::unique_ptr<llvm::Module> mLLVMModule;
+    
+    /* The module variable container. Used for declaring variables at the module level. */
+    VarContainer mModuleVarContainer;
     
     /* The current Function we are visiting during codegen. */
     Function * mCurFunction = nullptr;

@@ -1,13 +1,4 @@
-func blah() -> [3][3]int
-    return [1]
-end
+let v : int = 2
 
 func main() -> void
-    if false
-        print(1)
-    or if true
-        print(2)
-    else
-        print(3)
-    end
 end

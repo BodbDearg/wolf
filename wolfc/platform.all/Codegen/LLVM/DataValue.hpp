@@ -27,7 +27,7 @@ struct DataValue {
     
     DataValue(AST::ASTNode * _declaringNode,
               llvm::Value * _value,
-              DataType * _type,
+              const DataType * _type,
               bool _requiresLoad)
     :
         declaringNode(_declaringNode),
@@ -42,13 +42,13 @@ struct DataValue {
     DataValue & operator = (const DataValue & other) = default;
     
     /* The node that declared the data value */
-    AST::ASTNode * declaringNode;
+    const AST::ASTNode * declaringNode;
     
     /* The llvm value representing the data */
     llvm::Value * value;
     
     /* The data type object for this type */
-    DataType * type;
+    const DataType * type;
     
     /* If true the value requires a load first before being used. If not then it is already loaded */
     bool requiresLoad;

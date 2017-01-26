@@ -36,9 +36,10 @@ public:
      */
     DataValue * createVar(CodegenCtx & ctx,
                           const std::string & varName,
-                          DataType & varType,
+                          const DataType & varType,
                           llvm::Value & varValue,
-                          AST::ASTNode & varDeclaringNode);
+                          bool requiresLoad,
+                          const AST::ASTNode & varDeclaringNode);
     
     /* Get a variable within this scope. Returns null if not found within this scope. */
     const DataValue * getVar(const char * varName) const;

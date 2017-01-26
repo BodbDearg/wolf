@@ -9,9 +9,10 @@ WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 DataValue * VarContainer::createVar(CodegenCtx & ctx,
                                     const std::string & varName,
-                                    DataType & varType,
+                                    const DataType & varType,
                                     llvm::Value & varValue,
-                                    AST::ASTNode & varDeclaringNode)
+                                    bool requiresLoad,
+                                    const AST::ASTNode & varDeclaringNode)
 {
     // If the variable already exists in this scope then creation fails and issue a compile error
     {
@@ -35,7 +36,7 @@ DataValue * VarContainer::createVar(CodegenCtx & ctx,
     // Make the data value:
     DataValue & dataValue = mVarValues[varName];
     dataValue.declaringNode = &varDeclaringNode;
-    dataValue.requiresLoad = true;
+    dataValue.requiresLoad = requiresLoad;
     dataValue.type = &varType;
     dataValue.value = &varValue;
     return &dataValue;

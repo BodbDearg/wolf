@@ -1,12 +1,9 @@
 #include "WCVarDecl.hpp"
 
 #include "AST/WCASTNodeVisitor.hpp"
-#include "DataType/WCDataType.hpp"
-#include "DataType/WCPrimitiveDataTypes.hpp"
 #include "WCAssignExpr.hpp"
 #include "WCIdentifier.hpp"
 #include "WCLinearAlloc.hpp"
-#include "WCModule.hpp"
 #include "WCParseCtx.hpp"
 #include "WCScope.hpp"
 #include "WCType.hpp"
@@ -89,20 +86,6 @@ const Token & VarDecl::getEndToken() const {
     return mInitExpr.getEndToken();
 }
 
-#warning FIXME - Codegen
-#if 0
-bool VarDecl::codegen(CodegenCtx & cgCtx) {
-    // See if this is a local or global var. If it is a local var then there will be a parent scope:
-    Scope * parentScope = getParentScope();
-    
-    if (parentScope) {
-        return codegenAsLocalVar(cgCtx, *parentScope);     // Local variable!
-    }
-    
-    return codegenAsGlobalVar(cgCtx);
-}
-#endif
-
 bool VarDecl::allCodepathsHaveUncondRet() const {
     return false;
 }
@@ -136,41 +119,6 @@ bool VarDecl::codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope) {
 
     // Generate store instruction:
     return cgCtx.irBuilder.CreateStore(rightValue, leftValue->value) != nullptr;
-}
-
-bool VarDecl::codegenAsGlobalVar(CodegenCtx & cgCtx) { 
-    // Now evaluate the right expression:
-    llvm::Constant * rightValue = mInitExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(rightValue, false);
-    
-    // Create the variable. If this fails then the variable already exists:
-    DataType & varDataType = dataType();
-    
-    // Data type for the var must equal the data type of the expression:
-    DataType & exprDataType = mInitExpr.dataType();
-    
-    if (!varDataType.equals(exprDataType)) {
-        // TODO: Handle auto type promotion here
-        compileError("Initializing expression for variable declaration must be of type '%s', not '%s'!",
-                     varDataType.name().c_str(),
-                     exprDataType.name().c_str());
-        
-        return false;
-    }
-    
-    // Create the value
-    DataValue * leftValue = cgCtx.module.createVar(mIdent.mToken.data.strVal.ptr,
-                                                   varDataType,
-                                                   rightValue,
-                                                   cgCtx,
-                                                   *this);
-    
-    if (!leftValue) {
-        compileError("The global variable '%s' has been redefined!", mIdent.mToken.data.strVal.ptr);
-        return false;
-    }
-    
-    return true;    // All good!
 }
 #endif
 

@@ -17,7 +17,6 @@
 #include "AST/Nodes/WCScopeStmnt.hpp"
 #include "AST/Nodes/WCStrLit.hpp"
 #include "AST/Nodes/WCTimeExpr.hpp"
-#include "AST/Nodes/WCVarDecl.hpp"
 #include "AST/Nodes/WCWhileStmnt.hpp"
 #include "CodegenCtx.hpp"
 
@@ -149,16 +148,6 @@ void Codegen::visit(const AST::StrLit & astNode) {
 }
 
 void Codegen::visit(const AST::TimeExpr & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::VarDeclExplicitType & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::VarDeclInferType & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }
