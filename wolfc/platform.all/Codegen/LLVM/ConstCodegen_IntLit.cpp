@@ -12,7 +12,8 @@ void ConstCodegen::visit(const AST::IntLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
     // TODO: data type should be based on the numeric literal and precision suffixes used
-    llvm::Constant * constant = llvm::ConstantInt::get(llvm::Type::getInt64Ty(mCtx.mLLVMCtx), astNode.mToken.data.intVal);
+    llvm::Type * llvmType = llvm::Type::getInt64Ty(mCtx.mLLVMCtx);
+    llvm::Constant * constant = llvm::ConstantInt::get(llvmType, astNode.mToken.data.intVal);
     WC_ASSERT(constant);
     mCtx.pushLLVMConstant(*constant);
 }

@@ -1,7 +1,6 @@
-let v : int = 3 & 1
+let v1 = 1 >= 2
+let v2 = 2 >= 2
+let v3 = 3 >= 2
 
 func main() -> void
-    if 1 is not 2
-        print(true)
-    end
 end

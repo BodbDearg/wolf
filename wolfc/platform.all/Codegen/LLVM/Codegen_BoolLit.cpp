@@ -9,7 +9,13 @@ WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 void Codegen::visit(const AST::BoolLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    llvm::Value * value = mCtx.mIRBuilder.getInt1(astNode.mToken.type == TokenType::kTrue);
+    
+    // Create the value
+    llvm::Constant * value = astNode.mToken.type == TokenType::kTrue ?
+        mCtx.mIRBuilder.getTrue() :
+        mCtx.mIRBuilder.getFalse();
+    
+    // Save the value created
     WC_ASSERT(value);
     mCtx.pushLLVMValue(*value);
 }

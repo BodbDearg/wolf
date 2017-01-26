@@ -92,7 +92,7 @@ public:
 class CodegenCmpGEBinaryOp : public CodegenBinaryOpHelper {
 public:
     CodegenCmpGEBinaryOp(Codegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenBinaryOpHelper(cg, leftExpr, rightExpr, ">", "greater than or equal to")
+        CodegenBinaryOpHelper(cg, leftExpr, rightExpr, ">=", "greater than or equal to")
     {
         WC_EMPTY_FUNC_BODY();
     }
