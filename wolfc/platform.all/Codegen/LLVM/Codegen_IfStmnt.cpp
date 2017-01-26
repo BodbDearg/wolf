@@ -19,7 +19,8 @@ void Codegen::visit(const AST::IfStmntNoElse & astNode) {
     llvm::Value * ifExprVal = mCtx.popLLVMValue();
     
     // If the statement condition expression must be of type bool
-    const DataType & ifExprDataType = ifExpr.dataType();
+    ifExpr.dataType().accept(mConstCodegen.mCodegenDataType);
+    const DataType & ifExprDataType = mCtx.popCompiledDataType().getDataType();
     bool ifExprIsBool = ifExprDataType.isBool();
     
     if (!ifExprIsBool) {
@@ -89,7 +90,8 @@ void Codegen::visit(const AST::IfStmntElseIf & astNode) {
     llvm::Value * ifExprVal = mCtx.popLLVMValue();
     
     // If the statement condition expression must be of type bool
-    const DataType & ifExprDataType = ifExpr.dataType();
+    ifExpr.dataType().accept(mConstCodegen.mCodegenDataType);
+    const DataType & ifExprDataType = mCtx.popCompiledDataType().getDataType();
     bool ifExprIsBool = ifExprDataType.isBool();
     
     if (!ifExprIsBool) {
@@ -180,7 +182,8 @@ void Codegen::visit(const AST::IfStmntElse & astNode) {
     llvm::Value * ifExprVal = mCtx.popLLVMValue();
     
     // If the statement condition expression must be of type bool
-    const DataType & ifExprDataType = ifExpr.dataType();
+    ifExpr.dataType().accept(mConstCodegen.mCodegenDataType);
+    const DataType & ifExprDataType = mCtx.popCompiledDataType().getDataType();
     bool ifExprIsBool = ifExprDataType.isBool();
     
     if (!ifExprIsBool) {
