@@ -28,7 +28,9 @@ void CodegenUnaryOpHelper::codegen() {
     const AST::IExpr * nodeAsExpr = dynamic_cast<const AST::IExpr*>(&mExpr);
     
     if (nodeAsExpr) {
-        mExprType = &nodeAsExpr->dataType();
+        nodeAsExpr->dataType().accept(mCG.mConstCodegen.mCodegenDataType);
+        CompiledDataType exprCompiledType = mCG.mCtx.popCompiledDataType();
+        mExprType = &exprCompiledType.getDataType();
     }
     else {
         mCG.mCtx.error(mExpr,

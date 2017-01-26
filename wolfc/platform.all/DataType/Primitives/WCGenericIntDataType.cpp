@@ -31,58 +31,6 @@ llvm::Value * GenericIntDataType::codegenDecOp(CodegenCtx & cgCtx,
     return cgCtx.irBuilder.CreateSub(&val, decBy, "GenericInt_DecOp");
 }
 
-llvm::Constant * GenericIntDataType::codegenConstAddOp(AST::ASTNode & callingNode,
-                                                       llvm::Constant & leftVal,
-                                                       DataType & rightTy,
-                                                       llvm::Constant & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_Add,
-                                            kOpName_Add,
-                                            rightTy), nullptr);
-    
-    return llvm::ConstantExpr::getAdd(&leftVal, &rightVal);
-}
-
-llvm::Constant * GenericIntDataType::codegenConstSubOp(AST::ASTNode & callingNode,
-                                                       llvm::Constant & leftVal,
-                                                       DataType & rightTy,
-                                                       llvm::Constant & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_Sub,
-                                            kOpName_Sub,
-                                            rightTy), nullptr);
-    
-    return llvm::ConstantExpr::getSub(&leftVal, &rightVal);
-}
-
-llvm::Constant * GenericIntDataType::codegenConstBOrOp(AST::ASTNode & callingNode,
-                                                       llvm::Constant & leftVal,
-                                                       DataType & rightTy,
-                                                       llvm::Constant & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_BOr,
-                                            kOpName_BOr,
-                                            rightTy), nullptr);
-    
-    return llvm::ConstantExpr::getOr(&leftVal, &rightVal);
-}
-
-llvm::Constant * GenericIntDataType::codegenConstBXOrOp(AST::ASTNode & callingNode,
-                                                        llvm::Constant & leftVal,
-                                                        DataType & rightTy,
-                                                        llvm::Constant & rightVal)
-{
-    WC_GUARD(compileCheckBinaryOpTypesMatch(callingNode,
-                                            kOpSymbol_BXOr,
-                                            kOpName_BXOr,
-                                            rightTy), nullptr);
-    
-    return llvm::ConstantExpr::getXor(&leftVal, &rightVal);
-}
-
 llvm::Constant * GenericIntDataType::codegenConstMulOp(AST::ASTNode & callingNode,
                                                        llvm::Constant & leftVal,
                                                        DataType & rightTy,
