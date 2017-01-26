@@ -29,7 +29,8 @@ void Codegen::visit(const AST::AssertStmnt & astNode) {
     llvm::Value * exprVal = mCtx.popLLVMValue();
     
     // The expression being asserted must evaluate to a boolean
-    const DataType & exprDataType = astNode.mExpr.dataType();
+    astNode.mExpr.dataType().accept(mConstCodegen.mCodegenDataType);
+    const DataType & exprDataType = mCtx.popCompiledDataType().getDataType();
     bool exprIsBool = exprDataType.isBool();
     
     if (!exprIsBool) {
