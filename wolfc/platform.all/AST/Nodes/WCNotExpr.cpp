@@ -84,21 +84,6 @@ const DataType & NotExprNoOp::dataType() const {
     return mExpr.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * NotExprNoOp::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mExpr.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * NotExprNoOp::codegenExprEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * NotExprNoOp::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprConstEval(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // NotExprLNot
 //-----------------------------------------------------------------------------

@@ -88,21 +88,6 @@ const DataType & AssignExprNoAssign::dataType() const {
     return mExpr.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * AssignExprNoAssign::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mExpr.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * AssignExprNoAssign::codegenExprEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * AssignExprNoAssign::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprConstEval(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // AssignExprAssignBase
 //-----------------------------------------------------------------------------
@@ -140,24 +125,6 @@ const DataType & AssignExprAssignBase::dataType() const {
 
 #warning FIXME - Codegen
 #if 0
-llvm::Value * AssignExprAssignBase::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an assign type ('=') expression result!");
-    return nullptr;
-}
-
-llvm::Constant * AssignExprAssignBase::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: eventually we could relax this perhaps and allow for full constant evaluation of a
-    // function provided it does not rely on something that can externally vary.
-    // For now however, you must use functional type programming if you want constant evaluation.
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Assign is not allowed in a constant expression!");
-    return nullptr;
-}
-#endif
-
-#warning FIXME - Codegen
-#if 0
 bool AssignExprAssignBase::compileCheckAssignIsLegal() {
     // Left side of expression must be an lvalue!
     if (!mLeftExpr.isLValue()) {
@@ -187,24 +154,10 @@ bool AssignExprAssignBase::compileCheckAssignIsLegal() {
 //-----------------------------------------------------------------------------
 // AssignExprBinaryOpBase
 //-----------------------------------------------------------------------------
-AssignExprBinaryOpBase::AssignExprBinaryOpBase(TernaryExpr & leftExpr,
-                                               AssignExpr & rightExpr
-                                            #warning FIXME - Codegen
-                                            #if 0
-                                               ,DTCodegenBinaryOpFunc codegenBinaryOpFunc
-                                            #endif
-                                               )
-:
+AssignExprBinaryOpBase::AssignExprBinaryOpBase(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprAssignBase(leftExpr, rightExpr)
-#warning FIXME - Codegen
-#if 0
-    ,mCodegenBinaryOpFunc(codegenBinaryOpFunc)
-#endif
 {
-#warning FIXME - Codegen
-#if 0
-    WC_ASSERT(mCodegenBinaryOpFunc);
-#endif
+    WC_EMPTY_FUNC_BODY();
 }
 
 #warning FIXME - Codegen
@@ -279,12 +232,7 @@ llvm::Value * AssignExprAssign::codegenExprEval(CodegenCtx & cgCtx) {
 // AssignExprAssignAdd
 //-----------------------------------------------------------------------------
 AssignExprAssignAdd::AssignExprAssignAdd(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr
-                        #warning FIXME - Codegen
-                        #if 0
-                           , &DataType::codegenAddOp
-                        #endif
-                           )
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -297,12 +245,7 @@ void AssignExprAssignAdd::accept(ASTNodeVisitor & visitor) const {
 // AssignExprAssignSub
 //-----------------------------------------------------------------------------
 AssignExprAssignSub::AssignExprAssignSub(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr
-                        #warning FIXME - Codegen
-                        #if 0
-                           , &DataType::codegenSubOp
-                        #endif
-                           )
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -315,12 +258,7 @@ void AssignExprAssignSub::accept(ASTNodeVisitor & visitor) const {
 // AssignExprAssignBOr
 //-----------------------------------------------------------------------------
 AssignExprAssignBOr::AssignExprAssignBOr(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr
-                        #warning FIXME - Codegen
-                        #if 0
-                           , &DataType::codegenBOrOp
-                        #endif
-                           )
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -333,12 +271,7 @@ void AssignExprAssignBOr::accept(ASTNodeVisitor & visitor) const {
 // AssignExprAssignBXor
 //-----------------------------------------------------------------------------
 AssignExprAssignBXor::AssignExprAssignBXor(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr
-                        #warning FIXME - Codegen
-                        #if 0
-                           , &DataType::codegenBXOrOp
-                        #endif
-                           )
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -351,12 +284,7 @@ void AssignExprAssignBXor::accept(ASTNodeVisitor & visitor) const {
 // AssignExprAssignMul
 //-----------------------------------------------------------------------------
 AssignExprAssignMul::AssignExprAssignMul(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr
-                        #warning FIXME - Codegen
-                        #if 0
-                           , &DataType::codegenMulOp
-                        #endif
-                           )
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -369,12 +297,7 @@ void AssignExprAssignMul::accept(ASTNodeVisitor & visitor) const {
 // AssignExprAssignDiv
 //-----------------------------------------------------------------------------
 AssignExprAssignDiv::AssignExprAssignDiv(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr
-                        #warning FIXME - Codegen
-                        #if 0
-                           , &DataType::codegenDivOp
-                        #endif
-                           )
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -387,12 +310,7 @@ void AssignExprAssignDiv::accept(ASTNodeVisitor & visitor) const {
 // AssignExprAssignMod
 //-----------------------------------------------------------------------------
 AssignExprAssignMod::AssignExprAssignMod(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr
-                        #warning FIXME - Codegen
-                        #if 0
-                           , &DataType::codegenModOp
-                        #endif
-                           )
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -405,12 +323,7 @@ void AssignExprAssignMod::accept(ASTNodeVisitor & visitor) const {
 // AssignExprAssignBAnd
 //-----------------------------------------------------------------------------
 AssignExprAssignBAnd::AssignExprAssignBAnd(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr
-                        #warning FIXME - Codegen
-                        #if 0
-                           , &DataType::codegenBAndOp
-                        #endif
-                           )
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -423,12 +336,7 @@ void AssignExprAssignBAnd::accept(ASTNodeVisitor & visitor) const {
 // AssignExprAssignLShift
 //-----------------------------------------------------------------------------
 AssignExprAssignLShift::AssignExprAssignLShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr
-                        #warning FIXME - Codegen
-                        #if 0
-                           , &DataType::codegenLShiftOp
-                        #endif
-                           )
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -441,12 +349,7 @@ void AssignExprAssignLShift::accept(ASTNodeVisitor & visitor) const {
 // AssignExprAssignARShift
 //-----------------------------------------------------------------------------
 AssignExprAssignARShift::AssignExprAssignARShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr
-                        #warning FIXME - Codegen
-                        #if 0
-                           , &DataType::codegenARShiftOp
-                        #endif
-                           )
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -459,12 +362,7 @@ void AssignExprAssignARShift::accept(ASTNodeVisitor & visitor) const {
 // AssignExprAssignLRShift
 //-----------------------------------------------------------------------------
 AssignExprAssignLRShift::AssignExprAssignLRShift(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
-    AssignExprBinaryOpBase(leftExpr, rightExpr
-                        #warning FIXME - Codegen
-                        #if 0
-                           , &DataType::codegenLRShiftOp
-                        #endif
-                           )
+    AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }

@@ -138,43 +138,13 @@ const DataType & PostfixExprNoPostfix::dataType() const {
     return mExpr.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * PostfixExprNoPostfix::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mExpr.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * PostfixExprNoPostfix::codegenExprEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * PostfixExprNoPostfix::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprConstEval(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // PostfixExprIncDecBase
 //-----------------------------------------------------------------------------
-PostfixExprIncDecBase::PostfixExprIncDecBase(CastExpr & expr,
-                                             const Token & endToken
-                                            #warning FIXME - Codegen
-                                            #if 0
-                                             ,DTCodegenUnaryOpFunc codegenUnaryOpFunc
-                                            #endif
-                                             )
-:
+PostfixExprIncDecBase::PostfixExprIncDecBase(CastExpr & expr, const Token & endToken) :
     mExpr(expr),
     mEndToken(endToken)
-#warning FIXME - Codegen
-#if 0
-    ,mCodegenUnaryOpFunc(codegenUnaryOpFunc)
-#endif
 {
-#warning FIXME - Codegen
-#if 0
-    WC_ASSERT(mCodegenUnaryOpFunc);
-#endif
     mExpr.mParent = this;
 }
 
@@ -243,12 +213,7 @@ llvm::Constant * PostfixExprIncDecBase::codegenExprConstEval(CodegenCtx & cgCtx)
 // PostfixExprInc
 //-----------------------------------------------------------------------------
 PostfixExprInc::PostfixExprInc(CastExpr & expr, const Token & endToken) :
-    PostfixExprIncDecBase(expr, endToken
-                        #warning FIXME - Codegen
-                        #if 0
-                          , &DataType::codegenIncOp
-                        #endif
-                          )
+    PostfixExprIncDecBase(expr, endToken)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -261,12 +226,7 @@ void PostfixExprInc::accept(ASTNodeVisitor & visitor) const {
 // PostfixExprDec
 //-----------------------------------------------------------------------------
 PostfixExprDec::PostfixExprDec(CastExpr & expr, const Token & endToken) :
-    PostfixExprIncDecBase(expr, endToken
-                        #warning FIXME - Codegen
-                        #if 0
-                          , &DataType::codegenDecOp
-                        #endif
-                          )
+    PostfixExprIncDecBase(expr, endToken)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -623,7 +583,6 @@ ArrayDataType * PostfixExprArrayLookup::getArrayDataTypeOrIssueError() {
 }
 
 llvm::Value * PostfixExprArrayLookup::codegenAddrOfArrayElem(CodegenCtx & cgCtx) {
-    
     // TODO: support this operator on custom types eventually
     
     // Codgen the address of the array first

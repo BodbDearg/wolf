@@ -84,21 +84,6 @@ const DataType & TernaryExprNoCond::dataType() const {
     return mExpr.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * TernaryExprNoCond::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mExpr.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * TernaryExprNoCond::codegenExprEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * TernaryExprNoCond::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprConstEval(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // TernaryExprWithCond
 //-----------------------------------------------------------------------------

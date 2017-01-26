@@ -8,13 +8,6 @@
 #include "WCPrimaryExpr.hpp"
 #include "WCType.hpp"
 
-#warning FIXME - Codegen
-#if 0
-WC_THIRD_PARTY_INCLUDES_BEGIN
-    #include <llvm/IR/Module.h>
-WC_THIRD_PARTY_INCLUDES_END
-#endif
-
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
@@ -113,21 +106,6 @@ bool CastExprNoCast::isConstExpr() const {
 const DataType & CastExprNoCast::dataType() const {
     return mExpr.dataType();
 }
-
-#warning FIXME - Codegen
-#if 0
-llvm::Value * CastExprNoCast::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mExpr.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * CastExprNoCast::codegenExprEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * CastExprNoCast::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprConstEval(cgCtx);
-}
-#endif
 
 //-----------------------------------------------------------------------------
 // CastExprCast
