@@ -81,8 +81,8 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
     // Can only generate the print call if we have both printf and an expression value
     if (printfFn && exprValue) {
         // Get the data type of the expression:
-        #warning Eval data type first
-        const DataType & exprDataType = astNode.mExpr.dataType();
+        astNode.mExpr.dataType().accept(mConstCodegen.mCodegenDataType);
+        const DataType & exprDataType = mCtx.popCompiledDataType().getDataType();
         
         #warning Use visitor interface instead
         // See which type we are dealing with:

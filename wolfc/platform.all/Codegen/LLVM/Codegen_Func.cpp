@@ -65,6 +65,7 @@ void Codegen::visit(const AST::Func & astNode) {
     funcArgLLVMTypes.reserve(astFuncArgs.size());
     
     for (const AST::FuncArg * astArg : astFuncArgs) {
+        #warning register the args in a var container
         // Visit the arg, which will codegen it's type and push it onto the type stack:
         WC_ASSERT(astArg);
         astArg->accept(*this);
@@ -124,6 +125,8 @@ void Codegen::visit(const AST::Func & astNode) {
         WC_ASSERT(argNum < funcArgs.size());
         FuncArg * funcArg = funcArgs[argNum];
         WC_ASSERT(funcArg);
+     
+        #warning COMPILE DATA TYPE
         DataType & argDataType = funcArg->dataType();
         bool requiresLoad = argDataType.requiresStorage();
         
