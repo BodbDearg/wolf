@@ -12,12 +12,6 @@ WC_AST_BEGIN_NAMESPACE
 class IBasicCodegenNode {
 public:
     virtual ~IBasicCodegenNode() = default;
-    
-#warning FIXME - Codegen
-#if 0
-    /* Generate the llvm code for this statement. Returns true on success or false on failure. */
-    virtual bool codegen(CodegenCtx & cgCtx) = 0;
-#endif
 };
 
 WC_AST_END_NAMESPACE

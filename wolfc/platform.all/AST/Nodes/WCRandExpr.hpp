@@ -27,12 +27,6 @@ public:
     virtual bool isLValue() const final override;
     virtual bool isConstExpr() const final override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) final override;
-#endif
-    
     const Token & mStartToken;
     const Token & mEndToken;
 };
@@ -45,11 +39,6 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     
     virtual const DataType & dataType() const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-#endif
 };
 
 /* srand ( AssignExpr ) */
@@ -62,11 +51,6 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     
     virtual const DataType & dataType() const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-#endif
     
     AssignExpr & mSeedExpr;
 };

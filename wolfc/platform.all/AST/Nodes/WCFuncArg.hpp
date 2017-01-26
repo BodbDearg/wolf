@@ -30,11 +30,6 @@ public:
     
     const char * name() const;
     
-#warning FIXME - Codegen
-#if 0
-    bool codegen(CodegenCtx & cgCtx, ASTNode & callingNode);
-#endif
-    
     Identifier &    mIdent;
     Type &          mType;
 };

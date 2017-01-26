@@ -34,13 +34,6 @@ public:
     
     virtual const DataType & dataType() const override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
-    
     LOrExpr & mExpr;
 };
 
@@ -59,20 +52,6 @@ public:
     virtual bool isConstExpr() const override;
     
     virtual const DataType & dataType() const override;
-
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-    
-    /**
-     * TODO: this is a temp function for the moment. Verify the types of the sub-expressions
-     * involved in this expression. The leftmost expression should be a bool and the two other value 
-     * expressions should equate to the same type.
-     */
-    bool compileCheckExprDataTypes() const;
-#endif
     
     LOrExpr &       mCondExpr;
     AssignExpr &    mTrueExpr;

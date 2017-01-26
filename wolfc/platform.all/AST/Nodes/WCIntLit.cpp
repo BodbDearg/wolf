@@ -55,20 +55,5 @@ const DataType & IntLit::dataType() const {
     return PrimitiveDataTypes::getDefaultUIntType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * IntLit::codegenAddrOf(CodegenCtx & cgCtx) {
-    // TODO: update message here when we convert to a more generic numeric literal
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of an 'int' literal!");
-    return nullptr;
-}
-
-llvm::Constant * IntLit::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: data type should be based on the numeric literal and precision suffixes used
-    return llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), mToken.data.intVal);
-}
-#endif
-
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

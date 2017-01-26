@@ -35,11 +35,6 @@ public:
     
     virtual const DataType & dataType() const = 0;
     
-#warning FIXME - Codegen
-#if 0
-    bool codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope);
-#endif
-    
     const Token &   mStartToken;
     Identifier &    mIdent;
     AssignExpr & 	mInitExpr;

@@ -17,11 +17,6 @@ class DeclDef : public ASTNode {
 public:
     static bool peek(const Token * tokenPtr);
     static DeclDef * parse(ParseCtx & parseCtx);
-    
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegen(CodegenCtx & cgCtx) = 0;
-#endif
 };
 
 /* Func */
@@ -32,11 +27,6 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegen(CodegenCtx & cgCtx) override;
-#endif
     
     Func & mFunc;
 };
@@ -49,11 +39,6 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegen(CodegenCtx & cgCtx) override;
-#endif
     
     VarDecl & mVarDecl;
 };

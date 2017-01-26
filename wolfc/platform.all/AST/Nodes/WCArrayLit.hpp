@@ -31,24 +31,7 @@ public:
     
     virtual const DataType & dataType() const override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
-    
 private:
-    
-#warning FIXME - Codegen
-#if 0
-    /**
-     * Does the codegen for the element llvm type. 
-     * Issues a compile error and returns false if failed.
-     */
-    bool codegenLLVMType(CodegenCtx & cgCtx);
-#endif
-    
     const Token &      mLBrack;
     ArrayLitExprs &    mExprs;
     const Token &      mRBrack;

@@ -24,27 +24,6 @@ public:
     
     /* Return the data type that this expression results in after evaluation. */
     virtual const DataType & dataType() const = 0;
-    
-#warning FIXME - Codegen
-#if 0
-    /**
-     * Codegen the llvm value that represents the address of this expression.
-     * Note: this is only possible for lvalues! For rvalues this should return nullptr.
-     */
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) = 0;
-    
-    /**
-     * Generate the llvm code to evaluate this expression at runtime.
-     * The expression result is returned as an llvm value, or nullptr if there was a compile error.
-     */
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) = 0;
-    
-    /**
-     * Generate the llvm code to evaluate this expression at compile time.
-     * Note that not all expressions will support this and may return nullptr if not suported.
-     */
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) = 0;
-#endif
 };
 
 WC_AST_END_NAMESPACE

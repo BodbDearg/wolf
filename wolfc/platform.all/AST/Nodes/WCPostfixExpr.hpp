@@ -43,26 +43,13 @@ public:
     
     virtual const DataType & dataType() const override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
-    
     CastExpr & mExpr;
 };
 
 /* Base class for increment/decrement postfix expressions */
 class PostfixExprIncDecBase : public PostfixExpr {
 public:
-    PostfixExprIncDecBase(CastExpr & expr,
-                          const Token & endToken
-                        #warning FIXME - Codegen
-                        #if 0
-                          ,DTCodegenUnaryOpFunc codegenUnaryOpFunc
-                        #endif
-                          );
+    PostfixExprIncDecBase(CastExpr & expr, const Token & endToken);
 
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
@@ -71,22 +58,9 @@ public:
     virtual bool isConstExpr() const final override;
 
     virtual const DataType & dataType() const final override;
-
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) final override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) final override;
-#endif
     
     CastExpr &      mExpr;
     const Token &   mEndToken;
-
-private:
-#warning FIXME - Codegen
-#if 0
-    const DTCodegenUnaryOpFunc mCodegenUnaryOpFunc;
-#endif
 };
 
 /* CastExpr ++ */
@@ -118,13 +92,6 @@ public:
     virtual bool isConstExpr() const override;
     
     virtual const DataType & dataType() const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
     
     PostfixExpr &   mExpr;
     FuncCall &      mFuncCall;
@@ -159,13 +126,6 @@ public:
     virtual bool isConstExpr() const override;
     
     virtual const DataType & dataType() const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
     
     PostfixExpr &   mArrayExpr;
     AssignExpr &    mIndexExpr;

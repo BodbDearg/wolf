@@ -34,13 +34,6 @@ public:
     virtual bool isConstExpr() const override;
     
     virtual const DataType & dataType() const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
 
     PrimaryExpr & mExpr;
 };
@@ -61,13 +54,6 @@ public:
     virtual bool isConstExpr() const final override;
 
     virtual const DataType & dataType() const final override;
-
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::Value * codegenAddrOf(CodegenCtx & cgCtx) override;
-    virtual llvm::Value * codegenExprEval(CodegenCtx & cgCtx) override;
-    virtual llvm::Constant * codegenExprConstEval(CodegenCtx & cgCtx) override;
-#endif
     
     const Token &   mStartToken;
     AssignExpr &    mExpr;

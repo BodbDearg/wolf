@@ -3,13 +3,6 @@
 #include "WCASTNode.hpp"
 #include "WCIStmnt.hpp"
 
-#warning FIXME - Codegen
-#if 0
-namespace llvm {
-    class BasicBlock;
-}
-#endif
-
 WC_BEGIN_NAMESPACE
 
 class DataType;
@@ -41,12 +34,6 @@ public:
     const Token & mReturnToken;
     
 protected:
-#warning FIXME - Codegen
-#if 0
-    /* Perform code generation and verification for the return data type */
-    bool codegenAndVerifyReturnDataType(CodegenCtx & cgCtx);
-#endif
-    
     /**
      * Verifies the return type is correct for the containing function.
      * If incorrect returns false and emits a compile error.
@@ -62,11 +49,6 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getEndToken() const override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegen(CodegenCtx & cgCtx) override;
-#endif
-    
     virtual const DataType & dataType() override;
     
     virtual bool allCodepathsHaveUncondRet() const override;
@@ -79,11 +61,6 @@ public:
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getEndToken() const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegen(CodegenCtx & cgCtx) override;
-#endif
     
     virtual const DataType & dataType() override;
     
@@ -133,11 +110,6 @@ public:
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegen(CodegenCtx & cgCtx) override;
-#endif
-    
     virtual const DataType & dataType() override;
 };
 
@@ -150,11 +122,6 @@ public:
                                 AssignExpr & condExpr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegen(CodegenCtx & cgCtx) override;
-#endif
     
     virtual const DataType & dataType() override;
 

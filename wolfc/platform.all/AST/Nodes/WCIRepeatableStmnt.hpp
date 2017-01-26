@@ -2,13 +2,6 @@
 
 #include "WCIStmnt.hpp"
 
-#warning FIXME - Codegen
-#if 0
-namespace llvm {
-    class BasicBlock;
-}
-#endif
-
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 

@@ -89,18 +89,6 @@ public:
         return nullptr;
     }
     
-#warning FIXME - Codegen
-#if 0
-    /**
-     * Emit a formatted compile error message followed by a newline to stderr for a compile error.
-     * The line and column information for this node are output also.
-     */
-    void compileError(const char * msg, ...) const;
-    
-    /* Makeup an LLVM label for something and include the line number and column number info of the given token */
-    std::string makeLLVMLabelForTok(const char * labelText, const Token & token);
-#endif
-    
     /* The parent of this AST node. This should be set by the parent itself in the constructor. */
     ASTNode * mParent;
 };

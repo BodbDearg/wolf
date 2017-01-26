@@ -3,13 +3,6 @@
 #include "WCASTNode.hpp"
 #include "WCIStmnt.hpp"
 
-#warning FIXME - Codegen
-#if 0
-namespace llvm {
-    class BasicBlock;
-}
-#endif
-
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
@@ -31,12 +24,6 @@ public:
     
     virtual bool allCodepathsHaveUncondRet() const override;
     
-#warning FIXME - Codegen
-#if 0
-    /* Shouldn't be called directly. The statement itself will schedule this. */
-    bool deferredCodegen(CodegenCtx & cgCtx);
-#endif
-    
     /* The 'break' token */
     const Token & mBreakToken;
     
@@ -54,11 +41,6 @@ public:
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getEndToken() const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegen(CodegenCtx & cgCtx) override;
-#endif
 };
 
 /* break if|unless AssignExpr */
@@ -70,11 +52,6 @@ public:
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getEndToken() const override;
-    
-#warning FIXME - Codegen
-#if 0
-    virtual bool codegen(CodegenCtx & cgCtx) override;
-#endif
     
     /* Tell if the 'if' condition for the statement is inverted (unless) */
     bool isIfCondInverted() const;
