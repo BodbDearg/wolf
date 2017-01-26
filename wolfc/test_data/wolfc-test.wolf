@@ -1,5 +1,7 @@
-let v1 = ~ 1
-let v2 = ~ 0
+let v1 = true or true
+let v2 = true or false
+let v3 = false or false
+let v4 = false or true
 
 func main() -> void
 end

@@ -85,49 +85,6 @@ IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Inc)
 IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Dec)
 
 #undef IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC
-
-/* Default const binary op implementations */
-#define IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(OpName)\
-    llvm::Constant * DataType::codegenConst ## OpName ## Op(AST::ASTNode & callingNode,\
-                                                            llvm::Constant & leftVal,\
-                                                            DataType & rightTy,\
-                                                            llvm::Constant & rightVal)\
-    {\
-        /* The default impl simply issues an error that the operator is not available */\
-        WC_UNUSED_PARAM(leftVal);\
-        WC_UNUSED_PARAM(rightVal);\
-        issueBinaryOpNotAvailableCompileError(callingNode, kOpSymbol_ ## OpName, kOpName_ ## OpName, rightTy);\
-        return nullptr;\
-    }
-
-IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(CmpEQ)
-IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(CmpNE)
-IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(CmpLT)
-IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(CmpLE)
-IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(CmpGT)
-IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(CmpGE)
-IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(LShift)
-IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(ARShift)
-IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(LRShift)
-
-#undef IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC
-
-/* Default const unary op implementations */
-#define IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(OpName)\
-    llvm::Constant * DataType::codegenConst ## OpName ## Op(AST::ASTNode & callingNode,\
-                                                            llvm::Constant & val)\
-    {\
-        /* The default impl simply issues an error that the operator is not available */\
-        WC_UNUSED_PARAM(val);\
-        issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_ ## OpName, kOpName_ ## OpName);\
-        return nullptr;\
-    }
-
-IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(BNot)
-IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Plus)
-IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC(Minus)
-
-#undef IMPL_DEFAULT_CODEGEN_CONST_BINARY_OP_FUNC
 #endif
 
 WC_END_NAMESPACE
