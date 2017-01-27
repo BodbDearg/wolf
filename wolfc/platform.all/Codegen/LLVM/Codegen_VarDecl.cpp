@@ -92,7 +92,7 @@ static void codegenLocalVarDeclWithType(Codegen & cg,
     doVarDeclTypeChecks(cg,
                         varDecl,
                         varCompiledType,
-                        varDataTypeIsInferred,
+                        varTypeIsInferred,
                         initializerTypeIsOk,
                         varTypeIsOk);
     

@@ -386,6 +386,7 @@
 		1FCD4E0B1D0161A60076E358 /* WCInt64DataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCInt64DataType.cpp; sourceTree = "<group>"; };
 		1FCD4E0C1D0161A60076E358 /* WCInt64DataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCInt64DataType.hpp; sourceTree = "<group>"; };
 		1FD455941CE30BB1005EB3C3 /* test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = test_data; path = ../test_data; sourceTree = "<group>"; };
+		1FD7EA041E3B1B9000C6C9DA /* Constant.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Constant.hpp; sourceTree = "<group>"; };
 		1FF09CBE1E399A2F00B8EC80 /* Codegen_VarDecl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_VarDecl.cpp; sourceTree = "<group>"; };
 		1FF09CC01E39A6F300B8EC80 /* CodegenConstBinaryOpHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodegenConstBinaryOpHelper.cpp; sourceTree = "<group>"; };
 		1FF09CC11E39A6F300B8EC80 /* CodegenConstBinaryOpHelper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CodegenConstBinaryOpHelper.hpp; sourceTree = "<group>"; };
@@ -592,6 +593,7 @@
 				1F2352AC1E35A0F30055A5E5 /* CodegenUnaryOpHelper.cpp */,
 				1F2352AD1E35A0F30055A5E5 /* CodegenUnaryOpHelper.hpp */,
 				1F09BD851E37313D0072CF0B /* CompiledDataType.hpp */,
+				1FD7EA041E3B1B9000C6C9DA /* Constant.hpp */,
 				1FB3F9121E38721300616753 /* ConstCodegen_AddExpr.cpp */,
 				1FB3F9061E386B5500616753 /* ConstCodegen_AssignExpr.cpp */,
 				1FB3F9221E387D3000616753 /* ConstCodegen_BoolLit.cpp */,
@@ -611,11 +613,11 @@
 				1FB3F9181E3874B500616753 /* ConstCodegen_UnaryExpr.cpp */,
 				1F3914491E31DC23001925BE /* ConstCodegen.cpp */,
 				1F39144A1E31DC23001925BE /* ConstCodegen.hpp */,
-				1F09BD841E371DD20072CF0B /* Value.hpp */,
 				1F7E19411E30A16400C82867 /* Function.cpp */,
 				1F7E19421E30A16400C82867 /* Function.hpp */,
 				1F09BD811E371B160072CF0B /* ValHolder.cpp */,
 				1F09BD821E371B160072CF0B /* ValHolder.hpp */,
+				1F09BD841E371DD20072CF0B /* Value.hpp */,
 			);
 			path = LLVM;
 			sourceTree = "<group>";

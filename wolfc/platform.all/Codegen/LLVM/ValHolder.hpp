@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Constant.hpp"
 #include "Value.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -41,13 +42,43 @@ public:
                             bool requiresLoad,
                             const AST::ASTNode & declaringNode);
     
-    /* Get a value within this holder. Returns null if not found within this scope. */
+    /** 
+     * Create a constant within this holder.
+     * If the constant already exists then creation fails and null is returned.
+     * If creation fails a compile error is also emitted.
+     */
+    const Constant * createConst(CodegenCtx & ctx,
+                                 const std::string & name,
+                                 const DataType & type,
+                                 llvm::Constant & llvmConstant,
+                                 const AST::ASTNode & declaringNode);
+    
+    /**
+     * Get a value within this holder. Returns null if not found within this scope.
+     * Note: constants can also be retrieved as values too via this method.
+     */
     const Value * getVal(const char * name) const;
     const Value * getVal(const std::string & name) const;
     
+    /* Get a constant within this holder. Returns null if not found within this scope. */
+    const Constant * getConst(const char * name) const;
+    const Constant * getConst(const std::string & name) const;
+    
 private:
+    /**
+     * Compile check the given value declaration name is not taken.
+     * Returns false and issues a compile error if the name is taken.
+     */
+    bool compileCheckValueNameNotTaken(CodegenCtx & ctx,
+                                       const std::string & name,
+                                       const DataType & type,
+                                       const AST::ASTNode & declaringNode) const;
+    
     /* The values in the container */
     std::map<std::string, Value, std::less<>> mValues;
+    
+    /* The constants in the container */
+    std::map<std::string, Constant, std::less<>> mConstants;
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE
