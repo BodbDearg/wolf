@@ -1,7 +1,3 @@
-let v1 = true or true
-let v2 = true or false
-let v3 = false or false
-let v4 = false or true
-
 func main() -> void
+    let v = 2
 end

@@ -35,15 +35,6 @@ bool DataType::requiresStorage() const {
 
 #warning FIXME - Codegen
 #if 0
-llvm::AllocaInst * DataType::codegenAlloca(CodegenCtx & cgCtx,
-                                           AST::ASTNode & callingNode,
-                                           const std::string & instLabel)
-{
-    WC_GUARD_ASSERT(mLLVMType, nullptr);
-    WC_UNUSED_PARAM(callingNode);
-    return cgCtx.irBuilder.CreateAlloca(mLLVMType, nullptr, instLabel);
-}
-
 llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
                                       AST::ASTNode & callingNode,
                                       llvm::Value & valToCast,

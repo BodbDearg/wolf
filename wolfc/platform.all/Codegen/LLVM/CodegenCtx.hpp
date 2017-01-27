@@ -18,6 +18,7 @@ class DataType;
 namespace AST {
     class ASTNode;
     class Func;
+    class Scope;
 }
 
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
@@ -103,6 +104,20 @@ public:
     }
     
     /**
+     * Push/pop the current scope being visited during code generation from the scope visitation stack.
+     * The behavior of pop is undefined if the visited scope stack is empty.
+     */
+    void pushScope(const AST::Scope & node);
+    void popScope();
+    
+    inline const std::vector<const AST::Scope*> getScopeStack() const {
+        return mScopeStack;
+    }
+    
+    /* Get the current scope being code generated. Returns nullptr if none. */
+    const AST::Scope * getCurrentScope() const;
+    
+    /**
      * Push/pop an llvm::Value object to the value stack.
      * If popping and the stack is emtpy, a null pointer will be returned.
      */
@@ -153,6 +168,9 @@ public:
     
     const DataType * getNodeEvaluatedDataType(const AST::ASTNode & astNode) const;
     
+    /* Get the variable container for the given scope. If it does not exist, then it is created. */
+    VarContainer & getScopeVarContainer(const AST::Scope & scope);
+    
     /* The LLVM context */
     llvm::LLVMContext mLLVMCtx;
     
@@ -180,6 +198,9 @@ private:
     
     /* The stack of AST nodes being visited */
     std::vector<const AST::ASTNode*> mASTNodeStack;
+    
+    /* The stack of scopes being visited */
+    std::vector<const AST::Scope*> mScopeStack;
     
     /**
      * A stack of llvm values created during codegen. 
@@ -218,6 +239,9 @@ private:
      * time such as arrays with size expressions.
      */
     std::map<const AST::ASTNode*, std::unique_ptr<const DataType>> mNodeEvaluatedDataTypes;
+    
+    /* A set of variable containers for each scope */
+    std::map<const AST::Scope*, VarContainer> mScopeVarContainers;
 };
 
 /* A helper RAII object which pushes and pops a node from the given codegen context. */

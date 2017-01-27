@@ -227,6 +227,23 @@ void CodegenCtx::popASTNode() {
     mASTNodeStack.pop_back();
 }
 
+void CodegenCtx::pushScope(const AST::Scope & node) {
+    mScopeStack.push_back(&node);
+}
+
+void CodegenCtx::popScope() {
+    WC_ASSERT(!mScopeStack.empty());
+    mScopeStack.pop_back();
+}
+
+const AST::Scope * CodegenCtx::getCurrentScope() const {
+    if (!mScopeStack.empty()) {
+        return mScopeStack.back();
+    }
+    
+    return nullptr;
+}
+
 void CodegenCtx::pushLLVMValue(llvm::Value & llvmValue) {
     mLLVMValues.push_back(&llvmValue);
 }
@@ -292,6 +309,10 @@ const DataType * CodegenCtx::getNodeEvaluatedDataType(const AST::ASTNode & astNo
     auto iter = mNodeEvaluatedDataTypes.find(&astNode);
     WC_GUARD(iter != mNodeEvaluatedDataTypes.end(), nullptr);
     return iter->second.get();
+}
+
+VarContainer & CodegenCtx::getScopeVarContainer(const AST::Scope & scope) {
+    return mScopeVarContainers[&scope];
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE

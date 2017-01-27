@@ -90,38 +90,6 @@ bool VarDecl::allCodepathsHaveUncondRet() const {
     return false;
 }
 
-#warning FIXME - Codegen
-#if 0
-bool VarDecl::codegenAsLocalVar(CodegenCtx & cgCtx, Scope & parentScope) {
-    // Create the variable. If this fails then the variable already exists:
-    DataType & varDataType = dataType();
-    DataValue * leftValue = parentScope.createVar(mIdent.mToken.data.strVal.ptr,
-                                                  varDataType,
-                                                  cgCtx,
-                                                  *this);
-    WC_GUARD(leftValue, nullptr);
-    
-    // Now evaluate the right:
-    llvm::Value * rightValue = mInitExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightValue, false);
-    
-    // Data type for the var must equal the data type of the expression:
-    DataType & exprDataType = mInitExpr.dataType();
-    
-    if (!varDataType.equals(exprDataType)) {
-        // TODO: Handle auto type promotion here
-        compileError("Initializing expression for variable declaration must be of type '%s', not '%s'!",
-                     varDataType.name().c_str(),
-                     exprDataType.name().c_str());
-        
-        return false;
-    }
-
-    // Generate store instruction:
-    return cgCtx.irBuilder.CreateStore(rightValue, leftValue->value) != nullptr;
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // VarDeclInferType
 //-----------------------------------------------------------------------------
