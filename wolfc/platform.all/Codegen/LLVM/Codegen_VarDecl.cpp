@@ -113,14 +113,14 @@ static void codegenLocalVarDeclWithType(Codegen & cg,
     llvm::Value * varAlloca = cg.mCtx.mIRBuilder.CreateAlloca(varCompiledType.getLLVMType(), nullptr, varLabel);
     WC_GUARD(varAlloca);
     
-    // Save the data value in the var container for the scope
-    VarContainer & scopeVarContainer = cg.mCtx.getScopeVarContainer(*scope);
-    scopeVarContainer.createVar(cg.mCtx,
-                                varDecl.mIdent.name(),
-                                varCompiledType.getDataType(),
-                                *varAlloca,
-                                true,
-                                varDecl);
+    // Save the data value in the value holder for the scope
+    ValHolder & scopeValHolder = cg.mCtx.getScopeValHolder(*scope);
+    scopeValHolder.createVal(cg.mCtx,
+                             varDecl.mIdent.name(),
+                             varCompiledType.getDataType(),
+                             *varAlloca,
+                             true,
+                             varDecl);
     
     // Store the initializer expression to the variable if we generated it ok
     if (varInitLLVMVal) {
@@ -169,12 +169,12 @@ static void codegenGlobalVarDeclWithType(Codegen & cg,
     WC_ASSERT(varLLVMVar);
     
     // Register the variable. If it's registered more than once then this will generate an error.
-    cg.mCtx.mModuleVarContainer.createVar(cg.mCtx,
-                                          varName,
-                                          varCompiledType.getDataType(),
-                                          *varLLVMVar,
-                                          true,
-                                          varDecl);
+    cg.mCtx.mModuleValHolder.createVal(cg.mCtx,
+                                       varName,
+                                       varCompiledType.getDataType(),
+                                       *varLLVMVar,
+                                       true,
+                                       varDecl);
 }
 
 /* Code generate the variable declaration with the given compiled data type */

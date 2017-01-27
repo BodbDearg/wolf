@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CompiledDataType.hpp"
-#include "VarContainer.hpp"
+#include "ValHolder.hpp"
 #include "WCMacros.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -168,8 +168,8 @@ public:
     
     const DataType * getNodeEvaluatedDataType(const AST::ASTNode & astNode) const;
     
-    /* Get the variable container for the given scope. If it does not exist, then it is created. */
-    VarContainer & getScopeVarContainer(const AST::Scope & scope);
+    /* Get the value holder for the given scope. If it does not exist, then it is created. */
+    ValHolder & getScopeValHolder(const AST::Scope & scope);
     
     /* The LLVM context */
     llvm::LLVMContext mLLVMCtx;
@@ -180,8 +180,8 @@ public:
     /* The LLVM module */
     std::unique_ptr<llvm::Module> mLLVMModule;
     
-    /* The module variable container. Used for declaring variables at the module level. */
-    VarContainer mModuleVarContainer;
+    /* The module value container. Used for declaring values at the module level. */
+    ValHolder mModuleValHolder;
     
     /* The current Function we are visiting during codegen. */
     Function * mCurFunction = nullptr;
@@ -240,8 +240,8 @@ private:
      */
     std::map<const AST::ASTNode*, std::unique_ptr<const DataType>> mNodeEvaluatedDataTypes;
     
-    /* A set of variable containers for each scope */
-    std::map<const AST::Scope*, VarContainer> mScopeVarContainers;
+    /* A set of value holders for each scope */
+    std::map<const AST::Scope*, ValHolder> mScopeValHolders;
 };
 
 /* A helper RAII object which pushes and pops a node from the given codegen context. */

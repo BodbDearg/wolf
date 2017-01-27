@@ -2,6 +2,7 @@
 	- Just need to implement unit test now
 - Make logical statements lazy evaluate
 - Allow 'do' to open function body
+- Unify variable and function lookup via identifiers and introduce a function data type.
 - Make newline a token and terminate statements on newline
 - Make the parser not accept multiple statements on the same line
 - Allow ',' to separate multiple statements on the same line

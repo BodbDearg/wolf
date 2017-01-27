@@ -311,8 +311,8 @@ const DataType * CodegenCtx::getNodeEvaluatedDataType(const AST::ASTNode & astNo
     return iter->second.get();
 }
 
-VarContainer & CodegenCtx::getScopeVarContainer(const AST::Scope & scope) {
-    return mScopeVarContainers[&scope];
+ValHolder & CodegenCtx::getScopeValHolder(const AST::Scope & scope) {
+    return mScopeValHolders[&scope];
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE
