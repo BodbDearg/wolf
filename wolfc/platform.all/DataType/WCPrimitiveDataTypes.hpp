@@ -8,6 +8,7 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
+class BoolDataType;
 class DataType;
 class UnknownDataType;
 enum class DataTypeId : uint8_t;
@@ -35,6 +36,9 @@ namespace PrimitiveDataTypes {
     
     /* Get the unknown data type */
     const UnknownDataType & getUnknownDataType();
+    
+    /* Get the bool data type */
+    const BoolDataType & getBoolDataType();
     
     /**
      * Get the default unsigned integer type or the type of the 'uint' alias. Will be a 32-bit

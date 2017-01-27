@@ -70,10 +70,10 @@ void CodegenDataType::visit(const ArrayUnevalSizeDataType & dataType) {
 
     // Evaluate the size expression for the array
     dataType.mSizeExpr.accept(mConstCodegen);
-    llvm::Constant * sizeValue = mCtx.popLLVMConstant();
+    Constant sizeConst = mCtx.popConstant();
     
     // If the size expression is not of type 'int' then it is invalid:
-    const DataType & sizeExprDataType = dataType.mSizeExpr.dataType();
+    const DataType & sizeExprDataType = sizeConst.mCompiledType.getDataType();
     bool sizeExprIsInt = sizeExprDataType.isInteger();
     
     if (!sizeExprIsInt) {
@@ -85,11 +85,11 @@ void CodegenDataType::visit(const ArrayUnevalSizeDataType & dataType) {
     // Save the evaluated data type here:
     std::unique_ptr<const DataType> evaluatedDataType;
     
-    if (sizeExprIsInt && sizeValue) {
-        llvm::ConstantInt * sizeConstant = llvm::dyn_cast<llvm::ConstantInt>(sizeValue);
+    if (sizeExprIsInt && sizeConst.isValid()) {
+        llvm::ConstantInt * sizeLLVMConst = llvm::dyn_cast<llvm::ConstantInt>(sizeConst.mLLVMConst);
         
-        if (!sizeConstant->isNegative()) {
-            const auto & sizeAPInt = sizeConstant->getValue();
+        if (!sizeLLVMConst->isNegative()) {
+            const auto & sizeAPInt = sizeLLVMConst->getValue();
             
             if (sizeAPInt.getNumWords() <= 1) {
                 // Got the array size, set the evaluated array type:

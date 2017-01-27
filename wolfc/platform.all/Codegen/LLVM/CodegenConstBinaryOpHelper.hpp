@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Constant.hpp"
 #include "DataType/DataTypeVisitor.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -56,8 +57,12 @@ protected:
     /* Issue a compile error that a binary operation is not supported! */
     void issueBinaryOpNotSupportedError();
     
-    /* Save the operator result in the codegen context */
+    /**
+     * Save the operator result in the codegen context. If the compiled type of the result 
+     * is not specified then we use the compiled type of left operand.
+     */
     void pushOpResult(llvm::Constant * result);
+    void pushOpResult(llvm::Constant * result, const CompiledDataType & resultType);
     
     /* Various vars needed as input to the code generator */
     ConstCodegen &          mCG;
@@ -67,10 +72,8 @@ protected:
     const char *            mOpName;
     
     /* These are generated and cached by the codegen() function */
-    const DataType *    mLeftType = nullptr;
-    const DataType *    mRightType = nullptr;
-    llvm::Constant *    mLeftVal = nullptr;
-    llvm::Constant *    mRightVal = nullptr;
+    Constant mLeftConst;
+    Constant mRightConst;
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE

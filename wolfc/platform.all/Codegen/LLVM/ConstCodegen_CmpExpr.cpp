@@ -23,8 +23,8 @@ public:
     
     inline void codegenIntCompare(llvm::ICmpInst::Predicate predicate) {
         pushOpResult(llvm::ConstantExpr::getICmp(predicate,
-                                                 mLeftVal,
-                                                 mRightVal));
+                                                 mLeftConst.mLLVMConst,
+                                                 mRightConst.mLLVMConst));
     }
 };
 

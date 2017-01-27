@@ -118,18 +118,18 @@ public:
     const AST::Scope * getCurrentScope() const;
     
     /**
-     * Push/pop an llvm::Value object to the value stack.
-     * If popping and the stack is emtpy, a null pointer will be returned.
+     * Push/pop a value to the value stack.
+     * If popping and the stack is empty, an invalid value will be returned.
      */
-    void pushLLVMValue(llvm::Value & llvmValue);
-    llvm::Value * popLLVMValue();
+    void pushValue(const Value & value);
+    Value popValue();
     
     /**
-     * Push/pop an llvm::Constant object to the value stack.
-     * If popping and the stack is emtpy, a null pointer will be returned.
+     * Push/pop a constant to the constant stack.
+     * If popping and the stack is empty, an invalid constant will be returned.
      */
-    void pushLLVMConstant(llvm::Constant & llvmConstant);
-    llvm::Constant * popLLVMConstant();
+    void pushConstant(const Constant & constant);
+    Constant popConstant();
     
     /**
      * Push/pop a compiled data type to the stack.
@@ -203,16 +203,16 @@ private:
     std::vector<const AST::Scope*> mScopeStack;
     
     /**
-     * A stack of llvm values created during codegen. 
+     * A stack of values created during codegen.
      * Used for communication between code sections, and storing results temporarily, like the stack in LUA. 
      */
-    std::vector<llvm::Value*> mLLVMValues;
+    std::vector<Value> mValues;
     
     /** 
-     * A stack of llvm constants created during codegen. 
+     * A stack of constants created during codegen.
      * Used for communication between code sections, and storing results temporarily, like the stack in LUA.
      */
-    std::vector<llvm::Constant*> mLLVMConstants;
+    std::vector<Constant> mConstants;
     
     /**
      * A stack of compiled data types created during codegen. 

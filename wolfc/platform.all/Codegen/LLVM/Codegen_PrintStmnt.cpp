@@ -76,27 +76,25 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
     
     // Evaluate the code for the argument to printf
     astNode.mExpr.accept(*this);
-    llvm::Value * exprValue = mCtx.popLLVMValue();
+    Value exprVal = mCtx.popValue();
     
     // Can only generate the print call if we have both printf and an expression value
-    if (printfFn && exprValue) {
-        // Get the data type of the expression:
-        astNode.mExpr.dataType().accept(mConstCodegen.mCodegenDataType);
-        const DataType & exprDataType = mCtx.popCompiledDataType().getDataType();
-        
+    if (printfFn && exprVal.isValid()) {
         #warning Use visitor interface instead
         // See which type we are dealing with:
+        const DataType & exprDataType = exprVal.mCompiledType.getDataType();
+        
         switch (exprDataType.getTypeId()) {
             case DataTypeId::kInt64:
-                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprValue, "%lld");
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%lld");
                 break;
                 
             case DataTypeId::kBool:
-                codegenBoolPrintStmnt(mCtx, *printfFn, *exprValue);
+                codegenBoolPrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal);
                 break;
                 
             case DataTypeId::kStr:
-                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprValue, "%s");
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%s");
                 break;
                 
             case DataTypeId::kUnknown:                

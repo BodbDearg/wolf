@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DataType/DataTypeVisitor.hpp"
+#include "Value.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <functional>
@@ -55,8 +56,14 @@ protected:
     /* Issue a compile error that a unary operation is not supported! */
     void issueUnaryOpNotSupportedError();
     
-    /* Save the operator result in the codegen context */
+    /**
+     * Save the operator result in the codegen context. If the compiled type of the result 
+     * is not specified then we use the compiled type of the operand. If the 'requiresLoad'
+     * flag is not specified then it is defaulted to false.
+     */
     void pushOpResult(llvm::Value * result);
+    void pushOpResult(llvm::Value * result, bool requiresLoad);
+    void pushOpResult(llvm::Value * result, bool requiresLoad, const CompiledDataType & resultType);
     
     /* Various vars needed as input to the code generator */
     Codegen &               mCG;
@@ -64,9 +71,8 @@ protected:
     const char *            mOpSymbol;
     const char *            mOpName;
     
-    /* These are generated and cached by the codegen() function */
-    const DataType *    mExprType = nullptr;
-    llvm::Value *       mExprVal = nullptr;
+    /* This is generated and cached by the codegen() function */
+    Value mExprVal;
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE

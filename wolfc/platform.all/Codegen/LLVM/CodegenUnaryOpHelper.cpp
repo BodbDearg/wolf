@@ -27,12 +27,7 @@ void CodegenUnaryOpHelper::codegen() {
     // Get the type for the operand:
     const AST::IExpr * nodeAsExpr = dynamic_cast<const AST::IExpr*>(&mExpr);
     
-    if (nodeAsExpr) {
-        nodeAsExpr->dataType().accept(mCG.mConstCodegen.mCodegenDataType);
-        CompiledDataType exprCompiledType = mCG.mCtx.popCompiledDataType();
-        mExprType = &exprCompiledType.getDataType();
-    }
-    else {
+    if (!nodeAsExpr) {
         mCG.mCtx.error(mExpr,
                        "Operand of '%s' (%s) operator must be an expression with a value result!",
                        mOpSymbol,
@@ -41,11 +36,13 @@ void CodegenUnaryOpHelper::codegen() {
     
     // Okay, codegen the operand expression
     mExpr.accept(mCG);
-    mExprVal = mCG.mCtx.popLLVMValue();
+    mExprVal = mCG.mCtx.popValue();
     
     // Must have a generated type and value to proceed any further:
-    WC_GUARD(mExprType && mExprVal);
-    mExprType->accept(*this);
+    if (mExprVal.isValid()) {
+        const DataType & dataType = mExprVal.mCompiledType.getDataType();
+        dataType.accept(*this);
+    }
 }
 
 void CodegenUnaryOpHelper::visit(const ArrayBadSizeDataType & dataType) {
@@ -89,19 +86,25 @@ void CodegenUnaryOpHelper::visit(const VoidDataType & dataType) {
 }
 
 void CodegenUnaryOpHelper::issueUnaryOpNotSupportedError() {
-    WC_GUARD(mExprType);
     AST::ASTNode * parent = mExpr.mParent;
     WC_ASSERT(parent);
     mCG.mCtx.error(*parent,
                    "Unary operator '%s' (%s) is not supported for an expression of type '%s'!",
                    mOpSymbol,
                    mOpName,
-                   mExprType->name().c_str());
+                   mExprVal.mCompiledType.getDataType().name().c_str());
 }
 
 void CodegenUnaryOpHelper::pushOpResult(llvm::Value * result) {
-    WC_GUARD_ASSERT(result);
-    mCG.mCtx.pushLLVMValue(*result);
+    pushOpResult(result, false);
+}
+
+void CodegenUnaryOpHelper::pushOpResult(llvm::Value * result, bool requiresLoad) {
+    pushOpResult(result, requiresLoad, mExprVal.mCompiledType);
+}
+
+void CodegenUnaryOpHelper::pushOpResult(llvm::Value * result, bool requiresLoad, const CompiledDataType & resultType) {
+    mCG.mCtx.pushValue(Value(result, resultType, requiresLoad, mExpr.mParent));
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE

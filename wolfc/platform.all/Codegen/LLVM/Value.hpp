@@ -1,6 +1,6 @@
 #pragma once
 
-#include "WCMacros.hpp"
+#include "CompiledDataType.hpp"
 
 namespace llvm {
     class Value;
@@ -8,34 +8,32 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class DataType;
-
 namespace AST {
     class ASTNode;
 }
 
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-/* Struct holding an LLVM value and it's corresponding data type */
+/* Struct holding an LLVM value and it's corresponding compiled data type */
 struct Value {
     Value() :
-        mDeclaringNode(nullptr),
-        mLLVMValue(nullptr),
-        mType(nullptr),
-        mRequiresLoad(false)
+        mLLVMVal(nullptr),
+        mCompiledType(),
+        mRequiresLoad(false),
+        mDeclaringNode(nullptr)
     {
         WC_EMPTY_FUNC_BODY();
     }
     
-    Value(AST::ASTNode * declaringNode,
-          llvm::Value * llvmValue,
-          const DataType * type,
-          bool requiresLoad)
+    Value(llvm::Value * llvmVal,
+          const CompiledDataType & compiledType,
+          bool requiresLoad,
+          const AST::ASTNode * declaringNode)
     :
-        mDeclaringNode(declaringNode),
-        mLLVMValue(llvmValue),
-        mType(type),
-        mRequiresLoad(requiresLoad)
+        mLLVMVal(llvmVal),
+        mCompiledType(compiledType),
+        mRequiresLoad(requiresLoad),
+        mDeclaringNode(declaringNode)
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -43,17 +41,21 @@ struct Value {
     Value(const Value & other) = default;
     Value & operator = (const Value & other) = default;
     
-    /* The node that declared the value */
-    const AST::ASTNode * mDeclaringNode;
+    inline bool isValid() const {
+        return mLLVMVal != nullptr && mCompiledType.isValid();
+    }
     
     /* The llvm value representing the value */
-    llvm::Value * mLLVMValue;
+    llvm::Value * mLLVMVal;
     
-    /* The data type for this value */
-    const DataType * mType;
+    /* The compiled data type for this value */
+    CompiledDataType mCompiledType;
     
     /* If true the value requires a load first before being used */
     bool mRequiresLoad;
+    
+    /* The node that declared the value */
+    const AST::ASTNode * mDeclaringNode;    
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE

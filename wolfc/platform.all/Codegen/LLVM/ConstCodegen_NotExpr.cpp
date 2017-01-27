@@ -18,7 +18,7 @@ public:
     
     void visit(const BoolDataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getNot(mExprVal));
+        pushOpResult(llvm::ConstantExpr::getNot(mExprConst.mLLVMConst));
     }
 };
 
@@ -32,7 +32,7 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getNot(mExprVal));
+        pushOpResult(llvm::ConstantExpr::getNot(mExprConst.mLLVMConst));
     }
 };
 

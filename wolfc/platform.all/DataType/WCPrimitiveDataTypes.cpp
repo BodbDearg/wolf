@@ -56,6 +56,10 @@ const UnknownDataType & PrimitiveDataTypes::getUnknownDataType() {
     return gUnknownDataType;
 }
 
+const BoolDataType & PrimitiveDataTypes::getBoolDataType() {
+    return gBoolDataType;
+}
+
 const DataType & PrimitiveDataTypes::getDefaultUIntType() {
     return getUsingTypeId(getDefaultUIntTypeId());
 }

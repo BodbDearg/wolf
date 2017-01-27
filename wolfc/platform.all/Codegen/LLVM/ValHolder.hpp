@@ -37,8 +37,8 @@ public:
      */
     const Value * createVal(CodegenCtx & ctx,
                             const std::string & name,
-                            const DataType & type,
-                            llvm::Value & llvmValue,
+                            llvm::Value & llvmVal,
+                            const CompiledDataType & compiledType,
                             bool requiresLoad,
                             const AST::ASTNode & declaringNode);
     
@@ -49,8 +49,8 @@ public:
      */
     const Constant * createConst(CodegenCtx & ctx,
                                  const std::string & name,
-                                 const DataType & type,
-                                 llvm::Constant & llvmConstant,
+                                 llvm::Constant & llvmConst,
+                                 const CompiledDataType & compiledType,
                                  const AST::ASTNode & declaringNode);
     
     /**
@@ -71,7 +71,7 @@ private:
      */
     bool compileCheckValueNameNotTaken(CodegenCtx & ctx,
                                        const std::string & name,
-                                       const DataType & type,
+                                       const CompiledDataType & compiledType,
                                        const AST::ASTNode & declaringNode) const;
     
     /* The values in the container */

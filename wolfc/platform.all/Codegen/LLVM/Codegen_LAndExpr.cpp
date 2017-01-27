@@ -19,7 +19,9 @@ public:
     
     void visit(const BoolDataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateAnd(mLeftVal, mRightVal, "Bool:LAnd:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateAnd(mLeftVal.mLLVMVal,
+                                                   mRightVal.mLLVMVal,
+                                                   "Bool:LAnd:Result"));
     }
 };
 

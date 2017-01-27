@@ -18,7 +18,8 @@ public:
     
     void visit(const BoolDataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getAnd(mLeftVal, mRightVal));
+        pushOpResult(llvm::ConstantExpr::getAnd(mLeftConst.mLLVMConst,
+                                                mRightConst.mLLVMConst));
     }
 };
 

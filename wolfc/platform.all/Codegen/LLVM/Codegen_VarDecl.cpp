@@ -83,7 +83,7 @@ static void codegenLocalVarDeclWithType(Codegen & cg,
     
     // Evaluate the initializer expression:
     varDecl.mInitExpr.accept(cg);
-    llvm::Value * varInitLLVMVal = cg.mCtx.popLLVMValue();
+    Value varInitVal = cg.mCtx.popValue();
     
     // Do the type checks for the var decl
     bool initializerTypeIsOk = false;
@@ -102,7 +102,7 @@ static void codegenLocalVarDeclWithType(Codegen & cg,
     
     // If the initializer is bad then codegen without it
     if (!initializerTypeIsOk) {
-        varInitLLVMVal = nullptr;
+        varInitVal.mLLVMVal = nullptr;
     }
     
     // Makeup the label we will give the var in the IR
@@ -117,14 +117,14 @@ static void codegenLocalVarDeclWithType(Codegen & cg,
     ValHolder & scopeValHolder = cg.mCtx.getScopeValHolder(*scope);
     scopeValHolder.createVal(cg.mCtx,
                              varDecl.mIdent.name(),
-                             varCompiledType.getDataType(),
                              *varAlloca,
+                             varCompiledType,
                              true,
                              varDecl);
     
     // Store the initializer expression to the variable if we generated it ok
-    if (varInitLLVMVal) {
-        WC_ASSERTED_OP(cg.mCtx.mIRBuilder.CreateStore(varInitLLVMVal, varAlloca));
+    if (varInitVal.mLLVMVal) {
+        WC_ASSERTED_OP(cg.mCtx.mIRBuilder.CreateStore(varInitVal.mLLVMVal, varAlloca));
     }
 }
 
@@ -136,7 +136,7 @@ static void codegenGlobalVarDeclWithType(Codegen & cg,
 {
     // Evaluate the initializer expression as a constant
     varDecl.mInitExpr.accept(cg.mConstCodegen);
-    llvm::Constant * varInitLLVMVal = cg.mCtx.popLLVMConstant();
+    Constant varInitVal = cg.mCtx.popConstant();
     
     // Do the type checks for the var decl
     bool initializerTypeIsOk = false;
@@ -154,7 +154,7 @@ static void codegenGlobalVarDeclWithType(Codegen & cg,
     
     // If the initializer is bad then codegen without it
     if (!initializerTypeIsOk) {
-        varInitLLVMVal = nullptr;
+        varInitVal.mLLVMConst = nullptr;
     }
     
     // TODO: use the linear allocator here
@@ -163,7 +163,7 @@ static void codegenGlobalVarDeclWithType(Codegen & cg,
                                                  varCompiledType.getLLVMType(),
                                                  false,                               // Not constant
                                                  llvm::GlobalValue::PrivateLinkage,
-                                                 varInitLLVMVal,
+                                                 varInitVal.mLLVMConst,
                                                  varName);
     
     WC_ASSERT(varLLVMVar);
@@ -171,8 +171,8 @@ static void codegenGlobalVarDeclWithType(Codegen & cg,
     // Register the variable. If it's registered more than once then this will generate an error.
     cg.mCtx.mModuleValHolder.createVal(cg.mCtx,
                                        varName,
-                                       varCompiledType.getDataType(),
                                        *varLLVMVar,
+                                       varCompiledType,
                                        true,
                                        varDecl);
 }

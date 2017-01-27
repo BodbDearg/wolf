@@ -28,12 +28,7 @@ void CodegenConstUnaryOpHelper::codegen() {
     // Get the type for the operand:
     const AST::IExpr * nodeAsExpr = dynamic_cast<const AST::IExpr*>(&mExpr);
     
-    if (nodeAsExpr) {
-        nodeAsExpr->dataType().accept(mCG.mCodegenDataType);
-        CompiledDataType exprCompiledType = mCG.mCtx.popCompiledDataType();
-        mExprType = &exprCompiledType.getDataType();
-    }
-    else {
+    if (!nodeAsExpr) {
         mCG.mCtx.error(mExpr,
                        "Operand of '%s' (%s) operator must be an expression with a value result!",
                        mOpSymbol,
@@ -42,11 +37,13 @@ void CodegenConstUnaryOpHelper::codegen() {
     
     // Okay, codegen the operand expression
     mExpr.accept(mCG);
-    mExprVal = mCG.mCtx.popLLVMConstant();
+    mExprConst = mCG.mCtx.popConstant();
     
     // Must have a generated type and value to proceed any further:
-    WC_GUARD(mExprType && mExprVal);
-    mExprType->accept(*this);
+    if (mExprConst.isValid()) {
+        const DataType & exprType = mExprConst.mCompiledType.getDataType();
+        exprType.accept(*this);
+    }
 }
 
 void CodegenConstUnaryOpHelper::visit(const ArrayBadSizeDataType & dataType) {
@@ -90,19 +87,22 @@ void CodegenConstUnaryOpHelper::visit(const VoidDataType & dataType) {
 }
 
 void CodegenConstUnaryOpHelper::issueUnaryOpNotSupportedError() {
-    WC_GUARD(mExprType);
     AST::ASTNode * parent = mExpr.mParent;
     WC_ASSERT(parent);
     mCG.mCtx.error(*parent,
                    "Unary operator '%s' (%s) is not supported for an expression of type '%s'!",
                    mOpSymbol,
                    mOpName,
-                   mExprType->name().c_str());
+                   mExprConst.mCompiledType.getDataType().name().c_str());
 }
 
 void CodegenConstUnaryOpHelper::pushOpResult(llvm::Constant * result) {
-    WC_GUARD_ASSERT(result);
-    mCG.mCtx.pushLLVMConstant(*result);
+    pushOpResult(result, mExprConst.mCompiledType);
+}
+
+void CodegenConstUnaryOpHelper::pushOpResult(llvm::Constant * result, const CompiledDataType & resultType) {
+    WC_ASSERT(result);
+    mCG.mCtx.pushConstant(Constant(result, resultType, mExpr.mParent));
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE

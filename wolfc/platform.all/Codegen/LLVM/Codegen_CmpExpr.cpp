@@ -19,12 +19,16 @@ public:
     
     void visit(const BoolDataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpEQ(mLeftVal, mRightVal, "Bool:CmpEQ:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpEQ(mLeftVal.mLLVMVal,
+                                                      mRightVal.mLLVMVal,
+                                                      "Bool:CmpEQ:Result"));
     }
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpEQ(mLeftVal, mRightVal, "Int64:CmpEQ:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpEQ(mLeftVal.mLLVMVal,
+                                                      mRightVal.mLLVMVal,
+                                                      "Int64:CmpEQ:Result"));
     }
 };
 
@@ -38,12 +42,16 @@ public:
     
     void visit(const BoolDataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpNE(mLeftVal, mRightVal, "Bool:CmpNE:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpNE(mLeftVal.mLLVMVal,
+                                                      mRightVal.mLLVMVal,
+                                                      "Bool:CmpNE:Result"));
     }
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpNE(mLeftVal, mRightVal, "Int64:CmpNE:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpNE(mLeftVal.mLLVMVal,
+                                                      mRightVal.mLLVMVal,
+                                                      "Int64:CmpNE:Result"));
     }
 };
 
@@ -57,7 +65,9 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpSLT(mLeftVal, mRightVal, "Int64:CmpLT:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpSLT(mLeftVal.mLLVMVal,
+                                                       mRightVal.mLLVMVal,
+                                                       "Int64:CmpLT:Result"));
     }
 };
 
@@ -71,7 +81,9 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpSLE(mLeftVal, mRightVal, "Int64:CmpLE:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpSLE(mLeftVal.mLLVMVal,
+                                                       mRightVal.mLLVMVal,
+                                                       "Int64:CmpLE:Result"));
     }
 };
 
@@ -85,7 +97,9 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpSGT(mLeftVal, mRightVal, "Int64:CmpGT:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpSGT(mLeftVal.mLLVMVal,
+                                                       mRightVal.mLLVMVal,
+                                                       "Int64:CmpGT:Result"));
     }
 };
 
@@ -99,7 +113,9 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpSGE(mLeftVal, mRightVal, "Int64:CmpGE:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateICmpSGE(mLeftVal.mLLVMVal,
+                                                       mRightVal.mLLVMVal,
+                                                       "Int64:CmpGE:Result"));
     }
 };
 

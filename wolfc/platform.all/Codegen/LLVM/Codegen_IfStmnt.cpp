@@ -16,11 +16,10 @@ void Codegen::visit(const AST::IfStmntNoElse & astNode) {
     // Generate the code for the if statement condition expression:
     const AST::AssignExpr & ifExpr = astNode.mIfExpr;
     ifExpr.accept(*this);
-    llvm::Value * ifExprVal = mCtx.popLLVMValue();
+    Value ifExprVal = mCtx.popValue();
     
     // If the statement condition expression must be of type bool
-    ifExpr.dataType().accept(mConstCodegen.mCodegenDataType);
-    const DataType & ifExprDataType = mCtx.popCompiledDataType().getDataType();
+    const DataType & ifExprDataType = ifExprVal.mCompiledType.getDataType();
     bool ifExprIsBool = ifExprDataType.isBool();
     
     if (!ifExprIsBool) {
@@ -61,12 +60,12 @@ void Codegen::visit(const AST::IfStmntNoElse & astNode) {
     // Only do this if the conditions for doing this are valid however...
     irb.SetInsertPoint(ifBranchBB);
     
-    if (ifExprVal && ifExprIsBool) {
+    if (ifExprVal.isValid() && ifExprIsBool) {
         if (astNode.isIfExprInversed()) {
-            WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal, endBB, thenBB));
+            WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal.mLLVMVal, endBB, thenBB));
         }
         else {
-            WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal, thenBB, endBB));
+            WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal.mLLVMVal, thenBB, endBB));
         }
     }
     
@@ -87,11 +86,10 @@ void Codegen::visit(const AST::IfStmntElseIf & astNode) {
     // Generate the code for the if statement condition expression:
     const AST::AssignExpr & ifExpr = astNode.mIfExpr;
     ifExpr.accept(*this);
-    llvm::Value * ifExprVal = mCtx.popLLVMValue();
+    Value ifExprVal = mCtx.popValue();
     
     // If the statement condition expression must be of type bool
-    ifExpr.dataType().accept(mConstCodegen.mCodegenDataType);
-    const DataType & ifExprDataType = mCtx.popCompiledDataType().getDataType();
+    const DataType & ifExprDataType = ifExprVal.mCompiledType.getDataType();
     bool ifExprIsBool = ifExprDataType.isBool();
     
     if (!ifExprIsBool) {
@@ -146,12 +144,12 @@ void Codegen::visit(const AST::IfStmntElseIf & astNode) {
     // Only do this if the conditions for doing this are valid however...
     irb.SetInsertPoint(ifBranchBB);
     
-    if (ifExprVal && ifExprIsBool) {
+    if (ifExprVal.isValid() && ifExprIsBool) {
         if (astNode.isIfExprInversed()) {
-            WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal, outerIfBB, thenBB));
+            WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal.mLLVMVal, outerIfBB, thenBB));
         }
         else {
-            WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal, thenBB, outerIfBB));
+            WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal.mLLVMVal, thenBB, outerIfBB));
         }
     }
     
@@ -179,11 +177,10 @@ void Codegen::visit(const AST::IfStmntElse & astNode) {
     // Generate the code for the if statement condition expression:
     const AST::AssignExpr & ifExpr = astNode.mIfExpr;
     ifExpr.accept(*this);
-    llvm::Value * ifExprVal = mCtx.popLLVMValue();
+    Value ifExprVal = mCtx.popValue();
     
     // If the statement condition expression must be of type bool
-    ifExpr.dataType().accept(mConstCodegen.mCodegenDataType);
-    const DataType & ifExprDataType = mCtx.popCompiledDataType().getDataType();
+    const DataType & ifExprDataType = ifExprVal.mCompiledType.getDataType();
     bool ifExprIsBool = ifExprDataType.isBool();
     
     if (!ifExprIsBool) {
@@ -238,12 +235,12 @@ void Codegen::visit(const AST::IfStmntElse & astNode) {
     // Only do this if the conditions for doing this are valid however...
     irb.SetInsertPoint(ifBranchBB);
     
-    if (ifExprVal && ifExprIsBool) {
+    if (ifExprVal.isValid() && ifExprIsBool) {
         if (astNode.isIfExprInversed()) {
-            WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal, elseBB, thenBB));
+            WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal.mLLVMVal, elseBB, thenBB));
         }
         else {
-            WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal, thenBB, elseBB));
+            WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal.mLLVMVal, thenBB, elseBB));
         }
     }
     

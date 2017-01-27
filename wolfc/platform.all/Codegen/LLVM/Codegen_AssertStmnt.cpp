@@ -26,11 +26,10 @@ void Codegen::visit(const AST::AssertStmnt & astNode) {
     
     // Evaluate the value for the expression being asserted
     astNode.mExpr.accept(*this);
-    llvm::Value * exprVal = mCtx.popLLVMValue();
+    Value exprVal = mCtx.popValue();
     
     // The expression being asserted must evaluate to a boolean
-    astNode.mExpr.dataType().accept(mConstCodegen.mCodegenDataType);
-    const DataType & exprDataType = mCtx.popCompiledDataType().getDataType();
+    const DataType & exprDataType = exprVal.mCompiledType.getDataType();
     bool exprIsBool = exprDataType.isBool();
     
     if (!exprIsBool) {
@@ -45,7 +44,7 @@ void Codegen::visit(const AST::AssertStmnt & astNode) {
     WC_ASSERT(parentFn);
     
     // Okay, proceed no further if any of these are bad
-    WC_GUARD(abortFn && printfFn && exprVal && exprIsBool);
+    WC_GUARD(abortFn && printfFn && exprVal.isValid() && exprIsBool);
     
     // Create basic blocks for assert failed and assert succeeded:
     llvm::BasicBlock * failBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, "AssertStmnt:fail", parentFn);
@@ -54,7 +53,7 @@ void Codegen::visit(const AST::AssertStmnt & astNode) {
     WC_ASSERT(passBB);
     
     // Create a branch to one of the two blocks:
-    WC_ASSERTED_OP(irb.CreateCondBr(exprVal, passBB, failBB));
+    WC_ASSERTED_OP(irb.CreateCondBr(exprVal.mLLVMVal, passBB, failBB));
     
     // Makeup the string for the assert failed message:
     std::string assertMsgStr;

@@ -19,7 +19,7 @@ public:
     
     void visit(const BoolDataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateNot(mExprVal, "Bool:LNot:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateNot(mExprVal.mLLVMVal, "Bool:LNot:Result"));
     }
 };
 
@@ -33,7 +33,7 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateNot(mExprVal, "Int64:BNot:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateNot(mExprVal.mLLVMVal, "Int64:BNot:Result"));
     }
 };
 

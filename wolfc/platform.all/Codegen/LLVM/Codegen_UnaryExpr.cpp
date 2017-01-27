@@ -20,7 +20,7 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mExprVal);
+        pushOpResult(mExprVal.mLLVMVal);
     }
 };
 
@@ -34,7 +34,7 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateNeg(mExprVal, "Int64:Minus:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateNeg(mExprVal.mLLVMVal, "Int64:Minus:Result"));
     }
 };
 

@@ -10,18 +10,21 @@ WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 const Value * ValHolder::createVal(CodegenCtx & ctx,
                                    const std::string & name,
-                                   const DataType & type,
-                                   llvm::Value & llvmValue,
+                                   llvm::Value & llvmVal,
+                                   const CompiledDataType & compiledType,
                                    bool requiresLoad,
                                    const AST::ASTNode & declaringNode)
 {
     // Make sure the name is not taken
-    WC_GUARD(compileCheckValueNameNotTaken(ctx, name, type, declaringNode), nullptr);
+    WC_GUARD(compileCheckValueNameNotTaken(ctx,
+                                           name,
+                                           compiledType,
+                                           declaringNode), nullptr);
     
     // Make the value:
     Value & value = mValues[name];
-    value.mType = &type;
-    value.mLLVMValue = &llvmValue;
+    value.mLLVMVal = &llvmVal;
+    value.mCompiledType = compiledType;
     value.mRequiresLoad = requiresLoad;
     value.mDeclaringNode = &declaringNode;
     return &value;
@@ -29,23 +32,26 @@ const Value * ValHolder::createVal(CodegenCtx & ctx,
 
 const Constant * ValHolder::createConst(CodegenCtx & ctx,
                                         const std::string & name,
-                                        const DataType & type,
-                                        llvm::Constant & llvmConstant,
+                                        llvm::Constant & llvmConst,
+                                        const CompiledDataType & compiledType,
                                         const AST::ASTNode & declaringNode)
 {
     // Make sure the name is not taken
-    WC_GUARD(compileCheckValueNameNotTaken(ctx, name, type, declaringNode), nullptr);
+    WC_GUARD(compileCheckValueNameNotTaken(ctx,
+                                           name,
+                                           compiledType,
+                                           declaringNode), nullptr);
     
     // Make the constant:
     Constant & constant = mConstants[name];
-    constant.mType = &type;
-    constant.mLLVMConstant = &llvmConstant;
+    constant.mLLVMConst = &llvmConst;
+    constant.mCompiledType = compiledType;
     constant.mDeclaringNode = &declaringNode;
     
     // Register the constant as an ordinary value too, can be accessed in that way
     Value & value = mValues[name];
-    value.mType = &type;
-    value.mLLVMValue = &llvmConstant;
+    value.mLLVMVal = &llvmConst;
+    value.mCompiledType = compiledType;
     value.mRequiresLoad = false;                // Constants never require a load
     value.mDeclaringNode = &declaringNode;
     
@@ -79,7 +85,7 @@ const Constant * ValHolder::getConst(const std::string & name) const {
 
 bool ValHolder::compileCheckValueNameNotTaken(CodegenCtx & ctx,
                                               const std::string & name,
-                                              const DataType & type,
+                                              const CompiledDataType & compiledType,
                                               const AST::ASTNode & declaringNode) const
 {
     // Just check the ordinary values map, constants are registered as values too
@@ -93,10 +99,10 @@ bool ValHolder::compileCheckValueNameNotTaken(CodegenCtx & ctx,
               "Duplicate declaration named '%s'! Declaration of type '%s' has already been declared "
               "at line %zu, col %zu as a declaration of type '%s'!",
               name.c_str(),
-              type.name().c_str(),
+              compiledType.getDataType().name().c_str(),
               otherValStartTok.startLine + 1,
               otherValStartTok.startCol + 1,
-              otherVal.mType->name().c_str());
+              otherVal.mCompiledType.getDataType().name().c_str());
     
     // False for failure
     return false;

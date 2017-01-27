@@ -1,6 +1,6 @@
 #pragma once
 
-#include "WCMacros.hpp"
+#include "CompiledDataType.hpp"
 
 namespace llvm {
     class Constant;
@@ -8,31 +8,29 @@ namespace llvm {
 
 WC_BEGIN_NAMESPACE
 
-class DataType;
-
 namespace AST {
     class ASTNode;
 }
 
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-/* Struct holding an LLVM constant and it's corresponding data type */
+/* Struct holding an LLVM constant and it's corresponding compiled data type */
 struct Constant {
     Constant() :
-        mDeclaringNode(nullptr),
-        mLLVMConstant(nullptr),
-        mType(nullptr)
+        mLLVMConst(nullptr),
+        mCompiledType(),
+        mDeclaringNode(nullptr)
     {
         WC_EMPTY_FUNC_BODY();
     }
     
-    Constant(AST::ASTNode * declaringNode,
-             llvm::Constant * llvmConstant,
-             const DataType * type)
+    Constant(llvm::Constant * llvmConst,
+             const CompiledDataType & compiledType,
+             const AST::ASTNode * declaringNode)
     :
-        mDeclaringNode(declaringNode),
-        mLLVMConstant(llvmConstant),
-        mType(type)
+        mLLVMConst(llvmConst),
+        mCompiledType(compiledType),
+        mDeclaringNode(declaringNode)
     {
         WC_EMPTY_FUNC_BODY();
     }
@@ -40,14 +38,18 @@ struct Constant {
     Constant(const Constant & other) = default;
     Constant & operator = (const Constant & other) = default;
     
-    /* The node that declared the value */
-    const AST::ASTNode * mDeclaringNode;
+    inline bool isValid() const {
+        return mLLVMConst != nullptr && mCompiledType.isValid();
+    }
     
     /* The llvm constant representing the constant */
-    llvm::Constant * mLLVMConstant;
+    llvm::Constant * mLLVMConst;
     
-    /* The data type for this constant */
-    const DataType * mType;
+    /* The compiled data type for this constant */
+    CompiledDataType mCompiledType;
+    
+    /* The node that declared the value */
+    const AST::ASTNode * mDeclaringNode;
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE

@@ -19,7 +19,9 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateMul(mLeftVal, mRightVal, "Int64:Mul:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateMul(mLeftVal.mLLVMVal,
+                                                   mRightVal.mLLVMVal,
+                                                   "Int64:Mul:Result"));
     }
 };
 
@@ -33,7 +35,9 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateSDiv(mLeftVal, mRightVal, "Int64:Div:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateSDiv(mLeftVal.mLLVMVal,
+                                                    mRightVal.mLLVMVal,
+                                                    "Int64:Div:Result"));
     }
 };
 
@@ -47,7 +51,9 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateSRem(mLeftVal, mRightVal, "Int64:Mod:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateSRem(mLeftVal.mLLVMVal,
+                                                    mRightVal.mLLVMVal,
+                                                    "Int64:Mod:Result"));
     }
 };
 
@@ -61,7 +67,9 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateAnd(mLeftVal, mRightVal, "Int64:BAnd:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateAnd(mLeftVal.mLLVMVal,
+                                                   mRightVal.mLLVMVal,
+                                                   "Int64:BAnd:Result"));
     }
 };
 

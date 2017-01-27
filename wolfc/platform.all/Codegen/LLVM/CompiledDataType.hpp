@@ -18,6 +18,13 @@ WC_LLVM_CODEGEN_BEGIN_NAMESPACE
  */
 class CompiledDataType {
 public:
+    inline CompiledDataType() :
+        mDataType(nullptr),
+        mLLVMType(nullptr)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+    
     inline CompiledDataType(const DataType & dataType, llvm::Type * llvmType) :
         mDataType(&dataType),
         mLLVMType(llvmType)
@@ -34,6 +41,10 @@ public:
     
     inline llvm::Type * getLLVMType() const {
         return mLLVMType;
+    }
+    
+    inline bool isValid() const {
+        return mDataType != nullptr && mLLVMType != nullptr;
     }
     
 private:

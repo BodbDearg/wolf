@@ -18,7 +18,8 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getShl(mLeftVal, mRightVal));
+        pushOpResult(llvm::ConstantExpr::getShl(mLeftConst.mLLVMConst,
+                                                mRightConst.mLLVMConst));
     }
 };
 
@@ -32,7 +33,8 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getAShr(mLeftVal, mRightVal));
+        pushOpResult(llvm::ConstantExpr::getAShr(mLeftConst.mLLVMConst,
+                                                 mRightConst.mLLVMConst));
     }
 };
 
@@ -46,7 +48,8 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getLShr(mLeftVal, mRightVal));
+        pushOpResult(llvm::ConstantExpr::getLShr(mLeftConst.mLLVMConst,
+                                                 mRightConst.mLLVMConst));
     }
 };
 

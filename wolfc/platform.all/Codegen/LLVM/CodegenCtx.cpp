@@ -15,7 +15,15 @@ CodegenCtx::CodegenCtx() :
     mLLVMCtx(),
     mIRBuilder(mLLVMCtx)
 {
-    WC_EMPTY_FUNC_BODY();
+    // Reserving some room for these things
+    mASTNodeStack.reserve(4096);
+    mScopeStack.reserve(128);
+    mValues.reserve(32);
+    mConstants.reserve(32);
+    mCompiledDataTypes.reserve(32);
+    mErrorMsgs.reserve(256);
+    mWarningMsgs.reserve(256);
+    mDeferredCgCallbacks_Module.reserve(1024);
 }
 
 CodegenCtx::~CodegenCtx() {
@@ -244,32 +252,32 @@ const AST::Scope * CodegenCtx::getCurrentScope() const {
     return nullptr;
 }
 
-void CodegenCtx::pushLLVMValue(llvm::Value & llvmValue) {
-    mLLVMValues.push_back(&llvmValue);
+void CodegenCtx::pushValue(const Value & value) {
+    mValues.push_back(value);
 }
 
-llvm::Value * CodegenCtx::popLLVMValue() {
-    if (mLLVMValues.empty()) {
-        return nullptr;
+Value CodegenCtx::popValue() {
+    if (mValues.empty()) {
+        return Value();
     }
     
-    llvm::Value * llvmValue = mLLVMValues.back();
-    mLLVMValues.pop_back();
-    return llvmValue;
+    Value value = mValues.back();
+    mValues.pop_back();
+    return value;
 }
 
-void CodegenCtx::pushLLVMConstant(llvm::Constant & llvmConstant) {
-    mLLVMConstants.push_back(&llvmConstant);
+void CodegenCtx::pushConstant(const Constant & constant) {
+    mConstants.push_back(constant);
 }
 
-llvm::Constant * CodegenCtx::popLLVMConstant() {
-    if (mLLVMConstants.empty()) {
-        return nullptr;
+Constant CodegenCtx::popConstant() {
+    if (mConstants.empty()) {
+        return Constant();
     }
     
-    llvm::Constant * llvmConstant = mLLVMConstants.back();
-    mLLVMConstants.pop_back();
-    return llvmConstant;
+    Constant constant = mConstants.back();
+    mConstants.pop_back();
+    return constant;
 }
 
 void CodegenCtx::pushCompiledDataType(const CompiledDataType & dataType) {

@@ -19,7 +19,9 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateShl(mLeftVal, mRightVal, "Int64:LShift:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateShl(mLeftVal.mLLVMVal,
+                                                   mRightVal.mLLVMVal,
+                                                   "Int64:LShift:Result"));
     }
 };
 
@@ -33,7 +35,9 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateAShr(mLeftVal, mRightVal, "Int64:ARShift:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateAShr(mLeftVal.mLLVMVal,
+                                                    mRightVal.mLLVMVal,
+                                                    "Int64:ARShift:Result"));
     }
 };
 
@@ -47,7 +51,9 @@ public:
     
     void visit(const Int64DataType & dataType) override {
         WC_UNUSED_PARAM(dataType);
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateLShr(mLeftVal, mRightVal, "Int64:LRShift:Result"));
+        pushOpResult(mCG.mCtx.mIRBuilder.CreateLShr(mLeftVal.mLLVMVal,
+                                                    mRightVal.mLLVMVal,
+                                                    "Int64:LRShift:Result"));
     }
 };
 

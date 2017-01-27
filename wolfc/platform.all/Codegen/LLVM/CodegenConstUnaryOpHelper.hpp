@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Constant.hpp"
 #include "DataType/DataTypeVisitor.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -55,8 +56,12 @@ protected:
     /* Issue a compile error that a unary operation is not supported! */
     void issueUnaryOpNotSupportedError();
     
-    /* Save the operator result in the codegen context */
+    /**
+     * Save the operator result in the codegen context. If the compiled type of the result 
+     * is not specified then we use the compiled type of the operand.
+     */
     void pushOpResult(llvm::Constant * result);
+    void pushOpResult(llvm::Constant * result, const CompiledDataType & resultType);
     
     /* Various vars needed as input to the code generator */
     ConstCodegen &          mCG;
@@ -64,9 +69,8 @@ protected:
     const char *            mOpSymbol;
     const char *            mOpName;
     
-    /* These are generated and cached by the codegen() function */
-    const DataType *    mExprType = nullptr;
-    llvm::Constant *    mExprVal = nullptr;
+    /* This are generated and cached by the codegen() function */
+    Constant mExprConst;
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE
