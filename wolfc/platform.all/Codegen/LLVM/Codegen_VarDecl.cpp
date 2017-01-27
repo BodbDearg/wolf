@@ -24,7 +24,7 @@ static const std::string kVarLabelPrefix = "alloc_var:";
 static void doVarDeclTypeChecks(Codegen & cg,
                                 const AST::VarDecl & varDecl,
                                 const CompiledDataType & varCompiledType,
-                                bool varDataTypeInferred,
+                                bool varTypeIsInferred,
                                 bool & initializerTypeIsOkOut,
                                 bool & varTypeIsOkOut)
 {
@@ -33,7 +33,7 @@ static void doVarDeclTypeChecks(Codegen & cg,
     const DataType & varType = varCompiledType.getDataType();
     initializerTypeIsOkOut = true;
     
-    if (!varDataTypeInferred) {
+    if (!varTypeIsInferred) {
         // Compile the type of the variable initializer
         varDecl.mInitExpr.dataType().accept(cg.mConstCodegen.mCodegenDataType);
         CompiledDataType varInitCompiledType = cg.mCtx.popCompiledDataType();
@@ -72,7 +72,7 @@ static void doVarDeclTypeChecks(Codegen & cg,
 static void codegenLocalVarDeclWithType(Codegen & cg,
                                         const AST::VarDecl & varDecl,
                                         const CompiledDataType & varCompiledType,
-                                        bool varDataTypeIsInferred)
+                                        bool varTypeIsInferred)
 {
     // Get the current scope, if there is none then issue an error
     const AST::Scope * scope = cg.mCtx.getCurrentScope();
@@ -132,7 +132,7 @@ static void codegenLocalVarDeclWithType(Codegen & cg,
 static void codegenGlobalVarDeclWithType(Codegen & cg,
                                          const AST::VarDecl & varDecl,
                                          const CompiledDataType & varCompiledType,
-                                         bool varDataTypeIsInferred)
+                                         bool varTypeIsInferred)
 {
     // Evaluate the initializer expression as a constant
     varDecl.mInitExpr.accept(cg.mConstCodegen);
@@ -145,7 +145,7 @@ static void codegenGlobalVarDeclWithType(Codegen & cg,
     doVarDeclTypeChecks(cg,
                         varDecl,
                         varCompiledType,
-                        varDataTypeIsInferred,
+                        varTypeIsInferred,
                         initializerTypeIsOk,
                         varTypeIsOk);
     
@@ -181,20 +181,20 @@ static void codegenGlobalVarDeclWithType(Codegen & cg,
 static void codegenVarDeclWithType(Codegen & cg,
                                    const AST::VarDecl & varDecl,
                                    const CompiledDataType & varCompiledType,
-                                   bool varDataTypeIsInferred)
+                                   bool varTypeIsInferred)
 {
     // Codegen as either a local or global variable definition
     if (cg.mCtx.mCurFunction) {
         codegenLocalVarDeclWithType(cg,
                                     varDecl,
                                     varCompiledType,
-                                    varDataTypeIsInferred);
+                                    varTypeIsInferred);
     }
     else {
         codegenGlobalVarDeclWithType(cg,
                                      varDecl,
                                      varCompiledType, 
-                                     varDataTypeIsInferred);
+                                     varTypeIsInferred);
     }
 }
 
