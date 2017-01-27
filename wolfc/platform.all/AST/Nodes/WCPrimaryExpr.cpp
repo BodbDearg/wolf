@@ -106,21 +106,6 @@ const DataType & PrimaryExprIntLit::dataType() const {
     return mLit.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * PrimaryExprIntLit::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mLit.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * PrimaryExprIntLit::codegenExprEval(CodegenCtx & cgCtx) {
-    return mLit.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * PrimaryExprIntLit::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mLit.codegenExprConstEval(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // PrimaryExprBoolLit
 //-----------------------------------------------------------------------------
@@ -151,21 +136,6 @@ bool PrimaryExprBoolLit::isConstExpr() const {
 const DataType & PrimaryExprBoolLit::dataType() const {
     return mLit.dataType();
 }
-
-#warning FIXME - Codegen
-#if 0
-llvm::Value * PrimaryExprBoolLit::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mLit.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * PrimaryExprBoolLit::codegenExprEval(CodegenCtx & cgCtx) {
-    return mLit.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * PrimaryExprBoolLit::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mLit.codegenExprConstEval(cgCtx);
-}
-#endif
 
 //-----------------------------------------------------------------------------
 // PrimaryExprStrLit
@@ -198,21 +168,6 @@ const DataType & PrimaryExprStrLit::dataType() const {
     return mLit.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * PrimaryExprStrLit::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mLit.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * PrimaryExprStrLit::codegenExprEval(CodegenCtx & cgCtx) {
-    return mLit.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * PrimaryExprStrLit::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mLit.codegenExprConstEval(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // PrimaryExprArrayLit
 //-----------------------------------------------------------------------------
@@ -244,21 +199,6 @@ const DataType & PrimaryExprArrayLit::dataType() const {
     return mLit.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * PrimaryExprArrayLit::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mLit.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * PrimaryExprArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
-    return mLit.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * PrimaryExprArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mLit.codegenExprConstEval(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // PrimaryExprIdentifier
 //-----------------------------------------------------------------------------
@@ -289,21 +229,6 @@ bool PrimaryExprIdentifier::isConstExpr() const {
 const DataType & PrimaryExprIdentifier::dataType() const {
     return mIdent.dataType();
 }
-
-#warning FIXME - Codegen
-#if 0
-llvm::Value * PrimaryExprIdentifier::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mIdent.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * PrimaryExprIdentifier::codegenExprEval(CodegenCtx & cgCtx) {
-    return mIdent.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * PrimaryExprIdentifier::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mIdent.codegenExprConstEval(cgCtx);
-}
-#endif
 
 const char * PrimaryExprIdentifier::name() const {
     return mIdent.name();
@@ -340,21 +265,6 @@ const DataType & PrimaryExprReadnum::dataType() const {
     return mExpr.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * PrimaryExprReadnum::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mExpr.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * PrimaryExprReadnum::codegenExprEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * PrimaryExprReadnum::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprConstEval(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // PrimaryExprTime
 //-----------------------------------------------------------------------------
@@ -386,21 +296,6 @@ const DataType & PrimaryExprTime::dataType() const {
     return mExpr.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * PrimaryExprTime::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mExpr.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * PrimaryExprTime::codegenExprEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * PrimaryExprTime::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprConstEval(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // PrimaryRandExpr
 //-----------------------------------------------------------------------------
@@ -431,21 +326,6 @@ bool PrimaryExprRandExpr::isConstExpr() const {
 const DataType & PrimaryExprRandExpr::dataType() const {
     return mExpr.dataType();
 }
-
-#warning FIXME - Codegen
-#if 0
-llvm::Value * PrimaryExprRandExpr::codegenAddrOf(CodegenCtx & cgCtx) {
-    return mExpr.codegenAddrOf(cgCtx);
-}
-
-llvm::Value * PrimaryExprRandExpr::codegenExprEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprEval(cgCtx);
-}
-
-llvm::Constant * PrimaryExprRandExpr::codegenExprConstEval(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprConstEval(cgCtx);
-}
-#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE
