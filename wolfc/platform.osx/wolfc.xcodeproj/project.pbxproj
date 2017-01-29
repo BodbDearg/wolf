@@ -114,6 +114,7 @@
 		1F5B592A1E2D773000609CDD /* CodegenCtx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F5B59281E2D773000609CDD /* CodegenCtx.cpp */; };
 		1F5FB1271D4B119D002C8F15 /* WCArrayDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F5FB1251D4B119D002C8F15 /* WCArrayDataType.cpp */; };
 		1F6B6BCB1E3D96DA00B75BF4 /* AddrCodegen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B6BC91E3D96DA00B75BF4 /* AddrCodegen.cpp */; };
+		1F6B6BCD1E3DCA1100B75BF4 /* AddrCodegen_Identifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B6BCC1E3DCA1100B75BF4 /* AddrCodegen_Identifier.cpp */; };
 		1F72313C1DD0762D00D9E50D /* WCDebugBreak.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F72313B1DD0762D00D9E50D /* WCDebugBreak.cpp */; };
 		1F7E19401E307C0400C82867 /* Codegen_Module.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F7E193F1E307C0400C82867 /* Codegen_Module.cpp */; };
 		1F7E19431E30A16400C82867 /* Function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F7E19411E30A16400C82867 /* Function.cpp */; };
@@ -334,6 +335,7 @@
 		1F65622B1D08FEF700815D7D /* misc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = misc; path = ../../misc; sourceTree = "<group>"; };
 		1F6B6BC91E3D96DA00B75BF4 /* AddrCodegen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddrCodegen.cpp; sourceTree = "<group>"; };
 		1F6B6BCA1E3D96DA00B75BF4 /* AddrCodegen.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AddrCodegen.hpp; sourceTree = "<group>"; };
+		1F6B6BCC1E3DCA1100B75BF4 /* AddrCodegen_Identifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddrCodegen_Identifier.cpp; sourceTree = "<group>"; };
 		1F72313B1DD0762D00D9E50D /* WCDebugBreak.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCDebugBreak.cpp; sourceTree = "<group>"; };
 		1F72313D1DD076C800D9E50D /* WCDebugBreak.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WCDebugBreak.hpp; sourceTree = "<group>"; };
 		1F7E193F1E307C0400C82867 /* Codegen_Module.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_Module.cpp; sourceTree = "<group>"; };
@@ -553,6 +555,7 @@
 		1FA38ADC1E2C0D6F007BD3B8 /* LLVM */ = {
 			isa = PBXGroup;
 			children = (
+				1F6B6BCC1E3DCA1100B75BF4 /* AddrCodegen_Identifier.cpp */,
 				1F6B6BC91E3D96DA00B75BF4 /* AddrCodegen.cpp */,
 				1F6B6BCA1E3D96DA00B75BF4 /* AddrCodegen.hpp */,
 				1F2352971E34374C0055A5E5 /* Codegen_AddExpr.cpp */,
@@ -917,6 +920,7 @@
 				1F23528C1E3431A00055A5E5 /* Codegen_AssignExpr.cpp in Sources */,
 				1F39144E1E31E1A0001925BE /* CodegenDataType.cpp in Sources */,
 				1F0308A51E2AF2510097D223 /* WCPostfixExpr.cpp in Sources */,
+				1F6B6BCD1E3DCA1100B75BF4 /* AddrCodegen_Identifier.cpp in Sources */,
 				1F2352A21E343C430055A5E5 /* Codegen_CastExpr.cpp in Sources */,
 				1F0308A31E2AF2510097D223 /* WCNoOpStmnt.cpp in Sources */,
 				1F7E6C501E2F5F0E00719A99 /* Codegen.cpp in Sources */,

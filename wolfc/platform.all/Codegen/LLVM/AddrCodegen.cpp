@@ -316,11 +316,6 @@ void AddrCodegen::visit(const AST::FuncCallArgListSingle & astNode) {
     codegenNotSupportedForNodeTypeError(astNode, "FuncCallArgListSingle");
 }
 
-void AddrCodegen::visit(const AST::Identifier & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void AddrCodegen::visit(const AST::IfStmntElse & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "IfStmntElse");
