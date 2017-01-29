@@ -14,7 +14,17 @@ void Codegen::visit(const AST::AssignExprNoAssign & astNode) {
 
 void Codegen::visit(const AST::AssignExprAssign & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    
+    #warning TODO
+    /*
+    // Codegen the address of the left side
+    astNode.mLeftExpr.accept(mAddrCodegen);
+    Value leftAddr = mCtx.popValue();
+    
+    // Codegen the right value
+    astNode.mRightExpr.accept(*this);
+    Value valueAddr = mCtx.popValue();
+    */
 }
 
 void Codegen::visit(const AST::AssignExprAssignAdd & astNode) {

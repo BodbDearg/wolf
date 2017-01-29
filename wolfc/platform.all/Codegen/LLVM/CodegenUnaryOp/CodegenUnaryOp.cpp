@@ -1,4 +1,4 @@
-#include "CodegenUnaryOpHelper.hpp"
+#include "CodegenUnaryOp.hpp"
 
 #include "AST/Nodes/WCASTNode.hpp"
 #include "AST/Nodes/WCIExpr.hpp"
@@ -10,10 +10,10 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-CodegenUnaryOpHelper::CodegenUnaryOpHelper(Codegen & cg,
-                                           const AST::ASTNode & expr,
-                                           const char * opSymbol,
-                                           const char * opName)
+CodegenUnaryOp::CodegenUnaryOp(Codegen & cg,
+                               const AST::ASTNode & expr,
+                               const char * opSymbol,
+                               const char * opName)
 :
     mCG(cg),
     mExpr(expr),
@@ -24,7 +24,7 @@ CodegenUnaryOpHelper::CodegenUnaryOpHelper(Codegen & cg,
     WC_ASSERT(mExpr.mParent);
 }
 
-void CodegenUnaryOpHelper::codegen() {
+void CodegenUnaryOp::codegen() {
     // Get the type for the operand:
     const AST::IExpr * nodeAsExpr = dynamic_cast<const AST::IExpr*>(&mExpr);
     
@@ -46,47 +46,47 @@ void CodegenUnaryOpHelper::codegen() {
     }
 }
 
-void CodegenUnaryOpHelper::visit(const ArrayBadSizeDataType & dataType) {
+void CodegenUnaryOp::visit(const ArrayBadSizeDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();
 }
 
-void CodegenUnaryOpHelper::visit(const ArrayDataType & dataType) {
+void CodegenUnaryOp::visit(const ArrayDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();
 }
 
-void CodegenUnaryOpHelper::visit(const ArrayUnevalSizeDataType & dataType) {
+void CodegenUnaryOp::visit(const ArrayUnevalSizeDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();
 }
 
-void CodegenUnaryOpHelper::visit(const BoolDataType & dataType) {
+void CodegenUnaryOp::visit(const BoolDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();
 }
 
-void CodegenUnaryOpHelper::visit(const Int64DataType & dataType) {
+void CodegenUnaryOp::visit(const Int64DataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();
 }
 
-void CodegenUnaryOpHelper::visit(const StrDataType & dataType) {
+void CodegenUnaryOp::visit(const StrDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();
 }
 
-void CodegenUnaryOpHelper::visit(const UnknownDataType & dataType) {
+void CodegenUnaryOp::visit(const UnknownDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();
 }
 
-void CodegenUnaryOpHelper::visit(const VoidDataType & dataType) {
+void CodegenUnaryOp::visit(const VoidDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();
 }
 
-void CodegenUnaryOpHelper::issueUnaryOpNotSupportedError() {
+void CodegenUnaryOp::issueUnaryOpNotSupportedError() {
     AST::ASTNode * parent = mExpr.mParent;
     WC_ASSERT(parent);
     mCG.mCtx.error(*parent,
@@ -96,15 +96,15 @@ void CodegenUnaryOpHelper::issueUnaryOpNotSupportedError() {
                    mExprVal.mCompiledType.getDataType().name().c_str());
 }
 
-void CodegenUnaryOpHelper::pushOpResult(llvm::Value * result) {
+void CodegenUnaryOp::pushOpResult(llvm::Value * result) {
     pushOpResult(result, false);
 }
 
-void CodegenUnaryOpHelper::pushOpResult(llvm::Value * result, bool requiresLoad) {
+void CodegenUnaryOp::pushOpResult(llvm::Value * result, bool requiresLoad) {
     pushOpResult(result, requiresLoad, mExprVal.mCompiledType);
 }
 
-void CodegenUnaryOpHelper::pushOpResult(llvm::Value * result, bool requiresLoad, const CompiledDataType & resultType) {
+void CodegenUnaryOp::pushOpResult(llvm::Value * result, bool requiresLoad, const CompiledDataType & resultType) {
     mCG.mCtx.pushValue(Value(result, resultType, requiresLoad, mExpr.mParent));
 }
 

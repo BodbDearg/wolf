@@ -2,71 +2,11 @@
 
 #include "AST/Nodes/WCMulExpr.hpp"
 #include "AST/Nodes/WCShiftExpr.hpp"
-#include "CodegenConstBinaryOpHelper.hpp"
+#include "CodegenConstBinaryOp/CodegenConstBinaryOp_MulExpr.hpp"
 #include "CodegenCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
-
-class CodegenConstMulBinaryOp : public CodegenConstBinaryOpHelper {
-public:
-    CodegenConstMulBinaryOp(ConstCodegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenConstBinaryOpHelper(cg, leftExpr, rightExpr, "*", "multiply")
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-    
-    void visit(const Int64DataType & dataType) override {
-        WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getMul(mLeftConst.mLLVMConst,
-                                                mRightConst.mLLVMConst));
-    }
-};
-
-class CodegenConstDivBinaryOp : public CodegenConstBinaryOpHelper {
-public:
-    CodegenConstDivBinaryOp(ConstCodegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenConstBinaryOpHelper(cg, leftExpr, rightExpr, "/", "divide")
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-    
-    void visit(const Int64DataType & dataType) override {
-        WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getSDiv(mLeftConst.mLLVMConst,
-                                                 mRightConst.mLLVMConst));
-    }
-};
-
-class CodegenConstModBinaryOp : public CodegenConstBinaryOpHelper {
-public:
-    CodegenConstModBinaryOp(ConstCodegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenConstBinaryOpHelper(cg, leftExpr, rightExpr, "%", "modulus")
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-    
-    void visit(const Int64DataType & dataType) override {
-        WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getSRem(mLeftConst.mLLVMConst,
-                                                 mRightConst.mLLVMConst));
-    }
-};
-
-class CodegenConstBAndBinaryOp : public CodegenConstBinaryOpHelper {
-public:
-    CodegenConstBAndBinaryOp(ConstCodegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenConstBinaryOpHelper(cg, leftExpr, rightExpr, "&", "bitwise and")
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-    
-    void visit(const Int64DataType & dataType) override {
-        WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getAnd(mLeftConst.mLLVMConst,
-                                                mRightConst.mLLVMConst));
-    }
-};
 
 void ConstCodegen::visit(const AST::MulExprNoOp & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();

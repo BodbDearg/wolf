@@ -1,20 +1,20 @@
-#include "CodegenConstBinaryOpHelper.hpp"
+#include "CodegenBinaryOp.hpp"
 
 #include "AST/Nodes/WCASTNode.hpp"
 #include "AST/Nodes/WCIExpr.hpp"
+#include "Codegen.hpp"
 #include "CodegenCtx.hpp"
-#include "ConstCodegen.hpp"
 #include "DataType/WCDataType.hpp"
 #include "WCAssert.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-CodegenConstBinaryOpHelper::CodegenConstBinaryOpHelper(ConstCodegen & cg,
-                                                       const AST::ASTNode & leftExpr,
-                                                       const AST::ASTNode & rightExpr,
-                                                       const char * opSymbol,
-                                                       const char * opName)
+CodegenBinaryOp::CodegenBinaryOp(Codegen & cg,
+                                 const AST::ASTNode & leftExpr,
+                                 const AST::ASTNode & rightExpr,
+                                 const char * opSymbol,
+                                 const char * opName)
 :
     mCG(cg),
     mLeftExpr(leftExpr),
@@ -28,7 +28,7 @@ CodegenConstBinaryOpHelper::CodegenConstBinaryOpHelper(ConstCodegen & cg,
     WC_ASSERT(mLeftExpr.mParent == mRightExpr.mParent);
 }
 
-void CodegenConstBinaryOpHelper::codegen() {
+void CodegenBinaryOp::codegen() {
     // Get the type for both left and right expressions:
     const AST::IExpr * leftAsExpr = dynamic_cast<const AST::IExpr*>(&mLeftExpr);
     
@@ -50,17 +50,16 @@ void CodegenConstBinaryOpHelper::codegen() {
     
     // Okay, codegen both the left and right expressions
     mLeftExpr.accept(mCG);
-    mLeftConst = mCG.mCtx.popConstant();
+    mLeftVal = mCG.mCtx.popValue();
     mRightExpr.accept(mCG);
-    mRightConst = mCG.mCtx.popConstant();
+    mRightVal = mCG.mCtx.popValue();
     
     // The left and right types must match:
-    const DataType & leftType = mLeftConst.mCompiledType.getDataType();
-    const DataType & rightType = mRightConst.mCompiledType.getDataType();
+    const DataType & leftType = mLeftVal.mCompiledType.getDataType();
+    const DataType & rightType = mRightVal.mCompiledType.getDataType();
     
-    // TODO: Support auto type promotion
     if (leftType.equals(rightType)) {
-        if (mLeftConst.isValid() && mRightConst.isValid()) {
+        if (mLeftVal.isValid() && mRightVal.isValid()) {
             leftType.accept(*this);
         }
     }
@@ -76,47 +75,47 @@ void CodegenConstBinaryOpHelper::codegen() {
     }
 }
 
-void CodegenConstBinaryOpHelper::visit(const ArrayBadSizeDataType & dataType) {
+void CodegenBinaryOp::visit(const ArrayBadSizeDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenConstBinaryOpHelper::visit(const ArrayDataType & dataType) {
+void CodegenBinaryOp::visit(const ArrayDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenConstBinaryOpHelper::visit(const ArrayUnevalSizeDataType & dataType) {
+void CodegenBinaryOp::visit(const ArrayUnevalSizeDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenConstBinaryOpHelper::visit(const BoolDataType & dataType) {
+void CodegenBinaryOp::visit(const BoolDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenConstBinaryOpHelper::visit(const Int64DataType & dataType) {
+void CodegenBinaryOp::visit(const Int64DataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenConstBinaryOpHelper::visit(const StrDataType & dataType) {
+void CodegenBinaryOp::visit(const StrDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenConstBinaryOpHelper::visit(const UnknownDataType & dataType) {
+void CodegenBinaryOp::visit(const UnknownDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenConstBinaryOpHelper::visit(const VoidDataType & dataType) {
+void CodegenBinaryOp::visit(const VoidDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }
 
-void CodegenConstBinaryOpHelper::issueBinaryOpNotSupportedError() {
+void CodegenBinaryOp::issueBinaryOpNotSupportedError() {
     AST::ASTNode * parent = mLeftExpr.mParent;
     WC_ASSERT(parent);
     mCG.mCtx.error(*parent,
@@ -124,17 +123,26 @@ void CodegenConstBinaryOpHelper::issueBinaryOpNotSupportedError() {
                    "of type '%s' and right expression of type '%s'!",
                    mOpSymbol,
                    mOpName,
-                   mLeftConst.mCompiledType.getDataType().name().c_str(),
-                   mRightConst.mCompiledType.getDataType().name().c_str());
+                   mLeftVal.mCompiledType.getDataType().name().c_str(),
+                   mRightVal.mCompiledType.getDataType().name().c_str());
 }
 
-void CodegenConstBinaryOpHelper::pushOpResult(llvm::Constant * result) {
-    pushOpResult(result, mLeftConst.mCompiledType);
+void CodegenBinaryOp::pushOpResult(llvm::Value * result) {
+    pushOpResult(result, false);
 }
 
-void CodegenConstBinaryOpHelper::pushOpResult(llvm::Constant * result, const CompiledDataType & resultType) {
+void CodegenBinaryOp::pushOpResult(llvm::Value * result,
+                                   bool requiresLoad)
+{
+    pushOpResult(result, requiresLoad, mLeftVal.mCompiledType);
+}
+
+void CodegenBinaryOp::pushOpResult(llvm::Value * result,
+                                   bool requiresLoad,
+                                   const CompiledDataType & resultType)
+{
     WC_ASSERT(result);
-    mCG.mCtx.pushConstant(Constant(result, resultType, mLeftExpr.mParent));
+    mCG.mCtx.pushValue(Value(result, resultType, requiresLoad, mLeftExpr.mParent));
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE

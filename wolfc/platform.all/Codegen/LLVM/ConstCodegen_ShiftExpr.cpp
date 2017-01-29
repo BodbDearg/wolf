@@ -2,56 +2,11 @@
 
 #include "AST/Nodes/WCShiftExpr.hpp"
 #include "AST/Nodes/WCUnaryExpr.hpp"
-#include "CodegenConstBinaryOpHelper.hpp"
+#include "CodegenConstBinaryOp_ShiftExpr.hpp"
 #include "CodegenCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
-
-class CodegenConstLShiftBinaryOp : public CodegenConstBinaryOpHelper {
-public:
-    CodegenConstLShiftBinaryOp(ConstCodegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenConstBinaryOpHelper(cg, leftExpr, rightExpr, "<<", "left shift")
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-    
-    void visit(const Int64DataType & dataType) override {
-        WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getShl(mLeftConst.mLLVMConst,
-                                                mRightConst.mLLVMConst));
-    }
-};
-
-class CodegenConstARShiftBinaryOp : public CodegenConstBinaryOpHelper {
-public:
-    CodegenConstARShiftBinaryOp(ConstCodegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenConstBinaryOpHelper(cg, leftExpr, rightExpr, ">>", "arithmetic right shift")
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-    
-    void visit(const Int64DataType & dataType) override {
-        WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getAShr(mLeftConst.mLLVMConst,
-                                                 mRightConst.mLLVMConst));
-    }
-};
-
-class CodegenConstLRShiftBinaryOp : public CodegenConstBinaryOpHelper {
-public:
-    CodegenConstLRShiftBinaryOp(ConstCodegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenConstBinaryOpHelper(cg, leftExpr, rightExpr, ">>>", "logical right shift")
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-    
-    void visit(const Int64DataType & dataType) override {
-        WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getLShr(mLeftConst.mLLVMConst,
-                                                 mRightConst.mLLVMConst));
-    }
-};
 
 void ConstCodegen::visit(const AST::ShiftExprNoOp & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Constant.hpp"
 #include "DataType/DataTypeVisitor.hpp"
+#include "Value.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <functional>
 WC_THIRD_PARTY_INCLUDES_END
 
 namespace llvm {
-    class Constant;
+    class Value;
 }
 
 WC_BEGIN_NAMESPACE
@@ -21,20 +21,20 @@ namespace AST {
 
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-class ConstCodegen;
+class Codegen;
 
 /**
- * Class that generates code for a const binary operation for a specific data type.
- * The default implementation of each visitor function says that the op is not 
- * supported for the data type.
+ * Class that generates code for a binary operation for a specific data type.
+ * The default implementation of each visitor function says that the op is
+ * not supported for the data type.
  */
-class CodegenConstBinaryOpHelper : public DataTypeVisitor {
+class CodegenBinaryOp : public DataTypeVisitor {
 public:
-    CodegenConstBinaryOpHelper(ConstCodegen & cg,
-                               const AST::ASTNode & leftExpr,
-                               const AST::ASTNode & rightExpr,
-                               const char * opSymbol,
-                               const char * opName);
+    CodegenBinaryOp(Codegen & cg,
+                    const AST::ASTNode & leftExpr,
+                    const AST::ASTNode & rightExpr,
+                    const char * opSymbol,
+                    const char * opName);
     
     /**
      * Kicks off the codegen for the binary op.
@@ -59,21 +59,28 @@ protected:
     
     /**
      * Save the operator result in the codegen context. If the compiled type of the result 
-     * is not specified then we use the compiled type of left operand.
+     * is not specified then we use the compiled type of left operand. If the 'requiresLoad'
+     * flag is not specified then it is defaulted to false.
      */
-    void pushOpResult(llvm::Constant * result);
-    void pushOpResult(llvm::Constant * result, const CompiledDataType & resultType);
+    void pushOpResult(llvm::Value * result);
+    
+    void pushOpResult(llvm::Value * result,
+                      bool requiresLoad);
+    
+    void pushOpResult(llvm::Value * result,
+                      bool requiresLoad,
+                      const CompiledDataType & resultType);
     
     /* Various vars needed as input to the code generator */
-    ConstCodegen &          mCG;
+    Codegen &               mCG;
     const AST::ASTNode &    mLeftExpr;
     const AST::ASTNode &    mRightExpr;
     const char *            mOpSymbol;
     const char *            mOpName;
     
     /* These are generated and cached by the codegen() function */
-    Constant mLeftConst;
-    Constant mRightConst;
+    Value mLeftVal;
+    Value mRightVal;
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE

@@ -2,39 +2,11 @@
 
 #include "AST/Nodes/WCCmpExpr.hpp"
 #include "AST/Nodes/WCNotExpr.hpp"
-#include "CodegenConstUnaryOpHelper.hpp"
+#include "CodegenConstUnaryOp/CodegenConstUnaryOp_NotExpr.hpp"
 #include "CodegenCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
-
-class CodegenConstLNotUnaryOp : public CodegenConstUnaryOpHelper {
-public:
-    CodegenConstLNotUnaryOp(ConstCodegen & cg, const AST::ASTNode & expr) :
-        CodegenConstUnaryOpHelper(cg, expr, "not", "logical not")
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-    
-    void visit(const BoolDataType & dataType) override {
-        WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getNot(mExprConst.mLLVMConst));
-    }
-};
-
-class CodegenConstBNotUnaryOp : public CodegenConstUnaryOpHelper {
-public:
-    CodegenConstBNotUnaryOp(ConstCodegen & cg, const AST::ASTNode & expr) :
-        CodegenConstUnaryOpHelper(cg, expr, "~", "bitwise not")
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-    
-    void visit(const Int64DataType & dataType) override {
-        WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getNot(mExprConst.mLLVMConst));
-    }
-};
 
 void ConstCodegen::visit(const AST::NotExprNoOp & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();

@@ -2,71 +2,11 @@
 
 #include "AST/Nodes/WCAddExpr.hpp"
 #include "AST/Nodes/WCMulExpr.hpp"
-#include "CodegenConstBinaryOpHelper.hpp"
+#include "CodegenConstBinaryOp/CodegenConstBinaryOp_AddExpr.hpp"
 #include "CodegenCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
-
-class CodegenConstAddBinaryOp : public CodegenConstBinaryOpHelper {
-public:
-    CodegenConstAddBinaryOp(ConstCodegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenConstBinaryOpHelper(cg, leftExpr, rightExpr, "+", "add")
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-    
-    void visit(const Int64DataType & dataType) override {
-        WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getAdd(mLeftConst.mLLVMConst,
-                                                mRightConst.mLLVMConst));
-    }
-};
-
-class CodegenConstSubBinaryOp : public CodegenConstBinaryOpHelper {
-public:
-    CodegenConstSubBinaryOp(ConstCodegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenConstBinaryOpHelper(cg, leftExpr, rightExpr, "-", "subtract")
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-    
-    void visit(const Int64DataType & dataType) override {
-        WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getSub(mLeftConst.mLLVMConst,
-                                                mRightConst.mLLVMConst));
-    }
-};
-
-class CodegenConstBOrBinaryOp : public CodegenConstBinaryOpHelper {
-public:
-    CodegenConstBOrBinaryOp(ConstCodegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenConstBinaryOpHelper(cg, leftExpr, rightExpr, "|", "bitwise or")
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-    
-    void visit(const Int64DataType & dataType) override {
-        WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getOr(mLeftConst.mLLVMConst,
-                                               mRightConst.mLLVMConst));
-    }
-};
-
-class CodegenConstBXOrBinaryOp : public CodegenConstBinaryOpHelper {
-public:
-    CodegenConstBXOrBinaryOp(ConstCodegen & cg, const AST::ASTNode & leftExpr, const AST::ASTNode & rightExpr) :
-        CodegenConstBinaryOpHelper(cg, leftExpr, rightExpr, "^", "bitwise xor")
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-    
-    void visit(const Int64DataType & dataType) override {
-        WC_UNUSED_PARAM(dataType);
-        pushOpResult(llvm::ConstantExpr::getXor(mLeftConst.mLLVMConst,
-                                                mRightConst.mLLVMConst));
-    }
-};
 
 void ConstCodegen::visit(const AST::AddExprNoOp & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
