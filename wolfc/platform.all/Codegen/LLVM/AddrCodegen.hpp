@@ -1,22 +1,25 @@
 #pragma once
 
 #include "AST/WCASTNodeVisitor.hpp"
-#include "ConstCodegen.hpp"
-
-WC_THIRD_PARTY_INCLUDES_BEGIN
-    #include <string>
-WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
+
+namespace AST {
+    class ASTNode;
+}
+
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
+class Codegen;
 class CodegenCtx;
-class Function;
 
-/* Generates code for the LLVM backend */
-class Codegen : public AST::ASTNodeVisitor {
+/**
+ * Code generation which generates the address of supported nodes. Address code generation is 
+ * required to lookup variables for load/store and also for array indexing etc.
+ */
+class AddrCodegen : public AST::ASTNodeVisitor {
 public:
-    Codegen(CodegenCtx & ctx, const char * moduleName);
+    AddrCodegen(CodegenCtx & ctx, Codegen & codegen);
     
     /* ASTNode visitor functions */
     virtual void visit(const AST::AddExprAdd & astNode) override;
@@ -141,20 +144,13 @@ public:
     /* The codegen context */
     CodegenCtx & mCtx;
     
-    /* Code generator in charge of constant code generation */
-    ConstCodegen mConstCodegen;
+    /* The regular code generator */
+    Codegen & mCodegen;
      
 private:
-    /**
-     * Deferred function codegen. Generates the code for the function body.
-     * This codegen is deferred until after top level module declarations so we can declare and use
-     * functions in any order, unlike C where the function must be declared in a prior source line 
-     * before being used.
-     */
-    void doDeferredFunctionCodegen(const AST::Func & astNode, Function & function);
-    
-    #warning TODO - move to codegen ctx
-    std::string mModuleName;
+    /* Issue a codegen not supported error for the given ASTNode type */
+    void codegenNotSupportedForNodeTypeError(const AST::ASTNode & node,
+                                             const char * nodeClassName);
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE

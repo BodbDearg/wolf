@@ -5,6 +5,7 @@
 #include "AST/Nodes/WCScope.hpp"
 #include "CodegenCtx.hpp"
 #include "DataType/WCDataType.hpp"
+#include "WCAssert.hpp"
 #include "WCStringUtils.hpp"
 
 WC_BEGIN_NAMESPACE
