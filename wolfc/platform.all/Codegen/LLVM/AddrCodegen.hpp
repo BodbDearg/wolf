@@ -12,6 +12,8 @@ WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
 class Codegen;
 class CodegenCtx;
+class CodegenDataType;
+class ConstCodegen;
 
 /**
  * Code generation which generates the address of supported nodes. Address code generation is 
@@ -19,7 +21,10 @@ class CodegenCtx;
  */
 class AddrCodegen : public AST::ASTNodeVisitor {
 public:
-    AddrCodegen(CodegenCtx & ctx, Codegen & codegen);
+    AddrCodegen(CodegenCtx & ctx,
+                Codegen & codegen,
+                ConstCodegen & constCodegen,
+                CodegenDataType & codegenDataType);
     
     /* ASTNode visitor functions */
     virtual void visit(const AST::AddExprAdd & astNode) override;
@@ -146,11 +151,28 @@ public:
     
     /* The regular code generator */
     Codegen & mCodegen;
+    
+    /* Code generator in charge of constant code generation */
+    ConstCodegen & mConstCodegen;
+    
+    /* Code generator in charge of data type generation */
+    CodegenDataType & mCodegenDataType;
      
 private:
     /* Issue a codegen not supported error for the given ASTNode type */
     void codegenNotSupportedForNodeTypeError(const AST::ASTNode & node,
                                              const char * nodeClassName);
+
+    /* Issue a codegen error that a unary operation can't have it's address taken. */
+    void cantTakeAddressOfUnaryOpError(const AST::ASTNode & exprNode,
+                                       const char * opSymbol,
+                                       const char * opName);
+    
+    /* Issue a codegen error that a binary operation can't have it's address taken. */
+    void cantTakeAddressOfBinaryOpError(const AST::ASTNode & leftExprNode,
+                                        const AST::ASTNode & rightExprNode,
+                                        const char * opSymbol,
+                                        const char * opName);
 };
 
 WC_LLVM_CODEGEN_END_NAMESPACE

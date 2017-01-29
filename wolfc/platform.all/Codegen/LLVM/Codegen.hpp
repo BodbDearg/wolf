@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AddrCodegen.hpp"
 #include "AST/WCASTNodeVisitor.hpp"
 #include "ConstCodegen.hpp"
 
@@ -143,6 +144,12 @@ public:
     
     /* Code generator in charge of constant code generation */
     ConstCodegen mConstCodegen;
+    
+    /* Code generator in charge of data type generation */
+    CodegenDataType & mCodegenDataType;
+    
+    /* Code generator in charge of 'address of' code generation */
+    AddrCodegen mAddrCodegen;
      
 private:
     /**

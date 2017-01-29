@@ -35,7 +35,7 @@ static void doVarDeclTypeChecks(Codegen & cg,
     
     if (!varTypeIsInferred) {
         // Compile the type of the variable initializer
-        varDecl.mInitExpr.dataType().accept(cg.mConstCodegen.mCodegenDataType);
+        varDecl.mInitExpr.dataType().accept(cg.mCodegenDataType);
         CompiledDataType varInitCompiledType = cg.mCtx.popCompiledDataType();
         const DataType & varInitType = varInitCompiledType.getDataType();
         
@@ -211,7 +211,7 @@ void Codegen::visit(const AST::VarDeclInferType & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
     // Codegen the inferred data type:
-    astNode.mInitExpr.dataType().accept(mConstCodegen.mCodegenDataType);
+    astNode.mInitExpr.dataType().accept(mCodegenDataType);
     CompiledDataType varCompiledType = mCtx.popCompiledDataType();
     codegenVarDeclWithType(*this, astNode, varCompiledType, true);
 }

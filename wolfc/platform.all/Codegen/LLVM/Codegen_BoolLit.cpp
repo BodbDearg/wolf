@@ -15,7 +15,7 @@ void Codegen::visit(const AST::BoolLit & astNode) {
     
     // Codegen the data type for the int
     const BoolDataType & dataType = PrimitiveDataTypes::getBoolDataType();
-    dataType.accept(mConstCodegen.mCodegenDataType);
+    dataType.accept(mCodegenDataType);
     CompiledDataType compiledType = mCtx.popCompiledDataType();
     
     // Create the value and save to the stack

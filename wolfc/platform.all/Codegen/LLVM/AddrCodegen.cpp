@@ -45,31 +45,47 @@
 #include "AST/Nodes/WCUnaryExpr.hpp"
 #include "AST/Nodes/WCVarDecl.hpp"
 #include "AST/Nodes/WCWhileStmnt.hpp"
+#include "Codegen.hpp"
 #include "CodegenCtx.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
 
-AddrCodegen::AddrCodegen(CodegenCtx & ctx, Codegen & codegen) :
+AddrCodegen::AddrCodegen(CodegenCtx & ctx,
+                         Codegen & codegen,
+                         ConstCodegen & constCodegen,
+                         CodegenDataType & codegenDataType)
+:
     mCtx(ctx),
-    mCodegen(codegen)
+    mCodegen(codegen),
+    mConstCodegen(constCodegen),
+    mCodegenDataType(codegenDataType)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
 void AddrCodegen::visit(const AST::AddExprAdd & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "+",
+                                   "add");
 }
 
 void AddrCodegen::visit(const AST::AddExprBOr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "|",
+                                   "bitwise or");
 }
 
 void AddrCodegen::visit(const AST::AddExprBXor & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "^",
+                                   "bitwise xor");
 }
 
 void AddrCodegen::visit(const AST::AddExprNoOp & astNode) {
@@ -79,7 +95,10 @@ void AddrCodegen::visit(const AST::AddExprNoOp & astNode) {
 
 void AddrCodegen::visit(const AST::AddExprSub & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "-",
+                                   "subtract");
 }
 
 void AddrCodegen::visit(const AST::ArrayLit & astNode) {
@@ -109,62 +128,62 @@ void AddrCodegen::visit(const AST::AssertStmnt & astNode) {
 
 void AddrCodegen::visit(const AST::AssignExprAssign & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
 
 void AddrCodegen::visit(const AST::AssignExprAssignAdd & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
 
 void AddrCodegen::visit(const AST::AssignExprAssignARShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
 
 void AddrCodegen::visit(const AST::AssignExprAssignBAnd & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
 
 void AddrCodegen::visit(const AST::AssignExprAssignBOr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
 
 void AddrCodegen::visit(const AST::AssignExprAssignBXor & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
 
 void AddrCodegen::visit(const AST::AssignExprAssignDiv & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
 
 void AddrCodegen::visit(const AST::AssignExprAssignLRShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
 
 void AddrCodegen::visit(const AST::AssignExprAssignLShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
 
 void AddrCodegen::visit(const AST::AssignExprAssignMod & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
 
 void AddrCodegen::visit(const AST::AssignExprAssignMul & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
 
 void AddrCodegen::visit(const AST::AssignExprAssignSub & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
 
 void AddrCodegen::visit(const AST::AssignExprNoAssign & astNode) {
@@ -174,7 +193,7 @@ void AddrCodegen::visit(const AST::AssignExprNoAssign & astNode) {
 
 void AddrCodegen::visit(const AST::BoolLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of a bool literal!");
 }
 
 void AddrCodegen::visit(const AST::BreakStmntNoCond & astNode) {
@@ -189,42 +208,72 @@ void AddrCodegen::visit(const AST::BreakStmntWithCond & astNode) {
 
 void AddrCodegen::visit(const AST::CastExprCast & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    
+    // Get the data type being casted from and to
+    astNode.mExpr.dataType().accept(mCodegenDataType);
+    CompiledDataType fromType = mCtx.popCompiledDataType();
+    astNode.mType.dataType().accept(mCodegenDataType);
+    CompiledDataType toType = mCtx.popCompiledDataType();
+    
+    // Issue the error
+    mCtx.error(astNode,
+               "Can't take the address of a cast operation casting from "
+               "type '%s' to type '%s'!",
+               fromType.getDataType().name().c_str(),
+               toType.getDataType().name().c_str());
 }
 
 void AddrCodegen::visit(const AST::CastExprNoCast & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mExpr.accept(*this);
 }
 
 void AddrCodegen::visit(const AST::CmpExprEQ & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "==",
+                                   "equals");
 }
 
 void AddrCodegen::visit(const AST::CmpExprGE & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   ">=",
+                                   "greater than or equal to");
 }
 
 void AddrCodegen::visit(const AST::CmpExprGT & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   ">",
+                                   "greater than");
 }
 
 void AddrCodegen::visit(const AST::CmpExprLE & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "<=",
+                                   "less than or equal to");
 }
 
 void AddrCodegen::visit(const AST::CmpExprLT & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "<",
+                                   "less than");
 }
 
 void AddrCodegen::visit(const AST::CmpExprNE & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "!=",
+                                   "not equals");
 }
 
 void AddrCodegen::visit(const AST::CmpExprNoOp & astNode) {
@@ -289,12 +338,15 @@ void AddrCodegen::visit(const AST::IfStmntNoElse & astNode) {
 
 void AddrCodegen::visit(const AST::IntLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of a integer literal!");
 }
 
 void AddrCodegen::visit(const AST::LAndExprAnd & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "and",
+                                   "logical and");
 }
 
 void AddrCodegen::visit(const AST::LAndExprNoOp & astNode) {
@@ -319,7 +371,10 @@ void AddrCodegen::visit(const AST::LOrExprNoOp & astNode) {
 
 void AddrCodegen::visit(const AST::LOrExprOr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "or",
+                                   "logical or");
 }
 
 void AddrCodegen::visit(const AST::Module & astNode) {
@@ -329,22 +384,34 @@ void AddrCodegen::visit(const AST::Module & astNode) {
 
 void AddrCodegen::visit(const AST::MulExprBAnd & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "&",
+                                   "bitwise and");
 }
 
 void AddrCodegen::visit(const AST::MulExprDiv & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "/",
+                                   "divide");
 }
 
 void AddrCodegen::visit(const AST::MulExprMod & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "%",
+                                   "modulus");
 }
 
 void AddrCodegen::visit(const AST::MulExprMul & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "*",
+                                   "multiply");
 }
 
 void AddrCodegen::visit(const AST::MulExprNoOp & astNode) {
@@ -369,12 +436,12 @@ void AddrCodegen::visit(const AST::NoOpStmnt & astNode) {
 
 void AddrCodegen::visit(const AST::NotExprBNot & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfUnaryOpError(astNode, "~", "bitwise not");
 }
 
 void AddrCodegen::visit(const AST::NotExprLNot & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfUnaryOpError(astNode, "not", "logical not");
 }
 
 void AddrCodegen::visit(const AST::NotExprNoOp & astNode) {
@@ -389,7 +456,7 @@ void AddrCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
 
 void AddrCodegen::visit(const AST::PostfixExprDec & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mExpr.accept(*this);
 }
 
 void AddrCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
@@ -399,7 +466,7 @@ void AddrCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
 
 void AddrCodegen::visit(const AST::PostfixExprInc & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mExpr.accept(*this);
 }
 
 void AddrCodegen::visit(const AST::PostfixExprNoPostfix & astNode) {
@@ -409,42 +476,42 @@ void AddrCodegen::visit(const AST::PostfixExprNoPostfix & astNode) {
 
 void AddrCodegen::visit(const AST::PrimaryExprArrayLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mLit.accept(*this);
 }
 
 void AddrCodegen::visit(const AST::PrimaryExprBoolLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mLit.accept(*this);
 }
 
 void AddrCodegen::visit(const AST::PrimaryExprIdentifier & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mIdent.accept(*this);
 }
 
 void AddrCodegen::visit(const AST::PrimaryExprIntLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mLit.accept(*this);
 }
 
 void AddrCodegen::visit(const AST::PrimaryExprRandExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mExpr.accept(*this);
 }
 
 void AddrCodegen::visit(const AST::PrimaryExprReadnum & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mExpr.accept(*this);
 }
 
 void AddrCodegen::visit(const AST::PrimaryExprStrLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mLit.accept(*this);
 }
 
 void AddrCodegen::visit(const AST::PrimaryExprTime & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mExpr.accept(*this);
 }
 
 void AddrCodegen::visit(const AST::PrimitiveType & astNode) {
@@ -459,17 +526,17 @@ void AddrCodegen::visit(const AST::PrintStmnt & astNode) {
 
 void AddrCodegen::visit(const AST::RandExprRand & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of a rand() expression!");
 }
 
 void AddrCodegen::visit(const AST::RandExprSRand & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of a srand() expression!");
 }
 
 void AddrCodegen::visit(const AST::ReadnumExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of a readnum() expression!");
 }
 
 void AddrCodegen::visit(const AST::ReturnStmntNoCondVoid & astNode) {
@@ -504,17 +571,26 @@ void AddrCodegen::visit(const AST::ScopeStmnt & astNode) {
 
 void AddrCodegen::visit(const AST::ShiftExprARShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   ">>",
+                                   "arithmetic right shift");
 }
 
 void AddrCodegen::visit(const AST::ShiftExprLRShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   ">>>",
+                                   "logical right shift");
 }
 
 void AddrCodegen::visit(const AST::ShiftExprLShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "<<",
+                                   "left shift");
 }
 
 void AddrCodegen::visit(const AST::ShiftExprNoOp & astNode) {
@@ -529,7 +605,7 @@ void AddrCodegen::visit(const AST::StmntAssertStmnt & astNode) {
 
 void AddrCodegen::visit(const AST::StmntAssignExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mExpr.accept(*this);
 }
 
 void AddrCodegen::visit(const AST::StmntBreakStmnt & astNode) {
@@ -584,7 +660,7 @@ void AddrCodegen::visit(const AST::StmntWhileStmnt & astNode) {
 
 void AddrCodegen::visit(const AST::StrLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of a string literal!");
 }
 
 void AddrCodegen::visit(const AST::TernaryExprNoCond & astNode) {
@@ -594,12 +670,14 @@ void AddrCodegen::visit(const AST::TernaryExprNoCond & astNode) {
 
 void AddrCodegen::visit(const AST::TernaryExprWithCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    
+    // FIXME: should we be able to do this?
+    mCtx.error(astNode, "Can't take the address of a ternary expression!");
 }
 
 void AddrCodegen::visit(const AST::TimeExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    mCtx.error(astNode, "Can't take the address of a time() expression!");
 }
 
 void AddrCodegen::visit(const AST::TypeArray & astNode) {
@@ -614,17 +692,17 @@ void AddrCodegen::visit(const AST::TypePrimitive & astNode) {
 
 void AddrCodegen::visit(const AST::UnaryExprMinus & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfUnaryOpError(astNode, "-", "minus");
 }
 
 void AddrCodegen::visit(const AST::UnaryExprParen & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mExpr.accept(*this);
 }
 
 void AddrCodegen::visit(const AST::UnaryExprPlus & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    cantTakeAddressOfUnaryOpError(astNode, "+", "plus");
 }
 
 void AddrCodegen::visit(const AST::UnaryExprPrimary & astNode) {
@@ -653,6 +731,62 @@ void AddrCodegen::codegenNotSupportedForNodeTypeError(const AST::ASTNode & node,
     mCtx.error(node,
                "Code generating the address of AST node type '%s' is not supported!",
                nodeClassName);
+}
+
+void AddrCodegen::cantTakeAddressOfUnaryOpError(const AST::ASTNode & exprNode,
+                                                const char * opSymbol,
+                                                const char * opName)
+{
+    // Get the node as an expression
+    const AST::IExpr * expr = dynamic_cast<const AST::IExpr*>(&exprNode);
+    WC_ASSERT(expr);
+    
+    // Get the parent of the node (the unary operator node)
+    const AST::ASTNode * parent = exprNode.mParent;
+    WC_ASSERT(parent);
+    
+    // Compile the data type
+    expr->dataType().accept(mCodegenDataType);
+    CompiledDataType type = mCtx.popCompiledDataType();
+    
+    // Issue the error
+    mCtx.error(*parent,
+               "Can't take the address of the result of unary operator '%s' (%s) for an "
+               "expression of type '%s'!",
+               opSymbol,
+               opName,
+               type.getDataType().name().c_str());
+}
+
+void AddrCodegen::cantTakeAddressOfBinaryOpError(const AST::ASTNode & leftExprNode,
+                                                 const AST::ASTNode & rightExprNode,
+                                                 const char * opSymbol,
+                                                 const char * opName)
+{
+    // Get the left and right nodes as expressions
+    const AST::IExpr * leftExpr = dynamic_cast<const AST::IExpr*>(&leftExprNode);
+    const AST::IExpr * rightExpr = dynamic_cast<const AST::IExpr*>(&rightExprNode);
+    WC_ASSERT(leftExpr);
+    WC_ASSERT(rightExpr);
+    
+    // Get the parent of the left and right expression (the binary operator node)
+    const AST::ASTNode * parent = leftExprNode.mParent;
+    WC_ASSERT(parent);
+    
+    // Compile the left and right data types
+    leftExpr->dataType().accept(mCodegenDataType);
+    CompiledDataType leftType = mCtx.popCompiledDataType();
+    rightExpr->dataType().accept(mCodegenDataType);
+    CompiledDataType rightType = mCtx.popCompiledDataType();
+    
+    // Issue the error
+    mCtx.error(*parent,
+               "Can't take the address of the result of binary operator '%s' (%s) for a "
+               "left expression of type '%s' and right expression of type '%s'!",
+               opSymbol,
+               opName,
+               leftType.getDataType().name().c_str(),
+               rightType.getDataType().name().c_str());
 }
 
 WC_LLVM_CODEGEN_END_NAMESPACE
