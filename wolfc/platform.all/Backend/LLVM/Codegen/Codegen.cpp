@@ -106,11 +106,6 @@ void Codegen::visit(const AST::RandExprSRand & astNode) {
     #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ReadnumExpr & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void Codegen::visit(const AST::ReturnStmntNoCondVoid & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node

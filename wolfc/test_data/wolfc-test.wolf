@@ -1,9 +1,4 @@
 func main() -> void
-    let v = 2
-    print(v)
-    scope
-        let v = 3
-        print(v)
-    end
+    let v = readnum()
     print(v)
 end

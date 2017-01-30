@@ -161,22 +161,22 @@ void ConstCodegen::visit(const AST::NoOpStmnt & astNode) {
 
 void ConstCodegen::visit(const AST::PrintStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "PrintStmnt");
+    mCtx.error(astNode, "Can't evaluate an 'print()' statement at compile time!");
 }
 
 void ConstCodegen::visit(const AST::RandExprRand & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "RandExprRand");
+    mCtx.error(astNode, "Can't evaluate a 'rand()' expression at compile time!");
 }
 
 void ConstCodegen::visit(const AST::RandExprSRand & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "RandExprSRand");
+    mCtx.error(astNode, "Can't evaluate an 'srand()' statement at compile time!");
 }
 
 void ConstCodegen::visit(const AST::ReadnumExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "ReadnumExpr");
+    mCtx.error(astNode, "Can't evaluate a 'readnum()' expression at compile time!");
 }
 
 void ConstCodegen::visit(const AST::ReturnStmntNoCondVoid & astNode) {
@@ -276,7 +276,7 @@ void ConstCodegen::visit(const AST::StrLit & astNode) {
 
 void ConstCodegen::visit(const AST::TimeExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "TimeExpr");
+    mCtx.error(astNode, "Can't evaluate a 'time()' expression at compile time!");
 }
 
 void ConstCodegen::visit(const AST::VarDeclExplicitType & astNode) {
