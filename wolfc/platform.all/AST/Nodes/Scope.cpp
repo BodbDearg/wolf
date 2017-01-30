@@ -2,11 +2,8 @@
 
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
-#include "DataType/DataType.hpp"
 #include "LinearAlloc.hpp"
 #include "Stmnt.hpp"
-#include "StringUtils.hpp"
-#include "VarDecl.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -67,65 +64,6 @@ bool Scope::allCodepathsHaveUncondRet() const {
     
     return false;
 }
-
-#warning FIXME - Codegen
-#if 0
-DataValue * Scope::createVar(const char * varName,
-                             DataType & dataType,
-                             CodegenCtx & cgCtx,
-                             VarDecl & callingNode)
-{
-    // If the variable already exists in this scope then creation fails:
-    {
-        auto iter = mVarValues.find(varName);
-        
-        if (iter != mVarValues.end()) {
-            compileError("Attempting to redeclare variable '%s' in this scope!", varName);
-            return nullptr;
-        }
-    }
-    
-    // Compile the variable llvm type:
-    WC_GUARD(dataType.codegenLLVMTypeIfRequired(cgCtx, callingNode), nullptr);
-    
-    // The variable must have an llvm type:
-    if (!dataType.mLLVMType) {
-        compileError("Variable '%s' of type '%s' is not an llvm primitive type! Cannot create a variable to hold it!",
-                     varName,
-                     dataType.name().c_str());
-        
-        return nullptr;
-    }
-    
-    // Make the data value:
-    DataValue & dataValue = mVarValues[varName];
-    dataValue.declaringNode = &callingNode;
-    dataValue.requiresLoad = true;
-    dataValue.type = &dataType;
-    dataValue.value = dataType.codegenAlloca(cgCtx, *this, std::string("alloc_ident_val:") + varName);
-    WC_GUARD(dataValue.value, nullptr);
-
-    return &dataValue;
-}
-
-DataValue * Scope::getVar(const char * varName) {
-    // First search in this scope:
-    auto iter = mVarValues.find(varName);
-    
-    if (iter != mVarValues.end()) {
-        return &iter->second;
-    }
-    
-    // If that fails try a parent scope, if it exists:
-    Scope * parentScope = getParentScope();
-    
-    if (parentScope) {
-        return parentScope->getVar(varName);
-    }
-    
-    return nullptr;     // Variable not found!
-}
-#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

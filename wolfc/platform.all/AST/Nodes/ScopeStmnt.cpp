@@ -65,37 +65,6 @@ const Token & ScopeStmnt::getEndToken() const {
     return mEndToken;
 }
 
-#warning FIXME - Codegen
-#if 0
-bool ScopeStmnt::codegen(CodegenCtx & cgCtx) {
-    // Grab the parent function
-    llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
-    WC_GUARD_ASSERT(parentFn, false);
-    
-    // Create the 'scope' main block.
-    // Note: also make the previous block branch to this block in order to properly terminate it.
-    llvm::BasicBlock * startBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "ScopeStmnt:block", parentFn);
-    WC_ASSERT(startBB);
-    cgCtx.irBuilder.CreateBr(startBB);
-
-    // Codegen the main body scope:
-    cgCtx.irBuilder.SetInsertPoint(startBB);
-    
-    if (!mBodyScope.codegen(cgCtx)) {
-        return false;
-    }
-    
-    // Create the end basic block and make the current block branch to it to terminate it:
-    llvm::BasicBlock * endBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "ScopeStmnt:end", parentFn);
-    WC_ASSERT(endBB);
-    cgCtx.irBuilder.CreateBr(endBB);
-    
-    // Switch to inserting code at the end block:
-    cgCtx.irBuilder.SetInsertPoint(endBB);
-    return true;
-}
-#endif
-
 bool ScopeStmnt::allCodepathsHaveUncondRet() const {
     return mBodyScope.allCodepathsHaveUncondRet();
 }
