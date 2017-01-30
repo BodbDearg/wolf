@@ -6,7 +6,6 @@
 #include "AST/Nodes/WCFuncCall.hpp"
 #include "AST/Nodes/WCFuncCallArgList.hpp"
 #include "AST/Nodes/WCIBasicCodegenNode.hpp"
-#include "AST/Nodes/WCIdentifier.hpp"
 #include "AST/Nodes/WCIExpr.hpp"
 #include "AST/Nodes/WCLoopStmnt.hpp"
 #include "AST/Nodes/WCNextStmnt.hpp"
@@ -73,11 +72,6 @@ void Codegen::visit(const AST::FuncCallArgListMulti & astNode) {
 }
 
 void Codegen::visit(const AST::FuncCallArgListSingle & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::Identifier & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }

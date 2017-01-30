@@ -103,6 +103,7 @@
 		1F2352A81E3441DC0055A5E5 /* Codegen_IntLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2352A71E3441DC0055A5E5 /* Codegen_IntLit.cpp */; };
 		1F2352B01E35D2EB0055A5E5 /* Codegen_AssertStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2352AF1E35D2EB0055A5E5 /* Codegen_AssertStmnt.cpp */; };
 		1F2352B21E35EC420055A5E5 /* Codegen_IfStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2352B11E35EC420055A5E5 /* Codegen_IfStmnt.cpp */; };
+		1F2985831E3EDD2500DC17CC /* Codegen_Identifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2985821E3EDD2500DC17CC /* Codegen_Identifier.cpp */; };
 		1F3914481E31CBAF001925BE /* WCArrayUnevalSizeDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F3914461E31CBAE001925BE /* WCArrayUnevalSizeDataType.cpp */; };
 		1F39144B1E31DC23001925BE /* ConstCodegen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F3914491E31DC23001925BE /* ConstCodegen.cpp */; };
 		1F39144E1E31E1A0001925BE /* CodegenDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F39144C1E31E1A0001925BE /* CodegenDataType.cpp */; };
@@ -328,6 +329,7 @@
 		1F2352A71E3441DC0055A5E5 /* Codegen_IntLit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_IntLit.cpp; sourceTree = "<group>"; };
 		1F2352AF1E35D2EB0055A5E5 /* Codegen_AssertStmnt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_AssertStmnt.cpp; sourceTree = "<group>"; };
 		1F2352B11E35EC420055A5E5 /* Codegen_IfStmnt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_IfStmnt.cpp; sourceTree = "<group>"; };
+		1F2985821E3EDD2500DC17CC /* Codegen_Identifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_Identifier.cpp; sourceTree = "<group>"; };
 		1F3914461E31CBAE001925BE /* WCArrayUnevalSizeDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WCArrayUnevalSizeDataType.cpp; sourceTree = "<group>"; };
 		1F3914471E31CBAE001925BE /* WCArrayUnevalSizeDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WCArrayUnevalSizeDataType.hpp; sourceTree = "<group>"; };
 		1F3914491E31DC23001925BE /* ConstCodegen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConstCodegen.cpp; sourceTree = "<group>"; };
@@ -683,6 +685,7 @@
 				1F7E19441E30A72400C82867 /* Codegen_DeclDef.cpp */,
 				1F7E19461E30A81400C82867 /* Codegen_Func.cpp */,
 				1F23527F1E33D7EF0055A5E5 /* Codegen_FuncArg.cpp */,
+				1F2985821E3EDD2500DC17CC /* Codegen_Identifier.cpp */,
 				1F2352B11E35EC420055A5E5 /* Codegen_IfStmnt.cpp */,
 				1F2352A71E3441DC0055A5E5 /* Codegen_IntLit.cpp */,
 				1F2352911E3434490055A5E5 /* Codegen_LAndExpr.cpp */,
@@ -1039,6 +1042,7 @@
 				1FCD4E0D1D0161A60076E358 /* WCInt64DataType.cpp in Sources */,
 				1F6B6BF81E3DEE1300B75BF4 /* CodegenBinaryOp_MulExpr.cpp in Sources */,
 				1F0308B61E2AF2510097D223 /* WCWhileStmnt.cpp in Sources */,
+				1F2985831E3EDD2500DC17CC /* Codegen_Identifier.cpp in Sources */,
 				1F03089F1E2AF2510097D223 /* WCLOrExpr.cpp in Sources */,
 				1F0308981E2AF2510097D223 /* WCFuncCall.cpp in Sources */,
 				1F0308AB1E2AF2510097D223 /* WCReturnStmnt.cpp in Sources */,
