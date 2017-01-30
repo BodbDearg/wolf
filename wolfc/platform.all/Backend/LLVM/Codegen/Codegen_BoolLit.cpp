@@ -14,8 +14,11 @@ void Codegen::visit(const AST::BoolLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
     // Codegen the data type for the int
-    const BoolDataType & dataType = PrimitiveDataTypes::getBoolDataType();
-    dataType.accept(mCodegenDataType);
+    {
+        const BoolDataType & dataType = PrimitiveDataTypes::getBoolDataType();
+        dataType.accept(mCodegenDataType);
+    }
+    
     CompiledDataType compiledType = mCtx.popCompiledDataType();
     
     // Create the value and save to the stack

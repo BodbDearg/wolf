@@ -24,7 +24,6 @@
 #include "AST/Nodes/Scope.hpp"
 #include "AST/Nodes/ScopeStmnt.hpp"
 #include "AST/Nodes/Stmnt.hpp"
-#include "AST/Nodes/StrLit.hpp"
 #include "AST/Nodes/TimeExpr.hpp"
 #include "AST/Nodes/VarDecl.hpp"
 #include "AST/Nodes/WhileStmnt.hpp"
@@ -267,11 +266,6 @@ void ConstCodegen::visit(const AST::StmntVarDecl & astNode) {
 void ConstCodegen::visit(const AST::StmntWhileStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "StmntWhileStmnt");
-}
-
-void ConstCodegen::visit(const AST::StrLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
 }
 
 void ConstCodegen::visit(const AST::TimeExpr & astNode) {

@@ -14,9 +14,12 @@ void ConstCodegen::visit(const AST::BoolLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
     // Codegen the data type for the bool
-    const DataType & dataType = PrimitiveDataTypes::getBoolDataType();
-    WC_ASSERT(dataType.isBool());
-    dataType.accept(mCodegenDataType);
+    {
+        const DataType & dataType = PrimitiveDataTypes::getBoolDataType();
+        WC_ASSERT(dataType.isBool());
+        dataType.accept(mCodegenDataType);
+    }
+    
     CompiledDataType compiledType = mCtx.popCompiledDataType();
     
     // Create the constant and save to the stack

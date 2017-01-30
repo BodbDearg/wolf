@@ -1,11 +1,6 @@
+let global = "This is a global\n"
+
 func main() -> void
-    let v = 2
-    print(v)
-
-    scope
-        let v = 3
-        print(v)
-    end
-
-    print(v)
+    print("Hello world\n")
+    print(global)
 end

@@ -14,7 +14,6 @@
 #include "AST/Nodes/ReadnumExpr.hpp"
 #include "AST/Nodes/ReturnStmnt.hpp"
 #include "AST/Nodes/ScopeStmnt.hpp"
-#include "AST/Nodes/StrLit.hpp"
 #include "AST/Nodes/TimeExpr.hpp"
 #include "AST/Nodes/WhileStmnt.hpp"
 
@@ -122,11 +121,6 @@ void Codegen::visit(const AST::ReturnStmntWithCondAndValue & astNode) {
 }
 
 void Codegen::visit(const AST::ReturnStmntWithCondVoid & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::StrLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }

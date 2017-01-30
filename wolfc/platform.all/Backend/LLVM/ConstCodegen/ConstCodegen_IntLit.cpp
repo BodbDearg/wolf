@@ -14,9 +14,12 @@ void ConstCodegen::visit(const AST::IntLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
     // Codegen the data type for the int
-    const DataType & dataType = PrimitiveDataTypes::getDefaultIntType();
-    WC_ASSERT(dataType.isInteger());
-    dataType.accept(mCodegenDataType);
+    {
+        const DataType & dataType = PrimitiveDataTypes::getDefaultIntType();
+        WC_ASSERT(dataType.isInteger());
+        dataType.accept(mCodegenDataType);
+    }
+    
     CompiledDataType compiledType = mCtx.popCompiledDataType();
     
     // Create the constant and save to the stack
