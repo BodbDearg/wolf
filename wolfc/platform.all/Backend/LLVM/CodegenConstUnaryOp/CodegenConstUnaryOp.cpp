@@ -1,11 +1,11 @@
 #include "CodegenConstUnaryOp.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCASTNode.hpp"
-#include "AST/Nodes/WCIExpr.hpp"
-#include "ConstCodegen/ConstCodegen.hpp"
-#include "DataType/WCDataType.hpp"
-#include "WCAssert.hpp"
+#include "../ConstCodegen/ConstCodegen.hpp"
+#include "Assert.hpp"
+#include "AST/Nodes/ASTNode.hpp"
+#include "AST/Nodes/IExpr.hpp"
+#include "DataType/DataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

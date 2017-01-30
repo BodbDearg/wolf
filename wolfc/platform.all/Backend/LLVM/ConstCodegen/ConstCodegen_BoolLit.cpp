@@ -1,11 +1,11 @@
 #include "ConstCodegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCBoolLit.hpp"
-#include "DataType/Primitives/WCBoolDataType.hpp"
-#include "DataType/WCPrimitiveDataTypes.hpp"
-#include "Lexer/WCToken.hpp"
-#include "WCAssert.hpp"
+#include "Assert.hpp"
+#include "AST/Nodes/BoolLit.hpp"
+#include "DataType/PrimitiveDataTypes.hpp"
+#include "DataType/Primitives/BoolDataType.hpp"
+#include "Lexer/Token.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

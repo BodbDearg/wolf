@@ -1,7 +1,7 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCNoOpStmnt.hpp"
+#include "AST/Nodes/NoOpStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

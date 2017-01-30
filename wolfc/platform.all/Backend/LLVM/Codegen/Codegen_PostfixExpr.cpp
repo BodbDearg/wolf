@@ -1,8 +1,8 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCCastExpr.hpp"
-#include "AST/Nodes/WCPostfixExpr.hpp"
+#include "AST/Nodes/CastExpr.hpp"
+#include "AST/Nodes/PostfixExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

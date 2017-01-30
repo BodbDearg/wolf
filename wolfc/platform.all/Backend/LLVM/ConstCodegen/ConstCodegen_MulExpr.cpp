@@ -2,8 +2,8 @@
 
 #include "../CodegenConstBinaryOp/CodegenConstBinaryOp_MulExpr.hpp"
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCMulExpr.hpp"
-#include "AST/Nodes/WCShiftExpr.hpp"
+#include "AST/Nodes/MulExpr.hpp"
+#include "AST/Nodes/ShiftExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

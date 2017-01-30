@@ -1,10 +1,10 @@
-#include "AST/Nodes/WCModule.hpp"
+#include "AST/Nodes/Module.hpp"
 #include "Backend/LLVM/Codegen/Codegen.hpp"
 #include "Backend/LLVM/CodegenCtx.hpp"
-#include "Lexer/WCLexer.hpp"
-#include "WCFileUtils.hpp"
-#include "WCLinearAlloc.hpp"
-#include "WCParseCtx.hpp"
+#include "FileUtils.hpp"
+#include "Lexer/Lexer.hpp"
+#include "LinearAlloc.hpp"
+#include "ParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <cstdio>

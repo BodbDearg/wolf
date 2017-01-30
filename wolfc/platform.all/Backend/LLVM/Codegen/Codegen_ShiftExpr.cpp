@@ -2,8 +2,8 @@
 
 #include "../CodegenBinaryOp/CodegenBinaryOp_ShiftExpr.hpp"
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCShiftExpr.hpp"
-#include "AST/Nodes/WCUnaryExpr.hpp"
+#include "AST/Nodes/ShiftExpr.hpp"
+#include "AST/Nodes/UnaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

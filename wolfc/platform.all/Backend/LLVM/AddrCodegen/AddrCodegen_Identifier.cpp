@@ -3,8 +3,8 @@
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
 #include "../ValHolder.hpp"
-#include "AST/Nodes/WCIdentifier.hpp"
-#include "WCAssert.hpp"
+#include "Assert.hpp"
+#include "AST/Nodes/Identifier.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

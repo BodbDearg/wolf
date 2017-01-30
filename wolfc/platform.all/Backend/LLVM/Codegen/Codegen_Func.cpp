@@ -2,11 +2,11 @@
 
 #include "../CodegenCtx.hpp"
 #include "../Function.hpp"
-#include "AST/Nodes/WCFunc.hpp"
-#include "AST/Nodes/WCFuncArg.hpp"
-#include "AST/Nodes/WCScope.hpp"
-#include "DataType/WCDataType.hpp"
-#include "WCAssert.hpp"
+#include "Assert.hpp"
+#include "AST/Nodes/Func.hpp"
+#include "AST/Nodes/FuncArg.hpp"
+#include "AST/Nodes/Scope.hpp"
+#include "DataType/DataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

@@ -2,7 +2,7 @@
 
 #include "../AddrCodegen/AddrCodegen.hpp"
 #include "../ConstCodegen/ConstCodegen.hpp"
-#include "AST/WCASTNodeVisitor.hpp"
+#include "AST/ASTNodeVisitor.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <string>

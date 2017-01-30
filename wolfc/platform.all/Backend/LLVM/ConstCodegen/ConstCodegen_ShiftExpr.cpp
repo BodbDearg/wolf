@@ -1,8 +1,8 @@
 #include "ConstCodegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCShiftExpr.hpp"
-#include "AST/Nodes/WCUnaryExpr.hpp"
+#include "AST/Nodes/ShiftExpr.hpp"
+#include "AST/Nodes/UnaryExpr.hpp"
 #include "CodegenConstBinaryOp_ShiftExpr.hpp"
 
 WC_BEGIN_NAMESPACE

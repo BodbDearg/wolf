@@ -1,9 +1,9 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCFuncArg.hpp"
-#include "AST/Nodes/WCType.hpp"
-#include "WCAssert.hpp"
+#include "Assert.hpp"
+#include "AST/Nodes/FuncArg.hpp"
+#include "AST/Nodes/Type.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

@@ -1,10 +1,10 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCScope.hpp"
-#include "AST/Nodes/WCStmnt.hpp"
-#include "WCAssert.hpp"
-#include "WCFinally.hpp"
+#include "Assert.hpp"
+#include "AST/Nodes/Scope.hpp"
+#include "AST/Nodes/Stmnt.hpp"
+#include "Finally.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

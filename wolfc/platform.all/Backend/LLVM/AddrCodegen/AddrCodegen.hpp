@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AST/WCASTNodeVisitor.hpp"
+#include "AST/ASTNodeVisitor.hpp"
 
 WC_BEGIN_NAMESPACE
 

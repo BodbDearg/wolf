@@ -1,6 +1,6 @@
 #pragma once
 
-#include "WCMacros.hpp"
+#include "Macros.hpp"
 
 WC_BEGIN_NAMESPACE
 

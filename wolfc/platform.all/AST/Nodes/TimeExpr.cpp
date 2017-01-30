@@ -1,0 +1,112 @@
+#include "TimeExpr.hpp"
+
+#include "../ASTNodeVisitor.hpp"
+#include "../ParseCtx.hpp"
+#include "DataType/DataTypeId.hpp"
+#include "DataType/PrimitiveDataTypes.hpp"
+#include "LinearAlloc.hpp"
+#include "Module.hpp"
+
+WC_BEGIN_NAMESPACE
+WC_AST_BEGIN_NAMESPACE
+
+bool TimeExpr::peek(const Token * tokenPtr) {
+    return tokenPtr->type == TokenType::kTime;
+}
+
+TimeExpr * TimeExpr::parse(ParseCtx & parseCtx) {
+    if (parseCtx.tok()->type != TokenType::kTime) {
+        parseCtx.error("Expected 'time' at begining of time() expression!");
+        return nullptr;
+    }
+    
+    const Token * readnumTok = parseCtx.tok();
+    parseCtx.nextTok();     // Consume 'time'
+    
+    if (parseCtx.tok()->type != TokenType::kLParen) {
+        parseCtx.error("Expect '(' following 'time'!");
+        return nullptr;
+    }
+    
+    parseCtx.nextTok();     // Consume '('
+    
+    if (parseCtx.tok()->type != TokenType::kRParen) {
+        parseCtx.error("Expect ')' following '('!");
+        return nullptr;
+    }
+    
+    const Token * rparenTok = parseCtx.tok();
+    parseCtx.nextTok();     // Consume ')'
+    
+    return WC_NEW_AST_NODE(parseCtx, TimeExpr, *readnumTok, *rparenTok);
+}
+
+TimeExpr::TimeExpr(const Token & startToken, const Token & endToken) :
+    mStartToken(startToken),
+    mEndToken(endToken)
+{
+    
+}
+
+void TimeExpr::accept(ASTNodeVisitor & visitor) const {
+    visitor.visit(*this);
+}
+
+const Token & TimeExpr::getStartToken() const {
+    return mStartToken;
+}
+
+const Token & TimeExpr::getEndToken() const {
+    return mEndToken;
+}
+
+bool TimeExpr::isLValue() const {
+    return false;
+}
+
+bool TimeExpr::isConstExpr() const {
+    return false;
+}
+
+const DataType & TimeExpr::dataType() const {
+    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
+}
+
+#warning FIXME - Codegen
+#if 0
+llvm::Value * TimeExpr::codegenAddrOf(CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Can't take the address of a 'time()' expression result!");
+    return nullptr;
+}
+
+llvm::Value * TimeExpr::codegenExprEval(CodegenCtx & cgCtx) {
+    // Get 'time' C function
+    llvm::Constant * timeFN = cgCtx.module.getLLVMModuleRef().getFunction("time");
+    
+    if (!timeFN) {
+        compileError("Codegen failed! Can't find 'time' function!");
+        return nullptr;
+    }
+
+    // This is the value we will pass to the time() function, a null pointer
+    llvm::Type * int64PtrTy = cgCtx.irBuilder.getInt64Ty()->getPointerTo();
+    WC_ASSERT(int64PtrTy);
+    llvm::Constant * nullInt64Ptr = llvm::ConstantPointerNull::getNullValue(int64PtrTy);
+    WC_ASSERT(nullInt64Ptr);
+    
+    // Create the call to time!
+    llvm::Value * callInst = cgCtx.irBuilder.CreateCall(timeFN, { nullInt64Ptr }, "TimeExpr:result");
+    WC_ASSERT(callInst);
+    return callInst;
+}
+
+llvm::Constant * TimeExpr::codegenExprConstEval(CodegenCtx & cgCtx) {
+    WC_UNUSED_PARAM(cgCtx);
+    compileError("Cannot evaluate a 'time()' expression at compile time!");
+    return nullptr;
+}
+#endif
+
+WC_AST_END_NAMESPACE
+WC_END_NAMESPACE

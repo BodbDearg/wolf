@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CompiledDataType.hpp"
+#include "Macros.hpp"
 #include "ValHolder.hpp"
-#include "WCMacros.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/IRBuilder.h>

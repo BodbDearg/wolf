@@ -2,9 +2,9 @@
 
 #include "../CodegenCtx.hpp"
 #include "../Value.hpp"
-#include "AST/Nodes/WCIdentifier.hpp"
-#include "Lexer/WCToken.hpp"
-#include "WCAssert.hpp"
+#include "Assert.hpp"
+#include "AST/Nodes/Identifier.hpp"
+#include "Lexer/Token.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

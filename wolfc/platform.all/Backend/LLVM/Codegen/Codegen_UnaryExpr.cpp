@@ -2,9 +2,9 @@
 
 #include "../CodegenCtx.hpp"
 #include "../CodegenUnaryOp/CodegenUnaryOp_UnaryExpr.hpp"
-#include "AST/Nodes/WCAssignExpr.hpp"
-#include "AST/Nodes/WCPostfixExpr.hpp"
-#include "AST/Nodes/WCUnaryExpr.hpp"
+#include "AST/Nodes/AssignExpr.hpp"
+#include "AST/Nodes/PostfixExpr.hpp"
+#include "AST/Nodes/UnaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

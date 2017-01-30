@@ -1,15 +1,15 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCArrayLit.hpp"
-#include "AST/Nodes/WCBoolLit.hpp"
-#include "AST/Nodes/WCIdentifier.hpp"
-#include "AST/Nodes/WCIntLit.hpp"
-#include "AST/Nodes/WCPrimaryExpr.hpp"
-#include "AST/Nodes/WCRandExpr.hpp"
-#include "AST/Nodes/WCReadnumExpr.hpp"
-#include "AST/Nodes/WCStrLit.hpp"
-#include "AST/Nodes/WCTimeExpr.hpp"
+#include "AST/Nodes/ArrayLit.hpp"
+#include "AST/Nodes/BoolLit.hpp"
+#include "AST/Nodes/Identifier.hpp"
+#include "AST/Nodes/IntLit.hpp"
+#include "AST/Nodes/PrimaryExpr.hpp"
+#include "AST/Nodes/RandExpr.hpp"
+#include "AST/Nodes/ReadnumExpr.hpp"
+#include "AST/Nodes/StrLit.hpp"
+#include "AST/Nodes/TimeExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

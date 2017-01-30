@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../CodegenDataType/CodegenDataType.hpp"
-#include "AST/WCASTNodeVisitor.hpp"
+#include "AST/ASTNodeVisitor.hpp"
 
 WC_BEGIN_NAMESPACE
 

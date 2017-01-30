@@ -1,12 +1,12 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCAssignExpr.hpp"
-#include "AST/Nodes/WCIfStmnt.hpp"
-#include "AST/Nodes/WCScope.hpp"
-#include "DataType/WCDataType.hpp"
-#include "WCAssert.hpp"
-#include "WCStringUtils.hpp"
+#include "Assert.hpp"
+#include "AST/Nodes/AssignExpr.hpp"
+#include "AST/Nodes/IfStmnt.hpp"
+#include "AST/Nodes/Scope.hpp"
+#include "DataType/DataType.hpp"
+#include "StringUtils.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

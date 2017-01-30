@@ -1,10 +1,10 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCAssignExpr.hpp"
-#include "AST/Nodes/WCPrintStmnt.hpp"
-#include "DataType/WCDataType.hpp"
-#include "WCAssert.hpp"
+#include "Assert.hpp"
+#include "AST/Nodes/AssignExpr.hpp"
+#include "AST/Nodes/PrintStmnt.hpp"
+#include "DataType/DataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

@@ -2,8 +2,8 @@
 
 #include "../CodegenCtx.hpp"
 #include "../CodegenUnaryOp/CodegenUnaryOp_NotExpr.hpp"
-#include "AST/Nodes/WCCmpExpr.hpp"
-#include "AST/Nodes/WCNotExpr.hpp"
+#include "AST/Nodes/CmpExpr.hpp"
+#include "AST/Nodes/NotExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

@@ -1,10 +1,10 @@
 #include "ConstCodegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCBoolLit.hpp"
-#include "AST/Nodes/WCIntLit.hpp"
-#include "AST/Nodes/WCPrimaryExpr.hpp"
-#include "AST/Nodes/WCStrLit.hpp"
+#include "AST/Nodes/BoolLit.hpp"
+#include "AST/Nodes/IntLit.hpp"
+#include "AST/Nodes/PrimaryExpr.hpp"
+#include "AST/Nodes/StrLit.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

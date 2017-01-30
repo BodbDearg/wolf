@@ -2,14 +2,14 @@
 
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCAssignExpr.hpp"
-#include "AST/Nodes/WCIdentifier.hpp"
-#include "AST/Nodes/WCScope.hpp"
-#include "AST/Nodes/WCType.hpp"
-#include "AST/Nodes/WCVarDecl.hpp"
-#include "DataType/WCDataType.hpp"
-#include "WCAssert.hpp"
-#include "WCStringUtils.hpp"
+#include "Assert.hpp"
+#include "AST/Nodes/AssignExpr.hpp"
+#include "AST/Nodes/Identifier.hpp"
+#include "AST/Nodes/Scope.hpp"
+#include "AST/Nodes/Type.hpp"
+#include "AST/Nodes/VarDecl.hpp"
+#include "DataType/DataType.hpp"
+#include "StringUtils.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE

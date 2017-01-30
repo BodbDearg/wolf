@@ -1,9 +1,9 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/WCDeclDef.hpp"
-#include "AST/Nodes/WCFunc.hpp"
-#include "AST/Nodes/WCVarDecl.hpp"
+#include "AST/Nodes/DeclDef.hpp"
+#include "AST/Nodes/Func.hpp"
+#include "AST/Nodes/VarDecl.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_CODEGEN_BEGIN_NAMESPACE
