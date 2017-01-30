@@ -140,13 +140,6 @@ const Token & StmntNoOpStmnt::getEndToken() const {
     return mStmnt.getEndToken();
 }
 
-#warning FIXME - Codegen
-#if 0
-bool StmntNoOpStmnt::codegen(CodegenCtx & cgCtx) {
-    return mStmnt.codegen(cgCtx);
-}
-#endif
-
 bool StmntNoOpStmnt::allCodepathsHaveUncondRet() const {
     return mStmnt.allCodepathsHaveUncondRet();
 }
@@ -169,13 +162,6 @@ const Token & StmntPrintStmnt::getStartToken() const {
 const Token & StmntPrintStmnt::getEndToken() const {
     return mStmnt.getEndToken();
 }
-
-#warning FIXME - Codegen
-#if 0
-bool StmntPrintStmnt::codegen(CodegenCtx & cgCtx) {
-    return mStmnt.codegen(cgCtx);
-}
-#endif
 
 bool StmntPrintStmnt::allCodepathsHaveUncondRet() const {
     return mStmnt.allCodepathsHaveUncondRet();
@@ -200,13 +186,6 @@ const Token & StmntAssertStmnt::getEndToken() const {
     return mStmnt.getEndToken();
 }
 
-#warning FIXME - Codegen
-#if 0
-bool StmntAssertStmnt::codegen(CodegenCtx & cgCtx) {
-    return mStmnt.codegen(cgCtx);
-}
-#endif
-
 bool StmntAssertStmnt::allCodepathsHaveUncondRet() const {
     return mStmnt.allCodepathsHaveUncondRet();
 }
@@ -229,13 +208,6 @@ const Token & StmntIfStmnt::getStartToken() const {
 const Token & StmntIfStmnt::getEndToken() const {
     return mIfStmnt.getEndToken();
 }
-
-#warning FIXME - Codegen
-#if 0
-bool StmntIfStmnt::codegen(CodegenCtx & cgCtx) {
-    return mIfStmnt.codegen(cgCtx);
-}
-#endif
 
 bool StmntIfStmnt::allCodepathsHaveUncondRet() const {
     return mIfStmnt.allCodepathsHaveUncondRet();
@@ -260,13 +232,6 @@ const Token & StmntWhileStmnt::getEndToken() const {
     return mWhileStmnt.getEndToken();
 }
 
-#warning FIXME - Codegen
-#if 0
-bool StmntWhileStmnt::codegen(CodegenCtx & cgCtx) {
-    return mWhileStmnt.codegen(cgCtx);
-}
-#endif
-
 bool StmntWhileStmnt::allCodepathsHaveUncondRet() const {
     return mWhileStmnt.allCodepathsHaveUncondRet();
 }
@@ -289,13 +254,6 @@ const Token & StmntLoopStmnt::getStartToken() const {
 const Token & StmntLoopStmnt::getEndToken() const {
     return mLoopStmnt.getEndToken();
 }
-
-#warning FIXME - Codegen
-#if 0
-bool StmntLoopStmnt::codegen(CodegenCtx & cgCtx) {
-    return mLoopStmnt.codegen(cgCtx);
-}
-#endif
 
 bool StmntLoopStmnt::allCodepathsHaveUncondRet() const {
     return mLoopStmnt.allCodepathsHaveUncondRet();
@@ -320,13 +278,6 @@ const Token & StmntScopeStmnt::getEndToken() const {
     return mScopeStmnt.getEndToken();
 }
 
-#warning FIXME - Codegen
-#if 0
-bool StmntScopeStmnt::codegen(CodegenCtx & cgCtx) {
-    return mScopeStmnt.codegen(cgCtx);
-}
-#endif
-
 bool StmntScopeStmnt::allCodepathsHaveUncondRet() const {
     return mScopeStmnt.allCodepathsHaveUncondRet();
 }
@@ -349,13 +300,6 @@ const Token & StmntBreakStmnt::getStartToken() const {
 const Token & StmntBreakStmnt::getEndToken() const {
     return mBreakStmnt.getEndToken();
 }
-
-#warning FIXME - Codegen
-#if 0
-bool StmntBreakStmnt::codegen(CodegenCtx & cgCtx) {
-    return mBreakStmnt.codegen(cgCtx);
-}
-#endif
 
 bool StmntBreakStmnt::allCodepathsHaveUncondRet() const {
     return mBreakStmnt.allCodepathsHaveUncondRet();
@@ -380,13 +324,6 @@ const Token & StmntNextStmnt::getEndToken() const {
     return mNextStmnt.getEndToken();
 }
 
-#warning FIXME - Codegen
-#if 0
-bool StmntNextStmnt::codegen(CodegenCtx & cgCtx) {
-    return mNextStmnt.codegen(cgCtx);
-}
-#endif
-
 bool StmntNextStmnt::allCodepathsHaveUncondRet() const {
     return mNextStmnt.allCodepathsHaveUncondRet();
 }
@@ -409,13 +346,6 @@ const Token & StmntReturnStmnt::getStartToken() const {
 const Token & StmntReturnStmnt::getEndToken() const {
     return mReturnStmnt.getEndToken();
 }
-
-#warning FIXME - Codegen
-#if 0
-bool StmntReturnStmnt::codegen(CodegenCtx & cgCtx) {
-    return mReturnStmnt.codegen(cgCtx);
-}
-#endif
 
 bool StmntReturnStmnt::allCodepathsHaveUncondRet() const {
     return mReturnStmnt.allCodepathsHaveUncondRet();
@@ -440,13 +370,6 @@ const Token & StmntVarDecl::getEndToken() const {
     return mDecl.getEndToken();
 }
 
-#warning FIXME - Codegen
-#if 0
-bool StmntVarDecl::codegen(CodegenCtx & cgCtx) {
-    return mDecl.codegen(cgCtx);
-}
-#endif
-
 bool StmntVarDecl::allCodepathsHaveUncondRet() const {
     return mDecl.allCodepathsHaveUncondRet();
 }
@@ -469,13 +392,6 @@ const Token & StmntAssignExpr::getStartToken() const {
 const Token & StmntAssignExpr::getEndToken() const {
     return mExpr.getEndToken();
 }
-
-#warning FIXME - Codegen
-#if 0
-bool StmntAssignExpr::codegen(CodegenCtx & cgCtx) {
-    return mExpr.codegenExprEval(cgCtx) != nullptr;
-}
-#endif
 
 bool StmntAssignExpr::allCodepathsHaveUncondRet() const {
     return false;
