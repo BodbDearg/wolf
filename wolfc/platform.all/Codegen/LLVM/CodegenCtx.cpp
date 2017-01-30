@@ -323,5 +323,69 @@ ValHolder & CodegenCtx::getScopeValHolder(const AST::Scope & scope) {
     return mScopeValHolders[&scope];
 }
 
+const Value * CodegenCtx::lookupValueByName(const char * name) const {
+    // Search through the scope stack first for the value, start with the
+    // innermost scope and work our way down the stack:
+    WC_ASSERT(name);
+    ssize_t scopeStackSize = static_cast<ssize_t>(mScopeStack.size());
+    
+    for (ssize_t i = scopeStackSize - 1; i >= 0; --i) {
+        // Get this scope in the stack and see if there is a value holder declared for this scope.
+        // If there isn't a value holder then just skip this scope and move search onto the next one:
+        const AST::Scope * scope = mScopeStack[static_cast<size_t>(i)];
+        WC_ASSERT(scope);
+        auto iter = mScopeValHolders.find(scope);
+        
+        if (iter == mScopeValHolders.end()) {
+            continue;
+        }
+        
+        // Get the var holder for the scope and lookup the value in that holder.
+        // If found, then return the value:
+        const ValHolder & varHolder = iter->second;
+        const Value * value = varHolder.getVal(name);
+        
+        if (value) {
+            return value;
+        }
+    }
+    
+    // Value not found in any scope. Search in the global module scope instead and return the
+    // result of that particular search:
+    return mModuleValHolder.getVal(name);
+}
+
+const Constant * CodegenCtx::lookupConstantByName(const char * name) const {
+    // Search through the scope stack first for the value, start with the
+    // innermost scope and work our way down the stack:
+    WC_ASSERT(name);
+    ssize_t scopeStackSize = static_cast<ssize_t>(mScopeStack.size());
+    
+    for (ssize_t i = scopeStackSize - 1; i >= 0; --i) {
+        // Get this scope in the stack and see if there is a value holder declared for this scope.
+        // If there isn't a value holder then just skip this scope and move search onto the next one:
+        const AST::Scope * scope = mScopeStack[static_cast<size_t>(i)];
+        WC_ASSERT(scope);
+        auto iter = mScopeValHolders.find(scope);
+        
+        if (iter == mScopeValHolders.end()) {
+            continue;
+        }
+        
+        // Get the var holder for the scope and lookup the value in that holder.
+        // If found, then return the value:
+        const ValHolder & varHolder = iter->second;
+        const Constant * constant = varHolder.getConst(name);
+        
+        if (constant) {
+            return constant;
+        }
+    }
+    
+    // Value not found in any scope. Search in the global module scope instead and return the
+    // result of that particular search:
+    return mModuleValHolder.getConst(name);
+}
+
 WC_LLVM_CODEGEN_END_NAMESPACE
 WC_END_NAMESPACE

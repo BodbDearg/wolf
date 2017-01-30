@@ -171,6 +171,20 @@ public:
     /* Get the value holder for the given scope. If it does not exist, then it is created. */
     ValHolder & getScopeValHolder(const AST::Scope & scope);
     
+    /**
+     * Attempt to lookup a value with the given name, staring by searching from the current 
+     * (innermost) scope and ending the search at the module level. 
+     * Returns nullptr if the value is not found.
+     */
+    const Value * lookupValueByName(const char * name) const;
+    
+    /**
+     * Attempt to lookup a constant with the given name, staring by searching from the current
+     * (innermost) scope and ending the search at the module level.
+     * Returns nullptr if the constant is not found.
+     */
+    const Constant * lookupConstantByName(const char * name) const;
+    
     /* The LLVM context */
     llvm::LLVMContext mLLVMCtx;
     
