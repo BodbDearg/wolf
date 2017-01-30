@@ -1,6 +1,6 @@
 #include "AST/Nodes/WCModule.hpp"
-#include "Codegen/LLVM/CodegenCtx.hpp"
-#include "Codegen/LLVM/Codegen.hpp"
+#include "Backend/LLVM/Codegen/Codegen.hpp"
+#include "Backend/LLVM/CodegenCtx.hpp"
 #include "Lexer/WCLexer.hpp"
 #include "WCFileUtils.hpp"
 #include "WCLinearAlloc.hpp"
