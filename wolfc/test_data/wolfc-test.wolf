@@ -1,7 +1,9 @@
 func main() -> void
     let v = 2
-    v = 3
     print(v)
-    v = 2
+    scope
+        let v = 3
+        print(v)
+    end
     print(v)
 end

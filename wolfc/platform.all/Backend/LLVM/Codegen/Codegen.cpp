@@ -131,11 +131,6 @@ void Codegen::visit(const AST::ReturnStmntWithCondVoid & astNode) {
     #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::ScopeStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void Codegen::visit(const AST::StrLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
