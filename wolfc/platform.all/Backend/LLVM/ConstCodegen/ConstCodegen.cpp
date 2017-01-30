@@ -30,7 +30,7 @@
 #include "AST/Nodes/WhileStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 ConstCodegen::ConstCodegen(CodegenCtx & ctx) :
     mCtx(ctx),
@@ -302,5 +302,5 @@ void ConstCodegen::codegenNotSupportedForNodeTypeError(const AST::ASTNode & node
                nodeClassName);
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

@@ -17,11 +17,9 @@ WC_THIRD_PARTY_INCLUDES_END
 
 /* Compiles the given AST */
 static bool compileAST(const Wolfc::AST::Module * astModule, const char * fromSrcFile) {
-    // Create a codegen context
-    Wolfc::LLVMCodeGen::CodegenCtx codegenCtx;
-    
-    // Do the codegen
-    Wolfc::LLVMCodeGen::Codegen codegen(codegenCtx, "WolfTest");
+    // Create a codegen context and do the code generation using the LLVM backend
+    Wolfc::LLVMBackend::CodegenCtx codegenCtx;
+    Wolfc::LLVMBackend::Codegen codegen(codegenCtx, "WolfTest");
     codegen.visit(*astModule);
     
     // Emit compile warnings to stdout if there are any

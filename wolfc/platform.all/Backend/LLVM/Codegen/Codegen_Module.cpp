@@ -6,7 +6,7 @@
 #include "AST/Nodes/Module.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 /**
  * Declare all the standard C functions required by codegen
@@ -84,5 +84,5 @@ void Codegen::visit(const AST::Module & astNode) {
     mCtx.handleDeferredCodegenCallbacks(mCtx.mDeferredCgCallbacks_Module);
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

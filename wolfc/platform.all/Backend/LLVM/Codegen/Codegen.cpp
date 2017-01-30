@@ -19,7 +19,7 @@
 #include "AST/Nodes/WhileStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 Codegen::Codegen(CodegenCtx & ctx, const char * moduleName) :
     mCtx(ctx),
@@ -151,5 +151,5 @@ void Codegen::visit(const AST::WhileStmnt & astNode) {
     #warning TODO: Codegen this node
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

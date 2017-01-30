@@ -6,7 +6,7 @@
 #include "AST/Nodes/CmpExpr.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 void ConstCodegen::visit(const AST::CmpExprNoOp & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
@@ -43,5 +43,5 @@ void ConstCodegen::visit(const AST::CmpExprGE & astNode) {
     CodegenConstCmpGEBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

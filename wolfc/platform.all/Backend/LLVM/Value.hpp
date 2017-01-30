@@ -12,7 +12,7 @@ namespace AST {
     class ASTNode;
 }
 
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 /* Struct holding an LLVM value and it's corresponding compiled data type */
 struct Value {
@@ -58,5 +58,5 @@ struct Value {
     const AST::ASTNode * mDeclaringNode;    
 };
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

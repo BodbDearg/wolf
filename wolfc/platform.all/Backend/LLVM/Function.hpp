@@ -12,7 +12,7 @@ namespace AST {
     class Func;
 }
 
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 /* Holds information about a function */
 class Function {
@@ -30,5 +30,5 @@ private:
     WC_DISALLOW_COPY_AND_ASSIGN(Function)
 };
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

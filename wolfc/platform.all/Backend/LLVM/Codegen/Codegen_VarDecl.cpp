@@ -12,7 +12,7 @@
 #include "StringUtils.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 /* Prefix for all var labels */
 static const std::string kVarLabelPrefix = "alloc_var:";
@@ -216,5 +216,5 @@ void Codegen::visit(const AST::VarDeclInferType & astNode) {
     codegenVarDeclWithType(*this, astNode, varCompiledType, true);
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

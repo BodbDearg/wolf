@@ -9,7 +9,7 @@
 #include "DataType/DataType.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 /* RAII Helper to set the current function being code generated and clear it again when done */
 struct SetCurrentCGFunction {
@@ -185,5 +185,5 @@ void Codegen::doDeferredFunctionCodegen(const AST::Func & astNode, Function & fu
     }
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

@@ -8,7 +8,7 @@
 #include "DataType/DataType.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 CodegenConstBinaryOp::CodegenConstBinaryOp(ConstCodegen & cg,
                                            const AST::ASTNode & leftExpr,
@@ -137,5 +137,5 @@ void CodegenConstBinaryOp::pushOpResult(llvm::Constant * result, const CompiledD
     mCG.mCtx.pushConstant(Constant(result, resultType, mLeftExpr.mParent));
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

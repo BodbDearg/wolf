@@ -9,7 +9,7 @@
 #include "Lexer/Token.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 CodegenCtx::CodegenCtx() :
     mLLVMCtx(),
@@ -387,5 +387,5 @@ const Constant * CodegenCtx::lookupConstantByName(const char * name) const {
     return mModuleValHolder.getConst(name);
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

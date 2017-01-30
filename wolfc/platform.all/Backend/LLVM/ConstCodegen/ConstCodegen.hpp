@@ -9,7 +9,7 @@ namespace AST {
     class ASTNode;
 }
 
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 class CodegenCtx;
 
@@ -150,5 +150,5 @@ private:
                                              const char * nodeClassName);
 };
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

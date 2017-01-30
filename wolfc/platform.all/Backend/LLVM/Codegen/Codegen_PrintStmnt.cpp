@@ -7,7 +7,7 @@
 #include "DataType/DataType.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 /* Generate the code for a print statement when we are dealing with a bool */
 static void codegenBoolPrintStmnt(CodegenCtx & ctx,
@@ -109,5 +109,5 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
     }
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

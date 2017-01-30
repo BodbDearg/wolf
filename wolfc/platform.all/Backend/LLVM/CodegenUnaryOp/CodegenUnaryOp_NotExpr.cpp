@@ -4,7 +4,7 @@
 #include "../CodegenCtx.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // CodegenLNotUnaryOp
@@ -38,5 +38,5 @@ void CodegenBNotUnaryOp::visit(const Int64DataType & dataType) {
     pushOpResult(mCG.mCtx.mIRBuilder.CreateNot(mExprVal.mLLVMVal, "Int64:BNot:Result"));
 }
     
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

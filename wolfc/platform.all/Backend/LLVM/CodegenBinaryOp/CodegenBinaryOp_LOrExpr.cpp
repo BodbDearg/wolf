@@ -4,7 +4,7 @@
 #include "../CodegenCtx.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // CodegenLOrBinaryOp
@@ -25,5 +25,5 @@ void CodegenLOrBinaryOp::visit(const BoolDataType & dataType) {
                                               "Bool:LOr:Result"));
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

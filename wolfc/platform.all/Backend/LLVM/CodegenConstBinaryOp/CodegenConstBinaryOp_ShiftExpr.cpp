@@ -5,7 +5,7 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
 WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // CodegenConstLShiftBinaryOp
@@ -61,5 +61,5 @@ void CodegenConstLRShiftBinaryOp::visit(const Int64DataType & dataType) {
                                              mRightConst.mLLVMConst));
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

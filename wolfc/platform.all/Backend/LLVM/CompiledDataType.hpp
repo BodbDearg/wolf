@@ -10,7 +10,7 @@ WC_BEGIN_NAMESPACE
 
 class DataType;
 
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 /**
  * Class representing a compiled and evaluated data type. A compiled data type is a data type that has had any expressions
@@ -55,5 +55,5 @@ private:
     llvm::Type * mLLVMType;
 };
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

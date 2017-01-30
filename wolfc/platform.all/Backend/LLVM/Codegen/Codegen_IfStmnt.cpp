@@ -9,7 +9,7 @@
 #include "StringUtils.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 void Codegen::visit(const AST::IfStmntNoElse & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
@@ -263,5 +263,5 @@ void Codegen::visit(const AST::IfStmntElse & astNode) {
     irb.SetInsertPoint(endBB);
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

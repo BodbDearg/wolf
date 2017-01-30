@@ -6,7 +6,7 @@
 #include "AST/Nodes/MulExpr.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 void Codegen::visit(const AST::AddExprNoOp & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
@@ -33,5 +33,5 @@ void Codegen::visit(const AST::AddExprBXor & astNode) {
     CodegenBXOrBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

@@ -4,7 +4,7 @@
 #include "../CodegenCtx.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
 // CodegenLShiftBinaryOp
@@ -63,5 +63,5 @@ void CodegenLRShiftBinaryOp::visit(const Int64DataType & dataType) {
                                                 "Int64:LRShift:Result"));
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

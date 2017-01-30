@@ -49,7 +49,7 @@
 #include "AST/Nodes/WhileStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 AddrCodegen::AddrCodegen(CodegenCtx & ctx,
                          Codegen & codegen,
@@ -784,5 +784,5 @@ void AddrCodegen::cantTakeAddressOfBinaryOpError(const AST::ASTNode & leftExprNo
                rightType.getDataType().name().c_str());
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

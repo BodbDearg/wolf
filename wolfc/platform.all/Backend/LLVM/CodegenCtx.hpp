@@ -21,7 +21,7 @@ namespace AST {
     class Scope;
 }
 
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 class Function;
 
@@ -277,5 +277,5 @@ private:
 #define WC_CODEGEN_RECORD_VISITED_NODE()\
     CodegenCtxPushASTNode pushASTNode(astNode, mCtx)
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

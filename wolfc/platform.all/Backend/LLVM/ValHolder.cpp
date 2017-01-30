@@ -6,7 +6,7 @@
 #include "Lexer/Token.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 const Value * ValHolder::createVal(CodegenCtx & ctx,
                                    const std::string & name,
@@ -108,5 +108,5 @@ bool ValHolder::compileCheckValueNameNotTaken(CodegenCtx & ctx,
     return false;
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

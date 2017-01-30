@@ -14,7 +14,7 @@
 #include "DataType/Primitives/VoidDataType.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 CodegenDataType::CodegenDataType(CodegenCtx & ctx, ConstCodegen & constCodegen) :
     mCtx(ctx),
@@ -154,5 +154,5 @@ void CodegenDataType::visit(const VoidDataType & dataType) {
     mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
 }
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

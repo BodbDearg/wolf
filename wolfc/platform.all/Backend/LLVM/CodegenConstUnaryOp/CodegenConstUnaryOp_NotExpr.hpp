@@ -3,7 +3,7 @@
 #include "CodegenConstUnaryOp.hpp"
 
 WC_BEGIN_NAMESPACE
-WC_LLVM_CODEGEN_BEGIN_NAMESPACE
+WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 class CodegenConstLNotUnaryOp : public CodegenConstUnaryOp {
 public:
@@ -21,5 +21,5 @@ public:
     void visit(const Int64DataType & dataType) override;
 };
 
-WC_LLVM_CODEGEN_END_NAMESPACE
+WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE
