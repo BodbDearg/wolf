@@ -50,37 +50,14 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getEndToken() const override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::BasicBlock * getNextStmntTargetBlock() override;
-    virtual llvm::BasicBlock * getBreakStmntTargetBlock() override;
-    
-    virtual bool codegen(CodegenCtx & cgCtx) override;
-#endif
-    
     /**
      * If true this is a loop 'until' statement rather than loop 'while'. In that case
      * The block will execute while the loop condition is false rather than true.
      */
     bool isLoopCondInversed() const;
     
-#warning FIXME - Codegen
-#if 0
-    /**
-     * Generate the code for the loop condition expression and return the value of that expression. 
-     * Returns nullptr on failure.
-     */
-    llvm::Value * codegenLoopCondExpr(CodegenCtx & cgCtx) const;
-#endif
-    
-    const Token &       mCondTypeToken;
-    AssignExpr &        mLoopCondExpr;
-    
-#warning FIXME - Codegen
-#if 0
-    llvm::BasicBlock *  mLoopCondBB = nullptr;
-    llvm::BasicBlock *  mEndBB = nullptr;
-#endif
+    const Token &   mCondTypeToken;
+    AssignExpr &    mLoopCondExpr;
 };
 
 WC_AST_END_NAMESPACE

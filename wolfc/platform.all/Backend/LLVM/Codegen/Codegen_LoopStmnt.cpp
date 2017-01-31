@@ -14,17 +14,17 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 void Codegen::visit(const AST::LoopStmntNoCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-
-    // Grab the parent function
-    llvm::Function * parentFn = mCtx.mIRBuilder.GetInsertBlock()->getParent();
-    WC_ASSERT(parentFn);
     
     // Create a metadata structure for this repeatable statement
     RepeatableStmnt & repeatableStmnt = mCtx.getRepeatableStmntForNode(astNode, astNode);
     
+    // Grab the parent function
+    llvm::Function * parentFn = mCtx.mIRBuilder.GetInsertBlock()->getParent();
+    WC_ASSERT(parentFn);
+    
     // Create the 'loop' main block.
     // Note: also make the previous block branch to this block in order to properly terminate it.
-    // Note: This is also where the 'next' statement will branch to.
+    // Note: This is also the target of the 'next' statement.
     llvm::BasicBlock * startBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx,
                                                           "LoopStmntNoCond:block",
                                                           parentFn);
@@ -58,7 +58,77 @@ void Codegen::visit(const AST::LoopStmntNoCond & astNode) {
 
 void Codegen::visit(const AST::LoopStmntWithCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    
+    // Create a metadata structure for this repeatable statement
+    RepeatableStmnt & repeatableStmnt = mCtx.getRepeatableStmntForNode(astNode, astNode);
+    
+    // Grab the parent function
+    llvm::Function * parentFn = mCtx.mIRBuilder.GetInsertBlock()->getParent();
+    WC_ASSERT(parentFn);
+    
+    // Create the 'loop' main block.
+    // Note: also make the previous block branch to this block in order to properly terminate it.
+    llvm::BasicBlock * startBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx,
+                                                          "LoopStmntWithCond:block",
+                                                          parentFn);
+    
+    WC_ASSERT(startBB);
+    mCtx.mIRBuilder.CreateBr(startBB);
+    
+    // Codegen the 'body' block:
+    mCtx.mIRBuilder.SetInsertPoint(startBB);
+    astNode.mBodyScope.accept(*this);
+    
+    // Create a block for the loop condition expression:
+    // Note: also make the previous block branch to this block in order to properly terminate it.
+    // Note: This is also the target of the 'next' statement.
+    llvm::BasicBlock * loopCondBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx,
+                                                             "LoopStmntWithCond:cond",
+                                                             parentFn);
+    
+    WC_ASSERT(loopCondBB);
+    mCtx.mIRBuilder.CreateBr(loopCondBB);
+    repeatableStmnt.mNextStmntTargetBB = loopCondBB;
+    
+    // Generate the code for the loop condition expression:
+    mCtx.mIRBuilder.SetInsertPoint(loopCondBB);
+    astNode.mLoopCondExpr.accept(*this);
+    Value loopExprVal = mCtx.popValue();
+    
+    // Generate the end basic block:
+    // Note: This is also the target of the 'break' statement.
+    llvm::BasicBlock * endBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx,
+                                                        "LoopStmntWithCond:end",
+                                                        parentFn);
+    
+    WC_ASSERT(endBB);
+    repeatableStmnt.mBreakStmntTargetBB = endBB;
+    
+    // Expect the value to be a boolean:
+    const DataType & loopExprType = loopExprVal.mCompiledType.getDataType();
+    
+    if (loopExprType.isBool()) {
+        // Branch to the either the end or the start of the loop depending on the condition
+        if (astNode.isLoopCondInversed()) {
+            mCtx.mIRBuilder.CreateCondBr(loopExprVal.mLLVMVal, endBB, startBB);
+        }
+        else {
+            mCtx.mIRBuilder.CreateCondBr(loopExprVal.mLLVMVal, startBB, endBB);
+        }
+    }
+    else {
+        // The loop condition must evaluate to a boolean
+        mCtx.error(astNode.mLoopCondExpr,
+                   "Condition expression for 'loop' statement must evaluate to type 'bool' "
+                   "not type '%s'!",
+                   loopExprType.name().c_str());
+        
+        // Create an unreachable just to terminate the block
+        mCtx.mIRBuilder.CreateUnreachable();
+    }
+    
+    // Insert code after the end block from here on in
+    mCtx.mIRBuilder.SetInsertPoint(endBB);
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

@@ -2,10 +2,7 @@
 
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
-#include "Assert.hpp"
 #include "AssignExpr.hpp"
-#include "DataType/DataType.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
 #include "LinearAlloc.hpp"
 #include "Scope.hpp"
 
@@ -133,84 +130,9 @@ const Token & LoopStmntWithCond::getEndToken() const {
     return mLoopCondExpr.getEndToken();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::BasicBlock * LoopStmntWithCond::getNextStmntTargetBlock() {
-    return mLoopCondBB;
-}
-
-llvm::BasicBlock * LoopStmntWithCond::getBreakStmntTargetBlock() {
-    return mEndBB;
-}
-
-bool LoopStmntWithCond::codegen(CodegenCtx & cgCtx) {
-    // Grab the parent function
-    llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
-    WC_GUARD_ASSERT(parentFn, false);
-    
-    // Create the 'loop' main block.
-    // Note: also make the previous block branch to this block in order to properly terminate it.
-    llvm::BasicBlock * startBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "LoopStmntWithCond:block", parentFn);
-    WC_ASSERT(startBB);
-    cgCtx.irBuilder.CreateBr(startBB);
-    
-    // Codegen the 'body' block, this will go back up to the start of itself when done
-    cgCtx.irBuilder.SetInsertPoint(startBB);
-    
-    if (!mBodyScope.codegen(cgCtx)) {
-        return false;
-    }
-    
-    // Create a block for the loop condition expression:
-    // Note: also make the previous block branch to this block in order to properly terminate it.
-    mLoopCondBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "LoopStmntWithCond:cond", parentFn);
-    WC_ASSERT(mLoopCondBB);
-    cgCtx.irBuilder.CreateBr(mLoopCondBB);
-    
-    // Generate the code for the loop condition expression:
-    cgCtx.irBuilder.SetInsertPoint(mLoopCondBB);
-    llvm::Value * loopCondResult = codegenLoopCondExpr(cgCtx);
-    WC_GUARD(loopCondResult, false);
-    
-    // Generate the end basic block:
-    mEndBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "LoopStmntWithCond:end", parentFn);
-    WC_ASSERT(mEndBB);
-    
-    // Branch to the either the end or the start of the loop depending on the condition
-    if (isLoopCondInversed()) {
-        cgCtx.irBuilder.CreateCondBr(loopCondResult, mEndBB, startBB);
-    }
-    else {
-        cgCtx.irBuilder.CreateCondBr(loopCondResult, startBB, mEndBB);
-    }
-    
-    // Insert code after the end block from here on in
-    cgCtx.irBuilder.SetInsertPoint(mEndBB);
-    return true;
-}
-#endif
-
 bool LoopStmntWithCond::isLoopCondInversed() const {
     return mCondTypeToken.type == TokenType::kUntil;
 }
-
-#warning FIXME - Codegen
-#if 0
-llvm::Value * LoopStmntWithCond::codegenLoopCondExpr(CodegenCtx & cgCtx) const {
-    // Firstly validate that the loop condition expression is a bool:
-    const DataType & condExprDataType = mLoopCondExpr.dataType();
-    
-    if (!condExprDataType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool))) {
-        compileError("Condition for loop statement must evaluate to type 'bool', not '%s'!",
-                     condExprDataType.name().c_str());
-        
-        return nullptr;
-    }
-    
-    // Then generate the code
-    return mLoopCondExpr.codegenExprEval(cgCtx);
-}
-#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE
