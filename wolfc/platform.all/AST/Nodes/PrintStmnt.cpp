@@ -2,11 +2,8 @@
 
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
-#include "Assert.hpp"
 #include "AssignExpr.hpp"
-#include "DataType/DataType.hpp"
 #include "LinearAlloc.hpp"
-#include "Module.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -68,24 +65,6 @@ const Token & PrintStmnt::getStartToken() const {
 const Token & PrintStmnt::getEndToken() const {
     return mEndToken;
 }
-
-#warning FIXME - Codegen
-#if 0
-bool PrintStmnt::codegen(CodegenCtx & cgCtx) {
-    // Get printf
-    llvm::Constant * printfFn = cgCtx.module.getLLVMModuleRef().getFunction("printf");
-    
-    if (!printfFn) {
-        compileError("Codegen failed! Can't find 'printf' function!");
-        return false;
-    }
-    
-    // Evaluate the code for the argument to printf
-    llvm::Value * exprVal = mExpr.codegenExprEval(cgCtx);
-    WC_GUARD(exprVal, false);
-    return mExpr.dataType().codegenPrintStmnt(cgCtx, *this, *printfFn, *exprVal);
-}
-#endif
 
 bool PrintStmnt::allCodepathsHaveUncondRet() const {
     return false;
