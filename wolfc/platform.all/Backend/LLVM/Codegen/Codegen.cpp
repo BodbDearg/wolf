@@ -6,9 +6,6 @@
 #include "AST/Nodes/BreakStmnt.hpp"
 #include "AST/Nodes/FuncCall.hpp"
 #include "AST/Nodes/FuncCallArgList.hpp"
-#include "AST/Nodes/IBasicCodegenNode.hpp"
-#include "AST/Nodes/IExpr.hpp"
-#include "AST/Nodes/LoopStmnt.hpp"
 #include "AST/Nodes/NextStmnt.hpp"
 #include "AST/Nodes/RandExpr.hpp"
 #include "AST/Nodes/ReadnumExpr.hpp"
@@ -71,16 +68,6 @@ void Codegen::visit(const AST::FuncCallArgListMulti & astNode) {
 }
 
 void Codegen::visit(const AST::FuncCallArgListSingle & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::LoopStmntNoCond & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::LoopStmntWithCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }

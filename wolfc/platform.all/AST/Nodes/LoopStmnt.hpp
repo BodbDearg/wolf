@@ -36,21 +36,7 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getEndToken() const override;
     
-#warning FIXME - Codegen
-#if 0
-    virtual llvm::BasicBlock * getNextStmntTargetBlock() override;
-    virtual llvm::BasicBlock * getBreakStmntTargetBlock() override;
-    
-    virtual bool codegen(CodegenCtx & cgCtx) override;
-#endif
-    
-    const Token &       mEndToken;
-    
-#warning FIXME - Codegen
-#if 0
-    llvm::BasicBlock *  mStartBB = nullptr;
-    llvm::BasicBlock *  mEndBB = nullptr;
-#endif
+    const Token & mEndToken;
 };
 
 /* loop Scope repeat while|until AssignExpr */

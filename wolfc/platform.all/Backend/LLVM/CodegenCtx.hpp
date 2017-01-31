@@ -99,7 +99,7 @@ public:
      * given AST node which is a repeatable statement. If the info structure does not yet exist
      * then it will be created.
      */
-    RepeatableStmnt & getRepeatableStmntForNode(const AST::Func & astNode,
+    RepeatableStmnt & getRepeatableStmntForNode(const AST::ASTNode & astNode,
                                                 const AST::IRepeatableStmnt & astNodeAsRepeatableStmnt);
     
     /* Get the current repeatable statement being visited. Returns nullptr if none */

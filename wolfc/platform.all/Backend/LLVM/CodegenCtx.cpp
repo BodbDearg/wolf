@@ -228,7 +228,7 @@ Function * CodegenCtx::getModuleFunc(const std::string & name) {
     return iter->second.get();
 }
 
-RepeatableStmnt & CodegenCtx::getRepeatableStmntForNode(const AST::Func & astNode,
+RepeatableStmnt & CodegenCtx::getRepeatableStmntForNode(const AST::ASTNode & astNode,
                                                         const AST::IRepeatableStmnt & astNodeAsRepeatableStmnt)
 {
     // These AST node references should refer to the same thing

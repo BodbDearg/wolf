@@ -1,6 +1,9 @@
-let global = "This is a global\n"
-
 func main() -> void
-    print("Hello world\n")
-    print(global)
+    loop
+        print("Enter a number: ")
+        let num = readnum()
+        print("The number was: ")
+        print(num)
+        print("\n")
+    end
 end
