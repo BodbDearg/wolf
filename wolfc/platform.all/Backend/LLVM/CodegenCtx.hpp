@@ -18,6 +18,7 @@ class DataType;
 namespace AST {
     class ASTNode;
     class Func;
+    class IRepeatableStmnt;
     class Scope;
 }
 
@@ -101,6 +102,17 @@ public:
     
     inline const std::vector<const AST::ASTNode*> getASTNodeStack() const {
         return mASTNodeStack;
+    }
+    
+    /**
+     * Push/pop the current repeatable statement being visited during code generation from the node 
+     * visitation stack. The behavior of pop is undefined if the visited node stack is empty.
+     */
+    void pushRepeatableStmnt(const AST::IRepeatableStmnt & repeatableStmnt);
+    void popRepeatableStmnt();
+    
+    inline const std::vector<const AST::IRepeatableStmnt*> getRepeatableStmntStack() const {
+        return mRepeatableStmntStack;
     }
     
     /**
@@ -216,6 +228,9 @@ private:
     /* The stack of scopes being visited */
     std::vector<const AST::Scope*> mScopeStack;
     
+    /* The stack of repeatable statements being visited */
+    std::vector<const AST::IRepeatableStmnt*> mRepeatableStmntStack;
+    
     /**
      * A stack of values created during codegen.
      * Used for communication between code sections, and storing results temporarily, like the stack in LUA. 
@@ -261,21 +276,26 @@ private:
 /* A helper RAII object which pushes and pops a node from the given codegen context. */
 class CodegenCtxPushASTNode {
 public:
-    CodegenCtxPushASTNode(const AST::ASTNode & astNode, CodegenCtx & codegenCtx) : mCodegenCtx(codegenCtx) {
-        mCodegenCtx.pushASTNode(astNode);
-    }
-    
-    ~CodegenCtxPushASTNode() {
-        mCodegenCtx.popASTNode();
-    }
-    
-private:
-    CodegenCtx & mCodegenCtx;
+    CodegenCtxPushASTNode(const AST::ASTNode & node, CodegenCtx & ctx);
+    ~CodegenCtxPushASTNode();
+    CodegenCtx & mCtx;
+};
+
+/* A helper RAII object which pushes and pops a repeatable statement from the given codegen context. */
+class CodegenCtxPushRepeatbleStmnt {
+public:
+    CodegenCtxPushRepeatbleStmnt(const AST::IRepeatableStmnt & stmnt, CodegenCtx & ctx);
+    ~CodegenCtxPushRepeatbleStmnt();
+    CodegenCtx & mCtx;
 };
 
 /* A helper macro for using the 'CodegenCtxPushASTNode' object within a code generator */
 #define WC_CODEGEN_RECORD_VISITED_NODE()\
     CodegenCtxPushASTNode pushASTNode(astNode, mCtx)
+
+/* A helper macro for using the 'CodegenCtxPushRepeatbleStmnt' object within a code generator */
+#define WC_CODEGEN_RECORD_VISITED_REPEATABLE_STMNT()\
+    CodegenCtxPushRepeatbleStmnt pushRepeatableStmnt(astNode, mCtx)
 
 WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

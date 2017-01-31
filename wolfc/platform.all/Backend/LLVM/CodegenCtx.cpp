@@ -235,6 +235,15 @@ void CodegenCtx::popASTNode() {
     mASTNodeStack.pop_back();
 }
 
+void CodegenCtx::pushRepeatableStmnt(const AST::IRepeatableStmnt & repeatableStmnt) {
+    mRepeatableStmntStack.push_back(&repeatableStmnt);
+}
+
+void CodegenCtx::popRepeatableStmnt() {
+    WC_ASSERT(!mRepeatableStmntStack.empty());
+    mRepeatableStmntStack.pop_back();
+}
+
 void CodegenCtx::pushScope(const AST::Scope & node) {
     mScopeStack.push_back(&node);
 }
@@ -385,6 +394,26 @@ const Constant * CodegenCtx::lookupConstantByName(const char * name) const {
     // Value not found in any scope. Search in the global module scope instead and return the
     // result of that particular search:
     return mModuleValHolder.getConst(name);
+}
+
+CodegenCtxPushASTNode::CodegenCtxPushASTNode(const AST::ASTNode & node, CodegenCtx & ctx) : mCtx(ctx) {
+    mCtx.pushASTNode(node);
+}
+    
+CodegenCtxPushASTNode::~CodegenCtxPushASTNode() {
+    mCtx.popASTNode();
+}
+
+CodegenCtxPushRepeatbleStmnt::CodegenCtxPushRepeatbleStmnt(const AST::IRepeatableStmnt & stmnt,
+                                                           CodegenCtx & ctx)
+:
+    mCtx(ctx)
+{
+    mCtx.pushRepeatableStmnt(stmnt);
+}
+
+CodegenCtxPushRepeatbleStmnt::~CodegenCtxPushRepeatbleStmnt() {
+    mCtx.popRepeatableStmnt();
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE
