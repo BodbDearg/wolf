@@ -18,7 +18,12 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 class Function {
 public:
     /* Creates the function definition */
-    Function(const AST::Func & astNode);
+    inline Function(const AST::Func & astNode) :
+        mASTNode(astNode),
+        mLLVMFunc(nullptr)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
     
     /* The AST node for the function definition */
     const AST::Func & mASTNode;

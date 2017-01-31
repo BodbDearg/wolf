@@ -3,10 +3,12 @@
 #include "Assert.hpp"
 #include "AST/Nodes/ASTNode.hpp"
 #include "AST/Nodes/Func.hpp"
+#include "AST/Nodes/IRepeatableStmnt.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
 #include "DataType/Primitives/UnknownDataType.hpp"
 #include "Function.hpp"
 #include "Lexer/Token.hpp"
+#include "RepeatableStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -226,6 +228,45 @@ Function * CodegenCtx::getModuleFunc(const std::string & name) {
     return iter->second.get();
 }
 
+RepeatableStmnt & CodegenCtx::getRepeatableStmntForNode(const AST::Func & astNode,
+                                                        const AST::IRepeatableStmnt & astNodeAsRepeatableStmnt)
+{
+    // These AST node references should refer to the same thing
+    WC_ASSERT(dynamic_cast<const AST::IRepeatableStmnt*>(&astNode) == &astNodeAsRepeatableStmnt);
+    auto iter = mRepeatableStmnts.find(&astNodeAsRepeatableStmnt);
+    
+    // If we find an existing data structure for this statement then just return it
+    if (iter != mRepeatableStmnts.end()) {
+        return *iter->second;
+    }
+    
+    // Otherwise we need to make one
+    auto & ptr = mRepeatableStmnts[&astNodeAsRepeatableStmnt];
+    ptr.reset(new RepeatableStmnt(astNode, astNodeAsRepeatableStmnt));
+    return *ptr.get();
+}
+
+RepeatableStmnt * CodegenCtx::getCurrentRepeatableStmnt() const {
+    // Run through the AST node stack and search for the current repeatable statement
+    ssize_t numNodes = static_cast<ssize_t>(mASTNodeStack.size());
+    
+    for (ssize_t i = numNodes - 1; i >= 0; --i) {
+        const AST::ASTNode * astNode = mASTNodeStack[static_cast<size_t>(i)];
+        const AST::IRepeatableStmnt * astRepeatableStmt = dynamic_cast<const AST::IRepeatableStmnt*>(astNode);
+        
+        if (astRepeatableStmt) {
+            auto iter = mRepeatableStmnts.find(astRepeatableStmt);
+            
+            if (iter != mRepeatableStmnts.end()) {
+                return iter->second.get();
+            }
+        }
+    }
+    
+    // Couldn't find any:
+    return nullptr;
+}
+
 void CodegenCtx::pushASTNode(const AST::ASTNode & node) {
     mASTNodeStack.push_back(&node);
 }
@@ -233,15 +274,6 @@ void CodegenCtx::pushASTNode(const AST::ASTNode & node) {
 void CodegenCtx::popASTNode() {
     WC_ASSERT(!mASTNodeStack.empty());
     mASTNodeStack.pop_back();
-}
-
-void CodegenCtx::pushRepeatableStmnt(const AST::IRepeatableStmnt & repeatableStmnt) {
-    mRepeatableStmntStack.push_back(&repeatableStmnt);
-}
-
-void CodegenCtx::popRepeatableStmnt() {
-    WC_ASSERT(!mRepeatableStmntStack.empty());
-    mRepeatableStmntStack.pop_back();
 }
 
 void CodegenCtx::pushScope(const AST::Scope & node) {
@@ -402,18 +434,6 @@ CodegenCtxPushASTNode::CodegenCtxPushASTNode(const AST::ASTNode & node, CodegenC
     
 CodegenCtxPushASTNode::~CodegenCtxPushASTNode() {
     mCtx.popASTNode();
-}
-
-CodegenCtxPushRepeatbleStmnt::CodegenCtxPushRepeatbleStmnt(const AST::IRepeatableStmnt & stmnt,
-                                                           CodegenCtx & ctx)
-:
-    mCtx(ctx)
-{
-    mCtx.pushRepeatableStmnt(stmnt);
-}
-
-CodegenCtxPushRepeatbleStmnt::~CodegenCtxPushRepeatbleStmnt() {
-    mCtx.popRepeatableStmnt();
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

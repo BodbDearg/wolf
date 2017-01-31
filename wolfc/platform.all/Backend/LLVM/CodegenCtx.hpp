@@ -25,6 +25,7 @@ namespace AST {
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 class Function;
+class RepeatableStmnt;
 
 /* Class holding the context for code generation */
 class CodegenCtx {
@@ -94,6 +95,17 @@ public:
     Function * getModuleFunc(const std::string & name);
     
     /**
+     * Get a repeatable statement structure containing info on the repeatable statement for the 
+     * given AST node which is a repeatable statement. If the info structure does not yet exist
+     * then it will be created.
+     */
+    RepeatableStmnt & getRepeatableStmntForNode(const AST::Func & astNode,
+                                                const AST::IRepeatableStmnt & astNodeAsRepeatableStmnt);
+    
+    /* Get the current repeatable statement being visited. Returns nullptr if none */
+    RepeatableStmnt * getCurrentRepeatableStmnt() const;
+    
+    /**
      * Push/pop the current node being visited during code generation from the node visitation stack.
      * The behavior of pop is undefined if the visited node stack is empty.
      */
@@ -102,17 +114,6 @@ public:
     
     inline const std::vector<const AST::ASTNode*> getASTNodeStack() const {
         return mASTNodeStack;
-    }
-    
-    /**
-     * Push/pop the current repeatable statement being visited during code generation from the node 
-     * visitation stack. The behavior of pop is undefined if the visited node stack is empty.
-     */
-    void pushRepeatableStmnt(const AST::IRepeatableStmnt & repeatableStmnt);
-    void popRepeatableStmnt();
-    
-    inline const std::vector<const AST::IRepeatableStmnt*> getRepeatableStmntStack() const {
-        return mRepeatableStmntStack;
     }
     
     /**
@@ -228,8 +229,8 @@ private:
     /* The stack of scopes being visited */
     std::vector<const AST::Scope*> mScopeStack;
     
-    /* The stack of repeatable statements being visited */
-    std::vector<const AST::IRepeatableStmnt*> mRepeatableStmntStack;
+    /* A map from repeatable statements to info structures for those statements */
+    std::map<const AST::IRepeatableStmnt*, std::unique_ptr<RepeatableStmnt>> mRepeatableStmnts;
     
     /**
      * A stack of values created during codegen.
@@ -281,21 +282,9 @@ public:
     CodegenCtx & mCtx;
 };
 
-/* A helper RAII object which pushes and pops a repeatable statement from the given codegen context. */
-class CodegenCtxPushRepeatbleStmnt {
-public:
-    CodegenCtxPushRepeatbleStmnt(const AST::IRepeatableStmnt & stmnt, CodegenCtx & ctx);
-    ~CodegenCtxPushRepeatbleStmnt();
-    CodegenCtx & mCtx;
-};
-
 /* A helper macro for using the 'CodegenCtxPushASTNode' object within a code generator */
 #define WC_CODEGEN_RECORD_VISITED_NODE()\
     CodegenCtxPushASTNode pushASTNode(astNode, mCtx)
-
-/* A helper macro for using the 'CodegenCtxPushRepeatbleStmnt' object within a code generator */
-#define WC_CODEGEN_RECORD_VISITED_REPEATABLE_STMNT()\
-    CodegenCtxPushRepeatbleStmnt pushRepeatableStmnt(astNode, mCtx)
 
 WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE
