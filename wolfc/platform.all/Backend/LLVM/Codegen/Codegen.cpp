@@ -12,7 +12,6 @@
 #include "AST/Nodes/ReturnStmnt.hpp"
 #include "AST/Nodes/ScopeStmnt.hpp"
 #include "AST/Nodes/TimeExpr.hpp"
-#include "AST/Nodes/WhileStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -113,11 +112,6 @@ void Codegen::visit(const AST::ReturnStmntWithCondVoid & astNode) {
 }
 
 void Codegen::visit(const AST::TimeExpr & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::WhileStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }

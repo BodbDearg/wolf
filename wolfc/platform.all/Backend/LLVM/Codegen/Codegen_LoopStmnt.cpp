@@ -7,6 +7,7 @@
 #include "AST/Nodes/LoopStmnt.hpp"
 #include "AST/Nodes/Scope.hpp"
 #include "DataType/DataType.hpp"
+#include "Lexer/Token.hpp"
 #include "StringUtils.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -25,8 +26,11 @@ void Codegen::visit(const AST::LoopStmntNoCond & astNode) {
     // Create the 'loop' main block.
     // Note: also make the previous block branch to this block in order to properly terminate it.
     // Note: This is also the target of the 'next' statement.
+    std::string startBBLbl = StringUtils::appendLineInfo("LoopStmntNoCond:block",
+                                                         astNode.getStartToken());
+    
     llvm::BasicBlock * startBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx,
-                                                          "LoopStmntNoCond:block",
+                                                          startBBLbl,
                                                           parentFn);
     
     WC_ASSERT(startBB);
@@ -39,8 +43,11 @@ void Codegen::visit(const AST::LoopStmntNoCond & astNode) {
     
     // Create the end basic block: we go here on exiting the loop.
     // Note: this is also the target of the 'break' statement.
+    std::string endBBLbl = StringUtils::appendLineInfo("LoopStmntNoCond:end",
+                                                       (&astNode.getEndToken())[1]);
+    
     llvm::BasicBlock * endBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx,
-                                                        "LoopStmntNoCond:end",
+                                                        endBBLbl,
                                                         parentFn);
     
     WC_ASSERT(endBB);
@@ -68,8 +75,11 @@ void Codegen::visit(const AST::LoopStmntWithCond & astNode) {
     
     // Create the 'loop' main block.
     // Note: also make the previous block branch to this block in order to properly terminate it.
+    std::string startBBLbl = StringUtils::appendLineInfo("LoopStmntWithCond:block",
+                                                         astNode.getStartToken());
+    
     llvm::BasicBlock * startBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx,
-                                                          "LoopStmntWithCond:block",
+                                                          startBBLbl,
                                                           parentFn);
     
     WC_ASSERT(startBB);
@@ -82,8 +92,11 @@ void Codegen::visit(const AST::LoopStmntWithCond & astNode) {
     // Create a block for the loop condition expression:
     // Note: also make the previous block branch to this block in order to properly terminate it.
     // Note: This is also the target of the 'next' statement.
+    std::string loopCondBBLbl = StringUtils::appendLineInfo("LoopStmntWithCond:cond",
+                                                            astNode.mLoopCondExpr.getStartToken());
+    
     llvm::BasicBlock * loopCondBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx,
-                                                             "LoopStmntWithCond:cond",
+                                                             loopCondBBLbl,
                                                              parentFn);
     
     WC_ASSERT(loopCondBB);
@@ -97,8 +110,11 @@ void Codegen::visit(const AST::LoopStmntWithCond & astNode) {
     
     // Generate the end basic block:
     // Note: This is also the target of the 'break' statement.
+    std::string endBBLbl = StringUtils::appendLineInfo("LoopStmntWithCond:end",
+                                                       (&astNode.getEndToken())[1]);
+    
     llvm::BasicBlock * endBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx,
-                                                        "LoopStmntWithCond:end",
+                                                        endBBLbl,
                                                         parentFn);
     
     WC_ASSERT(endBB);
@@ -119,8 +135,8 @@ void Codegen::visit(const AST::LoopStmntWithCond & astNode) {
     else {
         // The loop condition must evaluate to a boolean
         mCtx.error(astNode.mLoopCondExpr,
-                   "Condition expression for 'loop' statement must evaluate to type 'bool' "
-                   "not type '%s'!",
+                   "Condition expression for 'loop' statement must evaluate to type "
+                   "'bool' not type '%s'!",
                    loopExprType.name().c_str());
         
         // Create an unreachable just to terminate the block

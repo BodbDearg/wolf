@@ -80,6 +80,7 @@
 		1F0308B61E2AF2510097D223 /* WhileStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308881E2AF2510097D223 /* WhileStmnt.cpp */; };
 		1F09BD831E371B160072CF0B /* ValHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F09BD811E371B160072CF0B /* ValHolder.cpp */; };
 		1F25171F1E40700A00E34CF6 /* Codegen_LoopStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F25171E1E40700A00E34CF6 /* Codegen_LoopStmnt.cpp */; };
+		1F2517211E40813A00E34CF6 /* Codegen_WhileStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2517201E40813A00E34CF6 /* Codegen_WhileStmnt.cpp */; };
 		1F2985A41E3EFAEB00DC17CC /* Codegen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2985851E3EFAEB00DC17CC /* Codegen.cpp */; };
 		1F2985A51E3EFAEB00DC17CC /* Codegen_AddExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2985871E3EFAEB00DC17CC /* Codegen_AddExpr.cpp */; };
 		1F2985A61E3EFAEB00DC17CC /* Codegen_AssertStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F2985881E3EFAEB00DC17CC /* Codegen_AssertStmnt.cpp */; };
@@ -311,6 +312,7 @@
 		1F231DAD1CE165AD0085E1C6 /* docs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = docs; path = ../../docs; sourceTree = "<group>"; };
 		1F25171D1E40553300E34CF6 /* RepeatableStmnt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RepeatableStmnt.hpp; sourceTree = "<group>"; };
 		1F25171E1E40700A00E34CF6 /* Codegen_LoopStmnt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_LoopStmnt.cpp; sourceTree = "<group>"; };
+		1F2517201E40813A00E34CF6 /* Codegen_WhileStmnt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_WhileStmnt.cpp; sourceTree = "<group>"; };
 		1F2985851E3EFAEB00DC17CC /* Codegen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen.cpp; sourceTree = "<group>"; };
 		1F2985861E3EFAEB00DC17CC /* Codegen.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Codegen.hpp; sourceTree = "<group>"; };
 		1F2985871E3EFAEB00DC17CC /* Codegen_AddExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_AddExpr.cpp; sourceTree = "<group>"; };
@@ -628,6 +630,7 @@
 				1F2985A11E3EFAEB00DC17CC /* Codegen_Type.cpp */,
 				1F2985A21E3EFAEB00DC17CC /* Codegen_UnaryExpr.cpp */,
 				1F2985A31E3EFAEB00DC17CC /* Codegen_VarDecl.cpp */,
+				1F2517201E40813A00E34CF6 /* Codegen_WhileStmnt.cpp */,
 				1F2985851E3EFAEB00DC17CC /* Codegen.cpp */,
 				1F2985861E3EFAEB00DC17CC /* Codegen.hpp */,
 			);
@@ -1113,6 +1116,7 @@
 				1F2985AA1E3EFAEB00DC17CC /* Codegen_CmpExpr.cpp in Sources */,
 				1F2985EC1E3EFB8B00DC17CC /* AddrCodegen.cpp in Sources */,
 				1F03089B1E2AF2510097D223 /* IfStmnt.cpp in Sources */,
+				1F2517211E40813A00E34CF6 /* Codegen_WhileStmnt.cpp in Sources */,
 				1F2985B11E3EFAEB00DC17CC /* Codegen_LAndExpr.cpp in Sources */,
 				1F0308A81E2AF2510097D223 /* PrintStmnt.cpp in Sources */,
 				1F6B6C201E3DFA7000B75BF4 /* CodegenConstUnaryOp.cpp in Sources */,
