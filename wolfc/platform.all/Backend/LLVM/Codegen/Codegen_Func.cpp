@@ -7,6 +7,7 @@
 #include "AST/Nodes/FuncArg.hpp"
 #include "AST/Nodes/Scope.hpp"
 #include "DataType/DataType.hpp"
+#include "StringUtils.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -144,8 +145,7 @@ void Codegen::visit(const AST::Func & astNode) {
     });
 }
 
-void Codegen::doDeferredFunctionCodegen(const AST::Func & astNode, Function & function)
-{
+void Codegen::doDeferredFunctionCodegen(const AST::Func & astNode, Function & function) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
     // Set the current function being code generated in the context.
@@ -153,8 +153,11 @@ void Codegen::doDeferredFunctionCodegen(const AST::Func & astNode, Function & fu
     
     // Create the function entry block and set it as the insert point for ir builder
     WC_ASSERT(function.mLLVMFunc);
+    std::string entryBBLabel = StringUtils::appendLineInfo("func_entry_bb",
+                                                           astNode.mScope.getStartToken());
+    
     llvm::BasicBlock * fnEntryBlock = llvm::BasicBlock::Create(mCtx.mLLVMCtx,
-                                                               "func_entry_bb",
+                                                               entryBBLabel,
                                                                function.mLLVMFunc);
     
     WC_ASSERT(fnEntryBlock);
