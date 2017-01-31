@@ -109,47 +109,6 @@ const Token & LoopStmntNoCond::getEndToken() const {
     return mEndToken;
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::BasicBlock * LoopStmntNoCond::getNextStmntTargetBlock() {
-    return mStartBB;
-}
-    
-llvm::BasicBlock * LoopStmntNoCond::getBreakStmntTargetBlock() {
-    return mEndBB;
-}
-
-bool LoopStmntNoCond::codegen(CodegenCtx & cgCtx) {
-    // Grab the parent function
-    llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
-    WC_GUARD_ASSERT(parentFn, false);
-    
-    // Create the 'loop' main block.
-    // Note: also make the previous block branch to this block in order to properly terminate it.
-    mStartBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "LoopStmntNoCond:block", parentFn);
-    WC_ASSERT(mStartBB);
-    cgCtx.irBuilder.CreateBr(mStartBB);
-
-    // Codegen the 'body' block, this will go back up to the start of itself when done
-    cgCtx.irBuilder.SetInsertPoint(mStartBB);
-    
-    if (!mBodyScope.codegen(cgCtx)) {
-        return false;
-    }
-    
-    // Create the end basic block: we go here on exiting the loop
-    mEndBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "LoopStmntNoCond:end", parentFn);
-    WC_ASSERT(mEndBB);
-    
-    // Create a branch back up to the top of the block for the body block
-    cgCtx.irBuilder.CreateBr(mStartBB);
-    
-    // Switch back to inserting code at the end block:
-    cgCtx.irBuilder.SetInsertPoint(mEndBB);
-    return true;
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // LoopStmntWithCond
 //-----------------------------------------------------------------------------
