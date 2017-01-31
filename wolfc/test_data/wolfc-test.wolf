@@ -1,11 +1,11 @@
 func main() -> void
     let num = 0
 
-    loop
+    while num >= 0
         print("Enter a number: ")
         num = readnum()
         print("The number was: ")
         print(num)
         print("\n")
-    repeat while num > 0
+    end
 end

@@ -2,9 +2,7 @@
 
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
-#include "Assert.hpp"
 #include "AssignExpr.hpp"
-#include "DataType/DataType.hpp"
 #include "LinearAlloc.hpp"
 #include "Scope.hpp"
 
@@ -101,89 +99,9 @@ bool WhileStmnt::allCodepathsHaveUncondRet() const {
     return false;
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::BasicBlock * WhileStmnt::getNextStmntTargetBlock() {
-    return mWhileCondBB;
-}
-
-llvm::BasicBlock * WhileStmnt::getBreakStmntTargetBlock() {
-    return mEndBB;
-}
-
-bool WhileStmnt::codegen(CodegenCtx & cgCtx) {
-    // Grab the parent function
-    llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
-    WC_GUARD_ASSERT(parentFn, false);
-    
-    // Create the 'while' basic block that does the condition check.
-    // Note: also make the previous block branch to this block in order to properly terminate it.
-    mWhileCondBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "WhileStmnt:while_cond", parentFn);
-    WC_ASSERT(mWhileCondBB);
-    cgCtx.irBuilder.CreateBr(mWhileCondBB);
-    
-    // Generate the code for the while statement condition expression:
-    cgCtx.irBuilder.SetInsertPoint(mWhileCondBB);
-    llvm::Value * whileExprResult = codegenWhileExpr(cgCtx);
-    WC_GUARD(whileExprResult, false);
-    
-    // Create the 'body' basic block:
-    llvm::BasicBlock * bodyBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "WhileStmnt:body", parentFn);
-    WC_ASSERT(bodyBB);
-
-    // Codegen the 'body' block, this will go back up to the while condition block when done
-    cgCtx.irBuilder.SetInsertPoint(bodyBB);
-    
-    if (!mBodyScope.codegen(cgCtx)) {
-        return false;
-    }
-    
-    cgCtx.irBuilder.CreateBr(mWhileCondBB);
-    
-    // Create the end basic block:
-    mEndBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "WhileStmnt:end", parentFn);
-    WC_ASSERT(mEndBB);
-    
-    // Generate the branch for the while condition
-    cgCtx.irBuilder.SetInsertPoint(mWhileCondBB);
-    llvm::Value * branch = nullptr;
-    
-    if (isWhileExprInversed()) {
-        branch = cgCtx.irBuilder.CreateCondBr(whileExprResult, mEndBB, bodyBB);
-    }
-    else {
-        branch = cgCtx.irBuilder.CreateCondBr(whileExprResult, bodyBB, mEndBB);
-    }
-    
-    WC_ASSERT(branch);
-    
-    // Insert code after the end block from here on in
-    cgCtx.irBuilder.SetInsertPoint(mEndBB);
-    return true;
-}
-#endif
-
 bool WhileStmnt::isWhileExprInversed() const {
     return mStartToken.type == TokenType::kUntil;
 }
-
-#warning FIXME - Codegen
-#if 0
-llvm::Value * WhileStmnt::codegenWhileExpr(CodegenCtx & cgCtx) const {
-    // Firstly validate that the while statement condition expression is a bool:
-    const DataType & whileExprDataType = mWhileExpr.dataType();
-    
-    if (!whileExprDataType.isBool()) {
-        compileError("Condition for while statement must evaluate to type 'bool', not '%s'!",
-                     whileExprDataType.name().c_str());
-        
-        return nullptr;
-    }
-    
-    // Then generate the code
-    return mWhileExpr.codegenExprEval(cgCtx);
-}
-#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

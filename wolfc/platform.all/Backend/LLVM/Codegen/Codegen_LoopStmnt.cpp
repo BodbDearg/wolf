@@ -126,10 +126,10 @@ void Codegen::visit(const AST::LoopStmntWithCond & astNode) {
     if (loopExprType.isBool()) {
         // Branch to the either the end or the start of the loop depending on the condition
         if (astNode.isLoopCondInversed()) {
-            mCtx.mIRBuilder.CreateCondBr(loopExprVal.mLLVMVal, endBB, startBB);
+            WC_ASSERTED_OP(mCtx.mIRBuilder.CreateCondBr(loopExprVal.mLLVMVal, endBB, startBB));
         }
         else {
-            mCtx.mIRBuilder.CreateCondBr(loopExprVal.mLLVMVal, startBB, endBB);
+            WC_ASSERTED_OP(mCtx.mIRBuilder.CreateCondBr(loopExprVal.mLLVMVal, startBB, endBB));
         }
     }
     else {

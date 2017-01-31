@@ -74,7 +74,7 @@ void Codegen::visit(const AST::IfStmntNoElse & astNode) {
     // that is if it is not already terminated:
     if (!thenEndBB->getTerminator()) {
         irb.SetInsertPoint(thenEndBB);
-        irb.CreateBr(endBB);
+        WC_ASSERTED_OP(irb.CreateBr(endBB));
     }
     
     // Insert future code past the end of this if statement
@@ -158,14 +158,14 @@ void Codegen::visit(const AST::IfStmntElseIf & astNode) {
     // that is if it is not already terminated:
     if (!thenEndBB->getTerminator()) {
         irb.SetInsertPoint(thenEndBB);
-        irb.CreateBr(endBB);
+        WC_ASSERTED_OP(irb.CreateBr(endBB));
     }
     
     // Tie the end of the 'outer if' scope to the end of this if statement,
     // that is if it is not already terminated:
     if (!outerIfEndBB->getTerminator()) {
         irb.SetInsertPoint(outerIfEndBB);
-        irb.CreateBr(endBB);
+        WC_ASSERTED_OP(irb.CreateBr(endBB));
     }
     
     // Insert future code past the end of this if statement
@@ -249,14 +249,14 @@ void Codegen::visit(const AST::IfStmntElse & astNode) {
     // that is if it is not already terminated:
     if (!thenEndBB->getTerminator()) {
         irb.SetInsertPoint(thenEndBB);
-        irb.CreateBr(endBB);
+        WC_ASSERTED_OP(irb.CreateBr(endBB));
     }
     
     // Tie the end of the 'else' scope to the end of this if statement,
     // that is if it is not already terminated:
     if (!elseEndBB->getTerminator()) {
         irb.SetInsertPoint(elseEndBB);
-        irb.CreateBr(endBB);
+        WC_ASSERTED_OP(irb.CreateBr(endBB));
     }
     
     // Insert future code past the end of this if statement
