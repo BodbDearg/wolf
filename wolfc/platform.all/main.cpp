@@ -128,20 +128,6 @@ static int mainImpl(int argc, const char * argv[]) {
     if (!compileSourceFile(argv[1])) {
         return -1;
     }
-    
-    // Do code generation
-
-#warning FIXME - Codegen
-#if 0
-    // Codegen the module
-    if (!module.generateCode()) {
-        std::printf("Compile failed for source file '%s'!\n", argv[1]);
-        return -1;
-    }
-
-    // Dump the code to stdout!
-    module.dumpIRCodeToStdout();
-#endif
 
     // Everything went well!
     return 0;
