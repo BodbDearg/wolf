@@ -26,12 +26,6 @@ public:
     
     /* The 'break' token */
     const Token & mBreakToken;
-    
-#warning FIXME - Codegen
-#if 0
-    /* Basic block for the 'break' code */
-    llvm::BasicBlock * mBreakBlock = nullptr;
-#endif
 };
 
 /* break */
@@ -61,12 +55,6 @@ public:
 
     /* The condition expression itself */
     AssignExpr & mCondExpr;
-    
-#warning FIXME - Codegen
-#if 0
-    /* Basic block for the 'continue' code */
-    llvm::BasicBlock * mContinueBlock = nullptr;
-#endif
 };
 
 WC_AST_END_NAMESPACE

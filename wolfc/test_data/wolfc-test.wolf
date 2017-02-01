@@ -8,8 +8,6 @@ func main() -> void
         print(num)
         print("\n")
 
-        unless num >= 0
-            break
-        end
+        break unless num >= 0
     end
 end
