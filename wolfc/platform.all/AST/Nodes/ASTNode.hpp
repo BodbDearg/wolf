@@ -39,6 +39,12 @@ public:
     /* Return the token that the AST node ends at. */
     virtual const Token & getEndToken() const = 0;
     
+    /**
+     * Return a token which is 1 token past the last token of the AST node. 
+     * One exception however, if the end token happens to be EOF then the EOF token will just be returned.
+     */
+    const Token & getPastEndToken() const;
+    
     /* Figure out what the parent scope of this node is. */
     Scope * getParentScope();
     

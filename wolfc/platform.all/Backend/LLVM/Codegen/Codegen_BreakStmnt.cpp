@@ -87,7 +87,7 @@ void Codegen::visit(const AST::BreakStmntWithCond & astNode) {
     WC_ASSERT(breakBB);
     
     // Create the basic block for the continue code:
-    std::string continueBBLbl = StringUtils::appendLineInfo("BreakStmntWithCond:continue", astNode.getStartToken());
+    std::string continueBBLbl = StringUtils::appendLineInfo("BreakStmntWithCond:continue", astNode.getPastEndToken());
     llvm::BasicBlock * continueBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, continueBBLbl, parentFn);
     WC_ASSERT(continueBB);
     

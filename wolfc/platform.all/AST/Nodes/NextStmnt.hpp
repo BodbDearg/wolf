@@ -24,12 +24,6 @@ public:
     
     /* The 'next' token */
     const Token & mNextToken;
-    
-#warning FIXME - Codegen
-#if 0
-    /* Basic block for the 'next' code */
-    llvm::BasicBlock * 	mNextBlock = nullptr;
-#endif
 };
 
 /* next */
@@ -63,12 +57,6 @@ public:
 
     /* The condition expression itself */
     AssignExpr & mCondExpr;
-    
-#warning FIXME - Codegen
-#if 0
-    /* Basic block for the 'continue' code */
-    llvm::BasicBlock * mContinueBlock = nullptr;
-#endif
 };
 
 WC_AST_END_NAMESPACE

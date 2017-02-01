@@ -76,36 +76,29 @@ void Codegen::visit(const AST::NextStmntNoCond & astNode) {
 
 void Codegen::visit(const AST::NextStmntWithCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-#warning REMOVE ME
-/*
-void Codegen::visit(const AST::BreakStmntWithCond & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
 
     // Grab the parent function
     llvm::Function * parentFn = mCtx.mIRBuilder.GetInsertBlock()->getParent();
     WC_ASSERT(parentFn);
     
-    // Create the basic block for the break code
-    std::string breakBBLbl = StringUtils::appendLineInfo("BreakStmntWithCond:break", astNode.getStartToken());
-    llvm::BasicBlock * breakBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, breakBBLbl, parentFn);
-    WC_ASSERT(breakBB);
+    // Create the basic block for the next code
+    std::string nextBBLbl = StringUtils::appendLineInfo("NextStmntWithCond:next", astNode.getStartToken());
+    llvm::BasicBlock * nextBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, nextBBLbl, parentFn);
+    WC_ASSERT(nextBB);
     
     // Create the basic block for the continue code:
-    std::string continueBBLbl = StringUtils::appendLineInfo("BreakStmntWithCond:continue", astNode.getStartToken());
+    std::string continueBBLbl = StringUtils::appendLineInfo("NextStmntWithCond:continue", astNode.getPastEndToken());
     llvm::BasicBlock * continueBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, continueBBLbl, parentFn);
     WC_ASSERT(continueBB);
     
-    // Evaluate the expression for the break condition
+    // Evaluate the expression for the next condition
     astNode.mCondExpr.accept(*this);
     Value condExprVal = mCtx.popValue();
     const DataType & condExprType = condExprVal.mCompiledType.getDataType();
     
     // The assign expression must evaluate to bool:
     if (!condExprType.isBool()) {
-        mCtx.error("Condition for 'break' statement must evaluate to type 'bool', not '%s'!",
+        mCtx.error("Condition for 'next' statement must evaluate to type 'bool', not '%s'!",
                    condExprType.name().c_str());
         
         return;
@@ -114,19 +107,18 @@ void Codegen::visit(const AST::BreakStmntWithCond & astNode) {
     // Depending on the result of the condition expression, either jump to the
     // continue block or the break block.
     if (astNode.isIfCondInverted()) {
-        mCtx.mIRBuilder.CreateCondBr(condExprVal.mLLVMVal, continueBB, breakBB);
+        mCtx.mIRBuilder.CreateCondBr(condExprVal.mLLVMVal, continueBB, nextBB);
     }
     else {
-        mCtx.mIRBuilder.CreateCondBr(condExprVal.mLLVMVal, breakBB, continueBB);
+        mCtx.mIRBuilder.CreateCondBr(condExprVal.mLLVMVal, nextBB, continueBB);
     }
     
     // Future code should insert in the continue block:
     mCtx.mIRBuilder.SetInsertPoint(continueBB);
     
-    // Schedule the deferred codegen for the break logic
-    deferredCodegenBreakLogic(mCtx, astNode, *breakBB);
+    // Schedule the deferred codegen for the next logic
+    deferredCodegenNextLogic(mCtx, astNode, *nextBB);
 }
-*/
 
 WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

@@ -44,7 +44,7 @@ void Codegen::visit(const AST::LoopStmntNoCond & astNode) {
     // Create the end basic block: we go here on exiting the loop.
     // Note: this is also the target of the 'break' statement.
     std::string endBBLbl = StringUtils::appendLineInfo("LoopStmntNoCond:end",
-                                                       (&astNode.getEndToken())[1]);
+                                                       astNode.getPastEndToken());
     
     llvm::BasicBlock * endBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx,
                                                         endBBLbl,
@@ -111,7 +111,7 @@ void Codegen::visit(const AST::LoopStmntWithCond & astNode) {
     // Generate the end basic block:
     // Note: This is also the target of the 'break' statement.
     std::string endBBLbl = StringUtils::appendLineInfo("LoopStmntWithCond:end",
-                                                       (&astNode.getEndToken())[1]);
+                                                       astNode.getPastEndToken());
     
     llvm::BasicBlock * endBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx,
                                                         endBBLbl,

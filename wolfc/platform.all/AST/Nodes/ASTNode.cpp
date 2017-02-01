@@ -22,6 +22,16 @@ ASTNode::~ASTNode() {
     WC_EMPTY_FUNC_BODY();
 }
 
+const Token & ASTNode::getPastEndToken() const {
+    const Token & endToken = getEndToken();
+    
+    if (endToken.type == TokenType::kEOF) {
+        return endToken;
+    }
+    
+    return (&endToken)[1];
+}
+
 Scope * ASTNode::getParentScope() {
     return firstParentOfType<Scope>();
 }

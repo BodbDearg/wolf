@@ -60,7 +60,7 @@ void Codegen::visit(const AST::WhileStmnt & astNode) {
     // Create the end basic block:
     // Note: this is also where the 'break' statement targets
     std::string endBBLbl = StringUtils::appendLineInfo("WhileStmnt:end",
-                                                       (&astNode.mBodyScope.getEndToken())[1]);
+                                                       astNode.mBodyScope.getPastEndToken());
     
     llvm::BasicBlock * endBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx,
                                                         endBBLbl,

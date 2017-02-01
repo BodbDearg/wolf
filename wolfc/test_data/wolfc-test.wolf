@@ -5,9 +5,7 @@ func main() -> void
         print("Enter a number: ")
         num = readnum()
 
-        if num >= 0
-            next
-        end
+        next if num >= 0
 
         print("The number was: ")
         print(num)
