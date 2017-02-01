@@ -4,10 +4,13 @@ func main() -> void
     loop
         print("Enter a number: ")
         num = readnum()
+
+        if num >= 0
+            next
+        end
+
         print("The number was: ")
         print(num)
         print("\n")
-
-        break unless num >= 0
     end
 end

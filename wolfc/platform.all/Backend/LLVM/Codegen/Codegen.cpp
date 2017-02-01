@@ -3,10 +3,8 @@
 #include "../CodegenCtx.hpp"
 #include "AST/Nodes/ArrayLit.hpp"
 #include "AST/Nodes/ArrayLitExprs.hpp"
-#include "AST/Nodes/BreakStmnt.hpp"
 #include "AST/Nodes/FuncCall.hpp"
 #include "AST/Nodes/FuncCallArgList.hpp"
-#include "AST/Nodes/NextStmnt.hpp"
 #include "AST/Nodes/RandExpr.hpp"
 #include "AST/Nodes/ReadnumExpr.hpp"
 #include "AST/Nodes/ReturnStmnt.hpp"
@@ -57,16 +55,6 @@ void Codegen::visit(const AST::FuncCallArgListMulti & astNode) {
 }
 
 void Codegen::visit(const AST::FuncCallArgListSingle & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::NextStmntNoCond & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::NextStmntWithCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }
