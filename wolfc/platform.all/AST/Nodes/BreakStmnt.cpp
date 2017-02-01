@@ -92,29 +92,6 @@ const Token & BreakStmntNoCond::getEndToken() const {
     return mBreakToken;
 }
 
-#warning FIXME - Codegen
-#if 0
-bool BreakStmntNoCond::codegen(CodegenCtx & cgCtx) {
-    // Grab the parent function
-    llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
-    WC_ASSERT(parentFn);
-    
-    // Create the basic block for the 'break' code
-    mBreakBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "BreakStmntNoCond:break", parentFn);
-    WC_ASSERT(mBreakBlock);
-    
-    // Point the previous block to this new basic block:
-    cgCtx.irBuilder.CreateBr(mBreakBlock);
-    
-    // Must defer the rest of the code generation until later
-    cgCtx.deferredCodegenCallbacks.push_back([=](CodegenCtx & deferredCgCtx){
-        return deferredCodegen(deferredCgCtx);
-    });
-    
-    return true;    // All good so far!
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // BreakStmntWithCond
 //-----------------------------------------------------------------------------

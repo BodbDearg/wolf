@@ -256,7 +256,6 @@ private:
     /* A list of warning messages emitted during parsing */
     std::vector<std::string> mWarningMsgs;
     
-#warning STILL required?
     /* A stack of code insert blocks pushed/saved for later restoring. */
     std::vector<llvm::BasicBlock*> mInsertBlockStack;
     

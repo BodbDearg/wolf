@@ -46,16 +46,6 @@ void Codegen::visit(const AST::ArrayLitExprsSingle & astNode) {
     #warning TODO: Codegen this node
 }
 
-void Codegen::visit(const AST::BreakStmntNoCond & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::BreakStmntWithCond & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void Codegen::visit(const AST::FuncCall & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
