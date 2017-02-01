@@ -1,6 +1,7 @@
 - Unit tests for constant primary expressions (int, bool, string etc.)
 - Fix recursion on unary expression (should be able to do - - 1 for example)
 	- Just need to implement unit test now
+- Unit tests for various permutations of 'next' and 'break' within loop and while.
 - Make logical statements lazy evaluate
 - Allow 'do' to open function body
 - Unify variable and function lookup via identifiers and introduce a function data type.
