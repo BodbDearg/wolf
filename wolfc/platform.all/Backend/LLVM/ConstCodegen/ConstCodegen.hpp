@@ -59,8 +59,6 @@ public:
     virtual void visit(const AST::Func & astNode) override;
     virtual void visit(const AST::FuncArg & astNode) override;
     virtual void visit(const AST::FuncCall & astNode) override;
-    virtual void visit(const AST::FuncCallArgListMulti & astNode) override;
-    virtual void visit(const AST::FuncCallArgListSingle & astNode) override;
     virtual void visit(const AST::Identifier & astNode) override;
     virtual void visit(const AST::IfStmntElse & astNode) override;
     virtual void visit(const AST::IfStmntElseIf & astNode) override;

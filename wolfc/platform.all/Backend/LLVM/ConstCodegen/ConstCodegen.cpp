@@ -10,7 +10,6 @@
 #include "AST/Nodes/Func.hpp"
 #include "AST/Nodes/FuncArg.hpp"
 #include "AST/Nodes/FuncCall.hpp"
-#include "AST/Nodes/FuncCallArgList.hpp"
 #include "AST/Nodes/Identifier.hpp"
 #include "AST/Nodes/IfStmnt.hpp"
 #include "AST/Nodes/LoopStmnt.hpp"
@@ -96,16 +95,6 @@ void ConstCodegen::visit(const AST::FuncArg & astNode) {
 void ConstCodegen::visit(const AST::FuncCall & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "FuncCall");
-}
-
-void ConstCodegen::visit(const AST::FuncCallArgListMulti & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "FuncCallArgListMulti");
-}
-
-void ConstCodegen::visit(const AST::FuncCallArgListSingle & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "FuncCallArgListSingle");
 }
 
 void ConstCodegen::visit(const AST::Identifier & astNode) {

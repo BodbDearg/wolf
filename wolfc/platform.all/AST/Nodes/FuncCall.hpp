@@ -10,44 +10,34 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 class AssignExpr;
-class FuncCallArgList;
 
 /*
 FuncCall:
-	( [FuncCallArgList] )
+	( [0..N: AssignExpr ,][AssignExpr] )
 */
 class FuncCall final : public ASTNode {
 public:
     static bool peek(const Token * currentToken);
     static FuncCall * parse(ParseCtx & parseCtx);
     
-    FuncCall(const Token & startToken, FuncCallArgList * argList, const Token & endToken);
+    FuncCall(const Token & startToken,
+             const std::vector<AssignExpr*> & args,
+             const Token & endToken);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    size_t numArgs() const;
-    void getArgs(std::vector<AssignExpr*> & args) const;
+    inline const std::vector<const AssignExpr*> & getArgs() const {
+        return mArgs;
+    }
     
-#warning FIXME - Codegen
-#if 0
-    /**
-     * Generates the code for the argument list expressions and saves them as a list of 
-     * llvm::Value objects on this object.
-     */
-    bool codegenArgsListExprs(CodegenCtx & cgCtx);
-#endif
+private:
+    const Token & mStartToken;
+    const Token & mEndToken;
     
-    const Token &       mStartToken;
-    FuncCallArgList *   mArgList;
-    const Token &       mEndToken;
-    
-#warning FIXME - Codegen
-#if 0
-    /* The list of evaluated arg list expressions, created after code generation. */
-    std::vector<llvm::Value*> mArgListExprsValues;
-#endif
+    /* The assign expression for all the arguments */
+    std::vector<const AssignExpr*> mArgs;
 };
 
 WC_AST_END_NAMESPACE

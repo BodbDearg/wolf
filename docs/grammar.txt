@@ -162,11 +162,7 @@ CastExpr:
 	cast ( AssignExpr to Type )
 
 FuncCall:
-	( [FuncCallArgList] )
-
-FuncCallArgList:
-	AssignExpr
-	AssignExpr , FuncCallArgList
+	( [0..N: AssignExpr ,][AssignExpr] )
 
 PrimaryExpr:
 	IntLit

@@ -48,7 +48,6 @@
 		1F0308951E2AF2510097D223 /* Func.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308421E2AF2510097D223 /* Func.cpp */; };
 		1F0308961E2AF2510097D223 /* FuncArg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308441E2AF2510097D223 /* FuncArg.cpp */; };
 		1F0308981E2AF2510097D223 /* FuncCall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308481E2AF2510097D223 /* FuncCall.cpp */; };
-		1F0308991E2AF2510097D223 /* FuncCallArgList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F03084A1E2AF2510097D223 /* FuncCallArgList.cpp */; };
 		1F03089A1E2AF2510097D223 /* Identifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F03084D1E2AF2510097D223 /* Identifier.cpp */; };
 		1F03089B1E2AF2510097D223 /* IfStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308501E2AF2510097D223 /* IfStmnt.cpp */; };
 		1F03089C1E2AF2510097D223 /* IntLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308521E2AF2510097D223 /* IntLit.cpp */; };
@@ -241,8 +240,6 @@
 		1F0308451E2AF2510097D223 /* FuncArg.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FuncArg.hpp; sourceTree = "<group>"; };
 		1F0308481E2AF2510097D223 /* FuncCall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FuncCall.cpp; sourceTree = "<group>"; };
 		1F0308491E2AF2510097D223 /* FuncCall.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FuncCall.hpp; sourceTree = "<group>"; };
-		1F03084A1E2AF2510097D223 /* FuncCallArgList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FuncCallArgList.cpp; sourceTree = "<group>"; };
-		1F03084B1E2AF2510097D223 /* FuncCallArgList.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FuncCallArgList.hpp; sourceTree = "<group>"; };
 		1F03084C1E2AF2510097D223 /* IBasicCodegenNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IBasicCodegenNode.hpp; sourceTree = "<group>"; };
 		1F03084D1E2AF2510097D223 /* Identifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Identifier.cpp; sourceTree = "<group>"; };
 		1F03084E1E2AF2510097D223 /* Identifier.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Identifier.hpp; sourceTree = "<group>"; };
@@ -519,8 +516,6 @@
 				1F0308451E2AF2510097D223 /* FuncArg.hpp */,
 				1F0308481E2AF2510097D223 /* FuncCall.cpp */,
 				1F0308491E2AF2510097D223 /* FuncCall.hpp */,
-				1F03084A1E2AF2510097D223 /* FuncCallArgList.cpp */,
-				1F03084B1E2AF2510097D223 /* FuncCallArgList.hpp */,
 				1F03084C1E2AF2510097D223 /* IBasicCodegenNode.hpp */,
 				1F03084D1E2AF2510097D223 /* Identifier.cpp */,
 				1F03084E1E2AF2510097D223 /* Identifier.hpp */,
@@ -1010,7 +1005,6 @@
 				1F03088D1E2AF2510097D223 /* AssertStmnt.cpp in Sources */,
 				1F2985A81E3EFAEB00DC17CC /* Codegen_BoolLit.cpp in Sources */,
 				1F0308A71E2AF2510097D223 /* PrimitiveType.cpp in Sources */,
-				1F0308991E2AF2510097D223 /* FuncCallArgList.cpp in Sources */,
 				1F2985A41E3EFAEB00DC17CC /* Codegen.cpp in Sources */,
 				1F0308B41E2AF2510097D223 /* UnaryExpr.cpp in Sources */,
 				1F2985B81E3EFAEC00DC17CC /* Codegen_PrimaryExpr.cpp in Sources */,

@@ -5,7 +5,6 @@
 #include "Assert.hpp"
 #include "AssignExpr.hpp"
 #include "DataType/DataType.hpp"
-#include "FuncCallArgList.hpp"
 #include "LinearAlloc.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -26,35 +25,54 @@ FuncCall * FuncCall::parse(ParseCtx & parseCtx) {
     const Token * startToken = parseCtx.tok();
     parseCtx.nextTok();
     
-    // See if there is an arg list:
-    FuncCallArgList * argList = nullptr;
+    // Start parsing the arg list
+    std::vector<AssignExpr*> argList;
     
-    if (FuncCallArgList::peek(parseCtx.tok())) {
-        argList = FuncCallArgList::parse(parseCtx);
-        WC_GUARD(argList, nullptr);
+    while (AssignExpr::peek(parseCtx.tok())) {
+        // Parse the arg and save if it was parsed ok
+        AssignExpr * argExpr = AssignExpr::parse(parseCtx);
+        
+        if (argExpr) {
+            argList.push_back(argExpr);
+        }
+        
+        // If a comma does not follow then we are done
+        if (parseCtx.tok()->type != TokenType::kComma) {
+            break;
+        }
+        
+        // Otherwise consume the comma
+        parseCtx.nextTok();
     }
     
     // Expect ')'
-    if (parseCtx.tok()->type != TokenType::kRParen) {
+    const Token * endToken = parseCtx.tok();
+    
+    if (endToken->type != TokenType::kRParen) {
         parseCtx.error("Expected ')' !");
-        return nullptr;
+    }
+    else {
+        // Skip the ')'
+        parseCtx.nextTok();
     }
     
-    // Save and skip ')'
-    const Token * endToken = parseCtx.tok();
-    parseCtx.nextTok();
-    
-    // No args:
+    // All good, return the node
     return WC_NEW_AST_NODE(parseCtx, FuncCall, *startToken, argList, *endToken);
 }
 
-FuncCall::FuncCall(const Token & startToken, FuncCallArgList * argList, const Token & endToken) :
+FuncCall::FuncCall(const Token & startToken,
+                   const std::vector<AssignExpr*> & args,
+                   const Token & endToken)
+:
     mStartToken(startToken),
-    mArgList(argList),
-    mEndToken(endToken)
+    mEndToken(endToken),
+    mArgs()
 {
-    if (mArgList) {
-        mArgList->mParent = this;
+    mArgs.reserve(args.size());
+    
+    for (AssignExpr * arg : args) {
+        arg->mParent = this;
+        mArgs.push_back(arg);
     }
 }
 
@@ -68,16 +86,6 @@ const Token & FuncCall::getStartToken() const {
 
 const Token & FuncCall::getEndToken() const {
     return mEndToken;
-}
-
-size_t FuncCall::numArgs() const {
-    WC_GUARD(mArgList, 0);
-    return mArgList->numArgs();
-}
-
-void FuncCall::getArgs(std::vector<AssignExpr*> & args) const {
-    WC_GUARD(mArgList);
-    mArgList->getArgs(args);
 }
 
 #warning FIXME - Codegen
