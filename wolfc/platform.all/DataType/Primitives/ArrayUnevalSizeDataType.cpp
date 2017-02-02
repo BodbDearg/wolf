@@ -19,11 +19,6 @@ ArrayUnevalSizeDataType::ArrayUnevalSizeDataType(const AST::ASTNode & declaringN
     mName += mElemType.name();
 }
 
-ArrayUnevalSizeDataType::~ArrayUnevalSizeDataType() {
-    // Defined here so llvm::Type can be forward referenced in the header.
-    WC_EMPTY_FUNC_BODY();
-}
-
 void ArrayUnevalSizeDataType::accept(DataTypeVisitor & visitor) const {
     visitor.visit(*this);
 }
@@ -43,15 +38,15 @@ bool ArrayUnevalSizeDataType::equals(const DataType & other) const {
     }
     
     // Check that dynamic types match:
-    auto otherArrayType = dynamic_cast<const ArrayUnevalSizeDataType*>(&other);
-    WC_GUARD(otherArrayType, false);
+    auto otherType = dynamic_cast<const ArrayUnevalSizeDataType*>(&other);
+    WC_GUARD(otherType, false);
     
     // Only consider the types equal if the AST node for the expression is the same.
     // Even the same expression evaluated at different points could mean different things.
-    WC_GUARD(&mSizeExpr == &otherArrayType->mSizeExpr, false);
+    WC_GUARD(&mSizeExpr == &otherType->mSizeExpr, false);
     
     // Lastly see if the element types match:
-    return mElemType.equals(otherArrayType->mElemType);
+    return mElemType.equals(otherType->mElemType);
 }
 
 bool ArrayUnevalSizeDataType::isValid() const {

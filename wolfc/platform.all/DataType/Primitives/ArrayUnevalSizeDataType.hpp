@@ -20,8 +20,6 @@ public:
                             const DataType & elemType,
                             AST::AssignExpr & sizeExpr);
     
-    virtual ~ArrayUnevalSizeDataType() override;
-    
     virtual void accept(DataTypeVisitor & visitor) const override;
     virtual DataTypeId getTypeId() const override;
     virtual const std::string & name() const final override;

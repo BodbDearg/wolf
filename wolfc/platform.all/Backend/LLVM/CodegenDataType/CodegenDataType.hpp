@@ -18,6 +18,8 @@ public:
     virtual void visit(const ArrayDataType & dataType) override;
     virtual void visit(const ArrayUnevalSizeDataType & dataType) override;
     virtual void visit(const BoolDataType & dataType) override;
+    virtual void visit(const FuncDataType & dataType) override;
+    virtual void visit(const FuncUnevalDataType & dataType) override;
     virtual void visit(const Int64DataType & dataType) override;
     virtual void visit(const StrDataType & dataType) override;
     virtual void visit(const UnknownDataType & dataType) override;

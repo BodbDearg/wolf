@@ -66,6 +66,16 @@ void CodegenUnaryOp::visit(const BoolDataType & dataType) {
     issueUnaryOpNotSupportedError();
 }
 
+void CodegenUnaryOp::visit(const FuncDataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    issueUnaryOpNotSupportedError();
+}
+
+void CodegenUnaryOp::visit(const FuncUnevalDataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    issueUnaryOpNotSupportedError();
+}
+
 void CodegenUnaryOp::visit(const Int64DataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();

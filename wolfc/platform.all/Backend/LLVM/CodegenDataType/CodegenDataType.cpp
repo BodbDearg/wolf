@@ -9,6 +9,8 @@
 #include "DataType/Primitives/ArrayDataType.hpp"
 #include "DataType/Primitives/ArrayUnevalSizeDataType.hpp"
 #include "DataType/Primitives/BoolDataType.hpp"
+#include "DataType/Primitives/FuncDataType.hpp"
+#include "DataType/Primitives/FuncUnevalDataType.hpp"
 #include "DataType/Primitives/Int64DataType.hpp"
 #include "DataType/Primitives/StrDataType.hpp"
 #include "DataType/Primitives/VoidDataType.hpp"
@@ -125,6 +127,103 @@ void CodegenDataType::visit(const BoolDataType & dataType) {
     llvm::Type * llvmType = llvm::Type::getInt1Ty(mCtx.mLLVMCtx);
     WC_ASSERT(llvmType);
     mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const FuncDataType & dataType) {
+    // Codegen the return type
+    dataType.mReturnType.accept(*this);
+    CompiledDataType returnCompiledType = mCtx.popCompiledDataType();
+    
+    // Codegen all the arg types
+    std::vector<CompiledDataType> argCompiledTypes;
+    argCompiledTypes.reserve(dataType.mArgTypes.size());
+    
+    for (const DataType * argDataType : dataType.mArgTypes) {
+        argDataType->accept(*this);
+        argCompiledTypes.push_back(mCtx.popCompiledDataType());
+    }
+    
+    // See if everything is valid
+    bool funcTypeValid = returnCompiledType.isValid();
+    
+    for (const CompiledDataType & argCompiledType : argCompiledTypes) {
+        if (argCompiledType.isValid()) {
+            const DataType & argDataType = argCompiledType.getDataType();
+            
+            if (!argDataType.isSized()) {
+                mCtx.error("An argument of unsized type '%s' is not allowed for a function!",
+                           argDataType.name().c_str());
+            }
+        }
+        else {
+            funcTypeValid = false;
+        }
+    }
+    
+    // Create a list of the llvm argument types:
+    std::vector<llvm::Type*> argLLVMTypes;
+    argLLVMTypes.reserve(argCompiledTypes.size());
+    
+    for (const CompiledDataType & argCompiledType : argCompiledTypes) {
+        argLLVMTypes.push_back(argCompiledType.getLLVMType());
+    }
+    
+    // If everything is valid then create the llvm type
+    llvm::Type * funcLLVMType = nullptr;
+    
+    if (funcTypeValid) {
+        // Create the function signature:
+        // TODO: support varargs
+        // TODO: support different linkage types
+        funcLLVMType = llvm::FunctionType::get(returnCompiledType.getLLVMType(),
+                                               argLLVMTypes,
+                                               false);
+        
+        WC_ASSERT(funcLLVMType);
+    }
+    
+    // Now save the result:
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, funcLLVMType));
+}
+
+void CodegenDataType::visit(const FuncUnevalDataType & dataType) {
+    // If the result of this has been cached then use that instead
+    if (const DataType * evaluatedDataType = mCtx.getNodeEvaluatedDataType(dataType.mDeclaringNode)) {
+        evaluatedDataType->accept(*this);
+        return;
+    }
+    
+    // Codegen the return type
+    dataType.mReturnType.accept(*this);
+    CompiledDataType returnCompiledType = mCtx.popCompiledDataType();
+    
+    // Codegen all the arg types
+    std::vector<CompiledDataType> argCompiledTypes;
+    argCompiledTypes.reserve(dataType.mArgTypes.size());
+    
+    for (const DataType * argDataType : dataType.mArgTypes) {
+        argDataType->accept(*this);
+        argCompiledTypes.push_back(mCtx.popCompiledDataType());
+    }
+    
+    // Make a list of arg data types
+    std::vector<const DataType*> argDataTypes;
+    argDataTypes.reserve(argCompiledTypes.size());
+    
+    for (CompiledDataType & compiledType : argCompiledTypes) {
+        argDataTypes.push_back(&compiledType.getDataType());
+    }
+    
+    // Save the evaluated data type here:
+    std::unique_ptr<const DataType> evaluatedDataType;
+    evaluatedDataType.reset(new FuncDataType(returnCompiledType.getDataType(),
+                                             std::move(argDataTypes)));
+    
+    // Codegen the evaluated type:
+    evaluatedDataType->accept(*this);
+    
+    // Save the evaluated type so we don't have to go through this again:
+    mCtx.setNodeEvaluatedDataType(dataType.mDeclaringNode, evaluatedDataType);
 }
 
 void CodegenDataType::visit(const Int64DataType & dataType) {

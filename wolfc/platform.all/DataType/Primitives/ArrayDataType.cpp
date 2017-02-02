@@ -23,11 +23,6 @@ ArrayDataType::ArrayDataType(const DataType & elemType, size_t size) :
     mName += ']';
 }
 
-ArrayDataType::~ArrayDataType() {
-    // Defined here so llvm::Type can be forward referenced in the header.
-    WC_EMPTY_FUNC_BODY();
-}
-
 void ArrayDataType::accept(DataTypeVisitor & visitor) const {
     visitor.visit(*this);
 }
@@ -47,14 +42,14 @@ bool ArrayDataType::equals(const DataType & other) const {
     }
     
     // Check that dynamic types match:
-    const ArrayDataType * otherArray = dynamic_cast<const ArrayDataType*>(&other);
-    WC_GUARD(otherArray, false);
+    const ArrayDataType * otherType = dynamic_cast<const ArrayDataType*>(&other);
+    WC_GUARD(otherType, false);
     
     // See if array sizes match:
-    WC_GUARD(mSize == otherArray->mSize, false);
+    WC_GUARD(mSize == otherType->mSize, false);
     
     // Lastly see if the element types match:
-    return mElemType.equals(otherArray->mElemType);
+    return mElemType.equals(otherType->mElemType);
 }
 
 bool ArrayDataType::isValid() const {

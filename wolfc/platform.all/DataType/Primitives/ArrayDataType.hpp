@@ -8,7 +8,6 @@ WC_BEGIN_NAMESPACE
 class ArrayDataType final : public DataType {
 public:
     ArrayDataType(const DataType & elemType, size_t size);
-    virtual ~ArrayDataType() override;
     
     virtual void accept(DataTypeVisitor & visitor) const override;
     virtual DataTypeId getTypeId() const override;
