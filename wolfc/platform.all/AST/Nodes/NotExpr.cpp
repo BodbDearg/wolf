@@ -118,21 +118,6 @@ const DataType & NotExprLNot::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Constant * NotExprLNot::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // Evaluate the expression to be 'notted'
-    llvm::Constant * value = mExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(value, nullptr);
-    
-    // Expression must evaluate to a boolean:
-    WC_GUARD(compileCheckExprIsBool(), nullptr);
-    
-    // Create the not operation
-    return llvm::ConstantExpr::getNot(value);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // NotExprBNot
 //-----------------------------------------------------------------------------
@@ -166,19 +151,6 @@ bool NotExprBNot::isConstExpr() const {
 const DataType & NotExprBNot::dataType() const {
     return mExpr.dataType();
 }
-
-#warning FIXME - Codegen
-#if 0
-llvm::Constant * NotExprBNot::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // Evaluate the expression to be 'notted'
-    llvm::Constant * val = mExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(val, nullptr);
-    
-    // Do the operation and return the result:
-    DataType & exprTy = mExpr.dataType();
-    return exprTy.codegenConstBNotOp(*this, *val);
-}
-#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

@@ -55,13 +55,6 @@ const Token & DeclDefFunc::getEndToken() const {
     return mFunc.getEndToken();
 }
 
-#warning FIXME - Codegen
-#if 0
-bool DeclDefFunc::codegen(CodegenCtx & cgCtx) {
-    return mFunc.codegen(cgCtx);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // DeclDefVarDecl
 //-----------------------------------------------------------------------------
@@ -80,13 +73,6 @@ const Token & DeclDefVarDecl::getStartToken() const {
 const Token & DeclDefVarDecl::getEndToken() const {
     return mVarDecl.getEndToken();
 }
-
-#warning FIXME - Codegen
-#if 0
-bool DeclDefVarDecl::codegen(CodegenCtx & cgCtx) {
-    return mVarDecl.codegen(cgCtx);
-}
-#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE
