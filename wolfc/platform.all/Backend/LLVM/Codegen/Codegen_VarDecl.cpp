@@ -157,24 +157,29 @@ static void codegenGlobalVarDeclWithType(Codegen & cg,
         varInitVal.mLLVMConst = nullptr;
     }
     
-    // TODO: use the linear allocator here
-    const char * varName = varDecl.mIdent.name();
-    auto * varLLVMVar = new llvm::GlobalVariable(*cg.mCtx.mLLVMModule.get(),
-                                                 varCompiledType.getLLVMType(),
-                                                 false,                               // Not constant
-                                                 llvm::GlobalValue::PrivateLinkage,
-                                                 varInitVal.mLLVMConst,
-                                                 varName);
-    
-    WC_ASSERT(varLLVMVar);
-    
     // Register the variable. If it's registered more than once then this will generate an error.
-    cg.mCtx.mModuleValHolder.createVal(cg.mCtx,
-                                       varName,
-                                       varLLVMVar,
-                                       varCompiledType,
-                                       true,
-                                       varDecl);
+    // We'll fill in the llvm value later once the unique name has been determined...
+    Value & value = cg.mCtx.mModuleValHolder.createVal(
+        cg.mCtx,
+        varDecl.mIdent.name(),
+        nullptr,
+        varCompiledType,
+        true,
+        varDecl
+    );
+    
+    // Create the llvm value.
+    // TODO: use the linear allocator here
+    value.mLLVMVal = new llvm::GlobalVariable(
+        *cg.mCtx.mLLVMModule.get(),
+        varCompiledType.getLLVMType(),
+        false,                               // Not constant
+        llvm::GlobalValue::PrivateLinkage,
+        varInitVal.mLLVMConst,
+        value.mName
+    );
+    
+    WC_ASSERT(value.mLLVMVal);
 }
 
 /* Code generate the variable declaration with the given compiled data type */

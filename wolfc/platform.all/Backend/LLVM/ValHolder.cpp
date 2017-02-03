@@ -159,15 +159,21 @@ void ValHolder::compileCheckValueNameNotTaken(CodegenCtx & ctx,
     size_t duplicateNum = 2;
     
     while (true) {
+        // Try this name:
+        uniqueName += '#';
         uniqueName += std::to_string(duplicateNum);
         
+        // If we found a unique name, stop the loop...
         if (!getVal(uniqueName.c_str())) {
-            // Found a unique name, stop the loop
             outputUniqueName = uniqueName;
             break;
         }
         
-        ++duplicateNum;     // This name is taken also, try another
+        // This name is taken also, try another.
+        ++duplicateNum;
+        
+        // Need to reset this:
+        uniqueName.resize(name.size());
     }
 }
 

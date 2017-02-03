@@ -1,3 +1,7 @@
+let blah = 1
+let blah = 2
+let blah = 3
+
 func main() -> void
     let num = 0
 
