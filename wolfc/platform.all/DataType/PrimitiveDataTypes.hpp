@@ -11,6 +11,7 @@ WC_BEGIN_NAMESPACE
 class BoolDataType;
 class DataType;
 class UnknownDataType;
+class VoidDataType;
 enum class DataTypeId : uint8_t;
 enum class TokenType : uint8_t;
 struct Token;
@@ -36,6 +37,9 @@ namespace PrimitiveDataTypes {
     
     /* Get the unknown data type */
     const UnknownDataType & getUnknownDataType();
+
+    /* Get the void data type */
+    const VoidDataType & getVoidDataType();
     
     /* Get the bool data type */
     const BoolDataType & getBoolDataType();

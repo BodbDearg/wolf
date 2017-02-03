@@ -5,6 +5,7 @@
 #include "Assert.hpp"
 #include "DataType/DataType.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
+#include "DataType/Primitives/VoidDataType.hpp"
 #include "FuncArg.hpp"
 #include "Identifier.hpp"
 #include "LinearAlloc.hpp"
@@ -115,6 +116,27 @@ Func * Func::parse(ParseCtx & parseCtx) {
                            *endToken);
 }
 
+/* Helper used by the constructor */
+static const DataType & getReturnDataType(Type * returnType) {
+    if (!returnType) {
+        return PrimitiveDataTypes::getVoidDataType();
+    }
+    
+    return returnType->dataType();
+}
+
+/* Helper used by the constructor */
+static std::vector<const DataType*> getArgDataTypes(const std::vector<FuncArg*> & args) {
+    std::vector<const DataType*> argDataTypes;
+    argDataTypes.reserve(args.size());
+    
+    for (FuncArg * arg : args) {
+        argDataTypes.push_back(&arg->dataType());
+    }
+    
+    return argDataTypes;
+}
+
 Func::Func(const Token & startToken,
            Identifier & identifier,
            std::vector<FuncArg*> && funcArgs,
@@ -127,12 +149,17 @@ Func::Func(const Token & startToken,
     mFuncArgs(funcArgs),
     mReturnType(returnType),
     mScope(scope),
-    mEndToken(endToken)
+    mEndToken(endToken),
+    mDataType(*this, getReturnDataType(returnType), getArgDataTypes(mFuncArgs))
 {
     mIdentifier.mParent = this;
     
     for (FuncArg * funcArg : mFuncArgs) {
         funcArg->mParent = this;
+    }
+    
+    if (mReturnType) {
+        mReturnType->mParent = this;
     }
     
     mScope.mParent = this;
@@ -162,15 +189,6 @@ DataValue * Func::getArg(const char * argName) {
     return &iter->second;
 }
 #endif
-
-const DataType & Func::returnDataType() const {
-    if (mReturnType) {
-        return mReturnType->dataType();
-    }
-    
-    // If no return type is explicitly specified then 'void' is assumed
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
-}
 
 #warning FIXME - Codegen
 #if 0

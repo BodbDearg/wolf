@@ -2,6 +2,7 @@
 
 #include "ASTNode.hpp"
 #include "CStrComparator.hpp"
+#include "DataType/Primitives/FuncUnevalDataType.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <vector>
@@ -45,7 +46,9 @@ public:
         return mFuncArgs;
     }
     
-    const DataType & returnDataType() const;
+    inline const FuncUnevalDataType & dataType() const {
+        return mDataType;
+    }
     
     const Token &       mStartToken;
     Identifier &        mIdentifier;
@@ -61,6 +64,9 @@ private:
      * If this is null then void type is assumed.
      */
     Type * mReturnType;
+    
+    /* The datatype of the function */
+    FuncUnevalDataType mDataType;
 };
 
 WC_AST_END_NAMESPACE

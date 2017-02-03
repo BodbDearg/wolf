@@ -45,6 +45,7 @@ static void compileCheckForDuplicateArgNames(CodegenCtx & ctx, const std::vector
 void Codegen::visit(const AST::Func & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
+    #warning TODO register this as a cosntant
     // Firstly register the function with the module.
     // If this function is a duplicate then a compile error will occur.
     mCtx.registerModuleFunc(astNode);
@@ -57,64 +58,26 @@ void Codegen::visit(const AST::Func & astNode) {
     // Set the current function being code generated in the context.
     SetCurrentCGFunction setCGFunction(mCtx, *function);
     
-    // Codegen all the function arguments and save their llvm types
-    const auto & astFuncArgs = astNode.getArgs();
-    
-    std::vector<CompiledDataType> funcArgTypes;
-    funcArgTypes.reserve(astFuncArgs.size());
-    std::vector<llvm::Type*> funcArgLLVMTypes;
-    funcArgLLVMTypes.reserve(astFuncArgs.size());
-    
-    for (const AST::FuncArg * astArg : astFuncArgs) {
-        #warning register the args in a var container
-        // Visit the arg, which will codegen it's type and push it onto the type stack:
-        WC_ASSERT(astArg);
-        astArg->accept(*this);
-        funcArgTypes.push_back(mCtx.popCompiledDataType());
-        llvm::Type * llvmArgType = funcArgTypes.back().getLLVMType();
-        
-        // Fallback to 'int64' just to get the right arg count, if codegenning the arg fails
-        if (llvmArgType) {
-            funcArgLLVMTypes.push_back(llvmArgType);
-        }
-        else {
-            llvmArgType = llvm::Type::getInt64Ty(mCtx.mLLVMCtx);
-            WC_ASSERT(llvmArgType);
-            funcArgLLVMTypes.push_back(llvmArgType);
-        }
-    }
+    // Codegen the data type for the function:
+    astNode.dataType().accept(mCodegenDataType);
+    CompiledDataType funcCompiledType = mCtx.popCompiledDataType();
     
     // Compile check for duplicate argument names
-    compileCheckForDuplicateArgNames(mCtx, astFuncArgs);
-    
-    // Get the return data type for the function and codegen the llvm type.
-    // If we fail to codegen the llvm type, just use 'int64' as a placeholder.
-    const DataType & returnDataType = astNode.returnDataType();
-    returnDataType.accept(mCodegenDataType);
-    CompiledDataType returnType = mCtx.popCompiledDataType();
-    llvm::Type * llvmReturnType = returnType.getLLVMType();
-    
-    if (!llvmReturnType) {
-        llvmReturnType = llvm::Type::getInt64Ty(mCtx.mLLVMCtx);
-    }
-    
-    // Create the function signature:
-    // TODO: support varargs
-    llvm::FunctionType * llvmFnType = llvm::FunctionType::get(llvmReturnType,
-                                                              funcArgLLVMTypes,
-                                                              false);
-    
-    WC_ASSERT(llvmFnType);
+    compileCheckForDuplicateArgNames(mCtx, astNode.getArgs());
     
     // Create the function object itself
     // TODO: support different linkage types
     WC_ASSERT(mCtx.mLLVMModule);
-    function->mLLVMFunc = llvm::Function::Create(llvmFnType,
-                                                 llvm::Function::ExternalLinkage,
-                                                 astNode.name(),
-                                                 mCtx.mLLVMModule.get());
     
-    WC_ASSERT(function->mLLVMFunc);
+    if (funcCompiledType.getLLVMType()) {
+        llvm::FunctionType * fnLLVMType = llvm::cast<llvm::FunctionType>(funcCompiledType.getLLVMType());
+        function->mLLVMFunc = llvm::Function::Create(fnLLVMType,
+                                                     llvm::Function::ExternalLinkage,
+                                                     astNode.name(),
+                                                     mCtx.mLLVMModule.get());
+        
+        WC_ASSERT(function->mLLVMFunc);
+    }
     
     #warning FIXME: FUNC codegen - save llvm arg values
     /*
@@ -171,7 +134,7 @@ void Codegen::doDeferredFunctionCodegen(const AST::Func & astNode, Function & fu
     // This is only allowable for void returning functions, for other functions not returning void it is
     // a compile error not to return a valid value.
     if (!mCtx.mIRBuilder.GetInsertBlock()->getTerminator()) {
-        if (astNode.returnDataType().isVoid()) {
+        if (astNode.dataType().mReturnType.isVoid()) {
             // Need an implicit return, make it:
             mCtx.mIRBuilder.CreateRetVoid();
         }

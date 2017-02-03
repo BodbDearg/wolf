@@ -56,6 +56,10 @@ const UnknownDataType & PrimitiveDataTypes::getUnknownDataType() {
     return gUnknownDataType;
 }
 
+const VoidDataType & PrimitiveDataTypes::getVoidDataType() {
+    return gVoidDataType;
+}
+
 const BoolDataType & PrimitiveDataTypes::getBoolDataType() {
     return gBoolDataType;
 }
