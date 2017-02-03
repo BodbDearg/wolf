@@ -117,7 +117,7 @@ static void codegenLocalVarDeclWithType(Codegen & cg,
     ValHolder & scopeValHolder = cg.mCtx.getScopeValHolder(*scope);
     scopeValHolder.createVal(cg.mCtx,
                              varDecl.mIdent.name(),
-                             *varAlloca,
+                             varAlloca,
                              varCompiledType,
                              true,
                              varDecl);
@@ -171,7 +171,7 @@ static void codegenGlobalVarDeclWithType(Codegen & cg,
     // Register the variable. If it's registered more than once then this will generate an error.
     cg.mCtx.mModuleValHolder.createVal(cg.mCtx,
                                        varName,
-                                       *varLLVMVar,
+                                       varLLVMVar,
                                        varCompiledType,
                                        true,
                                        varDecl);
@@ -183,8 +183,9 @@ static void codegenVarDeclWithType(Codegen & cg,
                                    const CompiledDataType & varCompiledType,
                                    bool varTypeIsInferred)
 {
-    // Codegen as either a local or global variable definition
-    if (cg.mCtx.mCurFunction) {
+    // Codegen as either a local or global variable definition.
+    // If we are currently code generating a function then codegen as a local var.
+    if (cg.mCtx.mCurFunc) {
         codegenLocalVarDeclWithType(cg,
                                     varDecl,
                                     varCompiledType,

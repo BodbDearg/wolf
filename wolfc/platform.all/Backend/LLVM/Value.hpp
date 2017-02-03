@@ -2,6 +2,10 @@
 
 #include "CompiledDataType.hpp"
 
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <string>
+WC_THIRD_PARTY_INCLUDES_END
+
 namespace llvm {
     class Value;
 }
@@ -17,6 +21,7 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 /* Struct holding an LLVM value and it's corresponding compiled data type */
 struct Value {
     Value() :
+        mName(),
         mLLVMVal(nullptr),
         mCompiledType(),
         mRequiresLoad(false),
@@ -30,6 +35,22 @@ struct Value {
           bool requiresLoad,
           const AST::ASTNode * declaringNode)
     :
+        mName(),
+        mLLVMVal(llvmVal),
+        mCompiledType(compiledType),
+        mRequiresLoad(requiresLoad),
+        mDeclaringNode(declaringNode)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+    
+    Value(const std::string & name,
+          llvm::Value * llvmVal,
+          const CompiledDataType & compiledType,
+          bool requiresLoad,
+          const AST::ASTNode * declaringNode)
+    :
+        mName(name),
         mLLVMVal(llvmVal),
         mCompiledType(compiledType),
         mRequiresLoad(requiresLoad),
@@ -44,6 +65,9 @@ struct Value {
     inline bool isValid() const {
         return mLLVMVal != nullptr && mCompiledType.isValid();
     }
+    
+    /* The name of the value */
+    std::string mName;
     
     /* The llvm value representing the value */
     llvm::Value * mLLVMVal;

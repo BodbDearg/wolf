@@ -430,7 +430,6 @@
 		1F6B6C251E3DFB9100B75BF4 /* CodegenConstUnaryOp_UnaryExpr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CodegenConstUnaryOp_UnaryExpr.hpp; sourceTree = "<group>"; };
 		1F72313B1DD0762D00D9E50D /* DebugBreak.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DebugBreak.cpp; sourceTree = "<group>"; };
 		1F72313D1DD076C800D9E50D /* DebugBreak.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DebugBreak.hpp; sourceTree = "<group>"; };
-		1F7E19421E30A16400C82867 /* Function.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Function.hpp; sourceTree = "<group>"; };
 		1F7E19481E30AE6100C82867 /* DataTypeVisitor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DataTypeVisitor.hpp; sourceTree = "<group>"; };
 		1F843D1A1CE9474E0065FB7A /* Lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lexer.cpp; sourceTree = "<group>"; };
 		1F843D1B1CE9474E0065FB7A /* Lexer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Lexer.hpp; sourceTree = "<group>"; };
@@ -792,7 +791,6 @@
 				1F09BD851E37313D0072CF0B /* CompiledDataType.hpp */,
 				1FD7EA041E3B1B9000C6C9DA /* Constant.hpp */,
 				1F2985C21E3EFB5400DC17CC /* ConstCodegen */,
-				1F7E19421E30A16400C82867 /* Function.hpp */,
 				1F25171D1E40553300E34CF6 /* RepeatableStmnt.hpp */,
 				1F09BD811E371B160072CF0B /* ValHolder.cpp */,
 				1F09BD821E371B160072CF0B /* ValHolder.hpp */,

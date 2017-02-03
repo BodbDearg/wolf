@@ -6,7 +6,6 @@
 #include "AST/Nodes/IRepeatableStmnt.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
 #include "DataType/Primitives/UnknownDataType.hpp"
-#include "Function.hpp"
 #include "Lexer/Token.hpp"
 #include "RepeatableStmnt.hpp"
 
@@ -203,29 +202,6 @@ bool CodegenCtx::dumpIRCodeToStdout() {
     WC_GUARD(mLLVMModule.get(), false);
     mLLVMModule->dump();
     return true;
-}
-
-bool CodegenCtx::registerModuleFunc(const AST::Func & astNode) {
-    // The function must not already be registered
-    if (getModuleFunc(astNode.name()) != nullptr) {
-        error(astNode, "A function named '%s' is already defined! Cannot be redefined!", astNode.name());
-        return false;
-    }
-    
-    mFuncs[astNode.name()].reset(new Function(astNode));
-    return true;
-}
-
-Function * CodegenCtx::getModuleFunc(const char * name) {
-    auto iter = mFuncs.find(name);
-    WC_GUARD(iter != mFuncs.end(), nullptr);
-    return iter->second.get();
-}
-
-Function * CodegenCtx::getModuleFunc(const std::string & name) {
-    auto iter = mFuncs.find(name);
-    WC_GUARD(iter != mFuncs.end(), nullptr);
-    return iter->second.get();
 }
 
 RepeatableStmnt & CodegenCtx::getRepeatableStmntForNode(const AST::ASTNode & astNode,

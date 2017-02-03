@@ -24,7 +24,6 @@ namespace AST {
 
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-class Function;
 class RepeatableStmnt;
 
 /* Class holding the context for code generation */
@@ -86,13 +85,6 @@ public:
      * Returns false if this is not possible.
      */
     bool dumpIRCodeToStdout();
-    
-    /* Register the given function in the module. Issues a compile error if already registered. */
-    bool registerModuleFunc(const AST::Func & astNode);
-    
-    /* Retrieve the function of the specified name in the module. Returns nullptr if not found. */
-    Function * getModuleFunc(const char * name);
-    Function * getModuleFunc(const std::string & name);
     
     /**
      * Get a repeatable statement structure containing info on the repeatable statement for the 
@@ -210,8 +202,8 @@ public:
     /* The module value container. Used for declaring values at the module level. */
     ValHolder mModuleValHolder;
     
-    /* The current Function we are visiting during codegen. */
-    Function * mCurFunction = nullptr;
+    /* The current function being code generated. Null if none. */
+    Constant * mCurFunc = nullptr;
     
     /**
      * Deferred codegen callbacks called after visiting AST::Module.
@@ -258,9 +250,6 @@ private:
     
     /* A stack of code insert blocks pushed/saved for later restoring. */
     std::vector<llvm::BasicBlock*> mInsertBlockStack;
-    
-    /* A list of registered functions in the module by name. */
-    std::map<std::string, std::unique_ptr<Function>> mFuncs;
     
     /**
      * An LUT of AST nodes to compiled data types for these nodes.

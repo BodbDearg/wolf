@@ -32,26 +32,26 @@ public:
     
     /** 
      * Create a value within this holder.
-     * If the value already exists then creation fails and null is returned.
-     * If creation fails a compile error is also emitted.
+     * If the value already exists then a compile error is emitted and the constant is given a '#2', 
+     * '#3' etc. suffix in order to allow the value to be created anyway.
      */
-    const Value * createVal(CodegenCtx & ctx,
-                            const std::string & name,
-                            llvm::Value & llvmVal,
-                            const CompiledDataType & compiledType,
-                            bool requiresLoad,
-                            const AST::ASTNode & declaringNode);
+    Value & createVal(CodegenCtx & ctx,
+                      const std::string & name,
+                      llvm::Value * llvmVal,
+                      const CompiledDataType & compiledType,
+                      bool requiresLoad,
+                      const AST::ASTNode & declaringNode);
     
     /** 
      * Create a constant within this holder.
-     * If the constant already exists then creation fails and null is returned.
-     * If creation fails a compile error is also emitted.
+     * If the constant already exists then a compile error is emitted and the constant is given a '#2', 
+     * '#3' etc. suffix in order to allow the constant to be created anyway.
      */
-    const Constant * createConst(CodegenCtx & ctx,
-                                 const std::string & name,
-                                 llvm::Constant & llvmConst,
-                                 const CompiledDataType & compiledType,
-                                 const AST::ASTNode & declaringNode);
+    Constant & createConst(CodegenCtx & ctx,
+                           const std::string & name,
+                           llvm::Constant * llvmConst,
+                           const CompiledDataType & compiledType,
+                           const AST::ASTNode & declaringNode);
     
     /**
      * Get a value within this holder. Returns null if not found within this scope.
@@ -59,18 +59,25 @@ public:
      */
     const Value * getVal(const char * name) const;
     const Value * getVal(const std::string & name) const;
+    Value * getVal(const char * name);
+    Value * getVal(const std::string & name);
     
     /* Get a constant within this holder. Returns null if not found within this scope. */
     const Constant * getConst(const char * name) const;
     const Constant * getConst(const std::string & name) const;
+    Constant * getConst(const char * name);
+    Constant * getConst(const std::string & name);
     
 private:
     /**
-     * Compile check the given value declaration name is not taken.
-     * Returns false and issues a compile error if the name is taken.
+     * Compile check the given name for a value declaration is not taken.
+     * Issues a compile error if the name is taken and changes the name to have a unique suffix such as 
+     * '#2' or '#3' in the given output name string. If the name is valid then the given output name matches
+     * the input name.
      */
-    bool compileCheckValueNameNotTaken(CodegenCtx & ctx,
+    void compileCheckValueNameNotTaken(CodegenCtx & ctx,
                                        const std::string & name,
+                                       std::string & outputUniqueName,
                                        const CompiledDataType & compiledType,
                                        const AST::ASTNode & declaringNode) const;
     
