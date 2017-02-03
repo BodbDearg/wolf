@@ -21,6 +21,7 @@ public:
     virtual bool equals(const DataType & other) const override;
     virtual bool isValid() const override;
     virtual bool isUnknown() const override;
+    virtual bool isFunc() const override;
 
     /* The node that declared this type */
     const AST::ASTNode & mDeclaringNode;

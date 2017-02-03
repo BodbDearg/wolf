@@ -18,12 +18,7 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
  */
 class CompiledDataType {
 public:
-    inline CompiledDataType() :
-        mDataType(nullptr),
-        mLLVMType(nullptr)
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
+    CompiledDataType();
     
     inline CompiledDataType(const DataType & dataType, llvm::Type * llvmType) :
         mDataType(&dataType),

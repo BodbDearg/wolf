@@ -29,6 +29,10 @@ bool DataType::isArray() const {
     return false;   // False by most types by default
 }
 
+bool DataType::isFunc() const {
+    return false;   // False by most types by default
+}
+
 bool DataType::requiresStorage() const {
     return false;   // False by default for all types
 }

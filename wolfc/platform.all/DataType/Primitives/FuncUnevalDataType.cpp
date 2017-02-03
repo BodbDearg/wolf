@@ -101,4 +101,8 @@ bool FuncUnevalDataType::isUnknown() const {
     return mReturnType.isUnknown();
 }
 
+bool FuncUnevalDataType::isFunc() const {
+    return true;
+}
+
 WC_END_NAMESPACE

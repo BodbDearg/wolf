@@ -1,18 +1,7 @@
-let blah = 1
-let blah = 2
-let blah = 3
+func blah()
+    print("Hello from blah!")
+end
 
 func main() -> void
-    let num = 0
-
-    loop
-        print("Enter a number: ")
-        num = readnum()
-
-        next if num >= 0
-
-        print("The number was: ")
-        print(num)
-        print("\n")
-    end
+    blah()
 end

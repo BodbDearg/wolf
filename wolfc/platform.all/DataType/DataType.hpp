@@ -74,6 +74,9 @@ public:
      */
     virtual bool isArray() const;
     
+    /* Utility. Tell if this data type is a function data type */
+    virtual bool isFunc() const;
+    
     /**
      * If true then the data type requires a storage area to hold it's data since it is
      * not a simple primitive that can be held in a register. This will be true for arrays, 

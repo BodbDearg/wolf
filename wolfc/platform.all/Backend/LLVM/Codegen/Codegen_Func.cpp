@@ -134,6 +134,11 @@ void Codegen::visit(const AST::Func & astNode) {
     
     WC_ASSERT(constant.mLLVMConst);
     
+    // Make sure the non constant registration of this also has the function value too
+    Value * value = mCtx.mModuleValHolder.getVal(constant.mName);
+    WC_ASSERT(value);
+    value->mLLVMVal = constant.mLLVMConst;
+    
     #warning FIXME: FUNC codegen - save llvm arg values
     /*
     // Save a list of the function arguments for later lookup by variables

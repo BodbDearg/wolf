@@ -3,7 +3,6 @@
 #include "../CodegenCtx.hpp"
 #include "AST/Nodes/ArrayLit.hpp"
 #include "AST/Nodes/ArrayLitExprs.hpp"
-#include "AST/Nodes/FuncCall.hpp"
 #include "AST/Nodes/RandExpr.hpp"
 #include "AST/Nodes/ReadnumExpr.hpp"
 #include "AST/Nodes/ReturnStmnt.hpp"
@@ -39,11 +38,6 @@ void Codegen::visit(const AST::ArrayLitExprsMulti & astNode) {
 }
 
 void Codegen::visit(const AST::ArrayLitExprsSingle & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::FuncCall & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }
