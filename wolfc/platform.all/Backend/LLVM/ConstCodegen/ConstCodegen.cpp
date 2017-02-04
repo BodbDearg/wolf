@@ -94,7 +94,7 @@ void ConstCodegen::visit(const AST::FuncArg & astNode) {
 
 void ConstCodegen::visit(const AST::FuncCall & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "FuncCall");
+    mCtx.error(astNode, "Function calls cannot be evaluated at compile time! (yet)");
 }
 
 void ConstCodegen::visit(const AST::Identifier & astNode) {

@@ -95,20 +95,6 @@ public:
     
     PostfixExpr &   mExpr;
     FuncCall &      mFuncCall;
-    
-private:
-    const char * nameOfFuncCalled() const;
-    
-#warning FIXME - Codegen
-#if 0
-    Func * lookupFuncCalled() const;
-#endif
-    
-#warning FIXME - Codegen
-#if 0
-    llvm::Value * mAddrOfResult;
-    llvm::Value * mExprEvalResult;
-#endif
 };
 
 /* PostfixExpr [ AssignExpr ] */
