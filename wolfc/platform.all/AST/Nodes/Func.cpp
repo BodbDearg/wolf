@@ -183,15 +183,6 @@ const char * Func::name() const {
 
 #warning FIXME - Codegen
 #if 0
-DataValue * Func::getArg(const char * argName) {
-    auto iter = mArgValues.find(argName);
-    WC_GUARD(iter != mArgValues.end(), nullptr);
-    return &iter->second;
-}
-#endif
-
-#warning FIXME - Codegen
-#if 0
 bool Func::codegen(CodegenCtx & cgCtx) {
     // TODO: verify all codepaths return a value if there is a return value
     
@@ -265,73 +256,6 @@ bool Func::codegen(CodegenCtx & cgCtx) {
     cgCtx.deferredCodegenCallbacks.push_back([=](CodegenCtx & deferredCgCtx){
         return deferredCodegen(deferredCgCtx);
     });
-    
-    return true;    // All good!
-}
-
-llvm::Type * Func::codegenLLVMReturnType(CodegenCtx & cgCtx) {
-    // See if there is an explicitly specified return type, if so then do codegen forn that
-    if (mReturnType) {
-        mReturnType->codegenLLVMType(cgCtx, *this);
-        return mReturnType->dataType().mLLVMType;
-    }
-    
-    // Otherwise codegen the implicit return type
-    DataType & dataType = returnDataType();
-    dataType.codegenLLVMTypeIfRequired(cgCtx, *this);
-    return dataType.mLLVMType;
-}
-
-bool Func::deferredCodegen(CodegenCtx & cgCtx) {
-    // This should NOT be null by the time this is called!
-    WC_ASSERT(mLLVMFunc);
-    
-    // Create the function entry block and set it as the insert point for ir builder
-    llvm::BasicBlock * fnEntryBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "func_entry_block", mLLVMFunc);
-    cgCtx.irBuilder.SetInsertPoint(fnEntryBlock);
-    
-    // Generate code for the function body
-    WC_GUARD(mScope.codegen(cgCtx), false);
-    
-    // Create the implicit return statement if required.
-    // This is only allowable for void returning functions, for other functions not returning void it is
-    // a compile error not to return a valid value.
-    if (!cgCtx.irBuilder.GetInsertBlock()->getTerminator()) {
-        if (returnDataType().isVoid()) {
-            // Need an implicit return, make it:
-            cgCtx.irBuilder.CreateRetVoid();
-        }
-        else {
-            // Can't do an implicit return, make sure all codepaths return a value:
-            if (!mScope.allCodepathsHaveUncondRet()) {
-                compileError("Not all codepaths return a value in function which requires a return value!");
-                return false;
-            }
-            
-            // If the end statement is unreachable then let llvm know.
-            // All codepaths in the scope return a value so the last bit of code can never be reached.
-            cgCtx.irBuilder.CreateUnreachable();
-        }
-    }
-    
-    return true;    // Success!
-}
-
-bool Func::compileCheckForDuplicateArgNames(const std::vector<FuncArg*> & funcArgs) const {
-    // TODO: handle args without names
-    std::set<std::string> argNames;
-    
-    for (FuncArg * arg : funcArgs) {
-        WC_ASSERT(arg);
-        std::string argName = arg->name();
-        
-        if (argNames.count(argName) > 0) {
-            compileError("Duplicate argument named '%s' in function argument list!", argName.c_str());
-            return false;
-        }
-        
-        argNames.insert(argName);
-    }
     
     return true;    // All good!
 }

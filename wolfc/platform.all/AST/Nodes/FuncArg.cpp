@@ -14,10 +14,6 @@ bool FuncArg::peek(const Token * currentToken) {
 }
 
 FuncArg * FuncArg::parse(ParseCtx & parseCtx) {
-    // TODO: support non primitive types here eventually (struct etc.)
-    // TODO: support arrays eventually
-    // TODO: support pointers eventually
-    
     // Parse the identifier:
     Identifier * ident = Identifier::parse(parseCtx);
     WC_GUARD(ident, nullptr);
@@ -66,13 +62,6 @@ const DataType & FuncArg::dataType() const {
 const char * FuncArg::name() const {
     return mIdent.name();
 }
-
-#warning FIXME - Codegen
-#if 0
-bool FuncArg::codegen(CodegenCtx & cgCtx, ASTNode & callingNode) {
-    return mType.codegenLLVMType(cgCtx, callingNode);
-}
-#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE
