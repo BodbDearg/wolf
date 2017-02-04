@@ -148,7 +148,9 @@ void Codegen::visit(const AST::PostfixExprFuncCall & astNode) {
         CompiledDataType returnCompiledType = mCtx.popCompiledDataType();
         
         // Save the result of the call:
-        mCtx.pushValue(Value(callResult, returnCompiledType, false, &astNode));
+        if (!funcDataType->mReturnType.isVoid()) {
+            mCtx.pushValue(Value(callResult, returnCompiledType, false, &astNode));
+        }
     }
 }
 
