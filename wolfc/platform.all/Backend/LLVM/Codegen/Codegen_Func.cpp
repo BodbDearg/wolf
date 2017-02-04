@@ -127,11 +127,12 @@ void Codegen::visit(const AST::Func & astNode) {
     // Create the function object itself:
     // TODO: support different linkage types.
     WC_ASSERT(mCtx.mLLVMModule);
-    constant.mLLVMConst = llvm::Function::Create(llvmFnTy,
-                                                 llvm::Function::ExternalLinkage,
-                                                 constant.mName,
-                                                 mCtx.mLLVMModule.get());
+    llvm::Function * llvmFn = llvm::Function::Create(llvmFnTy,
+                                                     llvm::Function::ExternalLinkage,
+                                                     constant.mName,
+                                                     mCtx.mLLVMModule.get());
     
+    constant.mLLVMConst = llvmFn;
     WC_ASSERT(constant.mLLVMConst);
     
     // Make sure the non constant registration of this also has the function value too
@@ -160,6 +161,50 @@ void Codegen::visit(const AST::Func & astNode) {
                                                 requiresLoad);
     }
     */
+    
+    // Get the val holder for the function scope, will register the function argument variables in this
+    ValHolder & funcValHolder = mCtx.getScopeValHolder(astNode.mScope);
+    
+    // Register the function arguments for lookup by variables:
+    {
+        auto & llvmArgList = llvmFn->getArgumentList();
+        auto & funcArgs = astNode.getArgs();
+        
+        for (auto & llvmArg : llvmArgList) {
+            size_t argNum = llvmArg.getArgNo();
+            
+            if (argNum < funcArgs.size()) {
+                // Okay, get the llvm value for this argument
+                llvm::Value * llvmArgVal = &llvmArg;
+                
+                // Get the compiled type for this argument:
+                AST::FuncArg * funcArg = funcArgs[argNum];
+                funcArg->dataType().accept(mCodegenDataType);
+                CompiledDataType argCompiledType = mCtx.popCompiledDataType();
+                
+                // Register this variable in the current scope
+                funcValHolder.createVal(mCtx,
+                                        funcArg->name(),
+                                        llvmArgVal,
+                                        argCompiledType,
+                                        false,
+                                        *funcArg);
+            }
+            else {
+                mCtx.error(astNode,
+                           "Error! Found more llvm function arguments than AST node function arguments "
+                           "during code generation. This shouldn't happen!");
+                
+                break;
+            }
+        }
+        
+        if (funcArgs.size() > llvmArgList.size()) {
+            mCtx.error(astNode,
+                       "Error! Found more AST function arguments than llvm function arguments! "
+                       "Did the llvm arguments codegen ok?");
+        }
+    }
     
     // Deferred code generation for the inner body of the function.
     // Called after the forward code declaration for the module has been done.

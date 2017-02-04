@@ -1,7 +1,9 @@
-func blah()
-    print("Hello from blah!")
+func blah(v1:int,v2:int,v3:int)
+    print(v1)
+    print(v2)
+    print(v3)
 end
 
 func main() -> void
-    blah()
+    blah(1,2,3)
 end
