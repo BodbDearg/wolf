@@ -33,22 +33,6 @@ private:
     Constant *      mPrevFunc;
 };
 
-#warning TODO: Eventually this should dissapeer once we register function vars in the same way as locals
-/* Check for duplicate arg names in the function and issue compile errors if there are dupes */
-static void compileCheckForDuplicateArgNames(CodegenCtx & ctx, const std::vector<AST::FuncArg*> & funcArgs) {
-    // TODO: handle args without names
-    std::set<std::string> argNames;
-    
-    for (const AST::FuncArg * arg : funcArgs) {
-        WC_ASSERT(arg);
-        std::string argName = arg->name();
-        
-        if (argNames.count(argName) > 0) {
-            ctx.error(*arg, "Duplicate argument named '%s' in function argument list!", argName.c_str());
-        }
-    }
-}
-
 /* Do deferred code generation for the body of the function */
 static void doDeferredFuncCodegen(Codegen & cg, const AST::Func & astNode, Constant & function) {
     // Record the node being visited in this scope and the current function being visited
@@ -102,10 +86,6 @@ void Codegen::visit(const AST::Func & astNode) {
     astNode.dataType().accept(mCodegenDataType);
     CompiledDataType fnCompiledTy = mCtx.popCompiledDataType();
     
-    #warning TODO: Eventually this should dissapeer once we register function vars in the same way as locals
-    // Compile check for duplicate argument names
-    compileCheckForDuplicateArgNames(mCtx, astNode.getArgs());
-    
     // Determine the llvm function type for the function.
     // Note: if the function data type does not have a valid llvm function type then we'll just generate a
     // void/void function type so we can at least try to codegen the rest of the function and discover more errors.
@@ -139,28 +119,6 @@ void Codegen::visit(const AST::Func & astNode) {
     Value * value = mCtx.mModuleValHolder.getVal(constant.mName);
     WC_ASSERT(value);
     value->mLLVMVal = constant.mLLVMConst;
-    
-    #warning FIXME: FUNC codegen - save llvm arg values
-    /*
-    // Save a list of the function arguments for later lookup by variables
-    auto & llvmArgList = mLLVMFunc->getArgumentList();
-    
-    for (auto & llvmArg : llvmArgList) {
-        size_t argNum = llvmArg.getArgNo();
-        WC_ASSERT(argNum < funcArgs.size());
-        FuncArg * funcArg = funcArgs[argNum];
-        WC_ASSERT(funcArg);
-     
-        #warning COMPILE DATA TYPE
-        DataType & argDataType = funcArg->dataType();
-        bool requiresLoad = argDataType.requiresStorage();
-        
-        mArgValues[funcArg->name()] = DataValue(funcArg,
-                                                &llvmArg,
-                                                &argDataType,
-                                                requiresLoad);
-    }
-    */
     
     // Get the val holder for the function scope, will register the function argument variables in this
     ValHolder & funcValHolder = mCtx.getScopeValHolder(astNode.mScope);
