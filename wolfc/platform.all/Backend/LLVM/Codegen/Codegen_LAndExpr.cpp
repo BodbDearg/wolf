@@ -15,7 +15,7 @@ void Codegen::visit(const AST::LAndExprNoOp & astNode) {
 
 void Codegen::visit(const AST::LAndExprAnd & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenLAndBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
+    CodegenLAndBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, false).codegen();
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

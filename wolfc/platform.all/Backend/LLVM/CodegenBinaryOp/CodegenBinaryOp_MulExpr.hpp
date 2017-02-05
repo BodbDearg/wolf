@@ -7,7 +7,8 @@ class CodegenMulBinaryOp : public CodegenBinaryOp {
 public:
     CodegenMulBinaryOp(Codegen & cg,
                        const AST::ASTNode & leftExpr,
-                       const AST::ASTNode & rightExpr);
+                       const AST::ASTNode & rightExpr,
+                       bool storeResultOnLeft);
     
     void visit(const Int64DataType & dataType) override;
 };
@@ -16,7 +17,8 @@ class CodegenDivBinaryOp : public CodegenBinaryOp {
 public:
     CodegenDivBinaryOp(Codegen & cg,
                        const AST::ASTNode & leftExpr,
-                       const AST::ASTNode & rightExpr);
+                       const AST::ASTNode & rightExpr,
+                       bool storeResultOnLeft);
     
     void visit(const Int64DataType & dataType) override;
 };
@@ -25,7 +27,8 @@ class CodegenModBinaryOp : public CodegenBinaryOp {
 public:
     CodegenModBinaryOp(Codegen & cg,
                        const AST::ASTNode & leftExpr,
-                       const AST::ASTNode & rightExpr);
+                       const AST::ASTNode & rightExpr,
+                       bool storeResultOnLeft);
     
     void visit(const Int64DataType & dataType) override;
 };
@@ -34,7 +37,8 @@ class CodegenBAndBinaryOp : public CodegenBinaryOp {
 public:
     CodegenBAndBinaryOp(Codegen & cg,
                         const AST::ASTNode & leftExpr,
-                        const AST::ASTNode & rightExpr);
+                        const AST::ASTNode & rightExpr,
+                        bool storeResultOnLeft);
     
     void visit(const Int64DataType & dataType) override;
 };

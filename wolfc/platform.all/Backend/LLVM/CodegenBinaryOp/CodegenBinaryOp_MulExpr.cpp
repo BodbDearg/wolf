@@ -11,9 +11,15 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 CodegenMulBinaryOp::CodegenMulBinaryOp(Codegen & cg,
                                        const AST::ASTNode & leftExpr,
-                                       const AST::ASTNode & rightExpr)
+                                       const AST::ASTNode & rightExpr,
+                                       bool storeResultOnLeft)
 :
-    CodegenBinaryOp(cg, leftExpr, rightExpr, "*", "multiply")
+    CodegenBinaryOp(cg,
+                    leftExpr,
+                    rightExpr, 
+                    "*",
+                    "multiply",
+                    storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -30,9 +36,15 @@ void CodegenMulBinaryOp::visit(const Int64DataType & dataType) {
 //-----------------------------------------------------------------------------
 CodegenDivBinaryOp::CodegenDivBinaryOp(Codegen & cg,
                                        const AST::ASTNode & leftExpr,
-                                       const AST::ASTNode & rightExpr)
+                                       const AST::ASTNode & rightExpr,
+                                       bool storeResultOnLeft)
 :
-    CodegenBinaryOp(cg, leftExpr, rightExpr, "/", "divide")
+    CodegenBinaryOp(cg,
+                    leftExpr,
+                    rightExpr,
+                    "/",
+                    "divide",
+                    storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -49,9 +61,15 @@ void CodegenDivBinaryOp::visit(const Int64DataType & dataType) {
 //-----------------------------------------------------------------------------
 CodegenModBinaryOp::CodegenModBinaryOp(Codegen & cg,
                                        const AST::ASTNode & leftExpr,
-                                       const AST::ASTNode & rightExpr)
+                                       const AST::ASTNode & rightExpr,
+                                       bool storeResultOnLeft)
 :
-    CodegenBinaryOp(cg, leftExpr, rightExpr, "%", "modulus")
+    CodegenBinaryOp(cg,
+                    leftExpr,
+                    rightExpr,
+                    "%",
+                    "modulus",
+                    storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -68,9 +86,15 @@ void CodegenModBinaryOp::visit(const Int64DataType & dataType) {
 //-----------------------------------------------------------------------------
 CodegenBAndBinaryOp::CodegenBAndBinaryOp(Codegen & cg,
                                          const AST::ASTNode & leftExpr,
-                                         const AST::ASTNode & rightExpr)
+                                         const AST::ASTNode & rightExpr,
+                                         bool storeResultOnLeft)
 :
-    CodegenBinaryOp(cg, leftExpr, rightExpr, "&", "bitwise and")
+    CodegenBinaryOp(cg,
+                    leftExpr,
+                    rightExpr,
+                    "&",
+                    "bitwise and",
+                    storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }

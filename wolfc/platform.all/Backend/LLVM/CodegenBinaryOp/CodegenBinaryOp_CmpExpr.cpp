@@ -13,9 +13,15 @@ CodegenCmpBinaryOp::CodegenCmpBinaryOp(Codegen & cg,
                                        const AST::ASTNode & leftExpr,
                                        const AST::ASTNode & rightExpr,
                                        const char * opSymbol,
-                                       const char * opName)
+                                       const char * opName,
+                                       bool storeResultOnLeft)
 :
-    CodegenBinaryOp(cg, leftExpr, rightExpr, opSymbol, opName)
+    CodegenBinaryOp(cg,
+                    leftExpr,
+                    rightExpr,
+                    opSymbol,
+                    opName,
+                    storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -46,9 +52,15 @@ void CodegenCmpBinaryOp::codegenICmp(llvm::CmpInst::Predicate predicate,
 //-----------------------------------------------------------------------------
 CodegenCmpEQBinaryOp::CodegenCmpEQBinaryOp(Codegen & cg,
                                            const AST::ASTNode & leftExpr,
-                                           const AST::ASTNode & rightExpr)
+                                           const AST::ASTNode & rightExpr,
+                                           bool storeResultOnLeft)
 :
-    CodegenCmpBinaryOp(cg, leftExpr, rightExpr, "==", "equals")
+    CodegenCmpBinaryOp(cg,
+                       leftExpr,
+                       rightExpr,
+                       "==",
+                       "equals",
+                       storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -68,9 +80,15 @@ void CodegenCmpEQBinaryOp::visit(const Int64DataType & dataType) {
 //-----------------------------------------------------------------------------
 CodegenCmpNEBinaryOp::CodegenCmpNEBinaryOp(Codegen & cg,
                                            const AST::ASTNode & leftExpr,
-                                           const AST::ASTNode & rightExpr)
+                                           const AST::ASTNode & rightExpr,
+                                           bool storeResultOnLeft)
 :
-    CodegenCmpBinaryOp(cg, leftExpr, rightExpr, "!=", "not equals")
+    CodegenCmpBinaryOp(cg,
+                       leftExpr,
+                       rightExpr,
+                       "!=",
+                       "not equals",
+                       storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -90,9 +108,15 @@ void CodegenCmpNEBinaryOp::visit(const Int64DataType & dataType) {
 //-----------------------------------------------------------------------------
 CodegenCmpLTBinaryOp::CodegenCmpLTBinaryOp(Codegen & cg,
                                            const AST::ASTNode & leftExpr,
-                                           const AST::ASTNode & rightExpr)
+                                           const AST::ASTNode & rightExpr,
+                                           bool storeResultOnLeft)
 :
-    CodegenCmpBinaryOp(cg, leftExpr, rightExpr, "<", "less than")
+    CodegenCmpBinaryOp(cg,
+                       leftExpr,
+                       rightExpr,
+                       "<",
+                       "less than",
+                       storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -107,9 +131,15 @@ void CodegenCmpLTBinaryOp::visit(const Int64DataType & dataType) {
 //-----------------------------------------------------------------------------
 CodegenCmpLEBinaryOp::CodegenCmpLEBinaryOp(Codegen & cg,
                                            const AST::ASTNode & leftExpr,
-                                           const AST::ASTNode & rightExpr)
+                                           const AST::ASTNode & rightExpr,
+                                           bool storeResultOnLeft)
 :
-    CodegenCmpBinaryOp(cg, leftExpr, rightExpr, "<=", "less than or equal to")
+    CodegenCmpBinaryOp(cg,
+                       leftExpr,
+                       rightExpr,
+                       "<=",
+                       "less than or equal to",
+                       storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -124,9 +154,15 @@ void CodegenCmpLEBinaryOp::visit(const Int64DataType & dataType) {
 //-----------------------------------------------------------------------------
 CodegenCmpGTBinaryOp::CodegenCmpGTBinaryOp(Codegen & cg,
                                            const AST::ASTNode & leftExpr,
-                                           const AST::ASTNode & rightExpr)
+                                           const AST::ASTNode & rightExpr,
+                                           bool storeResultOnLeft)
 :
-    CodegenCmpBinaryOp(cg, leftExpr, rightExpr, ">", "greater than")
+    CodegenCmpBinaryOp(cg,
+                       leftExpr,
+                       rightExpr,
+                       ">",
+                       "greater than",
+                       storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -141,9 +177,15 @@ void CodegenCmpGTBinaryOp::visit(const Int64DataType & dataType) {
 //-----------------------------------------------------------------------------
 CodegenCmpGEBinaryOp::CodegenCmpGEBinaryOp(Codegen & cg,
                                            const AST::ASTNode & leftExpr,
-                                           const AST::ASTNode & rightExpr)
+                                           const AST::ASTNode & rightExpr,
+                                           bool storeResultOnLeft)
 :
-    CodegenCmpBinaryOp(cg, leftExpr, rightExpr, ">=", "greater than or equal to")
+    CodegenCmpBinaryOp(cg,
+                       leftExpr,
+                       rightExpr,
+                       ">=",
+                       "greater than or equal to",
+                       storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }

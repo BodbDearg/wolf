@@ -7,7 +7,8 @@ class CodegenLAndBinaryOp : public CodegenBinaryOp {
 public:
     CodegenLAndBinaryOp(Codegen & cg,
                         const AST::ASTNode & leftExpr,
-                        const AST::ASTNode & rightExpr);
+                        const AST::ASTNode & rightExpr,
+                        bool storeResultOnLeft);
     
     void visit(const BoolDataType & dataType) override;
 };

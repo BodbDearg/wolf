@@ -15,22 +15,22 @@ void Codegen::visit(const AST::AddExprNoOp & astNode) {
 
 void Codegen::visit(const AST::AddExprAdd & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenAddBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
+    CodegenAddBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, false).codegen();
 }
 
 void Codegen::visit(const AST::AddExprSub & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenSubBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
+    CodegenSubBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, false).codegen();
 }
 
 void Codegen::visit(const AST::AddExprBOr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenBOrBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
+    CodegenBOrBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, false).codegen();
 }
 
 void Codegen::visit(const AST::AddExprBXor & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenBXOrBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
+    CodegenBXOrBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, false).codegen();
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

@@ -34,7 +34,8 @@ public:
                     const AST::ASTNode & leftExpr,
                     const AST::ASTNode & rightExpr,
                     const char * opSymbol,
-                    const char * opName);
+                    const char * opName,
+                    bool storeResultOnLeft);
     
     /**
      * Kicks off the codegen for the binary op.
@@ -79,6 +80,7 @@ protected:
     const AST::ASTNode &    mRightExpr;
     const char *            mOpSymbol;
     const char *            mOpName;
+    bool                    mStoreResultOnLeft;
     
     /* These are generated and cached by the codegen() function */
     Value mLeftVal;

@@ -14,13 +14,15 @@ CodegenBinaryOp::CodegenBinaryOp(Codegen & cg,
                                  const AST::ASTNode & leftExpr,
                                  const AST::ASTNode & rightExpr,
                                  const char * opSymbol,
-                                 const char * opName)
+                                 const char * opName,
+                                 bool storeResultOnLeft)
 :
     mCG(cg),
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr),
     mOpSymbol(opSymbol),
-    mOpName(opName)
+    mOpName(opName),
+    mStoreResultOnLeft(storeResultOnLeft)
 {
     // Expected that the nodes have a parent and that it is the same parent! (parent binary op)
     WC_ASSERT(mLeftExpr.mParent);
@@ -48,22 +50,47 @@ void CodegenBinaryOp::codegen() {
                        mOpName);
     }
     
-    // Okay, codegen both the left and right expressions
-    mLeftExpr.accept(mCG);
-    mLeftVal = mCG.mCtx.popValue();
+    // Okay, codegen both the left and right expressions.
+    // Do any variable loading that is required also.
+    // If we want to store the result on the left, codegen the address of the variable instead of it's value.
+    if (mStoreResultOnLeft) {
+        mLeftExpr.accept(mCG.mAddrCodegen);
+    }
+    else {
+        mLeftExpr.accept(mCG);
+    }
+    
+    Value leftValBeforeLoad = mCG.mCtx.popValue();
+    
+    if (leftValBeforeLoad.isValid() && leftValBeforeLoad.mRequiresLoad) {
+        llvm::Value * leftValLoaded = mCG.mCtx.mIRBuilder.CreateLoad(leftValBeforeLoad.mLLVMVal, "BinaryOp:LeftValLoaded");
+        WC_ASSERT(leftValLoaded);
+        mLeftVal = Value(leftValLoaded, leftValBeforeLoad.mCompiledType, false, leftValBeforeLoad.mDeclaringNode);
+    }
+    else {
+        mLeftVal = leftValBeforeLoad;
+    }
+    
     mRightExpr.accept(mCG);
-    mRightVal = mCG.mCtx.popValue();
+    
+    {
+        Value rightValBeforeLoad = mCG.mCtx.popValue();
+        
+        if (rightValBeforeLoad.isValid() && rightValBeforeLoad.mRequiresLoad) {
+            llvm::Value * rightValLoaded = mCG.mCtx.mIRBuilder.CreateLoad(rightValBeforeLoad.mLLVMVal, "BinaryOp:RightValLoaded");
+            WC_ASSERT(rightValLoaded);
+            mRightVal = Value(rightValLoaded, rightValBeforeLoad.mCompiledType, false, rightValBeforeLoad.mDeclaringNode);
+        }
+        else {
+            mRightVal = rightValBeforeLoad;
+        }
+    }
     
     // The left and right types must match:
     const DataType & leftType = mLeftVal.mCompiledType.getDataType();
     const DataType & rightType = mRightVal.mCompiledType.getDataType();
     
-    if (leftType.equals(rightType)) {
-        if (mLeftVal.isValid() && mRightVal.isValid()) {
-            leftType.accept(*this);
-        }
-    }
-    else {
+    if (!leftType.equals(rightType)) {
         mCG.mCtx.error(*mLeftExpr.mParent,
                        "Left and right side expressions for binary operator '%s' (%s) must be "
                        "of the same type! Left expression type is '%s', right expression type is "
@@ -72,7 +99,47 @@ void CodegenBinaryOp::codegen() {
                        mOpName,
                        leftType.name().c_str(),
                        rightType.name().c_str());
+        
+        return;
     }
+    
+    // Don't do anything if either side is not valid:
+    WC_GUARD(mLeftVal.isValid() && mRightVal.isValid());
+
+    // Code generate the actual operation itself
+    leftType.accept(*this);
+    
+    // See if we are to store the result on the left, if not then we are done:
+    WC_GUARD(mStoreResultOnLeft);
+    Value opResultVal = mCG.mCtx.popValue();
+    
+    // The left side must be in pointer format (require a load)
+    if (!leftValBeforeLoad.mRequiresLoad) {
+        mCG.mCtx.error(*mLeftExpr.mParent,
+                       "Internal error! Failed to codegen the binary operation because the "
+                       "left side of the expression is not in address format!");
+        
+        return;
+    }
+
+    // If the operator result is not valid then continue no further
+    WC_GUARD(opResultVal.isValid());
+
+    // The operator result type must match the left side type
+    const DataType & opResultType = opResultVal.mCompiledType.getDataType();
+    
+    if (!opResultType.equals(leftType)){
+        mCG.mCtx.error(*mLeftExpr.mParent,
+                       "Result of binary op can't be assigned to left side due to mismatched types! "
+                       "Require binary op result to be of type '%s'! Result of binary op was type '%s'!",
+                       leftType.name().c_str(),
+                       opResultType.name().c_str());
+        
+        return;
+    }
+    
+    // All good, do the actual store:
+    WC_ASSERTED_OP(mCG.mCtx.mIRBuilder.CreateStore(opResultVal.mLLVMVal, leftValBeforeLoad.mLLVMVal));
 }
 
 void CodegenBinaryOp::visit(const ArrayBadSizeDataType & dataType) {

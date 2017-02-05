@@ -11,9 +11,15 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 CodegenLOrBinaryOp::CodegenLOrBinaryOp(Codegen & cg,
                                        const AST::ASTNode & leftExpr,
-                                       const AST::ASTNode & rightExpr)
+                                       const AST::ASTNode & rightExpr,
+                                       bool storeResultOnLeft)
 :
-    CodegenBinaryOp(cg, leftExpr, rightExpr, "or", "logical or")
+    CodegenBinaryOp(cg,
+                    leftExpr,
+                    rightExpr,
+                    "or",
+                    "logical or",
+                    storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }

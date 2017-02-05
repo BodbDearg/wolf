@@ -15,17 +15,17 @@ void Codegen::visit(const AST::ShiftExprNoOp & astNode) {
 
 void Codegen::visit(const AST::ShiftExprLShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenLShiftBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
+    CodegenLShiftBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, false).codegen();
 }
 
 void Codegen::visit(const AST::ShiftExprARShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenARShiftBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
+    CodegenARShiftBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, false).codegen();
 }
 
 void Codegen::visit(const AST::ShiftExprLRShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenLRShiftBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr).codegen();
+    CodegenLRShiftBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, false).codegen();
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

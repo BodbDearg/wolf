@@ -1,5 +1,8 @@
 #include "Codegen.hpp"
 
+#include "../CodegenBinaryOp/CodegenBinaryOp_AddExpr.hpp"
+#include "../CodegenBinaryOp/CodegenBinaryOp_MulExpr.hpp"
+#include "../CodegenBinaryOp/CodegenBinaryOp_ShiftExpr.hpp"
 #include "../CodegenCtx.hpp"
 #include "Assert.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
@@ -53,57 +56,57 @@ void Codegen::visit(const AST::AssignExprAssign & astNode) {
 
 void Codegen::visit(const AST::AssignExprAssignAdd & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    CodegenAddBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, true).codegen();
 }
 
 void Codegen::visit(const AST::AssignExprAssignSub & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    CodegenSubBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, true).codegen();
 }
 
 void Codegen::visit(const AST::AssignExprAssignBOr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    CodegenBOrBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, true).codegen();
 }
 
 void Codegen::visit(const AST::AssignExprAssignBXor & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    CodegenBXOrBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, true).codegen();
 }
 
 void Codegen::visit(const AST::AssignExprAssignMul & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    CodegenMulBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, true).codegen();
 }
 
 void Codegen::visit(const AST::AssignExprAssignDiv & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    CodegenDivBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, true).codegen();
 }
 
 void Codegen::visit(const AST::AssignExprAssignMod & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    CodegenModBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, true).codegen();
 }
 
 void Codegen::visit(const AST::AssignExprAssignBAnd & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    CodegenBAndBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, true).codegen();
 }
 
 void Codegen::visit(const AST::AssignExprAssignLShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    CodegenLShiftBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, true).codegen();
 }
 
 void Codegen::visit(const AST::AssignExprAssignARShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    CodegenARShiftBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, true).codegen();
 }
 
 void Codegen::visit(const AST::AssignExprAssignLRShift & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    CodegenLRShiftBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, true).codegen();
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

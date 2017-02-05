@@ -11,9 +11,15 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 CodegenLShiftBinaryOp::CodegenLShiftBinaryOp(Codegen & cg,
                                              const AST::ASTNode & leftExpr,
-                                             const AST::ASTNode & rightExpr)
+                                             const AST::ASTNode & rightExpr,
+                                             bool storeResultOnLeft)
 :
-    CodegenBinaryOp(cg, leftExpr, rightExpr, "<<", "left shift")
+    CodegenBinaryOp(cg,
+                    leftExpr,
+                    rightExpr,
+                    "<<",
+                    "left shift",
+                    storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -30,9 +36,15 @@ void CodegenLShiftBinaryOp::visit(const Int64DataType & dataType) {
 //-----------------------------------------------------------------------------
 CodegenARShiftBinaryOp::CodegenARShiftBinaryOp(Codegen & cg,
                                                const AST::ASTNode & leftExpr,
-                                               const AST::ASTNode & rightExpr)
+                                               const AST::ASTNode & rightExpr,
+                                               bool storeResultOnLeft)
 :
-    CodegenBinaryOp(cg, leftExpr, rightExpr, ">>", "arithmetic right shift")
+    CodegenBinaryOp(cg,
+                    leftExpr,
+                    rightExpr,
+                    ">>",
+                    "arithmetic right shift",
+                    storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -49,9 +61,15 @@ void CodegenARShiftBinaryOp::visit(const Int64DataType & dataType) {
 //-----------------------------------------------------------------------------
 CodegenLRShiftBinaryOp::CodegenLRShiftBinaryOp(Codegen & cg,
                                                const AST::ASTNode & leftExpr,
-                                               const AST::ASTNode & rightExpr)
+                                               const AST::ASTNode & rightExpr,
+                                               bool storeResultOnLeft)
 :
-    CodegenBinaryOp(cg, leftExpr, rightExpr, ">>>", "logical right shift")
+    CodegenBinaryOp(cg,
+                    leftExpr,
+                    rightExpr,
+                    ">>>",
+                    "logical right shift",
+                    storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }

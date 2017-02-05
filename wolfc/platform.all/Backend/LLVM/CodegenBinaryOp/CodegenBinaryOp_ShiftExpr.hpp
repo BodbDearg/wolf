@@ -7,7 +7,8 @@ class CodegenLShiftBinaryOp : public CodegenBinaryOp {
 public:
     CodegenLShiftBinaryOp(Codegen & cg,
                           const AST::ASTNode & leftExpr,
-                          const AST::ASTNode & rightExpr);
+                          const AST::ASTNode & rightExpr,
+                          bool storeResultOnLeft);
     
     void visit(const Int64DataType & dataType) override;
 };
@@ -16,7 +17,8 @@ class CodegenARShiftBinaryOp : public CodegenBinaryOp {
 public:
     CodegenARShiftBinaryOp(Codegen & cg,
                            const AST::ASTNode & leftExpr,
-                           const AST::ASTNode & rightExpr);
+                           const AST::ASTNode & rightExpr,
+                           bool storeResultOnLeft);
     
     void visit(const Int64DataType & dataType) override;
 };
@@ -25,7 +27,8 @@ class CodegenLRShiftBinaryOp : public CodegenBinaryOp {
 public:
     CodegenLRShiftBinaryOp(Codegen & cg,
                            const AST::ASTNode & leftExpr,
-                           const AST::ASTNode & rightExpr);
+                           const AST::ASTNode & rightExpr,
+                           bool storeResultOnLeft);
     
     void visit(const Int64DataType & dataType) override;
 };

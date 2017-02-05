@@ -1,9 +1,5 @@
-func blah(v1:int,v2:int,v3:int)
-    print(v1)
-    print(v2)
-    print(v3)
-end
-
 func main() -> void
-    blah(1,2,3)
+    let v = 16
+    v >>>= 1
+    print(v)
 end
