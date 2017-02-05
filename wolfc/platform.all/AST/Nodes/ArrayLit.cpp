@@ -82,6 +82,7 @@ bool ArrayLit::isConstExpr() const {
 }
 
 const DataType & ArrayLit::dataType() const {
+    #warning TODO: May need to rework this
     return mExprs.getElementType();
 }
 
