@@ -123,34 +123,6 @@ const DataType & AssignExprAssignBase::dataType() const {
     return mLeftExpr.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-bool AssignExprAssignBase::compileCheckAssignIsLegal() {
-    // Left side of expression must be an lvalue!
-    if (!mLeftExpr.isLValue()) {
-        compileError("Can't assign to an rvalue!");
-        return false;
-    }
-
-    // TODO: support auto type promotion and the lark
-    // The data type of the right must match the left
-    const DataType & leftDataType = mLeftExpr.dataType();
-    const DataType & rightDataType = mRightExpr.dataType();
-
-    // TODO: print variable name here
-    if (!leftDataType.equals(rightDataType)) {
-        compileError("Can't assign expression of type '%s' to variable of type '%s'!",
-            rightDataType.name().c_str(),
-            leftDataType.name().c_str());
-
-        return false;
-    }
-
-    // All good!
-    return true;
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // AssignExprBinaryOpBase
 //-----------------------------------------------------------------------------
@@ -159,39 +131,6 @@ AssignExprBinaryOpBase::AssignExprBinaryOpBase(TernaryExpr & leftExpr, AssignExp
 {
     WC_EMPTY_FUNC_BODY();
 }
-
-#warning FIXME - Codegen
-#if 0
-llvm::Value * AssignExprBinaryOpBase::codegenExprEval(CodegenCtx & cgCtx) {
-    // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
-
-    // Evaluate left value and right side value
-    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(leftAddr, nullptr);
-    llvm::Value * leftVal = cgCtx.irBuilder.CreateLoad(leftAddr);
-    WC_ASSERT(leftVal);
-    llvm::Value * rightVal = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightVal, nullptr);
-
-    // Do the operation and store the result on the left
-    DataType & leftTy = mLeftExpr.dataType();
-    DataType & rightTy = mRightExpr.dataType();
-    llvm::Value * newVal = (leftTy.*mCodegenBinaryOpFunc)(cgCtx,
-                                                          *this,
-                                                          *leftVal,
-                                                          rightTy,
-                                                          *rightVal);
-    
-    WC_GUARD(newVal, nullptr);
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(newVal, leftAddr);
-    WC_ASSERT(storeInst);
-
-    // The expression evalutes to the left expression, which now has the value of the 
-    // new value, so return that...
-    return newVal;
-}
-#endif
 
 //-----------------------------------------------------------------------------
 // AssignExprAssign
@@ -205,28 +144,6 @@ AssignExprAssign::AssignExprAssign(TernaryExpr & leftExpr, AssignExpr & rightExp
 void AssignExprAssign::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
-
-#warning FIXME - Codegen
-#if 0
-llvm::Value * AssignExprAssign::codegenExprEval(CodegenCtx & cgCtx) {
-    // Basic compile checks:
-    WC_GUARD(compileCheckAssignIsLegal(), nullptr);
-    
-    // Evaluate left address and right side value
-    llvm::Value * leftAddr = mLeftExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(leftAddr, nullptr);
-    llvm::Value * rightValue = mRightExpr.codegenExprEval(cgCtx);
-    WC_GUARD(rightValue, nullptr);
-    
-    // Generate store instruction:
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(rightValue, leftAddr);
-    WC_ASSERT(storeInst);
-    
-    // The expression evalutes to the left expression, which now has the value of the 
-    // right expression, so return that...
-    return rightValue;
-}
-#endif
 
 //-----------------------------------------------------------------------------
 // AssignExprAssignAdd

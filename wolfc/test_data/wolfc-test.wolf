@@ -1,3 +1,5 @@
 func main() -> void
-    print(time())
+    let v = 2
+    v += 5
+    print(v)
 end

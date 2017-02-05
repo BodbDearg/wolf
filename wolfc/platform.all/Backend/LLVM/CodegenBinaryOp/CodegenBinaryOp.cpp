@@ -62,28 +62,45 @@ void CodegenBinaryOp::codegen() {
     
     Value leftValBeforeLoad = mCG.mCtx.popValue();
     
-    if (leftValBeforeLoad.isValid() && leftValBeforeLoad.mRequiresLoad) {
-        llvm::Value * leftValLoaded = mCG.mCtx.mIRBuilder.CreateLoad(leftValBeforeLoad.mLLVMVal, "BinaryOp:LeftValLoaded");
-        WC_ASSERT(leftValLoaded);
-        mLeftVal = Value(leftValLoaded, leftValBeforeLoad.mCompiledType, false, leftValBeforeLoad.mDeclaringNode);
+    if (mStoreResultOnLeft) {
+        // Storing the result on the left, create the load if we can
+        if (leftValBeforeLoad.isValid()) {
+            if (!leftValBeforeLoad.mRequiresLoad) {
+                mCG.mCtx.error(*mLeftExpr.mParent,
+                               "Internal error! Failed to codegen the binary operation because the "
+                               "left side of the expression was expected to require a load, but it doesn't!");
+                
+                return;
+            }
+            
+            llvm::Value * leftValLoaded = mCG.mCtx.mIRBuilder.CreateLoad(leftValBeforeLoad.mLLVMVal, "BinaryOp:LeftValLoaded");
+            WC_ASSERT(leftValLoaded);
+            mLeftVal = Value(leftValLoaded, leftValBeforeLoad.mCompiledType, false, leftValBeforeLoad.mDeclaringNode);
+        }
     }
     else {
+        // Not storing the result on the left, expect the result to not require a load
         mLeftVal = leftValBeforeLoad;
+        
+        if (mLeftVal.mRequiresLoad) {
+            mCG.mCtx.error(*mLeftExpr.mParent,
+                           "Internal error! Failed to codegen the binary operation because the "
+                           "left side of the expression requires a load when it was not expected to!");
+            
+            return;
+        }
     }
     
+    // Note: we expect the right expression to not require a load ever
     mRightExpr.accept(mCG);
+    mRightVal = mCG.mCtx.popValue();
     
-    {
-        Value rightValBeforeLoad = mCG.mCtx.popValue();
+    if (mRightVal.mRequiresLoad) {
+        mCG.mCtx.error(*mLeftExpr.mParent,
+                       "Internal error! Failed to codegen the binary operation because the "
+                       "right side of the expression requires a load when it was not expected to!");
         
-        if (rightValBeforeLoad.isValid() && rightValBeforeLoad.mRequiresLoad) {
-            llvm::Value * rightValLoaded = mCG.mCtx.mIRBuilder.CreateLoad(rightValBeforeLoad.mLLVMVal, "BinaryOp:RightValLoaded");
-            WC_ASSERT(rightValLoaded);
-            mRightVal = Value(rightValLoaded, rightValBeforeLoad.mCompiledType, false, rightValBeforeLoad.mDeclaringNode);
-        }
-        else {
-            mRightVal = rightValBeforeLoad;
-        }
+        return;
     }
     
     // The left and right types must match:
