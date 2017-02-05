@@ -97,28 +97,6 @@ llvm::Value * Identifier::codegenAddrOf(CodegenCtx & cgCtx) {
     return nullptr;
 }
 
-llvm::Value * Identifier::codegenExprEval(CodegenCtx & cgCtx) {
-    // Grab the variable value
-    const DataValue * dataValue = lookupDataValue();
-    
-    if (!dataValue) {
-        compileError("No variable named '%s' in the current scope! Unable to take it's value!", name());
-        return nullptr;
-    }
-    
-    // TODO: this won't work for anything other than primitives
-    
-    // Create an instruction to load it, if required, and return that instead of the value:
-    WC_ASSERT(dataValue->value);
-    
-    if (dataValue->requiresLoad) {
-        return cgCtx.irBuilder.CreateLoad(dataValue->value, std::string("load_ident_val:") + name());
-    }
-    
-    // No load required, return directly:
-    return dataValue->value;
-}
-
 llvm::Constant * Identifier::codegenExprConstEval(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);
     
@@ -150,47 +128,6 @@ llvm::Constant * Identifier::codegenExprConstEval(CodegenCtx & cgCtx) {
 const char * Identifier::name() const {
     return mToken.data.strVal.ptr;
 }
-
-#warning FIXME - Codegen
-#if 0
-DataValue * Identifier::lookupDataValue() {
-    // See if there is a parent scope, if so then try to lookup the value within that and
-    // all parent scopes of that parent scope...
-    const char * identifierName = name();
-    
-    {
-        Scope * parentScope = getParentScope();
-        
-        while (parentScope) {
-            DataValue * dataValue = parentScope->getVar(identifierName);
-            
-            if (dataValue) {
-                return dataValue;
-            }
-            
-            parentScope = parentScope->getParentScope();
-        }
-    }
-    
-    // Failing that check if there is a parent function and try to lookup the value within that:
-    {
-        Func * parentFunc = getParentFunc();
-        
-        if (parentFunc) {
-            DataValue * dataValue = parentFunc->getArg(identifierName);
-            
-            if (dataValue) {
-                return dataValue;
-            }
-        }
-    }
-    
-    // Failing that get the parent module and try to lookup the value within that:
-    Module * parentModule = getParentModule();
-    WC_ASSERT(parentModule);
-    return parentModule->getVar(identifierName);
-}
-#endif
 
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE
