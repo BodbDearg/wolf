@@ -57,11 +57,6 @@ bool ArrayDataType::isValid() const {
     return mElemType.isValid();
 }
 
-bool ArrayDataType::isUnknown() const {
-    // Only known if the element type is not unknown
-    return mElemType.isUnknown();
-}
-
 bool ArrayDataType::isArray() const {
     return true;
 }

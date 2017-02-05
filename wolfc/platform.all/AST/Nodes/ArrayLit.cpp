@@ -49,8 +49,7 @@ ArrayLit::ArrayLit(const Token & lBrack,
     mLBrack(lBrack),
     mExprs(exprs),
     mRBrack(rBrack),
-    mSize(exprs.numExprs()),
-    mDataType()
+    mSize(exprs.numExprs())
 #warning FIXME - Codegen
 #if 0
     ,mStorage(nullptr),
@@ -83,7 +82,7 @@ bool ArrayLit::isConstExpr() const {
 }
 
 const DataType & ArrayLit::dataType() const {
-    return mDataType;
+    return mExprs.getElementType();
 }
 
 #warning FIXME - Codegen

@@ -120,8 +120,9 @@ const DataType & ArrayLitExprsMulti::getElementType() const {
     const DataType & exprsListDataType = mExprsList.getElementType();
     
     if (!exprDataType.equals(exprsListDataType)) {
+        #warning TODO: Have 'ambiguous' data type here
         // Can't determine element type, ambiguous!
-        return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown);
+        return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInvalid);
     }
     
     // Element types match so the element type of the array is this:

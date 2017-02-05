@@ -240,10 +240,16 @@ void CodegenDataType::visit(const StrDataType & dataType) {
     mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
 }
 
-void CodegenDataType::visit(const UnknownDataType & dataType) {
+void CodegenDataType::visit(const InvalidDataType & dataType) {
     // We can't codegen an unknown data type
     WC_UNUSED_PARAM(dataType);
-    mCtx.error("Unable to generate the llvm type for an unknown data type!");
+    mCtx.error("Can't codegen an invalid data type!");
+}
+
+void CodegenDataType::visit(const UnevalDataType & dataType) {
+    // We can't codegen an unevaluated data type
+    WC_UNUSED_PARAM(dataType);
+    mCtx.error("Can't codegen an unevaluated data type!");
 }
 
 void CodegenDataType::visit(const VoidDataType & dataType) {

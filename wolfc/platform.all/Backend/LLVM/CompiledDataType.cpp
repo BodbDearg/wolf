@@ -1,14 +1,14 @@
 #include "CompiledDataType.hpp"
 
 #include "DataType/PrimitiveDataTypes.hpp"
-#include "DataType/Primitives/UnknownDataType.hpp"
+#include "DataType/Primitives/InvalidDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 CompiledDataType::CompiledDataType()
 :
-    mDataType(&PrimitiveDataTypes::getUnknownDataType()),
+    mDataType(&PrimitiveDataTypes::getInvalidDataType()),
     mLLVMType(nullptr)
 {
     

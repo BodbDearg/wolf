@@ -44,16 +44,6 @@ public:
      */
     virtual bool isSized() const;
     
-    /**
-     * Utility. Tell if this data type is an unknown form of data type such 
-     * as the 'Unknown' data type itself or an array data type with an 
-     * unknown/unevaluated size.
-     *
-     * Note: this can also be true for an array data type where the size is known, 
-     * if the inner type is actually unknown.
-     */
-    virtual bool isUnknown() const;
-    
     /* Utility. Tell if this data type is the 'void' data type. */
     inline bool isVoid() const {
         return getTypeId() == DataTypeId::kVoid;

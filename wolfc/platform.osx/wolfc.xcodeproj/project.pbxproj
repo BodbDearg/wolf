@@ -173,10 +173,11 @@
 		1FB40C671E0AFE4000D34587 /* GenericIntDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB40C651E0AFE4000D34587 /* GenericIntDataType.cpp */; };
 		1FB89D4F1E46BAF2006AC65D /* Codegen_TimeExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB89D4E1E46BAF2006AC65D /* Codegen_TimeExpr.cpp */; };
 		1FB89D511E46D7BA006AC65D /* Codegen_ReturnStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB89D501E46D7BA006AC65D /* Codegen_ReturnStmnt.cpp */; };
+		1FB89D541E470EB9006AC65D /* UnevalDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB89D521E470EB9006AC65D /* UnevalDataType.cpp */; };
 		1FCD4DF41D0136360076E358 /* DataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD4DF21D0136360076E358 /* DataType.cpp */; };
 		1FCD4DF71D0157C50076E358 /* PrimitiveDataTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD4DF51D0157C50076E358 /* PrimitiveDataTypes.cpp */; };
 		1FCD4E081D0160DB0076E358 /* BoolDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD4E021D0160DB0076E358 /* BoolDataType.cpp */; };
-		1FCD4E091D0160DB0076E358 /* UnknownDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD4E041D0160DB0076E358 /* UnknownDataType.cpp */; };
+		1FCD4E091D0160DB0076E358 /* InvalidDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD4E041D0160DB0076E358 /* InvalidDataType.cpp */; };
 		1FCD4E0A1D0160DB0076E358 /* VoidDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD4E061D0160DB0076E358 /* VoidDataType.cpp */; };
 		1FCD4E0D1D0161A60076E358 /* Int64DataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCD4E0B1D0161A60076E358 /* Int64DataType.cpp */; };
 		1FF99C8B1E430337008ED287 /* FuncDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FF99C891E430337008ED287 /* FuncDataType.cpp */; };
@@ -454,14 +455,16 @@
 		1FB40C691E0B3E5200D34587 /* GenericSignedIntDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GenericSignedIntDataType.hpp; sourceTree = "<group>"; };
 		1FB89D4E1E46BAF2006AC65D /* Codegen_TimeExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_TimeExpr.cpp; sourceTree = "<group>"; };
 		1FB89D501E46D7BA006AC65D /* Codegen_ReturnStmnt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_ReturnStmnt.cpp; sourceTree = "<group>"; };
+		1FB89D521E470EB9006AC65D /* UnevalDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnevalDataType.cpp; sourceTree = "<group>"; };
+		1FB89D531E470EB9006AC65D /* UnevalDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UnevalDataType.hpp; sourceTree = "<group>"; };
 		1FCD4DF21D0136360076E358 /* DataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataType.cpp; sourceTree = "<group>"; };
 		1FCD4DF31D0136360076E358 /* DataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DataType.hpp; sourceTree = "<group>"; };
 		1FCD4DF51D0157C50076E358 /* PrimitiveDataTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PrimitiveDataTypes.cpp; sourceTree = "<group>"; };
 		1FCD4DF61D0157C50076E358 /* PrimitiveDataTypes.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PrimitiveDataTypes.hpp; sourceTree = "<group>"; };
 		1FCD4E021D0160DB0076E358 /* BoolDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BoolDataType.cpp; sourceTree = "<group>"; };
 		1FCD4E031D0160DB0076E358 /* BoolDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BoolDataType.hpp; sourceTree = "<group>"; };
-		1FCD4E041D0160DB0076E358 /* UnknownDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnknownDataType.cpp; sourceTree = "<group>"; };
-		1FCD4E051D0160DB0076E358 /* UnknownDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UnknownDataType.hpp; sourceTree = "<group>"; };
+		1FCD4E041D0160DB0076E358 /* InvalidDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InvalidDataType.cpp; sourceTree = "<group>"; };
+		1FCD4E051D0160DB0076E358 /* InvalidDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = InvalidDataType.hpp; sourceTree = "<group>"; };
 		1FCD4E061D0160DB0076E358 /* VoidDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoidDataType.cpp; sourceTree = "<group>"; };
 		1FCD4E071D0160DB0076E358 /* VoidDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VoidDataType.hpp; sourceTree = "<group>"; };
 		1FCD4E0B1D0161A60076E358 /* Int64DataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Int64DataType.cpp; sourceTree = "<group>"; };
@@ -845,10 +848,12 @@
 				1FB40C691E0B3E5200D34587 /* GenericSignedIntDataType.hpp */,
 				1FCD4E0B1D0161A60076E358 /* Int64DataType.cpp */,
 				1FCD4E0C1D0161A60076E358 /* Int64DataType.hpp */,
+				1FCD4E041D0160DB0076E358 /* InvalidDataType.cpp */,
+				1FCD4E051D0160DB0076E358 /* InvalidDataType.hpp */,
 				1F54B4B01D02A4DB0016BF70 /* StrDataType.cpp */,
 				1F54B4B11D02A4DB0016BF70 /* StrDataType.hpp */,
-				1FCD4E041D0160DB0076E358 /* UnknownDataType.cpp */,
-				1FCD4E051D0160DB0076E358 /* UnknownDataType.hpp */,
+				1FB89D521E470EB9006AC65D /* UnevalDataType.cpp */,
+				1FB89D531E470EB9006AC65D /* UnevalDataType.hpp */,
 				1FCD4E061D0160DB0076E358 /* VoidDataType.cpp */,
 				1FCD4E071D0160DB0076E358 /* VoidDataType.hpp */,
 			);
@@ -1034,6 +1039,7 @@
 				1F6B6C071E3DF29200B75BF4 /* CodegenConstBinaryOp.cpp in Sources */,
 				1F0FE7291E41C6490047D568 /* Codegen_NextStmnt.cpp in Sources */,
 				1F0308A21E2AF2510097D223 /* NextStmnt.cpp in Sources */,
+				1FB89D541E470EB9006AC65D /* UnevalDataType.cpp in Sources */,
 				1FB40C671E0AFE4000D34587 /* GenericIntDataType.cpp in Sources */,
 				1F0308921E2AF2510097D223 /* CastExpr.cpp in Sources */,
 				1F2985DF1E3EFB5400DC17CC /* ConstCodegen_MulExpr.cpp in Sources */,
@@ -1105,7 +1111,7 @@
 				1F59F6191E3F243400F2FC78 /* Codegen_ScopeStmnt.cpp in Sources */,
 				1F03088A1E2AF2510097D223 /* AddExpr.cpp in Sources */,
 				1FCD4E0A1D0160DB0076E358 /* VoidDataType.cpp in Sources */,
-				1FCD4E091D0160DB0076E358 /* UnknownDataType.cpp in Sources */,
+				1FCD4E091D0160DB0076E358 /* InvalidDataType.cpp in Sources */,
 				1F6B6C261E3DFB9100B75BF4 /* CodegenConstUnaryOp_UnaryExpr.cpp in Sources */,
 				1F2985A51E3EFAEB00DC17CC /* Codegen_AddExpr.cpp in Sources */,
 				1F2985AE1E3EFAEB00DC17CC /* Codegen_Identifier.cpp in Sources */,

@@ -25,7 +25,6 @@ public:
     virtual const std::string & name() const final override;
     virtual bool equals(const DataType & other) const override;
     virtual bool isValid() const final override;
-    virtual bool isUnknown() const final override;
     virtual bool isArray() const final override;
     virtual bool requiresStorage() const final override;
 

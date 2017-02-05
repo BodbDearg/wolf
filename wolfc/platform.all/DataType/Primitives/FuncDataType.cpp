@@ -93,18 +93,6 @@ bool FuncDataType::isValid() const {
     return mReturnType.isValid();
 }
 
-bool FuncDataType::isUnknown() const {
-    // See if any arg types are unknown
-    for (const DataType * type : mArgTypes) {
-        if (type->isUnknown()) {
-            return true;
-        }
-    }
-    
-    // Tell if return type is unknown
-    return mReturnType.isUnknown();
-}
-
 bool FuncDataType::isFunc() const {
     return true;
 }

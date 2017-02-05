@@ -5,7 +5,7 @@
 #include "AST/Nodes/Func.hpp"
 #include "AST/Nodes/IRepeatableStmnt.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
-#include "DataType/Primitives/UnknownDataType.hpp"
+#include "DataType/Primitives/InvalidDataType.hpp"
 #include "Lexer/Token.hpp"
 #include "RepeatableStmnt.hpp"
 
@@ -308,7 +308,7 @@ CompiledDataType CodegenCtx::popCompiledDataType() {
         return type;
     }
     
-    return CompiledDataType(PrimitiveDataTypes::getUnknownDataType(), nullptr);
+    return CompiledDataType(PrimitiveDataTypes::getInvalidDataType(), nullptr);
 }
 
 void CodegenCtx::handleDeferredCodegenCallbacks(std::vector<std::function<void ()>> & callbacks) {

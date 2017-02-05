@@ -20,7 +20,6 @@ public:
     virtual const std::string & name() const override;
     virtual bool equals(const DataType & other) const override;
     virtual bool isValid() const override;
-    virtual bool isUnknown() const override;
     virtual bool isFunc() const override;
 
     /* The node that declared this type */

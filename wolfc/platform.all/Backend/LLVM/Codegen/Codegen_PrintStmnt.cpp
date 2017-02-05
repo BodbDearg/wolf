@@ -97,7 +97,8 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%s");
                 break;
                 
-            case DataTypeId::kUnknown:                
+            case DataTypeId::kInvalid:
+            case DataTypeId::kUneval:
             case DataTypeId::kVoid:
             case DataTypeId::kArray:
             case DataTypeId::kArrayUnevalSize:

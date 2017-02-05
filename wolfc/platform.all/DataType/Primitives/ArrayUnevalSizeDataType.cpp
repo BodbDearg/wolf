@@ -53,11 +53,6 @@ bool ArrayUnevalSizeDataType::isValid() const {
     return false;
 }
 
-bool ArrayUnevalSizeDataType::isUnknown() const {
-    // Only known if the element type is not unknown
-    return mElemType.isUnknown();
-}
-
 bool ArrayUnevalSizeDataType::isArray() const {
     return true;
 }

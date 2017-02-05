@@ -5,17 +5,11 @@
 #include "Assert.hpp"
 #include "AssignExpr.hpp"
 #include "CastExpr.hpp"
-#include "DataType/DataType.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
 #include "DataType/Primitives/ArrayDataType.hpp"
-#include "Func.hpp"
-#include "FuncArg.hpp"
+#include "DataType/Primitives/UnevalDataType.hpp"
 #include "FuncCall.hpp"
-#include "Identifier.hpp"
 #include "LinearAlloc.hpp"
-#include "Module.hpp"
-#include "PrimaryExpr.hpp"
-#include "PrimitiveType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -270,8 +264,8 @@ bool PostfixExprFuncCall::isConstExpr() const {
 }
 
 const DataType & PostfixExprFuncCall::dataType() const {
-    // We won't know this until compile time
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown);
+    // We won't know this until further analysis at compile time
+    return PrimitiveDataTypes::getUnevalDataType();
 }
 
 #warning FIXME - Codegen
@@ -344,10 +338,11 @@ bool PostfixExprArrayLookup::isConstExpr() const {
 }
 
 const DataType & PostfixExprArrayLookup::dataType() const {
+    #warning This should be 'uneval' if the array type is uneval
     // Expect the array expression to have the array data type.
     // If it doesn't have this type then we don't know what the element type is..
     const ArrayDataType * arrayDataType = dynamic_cast<const ArrayDataType*>(&mArrayExpr.dataType());
-    WC_GUARD(arrayDataType, PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown));
+    WC_GUARD(arrayDataType, PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInvalid));
     
     // Return the element data type
     return arrayDataType->mElemType;

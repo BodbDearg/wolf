@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ASTNode.hpp"
-#include "DataType/Primitives/UnknownDataType.hpp"
 #include "IExpr.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -36,15 +35,6 @@ private:
     ArrayLitExprs &    mExprs;
     const Token &      mRBrack;
     size_t             mSize;
-    UnknownDataType    mDataType;
-    
-#warning FIXME - Codegen
-#if 0
-    llvm::Value *               mStorage;
-    llvm::Value *               mAddrOfResult;
-    llvm::Value *               mExprEvalResult;
-    llvm::Constant *            mExprConstEvalResult;
-#endif
 };
 
 WC_AST_END_NAMESPACE

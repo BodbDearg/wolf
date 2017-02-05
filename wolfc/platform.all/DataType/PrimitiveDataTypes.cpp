@@ -3,14 +3,16 @@
 #include "Lexer/TokenType.hpp"
 #include "Primitives/BoolDataType.hpp"
 #include "Primitives/Int64DataType.hpp"
+#include "Primitives/InvalidDataType.hpp"
 #include "Primitives/StrDataType.hpp"
-#include "Primitives/UnknownDataType.hpp"
+#include "Primitives/UnevalDataType.hpp"
 #include "Primitives/VoidDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 
 /* Instances of the types themselves! */
-static UnknownDataType  gUnknownDataType;
+static InvalidDataType  gInvalidDataType;
+static UnevalDataType   gUnevalDataType;
 static VoidDataType     gVoidDataType;
 static Int64DataType    gInt64DataType;
 static BoolDataType     gBoolDataType;
@@ -18,8 +20,8 @@ static StrDataType      gStrDataType;   // TODO: remove, this is a temporary dat
 
 const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
     switch (type) {
-        // If 'Unknown' is specifically asked for
-        case DataTypeId::kUnknown: return gUnknownDataType;
+        // Non user facing types:
+        case DataTypeId::kInvalid: return gInvalidDataType;
             
         // The basic data types
         case DataTypeId::kVoid: return gVoidDataType;
@@ -34,7 +36,7 @@ const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
             break;
     }
     
-    return gUnknownDataType;
+    return gInvalidDataType;
 }
 
 const DataType & PrimitiveDataTypes::getUsingLangKeyword(TokenType tokenType) {
@@ -49,11 +51,15 @@ const DataType & PrimitiveDataTypes::getUsingLangKeyword(TokenType tokenType) {
             break;
     }
     
-    return gUnknownDataType;
+    return gInvalidDataType;
 }
 
-const UnknownDataType & PrimitiveDataTypes::getUnknownDataType() {
-    return gUnknownDataType;
+const InvalidDataType & PrimitiveDataTypes::getInvalidDataType() {
+    return gInvalidDataType;
+}
+
+const UnevalDataType & PrimitiveDataTypes::getUnevalDataType() {
+    return gUnevalDataType;
 }
 
 const VoidDataType & PrimitiveDataTypes::getVoidDataType() {
@@ -88,7 +94,7 @@ const DataType & PrimitiveDataTypes::getDefaultFloatType() {
 
 DataTypeId PrimitiveDataTypes::getDefaultFloatTypeId() {
     // FIXME: implement for float
-    return DataTypeId::kUnknown;
+    return DataTypeId::kUneval;
 }
 
 WC_END_NAMESPACE

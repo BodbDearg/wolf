@@ -5,6 +5,7 @@
 #include "Assert.hpp"
 #include "DataType/DataTypeId.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
+#include "DataType/Primitives/UnevalDataType.hpp"
 #include "Func.hpp"
 #include "LinearAlloc.hpp"
 #include "Module.hpp"
@@ -54,16 +55,8 @@ bool Identifier::isConstExpr() const {
 }
 
 const DataType & Identifier::dataType() const {
-#warning FIXME - Codegen
-#if 0
-    DataValue * dataValue = lookupDataValue();
-    
-    if (dataValue) {
-        WC_ASSERT(dataValue->type);
-        return *dataValue->type;
-    }
-#endif
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kUnknown);
+    // We won't know this until further analysis at compile time
+    return PrimitiveDataTypes::getUnevalDataType();
 }
 
 #warning FIXME - Codegen

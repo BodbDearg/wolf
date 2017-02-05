@@ -81,12 +81,17 @@ void CodegenConstUnaryOp::visit(const Int64DataType & dataType) {
     issueUnaryOpNotSupportedError();
 }
 
+void CodegenConstUnaryOp::visit(const InvalidDataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    issueUnaryOpNotSupportedError();
+}
+
 void CodegenConstUnaryOp::visit(const StrDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();
 }
 
-void CodegenConstUnaryOp::visit(const UnknownDataType & dataType) {
+void CodegenConstUnaryOp::visit(const UnevalDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();
 }
