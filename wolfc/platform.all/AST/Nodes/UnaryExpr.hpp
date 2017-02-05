@@ -23,11 +23,10 @@ public:
     static UnaryExpr * parse(ParseCtx & parseCtx);
 };
 
-#warning This needs to be renamed
 /* PostfixExpr */
-class UnaryExprPrimary : public UnaryExpr {
+class UnaryExprNoOp : public UnaryExpr {
 public:
-    UnaryExprPrimary(PostfixExpr & expr);
+    UnaryExprNoOp(PostfixExpr & expr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;

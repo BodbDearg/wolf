@@ -3,13 +3,9 @@
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
 #include "Assert.hpp"
-#include "DataType/DataTypeId.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
 #include "DataType/Primitives/UnevalDataType.hpp"
-#include "Func.hpp"
 #include "LinearAlloc.hpp"
-#include "Module.hpp"
-#include "Scope.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE

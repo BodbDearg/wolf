@@ -77,7 +77,7 @@ UnaryExpr * UnaryExpr::parse(ParseCtx & parseCtx) {
         default: {
             PostfixExpr * expr = PostfixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
-            return WC_NEW_AST_NODE(parseCtx, UnaryExprPrimary, *expr);
+            return WC_NEW_AST_NODE(parseCtx, UnaryExprNoOp, *expr);
         }   break;
     }
     
@@ -85,33 +85,33 @@ UnaryExpr * UnaryExpr::parse(ParseCtx & parseCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// UnaryExprPrimary
+// UnaryExprNoOp
 //-----------------------------------------------------------------------------
-UnaryExprPrimary::UnaryExprPrimary(PostfixExpr & expr) : mExpr(expr) {
+UnaryExprNoOp::UnaryExprNoOp(PostfixExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void UnaryExprPrimary::accept(ASTNodeVisitor & visitor) const {
+void UnaryExprNoOp::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
-const Token & UnaryExprPrimary::getStartToken() const {
+const Token & UnaryExprNoOp::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & UnaryExprPrimary::getEndToken() const {
+const Token & UnaryExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool UnaryExprPrimary::isLValue() const {
+bool UnaryExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-bool UnaryExprPrimary::isConstExpr() const {
+bool UnaryExprNoOp::isConstExpr() const {
     return mExpr.isConstExpr();
 }
 
-const DataType & UnaryExprPrimary::dataType() const {
+const DataType & UnaryExprNoOp::dataType() const {
     return mExpr.dataType();
 }
 

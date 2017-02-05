@@ -28,11 +28,10 @@ public:
     static PostfixExpr * parse(ParseCtx & parseCtx);
 };
 
-#warning Rename to 'no op'?
 /* CastExpr */
-class PostfixExprNoPostfix final : public PostfixExpr {
+class PostfixExprNoOp final : public PostfixExpr {
 public:
-    PostfixExprNoPostfix(CastExpr & expr);
+    PostfixExprNoOp(CastExpr & expr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;

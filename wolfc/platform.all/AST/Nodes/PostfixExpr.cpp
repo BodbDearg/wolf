@@ -50,7 +50,7 @@ PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
     }
     else {
         // Basic postfix outer expression with no increment or decrement
-        outerPostfixExpr = WC_NEW_AST_NODE(parseCtx, PostfixExprNoPostfix, *expr);
+        outerPostfixExpr = WC_NEW_AST_NODE(parseCtx, PostfixExprNoOp, *expr);
         WC_ASSERT(outerPostfixExpr);
     }
     
@@ -102,33 +102,33 @@ PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// PostfixExprNoPostfix
+// PostfixExprNoOp
 //-----------------------------------------------------------------------------
-PostfixExprNoPostfix::PostfixExprNoPostfix(CastExpr & expr) : mExpr(expr) {
+PostfixExprNoOp::PostfixExprNoOp(CastExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void PostfixExprNoPostfix::accept(ASTNodeVisitor & visitor) const {
+void PostfixExprNoOp::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
-const Token & PostfixExprNoPostfix::getStartToken() const {
+const Token & PostfixExprNoOp::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & PostfixExprNoPostfix::getEndToken() const {
+const Token & PostfixExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool PostfixExprNoPostfix::isLValue() const {
+bool PostfixExprNoOp::isLValue() const {
     return mExpr.isLValue();
 }
 
-bool PostfixExprNoPostfix::isConstExpr() const {
+bool PostfixExprNoOp::isConstExpr() const {
     return mExpr.isConstExpr();
 }
 
-const DataType & PostfixExprNoPostfix::dataType() const {
+const DataType & PostfixExprNoOp::dataType() const {
     return mExpr.dataType();
 }
 

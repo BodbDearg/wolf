@@ -451,7 +451,7 @@ void AddrCodegen::visit(const AST::PostfixExprInc & astNode) {
     astNode.mExpr.accept(*this);
 }
 
-void AddrCodegen::visit(const AST::PostfixExprNoPostfix & astNode) {
+void AddrCodegen::visit(const AST::PostfixExprNoOp & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mExpr.accept(*this);
 }
@@ -677,6 +677,11 @@ void AddrCodegen::visit(const AST::UnaryExprMinus & astNode) {
     cantTakeAddressOfUnaryOpError(astNode, "-", "minus");
 }
 
+void AddrCodegen::visit(const AST::UnaryExprNoOp & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    astNode.mExpr.accept(*this);
+}
+
 void AddrCodegen::visit(const AST::UnaryExprParen & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mExpr.accept(*this);
@@ -685,11 +690,6 @@ void AddrCodegen::visit(const AST::UnaryExprParen & astNode) {
 void AddrCodegen::visit(const AST::UnaryExprPlus & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     cantTakeAddressOfUnaryOpError(astNode, "+", "plus");
-}
-
-void AddrCodegen::visit(const AST::UnaryExprPrimary & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
 }
 
 void AddrCodegen::visit(const AST::VarDeclExplicitType & astNode) {

@@ -9,7 +9,7 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-void Codegen::visit(const AST::UnaryExprPrimary & astNode) {
+void Codegen::visit(const AST::UnaryExprNoOp & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mExpr.accept(*this);
 }

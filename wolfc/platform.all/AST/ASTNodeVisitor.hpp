@@ -72,7 +72,7 @@ class PostfixExprArrayLookup;
 class PostfixExprDec;
 class PostfixExprFuncCall;
 class PostfixExprInc;
-class PostfixExprNoPostfix;
+class PostfixExprNoOp;
 class PrimaryExprArrayLit;
 class PrimaryExprBoolLit;
 class PrimaryExprIdentifier;
@@ -115,9 +115,9 @@ class TimeExpr;
 class TypeArray;
 class TypePrimitive;
 class UnaryExprMinus;
+class UnaryExprNoOp;
 class UnaryExprParen;
 class UnaryExprPlus;
-class UnaryExprPrimary;
 class VarDeclExplicitType;
 class VarDeclInferType;
 class WhileStmnt;
@@ -127,6 +127,7 @@ class ASTNodeVisitor {
 public:
     virtual ~ASTNodeVisitor() = default;
     
+
     virtual void visit(const AddExprAdd & astNode) = 0;
     virtual void visit(const AddExprBOr & astNode) = 0;
     virtual void visit(const AddExprBXor & astNode) = 0;
@@ -194,7 +195,7 @@ public:
     virtual void visit(const PostfixExprDec & astNode) = 0;
     virtual void visit(const PostfixExprFuncCall & astNode) = 0;
     virtual void visit(const PostfixExprInc & astNode) = 0;
-    virtual void visit(const PostfixExprNoPostfix & astNode) = 0;
+    virtual void visit(const PostfixExprNoOp & astNode) = 0;
     virtual void visit(const PrimaryExprArrayLit & astNode) = 0;
     virtual void visit(const PrimaryExprBoolLit & astNode) = 0;
     virtual void visit(const PrimaryExprIdentifier & astNode) = 0;
@@ -237,9 +238,9 @@ public:
     virtual void visit(const TypeArray & astNode) = 0;
     virtual void visit(const TypePrimitive & astNode) = 0;
     virtual void visit(const UnaryExprMinus & astNode) = 0;
+    virtual void visit(const UnaryExprNoOp & astNode) = 0;
     virtual void visit(const UnaryExprParen & astNode) = 0;
     virtual void visit(const UnaryExprPlus & astNode) = 0;
-    virtual void visit(const UnaryExprPrimary & astNode) = 0;
     virtual void visit(const VarDeclExplicitType & astNode) = 0;
     virtual void visit(const VarDeclInferType & astNode) = 0;
     virtual void visit(const WhileStmnt & astNode) = 0;
