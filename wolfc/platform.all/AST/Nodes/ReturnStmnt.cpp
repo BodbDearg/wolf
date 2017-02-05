@@ -134,34 +134,6 @@ const Token & ReturnStmntNoCondWithValue::getEndToken() const {
     return mReturnExpr.getEndToken();
 }
 
-#warning FIXME - Codegen
-#if 0
-bool ReturnStmntNoCondWithValue::codegen(CodegenCtx & cgCtx) {
-    // Codegen the return type and verify the return type is correct
-    WC_GUARD(codegenAndVerifyReturnDataType(cgCtx), false);
-    
-    // Codegen the assign expression for the return
-    llvm::Value * returnExprResult = mReturnExpr.codegenExprEval(cgCtx);
-    WC_GUARD(returnExprResult, false);
-    
-    // Now generate the return and return true for success
-    cgCtx.irBuilder.CreateRet(returnExprResult);
-    
-    // Create a new basic block for the unreachable code past this and set all future code to insert after it:
-    {
-        Func * parentFunc = getParentFunc();
-        WC_ASSERT(parentFunc);
-        std::string unreachableBBLbl = makeLLVMLabelForTok("ReturnStmntNoCondWithValue:unreachable", getEndToken());
-        llvm::BasicBlock * unreachableBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, unreachableBBLbl, parentFunc->mLLVMFunc);
-        WC_ASSERT(unreachableBB);
-        cgCtx.irBuilder.SetInsertPoint(unreachableBB);
-        cgCtx.irBuilder.CreateUnreachable();
-    }
-    
-    return true;    // Success!
-}
-#endif
-
 const DataType & ReturnStmntNoCondWithValue::dataType() {
     return mReturnExpr.dataType();
 }

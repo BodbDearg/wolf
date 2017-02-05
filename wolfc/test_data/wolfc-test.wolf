@@ -1,12 +1,7 @@
-func blah(v:int) -> void
-    if v > 0
-        return
-    end
-
-    print("Hello")
+func mul(v1:int, v2:int) -> int
+    return v1 * v2
 end
 
 func main() -> void
-    blah(0)
-    blah(1)
+    print(mul(6, 12))
 end

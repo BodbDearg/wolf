@@ -65,14 +65,8 @@ void CodegenBinaryOp::codegen() {
     if (mStoreResultOnLeft) {
         // Storing the result on the left, create the load if we can
         if (leftValBeforeLoad.isValid()) {
-            if (!leftValBeforeLoad.mRequiresLoad) {
-                mCG.mCtx.error(*mLeftExpr.mParent,
-                               "Internal error! Failed to codegen the binary operation because the "
-                               "left side of the expression was expected to require a load, but it doesn't!");
-                
-                return;
-            }
-            
+            // Since we are storing on the left, we expect there to be a load required.
+            WC_ASSERT(leftValBeforeLoad.mRequiresLoad);
             llvm::Value * leftValLoaded = mCG.mCtx.mIRBuilder.CreateLoad(leftValBeforeLoad.mLLVMVal, "BinaryOp:LeftValLoaded");
             WC_ASSERT(leftValLoaded);
             mLeftVal = Value(leftValLoaded, leftValBeforeLoad.mCompiledType, false, leftValBeforeLoad.mDeclaringNode);
@@ -81,27 +75,13 @@ void CodegenBinaryOp::codegen() {
     else {
         // Not storing the result on the left, expect the result to not require a load
         mLeftVal = leftValBeforeLoad;
-        
-        if (mLeftVal.mRequiresLoad) {
-            mCG.mCtx.error(*mLeftExpr.mParent,
-                           "Internal error! Failed to codegen the binary operation because the "
-                           "left side of the expression requires a load when it was not expected to!");
-            
-            return;
-        }
+        WC_ASSERT(!mLeftVal.mRequiresLoad);
     }
     
     // Note: we expect the right expression to not require a load ever
     mRightExpr.accept(mCG);
     mRightVal = mCG.mCtx.popValue();
-    
-    if (mRightVal.mRequiresLoad) {
-        mCG.mCtx.error(*mLeftExpr.mParent,
-                       "Internal error! Failed to codegen the binary operation because the "
-                       "right side of the expression requires a load when it was not expected to!");
-        
-        return;
-    }
+    WC_ASSERT(!mRightVal.mRequiresLoad);
     
     // The left and right types must match:
     const DataType & leftType = mLeftVal.mCompiledType.getDataType();
@@ -129,15 +109,7 @@ void CodegenBinaryOp::codegen() {
     // See if we are to store the result on the left, if not then we are done:
     WC_GUARD(mStoreResultOnLeft);
     Value opResultVal = mCG.mCtx.popValue();
-    
-    // The left side must be in pointer format (require a load)
-    if (!leftValBeforeLoad.mRequiresLoad) {
-        mCG.mCtx.error(*mLeftExpr.mParent,
-                       "Internal error! Failed to codegen the binary operation because the "
-                       "left side of the expression is not in address format!");
-        
-        return;
-    }
+    WC_ASSERT(!opResultVal.mRequiresLoad);
 
     // If the operator result is not valid then continue no further
     WC_GUARD(opResultVal.isValid());

@@ -2,6 +2,7 @@
 
 #include "../CodegenCtx.hpp"
 #include "Assert.hpp"
+#include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/ReturnStmnt.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
 #include "DataType/Primitives/FuncDataType.hpp"
@@ -88,7 +89,39 @@ void Codegen::visit(const AST::ReturnStmntNoCondVoid & astNode) {
 
 void Codegen::visit(const AST::ReturnStmntNoCondWithValue & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    
+    // Codegen the assign expression for the return
+    astNode.mReturnExpr.accept(*this);
+    Value returnVal = mCtx.popValue();
+    
+    // Verify that the return type is correct:
+    WC_GUARD(verifyReturnTypeForCurrentFunction(*this, returnVal.mCompiledType));
+    
+    // Make sure we have a valid value to return:
+    WC_GUARD(returnVal.isValid());
+    WC_ASSERT(!returnVal.mRequiresLoad);
+    
+    // Now generate the return and return true for success
+    mCtx.mIRBuilder.CreateRet(returnVal.mLLVMVal);
+    
+    // Grab the parent function
+    auto & irb = mCtx.mIRBuilder;
+    llvm::Function * parentFn = irb.GetInsertBlock()->getParent();
+    WC_ASSERT(parentFn);
+    
+    // Create a new basic block for the unreachable code past this and set all future
+    // code to insert after it. Also create an 'unreachable' instruction to let llvm know
+    // everything past this can't be reached...
+    std::string bbLabel = StringUtils::appendLineInfo("ReturnStmntNoCondWithValue:unreachable",
+                                                      astNode.getPastEndToken());
+    
+    llvm::BasicBlock * unreachableBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx,
+                                                                bbLabel,
+                                                                parentFn);
+    
+    WC_ASSERT(unreachableBB);
+    mCtx.mIRBuilder.SetInsertPoint(unreachableBB);
+    mCtx.mIRBuilder.CreateUnreachable();
 }
 
 void Codegen::visit(const AST::ReturnStmntWithCondAndValue & astNode) {
