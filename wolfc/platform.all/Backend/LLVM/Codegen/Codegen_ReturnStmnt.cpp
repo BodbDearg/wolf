@@ -150,8 +150,9 @@ void Codegen::visit(const AST::ReturnStmntWithCondVoid & astNode) {
     // Verify the return type is correct, if it isn't then bail
     WC_GUARD(verifyReturnTypeForCurrentFunction(*this, returnedType));
     
-    // Don't go any further if the condition value is not a boolean or is not valid
-    WC_GUARD(condValIsBool && condVal.isValid());
+    // Don't go any further if these checks do not pass
+    WC_GUARD(condValIsBool);
+    WC_GUARD(condVal.isValid());
     
     // Grab the parent function
     llvm::Function * parentFn = mCtx.mIRBuilder.GetInsertBlock()->getParent();
@@ -185,7 +186,69 @@ void Codegen::visit(const AST::ReturnStmntWithCondVoid & astNode) {
 
 void Codegen::visit(const AST::ReturnStmntWithCondAndValue & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    
+    // Codegen the conditional expression
+    astNode.mCondExpr.accept(*this);
+    Value condVal = mCtx.popValue();
+    
+    // Verify that the condition value is a bool
+    const DataType & condValType = condVal.mCompiledType.getDataType();
+    bool condValIsBool = true;
+    
+    if (!condValType.isBool()) {
+        mCtx.error(astNode.mCondExpr,
+                   "Condition for executing return statement must of type 'bool' not '%s'!",
+                   condValType.name().c_str());
+        
+        condValIsBool = false;
+    }
+    
+    // Grab the parent function
+    llvm::Function * parentFn = mCtx.mIRBuilder.GetInsertBlock()->getParent();
+    WC_ASSERT(parentFn);
+    
+    // Create a basic block for the return logic:
+    std::string returnBBLbl = StringUtils::appendLineInfo("ReturnStmntWithCondAndValue:return", astNode.getStartToken());
+    llvm::BasicBlock * returnBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, returnBBLbl, parentFn);
+    WC_ASSERT(returnBB);
+    
+    // Create a basic block for the continue logic:
+    std::string continueBBLbl = StringUtils::appendLineInfo("ReturnStmntWithCondAndValue:continue", astNode.getPastEndToken());
+    llvm::BasicBlock * continueBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, continueBBLbl, parentFn);
+    WC_ASSERT(continueBB);
+    
+    // Begin generating code for the return case, switch to that block:
+    mCtx.pushInsertBlock();
+    mCtx.mIRBuilder.SetInsertPoint(returnBB);
+    
+    // Codegen the value to return
+    astNode.mReturnExpr.accept(*this);
+    Value returnVal = mCtx.popValue();
+    
+    // Verify the return type is correct, if it isn't then bail
+    WC_GUARD(verifyReturnTypeForCurrentFunction(*this, returnVal.mCompiledType));
+    WC_GUARD(returnVal.isValid());
+    
+    // Generate the code for the return:
+    mCtx.mIRBuilder.CreateRet(returnVal.mLLVMVal);
+    
+    // Go back to the block where the branch is in
+    mCtx.popInsertBlock();
+    
+    // Don't go any further if these checks do not pass
+    WC_GUARD(condValIsBool);
+    WC_GUARD(condVal.isValid());
+    
+    // Now generate the code for the branch:
+    if (astNode.isCondExprInversed()) {
+        mCtx.mIRBuilder.CreateCondBr(condVal.mLLVMVal, continueBB, returnBB);
+    }
+    else {
+        mCtx.mIRBuilder.CreateCondBr(condVal.mLLVMVal, returnBB, continueBB);
+    }
+    
+    // All further code is generated in the continue block:
+    mCtx.mIRBuilder.SetInsertPoint(continueBB);
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

@@ -1,9 +1,11 @@
-func blah(v: int)
-    return if v > 0
-    print("Hello")
+func blah(v: int) -> string
+    return "GREATER THAN 0" if v > 0
+    return "LESS THAN OR EQUAL TO 0"
 end
 
 func main() -> void
-    blah(0)
-    blah(1)
+    print(blah(0))
+    print("\n")
+    print(blah(1))
+    print("\n")
 end

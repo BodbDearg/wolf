@@ -2,11 +2,9 @@
 
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
-#include "Assert.hpp"
 #include "AssignExpr.hpp"
 #include "DataType/DataType.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
-#include "Func.hpp"
 #include "LinearAlloc.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -183,54 +181,6 @@ ReturnStmntWithCondVoid::ReturnStmntWithCondVoid(const Token & returnToken,
 void ReturnStmntWithCondVoid::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
-
-#warning FIXME - Codegen
-#if 0
-bool ReturnStmntWithCondVoid::codegen(CodegenCtx & cgCtx) {
-    // Codegen the return type and verify the return type is correct
-    WC_GUARD(codegenAndVerifyReturnDataType(cgCtx), false);
-    
-    // The conditional expression for returning must be void
-    if (!mCondExpr.dataType().isBool()) {
-        compileError("Condition for 'return' statement must evaluate to type 'bool' not '%s'!",
-                     mCondExpr.dataType().name().c_str());
-        
-        return false;
-    }
-    
-    // Grab the parent function
-    llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
-    WC_ASSERT(parentFn);
-    
-    // Create a basic block for the return logic:
-    mReturnBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "ReturnStmntWithCondVoid:return", parentFn);
-    WC_ASSERT(mReturnBlock);
-    
-    // Create a basic block for the continue logic:
-    mContinueBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "ReturnStmntWithCondVoid:continue", parentFn);
-    WC_ASSERT(mContinueBlock);
-    
-    // Evaluate the condition:
-    llvm::Value * condValue = mCondExpr.codegenExprEval(cgCtx);
-    WC_GUARD(condValue, nullptr);
-    
-    // Now generate the code for the branch:
-    if (isCondExprInversed()) {
-        cgCtx.irBuilder.CreateCondBr(condValue, mContinueBlock, mReturnBlock);
-    }
-    else {
-        cgCtx.irBuilder.CreateCondBr(condValue, mReturnBlock, mContinueBlock);
-    }
-    
-    // Generate the code for the return:
-    cgCtx.irBuilder.SetInsertPoint(mReturnBlock);
-    cgCtx.irBuilder.CreateRetVoid();
-    
-    // All further code is generated in the continue block:
-    cgCtx.irBuilder.SetInsertPoint(mContinueBlock);
-    return true;
-}
-#endif
     
 const DataType & ReturnStmntWithCondVoid::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
@@ -255,60 +205,6 @@ ReturnStmntWithCondAndValue::ReturnStmntWithCondAndValue(const Token & returnTok
 void ReturnStmntWithCondAndValue::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
-
-#warning FIXME - Codegen
-#if 0
-bool ReturnStmntWithCondAndValue::codegen(CodegenCtx & cgCtx) {
-    // Codegen the return type and verify the return type is correct
-    WC_GUARD(codegenAndVerifyReturnDataType(cgCtx), false);
-    
-    // The conditional expression for returning must be void
-    if (!mCondExpr.dataType().isBool()) {
-        compileError("Condition for 'return' statement must evaluate to type 'bool' not '%s'!",
-                     mCondExpr.dataType().name().c_str());
-        
-        return false;
-    }
-    
-    // Grab the parent function
-    llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
-    WC_ASSERT(parentFn);
-    
-    // Create a basic block for the return logic:
-    mReturnBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "ReturnStmntWithCondVoid:return", parentFn);
-    WC_ASSERT(mReturnBlock);
-    
-    // Create a basic block for the continue logic:
-    mContinueBlock = llvm::BasicBlock::Create(cgCtx.llvmCtx, "ReturnStmntWithCondVoid:continue", parentFn);
-    WC_ASSERT(mContinueBlock);
-    
-    // Evaluate the condition:
-    llvm::Value * condValue = mCondExpr.codegenExprEval(cgCtx);
-    WC_GUARD(condValue, nullptr);
-    
-    // Now generate the code for the branch:
-    if (isCondExprInversed()) {
-        cgCtx.irBuilder.CreateCondBr(condValue, mContinueBlock, mReturnBlock);
-    }
-    else {
-        cgCtx.irBuilder.CreateCondBr(condValue, mReturnBlock, mContinueBlock);
-    }
-    
-    // Begin generating code for the return case, switch to that block:
-    cgCtx.irBuilder.SetInsertPoint(mReturnBlock);
-    
-    // Codegen the assign expression for the return
-    llvm::Value * returnExprResult = mReturnExpr.codegenExprEval(cgCtx);
-    WC_GUARD(returnExprResult, false);
-    
-    // Generate the code for the return:
-    cgCtx.irBuilder.CreateRet(returnExprResult);
-    
-    // All further code is generated in the continue block:
-    cgCtx.irBuilder.SetInsertPoint(mContinueBlock);
-    return true;
-}
-#endif
     
 const DataType & ReturnStmntWithCondAndValue::dataType() {
     return mReturnExpr.dataType();
