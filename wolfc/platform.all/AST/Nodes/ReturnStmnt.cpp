@@ -93,49 +93,6 @@ const Token & ReturnStmnt::getStartToken() const {
     return mReturnToken;
 }
 
-#warning FIXME - Codegen
-#if 0
-bool ReturnStmnt::codegenAndVerifyReturnDataType(CodegenCtx & cgCtx) {
-    WC_GUARD(dataType().codegenLLVMTypeIfRequired(cgCtx, *this), false);
-    return verifyReturnTypeCorrect();
-}
-#endif
-
-#warning FIXME - Codegen
-#if 0
-bool ReturnStmnt::verifyReturnTypeCorrect() {
-    // Get the parent function:
-    const Func * parentFunc = firstParentOfType<Func>();
-    
-    if (!parentFunc) {
-        compileError("Unable to determine parent function for return statement!");
-        return false;
-    }
-    
-    // TODO: handle auto promotion of types here
-    // Verify correctness:
-    DataType & parentFnReturnTy = parentFunc->returnDataType();
-    DataType & returnTy = dataType();
-    
-    if (!returnTy.equals(parentFnReturnTy)) {
-        compileError("Invalid return statement! Need to return type '%s' for function '%s' "
-                     "instead of type '%s'!",
-                     parentFnReturnTy.name().c_str(),
-                     parentFunc->name(),
-                     returnTy.name().c_str());
-        
-        return false;
-    }
-    
-    // Both data types should have an LLVM type defined at this point
-    WC_GUARD(parentFnReturnTy.compileCheckLLVMTypeDefined(*this), false);
-    WC_GUARD(returnTy.compileCheckLLVMTypeDefined(*this), false);
-    
-    // All good!
-    return true;
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // ReturnStmntNoCondVoid
 //-----------------------------------------------------------------------------
@@ -150,31 +107,6 @@ void ReturnStmntNoCondVoid::accept(ASTNodeVisitor & visitor) const {
 const Token & ReturnStmntNoCondVoid::getEndToken() const {
     return mReturnToken;
 }
-
-#warning FIXME - Codegen
-#if 0
-bool ReturnStmntNoCondVoid::codegen(CodegenCtx & cgCtx) {
-    // Codegen the return type (if required) and verify the return type is correct
-    WC_GUARD(dataType().codegenLLVMTypeIfRequired(cgCtx, *this), false);
-    WC_GUARD(verifyReturnTypeCorrect(), false);
-    
-    // Generate the code for the return and return true for success
-    cgCtx.irBuilder.CreateRetVoid();
-    
-    // Create a new basic block for the unreachable code past this and set all future code to insert after it:
-    {
-        Func * parentFunc = getParentFunc();
-        WC_ASSERT(parentFunc);
-        std::string unreachableBBLbl = makeLLVMLabelForTok("ReturnStmntNoCondVoid:unreachable", getEndToken());
-        llvm::BasicBlock * unreachableBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, unreachableBBLbl, parentFunc->mLLVMFunc);
-        WC_ASSERT(unreachableBB);
-        cgCtx.irBuilder.SetInsertPoint(unreachableBB);
-        cgCtx.irBuilder.CreateUnreachable();
-    }
-    
-    return true;    // Success!
-}
-#endif
 
 const DataType & ReturnStmntNoCondVoid::dataType() {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);

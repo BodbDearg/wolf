@@ -32,13 +32,6 @@ public:
     
     /* The token for 'return' */
     const Token & mReturnToken;
-    
-protected:
-    /**
-     * Verifies the return type is correct for the containing function.
-     * If incorrect returns false and emits a compile error.
-     */
-    bool verifyReturnTypeCorrect();
 };
 
 /* return */
@@ -89,16 +82,6 @@ public:
     
     /* Expression for the return condition */
     AssignExpr & mCondExpr;
-    
-#warning FIXME - Codegen
-#if 0
-protected:
-    /* The block that does the return statement logic */
-    llvm::BasicBlock * mReturnBlock = nullptr;
-    
-    /* The block that continues and doesn't return */
-    llvm::BasicBlock * mContinueBlock = nullptr;
-#endif
 };
 
 /* return if|unless AssignExpr */

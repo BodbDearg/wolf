@@ -1,5 +1,12 @@
+func blah(v:int) -> void
+    if v > 0
+        return
+    end
+
+    print("Hello")
+end
+
 func main() -> void
-    let v = 2
-    v += 5
-    print(v)
+    blah(0)
+    blah(1)
 end

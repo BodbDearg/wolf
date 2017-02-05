@@ -4,9 +4,6 @@
 #include "AST/Nodes/ArrayLit.hpp"
 #include "AST/Nodes/ArrayLitExprs.hpp"
 #include "AST/Nodes/RandExpr.hpp"
-#include "AST/Nodes/ReadnumExpr.hpp"
-#include "AST/Nodes/ReturnStmnt.hpp"
-#include "AST/Nodes/ScopeStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -47,26 +44,6 @@ void Codegen::visit(const AST::RandExprRand & astNode) {
 }
 
 void Codegen::visit(const AST::RandExprSRand & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::ReturnStmntNoCondVoid & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::ReturnStmntNoCondWithValue & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::ReturnStmntWithCondAndValue & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::ReturnStmntWithCondVoid & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }
