@@ -1,5 +1,5 @@
 func main() -> void
-    let v = 0
-    v--
-    print(v)
+    print(rand())
+    print(rand())
+    print(rand())
 end

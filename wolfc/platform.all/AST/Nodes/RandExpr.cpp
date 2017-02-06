@@ -101,21 +101,6 @@ bool RandExpr::isConstExpr() const {
     return false;
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * RandExpr::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of a 'rand()' or 'srand()' expression result!");
-    return nullptr;
-}
-
-llvm::Constant * RandExpr::codegenExprConstEval(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Cannot evaluate a 'rand()' or 'srand()' expression at compile time!");
-    return nullptr;
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // RandExprRand
 //-----------------------------------------------------------------------------
@@ -132,30 +117,6 @@ void RandExprRand::accept(ASTNodeVisitor & visitor) const {
 const DataType & RandExprRand::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
 }
-
-#warning FIXME - Codegen
-#if 0
-llvm::Value * RandExprRand::codegenExprEval(CodegenCtx & cgCtx) {
-    // Get 'rand' C function
-    llvm::Constant * randFn = cgCtx.module.getLLVMModuleRef().getFunction("rand");
-    
-    if (!randFn) {
-        compileError("Codegen failed! Can't find 'rand' function!");
-        return nullptr;
-    }
-    
-    // Create the call to rand!
-    llvm::Value * randResult = cgCtx.irBuilder.CreateCall(randFn, {}, "RandExprRand:result");
-    WC_ASSERT(randResult);
-    
-    // It needs to be converted to an int64:
-    llvm::Type * int64Type = cgCtx.irBuilder.getInt64Ty();
-    WC_ASSERT(int64Type);
-    llvm::Value * extendedResult = cgCtx.irBuilder.CreateSExt(randResult, int64Type);
-    WC_ASSERT(extendedResult);
-    return extendedResult;
-}
-#endif
 
 //-----------------------------------------------------------------------------
 // RandExprSRand

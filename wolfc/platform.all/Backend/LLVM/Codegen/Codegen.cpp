@@ -3,7 +3,6 @@
 #include "../CodegenCtx.hpp"
 #include "AST/Nodes/ArrayLit.hpp"
 #include "AST/Nodes/ArrayLitExprs.hpp"
-#include "AST/Nodes/RandExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -34,16 +33,6 @@ void Codegen::visit(const AST::ArrayLitExprsMulti & astNode) {
 }
 
 void Codegen::visit(const AST::ArrayLitExprsSingle & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::RandExprRand & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void Codegen::visit(const AST::RandExprSRand & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }
