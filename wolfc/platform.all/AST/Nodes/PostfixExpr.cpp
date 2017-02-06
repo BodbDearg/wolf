@@ -165,43 +165,6 @@ const DataType & PostfixExprIncDecBase::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * PostfixExprIncDecBase::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Cant codegen the address of an increment or decrement statement!");
-    return nullptr;
-}
-
-llvm::Value * PostfixExprIncDecBase::codegenExprEval(CodegenCtx & cgCtx) {
-    // Get the address of the expression
-    llvm::Value * exprAddr = mExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(exprAddr, nullptr);
-
-    // Load it's current value
-    llvm::Value * exprOldValue = cgCtx.irBuilder.CreateLoad(exprAddr, "PostfixExprIncDecBase:Load");
-    WC_ASSERT(exprOldValue);
-
-    // Do the increment:
-    DataType & exprType = mExpr.dataType();
-    llvm::Value * exprNewValue = (exprType.*mCodegenUnaryOpFunc)(cgCtx, *this, *exprOldValue);
-    WC_GUARD(exprNewValue, nullptr);
-
-    // Save out the result
-    llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(exprNewValue, exprAddr);
-    WC_ASSERT(storeInst);
-    return storeInst;
-}
-
-llvm::Constant * PostfixExprIncDecBase::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // Not allowed to use in constant expressions
-    // TODO: can this be relaxed in future for functions that can be evaluated at compile time?
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Increment and decrement operators cannot be used in constant expressions!");
-    return nullptr;
-}
-#endif
-
 //-----------------------------------------------------------------------------
 // PostfixExprInc
 //-----------------------------------------------------------------------------

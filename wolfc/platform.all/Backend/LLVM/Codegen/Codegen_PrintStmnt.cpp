@@ -80,7 +80,6 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
     
     // Can only generate the print call if we have both printf and an expression value
     if (printfFn && exprVal.isValid()) {
-        #warning Use visitor interface instead
         // See which type we are dealing with:
         const DataType & exprDataType = exprVal.mCompiledType.getDataType();
         

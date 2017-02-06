@@ -51,7 +51,6 @@ void CodegenBinaryOp::codegen() {
     }
     
     // Okay, codegen both the left and right expressions.
-    // Do any variable loading that is required also.
     // If we want to store the result on the left, codegen the address of the variable instead of it's value.
     if (mStoreResultOnLeft) {
         mLeftExpr.accept(mCG.mAddrCodegen);
@@ -75,13 +74,13 @@ void CodegenBinaryOp::codegen() {
     else {
         // Not storing the result on the left, expect the result to not require a load
         mLeftVal = leftValBeforeLoad;
-        WC_ASSERT(!mLeftVal.mRequiresLoad);
+        WC_ASSERT(!mLeftVal.mRequiresLoad || !mLeftVal.isValid());
     }
     
     // Note: we expect the right expression to not require a load ever
     mRightExpr.accept(mCG);
     mRightVal = mCG.mCtx.popValue();
-    WC_ASSERT(!mRightVal.mRequiresLoad);
+    WC_ASSERT(!mRightVal.mRequiresLoad || !mRightVal.isValid());
     
     // The left and right types must match:
     const DataType & leftType = mLeftVal.mCompiledType.getDataType();
@@ -106,13 +105,10 @@ void CodegenBinaryOp::codegen() {
     // Code generate the actual operation itself
     leftType.accept(*this);
     
-    // See if we are to store the result on the left, if not then we are done:
+    // See if we are to store the result on the left, if not then we are done.
+    // Otherwise, grab the result of the operation:
     WC_GUARD(mStoreResultOnLeft);
     Value opResultVal = mCG.mCtx.popValue();
-    WC_ASSERT(!opResultVal.mRequiresLoad);
-
-    // If the operator result is not valid then continue no further
-    WC_GUARD(opResultVal.isValid());
 
     // The operator result type must match the left side type
     const DataType & opResultType = opResultVal.mCompiledType.getDataType();
@@ -127,7 +123,11 @@ void CodegenBinaryOp::codegen() {
         return;
     }
     
+    // If the operator result is not valid then continue no further
+    WC_GUARD(opResultVal.isValid());
+    
     // All good, do the actual store:
+    WC_ASSERT(!opResultVal.mRequiresLoad);
     WC_ASSERTED_OP(mCG.mCtx.mIRBuilder.CreateStore(opResultVal.mLLVMVal, leftValBeforeLoad.mLLVMVal));
 }
 

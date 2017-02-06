@@ -10,9 +10,14 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 // CodegenLNotUnaryOp
 //-----------------------------------------------------------------------------
 CodegenLNotUnaryOp::CodegenLNotUnaryOp(Codegen & cg,
-                                       const AST::ASTNode & expr)
+                                       const AST::ASTNode & expr,
+                                       bool storeResultInExpr)
 :
-    CodegenUnaryOp(cg, expr, "not", "logical not")
+    CodegenUnaryOp(cg,
+                   expr,
+                   "not",
+                   "logical not",
+                   storeResultInExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -26,9 +31,14 @@ void CodegenLNotUnaryOp::visit(const BoolDataType & dataType) {
 // CodegenBNotUnaryOp
 //-----------------------------------------------------------------------------
 CodegenBNotUnaryOp::CodegenBNotUnaryOp(Codegen & cg,
-                                       const AST::ASTNode & expr)
+                                       const AST::ASTNode & expr,
+                                       bool storeResultInExpr)
 :
-    CodegenUnaryOp(cg, expr, "~", "bitwise not")
+    CodegenUnaryOp(cg,
+                   expr,
+                   "~",
+                   "bitwise not",
+                   storeResultInExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }

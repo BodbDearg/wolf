@@ -57,25 +57,4 @@ llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
 }
 #endif
 
-#warning FIXME - Codegen
-#if 0
-/* Default unary op implementations */
-#define IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(OpName)\
-    llvm::Value * DataType::codegen ## OpName ## Op(CodegenCtx & cgCtx,\
-                                                    AST::ASTNode & callingNode,\
-                                                    llvm::Value & val)\
-    {\
-        /* The default impl simply issues an error that the operator is not available */\
-        WC_UNUSED_PARAM(cgCtx);\
-        WC_UNUSED_PARAM(val);\
-        issueUnaryOpNotAvailableCompileError(callingNode, kOpSymbol_ ## OpName, kOpName_ ## OpName);\
-        return nullptr;\
-    }
-
-IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Inc)
-IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC(Dec)
-
-#undef IMPL_DEFAULT_CODEGEN_UNARY_OP_FUNC
-#endif
-
 WC_END_NAMESPACE

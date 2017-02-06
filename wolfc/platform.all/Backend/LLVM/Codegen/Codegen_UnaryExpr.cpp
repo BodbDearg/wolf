@@ -16,12 +16,12 @@ void Codegen::visit(const AST::UnaryExprNoOp & astNode) {
 
 void Codegen::visit(const AST::UnaryExprPlus & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenPlusUnaryOp(*this, astNode.mExpr).codegen();
+    CodegenPlusUnaryOp(*this, astNode.mExpr, false).codegen();
 }
 
 void Codegen::visit(const AST::UnaryExprMinus & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenMinusUnaryOp(*this, astNode.mExpr).codegen();
+    CodegenMinusUnaryOp(*this, astNode.mExpr, false).codegen();
 }
 
 void Codegen::visit(const AST::UnaryExprParen & astNode) {

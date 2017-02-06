@@ -15,12 +15,12 @@ void Codegen::visit(const AST::NotExprNoOp & astNode) {
 
 void Codegen::visit(const AST::NotExprLNot & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenLNotUnaryOp(*this, astNode.mExpr).codegen();
+    CodegenLNotUnaryOp(*this, astNode.mExpr, false).codegen();
 }
 
 void Codegen::visit(const AST::NotExprBNot & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenBNotUnaryOp(*this, astNode.mExpr).codegen();
+    CodegenBNotUnaryOp(*this, astNode.mExpr, false).codegen();
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

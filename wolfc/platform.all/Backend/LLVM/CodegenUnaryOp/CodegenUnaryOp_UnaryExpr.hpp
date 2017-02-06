@@ -8,7 +8,8 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 class CodegenPlusUnaryOp : public CodegenUnaryOp {
 public:
     CodegenPlusUnaryOp(Codegen & cg,
-                       const AST::ASTNode & expr);
+                       const AST::ASTNode & expr,
+                       bool storeResultInExpr);
     
     void visit(const Int64DataType & dataType) override;
 };
@@ -16,7 +17,8 @@ public:
 class CodegenMinusUnaryOp : public CodegenUnaryOp {
 public:
     CodegenMinusUnaryOp(Codegen & cg,
-                        const AST::ASTNode & expr);
+                        const AST::ASTNode & expr,
+                        bool storeResultInExpr);
     
     void visit(const Int64DataType & dataType) override;
 };

@@ -115,16 +115,6 @@ public:
     PostfixExpr &   mArrayExpr;
     AssignExpr &    mIndexExpr;
     const Token &   mEndToken;
-
-#warning FIXME - Codegen
-#if 0
-private:
-    /* Gets the array data type for the array expression. Issues a compile error on failure. */
-    ArrayDataType * getArrayDataTypeOrIssueError();
-    
-    /* Peform codegen for getting the address of the array element */
-    llvm::Value * codegenAddrOfArrayElem(CodegenCtx & cgCtx);
-#endif
 };
 
 WC_AST_END_NAMESPACE

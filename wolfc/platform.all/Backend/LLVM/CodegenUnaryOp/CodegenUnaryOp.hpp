@@ -33,7 +33,8 @@ public:
     CodegenUnaryOp(Codegen & cg,
                    const AST::ASTNode & expr,
                    const char * opSymbol,
-                   const char * opName);
+                   const char * opName,
+                   bool storeResultInExpr);
     
     /**
      * Kicks off the codegen for the unary op.
@@ -73,6 +74,7 @@ protected:
     const AST::ASTNode &    mExpr;
     const char *            mOpSymbol;
     const char *            mOpName;
+    bool                    mStoreResultInExpr;
     
     /* This is generated and cached by the codegen() function */
     Value mExprVal;

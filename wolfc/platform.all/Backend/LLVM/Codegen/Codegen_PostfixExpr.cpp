@@ -1,6 +1,7 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
+#include "../CodegenUnaryOp/CodegenUnaryOp_PostfixExpr.hpp"
 #include "Assert.hpp"
 #include "AST/Nodes/CastExpr.hpp"
 #include "AST/Nodes/FuncCall.hpp"
@@ -18,12 +19,12 @@ void Codegen::visit(const AST::PostfixExprNoOp & astNode) {
 
 void Codegen::visit(const AST::PostfixExprInc & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    CodegenIncUnaryOp(*this, astNode.mExpr, true).codegen();
 }
 
 void Codegen::visit(const AST::PostfixExprDec & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    CodegenDecUnaryOp(*this, astNode.mExpr, true).codegen();
 }
 
 void Codegen::visit(const AST::PostfixExprFuncCall & astNode) {

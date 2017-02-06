@@ -13,12 +13,14 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 CodegenUnaryOp::CodegenUnaryOp(Codegen & cg,
                                const AST::ASTNode & expr,
                                const char * opSymbol,
-                               const char * opName)
+                               const char * opName,
+                               bool storeResultInExpr)
 :
     mCG(cg),
     mExpr(expr),
     mOpSymbol(opSymbol),
-    mOpName(opName)
+    mOpName(opName),
+    mStoreResultInExpr(storeResultInExpr)
 {
     // Expected that the node has a parent!
     WC_ASSERT(mExpr.mParent);
@@ -35,15 +37,64 @@ void CodegenUnaryOp::codegen() {
                        mOpName);
     }
     
-    // Okay, codegen the operand expression
-    mExpr.accept(mCG);
-    mExprVal = mCG.mCtx.popValue();
-    
-    // Must have a generated type and value to proceed any further:
-    if (mExprVal.isValid()) {
-        const DataType & dataType = mExprVal.mCompiledType.getDataType();
-        dataType.accept(*this);
+    // Okay, codegen the operand expression.
+    // If we want to store the result, codegen the address of the variable instead of it's value.
+    if (mStoreResultInExpr) {
+        mExpr.accept(mCG.mAddrCodegen);
     }
+    else {
+        mExpr.accept(mCG);
+    }
+    
+    Value exprValBeforeLoad = mCG.mCtx.popValue();
+    
+    if (mStoreResultInExpr) {
+        // Storing the result in the operand, create the load if we can
+        if (exprValBeforeLoad.isValid()) {
+            // Since we are storing on the left, we expect there to be a load required.
+            WC_ASSERT(exprValBeforeLoad.mRequiresLoad);
+            llvm::Value * exprValLoaded = mCG.mCtx.mIRBuilder.CreateLoad(exprValBeforeLoad.mLLVMVal, "UnaryOp:OperandLoaded");
+            WC_ASSERT(exprValLoaded);
+            mExprVal = Value(exprValLoaded, exprValBeforeLoad.mCompiledType, false, exprValBeforeLoad.mDeclaringNode);
+        }
+    }
+    else {
+        // Not storing the result on the left, expect the result to not require a load
+        mExprVal = exprValBeforeLoad;
+        WC_ASSERT(!mExprVal.mRequiresLoad || !mExprVal.isValid());
+    }
+    
+    // Don't do anything the expression value is not valid:
+    WC_GUARD(mExprVal.isValid());
+    
+    // Code generate the actual operation itself
+    const DataType & exprType = mExprVal.mCompiledType.getDataType();
+    exprType.accept(*this);
+    
+    // See if we are to store the result in the expression, if not then we are done.
+    // Otherwise, grab the result of the operation:
+    WC_GUARD(mStoreResultInExpr);
+    Value opResultVal = mCG.mCtx.popValue();
+    
+    // The operator result type must match the type of the variable we are storing to
+    const DataType & opResultType = opResultVal.mCompiledType.getDataType();
+    
+    if (!opResultType.equals(exprType)){
+        mCG.mCtx.error(*mExpr.mParent,
+                       "Result of unary op can't be assigned to the operand due to mismatched types! "
+                       "Require unary op result to be of type '%s'! Result of unary op was type '%s'!",
+                       exprType.name().c_str(),
+                       opResultType.name().c_str());
+        
+        return;
+    }
+    
+    // If the operator result is not valid then continue no further
+    WC_GUARD(opResultVal.isValid());
+
+    // All good, do the actual store:
+    WC_ASSERT(!opResultVal.mRequiresLoad);
+    WC_ASSERTED_OP(mCG.mCtx.mIRBuilder.CreateStore(opResultVal.mLLVMVal, exprValBeforeLoad.mLLVMVal));
 }
 
 void CodegenUnaryOp::visit(const ArrayBadSizeDataType & dataType) {
