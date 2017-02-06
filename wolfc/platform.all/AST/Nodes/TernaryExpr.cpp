@@ -128,56 +128,6 @@ const DataType & TernaryExprWithCond::dataType() const {
 
 #warning FIXME - Codegen
 #if 0
-llvm::Value * TernaryExprWithCond::codegenAddrOf(CodegenCtx & cgCtx) {
-    // FIXME: Address of ternary expr: surely we should be able to do this?
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Can't take the address of ternary expression result!");
-    return nullptr;
-}
-
-llvm::Value * TernaryExprWithCond::codegenExprEval(CodegenCtx & cgCtx) {
-    // Verify data types used by operator:
-    //
-    // FIXME: move this to after code generation, so we catch things like bad variable names better and
-    // get better error info by delegating down the AST tree.
-    WC_GUARD(compileCheckExprDataTypes(), nullptr);
-    
-    // Create a block for the true, false and follow on expressions:
-    llvm::Function * parentFn = cgCtx.irBuilder.GetInsertBlock()->getParent();
-    llvm::BasicBlock * trueBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "TernaryExprWithCond:true", parentFn);
-    llvm::BasicBlock * falseBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "TernaryExprWithCond:false", parentFn);
-    llvm::BasicBlock * endBB = llvm::BasicBlock::Create(cgCtx.llvmCtx, "TernaryExprWithCond:end", parentFn);
-    
-    // Generate the code to evaluate the condition and branch to whatever block based on that:
-    llvm::Value * condValue = mCondExpr.codegenExprEval(cgCtx);
-    WC_GUARD(condValue, nullptr);
-    cgCtx.irBuilder.CreateCondBr(condValue, trueBB, falseBB);
-    
-    // Generate the true expression code:
-    cgCtx.irBuilder.SetInsertPoint(trueBB);
-    llvm::Value * trueValue = mTrueExpr.codegenExprEval(cgCtx);
-    WC_GUARD(trueValue, nullptr);
-    cgCtx.irBuilder.CreateBr(endBB);
-    
-    // Generate the false expression code:
-    cgCtx.irBuilder.SetInsertPoint(falseBB);
-    llvm::Value * falseValue = mFalseExpr.codegenExprEval(cgCtx);
-    WC_GUARD(falseValue, nullptr);
-    cgCtx.irBuilder.CreateBr(endBB);
-    
-    // All code after that goes into the end block:
-    cgCtx.irBuilder.SetInsertPoint(endBB);
-    
-    // Create a PHI node to merge the values:
-    llvm::PHINode * phiNode = cgCtx.irBuilder.CreatePHI(trueValue->getType(), 2, "TernaryExprWithCond:PHI");
-    WC_ASSERT(phiNode);
-    phiNode->addIncoming(trueValue, trueBB);
-    phiNode->addIncoming(falseValue, falseBB);
-    
-    // Return the PHI node as the value:
-    return phiNode;
-}
-
 llvm::Constant * TernaryExprWithCond::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Verify data types used by operator:
     WC_GUARD(compileCheckExprDataTypes(), nullptr);
@@ -192,35 +142,6 @@ llvm::Constant * TernaryExprWithCond::codegenExprConstEval(CodegenCtx & cgCtx) {
     }
     
     return mTrueExpr.codegenExprConstEval(cgCtx);
-}
-#endif
-
-#warning FIXME - Codegen
-#if 0
-bool TernaryExprWithCond::compileCheckExprDataTypes() const {
-    const DataType & condType = mCondExpr.dataType();
-    
-    if (!condType.isBool()) {
-        compileError("Condition expression for ternary operator must be of type 'bool', not '%s'!",
-                     condType.name().c_str());
-        
-        return false;
-    }
-    
-    const DataType & trueType = mTrueExpr.dataType();
-    const DataType & falseType = mFalseExpr.dataType();
-    
-    if (!falseType.equals(trueType)) {
-        compileError("'true' sub-expression must be the same type as the 'false' sub expression in ternary operator! "
-                     "The type for the 'true' sub-expression was '%s'. "
-                     "The type for the 'false' sub-expression was '%s'.",
-                     trueType.name().c_str(),
-                     falseType.name().c_str());
-        
-        return false;
-    }
-    
-    return true;
 }
 #endif
 

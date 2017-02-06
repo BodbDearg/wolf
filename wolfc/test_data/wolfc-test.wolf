@@ -1,11 +1,5 @@
-func blah(v: int) -> string
-    return "GREATER THAN 0" if v > 0
-    return "LESS THAN OR EQUAL TO 0"
-end
-
 func main() -> void
-    print(blah(0))
-    print("\n")
-    print(blah(1))
-    print("\n")
+    let v = readnum()
+    let b = v > 0 ? "That was greater than 0" : "That as less than or equal to zero"
+    print(b)
 end
