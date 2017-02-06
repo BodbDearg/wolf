@@ -3,11 +3,9 @@
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
 #include "AssignExpr.hpp"
-#include "DataType/DataType.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
 #include "LinearAlloc.hpp"
 #include "PostfixExpr.hpp"
-#include "UnaryExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE

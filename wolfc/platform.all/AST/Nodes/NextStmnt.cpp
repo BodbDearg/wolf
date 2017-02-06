@@ -2,7 +2,6 @@
 
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
-#include "Assert.hpp"
 #include "AssignExpr.hpp"
 #include "LinearAlloc.hpp"
 

@@ -3,9 +3,7 @@
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
 #include "ArrayLitExprs.hpp"
-#include "Assert.hpp"
 #include "AssignExpr.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
 #include "LinearAlloc.hpp"
 
 WC_BEGIN_NAMESPACE

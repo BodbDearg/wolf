@@ -5,7 +5,6 @@
 #include "AssignExpr.hpp"
 #include "Identifier.hpp"
 #include "LinearAlloc.hpp"
-#include "Scope.hpp"
 #include "Type.hpp"
 
 WC_BEGIN_NAMESPACE

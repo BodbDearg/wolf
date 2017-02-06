@@ -2,7 +2,6 @@
 
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
-#include "Assert.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
 #include "DataType/Primitives/UnevalDataType.hpp"
 #include "LinearAlloc.hpp"

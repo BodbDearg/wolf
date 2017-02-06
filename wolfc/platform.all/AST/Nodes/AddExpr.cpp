@@ -2,8 +2,6 @@
 
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
-#include "Assert.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
 #include "LinearAlloc.hpp"
 #include "MulExpr.hpp"
 

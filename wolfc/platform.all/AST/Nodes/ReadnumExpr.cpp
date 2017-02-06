@@ -5,7 +5,6 @@
 #include "DataType/DataTypeId.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
 #include "LinearAlloc.hpp"
-#include "Module.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
