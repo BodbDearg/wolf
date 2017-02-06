@@ -126,24 +126,5 @@ const DataType & TernaryExprWithCond::dataType() const {
     return mTrueExpr.dataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Constant * TernaryExprWithCond::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // Verify data types used by operator:
-    WC_GUARD(compileCheckExprDataTypes(), nullptr);
-    
-    // Generate the code for the boolean condition:
-    llvm::Constant * condValue = mCondExpr.codegenExprConstEval(cgCtx);
-    WC_GUARD(condValue, nullptr);
-    
-    // See whether the value is true or false: use that to decide which sub expression to choose
-    if (condValue->isZeroValue()) {
-        return mFalseExpr.codegenExprConstEval(cgCtx);
-    }
-    
-    return mTrueExpr.codegenExprConstEval(cgCtx);
-}
-#endif
-
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

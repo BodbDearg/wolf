@@ -37,6 +37,7 @@ void Codegen::visit(const AST::TernaryExprWithCond & astNode) {
             condValIsBool = false;
         }
     }
+    
     // Get the current function
     llvm::Function * parentFn = mCtx.mIRBuilder.GetInsertBlock()->getParent();
     WC_ASSERT(parentFn);
@@ -87,6 +88,7 @@ void Codegen::visit(const AST::TernaryExprWithCond & astNode) {
     // Proceed no further if any of these checks fail
     WC_GUARD(condValIsBool);
     WC_GUARD(trueFalseValsTypeMatch);
+    WC_GUARD(condVal.isValid());
     WC_GUARD(trueVal.isValid());
     WC_GUARD(falseVal.isValid());
     
