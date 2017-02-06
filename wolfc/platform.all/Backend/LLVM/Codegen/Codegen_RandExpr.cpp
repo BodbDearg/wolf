@@ -2,6 +2,7 @@
 
 #include "../CodegenCtx.hpp"
 #include "Assert.hpp"
+#include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/RandExpr.hpp"
 #include "DataType/DataType.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
@@ -44,7 +45,44 @@ void Codegen::visit(const AST::RandExprRand & astNode) {
 
 void Codegen::visit(const AST::RandExprSRand & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+
+    // Evaluate the seed expression:
+    astNode.mSeedExpr.accept(*this);
+    Value seedExprVal = mCtx.popValue();
+    
+    // TODO: This might need to change for 32-bit code
+    // The seed expr type must be 'int'
+    const DataType & seedDataType = seedExprVal.mCompiledType.getDataType();
+    const DataType & requiredDataType = PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
+    
+    if (!seedDataType.equals(requiredDataType)) {
+        mCtx.error("Data type for seed given to 'srand()' call must be '%s' not '%s'!",
+                   requiredDataType.name().c_str(),
+                   seedDataType.name().c_str());
+        
+        return;
+    }
+    
+    // Don't continue if this is not valid
+    WC_GUARD(seedExprVal.isValid());
+    
+    // Get 'srand' C function
+    llvm::Constant * srandFn = mCtx.mLLVMModule->getFunction("srand");
+    
+    if (!srandFn) {
+        mCtx.error("Codegen failed! Can't find 'srand' function!");
+        return;
+    }
+    
+    // Need to downcast the seed to a 32-bit int
+    llvm::Type * int32Ty = mCtx.mIRBuilder.getInt32Ty();
+    WC_ASSERT(int32Ty);
+    llvm::Value * seedExprVal32 = mCtx.mIRBuilder.CreateTrunc(seedExprVal.mLLVMVal, int32Ty);
+    WC_ASSERT(seedExprVal32);
+    
+    // Create the call to srand!
+    llvm::Value * srandResult = mCtx.mIRBuilder.CreateCall(srandFn, { seedExprVal32 });
+    WC_ASSERT(srandResult);
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

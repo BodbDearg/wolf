@@ -139,43 +139,5 @@ const DataType & RandExprSRand::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * RandExprSRand::codegenExprEval(CodegenCtx & cgCtx) {
-    // Evaluate the seed expression:
-    llvm::Value * seedExprVal = mSeedExpr.codegenExprEval(cgCtx);
-    WC_GUARD(seedExprVal, nullptr);
-    
-    // The seed expr type must be 'int'
-    DataType & seedDataType = mSeedExpr.dataType();
-    
-    if (!seedDataType.equals(PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64))) {
-        compileError("Data type for seed given to 'srand()' call must be 'int' not '%s'!",
-                     seedDataType.name().c_str());
-        
-        return nullptr;
-    }
-    
-    // Get 'srand' C function
-    llvm::Constant * srandFn = cgCtx.module.getLLVMModuleRef().getFunction("srand");
-    
-    if (!srandFn) {
-        compileError("Codegen failed! Can't find 'srand' function!");
-        return nullptr;
-    }
-    
-    // Need to downcast the seed to a 32-bit int
-    llvm::Type * int32Ty = cgCtx.irBuilder.getInt32Ty();
-    WC_ASSERT(int32Ty);
-    llvm::Value * seedExprVal32 = cgCtx.irBuilder.CreateTrunc(seedExprVal, int32Ty);
-    WC_ASSERT(seedExprVal32);
-    
-    // Create the call to srand!
-    llvm::Value * srandResult = cgCtx.irBuilder.CreateCall(srandFn, { seedExprVal32 });
-    WC_ASSERT(srandResult);
-    return srandResult;
-}
-#endif
-
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

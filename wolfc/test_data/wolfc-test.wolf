@@ -1,5 +1,4 @@
 func main() -> void
-    print(rand())
-    print(rand())
+    srand(2)
     print(rand())
 end
