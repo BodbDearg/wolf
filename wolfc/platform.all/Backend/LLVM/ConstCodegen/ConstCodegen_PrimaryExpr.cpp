@@ -1,7 +1,9 @@
 #include "ConstCodegen.hpp"
 
 #include "../CodegenCtx.hpp"
+#include "AST/Nodes/ArrayLit.hpp"
 #include "AST/Nodes/BoolLit.hpp"
+#include "AST/Nodes/Identifier.hpp"
 #include "AST/Nodes/IntLit.hpp"
 #include "AST/Nodes/PrimaryExpr.hpp"
 #include "AST/Nodes/StrLit.hpp"
@@ -26,12 +28,12 @@ void ConstCodegen::visit(const AST::PrimaryExprStrLit & astNode) {
 
 void ConstCodegen::visit(const AST::PrimaryExprArrayLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mLit.accept(*this);
 }
 
 void ConstCodegen::visit(const AST::PrimaryExprIdentifier & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    astNode.mIdent.accept(*this);
 }
 
 void ConstCodegen::visit(const AST::PrimaryExprReadnum & astNode) {

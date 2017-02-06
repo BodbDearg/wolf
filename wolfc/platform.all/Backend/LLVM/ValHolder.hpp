@@ -40,7 +40,8 @@ public:
                       llvm::Value * llvmVal,
                       const CompiledDataType & compiledType,
                       bool requiresLoad,
-                      const AST::ASTNode & declaringNode);
+                      const AST::ASTNode & declaringNode,
+                      bool noDuplicateNameCheck);
     
     /** 
      * Create a constant within this holder.
@@ -51,7 +52,8 @@ public:
                            const std::string & name,
                            llvm::Constant * llvmConst,
                            const CompiledDataType & compiledType,
-                           const AST::ASTNode & declaringNode);
+                           const AST::ASTNode & declaringNode,
+                           bool noDuplicateNameCheck);
     
     /**
      * Get a value within this holder. Returns null if not found within this scope.
@@ -70,16 +72,16 @@ public:
     
 private:
     /**
-     * Compile check the given name for a value declaration is not taken.
+     * Compile check the given name for a value or constant declaration is not taken.
      * Issues a compile error if the name is taken and changes the name to have a unique suffix such as 
      * '#2' or '#3' in the given output name string. If the name is valid then the given output name matches
-     * the input name.
+     * the input name. Returns true if everything is ok.
      */
-    void compileCheckValueNameNotTaken(CodegenCtx & ctx,
-                                       const std::string & name,
-                                       std::string & outputUniqueName,
-                                       const CompiledDataType & compiledType,
-                                       const AST::ASTNode & declaringNode) const;
+    bool compileCheckNameNotTaken(CodegenCtx & ctx,
+                                  const std::string & name,
+                                  std::string & outputUniqueName,
+                                  const CompiledDataType & compiledType,
+                                  const AST::ASTNode & declaringNode) const;
     
     /* The values in the container */
     std::map<std::string, Value, std::less<>> mValues;

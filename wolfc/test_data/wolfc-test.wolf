@@ -1,4 +1,7 @@
-func main() -> void
-    srand(2)
-    print(rand())
+let v1 = 2
+let v2 = v1
+
+func main() -> int
+    print(v2)
+    return 0
 end

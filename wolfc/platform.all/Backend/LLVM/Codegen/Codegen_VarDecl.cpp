@@ -120,7 +120,8 @@ static void codegenLocalVarDeclWithType(Codegen & cg,
                              varAlloca,
                              varCompiledType,
                              true,
-                             varDecl);
+                             varDecl,
+                             false);
     
     // Store the initializer expression to the variable if we generated it ok
     if (varInitVal.mLLVMVal) {
@@ -165,7 +166,8 @@ static void codegenGlobalVarDeclWithType(Codegen & cg,
         nullptr,
         varCompiledType,
         true,
-        varDecl
+        varDecl,
+        false
     );
     
     // Create the llvm value.
@@ -180,6 +182,17 @@ static void codegenGlobalVarDeclWithType(Codegen & cg,
     );
     
     WC_ASSERT(value.mLLVMVal);
+    
+    // Register it as a constant that can be used also.
+    // Note: skip duplicate name checks in this case, because we already done for the variable declaration.
+    cg.mCtx.mModuleValHolder.createConst(
+        cg.mCtx,
+        varDecl.mIdent.name(),
+        varInitVal.mLLVMConst,
+        varCompiledType,
+        varDecl,
+        true
+    );
 }
 
 /* Code generate the variable declaration with the given compiled data type */

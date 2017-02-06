@@ -54,65 +54,6 @@ const DataType & Identifier::dataType() const {
     return PrimitiveDataTypes::getUnevalDataType();
 }
 
-#warning FIXME - Codegen
-#if 0
-llvm::Value * Identifier::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    
-    // FIXME: Does this work for function arguments?
-    // Grab the variable value
-    const DataValue * dataValue = lookupDataValue();
-    
-    if (!dataValue) {
-        compileError("Can't codegen address of variable '%s'! No such variable in current scope!", name());
-        return nullptr;
-    }
-    
-    // Get the LLVM value and see if it is a pointer.
-    // If we already have a pointer then we don't need to do anything else to get the address.
-    llvm::Value * llvmValue = dataValue->value;
-    WC_ASSERT(llvmValue);
-
-    if (llvmValue->getType()->isPointerTy()) {
-        return llvmValue;
-    }
-    
-    // Issue an error
-    compileError("Can't codegen address of variable '%s'! "
-                 "Dealing with an LLVM type that can't be converted to an address!", 
-                 name());
-
-    return nullptr;
-}
-
-llvm::Constant * Identifier::codegenExprConstEval(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    
-    // Grab the variable value
-    const DataValue * dataValue = lookupDataValue();
-    
-    if (!dataValue) {
-        compileError("No constant named '%s' in the current scope! Unable to take it's value!", name());
-        return nullptr;
-    }
-    
-    // See if it evaluates to a global variable:
-    if (llvm::GlobalVariable * globalVar = llvm::dyn_cast<llvm::GlobalVariable>(dataValue->value)) {
-        // If must have a constant initializer for us to use it's value:
-        if (llvm::Constant * globalVarInitializer = globalVar->getInitializer()) {
-            return globalVarInitializer;
-        }
-    }
-    
-    // TODO: relax restriction and allow referencing constant variables which have been defined
-    compileError("The variable named '%s' cannot be referenced in a constant expression because "
-                 "it cannot be evaluated at compile time!",
-                 name());
-    
-    return nullptr;
-}
-#endif
-
 const char * Identifier::name() const {
     return mToken.data.strVal.ptr;
 }

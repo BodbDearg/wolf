@@ -97,11 +97,6 @@ void ConstCodegen::visit(const AST::FuncCall & astNode) {
     mCtx.error(astNode, "Function calls cannot be evaluated at compile time! (yet)");
 }
 
-void ConstCodegen::visit(const AST::Identifier & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void ConstCodegen::visit(const AST::IfStmntElse & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "IfStmntElse");

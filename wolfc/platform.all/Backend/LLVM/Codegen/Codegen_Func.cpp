@@ -102,7 +102,8 @@ void Codegen::visit(const AST::Func & astNode) {
                                                             astNode.name(),
                                                             nullptr,
                                                             fnCompiledTy,
-                                                            astNode);
+                                                            astNode,
+                                                            false);
     
     // Create the function object itself:
     // TODO: support different linkage types.
@@ -115,10 +116,15 @@ void Codegen::visit(const AST::Func & astNode) {
     constant.mLLVMConst = llvmFn;
     WC_ASSERT(constant.mLLVMConst);
     
-    // Make sure the non constant registration of this also has the function value too
-    Value * value = mCtx.mModuleValHolder.getVal(constant.mName);
-    WC_ASSERT(value);
-    value->mLLVMVal = constant.mLLVMConst;
+    // Also register the function as a variable in the global scope.
+    // Note: skip duplicate name checks because they are already done above:
+    mCtx.mModuleValHolder.createVal(mCtx,
+                                    constant.mName,
+                                    llvmFn,
+                                    fnCompiledTy,
+                                    false,
+                                    astNode,
+                                    true);
     
     // Get the val holder for the function scope, will register the function argument variables in this
     ValHolder & funcValHolder = mCtx.getScopeValHolder(astNode.mScope);
@@ -146,7 +152,8 @@ void Codegen::visit(const AST::Func & astNode) {
                                         llvmArgVal,
                                         argCompiledType,
                                         false,
-                                        *funcArg);
+                                        *funcArg,
+                                        false);
             }
             else {
                 mCtx.error(astNode,

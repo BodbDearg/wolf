@@ -13,7 +13,8 @@ Value & ValHolder::createVal(CodegenCtx & ctx,
                              llvm::Value * llvmVal,
                              const CompiledDataType & compiledType,
                              bool requiresLoad,
-                             const AST::ASTNode & declaringNode)
+                             const AST::ASTNode & declaringNode,
+                             bool noDuplicateNameCheck)
 {
     // Start filling in some parts of the value
     Value value;
@@ -22,13 +23,18 @@ Value & ValHolder::createVal(CodegenCtx & ctx,
     value.mRequiresLoad = requiresLoad;
     value.mDeclaringNode = &declaringNode;
     
-    // Make sure the name is not taken, issue a compile error if so.
+    // Unless otherwise specified, make sure the name is not taken and issue a compile error if so.
     // This will also set the unique name of the value.
-    compileCheckValueNameNotTaken(ctx,
-                                  name,
-                                  value.mName,
-                                  compiledType,
-                                  declaringNode);
+    if (!noDuplicateNameCheck) {
+        compileCheckNameNotTaken(ctx,
+                                 name,
+                                 value.mName,
+                                 compiledType,
+                                 declaringNode);
+    }
+    else {
+        value.mName = name;
+    }
     
     // Store the value with the unique name:
     return mValues[value.mName] = std::move(value);
@@ -38,37 +44,29 @@ Constant & ValHolder::createConst(CodegenCtx & ctx,
                                   const std::string & name,
                                   llvm::Constant * llvmConst,
                                   const CompiledDataType & compiledType,
-                                  const AST::ASTNode & declaringNode)
+                                  const AST::ASTNode & declaringNode,
+                                  bool noDuplicateNameCheck)
 {
-    // Start filling in some parts of the value.
-    // Note that constants are a form of value too, so we register constants as values as well.
-    Value value;
-    value.mLLVMVal = llvmConst;
-    value.mCompiledType = compiledType;
-    value.mRequiresLoad = false;                // Constants never require a load
-    value.mDeclaringNode = &declaringNode;
-    
-    // Make sure the name is not taken, issue a compile error if so.
-    // This will also set the unique name of the value.
-    // We can also use this unique name for the constant and guarantee it's uniqueness, since values
-    // are registered as constants too.
-    compileCheckValueNameNotTaken(ctx,
-                                  name,
-                                  value.mName,
-                                  compiledType,
-                                  declaringNode);
-    
-    // Make the constant:
+    // Start filling in some parts of the constant
     Constant constant;
-    constant.mName = value.mName;
     constant.mLLVMConst = llvmConst;
     constant.mCompiledType = compiledType;
     constant.mDeclaringNode = &declaringNode;
     
-    // Save the value:
-    mValues[value.mName] = std::move(value);
+    // Unless otherwise specified, make sure the name is not taken and issue a compile error if so.
+    // This will also set the unique name of the value.
+    if (!noDuplicateNameCheck) {
+        compileCheckNameNotTaken(ctx,
+                                 name,
+                                 constant.mName,
+                                 compiledType,
+                                 declaringNode);
+    }
+    else {
+        constant.mName = name;
+    }
     
-    // The returned value is still the constant however
+    // Store the constant with the unique name:
     return mConstants[constant.mName] = std::move(constant);
 }
 
@@ -120,34 +118,64 @@ Constant * ValHolder::getConst(const std::string & name) {
     return &iter->second;
 }
 
-void ValHolder::compileCheckValueNameNotTaken(CodegenCtx & ctx,
-                                              const std::string & name,
-                                              std::string & outputUniqueName,
-                                              const CompiledDataType & compiledType,
-                                              const AST::ASTNode & declaringNode) const
+bool ValHolder::compileCheckNameNotTaken(CodegenCtx & ctx,
+                                         const std::string & name,
+                                         std::string & outputUniqueName,
+                                         const CompiledDataType & compiledType,
+                                         const AST::ASTNode & declaringNode) const
 {
-    // Just check the ordinary values map, constants are registered as values too
-    auto iter = mValues.find(name);
+    // Check to see if it exists in the set of values
+    bool duplicateNameError = false;
     
-    if (iter == mValues.end()) {
-        // Name is unique, save the output name and bail out, our work is done
-        outputUniqueName = name;
-        return;
+    {
+        auto iter = mValues.find(name);
+        
+        if (iter != mValues.end()) {
+            // Okay we have a duplicate name error, log it if not in silent mode:
+            const Value & otherVal = iter->second;
+            const Token & otherValStartTok = otherVal.mDeclaringNode->getStartToken();
+            
+            ctx.error(declaringNode,
+                      "Duplicate declaration named '%s'! Declaration of type '%s' has already been declared "
+                      "at line %zu, col %zu as a declaration of type '%s'!",
+                      name.c_str(),
+                      compiledType.getDataType().name().c_str(),
+                      otherValStartTok.startLine + 1,
+                      otherValStartTok.startCol + 1,
+                      otherVal.mCompiledType.getDataType().name().c_str());
+            
+            // We found an error
+            duplicateNameError = true;
+        }
     }
     
-    // Okay we have a duplicate name error, log it:
-    {
-        const Value & otherVal = iter->second;
-        const Token & otherValStartTok = otherVal.mDeclaringNode->getStartToken();
+    // Check to see if it exists in the set of constants
+    if (!duplicateNameError) {
+        auto iter = mConstants.find(name);
         
-        ctx.error(declaringNode,
-                  "Duplicate declaration named '%s'! Declaration of type '%s' has already been declared "
-                  "at line %zu, col %zu as a declaration of type '%s'!",
-                  name.c_str(),
-                  compiledType.getDataType().name().c_str(),
-                  otherValStartTok.startLine + 1,
-                  otherValStartTok.startCol + 1,
-                  otherVal.mCompiledType.getDataType().name().c_str());
+        if (iter != mConstants.end()) {
+            // Okay we have a duplicate name error, log it if not in silent mode:
+            const Constant & otherConst = iter->second;
+            const Token & otherConstStartTok = otherConst.mDeclaringNode->getStartToken();
+            
+            ctx.error(declaringNode,
+                      "Duplicate declaration named '%s'! Declaration of type '%s' has already been declared "
+                      "at line %zu, col %zu as a declaration of type '%s'!",
+                      name.c_str(),
+                      compiledType.getDataType().name().c_str(),
+                      otherConstStartTok.startLine + 1,
+                      otherConstStartTok.startCol + 1,
+                      otherConst.mCompiledType.getDataType().name().c_str());
+            
+            // We found an error
+            duplicateNameError = true;
+        }
+    }
+    
+    // If we are good then save the output name and bail:
+    if (!duplicateNameError) {
+        outputUniqueName = name;
+        return true;
     }
     
     // Okay, search for a unique name.
@@ -164,7 +192,7 @@ void ValHolder::compileCheckValueNameNotTaken(CodegenCtx & ctx,
         uniqueName += std::to_string(duplicateNum);
         
         // If we found a unique name, stop the loop...
-        if (!getVal(uniqueName.c_str())) {
+        if (!getVal(uniqueName.c_str()) && !getConst(uniqueName.c_str())) {
             outputUniqueName = uniqueName;
             break;
         }
@@ -175,6 +203,9 @@ void ValHolder::compileCheckValueNameNotTaken(CodegenCtx & ctx,
         // Need to reset this:
         uniqueName.resize(name.size());
     }
+    
+    // An error happened
+    return false;
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE
