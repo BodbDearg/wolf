@@ -22,6 +22,7 @@ const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
     switch (type) {
         // Non user facing types:
         case DataTypeId::kInvalid: return gInvalidDataType;
+        case DataTypeId::kUneval: return gUnevalDataType;
             
         // The basic data types
         case DataTypeId::kVoid: return gVoidDataType;
@@ -29,10 +30,12 @@ const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
         case DataTypeId::kBool: return gBoolDataType;
         case DataTypeId::kStr: return gStrDataType;
             
-        // All these types are created or customized by the user, hence non-primitive:
+        // All these types are customized types, hence non-primitive:
         case DataTypeId::kArray:
         case DataTypeId::kArrayUnevalSize:
         case DataTypeId::kArrayBadSize:
+        case DataTypeId::kFunc:
+        case DataTypeId::kFuncUneval:
             break;
     }
     
