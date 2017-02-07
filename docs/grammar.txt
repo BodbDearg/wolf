@@ -8,10 +8,6 @@ DeclDef:
 Func:
 	func Identifier ( [0..N: FuncArg ,][FuncArg] ) [-> Type] Scope end
 
-FuncArgList:
-	FuncArg
-	FuncArg , FuncArgList
-
 FuncArg:
 	Identifier : Type
 
