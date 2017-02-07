@@ -97,7 +97,6 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
                 break;
                 
             case DataTypeId::kInvalid:
-            case DataTypeId::kUneval:
             case DataTypeId::kVoid:
             case DataTypeId::kArray:
             case DataTypeId::kArrayUnevalSize:

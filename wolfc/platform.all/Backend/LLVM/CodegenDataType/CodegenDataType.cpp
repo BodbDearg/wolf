@@ -246,12 +246,6 @@ void CodegenDataType::visit(const InvalidDataType & dataType) {
     mCtx.error("Can't codegen an invalid data type!");
 }
 
-void CodegenDataType::visit(const UnevalDataType & dataType) {
-    // We can't codegen an unevaluated data type
-    WC_UNUSED_PARAM(dataType);
-    mCtx.error("Can't codegen an unevaluated data type!");
-}
-
 void CodegenDataType::visit(const VoidDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     llvm::Type * llvmType = llvm::Type::getVoidTy(mCtx.mLLVMCtx);

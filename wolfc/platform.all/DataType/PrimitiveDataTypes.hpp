@@ -11,7 +11,6 @@ WC_BEGIN_NAMESPACE
 class BoolDataType;
 class DataType;
 class InvalidDataType;
-class UnevalDataType;
 class VoidDataType;
 enum class DataTypeId : uint8_t;
 enum class TokenType : uint8_t;
@@ -38,9 +37,6 @@ namespace PrimitiveDataTypes {
     
     /* Get the invalid data type */
     const InvalidDataType & getInvalidDataType();
-    
-    /* Get the unevaluated data type */
-    const UnevalDataType & getUnevalDataType();
 
     /* Get the void data type */
     const VoidDataType & getVoidDataType();

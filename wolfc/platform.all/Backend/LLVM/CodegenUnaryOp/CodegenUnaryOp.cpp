@@ -142,11 +142,6 @@ void CodegenUnaryOp::visit(const StrDataType & dataType) {
     issueUnaryOpNotSupportedError();
 }
 
-void CodegenUnaryOp::visit(const UnevalDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueUnaryOpNotSupportedError();
-}
-
 void CodegenUnaryOp::visit(const VoidDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();

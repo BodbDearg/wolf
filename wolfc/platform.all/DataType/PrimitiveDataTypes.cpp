@@ -5,14 +5,12 @@
 #include "Primitives/Int64DataType.hpp"
 #include "Primitives/InvalidDataType.hpp"
 #include "Primitives/StrDataType.hpp"
-#include "Primitives/UnevalDataType.hpp"
 #include "Primitives/VoidDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 
 /* Instances of the types themselves! */
 static InvalidDataType  gInvalidDataType;
-static UnevalDataType   gUnevalDataType;
 static VoidDataType     gVoidDataType;
 static Int64DataType    gInt64DataType;
 static BoolDataType     gBoolDataType;
@@ -22,7 +20,6 @@ const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
     switch (type) {
         // Non user facing types:
         case DataTypeId::kInvalid: return gInvalidDataType;
-        case DataTypeId::kUneval: return gUnevalDataType;
             
         // The basic data types
         case DataTypeId::kVoid: return gVoidDataType;
@@ -61,10 +58,6 @@ const InvalidDataType & PrimitiveDataTypes::getInvalidDataType() {
     return gInvalidDataType;
 }
 
-const UnevalDataType & PrimitiveDataTypes::getUnevalDataType() {
-    return gUnevalDataType;
-}
-
 const VoidDataType & PrimitiveDataTypes::getVoidDataType() {
     return gVoidDataType;
 }
@@ -97,7 +90,7 @@ const DataType & PrimitiveDataTypes::getDefaultFloatType() {
 
 DataTypeId PrimitiveDataTypes::getDefaultFloatTypeId() {
     // FIXME: implement for float
-    return DataTypeId::kUneval;
+    return DataTypeId::kInvalid;
 }
 
 WC_END_NAMESPACE
