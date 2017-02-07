@@ -2,8 +2,6 @@
 
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
-#include "DataType/Primitives/VoidDataType.hpp"
 #include "FuncArg.hpp"
 #include "Identifier.hpp"
 #include "LinearAlloc.hpp"
@@ -113,41 +111,19 @@ Func * Func::parse(ParseCtx & parseCtx) {
                            *endToken);
 }
 
-/* Helper used by the constructor */
-static const DataType & getReturnDataType(Type * returnType) {
-    if (!returnType) {
-        return PrimitiveDataTypes::getVoidDataType();
-    }
-    
-    return returnType->getDataType();
-}
-
-/* Helper used by the constructor */
-static std::vector<const DataType*> getArgDataTypes(const std::vector<FuncArg*> & args) {
-    std::vector<const DataType*> argDataTypes;
-    argDataTypes.reserve(args.size());
-    
-    for (FuncArg * arg : args) {
-        argDataTypes.push_back(&arg->getDataType());
-    }
-    
-    return argDataTypes;
-}
-
 Func::Func(const Token & startToken,
            Identifier & identifier,
            std::vector<FuncArg*> && funcArgs,
-           Type * returnType,
+           Type * explicitReturnType,
            Scope & scope,
            const Token & endToken)
 :
     mStartToken(startToken),
     mIdentifier(identifier),
     mFuncArgs(funcArgs),
-    mReturnType(returnType),
+    mExplicitReturnType(explicitReturnType),
     mScope(scope),
-    mEndToken(endToken),
-    mDataType(*this, getReturnDataType(returnType), getArgDataTypes(mFuncArgs))
+    mEndToken(endToken)
 {
     mIdentifier.mParent = this;
     
@@ -155,8 +131,8 @@ Func::Func(const Token & startToken,
         funcArg->mParent = this;
     }
     
-    if (mReturnType) {
-        mReturnType->mParent = this;
+    if (mExplicitReturnType) {
+        mExplicitReturnType->mParent = this;
     }
     
     mScope.mParent = this;

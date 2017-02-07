@@ -4,8 +4,6 @@
 #include "../ParseCtx.hpp"
 #include "AssignExpr.hpp"
 #include "CastExpr.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
-#include "DataType/Primitives/ArrayDataType.hpp"
 #include "FuncCall.hpp"
 #include "LinearAlloc.hpp"
 

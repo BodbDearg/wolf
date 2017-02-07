@@ -4,9 +4,6 @@
 #include "IStmnt.hpp"
 
 WC_BEGIN_NAMESPACE
-
-class DataType;
-
 WC_AST_BEGIN_NAMESPACE
 
 class AssignExpr;

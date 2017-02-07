@@ -32,7 +32,6 @@ const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
         case DataTypeId::kArrayUnevalSize:
         case DataTypeId::kArrayBadSize:
         case DataTypeId::kFunc:
-        case DataTypeId::kFuncUneval:
             break;
     }
     

@@ -14,7 +14,7 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 class CodegenCtx;
 
 /* Generates code for the LLVM backend */
-class Codegen : public AST::ASTNodeVisitor {
+class Codegen final : public AST::ASTNodeVisitor {
 public:
     Codegen(CodegenCtx & ctx, const char * moduleName);
     

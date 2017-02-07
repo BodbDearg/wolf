@@ -19,7 +19,7 @@ class ConstCodegen;
  * Code generation which generates the address of supported nodes. Address code generation is 
  * required to lookup variables for load/store and also for array indexing etc.
  */
-class AddrCodegen : public AST::ASTNodeVisitor {
+class AddrCodegen final : public AST::ASTNodeVisitor {
 public:
     AddrCodegen(CodegenCtx & ctx,
                 Codegen & codegen,

@@ -2,8 +2,6 @@
 
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
-#include "DataType/DataTypeId.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
 #include "LinearAlloc.hpp"
 
 WC_BEGIN_NAMESPACE

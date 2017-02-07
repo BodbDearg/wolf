@@ -4,9 +4,6 @@
 #include "IExpr.hpp"
 
 WC_BEGIN_NAMESPACE
-
-class ArrayDataType;
-
 WC_AST_BEGIN_NAMESPACE
 
 class AssignExpr;

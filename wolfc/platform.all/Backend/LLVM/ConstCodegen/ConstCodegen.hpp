@@ -14,7 +14,7 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 class CodegenCtx;
 
 /* Similar to the 'Codegen' class but for compile time evaluation. */
-class ConstCodegen : public AST::ASTNodeVisitor {
+class ConstCodegen final : public AST::ASTNodeVisitor {
 public:
     ConstCodegen(CodegenCtx & ctx);
     

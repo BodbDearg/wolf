@@ -5,12 +5,15 @@
 #include "../ConstCodegen/ConstCodegen.hpp"
 #include "Assert.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
+#include "AST/Nodes/Func.hpp"
+#include "AST/Nodes/FuncArg.hpp"
+#include "AST/Nodes/Type.hpp"
+#include "DataType/PrimitiveDataTypes.hpp"
 #include "DataType/Primitives/ArrayBadSizeDataType.hpp"
 #include "DataType/Primitives/ArrayDataType.hpp"
 #include "DataType/Primitives/ArrayUnevalSizeDataType.hpp"
 #include "DataType/Primitives/BoolDataType.hpp"
 #include "DataType/Primitives/FuncDataType.hpp"
-#include "DataType/Primitives/FuncUnevalDataType.hpp"
 #include "DataType/Primitives/Int64DataType.hpp"
 #include "DataType/Primitives/StrDataType.hpp"
 #include "DataType/Primitives/VoidDataType.hpp"
@@ -23,6 +26,60 @@ CodegenDataType::CodegenDataType(CodegenCtx & ctx, ConstCodegen & constCodegen) 
     mConstCodegen(constCodegen)
 {
     WC_EMPTY_FUNC_BODY();
+}
+
+void CodegenDataType::visit(const AST::Func & func) {
+    // If we already figured this stuff out, then just return the answer:
+    if (const DataType * evaluatedDataType = mCtx.getNodeEvaluatedDataType(func)) {
+        evaluatedDataType->accept(*this);
+        return;
+    }
+    
+    // Generate the compiled data type for the function return type.
+    // If no explicit data type for the function return is given, assume 'void':
+    if (const AST::Type * explicitReturnType = func.getExplicitReturnType()) {
+        explicitReturnType->accept(mConstCodegen);
+    }
+    else {
+        // No explicit return type for function, void assumed:
+        PrimitiveDataTypes::getVoidDataType().accept(*this);
+    }
+    
+    CompiledDataType returnCDT = mCtx.popCompiledDataType();
+    
+    // Alright, figure out the compiled data types for all the params:
+    const auto & funcArgs = func.getArgs();
+    std::vector<CompiledDataType> funcArgCDTs;
+    funcArgCDTs.reserve(funcArgs.size());
+    
+    for (const AST::FuncArg * funcArg : funcArgs) {
+        visit(*funcArg);
+        CompiledDataType funcArgCDT = mCtx.popCompiledDataType();
+        funcArgCDTs.push_back(funcArgCDT);
+    }
+    
+    // Make a list of data type pointers for the 'FuncDataType' constructor
+    std::vector<const DataType*> funcArgDTs;
+    funcArgDTs.reserve(funcArgCDTs.size());
+    
+    for (const CompiledDataType & argCDT : funcArgCDTs) {
+        funcArgDTs.push_back(&argCDT.getDataType());
+    }
+    
+    // Now, given that we have all the info we need make the the data type and save:
+    const FuncDataType * funcDataType = new FuncDataType(returnCDT.getDataType(), std::move(funcArgDTs));
+    
+    {
+        std::unique_ptr<const DataType> ownershipPtr(funcDataType);
+        mCtx.setNodeEvaluatedDataType(func, ownershipPtr);
+    }
+    
+    // Codegen the func data type
+    funcDataType->accept(*this);
+}
+
+void CodegenDataType::visit(const AST::FuncArg & funcArg) {
+    funcArg.getDataType().accept(*this);
 }
 
 void CodegenDataType::visit(const ArrayBadSizeDataType & dataType) {
@@ -184,46 +241,6 @@ void CodegenDataType::visit(const FuncDataType & dataType) {
     
     // Now save the result:
     mCtx.pushCompiledDataType(CompiledDataType(dataType, funcLLVMType));
-}
-
-void CodegenDataType::visit(const FuncUnevalDataType & dataType) {
-    // If the result of this has been cached then use that instead
-    if (const DataType * evaluatedDataType = mCtx.getNodeEvaluatedDataType(dataType.mDeclaringNode)) {
-        evaluatedDataType->accept(*this);
-        return;
-    }
-    
-    // Codegen the return type
-    dataType.mReturnType.accept(*this);
-    CompiledDataType returnCompiledType = mCtx.popCompiledDataType();
-    
-    // Codegen all the arg types
-    std::vector<CompiledDataType> argCompiledTypes;
-    argCompiledTypes.reserve(dataType.mArgTypes.size());
-    
-    for (const DataType * argDataType : dataType.mArgTypes) {
-        argDataType->accept(*this);
-        argCompiledTypes.push_back(mCtx.popCompiledDataType());
-    }
-    
-    // Make a list of arg data types
-    std::vector<const DataType*> argDataTypes;
-    argDataTypes.reserve(argCompiledTypes.size());
-    
-    for (CompiledDataType & compiledType : argCompiledTypes) {
-        argDataTypes.push_back(&compiledType.getDataType());
-    }
-    
-    // Save the evaluated data type here:
-    std::unique_ptr<const DataType> evaluatedDataType;
-    evaluatedDataType.reset(new FuncDataType(returnCompiledType.getDataType(),
-                                             std::move(argDataTypes)));
-    
-    // Codegen the evaluated type:
-    evaluatedDataType->accept(*this);
-    
-    // Save the evaluated type so we don't have to go through this again:
-    mCtx.setNodeEvaluatedDataType(dataType.mDeclaringNode, evaluatedDataType);
 }
 
 void CodegenDataType::visit(const Int64DataType & dataType) {

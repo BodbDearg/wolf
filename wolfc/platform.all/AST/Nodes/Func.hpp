@@ -1,18 +1,12 @@
 #pragma once
 
 #include "ASTNode.hpp"
-#include "CStrComparator.hpp"
-#include "DataType/Primitives/FuncUnevalDataType.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <vector>
-    #include <map>
 WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
-
-class DataType;
-
 WC_AST_BEGIN_NAMESPACE
 
 class FuncArg;
@@ -32,7 +26,7 @@ public:
     Func(const Token & startToken,
          Identifier & identifier,
          std::vector<FuncArg*> && funcArgs,
-         Type * returnType,
+         Type * explicitReturnType,
          Scope & scope,
          const Token & endToken);
     
@@ -42,31 +36,43 @@ public:
     
     const char * name() const;
     
+    inline const Identifier & getIdentifier() const {
+        return mIdentifier;
+    }
+    
     inline const std::vector<FuncArg*> & getArgs() const {
         return mFuncArgs;
     }
     
-    inline const FuncUnevalDataType & getDataType() const {
-        return mDataType;
+    inline const Type * getExplicitReturnType() const {
+        return mExplicitReturnType;
     }
     
-    const Token &       mStartToken;
-    Identifier &        mIdentifier;
-    Scope &             mScope;
-    const Token &       mEndToken;
+    inline const Scope & getScope() const {
+        return mScope;
+    }
     
 private:
+    /* Start token for the function */
+    const Token & mStartToken;
+    
+    /* The function name identifier */
+    Identifier & mIdentifier;
+    
     /* The list of function arguments parsed */
     std::vector<FuncArg*> mFuncArgs;
     
     /**
-     * The explicitly specified return type for this function. 
+     * The explicitly specified return type for this function.
      * If this is null then void type is assumed.
      */
-    Type * mReturnType;
+    Type * mExplicitReturnType;
     
-    /* The datatype of the function */
-    FuncUnevalDataType mDataType;
+    /* The inner body scope of the function */
+    Scope & mScope;
+    
+    /* The end token for the function */
+    const Token & mEndToken;
 };
 
 WC_AST_END_NAMESPACE

@@ -30,9 +30,7 @@ enum class DataTypeId : uint8_t {
     /* Array type whose size expression has been evaluated but is invalid */
     kArrayBadSize,
     /* Function type */
-    kFunc,
-    /* Function type whose return and/or argument types have not yet been fully evaluated */
-    kFuncUneval,
+    kFunc
 };
 
 WC_END_NAMESPACE

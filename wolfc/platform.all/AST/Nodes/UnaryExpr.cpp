@@ -3,7 +3,6 @@
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
 #include "AssignExpr.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
 #include "LinearAlloc.hpp"
 #include "PostfixExpr.hpp"
 

@@ -2,8 +2,6 @@
 
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
-#include "DataType/DataType.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
 #include "LAndExpr.hpp"
 #include "LinearAlloc.hpp"
 

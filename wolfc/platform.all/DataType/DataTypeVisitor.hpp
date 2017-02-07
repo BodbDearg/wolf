@@ -9,7 +9,6 @@ class ArrayDataType;
 class ArrayUnevalSizeDataType;
 class BoolDataType;
 class FuncDataType;
-class FuncUnevalDataType;
 class Int64DataType;
 class InvalidDataType;
 class StrDataType;
@@ -25,7 +24,6 @@ public:
     virtual void visit(const ArrayUnevalSizeDataType & dataType) = 0;
     virtual void visit(const BoolDataType & dataType) = 0;
     virtual void visit(const FuncDataType & dataType) = 0;
-    virtual void visit(const FuncUnevalDataType & dataType) = 0;
     virtual void visit(const Int64DataType & dataType) = 0;
     virtual void visit(const InvalidDataType & dataType) = 0;
     virtual void visit(const StrDataType & dataType) = 0;

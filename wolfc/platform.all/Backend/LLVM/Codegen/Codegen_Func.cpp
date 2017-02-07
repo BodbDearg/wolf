@@ -6,6 +6,7 @@
 #include "AST/Nodes/FuncArg.hpp"
 #include "AST/Nodes/Scope.hpp"
 #include "DataType/DataType.hpp"
+#include "DataType/Primitives/FuncDataType.hpp"
 #include "StringUtils.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -45,7 +46,7 @@ static void doDeferredFuncCodegen(Codegen & cg, const AST::Func & astNode, Const
     
     // Create the function entry block and set it as the insert point for ir builder
     std::string entryBBLabel = StringUtils::appendLineInfo("func_entry_bb",
-                                                           astNode.mScope.getStartToken());
+                                                           astNode.getScope().getStartToken());
     
     llvm::BasicBlock * fnEntryBlock = llvm::BasicBlock::Create(cg.mCtx.mLLVMCtx,
                                                                entryBBLabel,
@@ -54,15 +55,22 @@ static void doDeferredFuncCodegen(Codegen & cg, const AST::Func & astNode, Const
     WC_ASSERT(fnEntryBlock);
     cg.mCtx.mIRBuilder.SetInsertPoint(fnEntryBlock);
     
+    // Get the data type for this function and ensure it is valid:
+    cg.mCodegenDataType.visit(astNode);
+    CompiledDataType funcCDT = cg.mCtx.popCompiledDataType();
+    WC_GUARD(funcCDT.isValid());
+    WC_GUARD(funcCDT.getDataType().getTypeId() == DataTypeId::kFunc);
+    const FuncDataType & funcDataType = static_cast<const FuncDataType&>(funcCDT.getDataType());
+    
     // Generate code for the function body
-    AST::Scope & scope = astNode.mScope;
+    const AST::Scope & scope = astNode.getScope();
     scope.accept(cg);
     
     // Create the implicit return statement if required.
     // This is only allowable for void returning functions, for other functions not returning void it is
     // a compile error not to return a valid value.
     if (!cg.mCtx.mIRBuilder.GetInsertBlock()->getTerminator()) {
-        if (astNode.getDataType().mReturnType.isVoid()) {
+        if (funcDataType.mReturnType.isVoid()) {
             // Need an implicit return, make it:
             cg.mCtx.mIRBuilder.CreateRetVoid();
         }
@@ -83,7 +91,7 @@ void Codegen::visit(const AST::Func & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
     // Codegen the data type for the function:
-    astNode.getDataType().accept(mCodegenDataType);
+    mCodegenDataType.visit(astNode);
     CompiledDataType fnCompiledTy = mCtx.popCompiledDataType();
     
     // Determine the llvm function type for the function.
@@ -127,7 +135,7 @@ void Codegen::visit(const AST::Func & astNode) {
                                     true);
     
     // Get the val holder for the function scope, will register the function argument variables in this
-    ValHolder & funcValHolder = mCtx.getScopeValHolder(astNode.mScope);
+    ValHolder & funcValHolder = mCtx.getScopeValHolder(astNode.getScope());
     
     // Register the function arguments for lookup by variables:
     {
