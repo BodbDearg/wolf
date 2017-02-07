@@ -106,10 +106,6 @@ const Token & ReturnStmntNoCondVoid::getEndToken() const {
     return mReturnToken;
 }
 
-const DataType & ReturnStmntNoCondVoid::dataType() {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
-}
-
 bool ReturnStmntNoCondVoid::allCodepathsHaveUncondRet() const {
     return true;
 }
@@ -130,10 +126,6 @@ void ReturnStmntNoCondWithValue::accept(ASTNodeVisitor & visitor) const {
 
 const Token & ReturnStmntNoCondWithValue::getEndToken() const {
     return mReturnExpr.getEndToken();
-}
-
-const DataType & ReturnStmntNoCondWithValue::dataType() {
-    return mReturnExpr.dataType();
 }
 
 bool ReturnStmntNoCondWithValue::allCodepathsHaveUncondRet() const {
@@ -181,10 +173,6 @@ ReturnStmntWithCondVoid::ReturnStmntWithCondVoid(const Token & returnToken,
 void ReturnStmntWithCondVoid::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
-    
-const DataType & ReturnStmntWithCondVoid::dataType() {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
-}
 
 //-----------------------------------------------------------------------------
 // ReturnStmntWithCondAndValue
@@ -204,10 +192,6 @@ ReturnStmntWithCondAndValue::ReturnStmntWithCondAndValue(const Token & returnTok
 
 void ReturnStmntWithCondAndValue::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
-}
-    
-const DataType & ReturnStmntWithCondAndValue::dataType() {
-    return mReturnExpr.dataType();
 }
 
 WC_AST_END_NAMESPACE

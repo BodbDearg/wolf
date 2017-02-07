@@ -94,10 +94,6 @@ const Token & PrimaryExprIntLit::getEndToken() const {
     return mLit.getEndToken();
 }
 
-const DataType & PrimaryExprIntLit::dataType() const {
-    return mLit.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // PrimaryExprBoolLit
 //-----------------------------------------------------------------------------
@@ -115,10 +111,6 @@ const Token & PrimaryExprBoolLit::getStartToken() const {
 
 const Token & PrimaryExprBoolLit::getEndToken() const {
     return mLit.getEndToken();
-}
-
-const DataType & PrimaryExprBoolLit::dataType() const {
-    return mLit.dataType();
 }
 
 //-----------------------------------------------------------------------------
@@ -140,10 +132,6 @@ const Token & PrimaryExprStrLit::getEndToken() const {
     return mLit.getEndToken();
 }
 
-const DataType & PrimaryExprStrLit::dataType() const {
-    return mLit.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // PrimaryExprArrayLit
 //-----------------------------------------------------------------------------
@@ -163,10 +151,6 @@ const Token & PrimaryExprArrayLit::getEndToken() const {
     return mLit.getEndToken();
 }
 
-const DataType & PrimaryExprArrayLit::dataType() const {
-    return mLit.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // PrimaryExprIdentifier
 //-----------------------------------------------------------------------------
@@ -184,10 +168,6 @@ const Token & PrimaryExprIdentifier::getStartToken() const {
 
 const Token & PrimaryExprIdentifier::getEndToken() const {
     return mIdent.getEndToken();
-}
-
-const DataType & PrimaryExprIdentifier::dataType() const {
-    return mIdent.dataType();
 }
 
 const char * PrimaryExprIdentifier::name() const {
@@ -213,10 +193,6 @@ const Token & PrimaryExprReadnum::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-const DataType & PrimaryExprReadnum::dataType() const {
-    return mExpr.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // PrimaryExprTime
 //-----------------------------------------------------------------------------
@@ -236,10 +212,6 @@ const Token & PrimaryExprTime::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-const DataType & PrimaryExprTime::dataType() const {
-    return mExpr.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // PrimaryRandExpr
 //-----------------------------------------------------------------------------
@@ -257,10 +229,6 @@ const Token & PrimaryExprRandExpr::getStartToken() const {
 
 const Token & PrimaryExprRandExpr::getEndToken() const {
     return mExpr.getEndToken();
-}
-
-const DataType & PrimaryExprRandExpr::dataType() const {
-    return mExpr.dataType();
 }
 
 WC_AST_END_NAMESPACE

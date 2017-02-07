@@ -59,9 +59,5 @@ const Token & TimeExpr::getEndToken() const {
     return mEndToken;
 }
 
-const DataType & TimeExpr::dataType() const {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
-}
-
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

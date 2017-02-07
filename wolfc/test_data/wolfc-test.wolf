@@ -1,7 +1,8 @@
 let v1 = 2
-let v2 = v1
+let v2 = v1 + 2
+let v3 = v2 * 2
 
 func main() -> int
-    print(v2)
+    print(v3)
     return 0
 end

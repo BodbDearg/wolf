@@ -40,9 +40,5 @@ const Token & BoolLit::getEndToken() const {
     return mToken;
 }
 
-const DataType & BoolLit::dataType() const {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
-}
-
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

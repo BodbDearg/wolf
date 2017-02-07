@@ -14,7 +14,7 @@ void ConstCodegen::visit(const AST::TypeArray & astNode) {
 
 void ConstCodegen::visit(const AST::TypePrimitive & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mType.accept(*this);
+    astNode.dataType().accept(mCodegenDataType);
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

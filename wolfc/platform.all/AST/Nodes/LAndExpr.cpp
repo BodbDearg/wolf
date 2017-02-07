@@ -56,10 +56,6 @@ const Token & LAndExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-const DataType & LAndExprNoOp::dataType() const {
-    return mExpr.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // LAndExprAnd
 //-----------------------------------------------------------------------------
@@ -81,10 +77,6 @@ const Token & LAndExprAnd::getStartToken() const {
 
 const Token & LAndExprAnd::getEndToken() const {
     return mRightExpr.getEndToken();
-}
-
-const DataType & LAndExprAnd::dataType() const {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
 WC_AST_END_NAMESPACE

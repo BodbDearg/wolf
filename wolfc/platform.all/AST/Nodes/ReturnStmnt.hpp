@@ -27,9 +27,6 @@ public:
     
     virtual const Token & getStartToken() const final override;
     
-    /* Gives the data type of the value returned */
-    virtual const DataType & dataType() = 0;
-    
     /* The token for 'return' */
     const Token & mReturnToken;
 };
@@ -42,8 +39,6 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getEndToken() const override;
     
-    virtual const DataType & dataType() override;
-    
     virtual bool allCodepathsHaveUncondRet() const override;
 };
 
@@ -54,8 +49,6 @@ public:
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getEndToken() const override;
-    
-    virtual const DataType & dataType() override;
     
     virtual bool allCodepathsHaveUncondRet() const override;
     
@@ -92,8 +85,6 @@ public:
                             AssignExpr & condExpr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
-    
-    virtual const DataType & dataType() override;
 };
 
 /* return AssignExpr if|unless AssignExpr */
@@ -105,8 +96,6 @@ public:
                                 AssignExpr & condExpr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
-    
-    virtual const DataType & dataType() override;
 
     /* Expression for the value to return */
     AssignExpr & mReturnExpr;

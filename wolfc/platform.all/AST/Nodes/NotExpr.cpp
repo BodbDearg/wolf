@@ -72,10 +72,6 @@ const Token & NotExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-const DataType & NotExprNoOp::dataType() const {
-    return mExpr.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // NotExprLNot
 //-----------------------------------------------------------------------------
@@ -98,10 +94,6 @@ const Token & NotExprLNot::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-const DataType & NotExprLNot::dataType() const {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
-}
-
 //-----------------------------------------------------------------------------
 // NotExprBNot
 //-----------------------------------------------------------------------------
@@ -122,10 +114,6 @@ const Token & NotExprBNot::getStartToken() const {
 
 const Token & NotExprBNot::getEndToken() const {
     return mExpr.getEndToken();
-}
-
-const DataType & NotExprBNot::dataType() const {
-    return mExpr.dataType();
 }
 
 WC_AST_END_NAMESPACE

@@ -64,10 +64,6 @@ const Token & LOrExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-const DataType & LOrExprNoOp::dataType() const {
-    return mExpr.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // LOrExprOr
 //-----------------------------------------------------------------------------
@@ -89,10 +85,6 @@ const Token & LOrExprOr::getStartToken() const {
 
 const Token & LOrExprOr::getEndToken() const {
     return mRightExpr.getEndToken();
-}
-
-const DataType & LOrExprOr::dataType() const {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
 WC_AST_END_NAMESPACE

@@ -65,10 +65,6 @@ const Token & AddExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-const DataType & AddExprNoOp::dataType() const {
-    return mExpr.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // AddExprTwoOps
 //-----------------------------------------------------------------------------
@@ -86,11 +82,6 @@ const Token & AddExprTwoOps::getStartToken() const {
 
 const Token & AddExprTwoOps::getEndToken() const {
     return mRightExpr.getEndToken();
-}
-
-const DataType & AddExprTwoOps::dataType() const {
-    // TODO: handle auto type promotion
-    return mLeftExpr.dataType();
 }
 
 //-----------------------------------------------------------------------------

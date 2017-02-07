@@ -85,11 +85,6 @@ const Token & ArrayLit::getEndToken() const {
     return mRBrack;
 }
 
-const DataType & ArrayLit::dataType() const {
-    #warning TODO: May need to rework this
-    return PrimitiveDataTypes::getUnevalDataType();
-}
-
 #warning FIXME - Codegen
 #if 0
 llvm::Value * ArrayLit::codegenAddrOf(CodegenCtx & cgCtx) {

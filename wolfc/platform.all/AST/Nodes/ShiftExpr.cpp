@@ -62,10 +62,6 @@ const Token & ShiftExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-const DataType & ShiftExprNoOp::dataType() const {
-    return mExpr.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // ShiftExprTwoOps
 //-----------------------------------------------------------------------------
@@ -83,11 +79,6 @@ const Token & ShiftExprTwoOps::getStartToken() const {
 
 const Token & ShiftExprTwoOps::getEndToken() const {
     return mRightExpr.getEndToken();
-}
-
-const DataType & ShiftExprTwoOps::dataType() const {
-    // TODO: handle auto type promotion
-    return mLeftExpr.dataType();
 }
 
 //-----------------------------------------------------------------------------

@@ -105,10 +105,6 @@ void VarDeclInferType::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
-const DataType & VarDeclInferType::dataType() const {
-    return mInitExpr.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // VarDeclExplicitType
 //-----------------------------------------------------------------------------
@@ -125,10 +121,6 @@ VarDeclExplicitType::VarDeclExplicitType(const Token & startToken,
 
 void VarDeclExplicitType::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
-}
-
-const DataType & VarDeclExplicitType::dataType() const {
-    return mType.dataType();
 }
 
 WC_AST_END_NAMESPACE

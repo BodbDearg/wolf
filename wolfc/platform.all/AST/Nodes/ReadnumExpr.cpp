@@ -59,9 +59,5 @@ const Token & ReadnumExpr::getEndToken() const {
     return mEndToken;
 }
 
-const DataType & ReadnumExpr::dataType() const {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
-}
-
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

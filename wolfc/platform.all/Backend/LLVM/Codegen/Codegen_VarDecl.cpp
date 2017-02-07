@@ -23,43 +23,48 @@ static const std::string kVarLabelPrefix = "alloc_var:";
  */
 static void doVarDeclTypeChecks(Codegen & cg,
                                 const AST::VarDecl & varDecl,
-                                const CompiledDataType & varCompiledType,
-                                bool varTypeIsInferred,
-                                bool & initializerTypeIsOkOut,
+                                const CompiledDataType * varExplicitType,
+                                const CompiledDataType & varInitializerType,
+                                bool & varInitializerTypeIsOkOut,
                                 bool & varTypeIsOkOut)
 {
+    // Get the var data type
+    const CompiledDataType & varCompiledType = varExplicitType ? *varExplicitType : varInitializerType;
+    const DataType & varDataType = varCompiledType.getDataType();
+    
     // Ensure the initializer is the same type as the var decl if the var type is not inferred.
     // If we are not using inference there might be a mismatch...
-    const DataType & varType = varCompiledType.getDataType();
-    initializerTypeIsOkOut = true;
-    
-    if (!varTypeIsInferred) {
-        // Compile the type of the variable initializer
-        varDecl.mInitExpr.dataType().accept(cg.mCodegenDataType);
-        CompiledDataType varInitCompiledType = cg.mCtx.popCompiledDataType();
-        const DataType & varInitType = varInitCompiledType.getDataType();
+    if (varExplicitType) {
+        // Var type is not inferred, initializer must be the same type as the explicitly specified var type
+        varInitializerTypeIsOkOut = true;
         
         // Make sure the initializer and variable types match
-        if (!varInitType.equals(varType)) {
+        const DataType & varInitializerDataType = varInitializerType.getDataType();
+        
+        if (!varInitializerDataType.equals(varDataType)) {
             cg.mCtx.error(varDecl,
                           "Variable initializer type mismatch! Variable is of type '%s' and "
                           "initializer is of type '%s'!",
-                          varType.name().c_str(),
-                          varInitType.name().c_str());
+                          varDataType.name().c_str(),
+                          varInitializerDataType.name().c_str());
             
-            initializerTypeIsOkOut = false;
+            varInitializerTypeIsOkOut = false;
         }
+    }
+    else {
+        // Var type is inferred, therefore the initializer type is always ok
+        varInitializerTypeIsOkOut = true;
     }
     
     // Ensure the variable data type is ok
     varTypeIsOkOut = true;
     
-    if (!varType.isValid()) {
-        cg.mCtx.error(varDecl, "Can't declare a variable of invalid type '%s'!", varType.name().c_str());
+    if (!varDataType.isValid()) {
+        cg.mCtx.error(varDecl, "Can't declare a variable of invalid type '%s'!", varDataType.name().c_str());
         varTypeIsOkOut = false;
     }
-    else if (!varType.isSized()) {
-        cg.mCtx.error(varDecl, "Can't declare a variable of type '%s' which has no size!", varType.name().c_str());
+    else if (!varDataType.isSized()) {
+        cg.mCtx.error(varDecl, "Can't declare a variable of type '%s' which has no size!", varDataType.name().c_str());
         varTypeIsOkOut = false;
     }
     else if (!varCompiledType.getLLVMType()) {
@@ -69,10 +74,9 @@ static void doVarDeclTypeChecks(Codegen & cg,
 }
 
 /* Codegen the variable declaration as a local variable within a scope */
-static void codegenLocalVarDeclWithType(Codegen & cg,
-                                        const AST::VarDecl & varDecl,
-                                        const CompiledDataType & varCompiledType,
-                                        bool varTypeIsInferred)
+static void codegenLocalVarDecl(Codegen & cg,
+                                const AST::VarDecl & varDecl,
+                                const CompiledDataType * varExplicitType)
 {
     // Get the current scope, if there is none then issue an error
     const AST::Scope * scope = cg.mCtx.getCurrentScope();
@@ -86,14 +90,14 @@ static void codegenLocalVarDeclWithType(Codegen & cg,
     Value varInitVal = cg.mCtx.popValue();
     
     // Do the type checks for the var decl
-    bool initializerTypeIsOk = false;
+    bool varInitializerTypeIsOk = false;
     bool varTypeIsOk = false;
     
     doVarDeclTypeChecks(cg,
                         varDecl,
-                        varCompiledType,
-                        varTypeIsInferred,
-                        initializerTypeIsOk,
+                        varExplicitType,
+                        varInitVal.mCompiledType,
+                        varInitializerTypeIsOk,
                         varTypeIsOk);
     
     // Can only create the variable if the type and current scope is ok
@@ -101,9 +105,14 @@ static void codegenLocalVarDeclWithType(Codegen & cg,
     WC_GUARD(scope);
     
     // If the initializer is bad then codegen without it
-    if (!initializerTypeIsOk) {
+    if (!varInitializerTypeIsOk) {
         varInitVal.mLLVMVal = nullptr;
     }
+    
+    // Decide what the var compiled type is:
+    CompiledDataType varCompiledType = varExplicitType ?
+        *varExplicitType :
+        varInitVal.mCompiledType;
     
     // Makeup the label we will give the var in the IR
     std::string varLabel = kVarLabelPrefix + varDecl.mIdent.name();
@@ -130,33 +139,37 @@ static void codegenLocalVarDeclWithType(Codegen & cg,
 }
 
 /* Codegen the variable declaration as a global variable within the module */
-static void codegenGlobalVarDeclWithType(Codegen & cg,
-                                         const AST::VarDecl & varDecl,
-                                         const CompiledDataType & varCompiledType,
-                                         bool varTypeIsInferred)
+static void codegenGlobalVarDecl(Codegen & cg,
+                                 const AST::VarDecl & varDecl,
+                                 const CompiledDataType * varExplicitType)
 {
     // Evaluate the initializer expression as a constant
     varDecl.mInitExpr.accept(cg.mConstCodegen);
     Constant varInitVal = cg.mCtx.popConstant();
     
     // Do the type checks for the var decl
-    bool initializerTypeIsOk = false;
+    bool varInitializerTypeIsOk = false;
     bool varTypeIsOk = false;
     
     doVarDeclTypeChecks(cg,
                         varDecl,
-                        varCompiledType,
-                        varTypeIsInferred,
-                        initializerTypeIsOk,
+                        varExplicitType,
+                        varInitVal.mCompiledType,
+                        varInitializerTypeIsOk,
                         varTypeIsOk);
     
     // Can only create the variable if the type is ok
     WC_GUARD(varTypeIsOk);
     
     // If the initializer is bad then codegen without it
-    if (!initializerTypeIsOk) {
+    if (!varInitializerTypeIsOk) {
         varInitVal.mLLVMConst = nullptr;
     }
+    
+    // Decide what the var compiled type is:
+    CompiledDataType varCompiledType = varExplicitType ?
+        *varExplicitType :
+        varInitVal.mCompiledType;
     
     // Register the variable. If it's registered more than once then this will generate an error.
     // We'll fill in the llvm value later once the unique name has been determined...
@@ -195,44 +208,39 @@ static void codegenGlobalVarDeclWithType(Codegen & cg,
     );
 }
 
-/* Code generate the variable declaration with the given compiled data type */
-static void codegenVarDeclWithType(Codegen & cg,
-                                   const AST::VarDecl & varDecl,
-                                   const CompiledDataType & varCompiledType,
-                                   bool varTypeIsInferred)
+/**
+ * Code generate the variable declaration with the given explicitly specified data type for the variable,
+ * which may be null. If the compiled data type is not given, then the data type for the variable is 
+ * infered from the variable initializer expression.
+ */
+static void codegenVarDecl(Codegen & cg,
+                           const AST::VarDecl & varDecl,
+                           const CompiledDataType * varExplicitType)
 {
     // Codegen as either a local or global variable definition.
     // If we are currently code generating a function then codegen as a local var.
     if (cg.mCtx.mCurFunc) {
-        codegenLocalVarDeclWithType(cg,
-                                    varDecl,
-                                    varCompiledType,
-                                    varTypeIsInferred);
+        codegenLocalVarDecl(cg, varDecl, varExplicitType);
     }
     else {
-        codegenGlobalVarDeclWithType(cg,
-                                     varDecl,
-                                     varCompiledType, 
-                                     varTypeIsInferred);
+        codegenGlobalVarDecl(cg, varDecl, varExplicitType);
     }
 }
 
 void Codegen::visit(const AST::VarDeclExplicitType & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
-    // Codegen the explict data type:
+    // Codegen the var with the given explictly given data type:
     astNode.mType.accept(*this);
-    CompiledDataType varCompiledType = mCtx.popCompiledDataType();
-    codegenVarDeclWithType(*this, astNode, varCompiledType, false);
+    CompiledDataType varExplicitType = mCtx.popCompiledDataType();
+    codegenVarDecl(*this, astNode, &varExplicitType);
 }
 
 void Codegen::visit(const AST::VarDeclInferType & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
-    // Codegen the inferred data type:
-    astNode.mInitExpr.dataType().accept(mCodegenDataType);
-    CompiledDataType varCompiledType = mCtx.popCompiledDataType();
-    codegenVarDeclWithType(*this, astNode, varCompiledType, true);
+    // Codegen the var but infer the data type:
+    codegenVarDecl(*this, astNode, nullptr);
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

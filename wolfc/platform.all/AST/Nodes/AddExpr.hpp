@@ -31,8 +31,6 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual const DataType & dataType() const override;
-    
     MulExpr & mExpr;
 };
 
@@ -43,8 +41,6 @@ public:
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
-    
-    virtual const DataType & dataType() const final override;
     
     MulExpr & mLeftExpr;
     AddExpr & mRightExpr;

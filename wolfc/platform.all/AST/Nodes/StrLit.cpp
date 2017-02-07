@@ -40,9 +40,5 @@ const Token & StrLit::getEndToken() const {
     return mToken;
 }
 
-const DataType & StrLit::dataType() const {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kStr);
-}
-
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

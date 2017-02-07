@@ -41,10 +41,5 @@ const Token & IntLit::getEndToken() const {
     return mToken;
 }
 
-const DataType & IntLit::dataType() const {
-    // TODO: data type should be based on the numeric literal and precision suffixes used
-    return PrimitiveDataTypes::getDefaultUIntType();
-}
-
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

@@ -74,10 +74,6 @@ const Token & AssignExprNoAssign::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-const DataType & AssignExprNoAssign::dataType() const {
-    return mExpr.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // AssignExprAssignBase
 //-----------------------------------------------------------------------------
@@ -95,11 +91,6 @@ const Token & AssignExprAssignBase::getStartToken() const {
 
 const Token & AssignExprAssignBase::getEndToken() const {
     return mRightExpr.getEndToken();
-}
-
-const DataType & AssignExprAssignBase::dataType() const {
-    // TODO: Handle auto type promotion eventually
-    return mLeftExpr.dataType();
 }
 
 //-----------------------------------------------------------------------------

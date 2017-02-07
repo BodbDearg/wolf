@@ -20,7 +20,7 @@ public:
     static bool peek(const Token * currentToken);
     static FuncArg * parse(ParseCtx & parseCtx);
     
-    FuncArg(Type & dataType, Identifier & ident);
+    FuncArg(Type & type, Identifier & ident);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;

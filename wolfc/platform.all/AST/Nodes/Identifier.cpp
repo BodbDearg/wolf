@@ -40,11 +40,6 @@ const Token & Identifier::getEndToken() const {
     return mToken;
 }
 
-const DataType & Identifier::dataType() const {
-    // We won't know this until further analysis at compile time
-    return PrimitiveDataTypes::getUnevalDataType();
-}
-
 const char * Identifier::name() const {
     return mToken.data.strVal.ptr;
 }

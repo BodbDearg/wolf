@@ -3,18 +3,13 @@
 #include "Macros.hpp"
 
 WC_BEGIN_NAMESPACE
-
-class DataType;
-
 WC_AST_BEGIN_NAMESPACE
 
 /* An interface that all expressions must implement. */
 class IExpr {
 public:
+    /* Nothing here at the moment. There used to be stuff but it was moved out of the AST */
     virtual ~IExpr() = default;
-    
-    /* Return the data type that this expression results in after evaluation. */
-    virtual const DataType & dataType() const = 0;
 };
 
 WC_AST_END_NAMESPACE

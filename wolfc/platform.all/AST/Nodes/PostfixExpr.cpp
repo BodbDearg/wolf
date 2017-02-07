@@ -119,10 +119,6 @@ const Token & PostfixExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-const DataType & PostfixExprNoOp::dataType() const {
-    return mExpr.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // PostfixExprIncDecBase
 //-----------------------------------------------------------------------------
@@ -139,12 +135,6 @@ const Token & PostfixExprIncDecBase::getStartToken() const {
 
 const Token & PostfixExprIncDecBase::getEndToken() const {
     return mEndToken;
-}
-
-const DataType & PostfixExprIncDecBase::dataType() const {
-    // Unlike C/C++ increment and decrement expressions do not return a value. This removes the need for prefix/postfix 
-    // increment and prevents them from being used in a confusing way in expressions.
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
 }
 
 //-----------------------------------------------------------------------------
@@ -194,11 +184,6 @@ const Token & PostfixExprFuncCall::getStartToken() const {
 
 const Token & PostfixExprFuncCall::getEndToken() const {
     return mFuncCall.getEndToken();
-}
-
-const DataType & PostfixExprFuncCall::dataType() const {
-    // We won't know this until further analysis at compile time
-    return PrimitiveDataTypes::getUnevalDataType();
 }
 
 #warning FIXME - Codegen
@@ -260,17 +245,6 @@ const Token & PostfixExprArrayLookup::getStartToken() const {
 
 const Token & PostfixExprArrayLookup::getEndToken() const {
     return mEndToken;
-}
-
-const DataType & PostfixExprArrayLookup::dataType() const {
-    #warning This should be 'uneval' if the array type is uneval
-    // Expect the array expression to have the array data type.
-    // If it doesn't have this type then we don't know what the element type is..
-    const ArrayDataType * arrayDataType = dynamic_cast<const ArrayDataType*>(&mArrayExpr.dataType());
-    WC_GUARD(arrayDataType, PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInvalid));
-    
-    // Return the element data type
-    return arrayDataType->mElemType;
 }
 
 #warning FIXME - Codegen

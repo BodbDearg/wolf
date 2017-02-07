@@ -70,10 +70,6 @@ const Token & TernaryExprNoCond::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-const DataType & TernaryExprNoCond::dataType() const {
-    return mExpr.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // TernaryExprWithCond
 //-----------------------------------------------------------------------------
@@ -100,12 +96,6 @@ const Token & TernaryExprWithCond::getStartToken() const {
 
 const Token & TernaryExprWithCond::getEndToken() const {
     return mFalseExpr.getEndToken();
-}
-
-const DataType & TernaryExprWithCond::dataType() const {
-    // Assume the data type is that of the 'true' expression.
-    // When we compile we will verify that the 'false' expression matches...
-    return mTrueExpr.dataType();
 }
 
 WC_AST_END_NAMESPACE

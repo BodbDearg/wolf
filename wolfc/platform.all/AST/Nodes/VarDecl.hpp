@@ -33,8 +33,6 @@ public:
     
     virtual bool allCodepathsHaveUncondRet() const final override;
     
-    virtual const DataType & dataType() const = 0;
-    
     const Token &   mStartToken;
     Identifier &    mIdent;
     AssignExpr & 	mInitExpr;
@@ -48,8 +46,6 @@ public:
                      AssignExpr & initExpr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
-    
-    virtual const DataType & dataType() const final override;
 };
 
 /* let Identifier : Type = AssignExpr */
@@ -61,8 +57,6 @@ public:
                         AssignExpr & initExpr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
-    
-    virtual const DataType & dataType() const final override;
     
     Type & mType;
 };

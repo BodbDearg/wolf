@@ -94,10 +94,6 @@ const Token & CastExprNoCast::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-const DataType & CastExprNoCast::dataType() const {
-    return mExpr.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // CastExprCast
 //-----------------------------------------------------------------------------
@@ -125,10 +121,6 @@ const Token & CastExprCast::getStartToken() const {
 
 const Token & CastExprCast::getEndToken() const {
     return mEndToken;
-}
-
-const DataType & CastExprCast::dataType() const {
-    return mType.dataType();
 }
 
 #warning FIXME - Codegen

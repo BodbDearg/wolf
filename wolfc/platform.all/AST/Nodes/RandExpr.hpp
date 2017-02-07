@@ -34,8 +34,6 @@ public:
     RandExprRand(const Token & startToken, const Token & endToken);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
-    
-    virtual const DataType & dataType() const override;
 };
 
 /* srand ( AssignExpr ) */
@@ -46,8 +44,6 @@ public:
                   const Token & endToken);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
-    
-    virtual const DataType & dataType() const override;
     
     AssignExpr & mSeedExpr;
 };

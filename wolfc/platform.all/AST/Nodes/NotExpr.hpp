@@ -29,8 +29,6 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual const DataType & dataType() const override;
-    
     CmpExpr & mExpr;
 };
 
@@ -42,8 +40,6 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
-    
-    virtual const DataType & dataType() const override;
     
     NotExpr &       mExpr;
     const Token &   mStartToken;
@@ -57,8 +53,6 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
-
-    virtual const DataType & dataType() const override;
 
     NotExpr &       mExpr;
     const Token &   mStartToken;

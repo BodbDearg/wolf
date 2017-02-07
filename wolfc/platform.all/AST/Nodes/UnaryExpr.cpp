@@ -101,10 +101,6 @@ const Token & UnaryExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-const DataType & UnaryExprNoOp::dataType() const {
-    return mExpr.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // UnaryExprPlusMinusBase
 //-----------------------------------------------------------------------------
@@ -121,10 +117,6 @@ const Token & UnaryExprPlusMinusBase::getStartToken() const {
 
 const Token & UnaryExprPlusMinusBase::getEndToken() const {
     return mExpr.getEndToken();
-}
-
-const DataType & UnaryExprPlusMinusBase::dataType() const {
-    return mExpr.dataType();
 }
 
 //-----------------------------------------------------------------------------
@@ -174,10 +166,6 @@ const Token & UnaryExprParen::getStartToken() const {
 
 const Token & UnaryExprParen::getEndToken() const {
     return mEndToken;
-}
-
-const DataType & UnaryExprParen::dataType() const {
-    return mExpr.dataType();
 }
 
 WC_AST_END_NAMESPACE

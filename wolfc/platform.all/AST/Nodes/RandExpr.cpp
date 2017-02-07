@@ -106,10 +106,6 @@ void RandExprRand::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
-const DataType & RandExprRand::dataType() const {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
-}
-
 //-----------------------------------------------------------------------------
 // RandExprSRand
 //-----------------------------------------------------------------------------
@@ -125,10 +121,6 @@ RandExprSRand::RandExprSRand(const Token & startToken,
 
 void RandExprSRand::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
-}
-
-const DataType & RandExprSRand::dataType() const {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kVoid);
 }
 
 WC_AST_END_NAMESPACE

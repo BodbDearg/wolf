@@ -190,9 +190,11 @@ void AddrCodegen::visit(const AST::BreakStmntWithCond & astNode) {
 void AddrCodegen::visit(const AST::CastExprCast & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
-    // Get the data type being casted from and to
-    astNode.mExpr.dataType().accept(mCodegenDataType);
-    CompiledDataType fromType = mCtx.popCompiledDataType();
+    // Get the value (and hence the data type) being from:
+    astNode.mExpr.accept(mCodegen);
+    Value exprVal = mCtx.popValue();
+    
+    // Get the type being casted to:
     astNode.mType.dataType().accept(mCodegenDataType);
     CompiledDataType toType = mCtx.popCompiledDataType();
     
@@ -200,7 +202,7 @@ void AddrCodegen::visit(const AST::CastExprCast & astNode) {
     mCtx.error(astNode,
                "Can't take the address of a cast operation casting from "
                "type '%s' to type '%s'!",
-               fromType.getDataType().name().c_str(),
+               exprVal.mCompiledType.getDataType().name().c_str(),
                toType.getDataType().name().c_str());
 }
 
@@ -711,9 +713,9 @@ void AddrCodegen::cantTakeAddressOfUnaryOpError(const AST::ASTNode & exprNode,
     const AST::ASTNode * parent = exprNode.mParent;
     WC_ASSERT(parent);
     
-    // Compile the data type
-    expr->dataType().accept(mCodegenDataType);
-    CompiledDataType type = mCtx.popCompiledDataType();
+    // Compile the expression to figure out what type it is
+    exprNode.accept(mCodegen);
+    Value val = mCtx.popValue();
     
     // Issue the error
     mCtx.error(*parent,
@@ -721,7 +723,7 @@ void AddrCodegen::cantTakeAddressOfUnaryOpError(const AST::ASTNode & exprNode,
                "expression of type '%s'!",
                opSymbol,
                opName,
-               type.getDataType().name().c_str());
+               val.mCompiledType.getDataType().name().c_str());
 }
 
 void AddrCodegen::cantTakeAddressOfBinaryOpError(const AST::ASTNode & leftExprNode,
@@ -739,11 +741,11 @@ void AddrCodegen::cantTakeAddressOfBinaryOpError(const AST::ASTNode & leftExprNo
     const AST::ASTNode * parent = leftExprNode.mParent;
     WC_ASSERT(parent);
     
-    // Compile the left and right data types
-    leftExpr->dataType().accept(mCodegenDataType);
-    CompiledDataType leftType = mCtx.popCompiledDataType();
-    rightExpr->dataType().accept(mCodegenDataType);
-    CompiledDataType rightType = mCtx.popCompiledDataType();
+    // Compile the left and right expressions to figure out what types they are
+    leftExprNode.accept(mCodegen);
+    Value leftVal = mCtx.popValue();
+    rightExprNode.accept(mCodegen);
+    Value rightVal = mCtx.popValue();
     
     // Issue the error
     mCtx.error(*parent,
@@ -751,8 +753,8 @@ void AddrCodegen::cantTakeAddressOfBinaryOpError(const AST::ASTNode & leftExprNo
                "left expression of type '%s' and right expression of type '%s'!",
                opSymbol,
                opName,
-               leftType.getDataType().name().c_str(),
-               rightType.getDataType().name().c_str());
+               leftVal.mCompiledType.getDataType().name().c_str(),
+               rightVal.mCompiledType.getDataType().name().c_str());
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

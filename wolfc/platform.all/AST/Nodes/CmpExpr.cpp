@@ -96,10 +96,6 @@ const Token & CmpExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-const DataType & CmpExprNoOp::dataType() const {
-    return mExpr.dataType();
-}
-
 //-----------------------------------------------------------------------------
 // CmpExprTwoOps
 //-----------------------------------------------------------------------------
@@ -117,10 +113,6 @@ const Token & CmpExprTwoOps::getStartToken() const {
 
 const Token & CmpExprTwoOps::getEndToken() const {
     return mRightExpr.getEndToken();
-}
-
-const DataType & CmpExprTwoOps::dataType() const {
-    return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
 
 //-----------------------------------------------------------------------------
