@@ -31,9 +31,6 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
-    
     virtual const DataType & dataType() const override;
     
     MulExpr & mExpr;
@@ -46,9 +43,6 @@ public:
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
-    
-    virtual bool isLValue() const final override;
-    virtual bool isConstExpr() const final override;
     
     virtual const DataType & dataType() const final override;
     

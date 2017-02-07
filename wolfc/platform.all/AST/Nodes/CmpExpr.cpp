@@ -96,14 +96,6 @@ const Token & CmpExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool CmpExprNoOp::isLValue() const {
-    return mExpr.isLValue();
-}
-
-bool CmpExprNoOp::isConstExpr() const {
-    return mExpr.isConstExpr();
-}
-
 const DataType & CmpExprNoOp::dataType() const {
     return mExpr.dataType();
 }
@@ -125,14 +117,6 @@ const Token & CmpExprTwoOps::getStartToken() const {
 
 const Token & CmpExprTwoOps::getEndToken() const {
     return mRightExpr.getEndToken();
-}
-
-bool CmpExprTwoOps::isLValue() const {
-    return false;
-}
-
-bool CmpExprTwoOps::isConstExpr() const {
-    return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
 const DataType & CmpExprTwoOps::dataType() const {

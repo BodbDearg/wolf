@@ -40,16 +40,6 @@ const Token & Identifier::getEndToken() const {
     return mToken;
 }
 
-bool Identifier::isLValue() const {
-    return true;
-}
-
-bool Identifier::isConstExpr() const {
-    #warning Do we need a semantic pass to determine this?
-    // FIXME: Implement this
-    return false;
-}
-
 const DataType & Identifier::dataType() const {
     // We won't know this until further analysis at compile time
     return PrimitiveDataTypes::getUnevalDataType();

@@ -119,14 +119,6 @@ const Token & PostfixExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool PostfixExprNoOp::isLValue() const {
-    return mExpr.isLValue();
-}
-
-bool PostfixExprNoOp::isConstExpr() const {
-    return mExpr.isConstExpr();
-}
-
 const DataType & PostfixExprNoOp::dataType() const {
     return mExpr.dataType();
 }
@@ -147,16 +139,6 @@ const Token & PostfixExprIncDecBase::getStartToken() const {
 
 const Token & PostfixExprIncDecBase::getEndToken() const {
     return mEndToken;
-}
-
-bool PostfixExprIncDecBase::isLValue() const {
-    return false;
-}
-
-bool PostfixExprIncDecBase::isConstExpr() const {
-    // Not allowed to use in constant expressions
-    // TODO: can this be relaxed in future for functions that can be evaluated at compile time?
-    return false;
 }
 
 const DataType & PostfixExprIncDecBase::dataType() const {
@@ -212,17 +194,6 @@ const Token & PostfixExprFuncCall::getStartToken() const {
 
 const Token & PostfixExprFuncCall::getEndToken() const {
     return mFuncCall.getEndToken();
-}
-
-bool PostfixExprFuncCall::isLValue() const {
-    // Can treat arrays returned from a function as an l-value, which can be dereferenced,
-    // but not simple types that are stored in registers..
-    return dataType().requiresStorage();
-}
-
-bool PostfixExprFuncCall::isConstExpr() const {
-    // TODO: Someday support calling functions that can be evaluated at compile time
-    return false;
 }
 
 const DataType & PostfixExprFuncCall::dataType() const {
@@ -289,14 +260,6 @@ const Token & PostfixExprArrayLookup::getStartToken() const {
 
 const Token & PostfixExprArrayLookup::getEndToken() const {
     return mEndToken;
-}
-
-bool PostfixExprArrayLookup::isLValue() const {
-    return mArrayExpr.isLValue();
-}
-
-bool PostfixExprArrayLookup::isConstExpr() const {
-    return mArrayExpr.isConstExpr() && mIndexExpr.isConstExpr();
 }
 
 const DataType & PostfixExprArrayLookup::dataType() const {

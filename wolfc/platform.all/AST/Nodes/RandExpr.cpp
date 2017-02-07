@@ -93,14 +93,6 @@ const Token & RandExpr::getEndToken() const {
     return mEndToken;
 }
 
-bool RandExpr::isLValue() const {
-    return false;
-}
-
-bool RandExpr::isConstExpr() const {
-    return false;
-}
-
 //-----------------------------------------------------------------------------
 // RandExprRand
 //-----------------------------------------------------------------------------

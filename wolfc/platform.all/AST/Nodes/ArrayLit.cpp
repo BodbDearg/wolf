@@ -85,21 +85,6 @@ const Token & ArrayLit::getEndToken() const {
     return mRBrack;
 }
 
-bool ArrayLit::isLValue() const {
-    return true;
-}
-
-bool ArrayLit::isConstExpr() const {
-    // True unless we find one of the sub expressions is not constant
-    for (const AST::AssignExpr * expr : mExprs) {
-        if (!expr->isConstExpr()) {
-            return false;
-        }
-    }
-    
-    return true;
-}
-
 const DataType & ArrayLit::dataType() const {
     #warning TODO: May need to rework this
     return PrimitiveDataTypes::getUnevalDataType();

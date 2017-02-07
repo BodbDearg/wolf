@@ -101,14 +101,6 @@ const Token & UnaryExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool UnaryExprNoOp::isLValue() const {
-    return mExpr.isLValue();
-}
-
-bool UnaryExprNoOp::isConstExpr() const {
-    return mExpr.isConstExpr();
-}
-
 const DataType & UnaryExprNoOp::dataType() const {
     return mExpr.dataType();
 }
@@ -129,14 +121,6 @@ const Token & UnaryExprPlusMinusBase::getStartToken() const {
 
 const Token & UnaryExprPlusMinusBase::getEndToken() const {
     return mExpr.getEndToken();
-}
-
-bool UnaryExprPlusMinusBase::isLValue() const {
-    return false;
-}
-
-bool UnaryExprPlusMinusBase::isConstExpr() const {
-    return mExpr.isConstExpr();
 }
 
 const DataType & UnaryExprPlusMinusBase::dataType() const {
@@ -190,14 +174,6 @@ const Token & UnaryExprParen::getStartToken() const {
 
 const Token & UnaryExprParen::getEndToken() const {
     return mEndToken;
-}
-
-bool UnaryExprParen::isLValue() const {
-    return mExpr.isLValue();
-}
-
-bool UnaryExprParen::isConstExpr() const {
-    return mExpr.isConstExpr();
 }
 
 const DataType & UnaryExprParen::dataType() const {

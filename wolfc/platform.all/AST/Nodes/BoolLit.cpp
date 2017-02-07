@@ -40,14 +40,6 @@ const Token & BoolLit::getEndToken() const {
     return mToken;
 }
 
-bool BoolLit::isLValue() const {
-    return false;
-}
-
-bool BoolLit::isConstExpr() const {
-    return true;
-}
-
 const DataType & BoolLit::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }

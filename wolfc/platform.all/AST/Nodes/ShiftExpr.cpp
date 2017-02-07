@@ -62,14 +62,6 @@ const Token & ShiftExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool ShiftExprNoOp::isLValue() const {
-    return mExpr.isLValue();
-}
-
-bool ShiftExprNoOp::isConstExpr() const {
-    return mExpr.isConstExpr();
-}
-
 const DataType & ShiftExprNoOp::dataType() const {
     return mExpr.dataType();
 }
@@ -91,14 +83,6 @@ const Token & ShiftExprTwoOps::getStartToken() const {
 
 const Token & ShiftExprTwoOps::getEndToken() const {
     return mRightExpr.getEndToken();
-}
-
-bool ShiftExprTwoOps::isLValue() const {
-    return false;
-}
-
-bool ShiftExprTwoOps::isConstExpr() const {
-    return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
 const DataType & ShiftExprTwoOps::dataType() const {

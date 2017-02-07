@@ -56,14 +56,6 @@ const Token & LAndExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool LAndExprNoOp::isLValue() const {
-    return mExpr.isLValue();
-}
-
-bool LAndExprNoOp::isConstExpr() const {
-    return mExpr.isConstExpr();
-}
-
 const DataType & LAndExprNoOp::dataType() const {
     return mExpr.dataType();
 }
@@ -89,14 +81,6 @@ const Token & LAndExprAnd::getStartToken() const {
 
 const Token & LAndExprAnd::getEndToken() const {
     return mRightExpr.getEndToken();
-}
-
-bool LAndExprAnd::isLValue() const {
-    return false;
-}
-
-bool LAndExprAnd::isConstExpr() const {
-    return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
 const DataType & LAndExprAnd::dataType() const {

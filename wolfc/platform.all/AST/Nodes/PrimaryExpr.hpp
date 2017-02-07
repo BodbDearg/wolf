@@ -41,9 +41,6 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
-    
     virtual const DataType & dataType() const override;
     
     IntLit & mLit;
@@ -57,9 +54,6 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
-    
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
     
     virtual const DataType & dataType() const override;
     
@@ -75,9 +69,6 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
-    
     virtual const DataType & dataType() const override;
     
     StrLit & mLit;
@@ -92,9 +83,6 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
-    
     virtual const DataType & dataType() const override;
     
     ArrayLit & mLit;
@@ -108,9 +96,6 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
-    
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
     
     virtual const DataType & dataType() const override;
     
@@ -128,9 +113,6 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
-    
     virtual const DataType & dataType() const override;
     
     ReadnumExpr & mExpr;
@@ -145,9 +127,6 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
-    
     virtual const DataType & dataType() const override;
     
     TimeExpr & mExpr;
@@ -161,9 +140,6 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
-    
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
     
     virtual const DataType & dataType() const override;
     

@@ -72,14 +72,6 @@ const Token & NotExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool NotExprNoOp::isLValue() const {
-    return mExpr.isLValue();
-}
-
-bool NotExprNoOp::isConstExpr() const {
-    return mExpr.isConstExpr();
-}
-
 const DataType & NotExprNoOp::dataType() const {
     return mExpr.dataType();
 }
@@ -106,14 +98,6 @@ const Token & NotExprLNot::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool NotExprLNot::isLValue() const {
-    return false;
-}
-
-bool NotExprLNot::isConstExpr() const {
-    return mExpr.isConstExpr();
-}
-
 const DataType & NotExprLNot::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kBool);
 }
@@ -138,14 +122,6 @@ const Token & NotExprBNot::getStartToken() const {
 
 const Token & NotExprBNot::getEndToken() const {
     return mExpr.getEndToken();
-}
-
-bool NotExprBNot::isLValue() const {
-    return false;
-}
-
-bool NotExprBNot::isConstExpr() const {
-    return mExpr.isConstExpr();
 }
 
 const DataType & NotExprBNot::dataType() const {

@@ -29,9 +29,6 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
-    
     virtual const DataType & dataType() const override;
     
     LOrExpr & mExpr;
@@ -47,9 +44,6 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
-    
-    virtual bool isLValue() const override;
-    virtual bool isConstExpr() const override;
     
     virtual const DataType & dataType() const override;
     

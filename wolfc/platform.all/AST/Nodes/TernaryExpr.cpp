@@ -70,14 +70,6 @@ const Token & TernaryExprNoCond::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool TernaryExprNoCond::isLValue() const {
-    return mExpr.isLValue();
-}
-
-bool TernaryExprNoCond::isConstExpr() const {
-    return mExpr.isConstExpr();
-}
-
 const DataType & TernaryExprNoCond::dataType() const {
     return mExpr.dataType();
 }
@@ -108,16 +100,6 @@ const Token & TernaryExprWithCond::getStartToken() const {
 
 const Token & TernaryExprWithCond::getEndToken() const {
     return mFalseExpr.getEndToken();
-}
-
-bool TernaryExprWithCond::isLValue() const {
-    return false;
-}
-
-bool TernaryExprWithCond::isConstExpr() const {
-    return  mCondExpr.isConstExpr() &&
-            mTrueExpr.isConstExpr() &&
-            mFalseExpr.isConstExpr();
 }
 
 const DataType & TernaryExprWithCond::dataType() const {

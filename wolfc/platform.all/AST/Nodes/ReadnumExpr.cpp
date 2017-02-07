@@ -59,14 +59,6 @@ const Token & ReadnumExpr::getEndToken() const {
     return mEndToken;
 }
 
-bool ReadnumExpr::isLValue() const {
-    return false;
-}
-
-bool ReadnumExpr::isConstExpr() const {
-    return false;
-}
-
 const DataType & ReadnumExpr::dataType() const {
     return PrimitiveDataTypes::getUsingTypeId(DataTypeId::kInt64);
 }

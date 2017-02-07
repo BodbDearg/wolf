@@ -63,14 +63,6 @@ const Token & MulExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
-bool MulExprNoOp::isLValue() const {
-    return mExpr.isLValue();
-}
-
-bool MulExprNoOp::isConstExpr() const {
-    return mExpr.isConstExpr();
-}
-
 const DataType & MulExprNoOp::dataType() const {
     return mExpr.dataType();
 }
@@ -92,14 +84,6 @@ const Token & MulExprTwoOps::getStartToken() const {
 
 const Token & MulExprTwoOps::getEndToken() const {
     return mRightExpr.getEndToken();
-}
-
-bool MulExprTwoOps::isLValue() const {
-    return false;
-}
-
-bool MulExprTwoOps::isConstExpr() const {
-    return mLeftExpr.isConstExpr() && mRightExpr.isConstExpr();
 }
 
 const DataType & MulExprTwoOps::dataType() const {

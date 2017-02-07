@@ -24,9 +24,6 @@ public:
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
     
-    virtual bool isLValue() const final override;
-    virtual bool isConstExpr() const final override;
-    
     const Token & mStartToken;
     const Token & mEndToken;
 };
