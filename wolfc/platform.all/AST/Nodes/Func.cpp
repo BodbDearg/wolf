@@ -119,7 +119,7 @@ static const DataType & getReturnDataType(Type * returnType) {
         return PrimitiveDataTypes::getVoidDataType();
     }
     
-    return returnType->dataType();
+    return returnType->getDataType();
 }
 
 /* Helper used by the constructor */
@@ -128,7 +128,7 @@ static std::vector<const DataType*> getArgDataTypes(const std::vector<FuncArg*> 
     argDataTypes.reserve(args.size());
     
     for (FuncArg * arg : args) {
-        argDataTypes.push_back(&arg->dataType());
+        argDataTypes.push_back(&arg->getDataType());
     }
     
     return argDataTypes;

@@ -23,7 +23,7 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    const DataType & dataType() const;
+    const DataType & getDataType() const;
     
     const Token & mToken;
 };

@@ -195,7 +195,7 @@ void AddrCodegen::visit(const AST::CastExprCast & astNode) {
     Value exprVal = mCtx.popValue();
     
     // Get the type being casted to:
-    astNode.mType.dataType().accept(mCodegenDataType);
+    astNode.mType.getDataType().accept(mCodegenDataType);
     CompiledDataType toType = mCtx.popCompiledDataType();
     
     // Issue the error

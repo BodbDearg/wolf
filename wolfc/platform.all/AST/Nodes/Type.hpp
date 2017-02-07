@@ -26,7 +26,7 @@ public:
     static bool peek(const Token * currentToken);
     static Type * parse(ParseCtx & parseCtx);
     
-    virtual const DataType & dataType() const = 0;
+    virtual const DataType & getDataType() const = 0;
 };
 
 /* PrimitiveType */
@@ -38,7 +38,7 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual const DataType & dataType() const override;
+    virtual const DataType & getDataType() const override;
     
     PrimitiveType & mType;
 };
@@ -52,7 +52,7 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    virtual const DataType & dataType() const override;
+    virtual const DataType & getDataType() const override;
     
     const Token &   mStartToken;
     AssignExpr &    mSizeExpr;

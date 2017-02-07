@@ -46,7 +46,7 @@ public:
         return mFuncArgs;
     }
     
-    inline const FuncUnevalDataType & dataType() const {
+    inline const FuncUnevalDataType & getDataType() const {
         return mDataType;
     }
     

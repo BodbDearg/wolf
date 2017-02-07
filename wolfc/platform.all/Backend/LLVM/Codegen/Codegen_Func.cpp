@@ -62,7 +62,7 @@ static void doDeferredFuncCodegen(Codegen & cg, const AST::Func & astNode, Const
     // This is only allowable for void returning functions, for other functions not returning void it is
     // a compile error not to return a valid value.
     if (!cg.mCtx.mIRBuilder.GetInsertBlock()->getTerminator()) {
-        if (astNode.dataType().mReturnType.isVoid()) {
+        if (astNode.getDataType().mReturnType.isVoid()) {
             // Need an implicit return, make it:
             cg.mCtx.mIRBuilder.CreateRetVoid();
         }
@@ -83,7 +83,7 @@ void Codegen::visit(const AST::Func & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
     // Codegen the data type for the function:
-    astNode.dataType().accept(mCodegenDataType);
+    astNode.getDataType().accept(mCodegenDataType);
     CompiledDataType fnCompiledTy = mCtx.popCompiledDataType();
     
     // Determine the llvm function type for the function.
@@ -143,7 +143,7 @@ void Codegen::visit(const AST::Func & astNode) {
                 
                 // Get the compiled type for this argument:
                 AST::FuncArg * funcArg = funcArgs[argNum];
-                funcArg->dataType().accept(mCodegenDataType);
+                funcArg->getDataType().accept(mCodegenDataType);
                 CompiledDataType argCompiledType = mCtx.popCompiledDataType();
                 
                 // Register this variable in the current scope

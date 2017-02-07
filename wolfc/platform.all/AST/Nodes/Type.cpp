@@ -74,8 +74,8 @@ const Token & TypePrimitive::getEndToken() const {
     return mType.getEndToken();
 }
 
-const DataType & TypePrimitive::dataType() const {
-    return mType.dataType();
+const DataType & TypePrimitive::getDataType() const {
+    return mType.getDataType();
 }
 
 //-----------------------------------------------------------------------------
@@ -85,7 +85,7 @@ TypeArray::TypeArray(const Token & startToken, AssignExpr & sizeExpr, Type & ele
     mStartToken(startToken),
     mSizeExpr(sizeExpr),
     mElemType(elemType),
-    mDataType(*this, elemType.dataType(), sizeExpr)
+    mDataType(*this, elemType.getDataType(), sizeExpr)
 {
     mSizeExpr.mParent = this;
     mElemType.mParent = this;
@@ -103,7 +103,7 @@ const Token & TypeArray::getEndToken() const {
     return mElemType.getEndToken();
 }
 
-const DataType & TypeArray::dataType() const {
+const DataType & TypeArray::getDataType() const {
     return mDataType;
 }
 
