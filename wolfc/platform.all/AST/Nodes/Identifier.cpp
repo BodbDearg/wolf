@@ -45,6 +45,7 @@ bool Identifier::isLValue() const {
 }
 
 bool Identifier::isConstExpr() const {
+    #warning Do we need a semantic pass to determine this?
     // FIXME: Implement this
     return false;
 }

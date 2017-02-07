@@ -36,7 +36,6 @@
 /* Begin PBXBuildFile section */
 		1F03088A1E2AF2510097D223 /* AddExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F03082C1E2AF2510097D223 /* AddExpr.cpp */; };
 		1F03088B1E2AF2510097D223 /* ArrayLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F03082E1E2AF2510097D223 /* ArrayLit.cpp */; };
-		1F03088C1E2AF2510097D223 /* ArrayLitExprs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308301E2AF2510097D223 /* ArrayLitExprs.cpp */; };
 		1F03088D1E2AF2510097D223 /* AssertStmnt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308321E2AF2510097D223 /* AssertStmnt.cpp */; };
 		1F03088E1E2AF2510097D223 /* AssignExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308341E2AF2510097D223 /* AssignExpr.cpp */; };
 		1F03088F1E2AF2510097D223 /* ASTNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F0308361E2AF2510097D223 /* ASTNode.cpp */; };
@@ -226,8 +225,6 @@
 		1F03082D1E2AF2510097D223 /* AddExpr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AddExpr.hpp; sourceTree = "<group>"; };
 		1F03082E1E2AF2510097D223 /* ArrayLit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArrayLit.cpp; sourceTree = "<group>"; };
 		1F03082F1E2AF2510097D223 /* ArrayLit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ArrayLit.hpp; sourceTree = "<group>"; };
-		1F0308301E2AF2510097D223 /* ArrayLitExprs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArrayLitExprs.cpp; sourceTree = "<group>"; };
-		1F0308311E2AF2510097D223 /* ArrayLitExprs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ArrayLitExprs.hpp; sourceTree = "<group>"; };
 		1F0308321E2AF2510097D223 /* AssertStmnt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AssertStmnt.cpp; sourceTree = "<group>"; };
 		1F0308331E2AF2510097D223 /* AssertStmnt.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AssertStmnt.hpp; sourceTree = "<group>"; };
 		1F0308341E2AF2510097D223 /* AssignExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AssignExpr.cpp; sourceTree = "<group>"; };
@@ -515,8 +512,6 @@
 				1F03082D1E2AF2510097D223 /* AddExpr.hpp */,
 				1F03082E1E2AF2510097D223 /* ArrayLit.cpp */,
 				1F03082F1E2AF2510097D223 /* ArrayLit.hpp */,
-				1F0308301E2AF2510097D223 /* ArrayLitExprs.cpp */,
-				1F0308311E2AF2510097D223 /* ArrayLitExprs.hpp */,
 				1F0308321E2AF2510097D223 /* AssertStmnt.cpp */,
 				1F0308331E2AF2510097D223 /* AssertStmnt.hpp */,
 				1F0308341E2AF2510097D223 /* AssignExpr.cpp */,
@@ -1170,7 +1165,6 @@
 				1F6B6C201E3DFA7000B75BF4 /* CodegenConstUnaryOp.cpp in Sources */,
 				1F2985BF1E3EFAEC00DC17CC /* Codegen_Type.cpp in Sources */,
 				1F6B6BF31E3DEE1300B75BF4 /* CodegenBinaryOp.cpp in Sources */,
-				1F03088C1E2AF2510097D223 /* ArrayLitExprs.cpp in Sources */,
 				1F2985A71E3EFAEB00DC17CC /* Codegen_AssignExpr.cpp in Sources */,
 				1F0308A11E2AF2510097D223 /* MulExpr.cpp in Sources */,
 				1F0308961E2AF2510097D223 /* FuncArg.cpp in Sources */,

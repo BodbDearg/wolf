@@ -171,11 +171,7 @@ PrimaryExpr:
     RandExpr
 
 ArrayLit:
-    [ ArrayLitExprs ]
-
-ArrayLitExprs:
-    AssignExpr
-    AssignExpr , ArrayLitExprs
+    [ [0..N: AssignExpr ,] [AssignExpr] ]
 
 ReadnumExpr:
     readnum ( )

@@ -3,14 +3,21 @@
 #include "ASTNode.hpp"
 #include "IExpr.hpp"
 
-WC_BEGIN_NAMESPACE
-WC_AST_BEGIN_NAMESPACE
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <vector>
+WC_THIRD_PARTY_INCLUDES_END
 
-class ArrayLitExprs;
+WC_BEGIN_NAMESPACE
+
+namespace AST {
+    class AssignExpr;
+}
+
+WC_AST_BEGIN_NAMESPACE
 
 /*
 ArrayLit:
-    [ ArrayLitExprs ]
+    [ [0..N: AssignExpr ,] [AssignExpr] ]
 */
 class ArrayLit final : public ASTNode, public IExpr {
 public:
@@ -18,7 +25,7 @@ public:
     static ArrayLit * parse(ParseCtx & parseCtx);
     
     ArrayLit(const Token & lBrack,
-             ArrayLitExprs & exprs,
+             const std::vector<AssignExpr*> & exprs,
              const Token & rBrack);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
@@ -30,11 +37,20 @@ public:
     
     virtual const DataType & dataType() const override;
     
+    /* Get the sub expressions that constitute the array literal */
+    inline const std::vector<const AssignExpr*> & getExprs() const {
+        return mExprs;
+    }
+    
 private:
-    const Token &      mLBrack;
-    ArrayLitExprs &    mExprs;
-    const Token &      mRBrack;
-    size_t             mSize;
+    /* Left bracket token */
+    const Token & mLBrack;
+    
+    /* The assign expression for all array literal sub expressions */
+    std::vector<const AssignExpr*> mExprs;
+    
+    /* Right bracket token */
+    const Token & mRBrack;
 };
 
 WC_AST_END_NAMESPACE

@@ -2,8 +2,9 @@
 
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
-#include "ArrayLitExprs.hpp"
 #include "AssignExpr.hpp"
+#include "DataType/PrimitiveDataTypes.hpp"
+#include "DataType/Primitives/UnevalDataType.hpp"
 #include "LinearAlloc.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -23,9 +24,25 @@ ArrayLit * ArrayLit::parse(ParseCtx & parseCtx) {
     const Token * lBrack = parseCtx.tok();
     parseCtx.nextTok();
     
-    // Parse the array literal expressions
-    ArrayLitExprs * exprs = ArrayLitExprs::parse(parseCtx);
-    WC_GUARD(exprs, nullptr);
+    // Start parsing the list of sub expressions
+    std::vector<AssignExpr*> exprs;
+    
+    while (AssignExpr::peek(parseCtx.tok())) {
+        // Parse the expression and save if it was parsed ok
+        AssignExpr * expr = AssignExpr::parse(parseCtx);
+        
+        if (expr) {
+            exprs.push_back(expr);
+        }
+        
+        // If a comma does not follow then we are done
+        if (parseCtx.tok()->type != TokenType::kComma) {
+            break;
+        }
+        
+        // Otherwise consume the comma
+        parseCtx.nextTok();
+    }
     
     // Parse the closing ']'
     if (parseCtx.tok()->type != TokenType::kRBrack) {
@@ -37,26 +54,23 @@ ArrayLit * ArrayLit::parse(ParseCtx & parseCtx) {
     parseCtx.nextTok();
     
     // Now return the parsed node:
-    return WC_NEW_AST_NODE(parseCtx, ArrayLit, *lBrack, *exprs, *rBrack);
+    return WC_NEW_AST_NODE(parseCtx, ArrayLit, *lBrack, exprs, *rBrack);
 }
 
 ArrayLit::ArrayLit(const Token & lBrack,
-                   ArrayLitExprs & exprs,
+                   const std::vector<AssignExpr*> & exprs,
                    const Token & rBrack)
 :
     mLBrack(lBrack),
-    mExprs(exprs),
-    mRBrack(rBrack),
-    mSize(exprs.numExprs())
-#warning FIXME - Codegen
-#if 0
-    ,mStorage(nullptr),
-    mAddrOfResult(nullptr),
-    mExprEvalResult(nullptr),
-    mExprConstEvalResult(nullptr)
-#endif
+    mExprs(),
+    mRBrack(rBrack)
 {
-    mExprs.mParent = this;
+    mExprs.reserve(exprs.size());
+    
+    for (AssignExpr * expr : exprs) {
+        expr->mParent = this;
+        mExprs.push_back(expr);
+    }
 }
 
 void ArrayLit::accept(ASTNodeVisitor & visitor) const {
@@ -76,12 +90,19 @@ bool ArrayLit::isLValue() const {
 }
 
 bool ArrayLit::isConstExpr() const {
-    return mExprs.isConstExpr();
+    // True unless we find one of the sub expressions is not constant
+    for (const AST::AssignExpr * expr : mExprs) {
+        if (!expr->isConstExpr()) {
+            return false;
+        }
+    }
+    
+    return true;
 }
 
 const DataType & ArrayLit::dataType() const {
     #warning TODO: May need to rework this
-    return mExprs.getElementType();
+    return PrimitiveDataTypes::getUnevalDataType();
 }
 
 #warning FIXME - Codegen

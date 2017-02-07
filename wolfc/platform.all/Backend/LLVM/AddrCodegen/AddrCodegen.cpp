@@ -4,7 +4,6 @@
 #include "../CodegenCtx.hpp"
 #include "AST/Nodes/AddExpr.hpp"
 #include "AST/Nodes/ArrayLit.hpp"
-#include "AST/Nodes/ArrayLitExprs.hpp"
 #include "AST/Nodes/AssertStmnt.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/BoolLit.hpp"
@@ -101,21 +100,6 @@ void AddrCodegen::visit(const AST::AddExprSub & astNode) {
 void AddrCodegen::visit(const AST::ArrayLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
-}
-
-void AddrCodegen::visit(const AST::ArrayLitExprs & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "ArrayLitExprs");
-}
-
-void AddrCodegen::visit(const AST::ArrayLitExprsMulti & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "ArrayLitExprsMulti");
-}
-
-void AddrCodegen::visit(const AST::ArrayLitExprsSingle & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "ArrayLitExprsSingle");
 }
 
 void AddrCodegen::visit(const AST::AssertStmnt & astNode) {

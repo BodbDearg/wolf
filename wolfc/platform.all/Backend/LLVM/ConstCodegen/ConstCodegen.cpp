@@ -3,7 +3,6 @@
 #include "../CodegenCtx.hpp"
 #include "../CodegenDataType/CodegenDataType.hpp"
 #include "AST/Nodes/ArrayLit.hpp"
-#include "AST/Nodes/ArrayLitExprs.hpp"
 #include "AST/Nodes/AssertStmnt.hpp"
 #include "AST/Nodes/BreakStmnt.hpp"
 #include "AST/Nodes/DeclDef.hpp"
@@ -38,21 +37,6 @@ ConstCodegen::ConstCodegen(CodegenCtx & ctx) :
 }
 
 void ConstCodegen::visit(const AST::ArrayLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void ConstCodegen::visit(const AST::ArrayLitExprs & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void ConstCodegen::visit(const AST::ArrayLitExprsMulti & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void ConstCodegen::visit(const AST::ArrayLitExprsSingle & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     #warning TODO: Codegen this node
 }

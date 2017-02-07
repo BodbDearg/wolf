@@ -33,9 +33,6 @@ public:
     virtual void visit(const AST::AddExprNoOp & astNode) override;
     virtual void visit(const AST::AddExprSub & astNode) override;
     virtual void visit(const AST::ArrayLit & astNode) override;
-    virtual void visit(const AST::ArrayLitExprs & astNode) override;
-    virtual void visit(const AST::ArrayLitExprsMulti & astNode) override;
-    virtual void visit(const AST::ArrayLitExprsSingle & astNode) override;
     virtual void visit(const AST::AssertStmnt & astNode) override;
     virtual void visit(const AST::AssignExprAssign & astNode) override;
     virtual void visit(const AST::AssignExprAssignAdd & astNode) override;
