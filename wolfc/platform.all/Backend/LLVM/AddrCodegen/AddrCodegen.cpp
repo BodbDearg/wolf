@@ -287,7 +287,7 @@ void AddrCodegen::visit(const AST::FuncArg & astNode) {
 
 void AddrCodegen::visit(const AST::FuncCall & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    codegenNotSupportedForNodeTypeError(astNode, "FuncCall");
 }
 
 void AddrCodegen::visit(const AST::IfStmntElse & astNode) {
@@ -416,11 +416,6 @@ void AddrCodegen::visit(const AST::NotExprLNot & astNode) {
 void AddrCodegen::visit(const AST::NotExprNoOp & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
 }
 
 void AddrCodegen::visit(const AST::PostfixExprDec & astNode) {

@@ -3,12 +3,9 @@
 #include "../CodegenCtx.hpp"
 #include "../CodegenUnaryOp/CodegenUnaryOp_PostfixExpr.hpp"
 #include "Assert.hpp"
-#include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/CastExpr.hpp"
 #include "AST/Nodes/FuncCall.hpp"
 #include "AST/Nodes/PostfixExpr.hpp"
-#include "DataType/DataType.hpp"
-#include "DataType/Primitives/ArrayDataType.hpp"
 #include "DataType/Primitives/FuncDataType.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -160,63 +157,22 @@ void Codegen::visit(const AST::PostfixExprFuncCall & astNode) {
 void Codegen::visit(const AST::PostfixExprArrayLookup & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
-    // Codgen the address of the array first
-    astNode.mArrayExpr.accept(mAddrCodegen);
-    Value arrayAddrVal = mCtx.popValue();
-    WC_ASSERT(!arrayAddrVal.isValid() || arrayAddrVal.mRequiresLoad);
+    // Codgen the address of the array element first
+    astNode.accept(mAddrCodegen);
+    Value elemAddrVal = mCtx.popValue();
+    WC_ASSERT(!elemAddrVal.isValid() || elemAddrVal.mRequiresLoad);
     
-    // Codegen the expression for the array index
-    astNode.mIndexExpr.accept(*this);
-    Value indexVal = mCtx.popValue();
-    WC_ASSERT(!indexVal.isValid() || !indexVal.mRequiresLoad);
+    // Okay, only proceed further if that succeeded
+    WC_GUARD(elemAddrVal.isValid());
     
-    // Make sure the array is actually an array and figure out the element type.
-    //
-    // TODO: support the array lookup operator on custom types eventually.
-    const CompiledDataType & arrayCDT = arrayAddrVal.mCompiledType;
-    const DataType & arrayAbstractDT = arrayCDT.getDataType();
+    // Create the load for the element:
+    llvm::Value * loadedElemVal = mCtx.mIRBuilder.CreateLoad(elemAddrVal.mLLVMVal,
+                                                             "PostfixExprArrayLookup:LoadElem");
     
-    if (!arrayAbstractDT.isArray()) {
-        mCtx.error("Can't perform array indexing on an expression of type '%s'! Only arrays can be indexed.",
-                   arrayAbstractDT.name().c_str());
-        
-        return;
-    }
+    WC_ASSERT(loadedElemVal);
     
-    const ArrayDataType & arrayDT = static_cast<const ArrayDataType&>(arrayAbstractDT);
-
-    // Index expression must be an integer
-    const CompiledDataType & indexCDT = indexVal.mCompiledType;
-    const DataType & indexDT = indexCDT.getDataType();
-    
-    if (!indexDT.isInteger()) {
-        mCtx.error("Index expression for array lookup must be an integer not type '%s'! "
-                   "Can't index an array with non-integer types!",
-                   indexDT.name().c_str());
-
-        return;
-    }
-    
-    // Proceed no further if either of these is invalid
-    WC_GUARD(indexVal.isValid() && arrayAddrVal.isValid());
-    
-    // Get the value for the array address:
-    llvm::ConstantInt * zeroIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(mCtx.mLLVMCtx), 0);
-    WC_ASSERT(zeroIndex);
-    llvm::Value * arrayAddress = mCtx.mIRBuilder.CreateGEP(arrayAddrVal.mLLVMVal, { zeroIndex, indexVal.mLLVMVal });
-    WC_ASSERT(arrayAddress);
-    
-    // Alright the returned value is the value loaded
-    llvm::Value * arrayElemLLVM = mCtx.mIRBuilder.CreateLoad(arrayAddress, "PostfixExprArrayLookup:LoadArrayElem");
-    WC_ASSERT(arrayElemLLVM);
-    
-    // Figure out the compiled data type for the value loaded. If we fail in this then bail:
-    arrayDT.mElemType.accept(mCodegenDataType);
-    CompiledDataType arrayElemCDT = mCtx.popCompiledDataType();
-    WC_GUARD(arrayElemCDT.isValid());
-    
-    // All good, save the result!
-    mCtx.pushValue(Value(arrayElemLLVM, arrayElemCDT, false, &astNode));
+    // Push the loaded value back out onto the stack
+    mCtx.pushValue(Value(loadedElemVal, elemAddrVal.mCompiledType, false, &astNode));
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

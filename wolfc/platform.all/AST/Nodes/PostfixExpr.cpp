@@ -246,27 +246,6 @@ const Token & PostfixExprArrayLookup::getEndToken() const {
 
 #warning FIXME - Codegen
 #if 0
-llvm::Value * PostfixExprArrayLookup::codegenAddrOf(CodegenCtx & cgCtx) {
-    return codegenAddrOfArrayElem(cgCtx);
-}
-
-llvm::Value * PostfixExprArrayLookup::codegenExprEval(CodegenCtx & cgCtx) {
-    // Codegen the address of the array element
-    llvm::Value * arrayElemAddr = codegenAddrOfArrayElem(cgCtx);
-    WC_GUARD(arrayElemAddr, nullptr);
-
-    // Get the array datatype
-    ArrayDataType * arrayDataType = getArrayDataTypeOrIssueError();
-    WC_GUARD(arrayDataType, nullptr);
-    
-    // If the element type is not an array then load, otherwise return it
-    if (arrayDataType->mInnerType.isArray()) {
-        return arrayElemAddr;
-    }
-    
-    return cgCtx.irBuilder.CreateLoad(arrayElemAddr);
-}
-
 llvm::Constant * PostfixExprArrayLookup::codegenExprConstEval(CodegenCtx & cgCtx) {
     // Codegen the array constant:
     llvm::ConstantArray * arrayConstant = static_cast<llvm::ConstantArray*>(mArrayExpr.codegenExprConstEval(cgCtx));
@@ -340,53 +319,6 @@ llvm::Constant * PostfixExprArrayLookup::codegenExprConstEval(CodegenCtx & cgCtx
     
     // Right, now get the constant
     return llvm::ConstantExpr::getExtractValue(arrayConstant, { static_cast<unsigned>(index) });
-}
-
-ArrayDataType * PostfixExprArrayLookup::getArrayDataTypeOrIssueError() {
-    ArrayDataType * arrayDataType = dynamic_cast<ArrayDataType*>(&mArrayExpr.dataType());
-    
-    if (!arrayDataType) {
-        compileError("Can't perform array indexing on an expression that is not an array!");
-        return nullptr;
-    }
-    
-    return arrayDataType;
-}
-
-llvm::Value * PostfixExprArrayLookup::codegenAddrOfArrayElem(CodegenCtx & cgCtx) {
-    // TODO: support this operator on custom types eventually
-    
-    // Codgen the address of the array first
-    llvm::Value * arrayAddr = mArrayExpr.codegenAddrOf(cgCtx);
-    WC_GUARD(arrayAddr, nullptr);
-
-    // Make sure the array is actually an array...
-    // Note: we do this after codegen since that will catch more meaningful error info (like unknown var names)
-    if (!mArrayExpr.dataType().isArray()) {
-        compileError("Can't perform array indexing on an expression that is not an array!");
-        return nullptr;
-    }
-    
-    // Codegen the expression for the array index
-    llvm::Value * indexValue = mIndexExpr.codegenExprEval(cgCtx);
-    WC_GUARD(indexValue, nullptr);
-
-    // Index expression must be an integer
-    // Note: we do this after codegen since that will catch more meaningful error info (like unknown var names)
-    if (!mIndexExpr.dataType().isInteger()) {
-        mIndexExpr.compileError("Index expression for array lookup must be an integer not type '%s'! "
-            "Can't index an array with non-integer types!",
-            mIndexExpr.dataType().name().c_str());
-
-        return nullptr;
-    }
-    
-    // Get the value for the array address and return it:
-    llvm::ConstantInt * zeroIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(cgCtx.llvmCtx), 0);
-    WC_ASSERT(zeroIndex);
-    llvm::Value * arrayAddress = cgCtx.irBuilder.CreateGEP(arrayAddr, { zeroIndex, indexValue });
-    WC_ASSERT(arrayAddress);
-    return arrayAddress;
 }
 #endif
 
