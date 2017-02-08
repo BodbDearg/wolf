@@ -76,17 +76,7 @@ void CodegenConstBinaryOp::codegen() {
     }
 }
 
-void CodegenConstBinaryOp::visit(const ArrayBadSizeDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueBinaryOpNotSupportedError();
-}
-
 void CodegenConstBinaryOp::visit(const ArrayDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueBinaryOpNotSupportedError();
-}
-
-void CodegenConstBinaryOp::visit(const ArrayUnevalSizeDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueBinaryOpNotSupportedError();
 }

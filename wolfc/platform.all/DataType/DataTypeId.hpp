@@ -25,10 +25,6 @@ enum class DataTypeId : uint8_t {
     kStr,
     /* Array type */
     kArray,
-    /* Array type whose size expression has not yet been evaluated */
-    kArrayUnevalSize,
-    /* Array type whose size expression has been evaluated but is invalid */
-    kArrayBadSize,
     /* Function type */
     kFunc
 };

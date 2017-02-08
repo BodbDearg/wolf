@@ -10,7 +10,7 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 void Codegen::visit(const AST::PrimitiveType & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.getDataType().accept(mCodegenDataType);
+    mCodegenDataType.visitASTNode(astNode);
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

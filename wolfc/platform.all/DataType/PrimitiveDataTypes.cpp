@@ -29,8 +29,6 @@ const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
             
         // All these types are customized types, hence non-primitive:
         case DataTypeId::kArray:
-        case DataTypeId::kArrayUnevalSize:
-        case DataTypeId::kArrayBadSize:
         case DataTypeId::kFunc:
             break;
     }
@@ -38,19 +36,27 @@ const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
     return gInvalidDataType;
 }
 
-const DataType & PrimitiveDataTypes::getUsingLangKeyword(TokenType tokenType) {
+DataTypeId PrimitiveDataTypes::getTypeIdForLangKeyword(TokenType tokenType) {
     switch (tokenType) {
-        case TokenType::kVoid: return gVoidDataType;
-        case TokenType::kInt: return getDefaultIntType();
-        case TokenType::kInt64: return gInt64DataType;
-        case TokenType::kBool: return gBoolDataType;
-        case TokenType::kString: return gStrDataType;
+        case TokenType::kVoid: return DataTypeId::kVoid;
+        case TokenType::kInt: return getDefaultUIntTypeId();
+        case TokenType::kInt64: return DataTypeId::kInt64;
+        case TokenType::kBool: return DataTypeId::kBool;
+        case TokenType::kString: return DataTypeId::kStr;
             
         default:
             break;
     }
     
-    return gInvalidDataType;
+    return DataTypeId::kInvalid;
+}
+
+const DataType & PrimitiveDataTypes::getUsingLangKeyword(TokenType tokenType) {
+    return getUsingTypeId(getTypeIdForLangKeyword(tokenType));
+}
+
+bool PrimitiveDataTypes::isLangKeywordPrimitiveType(TokenType tokenType) {
+    return getTypeIdForLangKeyword(tokenType) != DataTypeId::kInvalid;
 }
 
 const InvalidDataType & PrimitiveDataTypes::getInvalidDataType() {

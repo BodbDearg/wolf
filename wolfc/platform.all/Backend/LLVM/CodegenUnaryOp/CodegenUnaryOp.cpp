@@ -97,17 +97,7 @@ void CodegenUnaryOp::codegen() {
     WC_ASSERTED_OP(mCG.mCtx.mIRBuilder.CreateStore(opResultVal.mLLVMVal, exprValBeforeLoad.mLLVMVal));
 }
 
-void CodegenUnaryOp::visit(const ArrayBadSizeDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueUnaryOpNotSupportedError();
-}
-
 void CodegenUnaryOp::visit(const ArrayDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueUnaryOpNotSupportedError();
-}
-
-void CodegenUnaryOp::visit(const ArrayUnevalSizeDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();
 }

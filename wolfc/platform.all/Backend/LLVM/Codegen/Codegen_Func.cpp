@@ -56,7 +56,7 @@ static void doDeferredFuncCodegen(Codegen & cg, const AST::Func & astNode, Const
     cg.mCtx.mIRBuilder.SetInsertPoint(fnEntryBlock);
     
     // Get the data type for this function and ensure it is valid:
-    cg.mCodegenDataType.visit(astNode);
+    cg.mCodegenDataType.visitASTNode(astNode);
     CompiledDataType funcCDT = cg.mCtx.popCompiledDataType();
     WC_GUARD(funcCDT.isValid());
     WC_GUARD(funcCDT.getDataType().getTypeId() == DataTypeId::kFunc);
@@ -91,7 +91,7 @@ void Codegen::visit(const AST::Func & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
     // Codegen the data type for the function:
-    mCodegenDataType.visit(astNode);
+    mCodegenDataType.visitASTNode(astNode);
     CompiledDataType fnCompiledTy = mCtx.popCompiledDataType();
     
     // Determine the llvm function type for the function.
@@ -151,7 +151,7 @@ void Codegen::visit(const AST::Func & astNode) {
                 
                 // Get the compiled type for this argument:
                 AST::FuncArg * funcArg = funcArgs[argNum];
-                funcArg->getDataType().accept(mCodegenDataType);
+                funcArg->accept(*this);
                 CompiledDataType argCompiledType = mCtx.popCompiledDataType();
                 
                 // Register this variable in the current scope

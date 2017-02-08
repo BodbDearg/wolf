@@ -46,17 +46,7 @@ void CodegenConstUnaryOp::codegen() {
     }
 }
 
-void CodegenConstUnaryOp::visit(const ArrayBadSizeDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueUnaryOpNotSupportedError();
-}
-
 void CodegenConstUnaryOp::visit(const ArrayDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueUnaryOpNotSupportedError();
-}
-
-void CodegenConstUnaryOp::visit(const ArrayUnevalSizeDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     issueUnaryOpNotSupportedError();
 }

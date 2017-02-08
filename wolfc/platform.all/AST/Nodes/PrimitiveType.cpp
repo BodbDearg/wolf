@@ -2,15 +2,14 @@
 
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
-#include "DataType/DataType.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
 #include "LinearAlloc.hpp"
+#include "DataType/PrimitiveDataTypes.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 bool PrimitiveType::peek(const Token * currentToken) {
-    return PrimitiveDataTypes::getUsingLangKeyword(currentToken->type).isValid();
+    return PrimitiveDataTypes::isLangKeywordPrimitiveType(currentToken->type);
 }
 
 PrimitiveType * PrimitiveType::parse(ParseCtx & parseCtx) {
@@ -42,10 +41,6 @@ const Token & PrimitiveType::getStartToken() const {
 
 const Token & PrimitiveType::getEndToken() const {
     return mToken;
-}
-
-const DataType & PrimitiveType::getDataType() const {
-    return PrimitiveDataTypes::getUsingLangKeyword(mToken.type);
 }
 
 WC_AST_END_NAMESPACE

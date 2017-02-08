@@ -43,6 +43,7 @@
 #include "AST/Nodes/UnaryExpr.hpp"
 #include "AST/Nodes/VarDecl.hpp"
 #include "AST/Nodes/WhileStmnt.hpp"
+#include "DataType/DataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -195,7 +196,7 @@ void AddrCodegen::visit(const AST::CastExprCast & astNode) {
     Value exprVal = mCtx.popValue();
     
     // Get the type being casted to:
-    astNode.mType.getDataType().accept(mCodegenDataType);
+    astNode.mType.accept(*this);
     CompiledDataType toType = mCtx.popCompiledDataType();
     
     // Issue the error

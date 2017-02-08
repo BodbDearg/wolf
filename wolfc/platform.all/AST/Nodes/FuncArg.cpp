@@ -55,10 +55,6 @@ const Token & FuncArg::getEndToken() const {
     return mIdent.getEndToken();
 }
 
-const DataType & FuncArg::getDataType() const {
-    return mType.getDataType();
-}
-
 const char * FuncArg::name() const {
     return mIdent.name();
 }

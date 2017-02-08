@@ -7,16 +7,17 @@
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/Func.hpp"
 #include "AST/Nodes/FuncArg.hpp"
+#include "AST/Nodes/PrimitiveType.hpp"
 #include "AST/Nodes/Type.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
-#include "DataType/Primitives/ArrayBadSizeDataType.hpp"
 #include "DataType/Primitives/ArrayDataType.hpp"
-#include "DataType/Primitives/ArrayUnevalSizeDataType.hpp"
 #include "DataType/Primitives/BoolDataType.hpp"
 #include "DataType/Primitives/FuncDataType.hpp"
 #include "DataType/Primitives/Int64DataType.hpp"
+#include "DataType/Primitives/InvalidDataType.hpp"
 #include "DataType/Primitives/StrDataType.hpp"
 #include "DataType/Primitives/VoidDataType.hpp"
+#include "Lexer/Token.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -28,7 +29,7 @@ CodegenDataType::CodegenDataType(CodegenCtx & ctx, ConstCodegen & constCodegen) 
     WC_EMPTY_FUNC_BODY();
 }
 
-void CodegenDataType::visit(const AST::Func & func) {
+void CodegenDataType::visitASTNode(const AST::Func & func) {
     // If we already figured this stuff out, then just return the answer:
     if (const DataType * evaluatedDataType = mCtx.getNodeEvaluatedDataType(func)) {
         evaluatedDataType->accept(*this);
@@ -53,7 +54,7 @@ void CodegenDataType::visit(const AST::Func & func) {
     funcArgCDTs.reserve(funcArgs.size());
     
     for (const AST::FuncArg * funcArg : funcArgs) {
-        visit(*funcArg);
+        visitASTNode(*funcArg);
         CompiledDataType funcArgCDT = mCtx.popCompiledDataType();
         funcArgCDTs.push_back(funcArgCDT);
     }
@@ -78,16 +79,8 @@ void CodegenDataType::visit(const AST::Func & func) {
     funcDataType->accept(*this);
 }
 
-void CodegenDataType::visit(const AST::FuncArg & funcArg) {
-    funcArg.getDataType().accept(*this);
-}
-
-void CodegenDataType::visit(const ArrayBadSizeDataType & dataType) {
-    // We can't codegen an unknown data type
-    WC_UNUSED_PARAM(dataType);
-    mCtx.error("Can't codegen the data type for an array with element type '%s' "
-               "which has a bad size specification!",
-               dataType.mElemType.name().c_str());
+void CodegenDataType::visitASTNode(const AST::FuncArg & funcArg) {
+    funcArg.mType.accept(mConstCodegen);
 }
 
 void CodegenDataType::visit(const ArrayDataType & dataType) {
@@ -116,19 +109,30 @@ void CodegenDataType::visit(const ArrayDataType & dataType) {
     mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
 }
 
-void CodegenDataType::visit(const ArrayUnevalSizeDataType & dataType) {
+void CodegenDataType::visitASTNode(const AST::PrimitiveType & primitiveType) {
+    // Get the data type object for this primitive and codegen
+    const DataType & dataType = PrimitiveDataTypes::getUsingLangKeyword(primitiveType.mToken.type);
+    dataType.accept(*this);
+}
+
+void CodegenDataType::visitASTNode(const AST::TypeArray & typeArray) {
     // If the result of this has been cached then use that instead
-    if (const DataType * evaluatedDataType = mCtx.getNodeEvaluatedDataType(dataType.mDeclaringNode)) {
-        evaluatedDataType->accept(*this);
+    if (const DataType * evaluatedDataType = mCtx.getNodeEvaluatedDataType(typeArray)) {
+        // Only codegen if valid, don't keep spewing out errors for the same thing over and over.
+        // If we have an invalid type generated for a node then we've already done errors for it earlier.
+        if (evaluatedDataType->isValid()) {
+            evaluatedDataType->accept(*this);
+        }
+        
         return;
     }
     
     // Codegen the element type:
-    dataType.mElemType.accept(*this);
+    typeArray.mElemType.accept(mConstCodegen);
     CompiledDataType elemCompiledType = mCtx.popCompiledDataType();
-
+    
     // Evaluate the size expression for the array
-    dataType.mSizeExpr.accept(mConstCodegen);
+    typeArray.mSizeExpr.accept(mConstCodegen);
     Constant sizeConst = mCtx.popConstant();
     
     // If the size expression is not of type 'int' then it is invalid:
@@ -136,7 +140,7 @@ void CodegenDataType::visit(const ArrayUnevalSizeDataType & dataType) {
     bool sizeExprIsInt = sizeExprDataType.isInteger();
     
     if (!sizeExprIsInt) {
-        mCtx.error(dataType.mSizeExpr,
+        mCtx.error(typeArray.mSizeExpr,
                    "Size expression for array size must be an integer type, not '%s'!",
                    sizeExprDataType.name().c_str());
     }
@@ -152,6 +156,8 @@ void CodegenDataType::visit(const ArrayUnevalSizeDataType & dataType) {
             
             if (sizeAPInt.getNumWords() <= 1) {
                 // Got the array size, set the evaluated array type:
+                //
+                // TODO: Use linear allocator here?
                 size_t arraySize = sizeAPInt.getZExtValue();
                 evaluatedDataType.reset(new ArrayDataType(elemCompiledType.getDataType(), arraySize));
             }
@@ -160,23 +166,27 @@ void CodegenDataType::visit(const ArrayUnevalSizeDataType & dataType) {
             }
         }
         else {
-            mCtx.error(dataType.mSizeExpr, "Size expression for array cannot be negative!");
+            mCtx.error(typeArray.mSizeExpr, "Size expression for array cannot be negative!");
         }
     }
     
+    // If an error occurred this evaluates to the invalid data type
     if (!evaluatedDataType.get()) {
         // Data type could not be evaluated for one reason or another or is not valid.
         // Evaluated data type is hence an array with a bad size...
-        evaluatedDataType.reset(new ArrayBadSizeDataType(dataType.mDeclaringNode,
-                                                         elemCompiledType.getDataType(),
-                                                         dataType.mSizeExpr));
+        //
+        // TODO: Use linear allocator here?
+        evaluatedDataType.reset(new InvalidDataType());
     }
     
-    // Codegen the evaluated type:
-    evaluatedDataType->accept(*this);
+    // Codegen the evaluated type (if valid).
+    // If it's not valid we don't do anything because we've already done errors earlier.
+    if (evaluatedDataType->isValid()) {
+        evaluatedDataType->accept(*this);
+    }
     
     // Save the evaluated type so we don't have to go through this again:
-    mCtx.setNodeEvaluatedDataType(dataType.mDeclaringNode, evaluatedDataType);
+    mCtx.setNodeEvaluatedDataType(typeArray, evaluatedDataType);
 }
 
 void CodegenDataType::visit(const BoolDataType & dataType) {
@@ -230,6 +240,7 @@ void CodegenDataType::visit(const FuncDataType & dataType) {
     
     if (funcTypeValid) {
         // Create the function signature:
+        //
         // TODO: support varargs
         // TODO: support different linkage types
         funcLLVMType = llvm::FunctionType::get(returnCompiledType.getLLVMType(),

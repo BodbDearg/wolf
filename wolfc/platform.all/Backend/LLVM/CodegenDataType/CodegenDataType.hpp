@@ -7,6 +7,8 @@ WC_BEGIN_NAMESPACE
 namespace AST {
     class Func;
     class FuncArg;
+    class PrimitiveType;
+    class TypeArray;
 }
 
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -19,14 +21,14 @@ class CodegenDataType final : public DataTypeVisitor {
 public:
     CodegenDataType(CodegenCtx & ctx, ConstCodegen & constCodegen);
     
-    /* Generate the data type for a function and push it to the stack */
-    virtual void visit(const AST::Func & func);
-    virtual void visit(const AST::FuncArg & funcArg);
+    /* Generate the data type for these AST nodes and push it to the codegen context stack */
+    void visitASTNode(const AST::Func & func);
+    void visitASTNode(const AST::FuncArg & funcArg);
+    void visitASTNode(const AST::PrimitiveType & primitiveType);
+    void visitASTNode(const AST::TypeArray & typeArray);
     
     /* DataType visitor functions */
-    virtual void visit(const ArrayBadSizeDataType & dataType) override;
     virtual void visit(const ArrayDataType & dataType) override;
-    virtual void visit(const ArrayUnevalSizeDataType & dataType) override;
     virtual void visit(const BoolDataType & dataType) override;
     virtual void visit(const FuncDataType & dataType) override;
     virtual void visit(const Int64DataType & dataType) override;

@@ -72,18 +72,13 @@ const Token & TypePrimitive::getEndToken() const {
     return mType.getEndToken();
 }
 
-const DataType & TypePrimitive::getDataType() const {
-    return mType.getDataType();
-}
-
 //-----------------------------------------------------------------------------
 // TypeArray
 //-----------------------------------------------------------------------------
 TypeArray::TypeArray(const Token & startToken, AssignExpr & sizeExpr, Type & elemType) :
     mStartToken(startToken),
     mSizeExpr(sizeExpr),
-    mElemType(elemType),
-    mDataType(*this, elemType.getDataType(), sizeExpr)
+    mElemType(elemType)
 {
     mSizeExpr.mParent = this;
     mElemType.mParent = this;
@@ -99,10 +94,6 @@ const Token & TypeArray::getStartToken() const {
 
 const Token & TypeArray::getEndToken() const {
     return mElemType.getEndToken();
-}
-
-const DataType & TypeArray::getDataType() const {
-    return mDataType;
 }
 
 WC_AST_END_NAMESPACE

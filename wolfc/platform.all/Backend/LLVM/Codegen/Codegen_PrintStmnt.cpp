@@ -99,8 +99,6 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
             case DataTypeId::kInvalid:
             case DataTypeId::kVoid:
             case DataTypeId::kArray:
-            case DataTypeId::kArrayUnevalSize:
-            case DataTypeId::kArrayBadSize:
             case DataTypeId::kFunc:
                 mCtx.error(astNode,
                            "print() not supported/implemented for expression of type '%s'!",

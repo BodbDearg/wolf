@@ -3,9 +3,6 @@
 #include "ASTNode.hpp"
 
 WC_BEGIN_NAMESPACE
-
-class DataType;
-
 WC_AST_BEGIN_NAMESPACE
 
 class Identifier;
@@ -25,8 +22,6 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
-    
-    const DataType & getDataType() const;
     
     const char * name() const;
     

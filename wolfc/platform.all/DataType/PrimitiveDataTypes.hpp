@@ -23,17 +23,26 @@ struct Token;
 namespace PrimitiveDataTypes {
     /** 
      * Get a primitive data type for the given data type id. 
-     * Will return the 'unknown' data type if the enum passed in is not valid, or if 
+     * Will return the 'invalid' data type if the enum passed in is not valid, or if
      * the primitive data type cannot be retrieved because it is a user customized type 
      * (e.g array, class).
      */
     const DataType & getUsingTypeId(DataTypeId type);
     
     /**
+     * Get the primitive data type id for a given language keyword, specified as a lexer token type.
+     * Returns the 'invalid' data type id if the keyword does not correspond to a primitive data ty[e.
+     */
+    DataTypeId getTypeIdForLangKeyword(TokenType tokenType);
+    
+    /**
      * Get the primitive data type for a given language keyword, specified as a lexer token type.
-     * Returns the 'unknown' data type if the keyword does not correspond to a valid data type.
+     * Returns the 'invalid' data type if the keyword does not correspond to a primitive data ty[e.
      */
     const DataType & getUsingLangKeyword(TokenType tokenType);
+    
+    /* Tells if the given language token is a primitive type. */
+    bool isLangKeywordPrimitiveType(TokenType tokenType);
     
     /* Get the invalid data type */
     const InvalidDataType & getInvalidDataType();
