@@ -1,5 +1,11 @@
 #include "CodegenConstBinaryOp_CmpExpr.hpp"
 
+#include "../CodegenCtx.hpp"
+#include "../ConstCodegen/ConstCodegen.hpp"
+#include "Assert.hpp"
+#include "DataType/PrimitiveDataTypes.hpp"
+#include "DataType/Primitives/BoolDataType.hpp"
+
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
@@ -18,9 +24,21 @@ CodegenConstCmpBinaryOp::CodegenConstCmpBinaryOp(ConstCodegen & cg,
 }
 
 void CodegenConstCmpBinaryOp::codegenIntCompare(llvm::ICmpInst::Predicate predicate) {
-    pushOpResult(llvm::ConstantExpr::getICmp(predicate,
-                                             mLeftConst.mLLVMConst,
-                                             mRightConst.mLLVMConst));
+    // Codegen the datatype for type 'bool', this is the datatype for the operator result
+    {
+        const BoolDataType & boolDataType = PrimitiveDataTypes::getBoolDataType();
+        boolDataType.accept(mCG.mCodegenDataType);
+    }
+    
+    CompiledDataType compiledType = mCG.mCtx.popCompiledDataType();
+    
+    // Generate the compare op and push to the codegen context
+    llvm::Constant * constant = llvm::ConstantExpr::getICmp(predicate,
+                                                            mLeftConst.mLLVMConst,
+                                                            mRightConst.mLLVMConst);
+    
+    WC_ASSERT(constant);
+    pushOpResult(constant, compiledType);
 }
 
 //-----------------------------------------------------------------------------
