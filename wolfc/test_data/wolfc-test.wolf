@@ -1,8 +1,5 @@
-let v1 = 2
-let v2 = v1 + 2
-let v3 = v2 * 2
+let v = [ 1, 2, 3, 4, 5 ]
 
 func main() -> int
-    print(v3)
     return 0
 end

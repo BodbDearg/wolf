@@ -2,7 +2,6 @@
 
 #include "../CodegenCtx.hpp"
 #include "../CodegenDataType/CodegenDataType.hpp"
-#include "AST/Nodes/ArrayLit.hpp"
 #include "AST/Nodes/AssertStmnt.hpp"
 #include "AST/Nodes/BreakStmnt.hpp"
 #include "AST/Nodes/DeclDef.hpp"
@@ -34,11 +33,6 @@ ConstCodegen::ConstCodegen(CodegenCtx & ctx) :
     mCodegenDataType(ctx, *this)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-void ConstCodegen::visit(const AST::ArrayLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
 }
 
 void ConstCodegen::visit(const AST::AssertStmnt & astNode) {

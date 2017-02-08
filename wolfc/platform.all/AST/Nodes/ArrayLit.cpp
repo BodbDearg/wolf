@@ -148,63 +148,6 @@ llvm::Value * ArrayLit::codegenExprEval(CodegenCtx & cgCtx) {
     mExprEvalResult = cgCtx.irBuilder.CreateLoad(mStorage);
     return mExprEvalResult;
 }
-
-llvm::Constant * ArrayLit::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // If already done then just return the previous calculated result
-    WC_GUARD(!mExprConstEvalResult, mExprConstEvalResult);
-    
-    // Generate the code for the element type:
-    WC_GUARD(codegenLLVMType(cgCtx), nullptr);
-    
-    // Get the sub expressions
-    std::vector<AssignExpr*> subExprs;
-    mExprs.getExprs(subExprs);
-    
-    // Alright Generate the code for each of the sub expressions
-    std::vector<llvm::Constant*> subexprConstants;
-    subexprConstants.reserve(subExprs.size());
-    
-    for (AssignExpr * subExpr : subExprs) {
-        llvm::Constant * subExprConstant = subExpr->codegenExprConstEval(cgCtx);
-        WC_GUARD(subExprConstant, nullptr);
-        subexprConstants.push_back(subExprConstant);
-    }
-    
-    // Now create a constant array and return
-    mExprConstEvalResult = llvm::ConstantArray::get(static_cast<llvm::ArrayType*>(mDataType->mLLVMType), subexprConstants);
-    return mExprConstEvalResult;
-}
-
-bool ArrayLit::codegenLLVMType(CodegenCtx & cgCtx) {
-    // Need to lazy init the data type
-    ArrayDataType & arrayDataType = static_cast<ArrayDataType&>(dataType());
-    
-    // Element type checks:
-    if (arrayDataType.mInnerType.isUnknown()) {
-        compileError("Unable to determine element type for array! "
-                     "Element type is ambiguous since different elements have different types!");
-        
-        return false;
-    }
-    
-    if (!arrayDataType.mInnerType.isSized()) {
-        compileError("Invalid element type for array: '%s'! Array element types must be sized.",
-                     arrayDataType.name().c_str());
-        
-        return false;
-    }
-
-    // Generate the code for the element:
-    WC_GUARD(arrayDataType.codegenLLVMTypeIfRequired(cgCtx, *this), nullptr);
-    
-    // Verify all is good:
-    if (!arrayDataType.mLLVMType) {
-        compileError("Invalid element type for array! Unable to determine the llvm type.");
-        return false;
-    }
-    
-    return true;    // Success!
-}
 #endif
 
 WC_AST_END_NAMESPACE

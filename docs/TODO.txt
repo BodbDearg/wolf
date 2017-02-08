@@ -2,9 +2,9 @@
 - Fix recursion on unary expression (should be able to do - - 1 for example)
 	- Just need to implement unit test now
 - Unit tests for various permutations of 'next' and 'break' within loop and while.
+- Allow global variables to reference each other in an order independent way
 - Make logical statements lazy evaluate
 - Allow 'do' to open function body
-- Unify variable and function lookup via identifiers and introduce a function data type.
 - Make newline a token and terminate statements on newline
 - Make the parser not accept multiple statements on the same line
 - Allow ',' to separate multiple statements on the same line
