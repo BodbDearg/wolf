@@ -8,7 +8,6 @@ WC_AST_BEGIN_NAMESPACE
 
 class AssignExpr;
 class CastExpr;
-class Func;
 class FuncCall;
 
 /*

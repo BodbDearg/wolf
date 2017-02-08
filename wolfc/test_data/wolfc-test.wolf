@@ -1,5 +1,6 @@
-let v = [ 1, 2, 3, 4, 5 ]
+let v = [ 10, 20, 30, 40, 50 ]
 
 func main() -> int
+    print(v[4])
     return 0
 end
