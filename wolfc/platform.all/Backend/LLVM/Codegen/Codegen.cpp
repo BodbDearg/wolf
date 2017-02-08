@@ -1,8 +1,5 @@
 #include "Codegen.hpp"
 
-#include "../CodegenCtx.hpp"
-#include "AST/Nodes/ArrayLit.hpp"
-
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
@@ -14,11 +11,6 @@ Codegen::Codegen(CodegenCtx & ctx, const char * moduleName) :
     mAddrCodegen(ctx, *this, mConstCodegen, mCodegenDataType)
 {
     WC_EMPTY_FUNC_BODY();
-}
-
-void Codegen::visit(const AST::ArrayLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE
