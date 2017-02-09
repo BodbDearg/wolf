@@ -4,12 +4,60 @@
 #include "../CodegenCtx.hpp"
 #include "Assert.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
+#include "AST/Nodes/CastExpr.hpp"
 #include "AST/Nodes/PostfixExpr.hpp"
 #include "DataType/DataType.hpp"
 #include "DataType/Primitives/ArrayDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
+
+void AddrCodegen::visit(const AST::PostfixExprNoOp & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    astNode.mExpr.accept(*this);
+}
+
+void AddrCodegen::visit(const AST::PostfixExprInc & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    astNode.mExpr.accept(*this);
+}
+
+void AddrCodegen::visit(const AST::PostfixExprDec & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    astNode.mExpr.accept(*this);
+}
+
+void AddrCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+
+    // Evaluate the expression first:
+    astNode.accept(mCodegen);
+    Value exprVal = mCtx.popValue();
+    
+    // The data type must be valid for this to work
+    WC_GUARD(exprVal.isValid());
+    
+    // The data type for the return value must be sized
+    const CompiledDataType & exprValCDT = exprVal.mCompiledType;
+    const DataType & exprValDT = exprValCDT.getDataType();
+    
+    if (!exprValDT.isSized()) {
+        mCtx.error(astNode,
+                   "Can't take the address of a function call result which returns "
+                   "unsized type '%s'!",
+                   exprValDT.name().c_str());
+        
+        return;
+    }
+    
+    // Create an alloca to hold the result of the function call and store the result there.
+    llvm::Value * llvmStackVal = mCtx.mIRBuilder.CreateAlloca(exprValCDT.getLLVMType());
+    WC_ASSERT(llvmStackVal);
+    mCtx.mIRBuilder.CreateStore(exprVal.mLLVMVal, llvmStackVal);
+    
+    // Push it onto the codegen context stack
+    mCtx.pushValue(Value(llvmStackVal, exprValCDT, true, &astNode));
+}
 
 void AddrCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();

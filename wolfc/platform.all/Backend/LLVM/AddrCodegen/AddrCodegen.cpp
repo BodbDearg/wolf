@@ -418,26 +418,6 @@ void AddrCodegen::visit(const AST::NotExprNoOp & astNode) {
     astNode.mExpr.accept(*this);
 }
 
-void AddrCodegen::visit(const AST::PostfixExprDec & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
-void AddrCodegen::visit(const AST::PostfixExprInc & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::PostfixExprNoOp & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
 void AddrCodegen::visit(const AST::PrimaryExprArrayLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mLit.accept(*this);
