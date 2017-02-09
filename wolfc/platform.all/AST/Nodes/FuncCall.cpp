@@ -86,49 +86,5 @@ const Token & FuncCall::getEndToken() const {
     return mEndToken;
 }
 
-#warning FIXME - Codegen
-#if 0
-bool FuncCall::codegenArgsListExprs(CodegenCtx & cgCtx) {
-    // If there is no args list then our job is easy, just return true for success
-    WC_GUARD(mArgList, true);
-    
-    // Get the list of expressions for the args list:
-    std::vector<AssignExpr*> args;
-    mArgList->getArgs(args);
-    mArgListExprsValues.reserve(args.size());
-    
-    // Evaluate the code for each arg:
-    for (AssignExpr * expr : args) {
-        // Generate the code, if it fails then bail
-        llvm::Value * argValue = expr->codegenExprEval(cgCtx);
-        WC_GUARD(argValue, false);
-
-        // If the argument value requires storage then we need to make our own copy of it
-        // prior to passing into the function. We also pass the pointer to the argument in
-        // this case and not the raw value itself:
-        DataType & exprDataType = expr->dataType();
-
-        if (exprDataType.requiresStorage()) {
-            // Value requires stack storage: need to alloc stack storage for it
-            llvm::Value * argStackValue = cgCtx.irBuilder.CreateAlloca(argValue->getType());
-            WC_ASSERT(argStackValue);
-
-            // Store the value in this slot:
-            llvm::Value * storeInst = cgCtx.irBuilder.CreateStore(argValue, argStackValue);
-            WC_ASSERT(storeInst);
-
-            // The arg stack value is what gets passed in:
-            mArgListExprsValues.push_back(argStackValue);
-        }
-        else {
-            // Value does not require stack storage. Just pass normally:
-            mArgListExprsValues.push_back(argValue);
-        }
-    }
-    
-    return true;    // All good!
-}
-#endif
-
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE
