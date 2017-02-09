@@ -149,17 +149,26 @@ void Codegen::visit(const AST::Func & astNode) {
                 // Okay, get the llvm value for this argument
                 llvm::Value * llvmArgVal = &llvmArg;
                 
-                // Get the compiled type for this argument:
+                // Get the compiled type for this argument.
+                // Note: need to transform for a function argument:
                 AST::FuncArg * funcArg = funcArgs[argNum];
                 funcArg->accept(*this);
                 CompiledDataType argCompiledType = mCtx.popCompiledDataType();
+                
+                // If the arg is a type which requires storage (array, struct etc.) then it
+                // is pased into the function by pointer. Therefore it requires a load:
+                bool argRequiresLoad = false;
+                
+                if (argCompiledType.getDataType().requiresStorage()) {
+                    argRequiresLoad = true;
+                }
                 
                 // Register this variable in the current scope
                 funcValHolder.createVal(mCtx,
                                         funcArg->name(),
                                         llvmArgVal,
                                         argCompiledType,
-                                        false,
+                                        argRequiresLoad,
                                         *funcArg,
                                         false);
             }

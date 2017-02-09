@@ -42,6 +42,16 @@ public:
         return mDataType != nullptr && mLLVMType != nullptr;
     }
     
+    /**
+     * Performs transformations to the LLVM type for this data type required for function args.
+     * Returns the transformed version of the compiled data type.
+     *
+     * For data types that require stack storage (Arrays, Structs etc.) we pass them into functions by
+     * pointer (secretly!) even when they are passed by value. This follows the behavior of the C/Stdcall 
+     * etc. calling conventions.
+     */
+    CompiledDataType getTransformedToFuncArg() const;
+    
 private:
     /* The data type object for this type */
     const DataType * mDataType;

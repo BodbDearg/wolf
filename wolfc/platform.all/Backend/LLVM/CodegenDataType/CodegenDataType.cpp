@@ -55,7 +55,7 @@ void CodegenDataType::visitASTNode(const AST::Func & func) {
     
     for (const AST::FuncArg * funcArg : funcArgs) {
         visitASTNode(*funcArg);
-        CompiledDataType funcArgCDT = mCtx.popCompiledDataType();
+        CompiledDataType funcArgCDT = mCtx.popCompiledDataType().getTransformedToFuncArg();
         funcArgCDTs.push_back(funcArgCDT);
     }
     
@@ -80,7 +80,10 @@ void CodegenDataType::visitASTNode(const AST::Func & func) {
 }
 
 void CodegenDataType::visitASTNode(const AST::FuncArg & funcArg) {
+    // Note: we need to transform the data type for function arguments
     funcArg.mType.accept(mConstCodegen);
+    CompiledDataType argCDT = mCtx.popCompiledDataType();
+    mCtx.pushCompiledDataType(argCDT.getTransformedToFuncArg());
 }
 
 void CodegenDataType::visit(const ArrayDataType & dataType) {
@@ -207,7 +210,7 @@ void CodegenDataType::visit(const FuncDataType & dataType) {
     
     for (const DataType * argDataType : dataType.mArgTypes) {
         argDataType->accept(*this);
-        argCompiledTypes.push_back(mCtx.popCompiledDataType());
+        argCompiledTypes.push_back(mCtx.popCompiledDataType().getTransformedToFuncArg());
     }
     
     // See if everything is valid
