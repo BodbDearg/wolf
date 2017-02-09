@@ -7,6 +7,7 @@
 #include "AST/Nodes/Scope.hpp"
 #include "DataType/DataType.hpp"
 #include "DataType/Primitives/FuncDataType.hpp"
+#include "Finally.hpp"
 #include "StringUtils.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -44,16 +45,23 @@ static void doDeferredFuncCodegen(Codegen & cg, const AST::Func & astNode, Const
     WC_ASSERT(function.mLLVMConst);
     llvm::Function * llvmFn = llvm::cast<llvm::Function>(function.mLLVMConst);
     
-    // Create the function entry block and set it as the insert point for ir builder
-    std::string entryBBLabel = StringUtils::appendLineInfo("func_entry_bb",
-                                                           astNode.getScope().getStartToken());
+    // Get the prologue BB for the function and make it the insert point
+    llvm::BasicBlock & fnPrologueBB = llvmFn->getEntryBlock();
+    cg.mCtx.mIRBuilder.SetInsertPoint(&fnPrologueBB);
     
-    llvm::BasicBlock * fnEntryBlock = llvm::BasicBlock::Create(cg.mCtx.mLLVMCtx,
-                                                               entryBBLabel,
-                                                               llvmFn);
+    // Create the user function entry block and set it as the insert point for ir builder
+    std::string fnUserEntryBBLbl = StringUtils::appendLineInfo("Func:UserEntryBB",
+                                                               astNode.getScope().getStartToken());
     
-    WC_ASSERT(fnEntryBlock);
-    cg.mCtx.mIRBuilder.SetInsertPoint(fnEntryBlock);
+    llvm::BasicBlock * fnUserEntryBB = llvm::BasicBlock::Create(cg.mCtx.mLLVMCtx,
+                                                                fnUserEntryBBLbl,
+                                                                llvmFn);
+    
+    WC_ASSERT(fnUserEntryBB);
+    
+    // Tie the prologue BB to the user entry BB and switch to inserting code in the user entry BB
+    cg.mCtx.mIRBuilder.CreateBr(fnUserEntryBB);
+    cg.mCtx.mIRBuilder.SetInsertPoint(fnUserEntryBB);
     
     // Get the data type for this function and ensure it is valid:
     cg.mCodegenDataType.visitASTNode(astNode);
@@ -124,6 +132,13 @@ void Codegen::visit(const AST::Func & astNode) {
     constant.mLLVMConst = llvmFn;
     WC_ASSERT(constant.mLLVMConst);
     
+    // Create the basic block to hold the function prologue and make it the current insert point
+    std::string fnPrologueBBLbl = StringUtils::appendLineInfo("Func:PrologueBB", astNode.getStartToken());
+    llvm::BasicBlock * fnPrologueBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, fnPrologueBBLbl, llvmFn);
+    WC_ASSERT(fnPrologueBB);
+    mCtx.mIRBuilder.SetInsertPoint(fnPrologueBB);
+    Finally clearInsertPointOnExit([&](){ mCtx.mIRBuilder.ClearInsertionPoint(); });
+    
     // Also register the function as a variable in the global scope.
     // Note: skip duplicate name checks because they are already done above:
     mCtx.mModuleValHolder.createVal(mCtx,
@@ -150,25 +165,40 @@ void Codegen::visit(const AST::Func & astNode) {
                 llvm::Value * llvmArgVal = &llvmArg;
                 
                 // Get the compiled type for this argument.
-                // Note: need to transform for a function argument:
                 AST::FuncArg * funcArg = funcArgs[argNum];
                 funcArg->accept(*this);
-                CompiledDataType argCompiledType = mCtx.popCompiledDataType();
+                CompiledDataType funcArgCDT = mCtx.popCompiledDataType();
                 
-                // If the arg is a type which requires storage (array, struct etc.) then it
-                // is pased into the function by pointer. Therefore it requires a load:
-                bool argRequiresLoad = false;
-                
-                if (argCompiledType.getDataType().requiresStorage()) {
-                    argRequiresLoad = true;
+                // Can only continue if this is valid data type
+                if (!funcArgCDT.isValid()) {
+                    continue;
                 }
+                
+                // Arg data type cannot be void:
+                const DataType & funcArgDT = funcArgCDT.getDataType();
+                
+                if (!funcArgDT.isSized()) {
+                    mCtx.error(*funcArg,
+                               "Invalid unsized data type '%s' for function argument!",
+                               funcArgDT.name().c_str());
+                    
+                    continue;
+                }
+                
+                // Need to allocate stack space for the argument and assign the function param to the arg:
+                llvm::Value * llvmArgStackVal = mCtx.mIRBuilder.CreateAlloca(funcArgCDT.getLLVMType(),
+                                                                             nullptr,
+                                                                             "Func:AllocArgOnStack");
+                
+                WC_ASSERT(llvmArgStackVal);
+                WC_ASSERTED_OP(mCtx.mIRBuilder.CreateStore(llvmArgVal, llvmArgStackVal));
                 
                 // Register this variable in the current scope
                 funcValHolder.createVal(mCtx,
                                         funcArg->name(),
-                                        llvmArgVal,
-                                        argCompiledType,
-                                        argRequiresLoad,
+                                        llvmArgStackVal,
+                                        funcArgCDT,
+                                        true,
                                         *funcArg,
                                         false);
             }

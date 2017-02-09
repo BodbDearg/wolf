@@ -55,8 +55,7 @@ void CodegenDataType::visitASTNode(const AST::Func & func) {
     
     for (const AST::FuncArg * funcArg : funcArgs) {
         visitASTNode(*funcArg);
-        CompiledDataType funcArgCDT = mCtx.popCompiledDataType().getTransformedToFuncArg();
-        funcArgCDTs.push_back(funcArgCDT);
+        funcArgCDTs.push_back(mCtx.popCompiledDataType());
     }
     
     // Make a list of data type pointers for the 'FuncDataType' constructor
@@ -80,10 +79,25 @@ void CodegenDataType::visitASTNode(const AST::Func & func) {
 }
 
 void CodegenDataType::visitASTNode(const AST::FuncArg & funcArg) {
-    // Note: we need to transform the data type for function arguments
+    // 'void' cannot be accepted as a valid function arg.
+    // Doing checks for that here:
     funcArg.mType.accept(mConstCodegen);
-    CompiledDataType argCDT = mCtx.popCompiledDataType();
-    mCtx.pushCompiledDataType(argCDT.getTransformedToFuncArg());
+    CompiledDataType funcArgCDT = mCtx.popCompiledDataType();
+    const DataType & funcArgDT = funcArgCDT.getDataType();
+    
+    if (funcArgDT.isSized()) {
+        // All is good, push the arg back onto the stack
+        mCtx.pushCompiledDataType(funcArgCDT);
+    }
+    else {
+        // Only generate the 'void' arg error if the data type is actually valid
+        if (funcArgDT.isValid()) {
+            // Invalid unsized type like 'void' passed as func arg type
+            mCtx.error(funcArg,
+                       "Invalid unsized data type '%s' for function argument!",
+                       funcArgDT.name().c_str());
+        }
+    }
 }
 
 void CodegenDataType::visit(const ArrayDataType & dataType) {
@@ -210,7 +224,7 @@ void CodegenDataType::visit(const FuncDataType & dataType) {
     
     for (const DataType * argDataType : dataType.mArgTypes) {
         argDataType->accept(*this);
-        argCompiledTypes.push_back(mCtx.popCompiledDataType().getTransformedToFuncArg());
+        argCompiledTypes.push_back(mCtx.popCompiledDataType());
     }
     
     // See if everything is valid
