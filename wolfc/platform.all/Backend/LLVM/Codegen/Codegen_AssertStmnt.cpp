@@ -6,6 +6,7 @@
 #include "AST/Nodes/AssignExpr.hpp"
 #include "DataType/DataType.hpp"
 #include "Lexer/Token.hpp"
+#include "StringUtils.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -51,9 +52,12 @@ void Codegen::visit(const AST::AssertStmnt & astNode) {
     WC_GUARD(abortFn && printfFn && exprVal.isValid() && exprIsBool);
     
     // Create basic blocks for assert failed and assert succeeded:
-    llvm::BasicBlock * failBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, "AssertStmnt:fail", parentFn);
+    std::string failBBLbl = StringUtils::appendLineInfo("AssertStmnt:fail", astNode.getStartToken());
+    llvm::BasicBlock * failBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, failBBLbl, parentFn);
     WC_ASSERT(failBB);
-    llvm::BasicBlock * passBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, "AssertStmnt:pass", parentFn);
+    
+    std::string passBBLbl = StringUtils::appendLineInfo("AssertStmnt:pass", astNode.getPastEndToken());
+    llvm::BasicBlock * passBB = llvm::BasicBlock::Create(mCtx.mLLVMCtx, passBBLbl, parentFn);
     WC_ASSERT(passBB);
     
     // Create a branch to one of the two blocks:
