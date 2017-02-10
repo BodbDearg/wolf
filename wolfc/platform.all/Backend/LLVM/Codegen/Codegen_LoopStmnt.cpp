@@ -54,8 +54,7 @@ void Codegen::visit(const AST::LoopStmntNoCond & astNode) {
     repeatableStmnt.mBreakStmntTargetBB = endBB;
     
     // Create a branch back up to the top of the block for the body block.
-    // This makes the loop happen.
-    // When done back to inserting code at the end block:
+    // This makes the loop happen. When done back to inserting code at the end block:
     mCtx.mIRBuilder.CreateBr(startBB);
     mCtx.mIRBuilder.SetInsertPoint(endBB);
     
