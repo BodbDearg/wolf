@@ -80,6 +80,10 @@ void Codegen::visit(const AST::PostfixExprFuncCall & astNode) {
         }
     }
     
+    // Note: popping the args off the stack in this way means that the order of the arguments
+    // has been reversed. Correct that here by reversing the values around again:
+    std::reverse(funcArgVals.begin(), funcArgVals.end());
+    
     // Make sure the number of args matches the number of args expected to the function.
     // If the arg counts match, make sure arg types agree.
     if (funcDataType) {
