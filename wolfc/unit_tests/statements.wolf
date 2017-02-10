@@ -272,6 +272,24 @@ func testNextStatement()
         next unless continue
         assert(false)   ; Should not be reached
     end
+
+    ; We had a bug with these
+    continue = true
+
+    loop
+        break if not continue
+        continue = false
+        next
+        assert(false)
+    end
+
+    continue = true
+
+    loop
+        continue = false
+        next
+        assert(false)
+    repeat while continue
 end
 
 ;==================================================================================================

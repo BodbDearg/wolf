@@ -144,6 +144,9 @@ void Codegen::visit(const AST::LoopStmntWithCond & astNode) {
     
     // Insert code after the end block from here on in
     mCtx.mIRBuilder.SetInsertPoint(endBB);
+    
+    // Do any deferred codegen which needs to be done when the loop is finished
+    mCtx.handleDeferredCodegenCallbacks(repeatableStmnt.mDeferredCodegenCallbacks);
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE
