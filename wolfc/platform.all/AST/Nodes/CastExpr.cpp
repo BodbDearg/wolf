@@ -123,7 +123,7 @@ const Token & CastExprCast::getEndToken() const {
     return mEndToken;
 }
 
-#warning FIXME - Codegen
+#warning FIXME: Codegen
 #if 0
 llvm::Value * CastExprCast::codegenAddrOf(CodegenCtx & cgCtx) {
     WC_UNUSED_PARAM(cgCtx);

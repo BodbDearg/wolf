@@ -14,7 +14,7 @@ void ConstCodegen::visit(const AST::CastExprNoCast & astNode) {
 
 void ConstCodegen::visit(const AST::CastExprCast & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    #warning FIXME: Codegen this node
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

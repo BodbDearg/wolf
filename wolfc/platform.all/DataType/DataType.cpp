@@ -33,7 +33,7 @@ bool DataType::requiresStorage() const {
     return false;   // False by default for all types
 }
 
-#warning FIXME - Codegen
+#warning FIXME: Codegen
 #if 0
 llvm::Value * DataType::codegenCastTo(CodegenCtx & cgCtx,
                                       AST::ASTNode & callingNode,

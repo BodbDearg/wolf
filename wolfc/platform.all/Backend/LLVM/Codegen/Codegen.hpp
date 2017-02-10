@@ -146,7 +146,7 @@ public:
     AddrCodegen mAddrCodegen;
      
 private:
-    #warning TODO - move to codegen ctx
+    #warning TODO: Move to codegen ctx
     std::string mModuleName;
 };
 

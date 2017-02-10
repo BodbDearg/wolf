@@ -9,7 +9,7 @@ WC_AST_BEGIN_NAMESPACE
 class AssignExpr;
 class PostfixExpr;
 
-#warning Rename to prefix expression?
+#warning TODO: Rename to 'PrefixExpr'
 /*
 UnaryExpr:
 	PostfixExpr

@@ -149,7 +149,7 @@ public:
      */
     void handleDeferredCodegenCallbacks(std::vector<std::function<void ()>> & callbacks);
     
-    #warning this should probably create a compiled data type
+    #warning TODO: This should probably create a compiled data type
     /**
      * Get or set the evaluated data type for the given AST node.
      * This allows code generators to store what the actual type of an AST node is, after
