@@ -7,6 +7,7 @@
 #include "DataType/DataType.hpp"
 #include "DataType/Primitives/ArrayDataType.hpp"
 #include "DataType/Primitives/InvalidDataType.hpp"
+#include "NoRTTIOps.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -111,31 +112,36 @@ void Codegen::visit(const AST::ArrayLit & astNode) {
     // Proceed no further if everything isn't valid
     WC_GUARD(arrayCDT.isValid() && allTypesValid);
     
-    // Allocate stack space for the array:
-    llvm::AllocaInst * arrayStorage = mCtx.mIRBuilder.CreateAlloca(arrayCDT.getLLVMType());
-    WC_ASSERT(arrayStorage);
+    // Create an undefined value for this array:
+    llvm::Value * arrayUndefVal = llvm::UndefValue::get(arrayCDT.getLLVMType());
     
     // Assign each of the element expressions to the array:
-    for (size_t i = 0; i < subExprsSize; ++i) {
-        // Figure out the pointer to the array element:
-        llvm::ConstantInt * zeroIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(mCtx.mLLVMCtx), 0);
-        WC_ASSERT(zeroIndex);
-        llvm::ConstantInt * arrayIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(mCtx.mLLVMCtx), i);
-        WC_ASSERT(arrayIndex);
-        llvm::Value * arrayElemPtr = mCtx.mIRBuilder.CreateGEP(arrayStorage, { zeroIndex, arrayIndex });
-        WC_ASSERT(arrayElemPtr);
+    for (size_t index = 0; index < subExprsSize; ++index) {
+        // Due to LLVM API restrictions we can only support as big as UINT_MAX here for an index
+        // because CreateInsertValue() takes this data type rather than uint64_t...
+        //
+        // It may be possible to lift this restriction in future, though I doubt this limitation will be
+        // much of an issue in practice. Who throws arrays >~ 4 billion elements at their
+        // compilers anyways?!
+        if (index > UINT_MAX) {
+            mCtx.error(*subExprs[index],
+                       "Array index '%zu' is too large! "
+                       "Can only support a max array index of '%zu' due to LLVM API restrictions!",
+                       index,
+                       uint64_t(UINT_MAX));
+            
+            return;
+        }
         
         // Do the actual store to the array element.
-        llvm::Value * storeResult = mCtx.mIRBuilder.CreateStore(values[i].mLLVMVal, arrayElemPtr);
-        WC_ASSERT(storeResult);
+        arrayUndefVal = NoRTTIOps::IRB::CreateInsertValue(mCtx.mIRBuilder,
+                                                          *arrayUndefVal,
+                                                          *values[index].mLLVMVal,
+                                                          { static_cast<unsigned>(index) });
     }
     
-    // Load the array type:
-    llvm::Value * loadedArray = mCtx.mIRBuilder.CreateLoad(arrayStorage, "ArrayLit:Load");
-    WC_ASSERT(loadedArray);
-    
     // Now push the array type
-    mCtx.pushValue(Value(loadedArray, arrayCDT, false, &astNode));
+    mCtx.pushValue(Value(arrayUndefVal, arrayCDT, false, &astNode));
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE
