@@ -3,6 +3,7 @@
 	- Just need to implement unit test now
 - Unit tests for various permutations of 'next' and 'break' within loop and while.
 - Unit tests for modifying function arguments.
+- Unit test for lookup of local array literal.
 - Allow global variables to reference each other in an order independent way
 - Make logical statements lazy evaluate
 - Allow 'do' to open function body

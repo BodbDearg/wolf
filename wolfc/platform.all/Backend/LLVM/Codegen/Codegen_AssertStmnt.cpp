@@ -29,7 +29,10 @@ void Codegen::visit(const AST::AssertStmnt & astNode) {
     astNode.mExpr.accept(*this);
     Value exprVal = mCtx.popValue();
     
-    // The expression being asserted must evaluate to a boolean
+    // If that failed don't issue any further errors, bail:
+    WC_GUARD(exprVal.isValid());
+    
+    // The expression being asserted must evaluate to a boolean.
     const DataType & exprDataType = exprVal.mCompiledType.getDataType();
     bool exprIsBool = exprDataType.isBool();
     

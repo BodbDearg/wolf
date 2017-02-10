@@ -82,10 +82,12 @@ void CodegenBinaryOp::codegen() {
     mRightVal = mCG.mCtx.popValue();
     WC_ASSERT(!mRightVal.mRequiresLoad || !mRightVal.isValid());
     
-    // The left and right types must match:
+    // Don't do anything if either side is not valid:
     const DataType & leftType = mLeftVal.mCompiledType.getDataType();
     const DataType & rightType = mRightVal.mCompiledType.getDataType();
+    WC_GUARD(mLeftVal.isValid() && mRightVal.isValid());
     
+    // The left and right types must match:
     if (!leftType.equals(rightType)) {
         mCG.mCtx.error(*mLeftExpr.mParent,
                        "Left and right side expressions for binary operator '%s' (%s) must be "
@@ -98,9 +100,6 @@ void CodegenBinaryOp::codegen() {
         
         return;
     }
-    
-    // Don't do anything if either side is not valid:
-    WC_GUARD(mLeftVal.isValid() && mRightVal.isValid());
 
     // Code generate the actual operation itself
     leftType.accept(*this);
