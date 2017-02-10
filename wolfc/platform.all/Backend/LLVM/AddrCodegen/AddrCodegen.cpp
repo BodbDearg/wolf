@@ -98,11 +98,6 @@ void AddrCodegen::visit(const AST::AddExprSub & astNode) {
                                    "subtract");
 }
 
-void AddrCodegen::visit(const AST::ArrayLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
-}
-
 void AddrCodegen::visit(const AST::AssertStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "AssertStmnt");

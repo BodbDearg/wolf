@@ -163,6 +163,7 @@
 		1F6B6C261E3DFB9100B75BF4 /* CodegenConstUnaryOp_UnaryExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B6C241E3DFB9100B75BF4 /* CodegenConstUnaryOp_UnaryExpr.cpp */; };
 		1F72313C1DD0762D00D9E50D /* DebugBreak.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F72313B1DD0762D00D9E50D /* DebugBreak.cpp */; };
 		1F7B2A9C1E4D9591007F06FB /* NoRTTIOps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F7B2A9A1E4D9591007F06FB /* NoRTTIOps.cpp */; settings = {COMPILER_FLAGS = "-fno-rtti"; }; };
+		1F7B2A9E1E4DA1E1007F06FB /* AddrCodegen_ArrayLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F7B2A9D1E4DA1E1007F06FB /* AddrCodegen_ArrayLit.cpp */; };
 		1F843D1D1CE9474E0065FB7A /* Lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F843D1A1CE9474E0065FB7A /* Lexer.cpp */; };
 		1F8BEB331CE5A02700A78DDE /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F8BEB311CE5A02700A78DDE /* Logger.cpp */; };
 		1FA292611D000FF600B0F975 /* LinearAlloc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FA292601D000FF600B0F975 /* LinearAlloc.cpp */; };
@@ -435,6 +436,7 @@
 		1F72313D1DD076C800D9E50D /* DebugBreak.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DebugBreak.hpp; sourceTree = "<group>"; };
 		1F7B2A9A1E4D9591007F06FB /* NoRTTIOps.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NoRTTIOps.cpp; sourceTree = "<group>"; };
 		1F7B2A9B1E4D9591007F06FB /* NoRTTIOps.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NoRTTIOps.hpp; sourceTree = "<group>"; };
+		1F7B2A9D1E4DA1E1007F06FB /* AddrCodegen_ArrayLit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddrCodegen_ArrayLit.cpp; sourceTree = "<group>"; };
 		1F7E19481E30AE6100C82867 /* DataTypeVisitor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DataTypeVisitor.hpp; sourceTree = "<group>"; };
 		1F843D1A1CE9474E0065FB7A /* Lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lexer.cpp; sourceTree = "<group>"; };
 		1F843D1B1CE9474E0065FB7A /* Lexer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Lexer.hpp; sourceTree = "<group>"; };
@@ -690,6 +692,7 @@
 		1F2985E81E3EFB8B00DC17CC /* AddrCodegen */ = {
 			isa = PBXGroup;
 			children = (
+				1F7B2A9D1E4DA1E1007F06FB /* AddrCodegen_ArrayLit.cpp */,
 				1F2985EB1E3EFB8B00DC17CC /* AddrCodegen_Identifier.cpp */,
 				1FB870DE1E4B016E00F2C0ED /* AddrCodegen_PostfixExpr.cpp */,
 				1F2985E91E3EFB8B00DC17CC /* AddrCodegen.cpp */,
@@ -1075,6 +1078,7 @@
 				1FCD4E081D0160DB0076E358 /* BoolDataType.cpp in Sources */,
 				1F03089A1E2AF2510097D223 /* Identifier.cpp in Sources */,
 				1F5B592A1E2D773000609CDD /* CodegenCtx.cpp in Sources */,
+				1F7B2A9E1E4DA1E1007F06FB /* AddrCodegen_ArrayLit.cpp in Sources */,
 				1FFD488D1CDC6A7F0084D66C /* StringUtils.cpp in Sources */,
 				1FCD4DF41D0136360076E358 /* DataType.cpp in Sources */,
 				1F2985B71E3EFAEC00DC17CC /* Codegen_PostfixExpr.cpp in Sources */,

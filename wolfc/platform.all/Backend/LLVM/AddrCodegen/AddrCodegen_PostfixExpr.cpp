@@ -34,7 +34,7 @@ void AddrCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
     astNode.accept(mCodegen);
     Value exprVal = mCtx.popValue();
     
-    // The data type must be valid for this to work
+    // The value must be valid for this to work
     WC_GUARD(exprVal.isValid());
     
     // The data type for the return value must be sized
