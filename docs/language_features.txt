@@ -1,6 +1,5 @@
 Language TODO:
 	- var x = Type(2)
-	- .. as 
 	- parsing float numbers
 	- parsing chars
 
@@ -14,6 +13,8 @@ Language TODO:
     - Variables must be initialized when declared
     - = void for no initialization
     - = default for default init
+    - SSA style 'const' variables. Maybe make optimizer detect constness?
+    - Branch prediction constructs.
 
 Modules:
     - Each translation unit compiles to a module stub
