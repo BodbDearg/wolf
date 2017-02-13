@@ -1,6 +1,8 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
+#include "../CodegenUnaryOp/CodegenUnaryOp_CastExpr.hpp"
+#include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/CastExpr.hpp"
 #include "AST/Nodes/PrimaryExpr.hpp"
 
@@ -14,7 +16,7 @@ void Codegen::visit(const AST::CastExprNoCast & astNode) {
 
 void Codegen::visit(const AST::CastExprCast & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    #warning TODO: Codegen this node
+    CodegenCastUnaryOp(*this, astNode.mExpr, astNode.mType, false).codegen();
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

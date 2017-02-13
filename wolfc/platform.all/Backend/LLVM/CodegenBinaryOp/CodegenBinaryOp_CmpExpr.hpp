@@ -21,7 +21,7 @@ protected:
                      const char * instructionLabel);
 };
 
-class CodegenCmpEQBinaryOp : public CodegenCmpBinaryOp {
+class CodegenCmpEQBinaryOp final : public CodegenCmpBinaryOp {
 public:
     CodegenCmpEQBinaryOp(Codegen & cg,
                          const AST::ASTNode & leftExpr,
@@ -32,7 +32,7 @@ public:
     void visit(const Int64DataType & dataType) override;
 };
 
-class CodegenCmpNEBinaryOp : public CodegenCmpBinaryOp {
+class CodegenCmpNEBinaryOp final : public CodegenCmpBinaryOp {
 public:
     CodegenCmpNEBinaryOp(Codegen & cg,
                          const AST::ASTNode & leftExpr,
@@ -43,7 +43,7 @@ public:
     void visit(const Int64DataType & dataType) override;
 };
 
-class CodegenCmpLTBinaryOp : public CodegenCmpBinaryOp {
+class CodegenCmpLTBinaryOp final : public CodegenCmpBinaryOp {
 public:
     CodegenCmpLTBinaryOp(Codegen & cg,
                          const AST::ASTNode & leftExpr,
@@ -53,7 +53,7 @@ public:
     void visit(const Int64DataType & dataType) override;
 };
 
-class CodegenCmpLEBinaryOp : public CodegenCmpBinaryOp {
+class CodegenCmpLEBinaryOp final : public CodegenCmpBinaryOp {
 public:
     CodegenCmpLEBinaryOp(Codegen & cg,
                          const AST::ASTNode & leftExpr,
@@ -63,7 +63,7 @@ public:
     void visit(const Int64DataType & dataType) override;
 };
 
-class CodegenCmpGTBinaryOp : public CodegenCmpBinaryOp {
+class CodegenCmpGTBinaryOp final : public CodegenCmpBinaryOp {
 public:
     CodegenCmpGTBinaryOp(Codegen & cg,
                          const AST::ASTNode & leftExpr,
@@ -73,7 +73,7 @@ public:
     void visit(const Int64DataType & dataType) override;
 };
 
-class CodegenCmpGEBinaryOp : public CodegenCmpBinaryOp {
+class CodegenCmpGEBinaryOp final : public CodegenCmpBinaryOp {
 public:
     CodegenCmpGEBinaryOp(Codegen & cg,
                          const AST::ASTNode & leftExpr,

@@ -123,34 +123,5 @@ const Token & CastExprCast::getEndToken() const {
     return mEndToken;
 }
 
-#warning FIXME: Codegen
-#if 0
-llvm::Value * CastExprCast::codegenAddrOf(CodegenCtx & cgCtx) {
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("Cant take the address of a 'cast()' expression!");
-    return nullptr;
-}
-
-llvm::Value * CastExprCast::codegenExprEval(CodegenCtx & cgCtx) {
-    // First evaluate the expression to cast:
-    llvm::Value * exprValue = mExpr.codegenExprEval(cgCtx);
-    WC_GUARD(exprValue, nullptr);
-    
-    // Now, do the cast and return the result:
-    DataType & exprDataType = mExpr.dataType();
-    return exprDataType.codegenCastTo(cgCtx,
-                                      *this,
-                                      *exprValue,
-                                      mType.dataType());
-}
-
-llvm::Constant * CastExprCast::codegenExprConstEval(CodegenCtx & cgCtx) {
-    // TODO: allow some casting at compile time in future
-    WC_UNUSED_PARAM(cgCtx);
-    compileError("'cast()' currently cannot be used in constant expressions!");
-    return nullptr;
-}
-#endif
-
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

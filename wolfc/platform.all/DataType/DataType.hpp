@@ -1,7 +1,6 @@
 #pragma once
 
 #include "DataTypeId.hpp"
-#include "Macros.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <string>

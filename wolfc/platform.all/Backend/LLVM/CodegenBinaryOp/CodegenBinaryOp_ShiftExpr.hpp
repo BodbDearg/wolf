@@ -3,7 +3,7 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-class CodegenLShiftBinaryOp : public CodegenBinaryOp {
+class CodegenLShiftBinaryOp final : public CodegenBinaryOp {
 public:
     CodegenLShiftBinaryOp(Codegen & cg,
                           const AST::ASTNode & leftExpr,
@@ -13,7 +13,7 @@ public:
     void visit(const Int64DataType & dataType) override;
 };
 
-class CodegenARShiftBinaryOp : public CodegenBinaryOp {
+class CodegenARShiftBinaryOp final : public CodegenBinaryOp {
 public:
     CodegenARShiftBinaryOp(Codegen & cg,
                            const AST::ASTNode & leftExpr,
@@ -23,7 +23,7 @@ public:
     void visit(const Int64DataType & dataType) override;
 };
 
-class CodegenLRShiftBinaryOp : public CodegenBinaryOp {
+class CodegenLRShiftBinaryOp final : public CodegenBinaryOp {
 public:
     CodegenLRShiftBinaryOp(Codegen & cg,
                            const AST::ASTNode & leftExpr,

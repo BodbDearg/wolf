@@ -5,7 +5,7 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-class CodegenLNotUnaryOp : public CodegenUnaryOp {
+class CodegenLNotUnaryOp final : public CodegenUnaryOp {
 public:
     CodegenLNotUnaryOp(Codegen & cg,
                        const AST::ASTNode & expr,
@@ -14,7 +14,7 @@ public:
     void visit(const BoolDataType & dataType) override;
 };
 
-class CodegenBNotUnaryOp : public CodegenUnaryOp {
+class CodegenBNotUnaryOp final : public CodegenUnaryOp {
 public:
     CodegenBNotUnaryOp(Codegen & cg,
                        const AST::ASTNode & expr,

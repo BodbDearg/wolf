@@ -14,10 +14,10 @@ enum class DataTypeId : uint8_t {
     kInvalid,
     /* Void/null data type. No actual data held. */
     kVoid,
-    /* Signed 64-bit integer data type */
-    kInt64,
     /* Boolean data type */
     kBool,
+    /* Signed 64-bit integer data type */
+    kInt64,
     /**
      * String constant data type
      * TODO: will probably change once we have a string class and once we support pointers to chars.

@@ -42,7 +42,7 @@ public:
      * Evaluates the left and right sides of the expression and makes sure both types match etc.
      * before calling the visitor functions with the values needed (if everything is ok).
      */
-    void codegen();
+    virtual void codegen();
     
     /* DataType visitor functions */
     virtual void visit(const ArrayDataType & dataType) override;

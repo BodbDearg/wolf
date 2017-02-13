@@ -3,7 +3,7 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-class CodegenLAndBinaryOp : public CodegenBinaryOp {
+class CodegenLAndBinaryOp final : public CodegenBinaryOp {
 public:
     CodegenLAndBinaryOp(Codegen & cg,
                         const AST::ASTNode & leftExpr,
