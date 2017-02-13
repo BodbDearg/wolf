@@ -134,6 +134,7 @@ void Codegen::visit(const AST::Func & astNode) {
     
     // Set the calling convetion to 'fast'
     llvmFn->setCallingConv(llvm::CallingConv::Fast);
+    llvmFn->setDoesNotThrow();
     
     // Create the basic block to hold the function prologue and make it the current insert point
     std::string fnPrologueBBLbl = StringUtils::appendLineInfo("Func:PrologueBB", astNode.getStartToken());
