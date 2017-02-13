@@ -338,9 +338,10 @@ func testUnaryExpr()
     assert(1 + (2 * 2) == 5)
     assert(((1 + 2) * (3 + 4)) * 2 == 42)
 
-    ; FIXME - these don't work yet
-    ; assert(+ + 1  == + + 1)
-    ; assert(- - 1  == - - 1)
+    assert(+ + 1  == + + 1)
+    assert(+ + 1  == 1)
+    assert(- - 1  == - - 1)
+    assert(- - 1  == 1)
 
     let testNum = 0
     while testNum < 5
