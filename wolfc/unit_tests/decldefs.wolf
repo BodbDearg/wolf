@@ -14,11 +14,20 @@ func testFuncCall3(v1: int, v2: int) -> int
     return v1 * v2
 end
 
+; This test checks modifying function arguments
+func testModifyFuncArgs(v: int) -> int
+    assert(v is 10)
+    v = 20
+    assert(v is 20)
+    return v
+end
+
 func testFunc()
     testFuncCall1()
     testFuncCall2(10, 20)
     assert(testFuncCall3(10, 20) == 200)
     assert(testFuncCall3(20, 20) == 400)
+    assert(testModifyFuncArgs(10) == 20)
 end
 
 ;==================================================================================================
