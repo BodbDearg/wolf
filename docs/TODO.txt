@@ -1,5 +1,4 @@
 - Unit tests for constant primary expressions (int, bool, string etc.)
-- Unit tests for various permutations of 'next' and 'break' within loop and while.
 - Make sure the type of increment and decrement operators is 'void'
 - Allow global variables to reference each other in an order independent way
 - Make logical statements lazy evaluate
