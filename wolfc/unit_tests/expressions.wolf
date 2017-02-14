@@ -437,6 +437,13 @@ end
 ;==================================================================================================
 ; PrimaryExpr
 ;==================================================================================================
+
+; Testing constant primary expressions of various types
+let testPrimaryExprConst1 = 234
+let testPrimaryExprConst2 = false
+let testPrimaryExprConst3 = [44, 55, 66]
+let testPrimaryExprConst4 = "Hello world!"  ; TODO: In future do more here?
+
 func testPrimaryExpr()
     ; IntLit
     let v1 = 1
@@ -464,6 +471,11 @@ func testPrimaryExpr()
     assert(v6[0][1][0] == 2)
     assert([11, 22, 33, 44][1] == 22)
     assert([11, 22, 33, 44][2] == 33)
+
+    ; Test constant primary expression literals
+    assert(testPrimaryExprConst1 == 234)
+    assert(not testPrimaryExprConst2)
+    assert(testPrimaryExprConst3[1] == 55)
 end
 
 ;==================================================================================================

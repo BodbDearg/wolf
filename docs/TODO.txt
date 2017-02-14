@@ -1,4 +1,3 @@
-- Unit tests for constant primary expressions (int, bool, string etc.)
 - Make sure the type of increment and decrement operators is 'void'
 - Allow global variables to reference each other in an order independent way
 - Make logical statements lazy evaluate

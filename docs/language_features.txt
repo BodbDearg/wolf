@@ -15,6 +15,7 @@ Language TODO:
     - = default for default init
     - SSA style 'const' variables. Maybe make optimizer detect constness?
     - Branch prediction constructs.
+    - typeof and istype expressions
 
 Modules:
     - Each translation unit compiles to a module stub
