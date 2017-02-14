@@ -23,7 +23,7 @@ func testFuncCallModifyFuncArgs(v: int) -> int
 end
 
 ; Test for a bug that happened with argument order being reversed into function calls
-func testFunCallArgumentOrder(v1: int, v2: int, v3: int, v4: int, v5: int, v6: int, v7: int, v8: int)
+func testFuncCallArgumentOrder(v1: int, v2: int, v3: int, v4: int, v5: int, v6: int, v7: int, v8: int)
     assert(v1 == 1)
     assert(v2 == 2)
     assert(v3 == 3)
@@ -40,7 +40,7 @@ func testFunc()
     assert(testFuncCall3(10, 20) == 200)
     assert(testFuncCall3(20, 20) == 400)
     assert(testFuncCallModifyFuncArgs(10) == 20)
-    testFunCallArgumentOrder(1, 2, 3, 4, 5, 6, 7, 8)
+    testFuncCallArgumentOrder(1, 2, 3, 4, 5, 6, 7, 8)
 end
 
 ;==================================================================================================
