@@ -15,11 +15,23 @@ func testFuncCall3(v1: int, v2: int) -> int
 end
 
 ; This test checks modifying function arguments
-func testModifyFuncArgs(v: int) -> int
+func testFuncCallModifyFuncArgs(v: int) -> int
     assert(v is 10)
     v = 20
     assert(v is 20)
     return v
+end
+
+; Test for a bug that happened with argument order being reversed into function calls
+func testFunCallArgumentOrder(v1: int, v2: int, v3: int, v4: int, v5: int, v6: int, v7: int, v8: int)
+    assert(v1 == 1)
+    assert(v2 == 2)
+    assert(v3 == 3)
+    assert(v4 == 4)
+    assert(v5 == 5)
+    assert(v6 == 6)
+    assert(v7 == 7)
+    assert(v8 == 8)
 end
 
 func testFunc()
@@ -27,7 +39,8 @@ func testFunc()
     testFuncCall2(10, 20)
     assert(testFuncCall3(10, 20) == 200)
     assert(testFuncCall3(20, 20) == 400)
-    assert(testModifyFuncArgs(10) == 20)
+    assert(testFuncCallModifyFuncArgs(10) == 20)
+    testFunCallArgumentOrder(1, 2, 3, 4, 5, 6, 7, 8)
 end
 
 ;==================================================================================================
