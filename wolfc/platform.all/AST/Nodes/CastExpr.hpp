@@ -10,7 +10,6 @@ class AssignExpr;
 class PrimaryExpr;
 class Type;
 
-#warning TODO: This can go under 'UnaryExpr' (or 'PrefixExpr' as it will be renamed).
 /*
 CastExpr:
 	PrimaryExpr
