@@ -157,6 +157,21 @@ func testWhileStmnt()
     i = 3
     until i >= 3 do i++ end
     assert(i == 3)
+
+    ; Next statement within a while statement
+    i = 1
+
+    while i > 0
+        i--
+        next
+        assert(false)
+    end
+
+    ; Break statement within a while statement
+    while true
+        break
+        assert(false)
+    end
 end
 
 ;==================================================================================================
@@ -190,6 +205,40 @@ func testLoopStmnt()
     repeat until i >= 3
 
     assert(i == 3)
+
+    ; Next statement within a loop statement
+    i = 0
+
+    loop
+        break if i > 0
+        i++
+        next
+        assert(false)
+    end
+
+    ; Break statement within a loop statement
+    loop
+        break
+        assert(false)
+    end
+
+    ; Next statement within a loop repeat statement
+    i = 0
+
+    loop
+        i++
+        next
+        assert(false)
+    repeat until i > 1
+
+    ; Break statement within a loop repeat statement
+    i = 0
+
+    loop
+        i--
+        break
+        assert(false)
+    repeat until i < 0    
 end
 
 ;==================================================================================================

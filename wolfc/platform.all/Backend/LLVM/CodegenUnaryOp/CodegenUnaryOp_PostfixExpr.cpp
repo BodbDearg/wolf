@@ -27,7 +27,7 @@ void CodegenIncUnaryOp::visit(const Int64DataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     llvm::ConstantInt * incByConstant = llvm::ConstantInt::get(llvm::Type::getInt64Ty(mCG.mCtx.mLLVMCtx), 1);
     WC_ASSERT(incByConstant);
-    pushOpResult(mCG.mCtx.mIRBuilder.CreateAdd(mExprVal.mLLVMVal, incByConstant));
+    pushOpResult(mCG.mCtx.mIRBuilder.CreateAdd(mExprVal.mLLVMVal, incByConstant, "PostfixExprInc:IncResult"));
 }
 
 //-----------------------------------------------------------------------------
@@ -50,7 +50,7 @@ void CodegenDecUnaryOp::visit(const Int64DataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     llvm::ConstantInt * decByConstant = llvm::ConstantInt::get(llvm::Type::getInt64Ty(mCG.mCtx.mLLVMCtx), 1);
     WC_ASSERT(decByConstant);
-    pushOpResult(mCG.mCtx.mIRBuilder.CreateSub(mExprVal.mLLVMVal, decByConstant));
+    pushOpResult(mCG.mCtx.mIRBuilder.CreateSub(mExprVal.mLLVMVal, decByConstant, "PostfixExprInc:DecResult"));
 }
     
 WC_LLVM_BACKEND_END_NAMESPACE
