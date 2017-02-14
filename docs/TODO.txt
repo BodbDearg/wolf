@@ -1,4 +1,3 @@
-- Make sure the type of increment and decrement operators is 'void'
 - Allow global variables to reference each other in an order independent way
 - Make logical statements lazy evaluate
 - Allow 'do' to open function body
@@ -9,4 +8,3 @@
 - Don't allow negation of unsigned ints
 - Implement various integer types int32, int16, uint32 etc. Upgrade lexer to add precision suffixes.
 - Upgrade lexer to support float numbers and implement float types.
-- Support assign expressions that both return void and non void
