@@ -1,0 +1,38 @@
+;==================================================================================================
+; VarDecl
+;==================================================================================================
+let varDeclGlobal1 = 20
+let varDeclGlobal2 : int = 30
+
+func testVarDeclCall1()
+    assert(varDeclGlobal1 == 20)
+    assert(varDeclGlobal2 == 30)
+    varDeclGlobal1 = 200
+    varDeclGlobal2 = 300
+end
+
+func testVarDeclCall2()
+    assert(varDeclGlobal1 == 200)
+    assert(varDeclGlobal2 == 300)
+end
+
+func testVarDecl()
+    assert(varDeclGlobal1 == 20)
+    assert(varDeclGlobal2 == 30)
+    testVarDeclCall1()
+    testVarDeclCall2()
+    assert(varDeclGlobal1 == 200)
+    assert(varDeclGlobal2 == 300)    
+    varDeclGlobal1 = 20
+    varDeclGlobal2 = 30
+    assert(varDeclGlobal1 == 20)
+    assert(varDeclGlobal2 == 30)    
+end
+
+;==================================================================================================
+; Run the tests
+;==================================================================================================
+func main() -> int
+    testVarDecl()
+    return 0
+end
