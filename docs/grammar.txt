@@ -135,15 +135,15 @@ MulExpr:
 	ShiftExpr & MulExpr
 
 ShiftExpr:
-	UnaryExpr
-	UnaryExpr << ShiftExpr
-	UnaryExpr >> ShiftExpr
-	UnaryExpr >>> ShiftExpr
+	PrefixExpr
+	PrefixExpr << ShiftExpr
+	PrefixExpr >> ShiftExpr
+	PrefixExpr >>> ShiftExpr
 
-UnaryExpr:
+PrefixExpr:
 	PostfixExpr
-	+ UnaryExpr
-	- UnaryExpr
+	+ PrefixExpr
+	- PrefixExpr
 	( AssignExpr )
 
 PostfixExpr:

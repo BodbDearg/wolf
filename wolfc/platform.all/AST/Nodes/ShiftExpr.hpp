@@ -6,14 +6,14 @@
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
-class UnaryExpr;
+class PrefixExpr;
 
 /*
 ShiftExpr:
-    UnaryExpr
-	UnaryExpr << ShiftExpr
-	UnaryExpr >> ShiftExpr
-	UnaryExpr >>> ShiftExpr
+    PrefixExpr
+	PrefixExpr << ShiftExpr
+	PrefixExpr >> ShiftExpr
+	PrefixExpr >>> ShiftExpr
 */
 class ShiftExpr : public ASTNode, public IExpr {
 public:
@@ -21,50 +21,50 @@ public:
     static ShiftExpr * parse(ParseCtx & parseCtx);
 };
 
-/* UnaryExpr */
+/* PrefixExpr */
 class ShiftExprNoOp final : public ShiftExpr {
 public:
-    ShiftExprNoOp(UnaryExpr & expr);
+    ShiftExprNoOp(PrefixExpr & expr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    UnaryExpr & mExpr;
+    PrefixExpr & mExpr;
 };
 
 /* Base class for an ShiftExpr with two operands */
 class ShiftExprTwoOps : public ShiftExpr {
 public:
-    ShiftExprTwoOps(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
+    ShiftExprTwoOps(PrefixExpr & leftExpr, ShiftExpr & rightExpr);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
     
-    UnaryExpr & mLeftExpr;
+    PrefixExpr & mLeftExpr;
     ShiftExpr & mRightExpr;
 };
 
-/* UnaryExpr << ShiftExpr */
+/* PrefixExpr << ShiftExpr */
 class ShiftExprLShift final : public ShiftExprTwoOps {
 public:
-    ShiftExprLShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
+    ShiftExprLShift(PrefixExpr & leftExpr, ShiftExpr & rightExpr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
-/* UnaryExpr >> ShiftExpr */
+/* PrefixExpr >> ShiftExpr */
 class ShiftExprARShift final : public ShiftExprTwoOps {
 public:
-    ShiftExprARShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
+    ShiftExprARShift(PrefixExpr & leftExpr, ShiftExpr & rightExpr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
-/* UnaryExpr >>> ShiftExpr */
+/* PrefixExpr >>> ShiftExpr */
 class ShiftExprLRShift final : public ShiftExprTwoOps {
 public:
-    ShiftExprLRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr);
+    ShiftExprLRShift(PrefixExpr & leftExpr, ShiftExpr & rightExpr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
 };

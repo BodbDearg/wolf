@@ -84,6 +84,10 @@ public:
     virtual void visit(const AST::PostfixExprFuncCall & astNode) override;
     virtual void visit(const AST::PostfixExprInc & astNode) override;
     virtual void visit(const AST::PostfixExprNoOp & astNode) override;
+    virtual void visit(const AST::PrefixExprMinus & astNode) override;
+    virtual void visit(const AST::PrefixExprNoOp & astNode) override;
+    virtual void visit(const AST::PrefixExprParen & astNode) override;
+    virtual void visit(const AST::PrefixExprPlus & astNode) override;
     virtual void visit(const AST::PrimaryExprArrayLit & astNode) override;
     virtual void visit(const AST::PrimaryExprBoolLit & astNode) override;
     virtual void visit(const AST::PrimaryExprIdentifier & astNode) override;
@@ -125,10 +129,6 @@ public:
     virtual void visit(const AST::TimeExpr & astNode) override;
     virtual void visit(const AST::TypeArray & astNode) override;
     virtual void visit(const AST::TypePrimitive & astNode) override;
-    virtual void visit(const AST::UnaryExprMinus & astNode) override;
-    virtual void visit(const AST::UnaryExprNoOp & astNode) override;
-    virtual void visit(const AST::UnaryExprParen & astNode) override;
-    virtual void visit(const AST::UnaryExprPlus & astNode) override;
     virtual void visit(const AST::VarDeclExplicitType & astNode) override;
     virtual void visit(const AST::VarDeclInferType & astNode) override;
     virtual void visit(const AST::WhileStmnt & astNode) override;

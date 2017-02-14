@@ -1,4 +1,4 @@
-#include "UnaryExpr.hpp"
+#include "PrefixExpr.hpp"
 
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
@@ -10,12 +10,12 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
-// UnaryExpr
+// PrefixExpr
 //-----------------------------------------------------------------------------
-bool UnaryExpr::peek(const Token * currentToken) {
+bool PrefixExpr::peek(const Token * currentToken) {
     /* 
-    - UnaryExpr
-    + UnaryExpr
+    - PrefixExpr
+    + PrefixExpr
     */
     if (currentToken->type == TokenType::kMinus || currentToken->type == TokenType::kPlus) {
         return PostfixExpr::peek(currentToken + 1);
@@ -30,24 +30,24 @@ bool UnaryExpr::peek(const Token * currentToken) {
     return PostfixExpr::peek(currentToken);
 }
 
-UnaryExpr * UnaryExpr::parse(ParseCtx & parseCtx) {
+PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
     switch (parseCtx.tok()->type) {
         /* - PostfixExpr */
         case TokenType::kMinus: {
             const Token * minusTok = parseCtx.tok();
             parseCtx.nextTok();     // Skip '-'
-            UnaryExpr * expr = UnaryExpr::parse(parseCtx);
+            PrefixExpr * expr = PrefixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
-            return WC_NEW_AST_NODE(parseCtx, UnaryExprMinus, *minusTok, *expr);
+            return WC_NEW_AST_NODE(parseCtx, PrefixExprMinus, *minusTok, *expr);
         }   break;
             
         /* + PostfixExpr */
         case TokenType::kPlus: {
             const Token * plusTok = parseCtx.tok();
             parseCtx.nextTok();     // Skip '+'
-            UnaryExpr * expr = UnaryExpr::parse(parseCtx);
+            PrefixExpr * expr = PrefixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
-            return WC_NEW_AST_NODE(parseCtx, UnaryExprPlus, *plusTok, *expr);
+            return WC_NEW_AST_NODE(parseCtx, PrefixExprPlus, *plusTok, *expr);
         }   break;
             
         /* ( AssignExpr ) */
@@ -67,14 +67,14 @@ UnaryExpr * UnaryExpr::parse(ParseCtx & parseCtx) {
             const Token * rparenTok = parseCtx.tok();
             parseCtx.nextTok();     // Skip ')'
             WC_GUARD(expr, nullptr);
-            return WC_NEW_AST_NODE(parseCtx, UnaryExprParen, *lparenTok, *expr, *rparenTok);
+            return WC_NEW_AST_NODE(parseCtx, PrefixExprParen, *lparenTok, *expr, *rparenTok);
         }   break;
             
         /* PostfixExpr */
         default: {
             PostfixExpr * expr = PostfixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
-            return WC_NEW_AST_NODE(parseCtx, UnaryExprNoOp, *expr);
+            return WC_NEW_AST_NODE(parseCtx, PrefixExprNoOp, *expr);
         }   break;
     }
     
@@ -82,72 +82,72 @@ UnaryExpr * UnaryExpr::parse(ParseCtx & parseCtx) {
 }
 
 //-----------------------------------------------------------------------------
-// UnaryExprNoOp
+// PrefixExprNoOp
 //-----------------------------------------------------------------------------
-UnaryExprNoOp::UnaryExprNoOp(PostfixExpr & expr) : mExpr(expr) {
+PrefixExprNoOp::PrefixExprNoOp(PostfixExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void UnaryExprNoOp::accept(ASTNodeVisitor & visitor) const {
+void PrefixExprNoOp::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
-const Token & UnaryExprNoOp::getStartToken() const {
+const Token & PrefixExprNoOp::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & UnaryExprNoOp::getEndToken() const {
+const Token & PrefixExprNoOp::getEndToken() const {
     return mExpr.getEndToken();
 }
 
 //-----------------------------------------------------------------------------
-// UnaryExprPlusMinusBase
+// PrefixExprPlusMinusBase
 //-----------------------------------------------------------------------------
-UnaryExprPlusMinusBase::UnaryExprPlusMinusBase(const Token & startToken, UnaryExpr & expr) :
+PrefixExprPlusMinusBase::PrefixExprPlusMinusBase(const Token & startToken, PrefixExpr & expr) :
     mStartToken(startToken),
     mExpr(expr)
 {
     mExpr.mParent = this;
 }
 
-const Token & UnaryExprPlusMinusBase::getStartToken() const {
+const Token & PrefixExprPlusMinusBase::getStartToken() const {
     return mStartToken;
 }
 
-const Token & UnaryExprPlusMinusBase::getEndToken() const {
+const Token & PrefixExprPlusMinusBase::getEndToken() const {
     return mExpr.getEndToken();
 }
 
 //-----------------------------------------------------------------------------
-// UnaryExprPlus
+// PrefixExprPlus
 //-----------------------------------------------------------------------------
-UnaryExprPlus::UnaryExprPlus(const Token & startToken, UnaryExpr & expr) :
-    UnaryExprPlusMinusBase(startToken, expr)
+PrefixExprPlus::PrefixExprPlus(const Token & startToken, PrefixExpr & expr) :
+    PrefixExprPlusMinusBase(startToken, expr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-void UnaryExprPlus::accept(ASTNodeVisitor & visitor) const {
+void PrefixExprPlus::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
 //-----------------------------------------------------------------------------
-// UnaryExprMinus
+// PrefixExprMinus
 //-----------------------------------------------------------------------------
-UnaryExprMinus::UnaryExprMinus(const Token & startToken, UnaryExpr & expr) :
-    UnaryExprPlusMinusBase(startToken, expr)
+PrefixExprMinus::PrefixExprMinus(const Token & startToken, PrefixExpr & expr) :
+    PrefixExprPlusMinusBase(startToken, expr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-void UnaryExprMinus::accept(ASTNodeVisitor & visitor) const {
+void PrefixExprMinus::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
 //-----------------------------------------------------------------------------
-// UnaryExprParen
+// PrefixExprParen
 //-----------------------------------------------------------------------------
-UnaryExprParen::UnaryExprParen(const Token & startToken, AssignExpr & expr, const Token & endToken) :
+PrefixExprParen::PrefixExprParen(const Token & startToken, AssignExpr & expr, const Token & endToken) :
     mStartToken(startToken),
     mExpr(expr),
     mEndToken(endToken)
@@ -155,15 +155,15 @@ UnaryExprParen::UnaryExprParen(const Token & startToken, AssignExpr & expr, cons
     mExpr.mParent = this;
 }
 
-void UnaryExprParen::accept(ASTNodeVisitor & visitor) const {
+void PrefixExprParen::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
-const Token & UnaryExprParen::getStartToken() const {
+const Token & PrefixExprParen::getStartToken() const {
     return mStartToken;
 }
 
-const Token & UnaryExprParen::getEndToken() const {
+const Token & PrefixExprParen::getEndToken() const {
     return mEndToken;
 }
 

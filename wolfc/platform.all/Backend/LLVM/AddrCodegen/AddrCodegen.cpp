@@ -26,6 +26,7 @@
 #include "AST/Nodes/NoOpStmnt.hpp"
 #include "AST/Nodes/NotExpr.hpp"
 #include "AST/Nodes/PostfixExpr.hpp"
+#include "AST/Nodes/PrefixExpr.hpp"
 #include "AST/Nodes/PrimaryExpr.hpp"
 #include "AST/Nodes/PrimitiveType.hpp"
 #include "AST/Nodes/PrintStmnt.hpp"
@@ -40,7 +41,6 @@
 #include "AST/Nodes/TernaryExpr.hpp"
 #include "AST/Nodes/TimeExpr.hpp"
 #include "AST/Nodes/Type.hpp"
-#include "AST/Nodes/UnaryExpr.hpp"
 #include "AST/Nodes/VarDecl.hpp"
 #include "AST/Nodes/WhileStmnt.hpp"
 #include "DataType/DataType.hpp"
@@ -413,6 +413,26 @@ void AddrCodegen::visit(const AST::NotExprNoOp & astNode) {
     astNode.mExpr.accept(*this);
 }
 
+void AddrCodegen::visit(const AST::PrefixExprMinus & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    cantTakeAddressOfUnaryOpError(astNode, "-", "minus");
+}
+
+void AddrCodegen::visit(const AST::PrefixExprNoOp & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    astNode.mExpr.accept(*this);
+}
+
+void AddrCodegen::visit(const AST::PrefixExprParen & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    astNode.mExpr.accept(*this);
+}
+
+void AddrCodegen::visit(const AST::PrefixExprPlus & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    cantTakeAddressOfUnaryOpError(astNode, "+", "plus");
+}
+
 void AddrCodegen::visit(const AST::PrimaryExprArrayLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mLit.accept(*this);
@@ -627,26 +647,6 @@ void AddrCodegen::visit(const AST::TypeArray & astNode) {
 void AddrCodegen::visit(const AST::TypePrimitive & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "TypePrimitive");
-}
-
-void AddrCodegen::visit(const AST::UnaryExprMinus & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfUnaryOpError(astNode, "-", "minus");
-}
-
-void AddrCodegen::visit(const AST::UnaryExprNoOp & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::UnaryExprParen & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::UnaryExprPlus & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfUnaryOpError(astNode, "+", "plus");
 }
 
 void AddrCodegen::visit(const AST::VarDeclExplicitType & astNode) {

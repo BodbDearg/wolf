@@ -9,24 +9,23 @@ WC_AST_BEGIN_NAMESPACE
 class AssignExpr;
 class PostfixExpr;
 
-#warning TODO: Rename to 'PrefixExpr'
 /*
-UnaryExpr:
+PrefixExpr:
 	PostfixExpr
-	+ UnaryExpr
-	- UnaryExpr
+	+ PrefixExpr
+	- PrefixExpr
 	( AssignExpr )
 */
-class UnaryExpr : public ASTNode, public IExpr {
+class PrefixExpr : public ASTNode, public IExpr {
 public:
     static bool peek(const Token * currentToken);
-    static UnaryExpr * parse(ParseCtx & parseCtx);
+    static PrefixExpr * parse(ParseCtx & parseCtx);
 };
 
 /* PostfixExpr */
-class UnaryExprNoOp : public UnaryExpr {
+class PrefixExprNoOp : public PrefixExpr {
 public:
-    UnaryExprNoOp(PostfixExpr & expr);
+    PrefixExprNoOp(PostfixExpr & expr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
@@ -36,37 +35,37 @@ public:
 };
 
 /* Base class for '+' or '-' unary expression */
-class UnaryExprPlusMinusBase : public UnaryExpr {
+class PrefixExprPlusMinusBase : public PrefixExpr {
 public:
-    UnaryExprPlusMinusBase(const Token & startToken, UnaryExpr & expr);
+    PrefixExprPlusMinusBase(const Token & startToken, PrefixExpr & expr);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
     
     const Token &   mStartToken;
-    UnaryExpr &     mExpr;
+    PrefixExpr &     mExpr;
 };
 
-/* + UnaryExpr */
-class UnaryExprPlus final : public UnaryExprPlusMinusBase {
+/* + PrefixExpr */
+class PrefixExprPlus final : public PrefixExprPlusMinusBase {
 public:
-    UnaryExprPlus(const Token & startToken, UnaryExpr & expr);
+    PrefixExprPlus(const Token & startToken, PrefixExpr & expr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
-/* - UnaryExpr */
-class UnaryExprMinus final : public UnaryExprPlusMinusBase {
+/* - PrefixExpr */
+class PrefixExprMinus final : public PrefixExprPlusMinusBase {
 public:
-    UnaryExprMinus(const Token & startToken, UnaryExpr & expr);
+    PrefixExprMinus(const Token & startToken, PrefixExpr & expr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
 /* ( AssignExpr ) */
-class UnaryExprParen final : public UnaryExpr {
+class PrefixExprParen final : public PrefixExpr {
 public:
-    UnaryExprParen(const Token & startToken, AssignExpr & expr, const Token & endToken);
+    PrefixExprParen(const Token & startToken, AssignExpr & expr, const Token & endToken);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;

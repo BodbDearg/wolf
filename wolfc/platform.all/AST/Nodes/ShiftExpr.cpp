@@ -3,7 +3,7 @@
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
 #include "LinearAlloc.hpp"
-#include "UnaryExpr.hpp"
+#include "PrefixExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
@@ -12,11 +12,11 @@ WC_AST_BEGIN_NAMESPACE
 // ShiftExpr
 //-----------------------------------------------------------------------------
 bool ShiftExpr::peek(const Token * tokenPtr) {
-    return UnaryExpr::peek(tokenPtr);
+    return PrefixExpr::peek(tokenPtr);
 }
 
 ShiftExpr * ShiftExpr::parse(ParseCtx & parseCtx) {
-    UnaryExpr * leftExpr = UnaryExpr::parse(parseCtx);
+    PrefixExpr * leftExpr = PrefixExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);
     
     // See if there is a known operator ahead.
@@ -46,7 +46,7 @@ ShiftExpr * ShiftExpr::parse(ParseCtx & parseCtx) {
 //-----------------------------------------------------------------------------
 // ShiftExprNoOp
 //-----------------------------------------------------------------------------
-ShiftExprNoOp::ShiftExprNoOp(UnaryExpr & expr) : mExpr(expr) {
+ShiftExprNoOp::ShiftExprNoOp(PrefixExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
@@ -65,7 +65,7 @@ const Token & ShiftExprNoOp::getEndToken() const {
 //-----------------------------------------------------------------------------
 // ShiftExprTwoOps
 //-----------------------------------------------------------------------------
-ShiftExprTwoOps::ShiftExprTwoOps(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
+ShiftExprTwoOps::ShiftExprTwoOps(PrefixExpr & leftExpr, ShiftExpr & rightExpr) :
     mLeftExpr(leftExpr),
     mRightExpr(rightExpr)
 {
@@ -84,7 +84,7 @@ const Token & ShiftExprTwoOps::getEndToken() const {
 //-----------------------------------------------------------------------------
 // ShiftExprLShift
 //-----------------------------------------------------------------------------
-ShiftExprLShift::ShiftExprLShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
+ShiftExprLShift::ShiftExprLShift(PrefixExpr & leftExpr, ShiftExpr & rightExpr) :
     ShiftExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
@@ -97,7 +97,7 @@ void ShiftExprLShift::accept(ASTNodeVisitor & visitor) const {
 //-----------------------------------------------------------------------------
 // ShiftExprARShift
 //-----------------------------------------------------------------------------
-ShiftExprARShift::ShiftExprARShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
+ShiftExprARShift::ShiftExprARShift(PrefixExpr & leftExpr, ShiftExpr & rightExpr) :
     ShiftExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
@@ -110,7 +110,7 @@ void ShiftExprARShift::accept(ASTNodeVisitor & visitor) const {
 //-----------------------------------------------------------------------------
 // ShiftExprLRShift
 //-----------------------------------------------------------------------------
-ShiftExprLRShift::ShiftExprLRShift(UnaryExpr & leftExpr, ShiftExpr & rightExpr) :
+ShiftExprLRShift::ShiftExprLRShift(PrefixExpr & leftExpr, ShiftExpr & rightExpr) :
     ShiftExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
