@@ -198,7 +198,6 @@ void CodegenBinaryOp::pushOpResult(llvm::Value * result,
                                    bool requiresLoad,
                                    const CompiledDataType & resultType)
 {
-    WC_ASSERT(result);
     mCG.mCtx.pushValue(Value(result, resultType, requiresLoad, mLeftExpr.mParent));
 }
 
