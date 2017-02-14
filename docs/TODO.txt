@@ -1,7 +1,6 @@
 - Unit tests for constant primary expressions (int, bool, string etc.)
 - Unit tests for various permutations of 'next' and 'break' within loop and while.
 - Unit tests for modifying function arguments.
-- Unit test for lookup of local array literal.
 - Unit test for bug where argument order was reversed when calling function in PostfixExpr
 - Make sure the type of increment and decrement operators is 'void'
 - Allow global variables to reference each other in an order independent way
