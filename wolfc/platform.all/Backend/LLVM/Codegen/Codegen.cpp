@@ -3,9 +3,8 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-Codegen::Codegen(CodegenCtx & ctx, const char * moduleName) :
+Codegen::Codegen(CodegenCtx & ctx) :
     mCtx(ctx),
-    mModuleName(moduleName),
     mConstCodegen(ctx),
     mCodegenDataType(mConstCodegen.mCodegenDataType),
     mAddrCodegen(ctx, *this, mConstCodegen, mCodegenDataType)

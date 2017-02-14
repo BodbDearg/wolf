@@ -16,7 +16,7 @@ class CodegenCtx;
 /* Generates code for the LLVM backend */
 class Codegen final : public AST::ASTNodeVisitor {
 public:
-    Codegen(CodegenCtx & ctx, const char * moduleName);
+    Codegen(CodegenCtx & ctx);
     
     /* ASTNode visitor functions */
     virtual void visit(const AST::AddExprAdd & astNode) override;
@@ -144,10 +144,6 @@ public:
     
     /* Code generator in charge of 'address of' code generation */
     AddrCodegen mAddrCodegen;
-     
-private:
-    #warning TODO: Move to codegen ctx
-    std::string mModuleName;
 };
 
 WC_LLVM_BACKEND_END_NAMESPACE

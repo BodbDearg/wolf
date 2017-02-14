@@ -12,9 +12,10 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-CodegenCtx::CodegenCtx() :
+CodegenCtx::CodegenCtx(const std::string & moduleName) :
     mLLVMCtx(),
-    mIRBuilder(mLLVMCtx)
+    mIRBuilder(mLLVMCtx),
+    mModuleName(moduleName)
 {
     // Reserving some room for these things
     mASTNodeStack.reserve(4096);

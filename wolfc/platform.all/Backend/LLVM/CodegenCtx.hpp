@@ -29,7 +29,7 @@ class RepeatableStmnt;
 /* Class holding the context for code generation */
 class CodegenCtx {
 public:
-    CodegenCtx();
+    CodegenCtx(const std::string & moduleName);
     
     ~CodegenCtx();
     
@@ -70,6 +70,11 @@ public:
     void warning(const AST::ASTNode & atNode, const char * msgFmtStr, std::va_list msgFmtStrArgs);
     void warning(const char * msgFmtStr, ...);
     void warning(const char * msgFmtStr, std::va_list msgFmtStrArgs);
+    
+    /* Get the name of the module being code generated */
+    inline const std::string & getModuleName() const {
+        return mModuleName;
+    }
     
     /* Push the current codegen basic block to the stack and save for later popping. */
     void pushInsertBlock();
@@ -215,6 +220,9 @@ public:
     
 private:
     WC_DISALLOW_COPY_AND_ASSIGN(CodegenCtx)
+    
+    /* The name of the module being code generated */
+    std::string mModuleName;
     
     /* The stack of AST nodes being visited */
     std::vector<const AST::ASTNode*> mASTNodeStack;

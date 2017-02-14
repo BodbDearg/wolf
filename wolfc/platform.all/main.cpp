@@ -15,11 +15,17 @@ WC_THIRD_PARTY_INCLUDES_BEGIN
     #endif
 WC_THIRD_PARTY_INCLUDES_END
 
+/**
+ * Temporary name for the wolfc module.
+ * TODO: Some day this will go away and be based on the filename or whatever.
+ */
+static const std::string kModuleName = "WolfTest";
+
 /* Compiles the given AST */
 static bool compileAST(const Wolfc::AST::Module * astModule, const char * fromSrcFile) {
     // Create a codegen context and do the code generation using the LLVM backend
-    Wolfc::LLVMBackend::CodegenCtx codegenCtx;
-    Wolfc::LLVMBackend::Codegen codegen(codegenCtx, "WolfTest");
+    Wolfc::LLVMBackend::CodegenCtx codegenCtx(kModuleName);
+    Wolfc::LLVMBackend::Codegen codegen(codegenCtx);
     codegen.visit(*astModule);
     
     // Emit compile warnings to stdout if there are any
