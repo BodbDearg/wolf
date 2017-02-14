@@ -133,6 +133,7 @@ public:
      */
     void pushValue(const Value & value);
     Value popValue();
+    void clearValues();
     
     /**
      * Push/pop a constant to the constant stack.
@@ -140,6 +141,7 @@ public:
      */
     void pushConstant(const Constant & constant);
     Constant popConstant();
+    void clearConstants();
     
     /**
      * Push/pop a compiled data type to the stack.
@@ -147,6 +149,7 @@ public:
      */
     void pushCompiledDataType(const CompiledDataType & dataType);
     CompiledDataType popCompiledDataType();
+    void clearCompiledDataTypes();
     
     /**
      * Handles the given list of deferred codegen callbacks.

@@ -6,6 +6,8 @@
 #include "AST/Nodes/ASTNode.hpp"
 #include "AST/Nodes/IExpr.hpp"
 #include "DataType/DataType.hpp"
+#include "DataType/PrimitiveDataTypes.hpp"
+#include "DataType/Primitives/VoidDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -128,6 +130,11 @@ void CodegenBinaryOp::codegen() {
     // All good, do the actual store:
     WC_ASSERT(!opResultVal.mRequiresLoad);
     WC_ASSERTED_OP(mCG.mCtx.mIRBuilder.CreateStore(opResultVal.mLLVMVal, leftValBeforeLoad.mLLVMVal));
+    
+    // The result of a stored operation is 'void'
+    PrimitiveDataTypes::getVoidDataType().accept(mCG.mCodegenDataType);
+    CompiledDataType voidCDT = mCG.mCtx.popCompiledDataType();
+    pushOpResult(nullptr, false, voidCDT);
 }
 
 void CodegenBinaryOp::visit(const ArrayDataType & dataType) {

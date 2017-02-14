@@ -284,6 +284,10 @@ Value CodegenCtx::popValue() {
     return value;
 }
 
+void CodegenCtx::clearValues() {
+    mValues.clear();
+}
+
 void CodegenCtx::pushConstant(const Constant & constant) {
     mConstants.push_back(constant);
 }
@@ -298,6 +302,10 @@ Constant CodegenCtx::popConstant() {
     return constant;
 }
 
+void CodegenCtx::clearConstants() {
+    mConstants.clear();
+}
+
 void CodegenCtx::pushCompiledDataType(const CompiledDataType & dataType) {
     mCompiledDataTypes.push_back(dataType);
 }
@@ -310,6 +318,10 @@ CompiledDataType CodegenCtx::popCompiledDataType() {
     }
     
     return CompiledDataType(PrimitiveDataTypes::getInvalidDataType(), nullptr);
+}
+
+void CodegenCtx::clearCompiledDataTypes() {
+    mCompiledDataTypes.clear();
 }
 
 void CodegenCtx::handleDeferredCodegenCallbacks(std::vector<std::function<void ()>> & callbacks) {

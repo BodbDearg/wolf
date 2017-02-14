@@ -77,6 +77,9 @@ void Codegen::visit(const AST::StmntReturnStmnt & astNode) {
 void Codegen::visit(const AST::StmntAssignExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mExpr.accept(*this);
+    
+    // Clear up all values on the stack after this is done
+    mCtx.clearValues();
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

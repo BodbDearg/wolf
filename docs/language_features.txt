@@ -16,6 +16,7 @@ Language TODO:
     - SSA style 'const' variables. Maybe make optimizer detect constness?
     - Branch prediction constructs.
     - typeof and istype expressions
+    - Support assign expressions that both return void and non void
 
 Modules:
     - Each translation unit compiles to a module stub

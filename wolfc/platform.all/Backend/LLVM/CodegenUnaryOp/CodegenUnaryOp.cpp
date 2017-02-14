@@ -6,6 +6,8 @@
 #include "AST/Nodes/ASTNode.hpp"
 #include "AST/Nodes/IExpr.hpp"
 #include "DataType/DataType.hpp"
+#include "DataType/PrimitiveDataTypes.hpp"
+#include "DataType/Primitives/VoidDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -79,7 +81,7 @@ void CodegenUnaryOp::codegen() {
     // The operator result type must match the type of the variable we are storing to
     const DataType & opResultType = opResultVal.mCompiledType.getDataType();
     
-    if (!opResultType.equals(exprType)){
+    if (!opResultType.equals(exprType)) {
         mCG.mCtx.error(*mExpr.mParent,
                        "Result of unary op can't be assigned to the operand due to mismatched types! "
                        "Require unary op result to be of type '%s'! Result of unary op was type '%s'!",
@@ -95,6 +97,11 @@ void CodegenUnaryOp::codegen() {
     // All good, do the actual store:
     WC_ASSERT(!opResultVal.mRequiresLoad);
     WC_ASSERTED_OP(mCG.mCtx.mIRBuilder.CreateStore(opResultVal.mLLVMVal, exprValBeforeLoad.mLLVMVal));
+    
+    // The result of a stored operation is 'void'
+    PrimitiveDataTypes::getVoidDataType().accept(mCG.mCodegenDataType);
+    CompiledDataType voidCDT = mCG.mCtx.popCompiledDataType();
+    pushOpResult(nullptr, false, voidCDT);
 }
 
 void CodegenUnaryOp::visit(const ArrayDataType & dataType) {

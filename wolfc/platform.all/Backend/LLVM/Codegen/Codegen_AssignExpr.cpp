@@ -8,6 +8,8 @@
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/TernaryExpr.hpp"
 #include "DataType/DataType.hpp"
+#include "DataType/PrimitiveDataTypes.hpp"
+#include "DataType/Primitives/VoidDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -52,6 +54,11 @@ void Codegen::visit(const AST::AssignExprAssign & astNode) {
         // Do the store:
         mCtx.mIRBuilder.CreateStore(rightVal.mLLVMVal, leftAddr.mLLVMVal);
     }
+    
+    // The result of an assign expression is 'void'
+    PrimitiveDataTypes::getVoidDataType().accept(mCodegenDataType);
+    CompiledDataType voidCDT = mCtx.popCompiledDataType();
+    mCtx.pushValue(Value(nullptr, voidCDT, false, &astNode));
 }
 
 void Codegen::visit(const AST::AssignExprAssignAdd & astNode) {
