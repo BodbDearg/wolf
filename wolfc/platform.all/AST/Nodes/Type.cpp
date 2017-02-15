@@ -13,6 +13,7 @@ WC_AST_BEGIN_NAMESPACE
 // Type
 //-----------------------------------------------------------------------------
 bool Type::peek(const Token * currentToken) {
+    #warning Handle newlines during parsing
     return  currentToken->type == TokenType::kLBrack ||
             PrimitiveType::peek(currentToken);
 }

@@ -10,6 +10,7 @@ WC_AST_BEGIN_NAMESPACE
 // TODO: Make this be for ALL numeric literals
 
 bool IntLit::peek(const Token * tokenPtr) {
+    #warning Handle newlines during parsing
     return tokenPtr->type == TokenType::kIntLit;
 }
 

@@ -23,6 +23,7 @@ WC_AST_BEGIN_NAMESPACE
 // Stmnt
 //-----------------------------------------------------------------------------
 bool Stmnt::peek(const Token * tokenPtr) {
+    #warning Handle newlines during parsing
     return  NoOpStmnt::peek(tokenPtr) ||
             PrintStmnt::peek(tokenPtr) ||
             AssertStmnt::peek(tokenPtr) ||

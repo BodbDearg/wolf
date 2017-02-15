@@ -13,6 +13,7 @@ WC_AST_BEGIN_NAMESPACE
 // LoopStmnt
 //-----------------------------------------------------------------------------
 bool LoopStmnt::peek(const Token * tokenPtr) {
+    #warning Handle newlines during parsing
     return tokenPtr->type == TokenType::kLoop;
 }
 

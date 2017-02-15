@@ -9,6 +9,7 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 bool FuncCall::peek(const Token * currentToken) {
+    #warning Handle newlines during parsing
     return currentToken->type == TokenType::kLParen;
 }
 

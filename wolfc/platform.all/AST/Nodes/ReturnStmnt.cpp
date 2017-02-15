@@ -17,6 +17,7 @@ static bool isCondTokenType(TokenType tokenType) {
 // ReturnStmnt
 //-----------------------------------------------------------------------------
 bool ReturnStmnt::peek(const Token * tokenPtr) {
+    #warning Handle newlines during parsing
     return tokenPtr[0].type == TokenType::kReturn;
 }
 

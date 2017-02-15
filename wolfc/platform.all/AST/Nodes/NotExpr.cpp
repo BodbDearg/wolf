@@ -12,6 +12,7 @@ WC_AST_BEGIN_NAMESPACE
 // NotExpr
 //-----------------------------------------------------------------------------
 bool NotExpr::peek(const Token * tokenPtr) {
+    #warning Handle newlines during parsing
     return  tokenPtr->type == TokenType::kNot ||
             tokenPtr->type == TokenType::kTilde ||
             CmpExpr::peek(tokenPtr);

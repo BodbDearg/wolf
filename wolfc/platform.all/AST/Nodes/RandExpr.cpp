@@ -12,6 +12,7 @@ WC_AST_BEGIN_NAMESPACE
 // RandExpr
 //-----------------------------------------------------------------------------
 bool RandExpr::peek(const Token * tokenPtr) {
+    #warning Handle newlines during parsing
     return  tokenPtr->type == TokenType::kRand ||
             tokenPtr->type == TokenType::kSRand;
 }

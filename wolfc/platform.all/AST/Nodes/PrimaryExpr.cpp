@@ -19,6 +19,7 @@ WC_AST_BEGIN_NAMESPACE
 // PrimaryExpr
 //-----------------------------------------------------------------------------
 bool PrimaryExpr::peek(const Token * currentToken) {
+    #warning Handle newlines during parsing
     return  IntLit::peek(currentToken) ||
             BoolLit::peek(currentToken) ||
             StrLit::peek(currentToken) ||

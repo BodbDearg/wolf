@@ -16,6 +16,7 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 bool Func::peek(const Token * tokenPtr) {
+    #warning Handle newlines during parsing
     return tokenPtr->type == TokenType::kFunc;
 }
 

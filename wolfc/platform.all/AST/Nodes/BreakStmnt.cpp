@@ -12,6 +12,7 @@ WC_AST_BEGIN_NAMESPACE
 // BreakStmnt
 //-----------------------------------------------------------------------------
 bool BreakStmnt::peek(const Token * tokenPtr) {
+    #warning Handle newlines during parsing
     return tokenPtr[0].type == TokenType::kBreak;
 }
 

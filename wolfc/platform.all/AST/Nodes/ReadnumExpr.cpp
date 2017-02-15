@@ -8,6 +8,7 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 bool ReadnumExpr::peek(const Token * tokenPtr) {
+    #warning Handle newlines during parsing
     return tokenPtr->type == TokenType::kReadnum;
 }
 

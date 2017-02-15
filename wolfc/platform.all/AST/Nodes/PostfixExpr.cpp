@@ -14,6 +14,7 @@ WC_AST_BEGIN_NAMESPACE
 // PostfixExpr
 //-----------------------------------------------------------------------------
 bool PostfixExpr::peek(const Token * currentToken) {
+    #warning Handle newlines during parsing
     return CastExpr::peek(currentToken);
 }
 

@@ -12,6 +12,7 @@ WC_AST_BEGIN_NAMESPACE
 // CmpExpr
 //-----------------------------------------------------------------------------
 bool CmpExpr::peek(const Token * tokenPtr) {
+    #warning Handle newlines during parsing
     return AddExpr::peek(tokenPtr);
 }
 

@@ -14,6 +14,7 @@ WC_AST_BEGIN_NAMESPACE
 // CastExpr
 //-----------------------------------------------------------------------------
 bool CastExpr::peek(const Token * currentToken) {
+    #warning Handle newlines during parsing
     return PrimaryExpr::peek(currentToken) || currentToken->type == TokenType::kCast;
 }
 

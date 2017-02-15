@@ -13,6 +13,7 @@ WC_AST_BEGIN_NAMESPACE
 // DeclDef
 //-----------------------------------------------------------------------------
 bool DeclDef::peek(const Token * tokenPtr) {
+    #warning Handle newlines during parsing
     return Func::peek(tokenPtr) || VarDecl::peek(tokenPtr);
 }
 

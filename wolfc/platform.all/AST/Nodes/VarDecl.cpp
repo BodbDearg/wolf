@@ -14,6 +14,7 @@ WC_AST_BEGIN_NAMESPACE
 // VarDecl
 //-----------------------------------------------------------------------------
 bool VarDecl::peek(const Token * tokenPtr) {
+    #warning Handle newlines during parsing
     return tokenPtr->type == TokenType::kLet;
 }
 

@@ -13,6 +13,7 @@ WC_AST_BEGIN_NAMESPACE
 // PrefixExpr
 //-----------------------------------------------------------------------------
 bool PrefixExpr::peek(const Token * currentToken) {
+    #warning Handle newlines during parsing
     /* 
     - PrefixExpr
     + PrefixExpr
@@ -21,7 +22,7 @@ bool PrefixExpr::peek(const Token * currentToken) {
         return PostfixExpr::peek(currentToken + 1);
     }
     
-    /* (AssignExpr) */
+    /* ( AssignExpr ) */
     if (currentToken->type == TokenType::kLParen) {
         return AssignExpr::peek(currentToken + 1);
     }

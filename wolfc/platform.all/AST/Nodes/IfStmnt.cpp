@@ -13,6 +13,7 @@ WC_AST_BEGIN_NAMESPACE
 // IfExpr
 //-----------------------------------------------------------------------------
 bool IfStmnt::peek(const Token * tokenPtr) {
+    #warning Handle newlines during parsing
     TokenType tokenType = tokenPtr->type;
     return tokenType == TokenType::kIf || tokenType == TokenType::kUnless;
 }
