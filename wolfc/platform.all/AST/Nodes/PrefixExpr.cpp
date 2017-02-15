@@ -13,18 +13,21 @@ WC_AST_BEGIN_NAMESPACE
 // PrefixExpr
 //-----------------------------------------------------------------------------
 bool PrefixExpr::peek(const Token * currentToken) {
-    #warning Handle newlines during parsing
     /* 
     - PrefixExpr
     + PrefixExpr
     */
     if (currentToken->type == TokenType::kMinus || currentToken->type == TokenType::kPlus) {
-        return PostfixExpr::peek(currentToken + 1);
+        ++currentToken;
+        WC_PARSER_SKIP_NEWLINE_TOKENS(currentToken);
+        return PrefixExpr::peek(currentToken);
     }
     
     /* ( AssignExpr ) */
     if (currentToken->type == TokenType::kLParen) {
-        return AssignExpr::peek(currentToken + 1);
+        ++currentToken;
+        WC_PARSER_SKIP_NEWLINE_TOKENS(currentToken);
+        return AssignExpr::peek(currentToken);
     }
     
     /* PrimaryExpr */
@@ -32,12 +35,12 @@ bool PrefixExpr::peek(const Token * currentToken) {
 }
 
 PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     switch (parseCtx.tok()->type) {
         /* - PostfixExpr */
         case TokenType::kMinus: {
             const Token * minusTok = parseCtx.tok();
-            parseCtx.nextTok();     // Skip '-'
+            parseCtx.nextTok();         // Skip '-'
+            parseCtx.skipNewlines();    // Skip any newlines
             PrefixExpr * expr = PrefixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
             return WC_NEW_AST_NODE(parseCtx, PrefixExprMinus, *minusTok, *expr);
@@ -46,7 +49,8 @@ PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
         /* + PostfixExpr */
         case TokenType::kPlus: {
             const Token * plusTok = parseCtx.tok();
-            parseCtx.nextTok();     // Skip '+'
+            parseCtx.nextTok();         // Skip '+'
+            parseCtx.skipNewlines();    // Skip any newlines
             PrefixExpr * expr = PrefixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
             return WC_NEW_AST_NODE(parseCtx, PrefixExprPlus, *plusTok, *expr);
@@ -55,8 +59,11 @@ PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
         /* ( AssignExpr ) */
         case TokenType::kLParen: {
             const Token * lparenTok = parseCtx.tok();
-            parseCtx.nextTok();     // Skip '('
+            parseCtx.nextTok();         // Skip '('
+            parseCtx.skipNewlines();    // Skip any newlines
+            
             AssignExpr * expr = AssignExpr::parse(parseCtx);
+            parseCtx.skipNewlines();    // Skip any newlines
             
             if (parseCtx.tok()->type != TokenType::kRParen) {
                 parseCtx.error("Expected closing ')' to match '(' at line %zu and column %zu!",
@@ -69,6 +76,7 @@ PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
             const Token * rparenTok = parseCtx.tok();
             parseCtx.nextTok();     // Skip ')'
             WC_GUARD(expr, nullptr);
+            
             return WC_NEW_AST_NODE(parseCtx, PrefixExprParen, *lparenTok, *expr, *rparenTok);
         }   break;
             

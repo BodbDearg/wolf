@@ -93,6 +93,8 @@ Func * Func::parse(ParseCtx & parseCtx) {
         WC_GUARD(returnType, nullptr);
     }
     
+    parseCtx.skipNewlines();    // Skip any newlines
+    
     // Parse the inner function scope:
     Scope * scope = Scope::parse(parseCtx);
     WC_GUARD(scope, nullptr);

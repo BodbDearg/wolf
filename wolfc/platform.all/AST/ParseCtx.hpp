@@ -17,6 +17,14 @@ struct Token;
 
 WC_AST_BEGIN_NAMESPACE
 
+/* Macro for skipping newline tokens types, given a token pointer */
+#define WC_PARSER_SKIP_NEWLINE_TOKENS(tokenPtr)\
+    do {\
+        while (tokenPtr->type == TokenType::kNewline) {\
+            ++tokenPtr;\
+        }\
+    }   while (0)
+
 /* Class holding the current context for parsing */
 class ParseCtx {
 public:

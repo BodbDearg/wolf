@@ -38,6 +38,16 @@ func testFuncArg(
     )
 end
 
+func testPrefixExpr() 
+    -
+        1
+    +
+        1
+    (
+        1
+    )
+end
+
 func testPrintStmnt()
     print
     (
@@ -61,6 +71,7 @@ func main() -> int
     testAssertStmnt()
     testFunc(1)
     testFuncArg(1)
+    testPrefixExpr()
     testPrintStmnt()
     testVarDecl()
     return 0

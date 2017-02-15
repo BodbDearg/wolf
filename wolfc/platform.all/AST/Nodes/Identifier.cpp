@@ -13,7 +13,6 @@ bool Identifier::peek(const Token * tokenPtr) {
 }
 
 Identifier * Identifier::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     if (parseCtx.tok()->type != TokenType::kIdentifier) {
         parseCtx.error("Expected identifier!");
         return nullptr;
