@@ -12,11 +12,21 @@ func testPrintStmnt()
     )
 end
 
+func testVarDecl()
+    let
+    blah
+    :
+    int
+    = 
+    3
+end
+
 ;==================================================================================================
 ; Run the tests
 ;==================================================================================================
 func main() -> int
     testAssertStmnt()
     testPrintStmnt()
+    testVarDecl()
     return 0
 end

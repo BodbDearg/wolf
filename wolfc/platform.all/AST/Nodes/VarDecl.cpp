@@ -18,7 +18,6 @@ bool VarDecl::peek(const Token * tokenPtr) {
 }
 
 VarDecl * VarDecl::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // Parse 'let' keyword
     if (parseCtx.tok()->type != TokenType::kLet) {
         parseCtx.error("Expected keyword 'let' at start of a variable declaration!");
@@ -27,22 +26,25 @@ VarDecl * VarDecl::parse(ParseCtx & parseCtx) {
     
     // Save and skip 'let'
     const Token * varToken = parseCtx.tok();
-    parseCtx.nextTok();
+    parseCtx.nextTok();         // Consume 'let'
+    parseCtx.skipNewlines();    // Skip any newlines
     
     // Parse the identifier ahead
     Identifier * ident = Identifier::parse(parseCtx);
     WC_GUARD(ident, nullptr);
+    parseCtx.skipNewlines();    // Skip any newlines
     
     // See if the type for the variable is specified:
     Type * type = nullptr;
     
     if (parseCtx.tok()->type == TokenType::kColon) {
-        // Type specified, skip the ':'
-        parseCtx.nextTok();
+        parseCtx.nextTok();         // Type specified, skip the ':'
+        parseCtx.skipNewlines();    // Skip any newlines
         
         // Parse the type:
         type = Type::parse(parseCtx);
         WC_GUARD(type, nullptr);
+        parseCtx.skipNewlines();    // Skip any newlines
     }
     
     // Parse the '='
@@ -51,7 +53,8 @@ VarDecl * VarDecl::parse(ParseCtx & parseCtx) {
         return nullptr;
     }
     
-    parseCtx.nextTok();
+    parseCtx.nextTok();         // Consume '='
+    parseCtx.skipNewlines();    // Skip any newlines
     
     // Parse the init expression and return result of parsing
     AssignExpr * initExpr = AssignExpr::parse(parseCtx);
