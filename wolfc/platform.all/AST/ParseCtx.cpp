@@ -12,6 +12,12 @@ ParseCtx::ParseCtx(const Token * startToken, LinearAlloc & linearAlloc) :
     WC_ASSERT(mCurrentToken);
 }
 
+void ParseCtx::skipNewlines() {
+    while (mCurrentToken->type == TokenType::kNewline) {
+        ++mCurrentToken;
+    }
+}
+
 bool ParseCtx::hasErrors() const {
     return mErrorMsgs.size() > 0;
 }

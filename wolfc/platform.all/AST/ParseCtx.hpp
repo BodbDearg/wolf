@@ -47,6 +47,9 @@ public:
         }
     }
     
+    /* Skip any newline tokens that are found */
+    void skipNewlines();
+    
     /* Get the liner allocator for the parse context */
     inline LinearAlloc & getAlloc() {
         return mLinearAlloc;

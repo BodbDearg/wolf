@@ -9,7 +9,9 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 Scope * Scope::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
+    // Skip any newlines that the scope starts with:
+    parseCtx.skipNewlines();
+    
     // Save start token:
     const Token * startToken = parseCtx.tok();
     
@@ -17,9 +19,13 @@ Scope * Scope::parse(ParseCtx & parseCtx) {
     std::vector<Stmnt*> stmnts;
     
     while (Stmnt::peek(parseCtx.tok())) {
+        // Parse the statement
         Stmnt * stmnt = Stmnt::parse(parseCtx);
         WC_GUARD(stmnt, nullptr);
         stmnts.push_back(stmnt);
+        
+        // Skip any newlines that follow
+        parseCtx.skipNewlines();
     }
     
     // Return the parsed scope

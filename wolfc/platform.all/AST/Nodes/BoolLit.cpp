@@ -12,7 +12,6 @@ bool BoolLit::peek(const Token * tokenPtr) {
 }
 
 BoolLit * BoolLit::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected 'bool' literal!");
         return nullptr;
