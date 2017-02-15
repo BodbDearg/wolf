@@ -14,10 +14,10 @@ bool FuncArg::peek(const Token * currentToken) {
 }
 
 FuncArg * FuncArg::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // Parse the identifier:
     Identifier * ident = Identifier::parse(parseCtx);
     WC_GUARD(ident, nullptr);
+    parseCtx.skipNewlines();    // Skip any newlines
     
     // Expect ':' following the identifier
     if (parseCtx.tok()->type != TokenType::kColon) {
@@ -25,8 +25,8 @@ FuncArg * FuncArg::parse(ParseCtx & parseCtx) {
         return nullptr;
     }
     
-    // Skip ':'
-    parseCtx.nextTok();
+    parseCtx.nextTok();         // Skip ':'
+    parseCtx.skipNewlines();    // Skip any newlines
     
     // Parse the data type
     Type * type = Type::parse(parseCtx);

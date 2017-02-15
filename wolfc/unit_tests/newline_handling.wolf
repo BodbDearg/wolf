@@ -1,4 +1,37 @@
+
+; Note: newline above and below deliberate to test parser
+
 func testAssertStmnt()
+    assert
+    (
+        true
+    )
+end
+
+func 
+testFunc
+(
+    
+    v 
+    :
+    int
+)
+    assert
+    (
+        true
+    )
+
+end
+
+
+func testFuncArg(
+    
+    v 
+    
+        :
+    
+    int
+)
     assert
     (
         true
@@ -26,6 +59,8 @@ end
 ;==================================================================================================
 func main() -> int
     testAssertStmnt()
+    testFunc(1)
+    testFuncArg(1)
     testPrintStmnt()
     testVarDecl()
     return 0
