@@ -5,10 +5,18 @@ func testAssertStmnt()
     )
 end
 
+func testPrintStmnt()
+    print
+    (
+        1
+    )
+end
+
 ;==================================================================================================
 ; Run the tests
 ;==================================================================================================
 func main() -> int
     testAssertStmnt()
+    testPrintStmnt()
     return 0
 end

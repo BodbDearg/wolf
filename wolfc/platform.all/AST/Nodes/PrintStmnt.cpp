@@ -13,25 +13,27 @@ bool PrintStmnt::peek(const Token * tokenPtr) {
 }
 
 PrintStmnt * PrintStmnt::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     if (parseCtx.tok()->type != TokenType::kPrint) {
         parseCtx.error("Expected keyword 'print' for 'print()' statement!");
         return nullptr;
     }
     
     const Token * printTok = parseCtx.tok();
-    parseCtx.nextTok();     // Consume 'print'
+    parseCtx.nextTok();         // Consume 'print'
+    parseCtx.skipNewlines();    // Consume any newlines
     
     if (parseCtx.tok()->type != TokenType::kLParen) {
         parseCtx.error("Expected '(' following 'print'!");
         return nullptr;
     }
     
-    parseCtx.nextTok();     // Consume '('
+    parseCtx.nextTok();         // Consume '('
+    parseCtx.skipNewlines();    // Consume any newlines
     
     // Parse the inner expression
     AssignExpr * assignExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(assignExpr, nullptr);
+    parseCtx.skipNewlines();    // Consume any newlines
     
     // Expect ')' following all that:
     if (parseCtx.tok()->type != TokenType::kRParen) {
