@@ -429,9 +429,14 @@ end
 ;==================================================================================================
 ; CastExpr
 ;==================================================================================================
+let testConstCastExpr1 = cast(2 to int)
+let testConstCastExpr2 = cast(2 to int64)
+
 func testCastExpr()
     assert(2 == cast(2 to int))     ; No-op cast
     assert(2 == cast(2 to int64))   ; No-op cast
+    assert(2 == testConstCastExpr1) ; No-op cast
+    assert(2 == testConstCastExpr2) ; No-op cast
 end
 
 ;==================================================================================================

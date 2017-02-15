@@ -40,7 +40,7 @@ public:
      * Evaluates the operand of the expression before calling the visitor functions 
      * with the value needed (if everything is ok).
      */
-    void codegen();
+    virtual void codegen();
     
     /* DataType visitor functions */
     virtual void visit(const ArrayDataType & dataType) override;
