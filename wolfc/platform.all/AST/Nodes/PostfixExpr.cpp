@@ -18,6 +18,7 @@ bool PostfixExpr::peek(const Token * currentToken) {
 }
 
 PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Parse the initial expression
     CastExpr * expr = CastExpr::parse(parseCtx);
     WC_GUARD(expr, nullptr);

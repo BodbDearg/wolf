@@ -14,6 +14,7 @@ bool IntLit::peek(const Token * tokenPtr) {
 }
 
 IntLit * IntLit::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected integer literal!");
         return nullptr;

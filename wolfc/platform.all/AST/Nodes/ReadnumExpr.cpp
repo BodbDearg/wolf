@@ -12,6 +12,7 @@ bool ReadnumExpr::peek(const Token * tokenPtr) {
 }
 
 ReadnumExpr * ReadnumExpr::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     if (parseCtx.tok()->type != TokenType::kReadnum) {
         parseCtx.error("Expected 'readnum' at begining of readnum() expression!");
         return nullptr;

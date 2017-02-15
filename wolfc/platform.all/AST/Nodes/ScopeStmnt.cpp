@@ -13,6 +13,7 @@ bool ScopeStmnt::peek(const Token * tokenPtr) {
 }
 
 ScopeStmnt * ScopeStmnt::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Parse the initial 'scope' keyword
     if (!peek(parseCtx.tok())) {
         parseCtx.error("'scope' statement expected!");

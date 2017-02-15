@@ -14,6 +14,7 @@ bool FuncArg::peek(const Token * currentToken) {
 }
 
 FuncArg * FuncArg::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Parse the identifier:
     Identifier * ident = Identifier::parse(parseCtx);
     WC_GUARD(ident, nullptr);

@@ -18,6 +18,7 @@ bool CastExpr::peek(const Token * currentToken) {
 }
 
 CastExpr * CastExpr::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // See if 'cast' follows:
     if (parseCtx.tok()->type == TokenType::kCast) {
         // Casting expression: skip 'cast'

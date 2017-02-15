@@ -12,6 +12,7 @@ bool TimeExpr::peek(const Token * tokenPtr) {
 }
 
 TimeExpr * TimeExpr::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     if (parseCtx.tok()->type != TokenType::kTime) {
         parseCtx.error("Expected 'time' at begining of time() expression!");
         return nullptr;

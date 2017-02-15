@@ -21,6 +21,7 @@ bool ReturnStmnt::peek(const Token * tokenPtr) {
 }
 
 ReturnStmnt * ReturnStmnt::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected return statement!");
         return nullptr;

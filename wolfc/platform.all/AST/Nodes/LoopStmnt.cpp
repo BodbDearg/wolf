@@ -17,6 +17,7 @@ bool LoopStmnt::peek(const Token * tokenPtr) {
 }
 
 LoopStmnt * LoopStmnt::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Parse the initial 'loop' keyword
     if (!peek(parseCtx.tok())) {
         parseCtx.error("'loop' statement expected!");

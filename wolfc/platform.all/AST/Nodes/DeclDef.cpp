@@ -17,6 +17,7 @@ bool DeclDef::peek(const Token * tokenPtr) {
 }
 
 DeclDef * DeclDef::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Check for 'Func':
     if (Func::peek(parseCtx.tok())) {
         Func * func = Func::parse(parseCtx);

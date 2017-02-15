@@ -18,6 +18,7 @@ bool Type::peek(const Token * currentToken) {
 }
 
 Type * Type::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // See if there is an array type following:
     if (parseCtx.tok()->type == TokenType::kLBrack) {
         // Array type ahead: skip the '['

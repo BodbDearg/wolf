@@ -127,12 +127,24 @@ void Lexer::skipAnyWhitespaceCharsAhead() {
 bool Lexer::moveOntoNextChar() {
     // Move along by one char, see if the next char is a newline or just a regular non newline char
     if (mLexerState.currentCharIsNewline) {
+        // Save a newline token into the list of tokens
+        Token & newlineTok = allocToken(TokenType::kNewline);
+        newlineTok.startLine = mLexerState.srcLine;
+        newlineTok.startCol = mLexerState.srcCol;
+        newlineTok.startSrcPtr = mLexerState.srcPtr;
+        newlineTok.endLine = mLexerState.srcLine + 1;
+        newlineTok.endCol = 0;
+        newlineTok.endSrcPtr = mLexerState.srcPtr + 1;
+        
         // Newline char: have to treat this different
         if (mLexerState.currentChar == '\r' && mLexerState.srcPtr[1] == '\n') {
             // Carriage return and newline utf8 combo: interpret as just one newline
             mLexerState.srcPtr += 2;
             mLexerState.srcLine++;
             mLexerState.srcCol = 0;
+            
+            // Move on the end for the newline token by one character
+            newlineTok.endSrcPtr++;
         }
         else {
             // Regular new line

@@ -13,6 +13,7 @@ bool FuncCall::peek(const Token * currentToken) {
 }
 
 FuncCall * FuncCall::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Must open with '('
     if (parseCtx.tok()->type != TokenType::kLParen) {
         parseCtx.error("Expected '(' !");

@@ -12,6 +12,7 @@ bool StrLit::peek(const Token * tokenPtr) {
 }
 
 StrLit * StrLit::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected string literal!");
         return nullptr;

@@ -16,6 +16,7 @@ bool ShiftExpr::peek(const Token * tokenPtr) {
 }
 
 ShiftExpr * ShiftExpr::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     PrefixExpr * leftExpr = PrefixExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);
     

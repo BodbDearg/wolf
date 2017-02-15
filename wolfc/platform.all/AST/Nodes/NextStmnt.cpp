@@ -16,6 +16,7 @@ bool NextStmnt::peek(const Token * tokenPtr) {
 }
 
 NextStmnt * NextStmnt::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Check the basics
     if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected next statement!");

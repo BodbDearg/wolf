@@ -18,6 +18,7 @@ bool IfStmnt::peek(const Token * tokenPtr) {
 }
 
 IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Parse the initial 'if' or 'unless' keyword
     if (!peek(parseCtx.tok())) {
         parseCtx.error("If statement expected!");

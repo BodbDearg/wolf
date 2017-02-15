@@ -18,6 +18,7 @@ bool VarDecl::peek(const Token * tokenPtr) {
 }
 
 VarDecl * VarDecl::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Parse 'let' keyword
     if (parseCtx.tok()->type != TokenType::kLet) {
         parseCtx.error("Expected keyword 'let' at start of a variable declaration!");

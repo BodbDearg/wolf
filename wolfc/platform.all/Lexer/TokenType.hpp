@@ -16,6 +16,8 @@ enum class TokenType : uint8_t {
     
     /* End of file token. Always the last token in a sequence */
     kEOF,
+    /* New line token */
+    kNewline,
     /**
      * A name/idenifier component for variables, function and class names etc.
      * The identifeir name is stored in the 'data' field as 'strVal'.

@@ -18,6 +18,7 @@ bool NotExpr::peek(const Token * tokenPtr) {
 }
 
 NotExpr * NotExpr::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Save the first token:
     const Token * startToken = parseCtx.tok();
     

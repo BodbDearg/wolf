@@ -13,6 +13,7 @@ bool PrintStmnt::peek(const Token * tokenPtr) {
 }
 
 PrintStmnt * PrintStmnt::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     if (parseCtx.tok()->type != TokenType::kPrint) {
         parseCtx.error("Expected keyword 'print' for 'print()' statement!");
         return nullptr;

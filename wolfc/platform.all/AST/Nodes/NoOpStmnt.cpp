@@ -12,6 +12,7 @@ bool NoOpStmnt::peek(const Token * tokenPtr) {
 }
 
 NoOpStmnt * NoOpStmnt::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Parse the initial 'noop'
     if (parseCtx.tok()->type != TokenType::kNoOp) {
         parseCtx.error("'noop' statement expected!");

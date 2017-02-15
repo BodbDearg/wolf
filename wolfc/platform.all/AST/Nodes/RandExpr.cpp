@@ -17,6 +17,7 @@ bool RandExpr::peek(const Token * tokenPtr) {
 }
 
 RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     TokenType tokType = parseCtx.tok()->type;
     
     if (tokType == TokenType::kRand) {

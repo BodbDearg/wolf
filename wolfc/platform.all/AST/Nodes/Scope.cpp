@@ -9,6 +9,7 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 Scope * Scope::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Save start token:
     const Token * startToken = parseCtx.tok();
     

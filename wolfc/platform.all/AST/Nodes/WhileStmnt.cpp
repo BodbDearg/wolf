@@ -15,6 +15,7 @@ bool WhileStmnt::peek(const Token * tokenPtr) {
 }
 
 WhileStmnt * WhileStmnt::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Parse the initial 'while' or 'until' keyword
     if (!peek(parseCtx.tok())) {
         parseCtx.error("While statement expected!");

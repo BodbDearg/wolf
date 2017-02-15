@@ -30,6 +30,7 @@ bool PrimaryExpr::peek(const Token * currentToken) {
 }
 
 PrimaryExpr * PrimaryExpr::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     if (IntLit::peek(parseCtx.tok())) {
         IntLit * uintLit = IntLit::parse(parseCtx);
         WC_GUARD(uintLit, nullptr);

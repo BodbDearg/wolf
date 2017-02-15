@@ -16,6 +16,7 @@ bool AssignExpr::peek(const Token * tokenPtr) {
 }
 
 AssignExpr * AssignExpr::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Parse the initial expression
     TernaryExpr * leftExpr = TernaryExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);

@@ -13,6 +13,7 @@ bool ArrayLit::peek(const Token * tokenPtr) {
 }
 
 ArrayLit * ArrayLit::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Parse the initial '[':
     if (parseCtx.tok()->type != TokenType::kLBrack) {
         parseCtx.error("Expected integer literal!");

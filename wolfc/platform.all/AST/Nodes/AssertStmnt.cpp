@@ -13,6 +13,7 @@ bool AssertStmnt::peek(const Token * tokenPtr) {
 }
 
 AssertStmnt * AssertStmnt::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     if (parseCtx.tok()->type != TokenType::kAssert) {
         parseCtx.error("Expected keyword 'assert' for 'assert()' statement!");
         return nullptr;

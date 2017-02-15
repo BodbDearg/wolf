@@ -16,6 +16,7 @@ bool LAndExpr::peek(const Token * tokenPtr) {
 }
 
 LAndExpr * LAndExpr::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Parse the initial expression
     NotExpr * leftExpr = NotExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);

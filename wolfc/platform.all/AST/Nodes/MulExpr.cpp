@@ -16,6 +16,7 @@ bool MulExpr::peek(const Token * tokenPtr) {
 }
 
 MulExpr * MulExpr::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     ShiftExpr * leftExpr = ShiftExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);
     

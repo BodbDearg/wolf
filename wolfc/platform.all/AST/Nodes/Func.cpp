@@ -20,6 +20,7 @@ bool Func::peek(const Token * tokenPtr) {
 }
 
 Func * Func::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Must be a function ahead:
     if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected function!");

@@ -16,6 +16,7 @@ bool CmpExpr::peek(const Token * tokenPtr) {
 }
 
 CmpExpr * CmpExpr::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     AddExpr * leftExpr = AddExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);
     

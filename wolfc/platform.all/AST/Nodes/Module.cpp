@@ -9,6 +9,7 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 Module * Module::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Parse a list of decldefs for the module.
     // Try to parse as many as possible so we get multiple error messages for various problems.
     std::vector<DeclDef*> declDefs;

@@ -38,6 +38,7 @@ bool Stmnt::peek(const Token * tokenPtr) {
 }
     
 Stmnt * Stmnt::parse(ParseCtx & parseCtx) {
+    #warning Handle newlines during parsing
     // Parse 'noop' statment if ahead
     if (NoOpStmnt::peek(parseCtx.tok())) {
         NoOpStmnt * noOpStmnt = NoOpStmnt::parse(parseCtx);
