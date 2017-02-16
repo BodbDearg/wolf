@@ -581,6 +581,9 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral() {
     
     // Null terminate the decoded string when done
     tok.data.strVal.ptr[tok.data.strVal.size] = 0;
+    
+    // Save the index of the current token we are on, will need down below
+    size_t thisStrLitTokenNum = mTokenCount;
 
     // Try to parse another string: if we find multiple string literals in succession
     // then join them together (similar to C/C++)
@@ -597,8 +600,10 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral() {
 
             // If the next string is zero length then just pop the token for it and return this string:
             if (nextStrLen == 0) {
-                // Zero length string ahead, just pop it to consume it
-                popToken();
+                // Zero length string ahead, just pop it off (and any newlines in between) to consume it
+                while (mTokenCount > thisStrLitTokenNum) {
+                    popToken();
+                }
             }
             else {
                 // Alright, we want to concatenate the strings from the two sources:
@@ -624,8 +629,10 @@ Lexer::ParseResult Lexer::parseDoubleQuotedStringLiteral() {
                 curTokStrVal.ptr = concatStrPtr;
                 curTokStrVal.size = concatStrSize;
 
-                // Done with the next token, pop it off the stack
-                popToken();
+                // Done with the next token, pop it off the stack (and any newlines in between)
+                while (mTokenCount > thisStrLitTokenNum) {
+                    popToken();
+                }
             }
         }
         else {

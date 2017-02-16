@@ -543,10 +543,9 @@ end
 
 ; Tells if the dealers hand is finished
 func dealer_handFinished() -> bool
-    return  
-        dealer_isBust() or      ; If the dealer is bust then his/her hand is finished
-        dealer_cantDraw() or    ; If the dealer can't draw any more, then the hand is finished
-        dealer_isStanding()     ; If the dealer's last action was stand, then the hand is finished.
+    return  dealer_isBust() or      ; If the dealer is bust then his/her hand is finished
+            dealer_cantDraw() or    ; If the dealer can't draw any more, then the hand is finished
+            dealer_isStanding()     ; If the dealer's last action was stand, then the hand is finished.
 end
 
 ; Does an action for the dealer
@@ -667,12 +666,11 @@ end
 
 ; Tells if the player's hand is finished
 func player_handFinished() -> bool
-    return
-        player_isBust() or      ; If the player is bust then his/her hand is finished
-        player_cantDraw() or    ; If the player can't draw any more, then the hand is finished
-        player_isStanding() or  ; If the player's last action was stand, then the hand is finished.
-        player_hasForfeit() or  ; If the player has forfeited then the hand is finished too
-        player_hasBlackjack()   ; If the player has a blackjack (perfect suit) then auto end the hand
+    return  player_isBust() or      ; If the player is bust then his/her hand is finished
+            player_cantDraw() or    ; If the player can't draw any more, then the hand is finished
+            player_isStanding() or  ; If the player's last action was stand, then the hand is finished.
+            player_hasForfeit() or  ; If the player has forfeited then the hand is finished too
+            player_hasBlackjack()   ; If the player has a blackjack (perfect suit) then auto end the hand
 end
 
 ; Figures out what actions are available to the player
