@@ -206,6 +206,25 @@ func testMulExpr()
         1
 end
 
+func testNextStmnt()
+    let keepLooping = true
+
+    while keepLooping
+        keepLooping = false
+        next
+
+    end
+
+    keepLooping = true
+
+    while keepLooping
+        keepLooping = false
+        next
+        if
+        true
+    end
+end
+
 func testPrefixExpr() 
     -
         1
@@ -353,6 +372,7 @@ func main() -> int
     testIfStmnt()
     testLoopStmnt()
     testMulExpr()
+    testNextStmnt()
     testPrefixExpr()
     testPrintStmnt()
     testReturnStmnt()

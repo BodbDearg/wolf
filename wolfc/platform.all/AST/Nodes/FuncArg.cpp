@@ -10,7 +10,6 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 bool FuncArg::peek(const Token * currentToken) {
-    #warning Handle newlines during parsing
     return Identifier::peek(currentToken);
 }
 
