@@ -304,6 +304,17 @@ func testPrintStmnt()
     )
 end
 
+func testRandExpr()
+    rand
+    (
+    )
+
+    srand
+    (
+        1
+    )
+end
+
 func testReturnStmnt()
     testReturnStmntFunc1()
     assert(testReturnStmntFunc2())
@@ -367,6 +378,13 @@ func testTernaryExpr()
         true
         :
         false
+end
+
+func testTimeExpr()
+    let t = 
+        time
+        (
+        )
 end
 
 func testType()
@@ -441,10 +459,12 @@ func main() -> int
     testPostfixExpr()
     testPrefixExpr()
     testPrintStmnt()
+    testRandExpr()
     testReturnStmnt()
     testScopeStmnt()
     testShiftExpr()
     testTernaryExpr()
+    testTimeExpr()
     testType()
     testVarDecl()
     testWhileStmnt()

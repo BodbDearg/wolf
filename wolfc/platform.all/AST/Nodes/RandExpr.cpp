@@ -17,13 +17,13 @@ bool RandExpr::peek(const Token * tokenPtr) {
 }
 
 RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     TokenType tokType = parseCtx.tok()->type;
     
     if (tokType == TokenType::kRand) {
-        // rand() call: consume 'rand' and save start token
+        // rand() call: consume 'rand', skip any newlines and save start token
         const Token * startToken = parseCtx.tok();
         parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Expect '('
         if (parseCtx.tok()->type != TokenType::kLParen) {
@@ -31,7 +31,8 @@ RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
             return nullptr;
         }
         
-        parseCtx.nextTok();     // Consume '('
+        parseCtx.nextTok();         // Consume '('
+        parseCtx.skipNewlines();    // Skip any newlines that follow
         
         // Expect ')'
         if (parseCtx.tok()->type != TokenType::kRParen) {
@@ -45,9 +46,10 @@ RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
         return WC_NEW_AST_NODE(parseCtx, RandExprRand, *startToken, *endToken);
     }
     else if (tokType == TokenType::kSRand) {
-        // srand() call: consume 'srand' and save start token
+        // srand() call: consume 'srand', skip any newlines that follow and save start token
         const Token * startToken = parseCtx.tok();
         parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Expect '('
         if (parseCtx.tok()->type != TokenType::kLParen) {
@@ -55,11 +57,13 @@ RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
             return nullptr;
         }
         
-        parseCtx.nextTok();     // Consume '('
+        parseCtx.nextTok();         // Consume '('
+        parseCtx.skipNewlines();    // Skip any newlines that follow
         
         // Parse the inner assign expression for the seed
         AssignExpr * seedExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(seedExpr, nullptr);
+        parseCtx.skipNewlines();        // Skip any newlines that follow
         
         // Expect ')'
         if (parseCtx.tok()->type != TokenType::kRParen) {

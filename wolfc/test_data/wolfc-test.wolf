@@ -304,6 +304,17 @@ func testPrintStmnt()
     )
 end
 
+func testRandExpr()
+    rand
+    (
+    )
+
+    srand
+    (
+        1
+    )
+end
+
 func testReturnStmnt()
     testReturnStmntFunc1()
     assert(testReturnStmntFunc2())
@@ -448,6 +459,7 @@ func main() -> int
     testPostfixExpr()
     testPrefixExpr()
     testPrintStmnt()
+    testRandExpr()
     testReturnStmnt()
     testScopeStmnt()
     testShiftExpr()
