@@ -18,12 +18,12 @@ bool CastExpr::peek(const Token * currentToken) {
 }
 
 CastExpr * CastExpr::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // See if 'cast' follows:
     if (parseCtx.tok()->type == TokenType::kCast) {
-        // Casting expression: skip 'cast'
+        // Casting expression: skip 'cast' and any newlines that follow
         const Token * startToken = parseCtx.tok();
         parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Expect opening '('
         if (parseCtx.tok()->type != TokenType::kLParen) {
@@ -31,12 +31,14 @@ CastExpr * CastExpr::parse(ParseCtx & parseCtx) {
             return nullptr;
         }
         
-        // Skip '('
+        // Skip '(' any newlines that follow
         parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Parse the initial assign expression:
         AssignExpr * expr = AssignExpr::parse(parseCtx);
         WC_GUARD(expr, nullptr);
+        parseCtx.skipNewlines();    // Skip any newlines that follow
         
         // Expect keyword 'to':
         if (parseCtx.tok()->type != TokenType::kTo) {
@@ -44,12 +46,14 @@ CastExpr * CastExpr::parse(ParseCtx & parseCtx) {
             return nullptr;
         }
         
-        // Skip 'to'
+        // Skip 'to' and any newlines that follow
         parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Parse the type to cast to:
         Type * type = Type::parse(parseCtx);
         WC_GUARD(type, nullptr);
+        parseCtx.skipNewlines();    // Skip any newlines that follow
         
         // Expect closing ')'
         if (parseCtx.tok()->type != TokenType::kRParen) {

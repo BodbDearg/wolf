@@ -81,6 +81,16 @@ func testBreakStmnt()
     end
 end
 
+func testCastExpr()
+    let v =
+        cast
+        (
+            1
+            to
+            int
+        )
+end
+
 func testCmpExpr()
     let v1 = 1 ==
         1
@@ -395,6 +405,7 @@ func main() -> int
     testAssertStmnt()
     testAssignExpr()
     testBreakStmnt()
+    testCastExpr()
     testCmpExpr()
     testFunc(1)
     testFuncArg(1)
