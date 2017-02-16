@@ -13,7 +13,8 @@ WC_AST_BEGIN_NAMESPACE
 // PrefixExpr
 //-----------------------------------------------------------------------------
 bool PrefixExpr::peek(const Token * currentToken) {
-    /* 
+    #warning Handle newlines here
+    /*
     - PrefixExpr
     + PrefixExpr
     */

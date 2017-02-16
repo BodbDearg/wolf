@@ -1,3 +1,35 @@
+
+; Note: newline above and below deliberate to test parser
+
+func testAddExpr()
+    let v1 = 1 +
+        2
+    let v2 = 1 -
+        2
+    let v3 = 1 |
+        2
+    let v4 = 1 ^
+        2
+end
+
+func testArrayLit()
+
+    [
+    
+        1
+
+        ,
+
+    2
+
+        , 
+
+            3
+
+    ]
+
+end
+
 func testAssertStmnt()
     assert
     (
@@ -5,10 +37,334 @@ func testAssertStmnt()
     )
 end
 
+func testBreakStmnt()
+    loop
+        break 
+        if
+        true
+    end
+
+    loop
+        break
+
+        unless
+
+        false
+    end
+end
+
+func testCmpExpr()
+    1 ==
+        1
+    1 is
+        1
+    1 !=
+        1
+    1 is not
+        1
+    1 <
+        1
+    1 <=
+        1
+    1 >
+        1
+    1 >=
+        1
+end
+
+func 
+
+testFunc
+
+(
+    
+    v 
+
+    :
+
+    int
+
+)
+    assert
+
+    (
+        true
+
+    )
+
+end
+
+
+func testFuncArg(
+    
+    v 
+    
+        :
+    
+    int
+)
+    assert
+    (
+        true
+    )
+end
+
+func testFuncCall()
+
+    testFuncCallTestFunc(
+
+        1 
+
+            ,
+
+        2
+
+
+                , 
+
+3
+
+    )
+end
+
+func testFuncCallTestFunc(v1: int, v2: int, v3: int)
+end 
+
+func testIfStmnt()
+    ; Basic if
+    if 
+    true
+    then
+
+    end
+
+    ; If with else
+    unless
+    false
+    then
+
+        assert(true)
+
+    else
+
+        assert(true)
+
+    end
+
+    ; If with or if
+    if 
+    
+    true
+
+    then
+
+    or 
+
+    if 
+
+    true 
+
+    then
+
+    end
+end
+
+func testLoopStmnt()
+
+    loop
+
+        break
+
+    end
+
+    loop
+
+    repeat
+
+    until
+
+    true
+
+end
+
+func testMulExpr()
+    let v1 = 1 *
+        2
+    let v2 = 1 /
+        2
+    let v3 = 1 %
+        2
+    let v4 = 1 &
+        1
+end
+
+func testNextStmnt()
+    let keepLooping = true
+
+    while keepLooping
+        keepLooping = false
+        next
+
+    end
+
+    keepLooping = true
+
+    while keepLooping
+        keepLooping = false
+        next
+        if
+        true
+    end
+end
+
+func testPrefixExpr() 
+    -
+        1
+    +
+        1
+    (
+        1
+    )
+end
+
+func testPrintStmnt()
+    print
+    (
+        1
+    )
+end
+
+func testReturnStmnt()
+    testReturnStmntFunc1()
+    assert(testReturnStmntFunc2())
+    testReturnStmntFunc3()
+    assert(testReturnStmntFunc4())
+end
+
+func testReturnStmntFunc1()
+
+    return
+
+end
+
+func testReturnStmntFunc2() -> bool
+
+    return
+
+    true
+
+end
+
+func testReturnStmntFunc3()
+    return 
+    if
+    true
+end
+
+func testReturnStmntFunc4() -> bool
+    return
+    
+    true
+    
+    unless
+
+    false
+
+    return true
+end
+
+func testScopeStmnt()
+
+    scope
+
+        assert(true)
+
+    end
+
+end
+
+func testShiftExpr()
+    let v1 = 1 <<
+        2
+    let v2 = 1 >>
+        2
+    let v3 = 1 >>> 2
+end
+
+func testType()
+    testTypeTestFuncCall()
+end
+
+func testTypeTestFuncCall() ->
+
+    [
+
+    3
+]
+
+    int
+
+    return 
+    [
+    1
+    , 
+    3
+    , 
+    3
+    ]
+
+end
+
+func testVarDecl()
+    let
+    blah
+    :
+    int
+    = 
+    3
+end
+
+func testWhileStmnt()
+
+    while
+    
+    false
+    
+    do
+
+    end
+
+    while
+    false
+    end
+end
+
 ;==================================================================================================
 ; Run the tests
 ;==================================================================================================
 func main() -> int
+    testAddExpr()
+    testArrayLit()
     testAssertStmnt()
+    testBreakStmnt()
+    testCmpExpr()
+    testFunc(1)
+    testFuncArg(1)
+    testFuncCall()
+    testIfStmnt()
+    testLoopStmnt()
+    testMulExpr()
+    testNextStmnt()
+    testPrefixExpr()
+    testPrintStmnt()
+    testReturnStmnt()
+    testScopeStmnt()
+    testShiftExpr()
+    testType()
+    testVarDecl()
+    testWhileStmnt()
     return 0
 end
+
+; Note: newline above and below deliberate to test parser
+

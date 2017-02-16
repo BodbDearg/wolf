@@ -2,26 +2,13 @@
 ; Note: newline above and below deliberate to test parser
 
 func testAddExpr()
-    let v1 =
-        1
-        +
+    let v1 = 1 +
         2
-
-    let v2 =
-        1
-
-        -
-        
+    let v2 = 1 -
         2
-
-    let v3 =
-        1
-        |
+    let v3 = 1 |
         2
-
-    let v4 =
-        1
-        ^
+    let v4 = 1 ^
         2
 end
 
@@ -201,26 +188,13 @@ func testLoopStmnt()
 end
 
 func testMulExpr()
-    let v1 =
-        1
-        *
+    let v1 = 1 *
         2
-
-    let v2 =
-        1
-
-        /
-
+    let v2 = 1 /
         2
-
-    let v3 = 
-        1
-        %
+    let v3 = 1 %
         2
-
-    let v4 =
-        1
-        &
+    let v4 = 1 &
         1
 end
 
@@ -310,22 +284,11 @@ func testScopeStmnt()
 end
 
 func testShiftExpr()
-    let v1 = 
-        1
-        <<
+    let v1 = 1 <<
         2
-
-    let v2 =
-        1
-        >>
+    let v2 = 1 >>
         2
-
-    let v3 =
-        1
-
-        >>>
-
-        2
+    let v3 = 1 >>> 2
 end
 
 func testType()
