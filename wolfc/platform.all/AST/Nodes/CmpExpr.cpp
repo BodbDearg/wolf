@@ -16,7 +16,6 @@ bool CmpExpr::peek(const Token * tokenPtr) {
 }
 
 CmpExpr * CmpExpr::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     AddExpr * leftExpr = AddExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);
     
@@ -25,7 +24,11 @@ CmpExpr * CmpExpr::parse(ParseCtx & parseCtx) {
     // return the AST node for the operation.
     #define PARSE_OP(TokenType, ASTNodeType)\
         case TokenType: {\
+            /* Consume the operator token */\
             parseCtx.nextTok();\
+            /* Skip any newlines that follow */\
+            parseCtx.skipNewlines();\
+            /* Parse the right side of the operator */\
             CmpExpr * rightExpr = CmpExpr::parse(parseCtx);\
             WC_GUARD(rightExpr, nullptr);\
             return WC_NEW_AST_NODE(parseCtx, ASTNodeType, *leftExpr, *rightExpr);\
@@ -49,14 +52,16 @@ CmpExpr * CmpExpr::parse(ParseCtx & parseCtx) {
     // Check for them here now
     if (nextTokType == TokenType::kIs) {
         // Skip 'is'
-        parseCtx.nextTok();
+        parseCtx.nextTok();         // Consume 'is'
+        parseCtx.skipNewlines();    // Skip any newlines that follow
         
         // See if 'not' follows, if it does then it inverses the comparison:
         bool cmpNotEq = false;
         
         if (parseCtx.tok()->type == TokenType::kNot) {
             cmpNotEq = true;
-            parseCtx.nextTok();
+            parseCtx.nextTok();         // Consume 'not'
+            parseCtx.skipNewlines();    // Skip any newlines that follow
         }
         
         // Parse the right expression

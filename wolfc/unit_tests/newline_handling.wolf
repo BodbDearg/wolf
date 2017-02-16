@@ -66,6 +66,25 @@ func testBreakStmnt()
     end
 end
 
+func testCmpExpr()
+    1 ==
+        1
+    1 is
+        1
+    1 !=
+        1
+    1 is not
+        1
+    1 <
+        1
+    1 <=
+        1
+    1 >
+        1
+    1 >=
+        1
+end
+
 func 
 
 testFunc
@@ -122,7 +141,6 @@ func testFuncCall()
 end
 
 func testFuncCallTestFunc(v1: int, v2: int, v3: int)
-
 end 
 
 func testIfStmnt()
@@ -366,6 +384,7 @@ func main() -> int
     testArrayLit()
     testAssertStmnt()
     testBreakStmnt()
+    testCmpExpr()
     testFunc(1)
     testFuncArg(1)
     testFuncCall()
