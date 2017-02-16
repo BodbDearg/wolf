@@ -16,7 +16,6 @@ bool AssignExpr::peek(const Token * tokenPtr) {
 }
 
 AssignExpr * AssignExpr::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // Parse the initial expression
     TernaryExpr * leftExpr = TernaryExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);
@@ -26,7 +25,11 @@ AssignExpr * AssignExpr::parse(ParseCtx & parseCtx) {
     // return the AST node for the operation.
     #define PARSE_OP(TokenType, ASTNodeType)\
         case TokenType: {\
+            /* Consume the operator token */\
             parseCtx.nextTok();\
+            /* Skip any newlines that follow */\
+            parseCtx.skipNewlines();\
+            /* Parse the right side of the operator */\
             AssignExpr * rightExpr = AssignExpr::parse(parseCtx);\
             WC_GUARD(rightExpr, nullptr);\
             return WC_NEW_AST_NODE(parseCtx, ASTNodeType, *leftExpr, *rightExpr);\

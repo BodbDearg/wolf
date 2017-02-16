@@ -37,6 +37,34 @@ func testAssertStmnt()
     )
 end
 
+func testAssignExpr()
+    let v = 0
+    v =
+        0
+    v +=
+        0
+    v -=
+        0
+    v |=
+        0
+    v ^=
+        0
+    v *=
+        0
+    v /=
+        1
+    v %=
+        1
+    v &=
+        0
+    v <<=
+        0
+    v >>=
+        0
+    v >>>=
+        0
+end
+
 func testBreakStmnt()
     loop
         break 
@@ -355,6 +383,7 @@ func main() -> int
     testAddExpr()
     testArrayLit()
     testAssertStmnt()
+    testAssignExpr()
     testBreakStmnt()
     testCmpExpr()
     testFunc(1)

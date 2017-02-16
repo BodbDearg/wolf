@@ -17,6 +17,7 @@ Language TODO:
     - Branch prediction constructs.
     - typeof and istype expressions
     - Support assign expressions that both return void and non void
+    - Declare multiple variables with same 'let'
 
 Modules:
     - Each translation unit compiles to a module stub
