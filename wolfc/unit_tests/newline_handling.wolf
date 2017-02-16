@@ -96,6 +96,45 @@ func testPrintStmnt()
     )
 end
 
+func testReturnStmnt()
+    testReturnStmntFunc1()
+    assert(testReturnStmntFunc2())
+    testReturnStmntFunc3()
+    assert(testReturnStmntFunc4())
+end
+
+func testReturnStmntFunc1()
+
+    return
+
+end
+
+func testReturnStmntFunc2() -> bool
+
+    return
+
+    true
+
+end
+
+func testReturnStmntFunc3()
+    return 
+    if
+    true
+end
+
+func testReturnStmntFunc4() -> bool
+    return
+    
+    true
+    
+    unless
+
+    false
+
+    return true
+end
+
 func testVarDecl()
     let
     blah
@@ -116,6 +155,7 @@ func main() -> int
     testLoopStmnt()
     testPrefixExpr()
     testPrintStmnt()
+    testReturnStmnt()
     testVarDecl()
     return 0
 end

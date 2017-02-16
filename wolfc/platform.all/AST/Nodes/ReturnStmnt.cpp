@@ -17,12 +17,10 @@ static bool isCondTokenType(TokenType tokenType) {
 // ReturnStmnt
 //-----------------------------------------------------------------------------
 bool ReturnStmnt::peek(const Token * tokenPtr) {
-    #warning Handle newlines during parsing
-    return tokenPtr[0].type == TokenType::kReturn;
+    return tokenPtr->type == TokenType::kReturn;
 }
 
 ReturnStmnt * ReturnStmnt::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected return statement!");
         return nullptr;
@@ -30,13 +28,15 @@ ReturnStmnt * ReturnStmnt::parse(ParseCtx & parseCtx) {
     
     // Consume 'return' token
     const Token * returnToken = parseCtx.tok();
-    parseCtx.nextTok();
+    parseCtx.nextTok();         // Consume 'return'
+    parseCtx.skipNewlines();    // Skip any newlines
     
     // See if a condition token follows:
     if (isCondTokenType(parseCtx.tok()->type)) {
         // Save the 'if' or 'unless' token and skip
         const Token * condToken = parseCtx.tok();
-        parseCtx.nextTok();
+        parseCtx.nextTok();         // Consume 'if' or 'unless'
+        parseCtx.skipNewlines();    // Skip any newlines
         
         // Parse the assign expression that follows:
         AssignExpr * condExpr = AssignExpr::parse(parseCtx);
@@ -55,12 +55,14 @@ ReturnStmnt * ReturnStmnt::parse(ParseCtx & parseCtx) {
         // Parse the assign expression for the return value:
         AssignExpr * returnExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(returnExpr, nullptr);
+        parseCtx.skipNewlines();    // Skip any newlines
         
         // See if a condition token follows:
         if (isCondTokenType(parseCtx.tok()->type)) {
             // Save the 'if' or 'unless' token and skip
             const Token * condToken = parseCtx.tok();
-            parseCtx.nextTok();
+            parseCtx.nextTok();         // Consume 'if' or 'unless'
+            parseCtx.skipNewlines();    // Skip any newlines
             
             // Parse the assign expression that follows:
             AssignExpr * condExpr = AssignExpr::parse(parseCtx);

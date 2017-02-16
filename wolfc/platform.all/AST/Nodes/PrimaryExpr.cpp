@@ -19,7 +19,6 @@ WC_AST_BEGIN_NAMESPACE
 // PrimaryExpr
 //-----------------------------------------------------------------------------
 bool PrimaryExpr::peek(const Token * currentToken) {
-    #warning Handle newlines during parsing
     return  IntLit::peek(currentToken) ||
             BoolLit::peek(currentToken) ||
             StrLit::peek(currentToken) ||
@@ -31,7 +30,6 @@ bool PrimaryExpr::peek(const Token * currentToken) {
 }
 
 PrimaryExpr * PrimaryExpr::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     if (IntLit::peek(parseCtx.tok())) {
         IntLit * uintLit = IntLit::parse(parseCtx);
         WC_GUARD(uintLit, nullptr);
