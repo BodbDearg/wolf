@@ -12,31 +12,33 @@ bool TimeExpr::peek(const Token * tokenPtr) {
 }
 
 TimeExpr * TimeExpr::parse(ParseCtx & parseCtx) {
+    // Consume 'time' and skip any newlines that follow
     if (parseCtx.tok()->type != TokenType::kTime) {
         parseCtx.error("Expected 'time' at begining of time() expression!");
         return nullptr;
     }
     
     const Token * readnumTok = parseCtx.tok();
-    parseCtx.nextTok();         // Consume 'time'
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.nextTok();
+    parseCtx.skipNewlines();
     
+    // Parse the '(' and skip any newlines that follow
     if (parseCtx.tok()->type != TokenType::kLParen) {
         parseCtx.error("Expect '(' following 'time'!");
         return nullptr;
     }
     
-    parseCtx.nextTok();         // Consume '('
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.nextTok();
+    parseCtx.skipNewlines();
     
+    // Parse the closing ')' and return the parsed node
     if (parseCtx.tok()->type != TokenType::kRParen) {
         parseCtx.error("Expect ')' following '('!");
         return nullptr;
     }
     
     const Token * rparenTok = parseCtx.tok();
-    parseCtx.nextTok();     // Consume ')'
-    
+    parseCtx.nextTok();
     return WC_NEW_AST_NODE(parseCtx, TimeExpr, *readnumTok, *rparenTok);
 }
 

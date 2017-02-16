@@ -32,10 +32,10 @@ ReturnStmnt * ReturnStmnt::parse(ParseCtx & parseCtx) {
     
     // See if a condition token follows:
     if (isCondTokenType(parseCtx.tok()->type)) {
-        // Save the 'if' or 'unless' token and skip
+        // Save the 'if' or 'unless' token and skip any newlines
         const Token * condToken = parseCtx.tok();
-        parseCtx.nextTok();         // Consume 'if' or 'unless'
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Parse the assign expression that follows:
         AssignExpr * condExpr = AssignExpr::parse(parseCtx);
@@ -57,10 +57,10 @@ ReturnStmnt * ReturnStmnt::parse(ParseCtx & parseCtx) {
         
         // See if a condition token follows:
         if (isCondTokenType(parseCtx.tok()->type)) {
-            // Save the 'if' or 'unless' token and skip
+            // Save the 'if' or 'unless' token and skip any newlines
             const Token * condToken = parseCtx.tok();
-            parseCtx.nextTok();         // Consume 'if' or 'unless'
-            parseCtx.skipNewlines();    // Skip any newlines that follow
+            parseCtx.nextTok();
+            parseCtx.skipNewlines();
             
             // Parse the assign expression that follows:
             AssignExpr * condExpr = AssignExpr::parse(parseCtx);

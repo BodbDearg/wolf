@@ -25,10 +25,11 @@ Type * Type::parse(ParseCtx & parseCtx) {
         parseCtx.nextTok();
         parseCtx.skipNewlines();
         
-        // Parse the inner assign expression for the array size:
+        // Parse the inner assign expression for the array size.
+        // Also skip any newlines following it:
         AssignExpr * arraySizeExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(arraySizeExpr, nullptr);
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        parseCtx.skipNewlines();
         
         // Expect a ']' next:
         if (parseCtx.tok()->type != TokenType::kRBrack) {

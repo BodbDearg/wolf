@@ -26,15 +26,15 @@ Func * Func::parse(ParseCtx & parseCtx) {
         return nullptr;
     }
     
-    // Skip the 'func' token and save location
+    // Skip the 'func' token and save location. Also skip any newlines that follow:
     const Token * startToken = parseCtx.tok();
-    parseCtx.nextTok();         // Consume 'func'
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.nextTok();
+    parseCtx.skipNewlines();
     
-    // Parse the function identifier:
+    // Parse the function identifier and skip any newlines that follow:
     Identifier * identifier = Identifier::parse(parseCtx);
     WC_GUARD(identifier, nullptr);
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.skipNewlines();
     
     // Expect '('
     if (parseCtx.tok()->type != TokenType::kLParen) {
@@ -56,16 +56,19 @@ Func * Func::parse(ParseCtx & parseCtx) {
             funcArgs.push_back(funcArg);
         }
         
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        // Skip any newlines that follow
+        parseCtx.skipNewlines();
         
         // See if a ',' follows
         if (parseCtx.tok()->type == TokenType::kComma) {
-            parseCtx.nextTok();         // Skip the ','
-            parseCtx.skipNewlines();    // Skip any newlines that follow
+            // Skip the ',' and any newlines that follow
+            parseCtx.nextTok();
+            parseCtx.skipNewlines();
             
             // Expect an argument following
             if (!FuncArg::peek(parseCtx.tok())) {
                 parseCtx.error("Expect an argument following ','!");
+                parseCtx.skipNewlines();
             }
         }
     }

@@ -18,22 +18,24 @@ PrintStmnt * PrintStmnt::parse(ParseCtx & parseCtx) {
         return nullptr;
     }
     
+    // Consume 'print' and skip any newlines that follow
     const Token * printTok = parseCtx.tok();
-    parseCtx.nextTok();         // Consume 'print'
-    parseCtx.skipNewlines();    // Consume any newlines
+    parseCtx.nextTok();
+    parseCtx.skipNewlines();
     
     if (parseCtx.tok()->type != TokenType::kLParen) {
         parseCtx.error("Expected '(' following 'print'!");
         return nullptr;
     }
     
-    parseCtx.nextTok();         // Consume '('
-    parseCtx.skipNewlines();    // Consume any newlines
+    // Consume '(' and any newlines that follow
+    parseCtx.nextTok();
+    parseCtx.skipNewlines();
     
-    // Parse the inner expression
+    // Parse the inner expression and skip any newlines that follow
     AssignExpr * assignExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(assignExpr, nullptr);
-    parseCtx.skipNewlines();    // Consume any newlines
+    parseCtx.skipNewlines();
     
     // Expect ')' following all that:
     if (parseCtx.tok()->type != TokenType::kRParen) {

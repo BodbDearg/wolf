@@ -25,14 +25,14 @@ RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
         parseCtx.nextTok();
         parseCtx.skipNewlines();
         
-        // Expect '('
+        // Expect '(', parse it and skip any newlines that follow
         if (parseCtx.tok()->type != TokenType::kLParen) {
             parseCtx.error("Expect '(' following 'rand'!");
             return nullptr;
         }
         
-        parseCtx.nextTok();         // Consume '('
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Expect ')'
         if (parseCtx.tok()->type != TokenType::kRParen) {
@@ -51,19 +51,20 @@ RandExpr * RandExpr::parse(ParseCtx & parseCtx) {
         parseCtx.nextTok();
         parseCtx.skipNewlines();
         
-        // Expect '('
+        // Expect '(', parse it and skip any newlines that follow
         if (parseCtx.tok()->type != TokenType::kLParen) {
             parseCtx.error("Expect '(' following 'srand'!");
             return nullptr;
         }
         
-        parseCtx.nextTok();         // Consume '('
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
-        // Parse the inner assign expression for the seed
+        // Parse the inner assign expression for the seed,
+        // also skip any newlines that follow.
         AssignExpr * seedExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(seedExpr, nullptr);
-        parseCtx.skipNewlines();        // Skip any newlines that follow
+        parseCtx.skipNewlines();
         
         // Expect ')'
         if (parseCtx.tok()->type != TokenType::kRParen) {

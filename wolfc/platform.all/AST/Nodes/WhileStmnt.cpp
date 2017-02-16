@@ -15,36 +15,39 @@ bool WhileStmnt::peek(const Token * tokenPtr) {
 }
 
 WhileStmnt * WhileStmnt::parse(ParseCtx & parseCtx) {
-    // Parse the initial 'while' or 'until' keyword
+    // Parse the initial 'while' or 'until' keyword.
+    // Skip any newlines that follow this keyword also..
     if (!peek(parseCtx.tok())) {
         parseCtx.error("While statement expected!");
         return nullptr;
     }
     
     const Token * startToken = parseCtx.tok();
-    parseCtx.nextTok();             // Consume the 'while' or 'until' token
-    parseCtx.skipNewlines();        // Skip any newlines that follow
+    parseCtx.nextTok();
+    parseCtx.skipNewlines();
     
-    // Parse the while expression (while condition):
+    // Parse the while expression (while condition) and any newlines that follow:
     AssignExpr * whileExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(whileExpr, nullptr);
-    parseCtx.skipNewlines();        // Skip any newlines that follow
+    parseCtx.skipNewlines();
     
     // See if there is a 'do' following. This keyword is optional, unless the body scope is required
     // to be on the same line as the enclosing while statement:
     bool bodyScopeRequiresNL = true;
     
     if (parseCtx.tok()->type == TokenType::kDo) {
-        // Found a 'do' token: the body scope is allowed to be on the same line
-        parseCtx.nextTok();             // Consume the 'do' token
-        parseCtx.skipNewlines();        // Skip any newlines that follow
+        // Found a 'do' token: the body scope is allowed to be on the same line.
+        // Consume the 'do' token and any newlines that follow:
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
         bodyScopeRequiresNL = false;
     }
     
-    // Expect scope following:
+    // Expect scope following.
+    // Parse it and skip any newlines that follow:
     Scope * bodyScope = Scope::parse(parseCtx);
     WC_GUARD(bodyScope, nullptr);
-    parseCtx.skipNewlines();        // Skip any newlines that follow
+    parseCtx.skipNewlines();
     
     // See if it violates newline rules:
     if (bodyScopeRequiresNL) {

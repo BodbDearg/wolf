@@ -19,18 +19,19 @@ FuncCall * FuncCall::parse(ParseCtx & parseCtx) {
         return nullptr;
     }
     
-    // Save and skip '('
+    // Save and skip '(', also skip any newlines that follow
     const Token * startToken = parseCtx.tok();
-    parseCtx.nextTok();         // Consume '('
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.nextTok();
+    parseCtx.skipNewlines();
     
     // Start parsing the arg list
     std::vector<AssignExpr*> argList;
     
     while (AssignExpr::peek(parseCtx.tok())) {
-        // Parse the arg and save if it was parsed ok
+        // Parse the arg and save if it was parsed ok,
+        // also skip any newlines that follow:
         AssignExpr * argExpr = AssignExpr::parse(parseCtx);
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        parseCtx.skipNewlines();
         
         if (argExpr) {
             argList.push_back(argExpr);
@@ -41,9 +42,10 @@ FuncCall * FuncCall::parse(ParseCtx & parseCtx) {
             break;
         }
         
-        // Otherwise continue parsing
-        parseCtx.nextTok();         // Consume ','
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        // Otherwise continue parsing and skip ',' as well
+        // as any newlines which might follow:
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
     }
     
     // Expect ')'

@@ -24,43 +24,43 @@ VarDecl * VarDecl::parse(ParseCtx & parseCtx) {
         return nullptr;
     }
     
-    // Save and skip 'let'
+    // Save and skip 'let' and consume any newlines that follow
     const Token * varToken = parseCtx.tok();
-    parseCtx.nextTok();         // Consume 'let'
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.nextTok();
+    parseCtx.skipNewlines();
     
-    // Parse the identifier ahead
+    // Parse the identifier ahead and skip any newlines that follow
     Identifier * ident = Identifier::parse(parseCtx);
     WC_GUARD(ident, nullptr);
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.skipNewlines();
     
-    // See if the type for the variable is specified:
+    // See if the type for the variable is specified
     Type * type = nullptr;
     
     if (parseCtx.tok()->type == TokenType::kColon) {
-        parseCtx.nextTok();         // Type specified, skip the ':'
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        // Type specified, skip the ':' and any newlines that follow
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
-        // Parse the type:
+        // Parse the type and skip any newlines that follow:
         type = Type::parse(parseCtx);
         WC_GUARD(type, nullptr);
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        parseCtx.skipNewlines();
     }
     
-    // Parse the '='
+    // Parse the '=' and skip any newlines that follow
     if (parseCtx.tok()->type != TokenType::kAssign) {
         parseCtx.error("Expected '=' following variable name for variable declaration!");
         return nullptr;
     }
     
-    parseCtx.nextTok();         // Consume '='
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.nextTok();
+    parseCtx.skipNewlines();
     
     // Parse the init expression and return result of parsing
     AssignExpr * initExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(initExpr, nullptr);
     
-    // Now return the AST node:
     if (type) {
         return WC_NEW_AST_NODE(parseCtx, VarDeclExplicitType, *varToken, *ident, *type, *initExpr);
     }

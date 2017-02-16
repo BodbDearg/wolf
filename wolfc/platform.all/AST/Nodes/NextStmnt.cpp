@@ -28,10 +28,10 @@ NextStmnt * NextStmnt::parse(ParseCtx & parseCtx) {
     
     // See whether 'if' or 'unless' follow, in which case the 'next' statement is conditional:
     if (parseCtx.tok()->type == TokenType::kIf || parseCtx.tok()->type == TokenType::kUnless) {
-        // Parse the condition token:
+        // Parse the condition token and skip any newlines that follow:
         const Token * condTok = parseCtx.tok();
-        parseCtx.nextTok();         // Consume 'if' or 'unless'
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Parse the condition assign expression:
         AssignExpr * condExpr = AssignExpr::parse(parseCtx);

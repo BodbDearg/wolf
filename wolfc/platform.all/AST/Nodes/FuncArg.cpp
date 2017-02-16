@@ -14,10 +14,10 @@ bool FuncArg::peek(const Token * currentToken) {
 }
 
 FuncArg * FuncArg::parse(ParseCtx & parseCtx) {
-    // Parse the identifier:
+    // Parse the identifier and skip any newlines that follow:
     Identifier * ident = Identifier::parse(parseCtx);
     WC_GUARD(ident, nullptr);
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.skipNewlines();
     
     // Expect ':' following the identifier
     if (parseCtx.tok()->type != TokenType::kColon) {

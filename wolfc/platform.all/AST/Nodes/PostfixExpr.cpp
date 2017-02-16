@@ -72,10 +72,10 @@ PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
             parseCtx.nextTok();
             parseCtx.skipNewlines();
             
-            // Parse the assign expression for the array index
+            // Parse the assign expression for the array index and skip any newlines that follow
             AssignExpr * arrayIndexExpr = AssignExpr::parse(parseCtx);
             WC_GUARD(arrayIndexExpr, nullptr);
-            parseCtx.skipNewlines();            // Skip any newlines that follow
+            parseCtx.skipNewlines();
             
             // Expect a closing ']'
             const Token & endToken = *parseCtx.tok();

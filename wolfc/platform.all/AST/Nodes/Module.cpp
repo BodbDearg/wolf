@@ -41,6 +41,7 @@ Module * Module::parse(ParseCtx & parseCtx) {
                 break;
             }
             
+            // Skip both the token and any newlines that follow it
             parseCtx.nextTok();
             parseCtx.skipNewlines();
         }

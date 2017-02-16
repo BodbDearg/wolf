@@ -19,15 +19,16 @@ ScopeStmnt * ScopeStmnt::parse(ParseCtx & parseCtx) {
         return nullptr;
     }
     
-    // Parse the initial 'scope' keyword and save it's location
+    // Parse the initial 'scope' keyword and save it's location.
+    // Also skip any newlines that follow:
     const Token * startToken = parseCtx.tok();
-    parseCtx.nextTok();         // Consume 'scope'
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.nextTok();
+    parseCtx.skipNewlines();
     
-    // Parse the body scope:
+    // Parse the body scope and skip any newlines that follow:
     Scope * bodyScope = Scope::parse(parseCtx);
     WC_GUARD(bodyScope, nullptr);
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.skipNewlines();
     
     // Must be terminated by an 'end' token
     if (parseCtx.tok()->type != TokenType::kEnd) {

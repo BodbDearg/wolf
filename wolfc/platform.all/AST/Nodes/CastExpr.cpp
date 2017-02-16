@@ -35,10 +35,10 @@ CastExpr * CastExpr::parse(ParseCtx & parseCtx) {
         parseCtx.nextTok();
         parseCtx.skipNewlines();
         
-        // Parse the initial assign expression:
+        // Parse the initial assign expression and skip any newlines that follow:
         AssignExpr * expr = AssignExpr::parse(parseCtx);
         WC_GUARD(expr, nullptr);
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        parseCtx.skipNewlines();
         
         // Expect keyword 'to':
         if (parseCtx.tok()->type != TokenType::kTo) {
@@ -50,10 +50,10 @@ CastExpr * CastExpr::parse(ParseCtx & parseCtx) {
         parseCtx.nextTok();
         parseCtx.skipNewlines();
         
-        // Parse the type to cast to:
+        // Parse the type to cast to and skip any newlines that follow:
         Type * type = Type::parse(parseCtx);
         WC_GUARD(type, nullptr);
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        parseCtx.skipNewlines();
         
         // Expect closing ')'
         if (parseCtx.tok()->type != TokenType::kRParen) {

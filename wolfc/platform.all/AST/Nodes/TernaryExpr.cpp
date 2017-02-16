@@ -27,10 +27,10 @@ TernaryExpr * TernaryExpr::parse(ParseCtx & parseCtx) {
         parseCtx.nextTok();
         parseCtx.skipNewlines();
         
-        // Now parse the 'true' expression:
+        // Now parse the 'true' expression and skip any newlines that follow:
         AssignExpr * trueExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(trueExpr, nullptr);
-        parseCtx.skipNewlines();        // Skip any newlines that follow
+        parseCtx.skipNewlines();
         
         // Expect a colon to separate 'true' from false:
         if (parseCtx.tok()->type != TokenType::kColon) {

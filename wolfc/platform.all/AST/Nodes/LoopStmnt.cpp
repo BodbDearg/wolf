@@ -23,26 +23,29 @@ LoopStmnt * LoopStmnt::parse(ParseCtx & parseCtx) {
         return nullptr;
     }
     
-    // Skip the 'loop' token and save location
+    // Skip the 'loop' token and save location, also skip any
+    // newlines which might follow:
     const Token * startToken = parseCtx.tok();
-    parseCtx.nextTok();         // Skip 'loop'
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.nextTok();
+    parseCtx.skipNewlines();
     
-    // Parse the body scope:
+    // Parse the body scope and skip any newlines that follow:
     Scope * bodyScope = Scope::parse(parseCtx);
     WC_GUARD(bodyScope, nullptr);
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.skipNewlines();
     
     // See if the current token is 'repeat', if it is then we have a loop/repeat statement
     if (parseCtx.tok()->type == TokenType::kRepeat) {
         // Loop block with a condition.
-        parseCtx.nextTok();         // Skip 'repeat'
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        // Skip the 'repeat' keyword and any newlines that follow:
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
-        // Now grab the condition type:
+        // Now grab the condition type.
+        // Skip the condition keyword and any newlines that follow:
         const Token * condTypeToken = parseCtx.tok();
-        parseCtx.nextTok();         // Skip 'while' or 'until'
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         if (condTypeToken->type != TokenType::kWhile && condTypeToken->type != TokenType::kUntil) {
             parseCtx.error("'while' or 'until' expected following 'repeat' token!");

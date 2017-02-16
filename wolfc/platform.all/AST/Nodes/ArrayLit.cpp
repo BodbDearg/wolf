@@ -27,9 +27,10 @@ ArrayLit * ArrayLit::parse(ParseCtx & parseCtx) {
     std::vector<AssignExpr*> exprs;
     
     while (AssignExpr::peek(parseCtx.tok())) {
-        // Parse the expression and save if it was parsed ok
+        // Parse the expression and save if it was parsed ok.
+        // Also skip any newlines that follow:
         AssignExpr * expr = AssignExpr::parse(parseCtx);
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        parseCtx.skipNewlines();
         
         if (expr) {
             exprs.push_back(expr);

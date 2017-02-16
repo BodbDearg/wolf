@@ -30,10 +30,10 @@ AssertStmnt * AssertStmnt::parse(ParseCtx & parseCtx) {
     parseCtx.nextTok();         // Consume '('
     parseCtx.skipNewlines();    // Skip any newlines that follow
     
-    // Parse the inner expression
+    // Parse the inner expression and skip any newlines that follow
     AssignExpr * assignExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(assignExpr, nullptr);
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.skipNewlines();
     
     // Expect ')' following all that:
     if (parseCtx.tok()->type != TokenType::kRParen) {

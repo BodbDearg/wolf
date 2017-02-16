@@ -38,9 +38,12 @@ PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
     switch (parseCtx.tok()->type) {
         /* - PostfixExpr */
         case TokenType::kMinus: {
+            // Skip '-' and any newlines that follow
             const Token * minusTok = parseCtx.tok();
-            parseCtx.nextTok();         // Skip '-'
-            parseCtx.skipNewlines();    // Skip any newlines that follow
+            parseCtx.nextTok();
+            parseCtx.skipNewlines();
+            
+            // Parse the operand and create the AST node
             PrefixExpr * expr = PrefixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
             return WC_NEW_AST_NODE(parseCtx, PrefixExprMinus, *minusTok, *expr);
@@ -48,9 +51,12 @@ PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
             
         /* + PostfixExpr */
         case TokenType::kPlus: {
+            // Skip '+' and any newlines that follow
             const Token * plusTok = parseCtx.tok();
-            parseCtx.nextTok();         // Skip '+'
-            parseCtx.skipNewlines();    // Skip any newlines that follow
+            parseCtx.nextTok();
+            parseCtx.skipNewlines();
+            
+            // Parse the operand and create the AST node
             PrefixExpr * expr = PrefixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
             return WC_NEW_AST_NODE(parseCtx, PrefixExprPlus, *plusTok, *expr);
@@ -58,13 +64,17 @@ PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
             
         /* ( AssignExpr ) */
         case TokenType::kLParen: {
+            // Skip '(' and any newlines that follow
             const Token * lparenTok = parseCtx.tok();
-            parseCtx.nextTok();         // Skip '('
-            parseCtx.skipNewlines();    // Skip any newlines that follow
+            parseCtx.nextTok();
+            parseCtx.skipNewlines();
             
+            // Parse the expression inside the parens and any newlines that follow
             AssignExpr * expr = AssignExpr::parse(parseCtx);
-            parseCtx.skipNewlines();    // Skip any newlines that follow
+            parseCtx.skipNewlines();
             
+            
+            // Parse the closing ')' and return the parsed node
             if (parseCtx.tok()->type != TokenType::kRParen) {
                 parseCtx.error("Expected closing ')' to match '(' at line %zu and column %zu!",
                                lparenTok->startLine + 1,
@@ -74,9 +84,8 @@ PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
             }
             
             const Token * rparenTok = parseCtx.tok();
-            parseCtx.nextTok();         // Skip ')'
+            parseCtx.nextTok();
             WC_GUARD(expr, nullptr);
-            
             return WC_NEW_AST_NODE(parseCtx, PrefixExprParen, *lparenTok, *expr, *rparenTok);
         }   break;
             

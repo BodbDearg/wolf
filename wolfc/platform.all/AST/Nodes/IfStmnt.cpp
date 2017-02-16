@@ -24,31 +24,33 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
         return nullptr;
     }
     
-    // Skip the 'if' or 'unless' token and save location
+    // Skip the 'if' or 'unless' token and save location.
+    // Consume the 'if' or 'unless' token and skip any newlines that follow:
     const Token * startToken = parseCtx.tok();
-    parseCtx.nextTok();         // Consume 'if' or 'unless'
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.nextTok();
+    parseCtx.skipNewlines();
     
-    // Parse the if condition:
+    // Parse the if condition and skip any newlines that follow:
     AssignExpr * ifExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(ifExpr, nullptr);
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.skipNewlines();
     
     // See if there is a 'then' following. This keyword is optional, unless the 'then' scope is required
     // to be on the same line as the enclosing if statement:
     bool thenScopeRequiresNL = true;
     
     if (parseCtx.tok()->type == TokenType::kThen) {
-        // Found a 'then' token: the 'then' scope is allowed to be on the same line
-        parseCtx.nextTok();             // Consume 'then'
-        parseCtx.skipNewlines();        // Skip any newlines that follow
+        // Found a 'then' token: the 'then' scope is allowed to be on the same line.
+        // Consume the 'then' token and skip any newlines that follow.
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
         thenScopeRequiresNL = false;
     }
     
-    // Expect scope following:
+    // Expect scope following. Parse it and skip any newlines that follow:
     Scope * thenScope = Scope::parse(parseCtx);
     WC_GUARD(thenScope, nullptr);
-    parseCtx.skipNewlines();            // Skip any newlines that follow
+    parseCtx.skipNewlines();
     
     // See if it violates newline rules:
     if (thenScopeRequiresNL) {
@@ -68,14 +70,16 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
     // 3 - 'else' for an 'if' statement with an else block
     //
     if (parseCtx.tok()->type == TokenType::kElse) {
-        // (3) if statement with an else
-        parseCtx.nextTok();         // Consume the 'else' token
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        // (3) if statement with an else.
+        // Consume the 'else' token and skip any newlines that follow:
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
-        // Parse the scope for the 'else' block:
+        // Parse the scope for the 'else' block and skip any newlines
+        // that follow after it:
         Scope * elseScope = Scope::parse(parseCtx);
         WC_GUARD(elseScope, nullptr);
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        parseCtx.skipNewlines();
         
         // Else block should be terminated by an 'end' token:
         if (parseCtx.tok()->type != TokenType::kEnd) {
@@ -97,9 +101,10 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
                                *endToken);
     }
     else if (parseCtx.tok()->type == TokenType::kOr) {
-        // (2) if statement with an 'or if' chained if statement
-        parseCtx.nextTok();         // Skip the 'or' token
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        // (2) if statement with an 'or if' chained if statement.
+        // Consume the 'or' token and skip any newlines that follow.
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Parse the if statement following the 'or':
         IfStmnt * outerIfStmnt = IfStmnt::parse(parseCtx);
