@@ -96,7 +96,7 @@ func card_shuffleCards()
     while shuffleNum < NUM_CARD_SHUFFLES
         let cardNum = 0
 
-        while (cardNum < 52)
+        while cardNum < 52
             ; Get the card to swap with the current card and do the swap
             let swapTarget = rand() % 52
             let tmpCard = gCardDeck[cardNum]
