@@ -13,22 +13,22 @@ WC_AST_BEGIN_NAMESPACE
 // Type
 //-----------------------------------------------------------------------------
 bool Type::peek(const Token * currentToken) {
-    #warning Handle newlines during parsing
     return  currentToken->type == TokenType::kLBrack ||
             PrimitiveType::peek(currentToken);
 }
 
 Type * Type::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // See if there is an array type following:
     if (parseCtx.tok()->type == TokenType::kLBrack) {
-        // Array type ahead: skip the '['
+        // Array type ahead: skip the '[' and any newlines that follow
         const Token * startToken = parseCtx.tok();
         parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Parse the inner assign expression for the array size:
         AssignExpr * arraySizeExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(arraySizeExpr, nullptr);
+        parseCtx.skipNewlines();    // Skip any newlines that follow
         
         // Expect a ']' next:
         if (parseCtx.tok()->type != TokenType::kRBrack) {
@@ -36,8 +36,9 @@ Type * Type::parse(ParseCtx & parseCtx) {
             return nullptr;
         }
         
-        // Skip ']'
+        // Skip ']' and any newlines that follow
         parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Parse the inner type following:
         Type * innerType = Type::parse(parseCtx);
