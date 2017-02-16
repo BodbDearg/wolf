@@ -1,8 +1,9 @@
 - Make 'FuncCall' postfix expr consistent with array lookup
 - Change 'or if' statement to 'else if'
+- Allow 'do' after 'else' in if statement to avoid 'else if / else + child if' ambiguity.
 
 - Make logical statements lazy evaluate
-- Allow 'do' to open function body
+- Allow 'do' to open function body and make it required for one liners
 - Allow ',' to separate multiple statements on the same line
 - Implement 'undefined' var declarations
 - Don't allow negation of unsigned ints
