@@ -67,17 +67,13 @@ end
 
 func testBreakStmnt()
     loop
-        break 
-        if
-        true
+        break if
+            true
     end
 
     loop
-        break
-
-        unless
-
-        false
+        break unless
+            false
     end
 end
 
@@ -259,9 +255,8 @@ func testNextStmnt()
 
     while keepLooping
         keepLooping = false
-        next
-        if
-        true
+        next if
+            true
     end
 end
 

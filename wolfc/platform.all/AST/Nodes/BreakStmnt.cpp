@@ -24,8 +24,7 @@ BreakStmnt * BreakStmnt::parse(ParseCtx & parseCtx) {
     
     // Consume 'break' and save token for later:
     const Token * breakTok = parseCtx.tok();
-    parseCtx.nextTok();         // Consume 'break'
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.nextTok();
     
     // See whether 'if' or 'unless' follow, in which case the 'break' statement is conditional:
     if (parseCtx.tok()->type == TokenType::kIf || parseCtx.tok()->type == TokenType::kUnless) {

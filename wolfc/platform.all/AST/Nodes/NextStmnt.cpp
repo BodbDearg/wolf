@@ -24,8 +24,7 @@ NextStmnt * NextStmnt::parse(ParseCtx & parseCtx) {
     
     // Consume 'next' and save token for later:
     const Token * nextTok = parseCtx.tok();
-    parseCtx.nextTok();         // Consume 'next'
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    parseCtx.nextTok();
     
     // See whether 'if' or 'unless' follow, in which case the 'next' statement is conditional:
     if (parseCtx.tok()->type == TokenType::kIf || parseCtx.tok()->type == TokenType::kUnless) {
