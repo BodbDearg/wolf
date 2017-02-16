@@ -362,6 +362,13 @@ func testShiftExpr()
         2
 end
 
+func testTernaryExpr()
+    let v = 1 > 2 ?
+        true
+        :
+        false
+end
+
 func testType()
     testTypeTestFuncCall()
 end
@@ -437,6 +444,7 @@ func main() -> int
     testReturnStmnt()
     testScopeStmnt()
     testShiftExpr()
+    testTernaryExpr()
     testType()
     testVarDecl()
     testWhileStmnt()

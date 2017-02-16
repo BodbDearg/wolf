@@ -17,19 +17,20 @@ bool TernaryExpr::peek(const Token * tokenPtr) {
 }
 
 TernaryExpr * TernaryExpr::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // Parse the initial expression
     LOrExpr * firstExpr = LOrExpr::parse(parseCtx);
     WC_GUARD(firstExpr, nullptr);
     
     // See if a '?' follows:
     if (parseCtx.tok()->type == TokenType::kQMark) {
-        // Alright, consume that '?':
+        // Alright, consume that '?' and skip any newlines that follow:
         parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Now parse the 'true' expression:
         AssignExpr * trueExpr = AssignExpr::parse(parseCtx);
         WC_GUARD(trueExpr, nullptr);
+        parseCtx.skipNewlines();        // Skip any newlines that follow
         
         // Expect a colon to separate 'true' from false:
         if (parseCtx.tok()->type != TokenType::kColon) {
@@ -37,8 +38,9 @@ TernaryExpr * TernaryExpr::parse(ParseCtx & parseCtx) {
             return nullptr;
         }
         
-        // Consume the ':'
+        // Consume the ':' and skip any newlines that follow
         parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Now parse the 'false' expression:
         AssignExpr * falseExpr = AssignExpr::parse(parseCtx);
