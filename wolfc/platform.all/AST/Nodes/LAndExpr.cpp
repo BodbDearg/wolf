@@ -16,15 +16,15 @@ bool LAndExpr::peek(const Token * tokenPtr) {
 }
 
 LAndExpr * LAndExpr::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // Parse the initial expression
     NotExpr * leftExpr = NotExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);
     
     // See if there is an 'and' for logical and
     if (parseCtx.tok()->type == TokenType::kAnd) {
-        // And expression with and. Skip the 'and'
+        // And expression with and. Skip the 'and' and any newlines that follow
         parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Parse the following and expression and create the AST node
         LAndExpr * rightExpr = LAndExpr::parse(parseCtx);

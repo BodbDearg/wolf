@@ -197,6 +197,11 @@ func testIfStmnt()
     end
 end
 
+func testLAndExpr()
+    let v = true and
+        true
+end
+
 func testLoopStmnt()
 
     loop
@@ -213,6 +218,11 @@ func testLoopStmnt()
 
     true
 
+end
+
+func testLOrExpr()
+    let v = false or
+        true    
 end
 
 func testMulExpr()
@@ -390,7 +400,9 @@ func main() -> int
     testFuncArg(1)
     testFuncCall()
     testIfStmnt()
+    testLAndExpr()
     testLoopStmnt()
+    testLOrExpr()
     testMulExpr()
     testNextStmnt()
     testNotExpr()

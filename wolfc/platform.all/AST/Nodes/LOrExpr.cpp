@@ -16,7 +16,6 @@ bool LOrExpr::peek(const Token * tokenPtr) {
 }
 
 LOrExpr * LOrExpr::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // Parse the initial expression
     LAndExpr * andExpr = LAndExpr::parse(parseCtx);
     WC_GUARD(andExpr, nullptr);
@@ -30,8 +29,9 @@ LOrExpr * LOrExpr::parse(ParseCtx & parseCtx) {
         if (nextTokType != TokenType::kIf &&
             nextTokType != TokenType::kUnless)
         {
-            // Or expression with or. Skip the 'or'
+            // Or expression with or, skip the 'or' and any newlines that follow:
             parseCtx.nextTok();
+            parseCtx.skipNewlines();
         
             // Parse the following and expression and create the AST node
             LOrExpr * orExpr = LOrExpr::parse(parseCtx);
