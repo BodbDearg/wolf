@@ -12,12 +12,10 @@ WC_AST_BEGIN_NAMESPACE
 // BreakStmnt
 //-----------------------------------------------------------------------------
 bool BreakStmnt::peek(const Token * tokenPtr) {
-    #warning Handle newlines during parsing
-    return tokenPtr[0].type == TokenType::kBreak;
+    return tokenPtr->type == TokenType::kBreak;
 }
 
 BreakStmnt * BreakStmnt::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // Check the basics
     if (!peek(parseCtx.tok())) {
         parseCtx.error("Expected break statement!");
@@ -26,13 +24,15 @@ BreakStmnt * BreakStmnt::parse(ParseCtx & parseCtx) {
     
     // Consume 'break' and save token for later:
     const Token * breakTok = parseCtx.tok();
-    parseCtx.nextTok();
+    parseCtx.nextTok();         // Consume 'break'
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // See whether 'if' or 'unless' follow, in which case the 'break' statement is conditional:
     if (parseCtx.tok()->type == TokenType::kIf || parseCtx.tok()->type == TokenType::kUnless) {
         // Parse the condition token:
         const Token * condTok = parseCtx.tok();
-        parseCtx.nextTok();
+        parseCtx.nextTok();         // Consume 'if' or 'unless'
+        parseCtx.skipNewlines();    // Skip any newlines that follow
         
         // Parse the condition assign expression:
         AssignExpr * condExpr = AssignExpr::parse(parseCtx);

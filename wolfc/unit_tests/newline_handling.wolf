@@ -8,17 +8,40 @@ func testAssertStmnt()
     )
 end
 
+func testBreakStmnt()
+    loop
+        break 
+        if
+        true
+    end
+
+    loop
+        break
+
+        unless
+
+        false
+    end
+end
+
 func 
+
 testFunc
+
 (
     
     v 
+
     :
+
     int
+
 )
     assert
+
     (
         true
+
     )
 
 end
@@ -36,6 +59,24 @@ func testFuncArg(
     (
         true
     )
+end
+
+func testLoopStmnt()
+
+    loop
+
+        break
+
+    end
+
+    loop
+
+    repeat
+
+    until
+
+    true
+
 end
 
 func testPrefixExpr() 
@@ -69,8 +110,10 @@ end
 ;==================================================================================================
 func main() -> int
     testAssertStmnt()
+    testBreakStmnt()
     testFunc(1)
     testFuncArg(1)
+    testLoopStmnt()
     testPrefixExpr()
     testPrintStmnt()
     testVarDecl()
