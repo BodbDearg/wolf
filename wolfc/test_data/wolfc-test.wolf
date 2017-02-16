@@ -369,6 +369,13 @@ func testTernaryExpr()
         false
 end
 
+func testTimeExpr()
+    let t = 
+        time
+        (
+        )
+end
+
 func testType()
     testTypeTestFuncCall()
 end
@@ -445,6 +452,7 @@ func main() -> int
     testScopeStmnt()
     testShiftExpr()
     testTernaryExpr()
+    testTimeExpr()
     testType()
     testVarDecl()
     testWhileStmnt()
