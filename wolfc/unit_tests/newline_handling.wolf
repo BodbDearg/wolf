@@ -79,6 +79,28 @@ func testFuncArg(
     )
 end
 
+func testFuncCall()
+
+    testFuncCallTestFunc(
+
+        1 
+
+            ,
+
+        2
+
+
+                , 
+
+3
+
+    )
+end
+
+func testFuncCallTestFunc(v1: int, v2: int, v3: int)
+
+end 
+
 func testIfStmnt()
     ; Basic if
     if 
@@ -220,6 +242,7 @@ func main() -> int
     testBreakStmnt()
     testFunc(1)
     testFuncArg(1)
+    testFuncCall()
     testIfStmnt()
     testLoopStmnt()
     testPrefixExpr()

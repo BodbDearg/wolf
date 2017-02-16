@@ -9,12 +9,10 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 bool FuncCall::peek(const Token * currentToken) {
-    #warning Handle newlines during parsing
     return currentToken->type == TokenType::kLParen;
 }
 
 FuncCall * FuncCall::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // Must open with '('
     if (parseCtx.tok()->type != TokenType::kLParen) {
         parseCtx.error("Expected '(' !");
@@ -23,7 +21,8 @@ FuncCall * FuncCall::parse(ParseCtx & parseCtx) {
     
     // Save and skip '('
     const Token * startToken = parseCtx.tok();
-    parseCtx.nextTok();
+    parseCtx.nextTok();         // Consume '('
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // Start parsing the arg list
     std::vector<AssignExpr*> argList;
@@ -31,6 +30,7 @@ FuncCall * FuncCall::parse(ParseCtx & parseCtx) {
     while (AssignExpr::peek(parseCtx.tok())) {
         // Parse the arg and save if it was parsed ok
         AssignExpr * argExpr = AssignExpr::parse(parseCtx);
+        parseCtx.skipNewlines();    // Skip any newlines that follow
         
         if (argExpr) {
             argList.push_back(argExpr);
@@ -41,8 +41,9 @@ FuncCall * FuncCall::parse(ParseCtx & parseCtx) {
             break;
         }
         
-        // Otherwise consume the comma
-        parseCtx.nextTok();
+        // Otherwise continue parsing
+        parseCtx.nextTok();         // Consume ','
+        parseCtx.skipNewlines();    // Skip any newlines that follow
     }
     
     // Expect ')'
