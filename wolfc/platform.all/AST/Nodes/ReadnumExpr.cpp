@@ -12,21 +12,22 @@ bool ReadnumExpr::peek(const Token * tokenPtr) {
 }
 
 ReadnumExpr * ReadnumExpr::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     if (parseCtx.tok()->type != TokenType::kReadnum) {
         parseCtx.error("Expected 'readnum' at begining of readnum() expression!");
         return nullptr;
     }
     
     const Token * readnumTok = parseCtx.tok();
-    parseCtx.nextTok();     // Consume 'readnum'
+    parseCtx.nextTok();         // Consume 'readnum'
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     if (parseCtx.tok()->type != TokenType::kLParen) {
         parseCtx.error("Expect '(' following 'readnum'!");
         return nullptr;
     }
     
-    parseCtx.nextTok();     // Consume '('
+    parseCtx.nextTok();         // Consume '('
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     if (parseCtx.tok()->type != TokenType::kRParen) {
         parseCtx.error("Expect ')' following '('!");
