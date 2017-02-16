@@ -324,6 +324,21 @@ func testVarDecl()
     3
 end
 
+func testWhileStmnt()
+
+    while
+    
+    false
+    
+    do
+
+    end
+
+    while
+    false
+    end
+end
+
 ;==================================================================================================
 ; Run the tests
 ;==================================================================================================
@@ -345,6 +360,7 @@ func main() -> int
     testShiftExpr()
     testType()
     testVarDecl()
+    testWhileStmnt()
     return 0
 end
 

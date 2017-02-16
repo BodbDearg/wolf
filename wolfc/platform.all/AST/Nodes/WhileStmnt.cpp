@@ -15,34 +15,36 @@ bool WhileStmnt::peek(const Token * tokenPtr) {
 }
 
 WhileStmnt * WhileStmnt::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // Parse the initial 'while' or 'until' keyword
     if (!peek(parseCtx.tok())) {
         parseCtx.error("While statement expected!");
         return nullptr;
     }
     
-    // Skip the 'while' or 'until' token and save location
     const Token * startToken = parseCtx.tok();
-    parseCtx.nextTok();
+    parseCtx.nextTok();             // Consume the 'while' or 'until' token
+    parseCtx.skipNewlines();        // Skip any newlines that follow
     
     // Parse the while expression (while condition):
     AssignExpr * whileExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(whileExpr, nullptr);
+    parseCtx.skipNewlines();        // Skip any newlines that follow
     
     // See if there is a 'do' following. This keyword is optional, unless the body scope is required
     // to be on the same line as the enclosing while statement:
     bool bodyScopeRequiresNL = true;
     
     if (parseCtx.tok()->type == TokenType::kDo) {
-        // Found a 'do' token, skip it. The body scope is allowed to be on the same line
-        parseCtx.nextTok();
+        // Found a 'do' token: the body scope is allowed to be on the same line
+        parseCtx.nextTok();             // Consume the 'do' token
+        parseCtx.skipNewlines();        // Skip any newlines that follow
         bodyScopeRequiresNL = false;
     }
     
     // Expect scope following:
     Scope * bodyScope = Scope::parse(parseCtx);
     WC_GUARD(bodyScope, nullptr);
+    parseCtx.skipNewlines();        // Skip any newlines that follow
     
     // See if it violates newline rules:
     if (bodyScopeRequiresNL) {
