@@ -54,21 +54,21 @@ func testBreakStmnt()
 end
 
 func testCmpExpr()
-    1 ==
+    let v1 = 1 ==
         1
-    1 is
+    let v2 = 1 is
         1
-    1 !=
+    let v3 = 1 !=
         1
-    1 is not
+    let v4 = 1 is not
         1
-    1 <
+    let v5 = 1 <
         1
-    1 <=
+    let v6 = 1 <=
         1
-    1 >
+    let v7 = 1 >
         1
-    1 >=
+    let v8 = 1 >=
         1
 end
 
@@ -217,12 +217,20 @@ func testNextStmnt()
     end
 end
 
+func testNotExpr()
+    let v1 = not
+        true
+    let v2 = ~
+        1
+end
+
 func testPrefixExpr() 
-    -
+    let v1 = -
         1
-    +
+    let v2 = +
         1
-    (
+
+    let v3 = (
         1
     )
 end
@@ -356,6 +364,7 @@ func main() -> int
     testLoopStmnt()
     testMulExpr()
     testNextStmnt()
+    testNotExpr()
     testPrefixExpr()
     testPrintStmnt()
     testReturnStmnt()

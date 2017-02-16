@@ -13,7 +13,6 @@ WC_AST_BEGIN_NAMESPACE
 // PrefixExpr
 //-----------------------------------------------------------------------------
 bool PrefixExpr::peek(const Token * currentToken) {
-    #warning Handle newlines here
     /*
     - PrefixExpr
     + PrefixExpr
@@ -75,7 +74,7 @@ PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
             }
             
             const Token * rparenTok = parseCtx.tok();
-            parseCtx.nextTok();     // Skip ')'
+            parseCtx.nextTok();         // Skip ')'
             WC_GUARD(expr, nullptr);
             
             return WC_NEW_AST_NODE(parseCtx, PrefixExprParen, *lparenTok, *expr, *rparenTok);

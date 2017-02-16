@@ -20,14 +20,14 @@ bool NotExpr::peek(const Token * tokenPtr) {
 }
 
 NotExpr * NotExpr::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // Save the first token:
     const Token * startToken = parseCtx.tok();
     
     // See if an actual 'not' or bitwise not ('~') expression:
     if (startToken->type == TokenType::kNot) {
-        // Logical 'not': skip 'not'
+        // Logical 'not': skip 'not' and any newlines that follow
         parseCtx.nextTok();
+        parseCtx.skipNewlines();
         
         // Parse the expression following
         NotExpr * notExpr = NotExpr::parse(parseCtx);
@@ -37,8 +37,9 @@ NotExpr * NotExpr::parse(ParseCtx & parseCtx) {
         return WC_NEW_AST_NODE(parseCtx, NotExprLNot, *notExpr, *startToken);
     }
     else if (startToken->type == TokenType::kTilde) {
-        // Bitwise 'not': skip 'not'
+        // Bitwise '~' (not): skip '~' and any newlines that follow
         parseCtx.nextTok();
+        parseCtx.skipNewlines();
 
         // Parse the expression following
         NotExpr * notExpr = NotExpr::parse(parseCtx);
