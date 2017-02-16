@@ -9,8 +9,7 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 bool PrintStmnt::peek(const Token * tokenPtr) {
-    #warning Handle newlines during parsing
-    return tokenPtr[0].type == TokenType::kPrint;
+    return tokenPtr->type == TokenType::kPrint;
 }
 
 PrintStmnt * PrintStmnt::parse(ParseCtx & parseCtx) {

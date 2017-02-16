@@ -12,7 +12,6 @@ WC_AST_BEGIN_NAMESPACE
 // AddExpr
 //-----------------------------------------------------------------------------
 bool AddExpr::peek(const Token * tokenPtr) {
-    #warning Handle newlines during parsing
     return MulExpr::peek(tokenPtr);
 }
 

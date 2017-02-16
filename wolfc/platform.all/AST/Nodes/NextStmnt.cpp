@@ -12,8 +12,7 @@ WC_AST_BEGIN_NAMESPACE
 // NextStmnt
 //-----------------------------------------------------------------------------
 bool NextStmnt::peek(const Token * tokenPtr) {
-    #warning Handle newlines during parsing
-    return tokenPtr[0].type == TokenType::kNext;
+    return tokenPtr->type == TokenType::kNext;
 }
 
 NextStmnt * NextStmnt::parse(ParseCtx & parseCtx) {

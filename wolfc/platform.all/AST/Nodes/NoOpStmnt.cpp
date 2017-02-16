@@ -8,12 +8,10 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 bool NoOpStmnt::peek(const Token * tokenPtr) {
-    #warning Handle newlines during parsing
     return tokenPtr->type == TokenType::kNoOp;
 }
 
 NoOpStmnt * NoOpStmnt::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // Parse the initial 'noop'
     if (parseCtx.tok()->type != TokenType::kNoOp) {
         parseCtx.error("'noop' statement expected!");

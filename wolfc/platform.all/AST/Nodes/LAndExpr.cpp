@@ -12,7 +12,6 @@ WC_AST_BEGIN_NAMESPACE
 // LAndExpr
 //-----------------------------------------------------------------------------
 bool LAndExpr::peek(const Token * tokenPtr) {
-    #warning Handle newlines during parsing
     return NotExpr::peek(tokenPtr);
 }
 

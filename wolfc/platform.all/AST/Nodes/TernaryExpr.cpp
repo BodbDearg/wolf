@@ -13,7 +13,6 @@ WC_AST_BEGIN_NAMESPACE
 // TernaryExpr
 //-----------------------------------------------------------------------------
 bool TernaryExpr::peek(const Token * tokenPtr) {
-    #warning Handle newlines during parsing
     return LOrExpr::peek(tokenPtr);
 }
 

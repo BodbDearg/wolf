@@ -12,7 +12,6 @@ WC_AST_BEGIN_NAMESPACE
 // ShiftExpr
 //-----------------------------------------------------------------------------
 bool ShiftExpr::peek(const Token * tokenPtr) {
-    #warning Handle newlines during parsing
     return PrefixExpr::peek(tokenPtr);
 }
 
