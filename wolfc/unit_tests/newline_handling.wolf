@@ -272,6 +272,25 @@ func testScopeStmnt()
 
 end
 
+func testShiftExpr()
+    let v1 = 
+        1
+        <<
+        2
+
+    let v2 =
+        1
+        >>
+        2
+
+    let v3 =
+        1
+
+        >>>
+
+        2
+end
+
 func testType()
     testTypeTestFuncCall()
 end
@@ -323,6 +342,7 @@ func main() -> int
     testPrintStmnt()
     testReturnStmnt()
     testScopeStmnt()
+    testShiftExpr()
     testType()
     testVarDecl()
     return 0
