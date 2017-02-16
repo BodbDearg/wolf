@@ -40,7 +40,7 @@ PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
         case TokenType::kMinus: {
             const Token * minusTok = parseCtx.tok();
             parseCtx.nextTok();         // Skip '-'
-            parseCtx.skipNewlines();    // Skip any newlines
+            parseCtx.skipNewlines();    // Skip any newlines that follow
             PrefixExpr * expr = PrefixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
             return WC_NEW_AST_NODE(parseCtx, PrefixExprMinus, *minusTok, *expr);
@@ -50,7 +50,7 @@ PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
         case TokenType::kPlus: {
             const Token * plusTok = parseCtx.tok();
             parseCtx.nextTok();         // Skip '+'
-            parseCtx.skipNewlines();    // Skip any newlines
+            parseCtx.skipNewlines();    // Skip any newlines that follow
             PrefixExpr * expr = PrefixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
             return WC_NEW_AST_NODE(parseCtx, PrefixExprPlus, *plusTok, *expr);
@@ -60,10 +60,10 @@ PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
         case TokenType::kLParen: {
             const Token * lparenTok = parseCtx.tok();
             parseCtx.nextTok();         // Skip '('
-            parseCtx.skipNewlines();    // Skip any newlines
+            parseCtx.skipNewlines();    // Skip any newlines that follow
             
             AssignExpr * expr = AssignExpr::parse(parseCtx);
-            parseCtx.skipNewlines();    // Skip any newlines
+            parseCtx.skipNewlines();    // Skip any newlines that follow
             
             if (parseCtx.tok()->type != TokenType::kRParen) {
                 parseCtx.error("Expected closing ')' to match '(' at line %zu and column %zu!",

@@ -28,24 +28,24 @@ VarDecl * VarDecl::parse(ParseCtx & parseCtx) {
     // Save and skip 'let'
     const Token * varToken = parseCtx.tok();
     parseCtx.nextTok();         // Consume 'let'
-    parseCtx.skipNewlines();    // Skip any newlines
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // Parse the identifier ahead
     Identifier * ident = Identifier::parse(parseCtx);
     WC_GUARD(ident, nullptr);
-    parseCtx.skipNewlines();    // Skip any newlines
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // See if the type for the variable is specified:
     Type * type = nullptr;
     
     if (parseCtx.tok()->type == TokenType::kColon) {
         parseCtx.nextTok();         // Type specified, skip the ':'
-        parseCtx.skipNewlines();    // Skip any newlines
+        parseCtx.skipNewlines();    // Skip any newlines that follow
         
         // Parse the type:
         type = Type::parse(parseCtx);
         WC_GUARD(type, nullptr);
-        parseCtx.skipNewlines();    // Skip any newlines
+        parseCtx.skipNewlines();    // Skip any newlines that follow
     }
     
     // Parse the '='
@@ -55,7 +55,7 @@ VarDecl * VarDecl::parse(ParseCtx & parseCtx) {
     }
     
     parseCtx.nextTok();         // Consume '='
-    parseCtx.skipNewlines();    // Skip any newlines
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // Parse the init expression and return result of parsing
     AssignExpr * initExpr = AssignExpr::parse(parseCtx);

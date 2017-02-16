@@ -30,12 +30,12 @@ Func * Func::parse(ParseCtx & parseCtx) {
     // Skip the 'func' token and save location
     const Token * startToken = parseCtx.tok();
     parseCtx.nextTok();         // Consume 'func'
-    parseCtx.skipNewlines();    // Skip any newlines
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // Parse the function identifier:
     Identifier * identifier = Identifier::parse(parseCtx);
     WC_GUARD(identifier, nullptr);
-    parseCtx.skipNewlines();    // Skip any newlines
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // Expect '('
     if (parseCtx.tok()->type != TokenType::kLParen) {
@@ -44,7 +44,7 @@ Func * Func::parse(ParseCtx & parseCtx) {
     }
     
     parseCtx.nextTok();         // Skip '('
-    parseCtx.skipNewlines();    // Skip any newlines
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // Parse any function arguments that follow:
     std::vector<FuncArg*> funcArgs;
@@ -57,12 +57,12 @@ Func * Func::parse(ParseCtx & parseCtx) {
             funcArgs.push_back(funcArg);
         }
         
-        parseCtx.skipNewlines();    // Skip any newlines
+        parseCtx.skipNewlines();    // Skip any newlines that follow
         
         // See if a ',' follows
         if (parseCtx.tok()->type == TokenType::kComma) {
             parseCtx.nextTok();         // Skip the ','
-            parseCtx.skipNewlines();    // Skip any newlines
+            parseCtx.skipNewlines();    // Skip any newlines that follow
             
             // Expect an argument following
             if (!FuncArg::peek(parseCtx.tok())) {
@@ -78,7 +78,7 @@ Func * Func::parse(ParseCtx & parseCtx) {
     }
     
     parseCtx.nextTok();         // Skip ')'
-    parseCtx.skipNewlines();    // Skip any newlines
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // See if a '->' follows for function explicit return type.
     // If it is not present then a 'void' return type is assumed.
@@ -86,20 +86,20 @@ Func * Func::parse(ParseCtx & parseCtx) {
     
     if (parseCtx.tok()->type == TokenType::kOpArrow) {
         parseCtx.nextTok();         // Explicit return type, skip the '->' first
-        parseCtx.skipNewlines();    // Skip any newlines
+        parseCtx.skipNewlines();    // Skip any newlines that follow
         
         // Now parse the return type, if that fails then bail
         returnType = Type::parse(parseCtx);
         WC_GUARD(returnType, nullptr);
     }
     
-    parseCtx.skipNewlines();    // Skip any newlines
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // Parse the inner function scope:
     Scope * scope = Scope::parse(parseCtx);
     WC_GUARD(scope, nullptr);
     
-    // Skip any newlines
+    // Skip any newlines that follow
     parseCtx.skipNewlines();
     
     // Must be terminated by an 'end' token

@@ -9,7 +9,7 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 Module * Module::parse(ParseCtx & parseCtx) {
-    // Skip any newlines:
+    // Skip any newlines that follow:
     parseCtx.skipNewlines();
     
     // Parse a list of decldefs for the module.

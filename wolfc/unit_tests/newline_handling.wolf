@@ -61,6 +61,45 @@ func testFuncArg(
     )
 end
 
+func testIfStmnt()
+    ; Basic if
+    if 
+    true
+    then
+
+    end
+
+    ; If with else
+    unless
+    false
+    then
+
+        assert(true)
+
+    else
+
+        assert(true)
+
+    end
+
+    ; If with or if
+    if 
+    
+    true
+
+    then
+
+    or 
+
+    if 
+
+    true 
+
+    then
+
+    end
+end
+
 func testLoopStmnt()
 
     loop
@@ -162,6 +201,7 @@ func main() -> int
     testBreakStmnt()
     testFunc(1)
     testFuncArg(1)
+    testIfStmnt()
     testLoopStmnt()
     testPrefixExpr()
     testPrintStmnt()

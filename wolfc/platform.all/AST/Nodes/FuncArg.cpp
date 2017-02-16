@@ -18,7 +18,7 @@ FuncArg * FuncArg::parse(ParseCtx & parseCtx) {
     // Parse the identifier:
     Identifier * ident = Identifier::parse(parseCtx);
     WC_GUARD(ident, nullptr);
-    parseCtx.skipNewlines();    // Skip any newlines
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // Expect ':' following the identifier
     if (parseCtx.tok()->type != TokenType::kColon) {
@@ -27,7 +27,7 @@ FuncArg * FuncArg::parse(ParseCtx & parseCtx) {
     }
     
     parseCtx.nextTok();         // Skip ':'
-    parseCtx.skipNewlines();    // Skip any newlines
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // Parse the data type
     Type * type = Type::parse(parseCtx);

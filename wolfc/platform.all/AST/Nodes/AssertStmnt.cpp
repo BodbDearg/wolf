@@ -20,7 +20,7 @@ AssertStmnt * AssertStmnt::parse(ParseCtx & parseCtx) {
     
     const Token * assertTok = parseCtx.tok();
     parseCtx.nextTok();         // Consume 'assert'
-    parseCtx.skipNewlines();    // Skip any newlines
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     if (parseCtx.tok()->type != TokenType::kLParen) {
         parseCtx.error("Expected '(' following 'assert'!");
@@ -28,12 +28,12 @@ AssertStmnt * AssertStmnt::parse(ParseCtx & parseCtx) {
     }
     
     parseCtx.nextTok();         // Consume '('
-    parseCtx.skipNewlines();    // Skip any newlines
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // Parse the inner expression
     AssignExpr * assignExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(assignExpr, nullptr);
-    parseCtx.skipNewlines();    // Skip any newlines
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // Expect ')' following all that:
     if (parseCtx.tok()->type != TokenType::kRParen) {

@@ -9,7 +9,7 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 Scope * Scope::parse(ParseCtx & parseCtx) {
-    // Skip any newlines that the scope starts with:
+    // Skip any newlines that follow which the scope starts with:
     parseCtx.skipNewlines();
     
     // Save start token:
