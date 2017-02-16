@@ -50,13 +50,13 @@ WhileStmnt * WhileStmnt::parse(ParseCtx & parseCtx) {
     parseCtx.skipNewlines();
     
     // See if it violates newline rules:
+    // Note: we'll only emit an error in this case and will continue to parse to see
+    // if we can find anymore problems.
     if (bodyScopeRequiresNL) {
         if (bodyScope->getStartToken().startLine == whileExpr->getEndToken().endLine) {
             parseCtx.error(bodyScope->getStartToken(),
                            "Code following 'while/until' statement condition must be on a new line unless "
                            "'do' is used after the condition.");
-            
-            return nullptr;
         }
     }
     

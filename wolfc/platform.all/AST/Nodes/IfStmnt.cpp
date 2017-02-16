@@ -52,14 +52,14 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
     WC_GUARD(thenScope, nullptr);
     parseCtx.skipNewlines();
     
-    // See if it violates newline rules:
+    // See if it violates newline rules.
+    // Note: we'll only emit an error in this case and will continue to parse to see
+    // if we can find anymore problems.
     if (thenScopeRequiresNL) {
         if (thenScope->getStartToken().startLine == ifExpr->getEndToken().endLine) {
             parseCtx.error(thenScope->getStartToken(),
                            "Code following 'if' statement condition must be on a new line unless "
                            "'then' is used after the condition.");
-            
-            return nullptr;
         }
     }
     
