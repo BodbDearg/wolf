@@ -1,6 +1,24 @@
 
 ; Note: newline above and below deliberate to test parser
 
+func testArrayLit()
+
+    [
+    
+        1
+
+        ,
+
+    2
+
+        , 
+
+            3
+
+    ]
+
+end
+
 func testAssertStmnt()
     assert
     (
@@ -197,6 +215,7 @@ end
 ; Run the tests
 ;==================================================================================================
 func main() -> int
+    testArrayLit()
     testAssertStmnt()
     testBreakStmnt()
     testFunc(1)
@@ -210,3 +229,6 @@ func main() -> int
     testVarDecl()
     return 0
 end
+
+; Note: newline above and below deliberate to test parser
+

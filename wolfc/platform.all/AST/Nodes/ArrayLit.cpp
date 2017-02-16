@@ -9,12 +9,10 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 bool ArrayLit::peek(const Token * tokenPtr) {
-    #warning Handle newlines during parsing
     return tokenPtr->type == TokenType::kLBrack;
 }
 
 ArrayLit * ArrayLit::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // Parse the initial '[':
     if (parseCtx.tok()->type != TokenType::kLBrack) {
         parseCtx.error("Expected integer literal!");
@@ -22,7 +20,8 @@ ArrayLit * ArrayLit::parse(ParseCtx & parseCtx) {
     }
     
     const Token * lBrack = parseCtx.tok();
-    parseCtx.nextTok();
+    parseCtx.nextTok();         // Consume '['
+    parseCtx.skipNewlines();    // Skip any newlines that follow
     
     // Start parsing the list of sub expressions
     std::vector<AssignExpr*> exprs;
@@ -30,6 +29,7 @@ ArrayLit * ArrayLit::parse(ParseCtx & parseCtx) {
     while (AssignExpr::peek(parseCtx.tok())) {
         // Parse the expression and save if it was parsed ok
         AssignExpr * expr = AssignExpr::parse(parseCtx);
+        parseCtx.skipNewlines();    // Skip any newlines that follow
         
         if (expr) {
             exprs.push_back(expr);
@@ -40,8 +40,9 @@ ArrayLit * ArrayLit::parse(ParseCtx & parseCtx) {
             break;
         }
         
-        // Otherwise consume the comma
-        parseCtx.nextTok();
+        // Otherwise carry parsing
+        parseCtx.nextTok();         // Consume ','
+        parseCtx.skipNewlines();    // Skip any newlines that follow
     }
     
     // Parse the closing ']'
