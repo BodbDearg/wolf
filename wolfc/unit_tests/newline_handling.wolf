@@ -1,6 +1,30 @@
 
 ; Note: newline above and below deliberate to test parser
 
+func testAddExpr()
+    let v1 =
+        1
+        +
+        2
+
+    let v2 =
+        1
+
+        -
+        
+        2
+
+    let v3 =
+        1
+        |
+        2
+
+    let v4 =
+        1
+        ^
+        2
+end
+
 func testArrayLit()
 
     [
@@ -261,6 +285,7 @@ end
 ; Run the tests
 ;==================================================================================================
 func main() -> int
+    testAddExpr()
     testArrayLit()
     testAssertStmnt()
     testBreakStmnt()
