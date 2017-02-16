@@ -1,6 +1,7 @@
 - Make newline a token and terminate statements on newline
 - Make the parser not accept multiple statements on the same line
 - Don't bail out on missing newline errors in if/loop/while etc. statements
+- Make 'FuncCall' postfix expr consistent with array lookup
 
 - Allow global variables to reference each other in an order independent way
 - Make logical statements lazy evaluate

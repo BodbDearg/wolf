@@ -272,6 +272,20 @@ func testNotExpr()
         1
 end
 
+func testPostfixExpr()
+    [1,2,3][
+        1
+    ]
+
+    testFuncCallTestFunc(
+        1
+        ,
+        2
+        ,
+        3
+    )
+end
+
 func testPrefixExpr() 
     let v1 = -
         1
@@ -417,6 +431,7 @@ func main() -> int
     testMulExpr()
     testNextStmnt()
     testNotExpr()
+    testPostfixExpr()
     testPrefixExpr()
     testPrintStmnt()
     testReturnStmnt()

@@ -18,7 +18,6 @@ bool PostfixExpr::peek(const Token * currentToken) {
 }
 
 PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // Parse the initial expression
     CastExpr * expr = CastExpr::parse(parseCtx);
     WC_GUARD(expr, nullptr);
@@ -51,7 +50,7 @@ PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
         WC_ASSERT(outerPostfixExpr);
     }
     
-    // Continue parsing and wrapping until one of these conditions breaks
+    // Continue parsing and wrapping function calls and array lookups while we can
     while (FuncCall::peek(parseCtx.tok()) ||
            parseCtx.tok()->type == TokenType::kLBrack)
     {
@@ -67,13 +66,16 @@ PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
             WC_ASSERT(outerPostfixExpr);
         }
         else {
-            // Skip the '['. Expect '[' to be here based on previous if() failing - see while loop.
+            // An array lookup follows, skip the '[' and any newlines that follow.
+            // Expect '[' to be here based on previous if() failing - see while loop.
             WC_ASSERT(parseCtx.tok()->type == TokenType::kLBrack);
             parseCtx.nextTok();
+            parseCtx.skipNewlines();
             
             // Parse the assign expression for the array index
             AssignExpr * arrayIndexExpr = AssignExpr::parse(parseCtx);
             WC_GUARD(arrayIndexExpr, nullptr);
+            parseCtx.skipNewlines();            // Skip any newlines that follow
             
             // Expect a closing ']'
             const Token & endToken = *parseCtx.tok();
