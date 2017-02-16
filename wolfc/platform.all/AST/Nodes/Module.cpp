@@ -24,7 +24,27 @@ Module * Module::parse(ParseCtx & parseCtx) {
         DeclDef * declDef = DeclDef::parse(parseCtx);
         
         if (declDef) {
-            // Got something from the parse, save:
+            // Each subsequent decldef must be put on a new line, if we find
+            // that not to be the case then issue errors:
+            //
+            // TODO: Allow commas to enable multiple decldefs per line
+            if (!declDefs.empty()) {
+                DeclDef * lastDeclDef = declDefs.back();
+                const Token & thisDeclDefStart = declDef->getStartToken();
+                const Token & prevDeclDefEnd = lastDeclDef->getEndToken();
+                
+                if (thisDeclDefStart.startLine <= prevDeclDefEnd.startLine) {
+                    parseCtx.error("Top level declarations/definitions must be separated onto different lines, or by ','! "
+                                   "The declaration/definition starting at line %zu, col %zu is on the same line as "
+                                   "the declaration/definition ending at line %zu, col %zu!",
+                                   thisDeclDefStart.startLine + 1,
+                                   thisDeclDefStart.startCol + 1,
+                                   prevDeclDefEnd.startLine + 1,
+                                   prevDeclDefEnd.startCol + 1);
+                }
+            }
+            
+            // Save the decldef which was parsed
             declDefs.push_back(declDef);
         }
         else if (!parseCtx.hasErrors()) {

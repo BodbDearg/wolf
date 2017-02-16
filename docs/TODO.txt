@@ -1,7 +1,5 @@
-- Make the parser not accept multiple statements on the same line
 - Make 'FuncCall' postfix expr consistent with array lookup
 - Change 'or if' statement to 'else if'
-
 
 - Make logical statements lazy evaluate
 - Allow 'do' to open function body

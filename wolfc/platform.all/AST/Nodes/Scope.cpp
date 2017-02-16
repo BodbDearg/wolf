@@ -19,12 +19,35 @@ Scope * Scope::parse(ParseCtx & parseCtx) {
     std::vector<Stmnt*> stmnts;
     
     while (Stmnt::peek(parseCtx.tok())) {
-        // Parse the statement
+        // Parse the statement, if that fails then try again:
         Stmnt * stmnt = Stmnt::parse(parseCtx);
-        WC_GUARD(stmnt, nullptr);
-        stmnts.push_back(stmnt);
         
-        // Skip any newlines that follow
+        if (!stmnt) {
+            continue;
+        }
+        
+        // Each subsequent statement must be put on a new line, if we find
+        // that not to be the case then issue errors:
+        //
+        // TODO: Allow commas to enable multiple statements per line
+        if (!stmnts.empty()) {
+            Stmnt * lastStmnt = stmnts.back();
+            const Token & thisStmntStart = stmnt->getStartToken();
+            const Token & prevStmntEnd = lastStmnt->getEndToken();
+            
+            if (thisStmntStart.startLine <= prevStmntEnd.startLine) {
+                parseCtx.error("Statements must be separated onto different lines, or by ','! "
+                               "The statement starting at line %zu, col %zu is on the same line as "
+                               "the statement ending at line %zu, col %zu!",
+                               thisStmntStart.startLine + 1,
+                               thisStmntStart.startCol + 1,
+                               prevStmntEnd.startLine + 1,
+                               prevStmntEnd.startCol + 1);
+            }
+        }
+            
+        // Save the statement and skip any newlines that follow
+        stmnts.push_back(stmnt);
         parseCtx.skipNewlines();
     }
     
