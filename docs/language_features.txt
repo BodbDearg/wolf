@@ -11,13 +11,16 @@ Language TODO:
     - 'in' expression
 
     - Variables must be initialized when declared
-    - = void for no initialization
-    - = default for default init
+        - '= undefined' for no initialization
+        - '= default' for default init
     - SSA style 'const' variables. Maybe make optimizer detect constness?
     - Branch prediction constructs.
     - typeof and istype expressions
     - Support assign expressions that both return void and non void
+        Can define += operator which returns and which does not return
+            - limited case of overloading based on return type
     - Declare multiple variables with same 'let'
+    - Allow global variables to reference each other in an order independent way
     - '\' to allow explicit multi line statements
 
 Modules:

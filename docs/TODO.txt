@@ -2,7 +2,7 @@
 - Make 'FuncCall' postfix expr consistent with array lookup
 - Change 'or if' statement to 'else if'
 
-- Allow global variables to reference each other in an order independent way
+
 - Make logical statements lazy evaluate
 - Allow 'do' to open function body
 - Allow ',' to separate multiple statements on the same line
