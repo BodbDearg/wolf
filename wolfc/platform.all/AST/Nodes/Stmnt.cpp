@@ -23,7 +23,6 @@ WC_AST_BEGIN_NAMESPACE
 // Stmnt
 //-----------------------------------------------------------------------------
 bool Stmnt::peek(const Token * tokenPtr) {
-    #warning Handle newlines during parsing
     return  NoOpStmnt::peek(tokenPtr) ||
             PrintStmnt::peek(tokenPtr) ||
             AssertStmnt::peek(tokenPtr) ||
@@ -39,7 +38,6 @@ bool Stmnt::peek(const Token * tokenPtr) {
 }
     
 Stmnt * Stmnt::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     // Parse 'noop' statment if ahead
     if (NoOpStmnt::peek(parseCtx.tok())) {
         NoOpStmnt * noOpStmnt = NoOpStmnt::parse(parseCtx);

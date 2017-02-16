@@ -9,7 +9,6 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 bool PrimitiveType::peek(const Token * currentToken) {
-    #warning Handle newlines during parsing
     return PrimitiveDataTypes::isLangKeywordPrimitiveType(currentToken->type);
 }
 

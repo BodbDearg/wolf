@@ -9,25 +9,25 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 bool ScopeStmnt::peek(const Token * tokenPtr) {
-    #warning Handle newlines during parsing
     return tokenPtr->type == TokenType::kScope;
 }
 
 ScopeStmnt * ScopeStmnt::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
-    // Parse the initial 'scope' keyword
+    // Sanity check
     if (!peek(parseCtx.tok())) {
         parseCtx.error("'scope' statement expected!");
         return nullptr;
     }
     
-    // Skip the 'scope' token and save location
+    // Parse the initial 'scope' keyword and save it's location
     const Token * startToken = parseCtx.tok();
-    parseCtx.nextTok();
+    parseCtx.nextTok();         // Consume 'scope'
+    parseCtx.skipNewlines();    // Skip any newlines
     
     // Parse the body scope:
     Scope * bodyScope = Scope::parse(parseCtx);
     WC_GUARD(bodyScope, nullptr);
+    parseCtx.skipNewlines();    // Skip any newlines
     
     // Must be terminated by an 'end' token
     if (parseCtx.tok()->type != TokenType::kEnd) {
