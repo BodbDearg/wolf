@@ -16,16 +16,20 @@ bool MulExpr::peek(const Token * tokenPtr) {
 }
 
 MulExpr * MulExpr::parse(ParseCtx & parseCtx) {
-    #warning Handle newlines during parsing
     ShiftExpr * leftExpr = ShiftExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);
+    parseCtx.skipNewlines();        // Skip any newlines that follow
     
     // See if there is a known operator ahead.
     // If we find a known operator parse the operator token, the right operand and
     // return the AST node for the operation.
     #define PARSE_OP(TokenType, ASTNodeType)\
         case TokenType: {\
+            /* Consume the operator token */\
             parseCtx.nextTok();\
+            /* Skip any newlines that follow */\
+            parseCtx.skipNewlines();\
+            /* Parse the right side of the operator */\
             MulExpr * rightExpr = MulExpr::parse(parseCtx);\
             WC_GUARD(rightExpr, nullptr);\
             return WC_NEW_AST_NODE(parseCtx, ASTNodeType, *leftExpr, *rightExpr);\

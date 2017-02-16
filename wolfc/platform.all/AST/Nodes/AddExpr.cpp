@@ -18,7 +18,7 @@ bool AddExpr::peek(const Token * tokenPtr) {
 AddExpr * AddExpr::parse(ParseCtx & parseCtx) {
     MulExpr * leftExpr = MulExpr::parse(parseCtx);
     WC_GUARD(leftExpr, nullptr);
-    parseCtx.skipNewlines();        // Consume any newlines that follow
+    parseCtx.skipNewlines();        // Skip any newlines that follow
     
     // See if there is a known operator ahead.
     // If we find a known operator parse the operator token, the right operand and

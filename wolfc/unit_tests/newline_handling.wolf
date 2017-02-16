@@ -182,6 +182,30 @@ func testLoopStmnt()
 
 end
 
+func testMulExpr()
+    let v1 =
+        1
+        *
+        2
+
+    let v2 =
+        1
+
+        /
+
+        2
+
+    let v3 = 
+        1
+        %
+        2
+
+    let v4 =
+        1
+        &
+        1
+end
+
 func testPrefixExpr() 
     -
         1
@@ -294,6 +318,7 @@ func main() -> int
     testFuncCall()
     testIfStmnt()
     testLoopStmnt()
+    testMulExpr()
     testPrefixExpr()
     testPrintStmnt()
     testReturnStmnt()
