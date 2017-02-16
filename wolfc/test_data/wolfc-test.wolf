@@ -288,7 +288,8 @@ func testShiftExpr()
         2
     let v2 = 1 >>
         2
-    let v3 = 1 >>> 2
+    let v3 = 1 >>> 
+        2
 end
 
 func testType()
