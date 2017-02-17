@@ -120,6 +120,21 @@ func testIfStmnt()
     ; 'unless' with 'else' and 'then' (allows single line statement)
     unless a >= b then assert(false) else a = 200 end
     assert(a == 200)
+
+    ; if and else with 'do'
+    if a is not 200 then assert(false) else do unless a is 200 then assert(false) end end
+
+    ; Same form as the above, put putting 'do' and 'then' on newlines to test newline handling
+    if a is not 200
+    then
+        assert(false)
+    else
+    do
+        unless a is 200
+        then
+            assert(false)
+        end
+    end
 end
 
 ;==================================================================================================

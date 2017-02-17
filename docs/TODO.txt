@@ -1,8 +1,7 @@
 - Make 'FuncCall' postfix expr consistent with array lookup
-- Allow 'do' after 'else' in if statement to avoid 'else if / else + child if' ambiguity.
+- Allow 'do' to open function body and make it required for one liners
 
 - Make logical statements lazy evaluate
-- Allow 'do' to open function body and make it required for one liners
 - Implement 'undefined' var declarations
 - Don't allow negation of unsigned ints
 - Implement various integer types int32, int16, uint32 etc. Upgrade lexer to add precision suffixes.

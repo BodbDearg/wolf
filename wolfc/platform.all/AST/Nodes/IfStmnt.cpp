@@ -86,7 +86,18 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
                                    *startToken);
         }
         else {
-            // 'else' block: parse the scope for the 'else' block and skip any
+            // 'else' block: skip any newlines that follow:
+            parseCtx.skipNewlines();
+            
+            // 'else' may be followed by an optional 'do' to disambiguate
+            // some parsing cases where it's not clear if we want an 'else' with a
+            // child 'if' inside it's block or 'else if' instead:
+            if (parseCtx.tok()->type == TokenType::kDo) {
+                // Found an optional 'do' token - skip it:
+                parseCtx.nextTok();
+            }
+            
+            // Parse the scope for the 'else' block and skip any
             // newlines that follow after it:
             Scope * elseScope = Scope::parse(parseCtx);
             WC_GUARD(elseScope, nullptr);

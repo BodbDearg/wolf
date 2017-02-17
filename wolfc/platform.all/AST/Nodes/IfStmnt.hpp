@@ -12,7 +12,7 @@ class Scope;
 /*
 IfStmnt:
 	if|unless AssignExpr [then] Scope end
-    if|unless AssignExpr [then] Scope else Scope end
+    if|unless AssignExpr [then] Scope else [do] Scope end
 	if|unless AssignExpr [then] Scope else IfStmnt
 */
 class IfStmnt : public ASTNode, public IStmnt {
@@ -54,7 +54,7 @@ public:
     const Token & mEndToken;
 };
 
-/* if|unless AssignExpr [then] Scope else Scope end */
+/* if|unless AssignExpr [then] Scope else [do] Scope end */
 class IfStmntElse final : public IfStmnt {
 public:
     IfStmntElse(AssignExpr & ifExpr,
