@@ -21,7 +21,7 @@ Language TODO:
             - limited case of overloading based on return type
     - Declare multiple variables with same 'let'
     - Allow global variables to reference each other in an order independent way
-    - '\' to allow explicit multi line statements
+    - Lexer: '\' to allow explicit multi line statements
 
 Modules:
     - Each translation unit compiles to a module stub

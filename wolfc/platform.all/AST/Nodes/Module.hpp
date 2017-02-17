@@ -21,7 +21,7 @@ class VarDecl;
 
 /* 
 Module:
-    [0..N: DeclDef] EOF
+    [0..N: DeclDef|,] EOF
 */
 class Module final : public ASTNode {
 public:

@@ -1,5 +1,5 @@
 Module:
-	[0..N: DeclDef] EOF
+	[0..N: DeclDef|,] EOF
 
 DeclDef:
 	Func
@@ -19,7 +19,7 @@ PrimitiveType:
 	void|int|int64|bool|string
 
 Scope:
-    [0..N: Stmnt]
+    [0..N: Stmnt|,]
 
 Stmnt:
 	NoOpStmnt

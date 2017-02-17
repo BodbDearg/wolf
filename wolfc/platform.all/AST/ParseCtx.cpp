@@ -12,10 +12,28 @@ ParseCtx::ParseCtx(const Token * startToken, LinearAlloc & linearAlloc) :
     WC_ASSERT(mCurrentToken);
 }
 
-void ParseCtx::skipNewlines() {
+size_t ParseCtx::skipNewlines() {
+    size_t numSkipped = 0;
+    
     while (mCurrentToken->type == TokenType::kNewline) {
         ++mCurrentToken;
+        ++numSkipped;
     }
+    
+    return numSkipped;
+}
+
+size_t ParseCtx::skipNewlinesAndCommas() {
+    size_t numSkipped = 0;
+    TokenType tokenType = mCurrentToken->type;
+    
+    while (tokenType == TokenType::kNewline || tokenType == TokenType::kComma) {
+        ++mCurrentToken;
+        ++numSkipped;
+        tokenType = mCurrentToken->type;
+    }
+    
+    return numSkipped;
 }
 
 bool ParseCtx::hasErrors() const {

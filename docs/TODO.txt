@@ -4,7 +4,6 @@
 
 - Make logical statements lazy evaluate
 - Allow 'do' to open function body and make it required for one liners
-- Allow ',' to separate multiple statements on the same line
 - Implement 'undefined' var declarations
 - Don't allow negation of unsigned ints
 - Implement various integer types int32, int16, uint32 etc. Upgrade lexer to add precision suffixes.

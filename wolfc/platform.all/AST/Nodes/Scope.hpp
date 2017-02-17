@@ -18,7 +18,7 @@ class VarDecl;
 
 /*
 Scope:
-    Stmnts
+    [0..N: Stmnt|,]
 */
 class Scope final : public ASTNode, public IStmnt {
 public:

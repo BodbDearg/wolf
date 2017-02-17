@@ -55,8 +55,17 @@ public:
         }
     }
     
-    /* Skip any newline tokens that are found */
-    void skipNewlines();
+    /**
+     * Skip any newline tokens that are found. 
+     * Returns the number of newlines skipped. 
+     */
+    size_t skipNewlines();
+    
+    /**
+     * Skip any newline and comma tokens that are found.
+     * Returns the number of newlines skipped.
+     */
+    size_t skipNewlinesAndCommas();
     
     /* Get the liner allocator for the parse context */
     inline LinearAlloc & getAlloc() {

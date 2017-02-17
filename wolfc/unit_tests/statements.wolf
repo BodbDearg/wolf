@@ -403,10 +403,20 @@ func testReturnStmnt()
     assert(testReturnStmntFunc7(2) == 1)
 end
 
+; Make sure the module handles commas between DeclDefs okay
+,, func testCommaHandling_DeclDef() end, func testCommaHandling_DeclDef1() end,
+
+; Make sure commas are allowed between statements in scopes
+func testCommaHandling_Statement() -> int
+    let v = 0, v += 1
+    v -= 2, return v
+end
+
 ;==================================================================================================
 ; Run the tests
 ;==================================================================================================
 func main() -> int
+    ; Tests for specific AST nodes
     testNoOpStatement()
     testAssertStmnt()
     testVarDecl()
@@ -417,5 +427,9 @@ func main() -> int
     testBreakStatement()
     testNextStatement()
     testReturnStmnt()
+
+    ; Test the handling of ',' as a statement/decldef separator
+    testCommaHandling_DeclDef()
+    testCommaHandling_Statement()
     return 0
 end

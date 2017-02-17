@@ -9,12 +9,13 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 Module * Module::parse(ParseCtx & parseCtx) {
-    // Skip any newlines that follow:
-    parseCtx.skipNewlines();
+    // Skip any newlines and commas (decldef separators) that follow:
+    parseCtx.skipNewlinesAndCommas();
     
     // Parse a list of decldefs for the module.
     // Try to parse as many as possible so we get multiple error messages for various problems.
     std::vector<DeclDef*> declDefs;
+    bool requireNewlineBetweenDeclDefs = false;
     
     while (parseCtx.tok()->type != TokenType::kEOF) {
         // Save this in case we need it later
@@ -28,7 +29,7 @@ Module * Module::parse(ParseCtx & parseCtx) {
             // that not to be the case then issue errors:
             //
             // TODO: Allow commas to enable multiple decldefs per line
-            if (!declDefs.empty()) {
+            if (requireNewlineBetweenDeclDefs) {
                 DeclDef * lastDeclDef = declDefs.back();
                 const Token & thisDeclDefStart = declDef->getStartToken();
                 const Token & prevDeclDefEnd = lastDeclDef->getEndToken();
@@ -46,24 +47,35 @@ Module * Module::parse(ParseCtx & parseCtx) {
             
             // Save the decldef which was parsed
             declDefs.push_back(declDef);
+            
+            // Skip any newlines and commas that folllow. If any newlines or commas are found, these reset the
+            // requirement for the next decldef to be on a new line.
+            if (parseCtx.skipNewlinesAndCommas() > 0) {
+                requireNewlineBetweenDeclDefs = false;
+            }
+            else {
+                requireNewlineBetweenDeclDefs = true;
+            }
         }
-        else if (!parseCtx.hasErrors()) {
+        else {
             // Just in case the code failed to emit an error
-            parseCtx.error(*startTok, "Failed to parse a top level module element! Exact error unknown.");
-        }
-        
-        // Skip any newlines that folllow:
-        parseCtx.skipNewlines();
-        
-        // Skip junk if getting a DeclDef failed:
-        while (parseCtx.tok()->type != TokenType::kEOF) {
-            if (DeclDef::peek(parseCtx.tok())) {
-                break;
+            if (!parseCtx.hasErrors()) {
+                parseCtx.error(*startTok, "Failed to parse a top level module element! Exact error unknown.");
             }
             
-            // Skip both the token and any newlines that follow it
-            parseCtx.nextTok();
-            parseCtx.skipNewlines();
+            // Skip junk when getting a DeclDef failed:
+            while (parseCtx.tok()->type != TokenType::kEOF) {
+                if (DeclDef::peek(parseCtx.tok())) {
+                    break;
+                }
+                
+                // Skip both the token and any newlines and commas that follow it
+                parseCtx.nextTok();
+                
+                if (parseCtx.skipNewlinesAndCommas() > 0) {
+                    requireNewlineBetweenDeclDefs = false;
+                }
+            }
         }
     }
     

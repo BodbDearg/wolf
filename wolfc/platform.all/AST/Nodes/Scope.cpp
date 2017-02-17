@@ -9,14 +9,15 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 Scope * Scope::parse(ParseCtx & parseCtx) {
-    // Skip any newlines that follow which the scope starts with:
-    parseCtx.skipNewlines();
+    // Skip any newlines and commas (statement separators) that follow:
+    parseCtx.skipNewlinesAndCommas();
     
     // Save start token:
     const Token * startToken = parseCtx.tok();
     
     // Parse all statements we can:
     std::vector<Stmnt*> stmnts;
+    bool requireNewlineBetweenStmnts = false;
     
     while (Stmnt::peek(parseCtx.tok())) {
         // Parse the statement, if that fails then try again:
@@ -30,7 +31,7 @@ Scope * Scope::parse(ParseCtx & parseCtx) {
         // that not to be the case then issue errors:
         //
         // TODO: Allow commas to enable multiple statements per line
-        if (!stmnts.empty()) {
+        if (requireNewlineBetweenStmnts) {
             Stmnt * lastStmnt = stmnts.back();
             const Token & thisStmntStart = stmnt->getStartToken();
             const Token & prevStmntEnd = lastStmnt->getEndToken();
@@ -46,9 +47,17 @@ Scope * Scope::parse(ParseCtx & parseCtx) {
             }
         }
             
-        // Save the statement and skip any newlines that follow
+        // Save the statement and skip any newlines and commas that follow
         stmnts.push_back(stmnt);
-        parseCtx.skipNewlines();
+
+        // Skip any newlines and commas that folllow. If any newlines or commas are found, these reset the
+        // requirement for the next statement to be on a new line.
+        if (parseCtx.skipNewlinesAndCommas() > 0) {
+            requireNewlineBetweenStmnts = false;
+        }
+        else {
+            requireNewlineBetweenStmnts = true;
+        }
     }
     
     // Return the parsed scope
