@@ -29,36 +29,28 @@ WhileStmnt * WhileStmnt::parse(ParseCtx & parseCtx) {
     // Parse the while expression (while condition) and any newlines that follow:
     AssignExpr * whileExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(whileExpr, nullptr);
-    parseCtx.skipNewlines();
+    bool bodyScopeIsOnNewLine = parseCtx.skipNewlines();
     
-    // See if there is a 'do' following. This keyword is optional, unless the body scope is required
+    // See if there is a 'do' following. This keyword is optional, but it allows the body scope
     // to be on the same line as the enclosing while statement:
     bool bodyScopeRequiresNL = true;
     
     if (parseCtx.tok()->type == TokenType::kDo) {
-        // Found a 'do' token: the body scope is allowed to be on the same line.
-        // Consume the 'do' token and any newlines that follow:
+        // Found a 'do' token: the body scope is allowed to be on the same line:
         parseCtx.nextTok();
-        parseCtx.skipNewlines();
         bodyScopeRequiresNL = false;
     }
     
-    // Expect scope following.
-    // Parse it and skip any newlines that follow:
+    // If the body scope is required to be on a new line, make sure that is the case here:
+    if (bodyScopeRequiresNL && !bodyScopeIsOnNewLine) {
+        parseCtx.error("Code following 'while/until' statement condition must be on a new line unless "
+                       "'do' is used after the condition.");
+    }
+    
+    // Expect scope following. Parse it and skip any newlines that follow:
     Scope * bodyScope = Scope::parse(parseCtx);
     WC_GUARD(bodyScope, nullptr);
     parseCtx.skipNewlines();
-    
-    // See if it violates newline rules:
-    // Note: we'll only emit an error in this case and will continue to parse to see
-    // if we can find anymore problems.
-    if (bodyScopeRequiresNL) {
-        if (bodyScope->getStartToken().startLine == whileExpr->getEndToken().endLine) {
-            parseCtx.error(bodyScope->getStartToken(),
-                           "Code following 'while/until' statement condition must be on a new line unless "
-                           "'do' is used after the condition.");
-        }
-    }
     
     // While block should be terminated by an 'end' token:
     if (parseCtx.tok()->type != TokenType::kEnd) {

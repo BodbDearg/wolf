@@ -33,7 +33,7 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
     // Parse the if condition and skip any newlines that follow:
     AssignExpr * ifExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(ifExpr, nullptr);
-    bool thenScopeIsOnNewline = parseCtx.skipNewlines() > 0;
+    bool thenScopeIsOnNewLine = parseCtx.skipNewlines() > 0;
     
     // See if there is a 'then' following. This keyword is optional, but it allows the 'then' scope
     // to be on the same line as the enclosing if statement:
@@ -45,8 +45,8 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
         thenScopeRequiresNL = false;
     }
     
-    // If the 'then' scope is required to be on a newline, make sure that is the case here:
-    if (thenScopeRequiresNL && !thenScopeIsOnNewline) {
+    // If the 'then' scope is required to be on a new line, make sure that is the case here:
+    if (thenScopeRequiresNL && !thenScopeIsOnNewLine) {
         parseCtx.error("Code following 'if' statement condition must be on a new line unless "
                        "'then' is used after the condition.");
     }
