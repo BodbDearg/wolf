@@ -33,35 +33,28 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
     // Parse the if condition and skip any newlines that follow:
     AssignExpr * ifExpr = AssignExpr::parse(parseCtx);
     WC_GUARD(ifExpr, nullptr);
-    parseCtx.skipNewlines();
+    bool thenScopeIsOnNewline = parseCtx.skipNewlines() > 0;
     
-    // See if there is a 'then' following. This keyword is optional, unless the 'then' scope is required
+    // See if there is a 'then' following. This keyword is optional, but it allows the 'then' scope
     // to be on the same line as the enclosing if statement:
     bool thenScopeRequiresNL = true;
     
     if (parseCtx.tok()->type == TokenType::kThen) {
-        // Found a 'then' token: the 'then' scope is allowed to be on the same line.
-        // Consume the 'then' token and skip any newlines that follow.
+        // Found a 'then' token: the 'then' scope is allowed to be on the same line:
         parseCtx.nextTok();
-        parseCtx.skipNewlines();
         thenScopeRequiresNL = false;
     }
     
-    // Expect scope following. Parse it and skip any newlines that follow:
+    // If the 'then' scope is required to be on a newline, make sure that is the case here:
+    if (thenScopeRequiresNL && !thenScopeIsOnNewline) {
+        parseCtx.error("Code following 'if' statement condition must be on a new line unless "
+                       "'then' is used after the condition.");
+    }
+    
+    // Expect a scope following. Parse it and skip any newlines that follow:
     Scope * thenScope = Scope::parse(parseCtx);
     WC_GUARD(thenScope, nullptr);
     parseCtx.skipNewlines();
-    
-    // See if it violates newline rules.
-    // Note: we'll only emit an error in this case and will continue to parse to see
-    // if we can find anymore problems.
-    if (thenScopeRequiresNL) {
-        if (thenScope->getStartToken().startLine == ifExpr->getEndToken().endLine) {
-            parseCtx.error(thenScope->getStartToken(),
-                           "Code following 'if' statement condition must be on a new line unless "
-                           "'then' is used after the condition.");
-        }
-    }
     
     // 2 possibilities here:
     //
