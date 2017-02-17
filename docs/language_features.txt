@@ -9,6 +9,7 @@ Language TODO:
     - break out of labeled loop
     - continue to labeled loop
     - 'in' expression
+    - 'defer' statement for delayed logic
 
     - Variables must be initialized when declared
         - '= undefined' for no initialization
