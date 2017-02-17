@@ -79,23 +79,58 @@ Func * Func::parse(ParseCtx & parseCtx) {
         return nullptr;
     }
     
-    parseCtx.nextTok();         // Skip ')'
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    // Skip ')'
+    parseCtx.nextTok();
+    
+    // Skip any newlines that follow. Tentatively mark also whether the function body
+    // is on a new line or not compared to the function opener (note: we may find this
+    // not to be true below)
+    bool funcBodyIsOnNewLine = parseCtx.skipNewlines() > 0;
     
     // See if a '->' follows for function explicit return type.
     // If it is not present then a 'void' return type is assumed.
     Type * returnType = nullptr;
     
     if (parseCtx.tok()->type == TokenType::kOpArrow) {
-        parseCtx.nextTok();         // Explicit return type, skip the '->' first
-        parseCtx.skipNewlines();    // Skip any newlines that follow
+        // Explicit return type, skip the '->' first.
+        // Also don't regard the the function body as being on a new line for now.
+        parseCtx.nextTok();
+        funcBodyIsOnNewLine = false;
+        
+        // Skip any newlines that follow
+        parseCtx.skipNewlines();
         
         // Now parse the return type, if that fails then bail
         returnType = Type::parse(parseCtx);
         WC_GUARD(returnType, nullptr);
     }
     
-    parseCtx.skipNewlines();    // Skip any newlines that follow
+    // Skip any newlines that follow
+    if (parseCtx.skipNewlines() > 0) {
+        funcBodyIsOnNewLine = true;
+    }
+    
+    // If a 'do' token follows the function opener then the body is allowed to be on
+    // the same line as the function signature:
+    bool funcBodyMustBeOnNewLine = true;
+    
+    if (parseCtx.tok()->type == TokenType::kDo) {
+        // The function body doesn't have to be on a new line, have a 'do' token.
+        // Skip this token and lift the newline restriction:
+        parseCtx.nextTok();
+        funcBodyMustBeOnNewLine = false;
+        
+        // Skip any newlines that follow
+        if (parseCtx.skipNewlines() > 0) {
+            funcBodyIsOnNewLine = true;
+        }
+    }
+    
+    // If the function body is required to be on a new line, make sure that is the case here:
+    if (funcBodyMustBeOnNewLine && !funcBodyIsOnNewLine) {
+        parseCtx.error("Code following a function signature (name, params & return type) must "
+                       "be on a new line unless 'do' is used after the function signature.");
+    }
     
     // Parse the inner function scope:
     Scope * scope = Scope::parse(parseCtx);

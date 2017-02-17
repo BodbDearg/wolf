@@ -1,8 +1,5 @@
 - Make 'FuncCall' postfix expr consistent with array lookup
-- Allow 'do' to open function body and make it required for one liners
-
 - Make logical statements lazy evaluate
-- Implement 'undefined' var declarations
 - Don't allow negation of unsigned ints
 - Implement various integer types int32, int16, uint32 etc. Upgrade lexer to add precision suffixes.
 - Upgrade lexer to support float numbers and implement float types.

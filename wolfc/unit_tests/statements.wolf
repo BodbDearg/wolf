@@ -419,7 +419,7 @@ func testReturnStmnt()
 end
 
 ; Make sure the module handles commas between DeclDefs okay
-,, func testCommaHandling_DeclDef() end, func testCommaHandling_DeclDef1() end,
+,, func testCommaHandling_DeclDef() do end, func testCommaHandling_DeclDef1() do end,
 
 ; Make sure commas are allowed between statements in scopes
 func testCommaHandling_Statement() -> int
