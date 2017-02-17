@@ -192,9 +192,7 @@ func testIfStmnt()
 
     then
 
-    or 
-
-    if 
+    else if 
 
     true 
 

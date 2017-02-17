@@ -50,8 +50,8 @@ VarDecl:
 
 IfStmnt:
 	if|unless AssignExpr [then] Scope end
-	if|unless AssignExpr [then] Scope or IfStmnt
-	if|unless AssignExpr [then] Scope else Scope end
+    if|unless AssignExpr [then] Scope else Scope end
+	if|unless AssignExpr [then] Scope else IfStmnt
 
 WhileStmnt:
 	while|until AssignExpr [do] Scope end

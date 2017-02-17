@@ -12,8 +12,8 @@ class Scope;
 /*
 IfStmnt:
 	if|unless AssignExpr [then] Scope end
-	if|unless AssignExpr [then] Scope or IfStmnt
-	if|unless AssignExpr [then] Scope else Scope end
+    if|unless AssignExpr [then] Scope else Scope end
+	if|unless AssignExpr [then] Scope else IfStmnt
 */
 class IfStmnt : public ASTNode, public IStmnt {
 public:
@@ -54,23 +54,6 @@ public:
     const Token & mEndToken;
 };
 
-/* if|unless AssignExpr [then] Scope or IfStmnt */
-class IfStmntElseIf final : public IfStmnt {
-public:
-    IfStmntElseIf(AssignExpr & ifExpr,
-                  Scope & thenScope,
-                  IfStmnt & elseIfStmnt,
-                  const Token & startToken);
-    
-    virtual void accept(ASTNodeVisitor & visitor) const override;
-    
-    virtual const Token & getEndToken() const override;
-    
-    virtual bool allCodepathsHaveUncondRet() const override;
-    
-    IfStmnt & mElseIfStmnt;
-};
-
 /* if|unless AssignExpr [then] Scope else Scope end */
 class IfStmntElse final : public IfStmnt {
 public:
@@ -88,6 +71,23 @@ public:
     
     Scope &         mElseScope;
     const Token &   mEndToken;
+};
+
+/* if|unless AssignExpr [then] Scope else IfStmnt */
+class IfStmntElseIf final : public IfStmnt {
+public:
+    IfStmntElseIf(AssignExpr & ifExpr,
+                  Scope & thenScope,
+                  IfStmnt & elseIfStmnt,
+                  const Token & startToken);
+    
+    virtual void accept(ASTNodeVisitor & visitor) const override;
+    
+    virtual const Token & getEndToken() const override;
+    
+    virtual bool allCodepathsHaveUncondRet() const override;
+    
+    IfStmnt & mElseIfStmnt;
 };
 
 WC_AST_END_NAMESPACE

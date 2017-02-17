@@ -63,63 +63,57 @@ IfStmnt * IfStmnt::parse(ParseCtx & parseCtx) {
         }
     }
     
-    // 3 possibilities can follow:
+    // 2 possibilities here:
     //
-    // 1 - 'end', for a simple 'if' statement without any 'or if' or 'else'.
-    // 2 - 'or if' for an chained 'elseif' type statement
-    // 3 - 'else' for an 'if' statement with an else block
-    //
+    // 1: 'end' to end the current if block
+    // 2: 'else' for an 'else' or 'else if' block.
     if (parseCtx.tok()->type == TokenType::kElse) {
-        // (3) if statement with an else.
-        // Consume the 'else' token and skip any newlines that follow:
+        // 2: 'else' or 'else if' block: consume the 'else' token.
         parseCtx.nextTok();
-        parseCtx.skipNewlines();
         
-        // Parse the scope for the 'else' block and skip any newlines
-        // that follow after it:
-        Scope * elseScope = Scope::parse(parseCtx);
-        WC_GUARD(elseScope, nullptr);
-        parseCtx.skipNewlines();
-        
-        // Else block should be terminated by an 'end' token:
-        if (parseCtx.tok()->type != TokenType::kEnd) {
-            parseCtx.error("'end' expected to terminate 'else' block!");
-            return nullptr;
+        // See if there is another chained 'else if' or 'else unless'
+        if (IfStmnt::peek(parseCtx.tok())) {
+            // 'else if' block: parse the if statement following the 'else':
+            IfStmnt * outerIfStmnt = IfStmnt::parse(parseCtx);
+            WC_GUARD(outerIfStmnt, nullptr);
+            
+            // Done, return the parsed statement:
+            return WC_NEW_AST_NODE(parseCtx,
+                                   IfStmntElseIf,
+                                   *ifExpr,
+                                   *thenScope,
+                                   *outerIfStmnt,
+                                   *startToken);
         }
-        
-        // Consume the 'end' token and save location
-        const Token * endToken = parseCtx.tok();
-        parseCtx.nextTok();
-        
-        // Done, return the parsed statement:
-        return WC_NEW_AST_NODE(parseCtx,
-                               IfStmntElse,
-                               *ifExpr,
-                               *thenScope,
-                               *elseScope,
-                               *startToken,
-                               *endToken);
-    }
-    else if (parseCtx.tok()->type == TokenType::kOr) {
-        // (2) if statement with an 'or if' chained if statement.
-        // Consume the 'or' token and skip any newlines that follow.
-        parseCtx.nextTok();
-        parseCtx.skipNewlines();
-        
-        // Parse the if statement following the 'or':
-        IfStmnt * outerIfStmnt = IfStmnt::parse(parseCtx);
-        WC_GUARD(outerIfStmnt, nullptr);
-        
-        // Done, return the parsed statement:
-        return WC_NEW_AST_NODE(parseCtx,
-                               IfStmntElseIf,
-                               *ifExpr,
-                               *thenScope,
-                               *outerIfStmnt,
-                               *startToken);
+        else {
+            // 'else' block: parse the scope for the 'else' block and skip any
+            // newlines that follow after it:
+            Scope * elseScope = Scope::parse(parseCtx);
+            WC_GUARD(elseScope, nullptr);
+            parseCtx.skipNewlines();
+            
+            // Else block should be terminated by an 'end' token:
+            if (parseCtx.tok()->type != TokenType::kEnd) {
+                parseCtx.error("'end' expected to terminate 'else' block!");
+                return nullptr;
+            }
+            
+            // Consume the 'end' token and save location
+            const Token * endToken = parseCtx.tok();
+            parseCtx.nextTok();
+            
+            // Done, return the parsed statement:
+            return WC_NEW_AST_NODE(parseCtx,
+                                   IfStmntElse,
+                                   *ifExpr,
+                                   *thenScope,
+                                   *elseScope,
+                                   *startToken,
+                                   *endToken);
+        }
     }
     else {
-        // (1) 'if then' type statement: expect closing 'end'
+        // 1: 'if then' type statement: expect closing 'end'
         if (parseCtx.tok()->type != TokenType::kEnd) {
             parseCtx.error("'end' expected to terminate 'if' block!");
             return nullptr;
@@ -186,33 +180,6 @@ bool IfStmntNoElse::allCodepathsHaveUncondRet() const {
 }
 
 //-----------------------------------------------------------------------------
-// IfStmntElseIf
-//-----------------------------------------------------------------------------
-IfStmntElseIf::IfStmntElseIf(AssignExpr & ifExpr,
-                             Scope & thenScope,
-                             IfStmnt & outerIfStmnt,
-                             const Token & startToken)
-:
-    IfStmnt(ifExpr, thenScope, startToken),
-    mElseIfStmnt(outerIfStmnt)
-{
-    mElseIfStmnt.mParent = this;
-}
-
-void IfStmntElseIf::accept(ASTNodeVisitor & visitor) const {
-    visitor.visit(*this);
-}
-
-const Token & IfStmntElseIf::getEndToken() const {
-    return mElseIfStmnt.getEndToken();
-}
-
-bool IfStmntElseIf::allCodepathsHaveUncondRet() const {
-    return  mThenScope.allCodepathsHaveUncondRet() &&
-            mElseIfStmnt.allCodepathsHaveUncondRet();
-}
-
-//-----------------------------------------------------------------------------
 // IfStmntElse
 //-----------------------------------------------------------------------------
 IfStmntElse::IfStmntElse(AssignExpr & ifExpr,
@@ -239,6 +206,33 @@ const Token & IfStmntElse::getEndToken() const {
 bool IfStmntElse::allCodepathsHaveUncondRet() const {
     return  mThenScope.allCodepathsHaveUncondRet() &&
             mElseScope.allCodepathsHaveUncondRet();
+}
+
+//-----------------------------------------------------------------------------
+// IfStmntElseIf
+//-----------------------------------------------------------------------------
+IfStmntElseIf::IfStmntElseIf(AssignExpr & ifExpr,
+                             Scope & thenScope,
+                             IfStmnt & outerIfStmnt,
+                             const Token & startToken)
+:
+    IfStmnt(ifExpr, thenScope, startToken),
+    mElseIfStmnt(outerIfStmnt)
+{
+    mElseIfStmnt.mParent = this;
+}
+
+void IfStmntElseIf::accept(ASTNodeVisitor & visitor) const {
+    visitor.visit(*this);
+}
+
+const Token & IfStmntElseIf::getEndToken() const {
+    return mElseIfStmnt.getEndToken();
+}
+
+bool IfStmntElseIf::allCodepathsHaveUncondRet() const {
+    return  mThenScope.allCodepathsHaveUncondRet() &&
+            mElseIfStmnt.allCodepathsHaveUncondRet();
 }
 
 WC_AST_END_NAMESPACE

@@ -159,29 +159,29 @@ func card_getSuitValue(suitOfCards: [5]int) -> int
 
             if card is CARD_ACE 
                 suitValue += 1 
-            or if card is CARD_2 
+            else if card is CARD_2 
                 suitValue += 2 
-            or if card is CARD_3 
+            else if card is CARD_3 
                 suitValue += 3 
-            or if card is CARD_4 
+            else if card is CARD_4 
                 suitValue += 4 
-            or if card is CARD_5 
+            else if card is CARD_5 
                 suitValue += 5 
-            or if card is CARD_6 
+            else if card is CARD_6 
                 suitValue += 6 
-            or if card is CARD_7 
+            else if card is CARD_7 
                 suitValue += 7
-            or if card is CARD_8 
+            else if card is CARD_8 
                 suitValue += 8 
-            or if card is CARD_9
+            else if card is CARD_9
                 suitValue += 9 
-            or if card is CARD_10 
+            else if card is CARD_10 
                 suitValue += 10 
-            or if card is CARD_KING 
+            else if card is CARD_KING 
                 suitValue += 10 
-            or if card is CARD_QUEEN 
+            else if card is CARD_QUEEN 
                 suitValue += 10 
-            or if card is CARD_JACK 
+            else if card is CARD_JACK 
                 suitValue += 10 
             end
 
@@ -351,7 +351,7 @@ func game_drawEndGameResults()
 
     if gGameWinner is GAME_WINNER_PLAYER
         println("Player wins.")
-    or if gGameWinner is GAME_WINNER_DEALER
+    else if gGameWinner is GAME_WINNER_DEALER
         println("Dealer wins.")
     else
         println("Game was a draw.")
@@ -363,7 +363,7 @@ func game_drawEndGameResults()
         print("Gained ")
         print(((gPlayerBetChips * 3) / 2) - gPlayerBetChips)
         println(" chips.")
-    or if gGameWinner is GAME_WINNER_DEALER
+    else if gGameWinner is GAME_WINNER_DEALER
         print("Lost ")
         print(gPlayerBetChips)
         println(" chips.")
@@ -421,7 +421,7 @@ func game_endGame()
         ; Player has won the game: increment amount of games won and money won
         gGameStatGamesWon++
         gGameStatMoneyGained += gPlayerBetChips / 2
-    or if gGameWinner is GAME_WINNER_DEALER
+    else if gGameWinner is GAME_WINNER_DEALER
         ; Dealer has won the game: increment amount of games lost and money lost
         gGameStatGamesLost++
         gGameStatMoneyLost += gPlayerBetChips
@@ -491,7 +491,7 @@ func game_payOutChips()
         ; Add 1.5 times the bet amount to the players chips. In other words, the player gets the
         ; original bet back, plus half the bet in winnings.
         gPlayerChips += (gPlayerBetChips * 3) / 2
-    or if gGameWinner is GAME_WINNER_DEALER
+    else if gGameWinner is GAME_WINNER_DEALER
         ; Dealer has won. Don't give back anything...
         noop
     else
@@ -574,14 +574,14 @@ func dealer_doAction()
             ; Will be too risky drawing another card!
             dealer_actionStand()
         end
-    or if player_hasForfeit()
+    else if player_hasForfeit()
         ; Player has given up on the game. No point in drawing any further
         ; cards. Order dealer to stand....
         dealer_actionStand()
-    or if player_isBust()
+    else if player_isBust()
         ; The player has gone bust. Draw no more cards and stand.
         dealer_actionStand()
-    or if playerSuitValue < dealerSuitValue
+    else if playerSuitValue < dealerSuitValue
         ; If the player has stood on a lower value than what the dealer currently has, then there is no point
         ; in drawing any more cards. Stand...
         dealer_actionStand()
@@ -716,11 +716,11 @@ func player_doNextGameAction()
     ; See what action the player requested and perform it if possible
     if playerAction is 1 and player_areActionsAvailable(GAMEACTION_HIT)
         player_actionHit()
-    or if playerAction is 2 and player_areActionsAvailable(GAMEACTION_STAND)
+    else if playerAction is 2 and player_areActionsAvailable(GAMEACTION_STAND)
         player_actionStand()
-    or if playerAction is 3 and player_areActionsAvailable(GAMEACTION_DOUBLEDOWN)
+    else if playerAction is 3 and player_areActionsAvailable(GAMEACTION_DOUBLEDOWN)
         player_actionDoubleDown()
-    or if playerAction is 4 and player_areActionsAvailable(GAMEACTION_FORFEIT)
+    else if playerAction is 4 and player_areActionsAvailable(GAMEACTION_FORFEIT)
         player_actionForfeit()
     else
         println("Invalid action input!")
@@ -964,11 +964,11 @@ func menu_displayMain()
                 ; Ask the player for the bet and start the game
                 menu_getBet()
             end
-        or if choice is 3
+        else if choice is 3
             menu_getMoney()
-        or if choice is 4
+        else if choice is 4
             menu_displayStatistics()
-        or if choice is 5
+        else if choice is 5
             gDisplayMenu = false
         else
             println("Invalid menu choice, try again!")

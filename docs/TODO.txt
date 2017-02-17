@@ -1,5 +1,4 @@
 - Make 'FuncCall' postfix expr consistent with array lookup
-- Change 'or if' statement to 'else if'
 - Allow 'do' after 'else' in if statement to avoid 'else if / else + child if' ambiguity.
 
 - Make logical statements lazy evaluate

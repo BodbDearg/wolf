@@ -52,10 +52,10 @@ func testIfStmnt()
 
     assert(a == b)
 
-    ; 'if' with 'or if'
+    ; 'if' with 'else if'
     if a < b
         assert(false)   ; Should not be reached
-    or if a == b
+    else if a == b
         a = 400
     end
 
@@ -74,8 +74,8 @@ func testIfStmnt()
     if a < b then a = b end
     assert(a == b)
 
-    ; 'if' with 'or if' and 'then' (allows single line statement)
-    if a < b then assert(false) or if a == b then a = 400 end
+    ; 'if' with 'else if' and 'then' (allows single line statement)
+    if a < b then assert(false) else if a == b then a = 400 end
     assert(a == 400)
 
     ; 'if' with 'else' and 'then' (allows single line statement)
@@ -91,10 +91,10 @@ func testIfStmnt()
 
     assert(a == b)
 
-    ; 'unless' with 'or unless'
+    ; 'unless' with 'else unless'
     unless a >= b
         assert(false)   ; Should not be reached
-    or unless a != b
+    else unless a != b
         a = 400
     end
 
@@ -113,8 +113,8 @@ func testIfStmnt()
     unless a >= b then a = b end
     assert(a == b)
 
-    ; 'unless' with 'or unless' and 'then' (allows single line statement)
-    unless a >= b then assert(false) or unless a != b then a = 400 end
+    ; 'unless' with 'else unless' and 'then' (allows single line statement)
+    unless a >= b then assert(false) else unless a != b then a = 400 end
     assert(a == 400)
 
     ; 'unless' with 'else' and 'then' (allows single line statement)

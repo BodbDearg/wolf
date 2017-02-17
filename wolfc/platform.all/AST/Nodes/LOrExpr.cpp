@@ -22,22 +22,14 @@ LOrExpr * LOrExpr::parse(ParseCtx & parseCtx) {
     
     // See if there is an 'or' for logical or:
     if (parseCtx.tok()->type == TokenType::kOr) {
-        TokenType nextTokType = parseCtx.tok()[1].type;
-
-        // Note: do not parse if we find 'or if' or 'or unless' since those are block
-        // terminators for a 'if / or if / else' chain
-        if (nextTokType != TokenType::kIf &&
-            nextTokType != TokenType::kUnless)
-        {
-            // Or expression with or, skip the 'or' and any newlines that follow:
-            parseCtx.nextTok();
-            parseCtx.skipNewlines();
-        
-            // Parse the following and expression and create the AST node
-            LOrExpr * orExpr = LOrExpr::parse(parseCtx);
-            WC_GUARD(orExpr, nullptr);
-            return WC_NEW_AST_NODE(parseCtx, LOrExprOr, *andExpr, *orExpr);
-        }
+        // Or expression with or, skip the 'or' and any newlines that follow:
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
+    
+        // Parse the following and expression and create the AST node
+        LOrExpr * orExpr = LOrExpr::parse(parseCtx);
+        WC_GUARD(orExpr, nullptr);
+        return WC_NEW_AST_NODE(parseCtx, LOrExprOr, *andExpr, *orExpr);
     }
 
     // Basic no-op expression
