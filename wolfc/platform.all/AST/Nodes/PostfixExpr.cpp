@@ -4,7 +4,6 @@
 #include "../ParseCtx.hpp"
 #include "AssignExpr.hpp"
 #include "CastExpr.hpp"
-#include "FuncCall.hpp"
 #include "LinearAlloc.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -51,19 +50,61 @@ PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
     }
     
     // Continue parsing and wrapping function calls and array lookups while we can
-    while (FuncCall::peek(parseCtx.tok()) ||
+    while (parseCtx.tok()->type == TokenType::kLParen ||
            parseCtx.tok()->type == TokenType::kLBrack)
     {
         // See if function call follows:
-        if (FuncCall::peek(parseCtx.tok())) {
-            FuncCall * funcCall = FuncCall::parse(parseCtx);
-            WC_GUARD(funcCall, nullptr);
-            outerPostfixExpr = WC_NEW_AST_NODE(parseCtx,
-                                               PostfixExprFuncCall,
-                                               *outerPostfixExpr,
-                                               *funcCall);
+        if (parseCtx.tok()->type == TokenType::kLParen) {
+            // Save and consume the '(' token as well as newlines following:
+            const Token * openingParen = parseCtx.tok();
+            parseCtx.nextTok();
+            parseCtx.skipNewlines();
             
-            WC_ASSERT(outerPostfixExpr);
+            // Start parsing the arg list
+            std::vector<AssignExpr*> argExprs;
+
+            while (AssignExpr::peek(parseCtx.tok())) {
+                // Parse the arg and save if it was parsed ok,
+                // also skip any newlines that follow:
+                AssignExpr * argExpr = AssignExpr::parse(parseCtx);
+                parseCtx.skipNewlines();
+                
+                if (argExpr) {
+                    argExprs.push_back(argExpr);
+                }
+                
+                // If a comma does not follow then we are done
+                if (parseCtx.tok()->type != TokenType::kComma) {
+                    break;
+                }
+                
+                // Otherwise continue parsing and skip ',' as well
+                // as any newlines which might follow:
+                parseCtx.nextTok();
+                parseCtx.skipNewlines();
+            }
+            
+            // Expect ')'
+            const Token * endToken = parseCtx.tok();
+            
+            if (endToken->type != TokenType::kRParen) {
+                // Failed, issue an error and return a null pointer
+                parseCtx.error("Expected ')' !");
+                return nullptr;
+            }
+            else {
+                // Save and skip the ')'
+                const Token * closingParen = parseCtx.tok();
+                parseCtx.nextTok();
+                
+                // Save the parsed node:
+                outerPostfixExpr = WC_NEW_AST_NODE(parseCtx,
+                                                   PostfixExprFuncCall,
+                                                   *outerPostfixExpr,
+                                                   *openingParen,
+                                                   argExprs,
+                                                   *closingParen);
+            }
         }
         else {
             // An array lookup follows, skip the '[' and any newlines that follow.
@@ -166,12 +207,23 @@ void PostfixExprDec::accept(ASTNodeVisitor & visitor) const {
 //-----------------------------------------------------------------------------
 // PostfixExprFuncCall
 //-----------------------------------------------------------------------------
-PostfixExprFuncCall::PostfixExprFuncCall(PostfixExpr & expr, FuncCall & funcCall) :
-    mExpr(expr),
-    mFuncCall(funcCall)
+PostfixExprFuncCall::PostfixExprFuncCall(PostfixExpr & operandExpr,
+                                         const Token & callOpeningParen,
+                                         std::vector<AssignExpr*> & argExprs,
+                                         const Token & callClosingParen)
+:
+    mOperandExpr(operandExpr),
+    mCallOpeningParen(callOpeningParen),
+    mArgExprs(),
+    mCallClosingParen(callClosingParen)
 {
-    mExpr.mParent = this;
-    mFuncCall.mParent = this;
+    mOperandExpr.mParent = this;
+    mArgExprs.reserve(argExprs.size());
+    
+    for (AssignExpr * argExpr : argExprs) {
+        argExpr->mParent = this;
+        mArgExprs.push_back(argExpr);
+    }
 }
 
 void PostfixExprFuncCall::accept(ASTNodeVisitor & visitor) const {
@@ -179,11 +231,11 @@ void PostfixExprFuncCall::accept(ASTNodeVisitor & visitor) const {
 }
 
 const Token & PostfixExprFuncCall::getStartToken() const {
-    return mExpr.getStartToken();
+    return mOperandExpr.getStartToken();
 }
 
 const Token & PostfixExprFuncCall::getEndToken() const {
-    return mFuncCall.getEndToken();
+    return mCallClosingParen;
 }
 
 //-----------------------------------------------------------------------------

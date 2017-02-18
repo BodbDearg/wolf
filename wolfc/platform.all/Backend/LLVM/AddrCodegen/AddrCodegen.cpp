@@ -13,7 +13,6 @@
 #include "AST/Nodes/DeclDef.hpp"
 #include "AST/Nodes/Func.hpp"
 #include "AST/Nodes/FuncArg.hpp"
-#include "AST/Nodes/FuncCall.hpp"
 #include "AST/Nodes/Identifier.hpp"
 #include "AST/Nodes/IfStmnt.hpp"
 #include "AST/Nodes/IntLit.hpp"
@@ -278,11 +277,6 @@ void AddrCodegen::visit(const AST::Func & astNode) {
 void AddrCodegen::visit(const AST::FuncArg & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "FuncArg");
-}
-
-void AddrCodegen::visit(const AST::FuncCall & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "FuncCall");
 }
 
 void AddrCodegen::visit(const AST::IfStmntElse & astNode) {

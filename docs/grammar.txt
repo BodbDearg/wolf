@@ -150,15 +150,12 @@ PostfixExpr:
 	CastExpr
 	CastExpr ++
 	CastExpr --
-	PostfixExpr FuncCall
+	PostfixExpr ( [0..N: AssignExpr ,][AssignExpr] )
 	PostfixExpr [ AssignExpr ]
 
 CastExpr:
 	PrimaryExpr
 	cast ( AssignExpr to Type )
-
-FuncCall:
-	( [0..N: AssignExpr ,][AssignExpr] )
 
 PrimaryExpr:
 	IntLit

@@ -7,7 +7,6 @@
 #include "AST/Nodes/DeclDef.hpp"
 #include "AST/Nodes/Func.hpp"
 #include "AST/Nodes/FuncArg.hpp"
-#include "AST/Nodes/FuncCall.hpp"
 #include "AST/Nodes/Identifier.hpp"
 #include "AST/Nodes/IfStmnt.hpp"
 #include "AST/Nodes/LoopStmnt.hpp"
@@ -68,11 +67,6 @@ void ConstCodegen::visit(const AST::Func & astNode) {
 void ConstCodegen::visit(const AST::FuncArg & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "FuncArg");
-}
-
-void ConstCodegen::visit(const AST::FuncCall & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Function calls cannot be evaluated at compile time! (yet)");
 }
 
 void ConstCodegen::visit(const AST::IfStmntElse & astNode) {

@@ -3,8 +3,8 @@
 #include "../CodegenCtx.hpp"
 #include "../CodegenUnaryOp/CodegenUnaryOp_PostfixExpr.hpp"
 #include "Assert.hpp"
+#include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/CastExpr.hpp"
-#include "AST/Nodes/FuncCall.hpp"
 #include "AST/Nodes/PostfixExpr.hpp"
 #include "DataType/Primitives/FuncDataType.hpp"
 
@@ -30,7 +30,7 @@ void Codegen::visit(const AST::PostfixExprFuncCall & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
     // First of all lookup the expression we perform the call on
-    astNode.mExpr.accept(*this);
+    astNode.mOperandExpr.accept(*this);
     Value operandVal = mCtx.popValue();
     
     // Determine if the function to call is valid
@@ -41,35 +41,34 @@ void Codegen::visit(const AST::PostfixExprFuncCall & astNode) {
     
     if (!operandDataType.isFunc()) {
         isOperandValid = false;
-        mCtx.error(astNode.mExpr,
+        mCtx.error(astNode.mOperandExpr,
                    "Operand of a function call must be of a function type, not type '%s'!",
                    operandDataType.name().c_str());
     }
     else if (!operandCompiledType.getLLVMType()) {
         isOperandValid = false;
-        mCtx.error(astNode.mExpr,
+        mCtx.error(astNode.mOperandExpr,
                    "Can't generate function call to function of type '%s' because we do not have a "
                    "valid llvm type generated for this function!",
                    operandDataType.name().c_str());
     }
     else if (!funcDataType) {
         isOperandValid = false;
-        mCtx.error(astNode.mExpr,
+        mCtx.error(astNode.mOperandExpr,
                    "Internal compiler error! Can't generate function call to function of type '%s' "
                    "because it's type has not been evaluated yet!",
                    operandDataType.name().c_str());
     }
     
     // Evalute the values for the function args
-    astNode.mFuncCall.accept(*this);
-    
-    // Now grab the arg values and see if they are all ok
-    size_t numArgs = astNode.mFuncCall.getArgs().size();
     std::vector<Value> funcArgVals;
-    funcArgVals.reserve(numArgs);
+    funcArgVals.reserve(astNode.mArgExprs.size());
     bool funcArgsOk = true;
     
-    for (size_t i = 0; i < numArgs; ++i) {
+    for (const AST::AssignExpr * argExpr : astNode.mArgExprs) {
+        // Evaluate the arg value:
+        argExpr->accept(*this);
+        
         // Grab the arg value from the stack
         funcArgVals.push_back(mCtx.popValue());
         const Value & arg = funcArgVals.back();
@@ -79,10 +78,6 @@ void Codegen::visit(const AST::PostfixExprFuncCall & astNode) {
             funcArgsOk = false;
         }
     }
-    
-    // Note: popping the args off the stack in this way means that the order of the arguments
-    // has been reversed. Correct that here by reversing the values around again:
-    std::reverse(funcArgVals.begin(), funcArgVals.end());
     
     // Make sure the number of args matches the number of args expected to the function.
     // If the arg counts match, make sure arg types agree.

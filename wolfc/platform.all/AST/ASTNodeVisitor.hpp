@@ -41,7 +41,6 @@ class DeclDefFunc;
 class DeclDefVarDecl;
 class Func;
 class FuncArg;
-class FuncCall;
 class Identifier;
 class IfStmntElse;
 class IfStmntElseIf;
@@ -161,7 +160,6 @@ public:
     virtual void visit(const DeclDefVarDecl & astNode) = 0;
     virtual void visit(const Func & astNode) = 0;
     virtual void visit(const FuncArg & astNode) = 0;
-    virtual void visit(const FuncCall & astNode) = 0;
     virtual void visit(const Identifier & astNode) = 0;
     virtual void visit(const IfStmntElse & astNode) = 0;
     virtual void visit(const IfStmntElseIf & astNode) = 0;

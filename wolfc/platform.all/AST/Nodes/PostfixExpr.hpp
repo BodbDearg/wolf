@@ -3,19 +3,22 @@
 #include "ASTNode.hpp"
 #include "IExpr.hpp"
 
+WC_THIRD_PARTY_INCLUDES_BEGIN
+    #include <vector>
+WC_THIRD_PARTY_INCLUDES_END
+
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 class AssignExpr;
 class CastExpr;
-class FuncCall;
 
 /*
 PostfixExpr:
 	CastExpr
 	CastExpr ++
 	CastExpr --
-	PostfixExpr FuncCall
+	PostfixExpr ( [0..N: AssignExpr ,][AssignExpr] )
 	PostfixExpr [ AssignExpr ]
 */
 class PostfixExpr : public ASTNode, public IExpr {
@@ -64,17 +67,29 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
-/* PostfixExpr FuncCall */
+/* PostfixExpr ( [0..N: AssignExpr ,][AssignExpr] ) */
 class PostfixExprFuncCall final : public PostfixExpr {
 public:
-    PostfixExprFuncCall(PostfixExpr & expr, FuncCall & funcInvocation);
+    PostfixExprFuncCall(PostfixExpr & operandExpr,
+                        const Token & callOpeningParen,
+                        std::vector<AssignExpr*> & argExprs,
+                        const Token & callClosingParen);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
-    PostfixExpr &   mExpr;
-    FuncCall &      mFuncCall;
+    /* The thing which the function is being called on */
+    PostfixExpr & mOperandExpr;
+    
+    /* The opening parenthesis '(' of the function call */
+    const Token & mCallOpeningParen;
+    
+    /* The assign expression for all the arguments */
+    std::vector<const AssignExpr*> mArgExprs;
+    
+    /* The closing parenthesis ')' of the function call */
+    const Token & mCallClosingParen;
 };
 
 /* PostfixExpr [ AssignExpr ] */

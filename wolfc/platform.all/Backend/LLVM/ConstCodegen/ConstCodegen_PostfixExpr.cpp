@@ -28,7 +28,7 @@ void ConstCodegen::visit(const AST::PostfixExprDec & astNode) {
 
 void ConstCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "PostfixExprFuncCall");
+    mCtx.error(astNode, "Function calls cannot be evaluated at compile time! (yet)");
 }
 
 void ConstCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
