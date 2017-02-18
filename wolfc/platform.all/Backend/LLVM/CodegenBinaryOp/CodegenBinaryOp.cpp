@@ -33,7 +33,7 @@ CodegenBinaryOp::CodegenBinaryOp(Codegen & cg,
 }
 
 void CodegenBinaryOp::codegen() {
-    // Get the type for both left and right expressions:
+    // Get the expression for both left and right operands:
     const AST::IExpr * leftAsExpr = dynamic_cast<const AST::IExpr*>(&mLeftExpr);
     
     if (!leftAsExpr) {
@@ -85,11 +85,12 @@ void CodegenBinaryOp::codegen() {
     WC_ASSERT(!mRightVal.mRequiresLoad || !mRightVal.isValid());
     
     // Don't do anything if either side is not valid:
-    const DataType & leftType = mLeftVal.mCompiledType.getDataType();
-    const DataType & rightType = mRightVal.mCompiledType.getDataType();
     WC_GUARD(mLeftVal.isValid() && mRightVal.isValid());
     
     // The left and right types must match:
+    const DataType & leftType = mLeftVal.mCompiledType.getDataType();
+    const DataType & rightType = mRightVal.mCompiledType.getDataType();
+    
     if (!leftType.equals(rightType)) {
         mCG.mCtx.error(*mLeftExpr.mParent,
                        "Left and right side expressions for binary operator '%s' (%s) must be "

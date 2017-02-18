@@ -21,7 +21,10 @@ void AddrCodegen::visit(const AST::ArrayLit & astNode) {
     
     // Create an alloca to hold the literal on the stack so we can take it's address
     const CompiledDataType & exprValCDT = exprVal.mCompiledType;
-    llvm::Value * llvmStackVal = mCtx.mIRBuilder.CreateAlloca(exprValCDT.getLLVMType());
+    llvm::Value * llvmStackVal = mCtx.mIRBuilder.CreateAlloca(exprValCDT.getLLVMType(),
+                                                              nullptr,
+                                                              "AddrCodegen:ArrayLit:Alloca");
+    
     WC_ASSERT(llvmStackVal);
     mCtx.mIRBuilder.CreateStore(exprVal.mLLVMVal, llvmStackVal);
     

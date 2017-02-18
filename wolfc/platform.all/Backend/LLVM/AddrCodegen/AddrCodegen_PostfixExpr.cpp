@@ -51,7 +51,10 @@ void AddrCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
     }
     
     // Create an alloca to hold the result of the function call and store the result there.
-    llvm::Value * llvmStackVal = mCtx.mIRBuilder.CreateAlloca(exprValCDT.getLLVMType());
+    llvm::Value * llvmStackVal = mCtx.mIRBuilder.CreateAlloca(exprValCDT.getLLVMType(),
+                                                              nullptr,
+                                                              "AddrCodegen:PostfixExprFuncCall:Alloca");
+    
     WC_ASSERT(llvmStackVal);
     mCtx.mIRBuilder.CreateStore(exprVal.mLLVMVal, llvmStackVal);
     
@@ -105,7 +108,10 @@ void AddrCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
     // Get the value for the array address:
     llvm::ConstantInt * zeroIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(mCtx.mLLVMCtx), 0);
     WC_ASSERT(zeroIndex);
-    llvm::Value * arrayElemAddr = mCtx.mIRBuilder.CreateGEP(arrayAddrVal.mLLVMVal, { zeroIndex, indexVal.mLLVMVal });
+    llvm::Value * arrayElemAddr = mCtx.mIRBuilder.CreateGEP(arrayAddrVal.mLLVMVal,
+                                                            { zeroIndex, indexVal.mLLVMVal },
+                                                            "AddrCodegen:PostfixExprArrayLookup:ElemAddr");
+    
     WC_ASSERT(arrayElemAddr);
     
     // Figure out the compiled data type for the value loaded. If we fail in this then bail:

@@ -418,6 +418,10 @@ func testReturnStmnt()
     assert(testReturnStmntFunc7(2) == 1)
 end
 
+;==================================================================================================
+; Comma handling tests
+;==================================================================================================
+
 ; Make sure the module handles commas between DeclDefs okay
 ,, func testCommaHandling_DeclDef() do end, func testCommaHandling_DeclDef1() do end,
 
@@ -428,7 +432,7 @@ func testCommaHandling_Statement() -> int
 end
 
 ;==================================================================================================
-; Run the tests
+; Run all the tests in this module
 ;==================================================================================================
 func main() -> int
     ; Tests for specific AST nodes

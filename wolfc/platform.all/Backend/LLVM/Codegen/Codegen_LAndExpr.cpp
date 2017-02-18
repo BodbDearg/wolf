@@ -1,6 +1,6 @@
 #include "Codegen.hpp"
 
-#include "../CodegenBinaryOp/CodegenBinaryOp_LAndExpr.hpp"
+#include "../CodegenBinaryOp/CodegenLazyLogicalBinaryOp.hpp"
 #include "../CodegenCtx.hpp"
 #include "AST/Nodes/LAndExpr.hpp"
 #include "AST/Nodes/NotExpr.hpp"
@@ -15,7 +15,10 @@ void Codegen::visit(const AST::LAndExprNoOp & astNode) {
 
 void Codegen::visit(const AST::LAndExprAnd & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenLAndBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, false).codegen();
+    CodegenLazyLogicalBinaryOp(*this,
+                               astNode.mLeftExpr,
+                               astNode.mRightExpr,
+                               CodegenLazyLogicalBinaryOp::OpType::kAnd).codegen();
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE
