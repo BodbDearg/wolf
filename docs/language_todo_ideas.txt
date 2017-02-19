@@ -1,4 +1,6 @@
-Language TODO:
+** Language TODO / IDEAS **
+
+General:
 	- var x = Type(2)
 	- parsing float numbers
 	- parsing chars
@@ -37,17 +39,6 @@ Compound types:
         - Intended for interfacing with C and low level code
 
 Primitives Types:
-    void:       empty/no-type
-    int8:		8-bit signed integer
-    uint8:		8-bit unsigned integer
-    int16:		16-bit signed integer
-    uint16:		16-bit unsigned integer
-    int32:		32-bit signed integer
-    uint32:		32-bit unsigned integer
-    int64:		64-bit signed integer
-    uint64:		64-bit unsigned integer
-    int128:		128-bit signed integer
-    uint128:	128-bit unsigned integer
     char8:		8-bit unsigned character type
     char16:		16-bit unsigned character type
     char32:		32-bit unsigend character type
@@ -58,8 +49,6 @@ Primitives Types:
     float128:   128-bit floating point number
 
 Primitive Type Aliases:
-	int:    Machine word sized signed int (e.g int64 on 64-bit system)
-    uint: 	Machine word sized unsigned int (e.g uint64 on 64-bit system)
     char: 	char8 by default (for utf8)
     uchar:  char32 by default (for utf32)
     float:  float32 by default (for single precision)
