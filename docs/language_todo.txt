@@ -1,10 +1,12 @@
 ** Language TODO / IDEAS **
 
 General:
+    - Pointers?
+    - References?
+    - 'extern' functions
 	- var x = Type(2)
 	- parsing float numbers
 	- parsing chars
-
     - for .. do
         - Completely range based for
     - rfor .. do
@@ -12,7 +14,6 @@ General:
     - continue to labeled loop
     - 'in' expression
     - 'defer' statement for delayed logic
-
     - Variables must be initialized when declared
         - '= undefined' for no initialization
         - '= default' for default init
@@ -25,6 +26,9 @@ General:
     - Declare multiple variables with same 'let'
     - Allow global variables to reference each other in an order independent way
     - Lexer: '\' to allow explicit multi line statements
+    - Arbitrary precision integers
+    - Fixed point types
+    - Built in vector types (e.g vec2f, vec3f64)
 
 Modules:
     - Each translation unit compiles to a module stub
@@ -37,6 +41,7 @@ Compound types:
         - Init with braces or named init.
         - No non trivial constructors (must be bitwise init,copy)
         - Intended for interfacing with C and low level code
+    classes - eventually...
 
 Primitives Types:
     char8:		8-bit unsigned character type
