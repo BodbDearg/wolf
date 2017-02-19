@@ -3,6 +3,8 @@
 General:
     - Pointers?
     - References?
+    - automatic type promotion
+    - automatic type demotion, if fitting, for constant expressions
     - 'extern' functions
 	- var x = Type(2)
 	- parsing float numbers
