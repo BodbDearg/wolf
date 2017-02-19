@@ -47,11 +47,11 @@ WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, Int16, getAShr)
 WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, Int32, getAShr)
 WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, Int64, getAShr)
 WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, Int8, getAShr)
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt128, getAShr)
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt16, getAShr)
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt32, getAShr)
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt64, getAShr)
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt8, getAShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt128, getLShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt16, getLShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt32, getLShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt64, getLShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt8, getLShr)
 
 //-----------------------------------------------------------------------------
 // CodegenConstLRShiftBinaryOp

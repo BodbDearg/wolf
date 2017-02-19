@@ -58,11 +58,11 @@ WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, Int16, CreateAShr)
 WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, Int32, CreateAShr)
 WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, Int64, CreateAShr)
 WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, Int8, CreateAShr)
-WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt128, CreateAShr)
-WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt16, CreateAShr)
-WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt32, CreateAShr)
-WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt64, CreateAShr)
-WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt8, CreateAShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt128, CreateLShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt16, CreateLShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt32, CreateLShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt64, CreateLShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt8, CreateLShr)
 
 //-----------------------------------------------------------------------------
 // CodegenLRShiftBinaryOp

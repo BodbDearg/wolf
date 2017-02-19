@@ -297,7 +297,19 @@ let testShiftExprConstexpr = [
     8 >>> 0 == 8,
     8 >>> 1 == 4,
     8 >>> 2 == 2,
-    -1 >>> 63 == 1  ; FIXME - this won't work if int type is 32-bit
+    -1 >>> 63 == 1,     ; FIXME - this won't work if int type is 32-bit
+
+    ; Make sure arithmetic right shifts behave as logical right shifts for unsigned types
+    cast(-1 to uint8) >> cast(1 to uint8) is 
+        cast(-1 to uint8) ^ cast(1 to uint8) << cast(7 to uint8),
+    cast(-1 to uint16) >> cast(1 to uint16) is
+        cast(-1 to uint16) ^ cast(1 to uint16) << cast(15 to uint16),
+    cast(-1 to uint32) >> cast(1 to uint32) is
+        cast(-1 to uint32) ^ cast(1 to uint32) << cast(31 to uint32),
+    cast(-1 to uint64) >> cast(1 to uint64) is
+        cast(-1 to uint64) ^ cast(1 to uint64) << cast(63 to uint64),
+    cast(-1 to uint128) >> cast(1 to uint128) is
+        cast(-1 to uint128) ^ cast(1 to uint128) << cast(127 to uint128)
 ]
 
 func testShiftExpr()
@@ -313,8 +325,21 @@ func testShiftExpr()
     assert(8 >>> 2 == 2)
     assert(-1 >>> 63 == 1)  ; FIXME - this won't work if int type is 32-bit
 
+    ; Make sure arithmetic right shifts behave as logical right shifts for unsigned types
+    assert(cast(-1 to uint8) >> cast(1 to uint8) is
+        cast(-1 to uint8) ^ cast(1 to uint8) << cast(7 to uint8))
+    assert(cast(-1 to uint16) >> cast(1 to uint16) is
+        cast(-1 to uint16) ^ cast(1 to uint16) << cast(15 to uint16))
+    assert(cast(-1 to uint32) >> cast(1 to uint32) is
+        cast(-1 to uint32) ^ cast(1 to uint32) << cast(31 to uint32))
+    assert(cast(-1 to uint64) >> cast(1 to uint64) is
+        cast(-1 to uint64) ^ cast(1 to uint64) << cast(63 to uint64))
+    assert(cast(-1 to uint128) >> cast(1 to uint128) is
+        cast(-1 to uint128) ^ cast(1 to uint128) << cast(127 to uint128))
+
+    ; Make sure the constant expression tests pass
     let testNum = 0
-    while testNum < 11
+    while testNum < 16
         assert(testShiftExprConstexpr[testNum])
         testNum++
     end
