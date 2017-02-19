@@ -1,4 +1,3 @@
-- Make logical statements lazy evaluate
 - Don't allow negation of unsigned ints
 - Implement various integer types int32, int16, uint32 etc. Upgrade lexer to add precision suffixes.
 - Upgrade lexer to support float numbers and implement float types.
