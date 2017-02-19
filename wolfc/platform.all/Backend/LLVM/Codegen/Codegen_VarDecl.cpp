@@ -60,7 +60,7 @@ static void doVarDeclTypeChecks(Codegen & cg,
     varTypeIsOkOut = true;
     
     if (!varDataType.isValid()) {
-        cg.mCtx.error(varDecl, "Can't declare a variable of invalid type '%s'!", varDataType.name().c_str());
+        // Note: no error for an invalid type because we've already done that elsewhere - the error is redundant
         varTypeIsOkOut = false;
     }
     else if (!varDataType.isSized()) {
