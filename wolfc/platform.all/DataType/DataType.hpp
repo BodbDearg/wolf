@@ -56,6 +56,12 @@ public:
     /* Utility. Tell if this data type is an integer data type. */
     virtual bool isInteger() const;
     
+    /** 
+     * Utility. Tell if this is a signed data type. Note: for data types where this question 
+     * does not make sense the function will simply return 'false'.
+     */
+    virtual bool isSigned() const;
+    
     /**
      * Utility. Tell if this data type is an array data type.
      * Returns true if the array is either an array with a known type

@@ -24,12 +24,16 @@ CodegenLShiftBinaryOp::CodegenLShiftBinaryOp(Codegen & cg,
     WC_EMPTY_FUNC_BODY();
 }
 
-void CodegenLShiftBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(mCG.mCtx.mIRBuilder.CreateShl(mLeftVal.mLLVMVal,
-                                               mRightVal.mLLVMVal,
-                                               "Int64:LShift:Result"));
-}
+WC_IMPL_BASIC_BINARY_OP(CodegenLShiftBinaryOp, Int128, CreateShl)
+WC_IMPL_BASIC_BINARY_OP(CodegenLShiftBinaryOp, Int16, CreateShl)
+WC_IMPL_BASIC_BINARY_OP(CodegenLShiftBinaryOp, Int32, CreateShl)
+WC_IMPL_BASIC_BINARY_OP(CodegenLShiftBinaryOp, Int64, CreateShl)
+WC_IMPL_BASIC_BINARY_OP(CodegenLShiftBinaryOp, Int8, CreateShl)
+WC_IMPL_BASIC_BINARY_OP(CodegenLShiftBinaryOp, UInt128, CreateShl)
+WC_IMPL_BASIC_BINARY_OP(CodegenLShiftBinaryOp, UInt16, CreateShl)
+WC_IMPL_BASIC_BINARY_OP(CodegenLShiftBinaryOp, UInt32, CreateShl)
+WC_IMPL_BASIC_BINARY_OP(CodegenLShiftBinaryOp, UInt64, CreateShl)
+WC_IMPL_BASIC_BINARY_OP(CodegenLShiftBinaryOp, UInt8, CreateShl)
 
 //-----------------------------------------------------------------------------
 // CodegenARShiftBinaryOp
@@ -49,12 +53,16 @@ CodegenARShiftBinaryOp::CodegenARShiftBinaryOp(Codegen & cg,
     WC_EMPTY_FUNC_BODY();
 }
 
-void CodegenARShiftBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(mCG.mCtx.mIRBuilder.CreateAShr(mLeftVal.mLLVMVal,
-                                                mRightVal.mLLVMVal,
-                                                "Int64:ARShift:Result"));
-}
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, Int128, CreateAShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, Int16, CreateAShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, Int32, CreateAShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, Int64, CreateAShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, Int8, CreateAShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt128, CreateAShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt16, CreateAShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt32, CreateAShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt64, CreateAShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenARShiftBinaryOp, UInt8, CreateAShr)
 
 //-----------------------------------------------------------------------------
 // CodegenLRShiftBinaryOp
@@ -74,12 +82,16 @@ CodegenLRShiftBinaryOp::CodegenLRShiftBinaryOp(Codegen & cg,
     WC_EMPTY_FUNC_BODY();
 }
 
-void CodegenLRShiftBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(mCG.mCtx.mIRBuilder.CreateLShr(mLeftVal.mLLVMVal,
-                                                mRightVal.mLLVMVal,
-                                                "Int64:LRShift:Result"));
-}
+WC_IMPL_BASIC_BINARY_OP(CodegenLRShiftBinaryOp, Int128, CreateLShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenLRShiftBinaryOp, Int16, CreateLShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenLRShiftBinaryOp, Int32, CreateLShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenLRShiftBinaryOp, Int64, CreateLShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenLRShiftBinaryOp, Int8, CreateLShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenLRShiftBinaryOp, UInt128, CreateLShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenLRShiftBinaryOp, UInt16, CreateLShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenLRShiftBinaryOp, UInt32, CreateLShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenLRShiftBinaryOp, UInt64, CreateLShr)
+WC_IMPL_BASIC_BINARY_OP(CodegenLRShiftBinaryOp, UInt8, CreateLShr)
 
 WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

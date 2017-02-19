@@ -719,7 +719,17 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         parseKeyword("false", TokenType::kFalse) ||
         parseKeyword("void", TokenType::kVoid) ||
         parseKeyword("int", TokenType::kInt) ||
-        parseKeyword("int64", TokenType::kInt64) ||        
+        parseKeyword("int8", TokenType::kInt8) ||
+        parseKeyword("int16", TokenType::kInt16) ||
+        parseKeyword("int32", TokenType::kInt32) ||
+        parseKeyword("int64", TokenType::kInt64) ||
+        parseKeyword("int128", TokenType::kInt128) ||
+        parseKeyword("uint", TokenType::kUInt) ||
+        parseKeyword("uint8", TokenType::kUInt8) ||
+        parseKeyword("uint16", TokenType::kUInt16) ||
+        parseKeyword("uint32", TokenType::kUInt32) ||
+        parseKeyword("uint64", TokenType::kUInt64) ||
+        parseKeyword("uint128", TokenType::kUInt128) ||
         parseKeyword("bool", TokenType::kBool) ||
         parseKeyword("string", TokenType::kString) ||
         parseKeyword("let", TokenType::kLet) ||

@@ -36,9 +36,18 @@ public:
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Array)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Bool)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Func)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(Int128)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(Int16)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(Int32)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Int64)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(Int8)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Invalid)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Str)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(UInt128)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(UInt16)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(UInt32)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(UInt64)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(UInt8)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Void)
     
     /* Done with this now! */
@@ -63,11 +72,11 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-// Cast From: void
+// Cast From: Array
 //-----------------------------------------------------------------------------
-class CodegenCastFromVoidUnaryOp final : public CodegenCastFromTypeUnaryOp {
+class CodegenCastFromArrayUnaryOp final : public CodegenCastFromTypeUnaryOp {
 public:
-    CodegenCastFromVoidUnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
+    CodegenCastFromArrayUnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
         CodegenCastFromTypeUnaryOp(cg, fromVal, toTypeCDT)
     {
         WC_EMPTY_FUNC_BODY();
@@ -87,11 +96,71 @@ public:
 };
 
 //-----------------------------------------------------------------------------
+// Cast From: Func
+//-----------------------------------------------------------------------------
+class CodegenCastFromFuncUnaryOp final : public CodegenCastFromTypeUnaryOp {
+public:
+    CodegenCastFromFuncUnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
+        CodegenCastFromTypeUnaryOp(cg, fromVal, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: int128
+//-----------------------------------------------------------------------------
+class CodegenCastFromInt128UnaryOp final : public CodegenCastFromTypeUnaryOp {
+public:
+    CodegenCastFromInt128UnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
+        CodegenCastFromTypeUnaryOp(cg, fromVal, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: int16
+//-----------------------------------------------------------------------------
+class CodegenCastFromInt16UnaryOp final : public CodegenCastFromTypeUnaryOp {
+public:
+    CodegenCastFromInt16UnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
+        CodegenCastFromTypeUnaryOp(cg, fromVal, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: int32
+//-----------------------------------------------------------------------------
+class CodegenCastFromInt32UnaryOp final : public CodegenCastFromTypeUnaryOp {
+public:
+    CodegenCastFromInt32UnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
+        CodegenCastFromTypeUnaryOp(cg, fromVal, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
 // Cast From: int64
 //-----------------------------------------------------------------------------
 class CodegenCastFromInt64UnaryOp final : public CodegenCastFromTypeUnaryOp {
 public:
     CodegenCastFromInt64UnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
+        CodegenCastFromTypeUnaryOp(cg, fromVal, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: int8
+//-----------------------------------------------------------------------------
+class CodegenCastFromInt8UnaryOp final : public CodegenCastFromTypeUnaryOp {
+public:
+    CodegenCastFromInt8UnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
         CodegenCastFromTypeUnaryOp(cg, fromVal, toTypeCDT)
     {
         WC_EMPTY_FUNC_BODY();
@@ -111,11 +180,11 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-// Cast From: Array
+// Cast From: uint128
 //-----------------------------------------------------------------------------
-class CodegenCastFromArrayUnaryOp final : public CodegenCastFromTypeUnaryOp {
+class CodegenCastFromUInt128UnaryOp final : public CodegenCastFromTypeUnaryOp {
 public:
-    CodegenCastFromArrayUnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
+    CodegenCastFromUInt128UnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
         CodegenCastFromTypeUnaryOp(cg, fromVal, toTypeCDT)
     {
         WC_EMPTY_FUNC_BODY();
@@ -123,11 +192,59 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-// Cast From: Func
+// Cast From: uint16
 //-----------------------------------------------------------------------------
-class CodegenCastFromFuncUnaryOp final : public CodegenCastFromTypeUnaryOp {
+class CodegenCastFromUInt16UnaryOp final : public CodegenCastFromTypeUnaryOp {
 public:
-    CodegenCastFromFuncUnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
+    CodegenCastFromUInt16UnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
+        CodegenCastFromTypeUnaryOp(cg, fromVal, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: uint32
+//-----------------------------------------------------------------------------
+class CodegenCastFromUInt32UnaryOp final : public CodegenCastFromTypeUnaryOp {
+public:
+    CodegenCastFromUInt32UnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
+        CodegenCastFromTypeUnaryOp(cg, fromVal, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: uint64
+//-----------------------------------------------------------------------------
+class CodegenCastFromUInt64UnaryOp final : public CodegenCastFromTypeUnaryOp {
+public:
+    CodegenCastFromUInt64UnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
+        CodegenCastFromTypeUnaryOp(cg, fromVal, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: uint8
+//-----------------------------------------------------------------------------
+class CodegenCastFromUInt8UnaryOp final : public CodegenCastFromTypeUnaryOp {
+public:
+    CodegenCastFromUInt8UnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
+        CodegenCastFromTypeUnaryOp(cg, fromVal, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: void
+//-----------------------------------------------------------------------------
+class CodegenCastFromVoidUnaryOp final : public CodegenCastFromTypeUnaryOp {
+public:
+    CodegenCastFromVoidUnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
         CodegenCastFromTypeUnaryOp(cg, fromVal, toTypeCDT)
     {
         WC_EMPTY_FUNC_BODY();
@@ -190,7 +307,16 @@ void CodegenCastUnaryOp::codegen() {
 IMPL_CAST_FROM_TYPE_FUNC(Array)
 IMPL_CAST_FROM_TYPE_FUNC(Bool)
 IMPL_CAST_FROM_TYPE_FUNC(Func)
+IMPL_CAST_FROM_TYPE_FUNC(Int128)
+IMPL_CAST_FROM_TYPE_FUNC(Int16)
+IMPL_CAST_FROM_TYPE_FUNC(Int32)
 IMPL_CAST_FROM_TYPE_FUNC(Int64)
+IMPL_CAST_FROM_TYPE_FUNC(Int8)
+IMPL_CAST_FROM_TYPE_FUNC(UInt128)
+IMPL_CAST_FROM_TYPE_FUNC(UInt16)
+IMPL_CAST_FROM_TYPE_FUNC(UInt32)
+IMPL_CAST_FROM_TYPE_FUNC(UInt64)
+IMPL_CAST_FROM_TYPE_FUNC(UInt8)
 IMPL_CAST_FROM_TYPE_FUNC(Str)
 IMPL_CAST_FROM_TYPE_FUNC(Void)
 

@@ -76,40 +76,28 @@ void CodegenConstBinaryOp::codegen() {
     }
 }
 
-void CodegenConstBinaryOp::visit(const ArrayDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueBinaryOpNotSupportedError();
-}
+#define WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(DataTypeName)\
+    void CodegenConstBinaryOp::visit(const DataTypeName##DataType & dataType) {\
+        WC_UNUSED_PARAM(dataType);\
+        issueBinaryOpNotSupportedError();\
+    }
 
-void CodegenConstBinaryOp::visit(const BoolDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueBinaryOpNotSupportedError();
-}
-
-void CodegenConstBinaryOp::visit(const FuncDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueBinaryOpNotSupportedError();
-}
-
-void CodegenConstBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueBinaryOpNotSupportedError();
-}
-
-void CodegenConstBinaryOp::visit(const InvalidDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueBinaryOpNotSupportedError();
-}
-
-void CodegenConstBinaryOp::visit(const StrDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueBinaryOpNotSupportedError();
-}
-
-void CodegenConstBinaryOp::visit(const VoidDataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    issueBinaryOpNotSupportedError();
-}
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(Array)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(Bool)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(Func)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(Int128)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(Int16)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(Int32)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(Int64)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(Int8)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(Invalid)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(Str)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt128)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt16)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt32)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt64)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt8)
+WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(Void)
 
 void CodegenConstBinaryOp::issueBinaryOpNotSupportedError() {
     AST::ASTNode * parent = mLeftExpr.mParent;

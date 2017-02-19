@@ -16,8 +16,26 @@ enum class DataTypeId : uint8_t {
     kVoid,
     /* Boolean data type */
     kBool,
+    /* Signed 8-bit integer data type */
+    kInt8,
+    /* Signed 16-bit integer data type */
+    kInt16,
+    /* Signed 32-bit integer data type */
+    kInt32,
     /* Signed 64-bit integer data type */
     kInt64,
+    /* Signed 128-bit integer data type */
+    kInt128,
+    /* Unsigned 8-bit integer data type */
+    kUInt8,
+    /* Unsigned 16-bit integer data type */
+    kUInt16,
+    /* Unsigned 32-bit integer data type */
+    kUInt32,
+    /* Unsigned 64-bit integer data type */
+    kUInt64,
+    /* Unsigned 128-bit integer data type */
+    kUInt128,
     /**
      * String constant data type
      * TODO: will probably change once we have a string class and once we support pointers to chars.

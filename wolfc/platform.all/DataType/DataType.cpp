@@ -21,6 +21,10 @@ bool DataType::isInteger() const {
     return false;   // False by default for everything except integer types
 }
 
+bool DataType::isSigned() const {
+    return false;   // False by default for everything
+}
+
 bool DataType::isArray() const {
     return false;   // False by most types by default
 }

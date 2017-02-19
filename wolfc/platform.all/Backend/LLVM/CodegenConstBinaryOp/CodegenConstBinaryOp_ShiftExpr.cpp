@@ -19,11 +19,16 @@ CodegenConstLShiftBinaryOp::CodegenConstLShiftBinaryOp(ConstCodegen & cg,
     WC_EMPTY_FUNC_BODY();
 }
 
-void CodegenConstLShiftBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(llvm::ConstantExpr::getShl(mLeftConst.mLLVMConst,
-                                            mRightConst.mLLVMConst));
-}
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLShiftBinaryOp, Int128, getShl)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLShiftBinaryOp, Int16, getShl)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLShiftBinaryOp, Int32, getShl)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLShiftBinaryOp, Int64, getShl)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLShiftBinaryOp, Int8, getShl)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLShiftBinaryOp, UInt128, getShl)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLShiftBinaryOp, UInt16, getShl)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLShiftBinaryOp, UInt32, getShl)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLShiftBinaryOp, UInt64, getShl)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLShiftBinaryOp, UInt8, getShl)
 
 //-----------------------------------------------------------------------------
 // CodegenConstARShiftBinaryOp
@@ -37,11 +42,16 @@ CodegenConstARShiftBinaryOp::CodegenConstARShiftBinaryOp(ConstCodegen & cg,
     WC_EMPTY_FUNC_BODY();
 }
 
-void CodegenConstARShiftBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(llvm::ConstantExpr::getAShr(mLeftConst.mLLVMConst,
-                                             mRightConst.mLLVMConst));
-}
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, Int128, getAShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, Int16, getAShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, Int32, getAShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, Int64, getAShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, Int8, getAShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt128, getAShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt16, getAShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt32, getAShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt64, getAShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstARShiftBinaryOp, UInt8, getAShr)
 
 //-----------------------------------------------------------------------------
 // CodegenConstLRShiftBinaryOp
@@ -55,11 +65,16 @@ CodegenConstLRShiftBinaryOp::CodegenConstLRShiftBinaryOp(ConstCodegen & cg,
     WC_EMPTY_FUNC_BODY();
 }
 
-void CodegenConstLRShiftBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(llvm::ConstantExpr::getLShr(mLeftConst.mLLVMConst,
-                                             mRightConst.mLLVMConst));
-}
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLRShiftBinaryOp, Int128, getLShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLRShiftBinaryOp, Int16, getLShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLRShiftBinaryOp, Int32, getLShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLRShiftBinaryOp, Int64, getLShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLRShiftBinaryOp, Int8, getLShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLRShiftBinaryOp, UInt128, getLShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLRShiftBinaryOp, UInt16, getLShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLRShiftBinaryOp, UInt32, getLShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLRShiftBinaryOp, UInt64, getLShr)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstLRShiftBinaryOp, UInt8, getLShr)
 
 WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

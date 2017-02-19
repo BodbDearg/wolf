@@ -36,9 +36,18 @@ public:
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Array)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Bool)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Func)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(Int128)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(Int16)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(Int32)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Int64)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(Int8)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Invalid)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Str)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(UInt128)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(UInt16)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(UInt32)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(UInt64)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(UInt8)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Void)
     
     /* Done with this now! */
@@ -63,13 +72,13 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-// Cast From: void
+// Cast From: Array
 //-----------------------------------------------------------------------------
-class CodegenConstCastFromVoidUnaryOp final : public CodegenConstCastFromTypeUnaryOp {
+class CodegenConstCastFromArrayUnaryOp final : public CodegenConstCastFromTypeUnaryOp {
 public:
-    CodegenConstCastFromVoidUnaryOp(ConstCodegen & cg, const
-                                    Constant & fromConst,
-                                    const CompiledDataType & toTypeCDT)
+    CodegenConstCastFromArrayUnaryOp(ConstCodegen & cg,
+                                     const Constant & fromConst,
+                                     const CompiledDataType & toTypeCDT)
     :
         CodegenConstCastFromTypeUnaryOp(cg, fromConst, toTypeCDT)
     {
@@ -93,6 +102,66 @@ public:
 };
 
 //-----------------------------------------------------------------------------
+// Cast From: Func
+//-----------------------------------------------------------------------------
+class CodegenConstCastFromFuncUnaryOp final : public CodegenConstCastFromTypeUnaryOp {
+public:
+    CodegenConstCastFromFuncUnaryOp(ConstCodegen & cg,
+                                    const Constant & fromConst,
+                                    const CompiledDataType & toTypeCDT)
+    :
+        CodegenConstCastFromTypeUnaryOp(cg, fromConst, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: int128
+//-----------------------------------------------------------------------------
+class CodegenConstCastFromInt128UnaryOp final : public CodegenConstCastFromTypeUnaryOp {
+public:
+    CodegenConstCastFromInt128UnaryOp(ConstCodegen & cg,
+                                      const Constant & fromConst,
+                                      const CompiledDataType & toTypeCDT)
+    :
+        CodegenConstCastFromTypeUnaryOp(cg, fromConst, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: int16
+//-----------------------------------------------------------------------------
+class CodegenConstCastFromInt16UnaryOp final : public CodegenConstCastFromTypeUnaryOp {
+public:
+    CodegenConstCastFromInt16UnaryOp(ConstCodegen & cg,
+                                     const Constant & fromConst,
+                                     const CompiledDataType & toTypeCDT)
+    :
+        CodegenConstCastFromTypeUnaryOp(cg, fromConst, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: int32
+//-----------------------------------------------------------------------------
+class CodegenConstCastFromInt32UnaryOp final : public CodegenConstCastFromTypeUnaryOp {
+public:
+    CodegenConstCastFromInt32UnaryOp(ConstCodegen & cg,
+                                     const Constant & fromConst,
+                                     const CompiledDataType & toTypeCDT)
+    :
+        CodegenConstCastFromTypeUnaryOp(cg, fromConst, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
 // Cast From: int64
 //-----------------------------------------------------------------------------
 class CodegenConstCastFromInt64UnaryOp final : public CodegenConstCastFromTypeUnaryOp {
@@ -100,6 +169,21 @@ public:
     CodegenConstCastFromInt64UnaryOp(ConstCodegen & cg,
                                      const Constant & fromConst,
                                      const CompiledDataType & toTypeCDT)
+    :
+        CodegenConstCastFromTypeUnaryOp(cg, fromConst, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: int8
+//-----------------------------------------------------------------------------
+class CodegenConstCastFromInt8UnaryOp final : public CodegenConstCastFromTypeUnaryOp {
+public:
+    CodegenConstCastFromInt8UnaryOp(ConstCodegen & cg,
+                                    const Constant & fromConst,
+                                    const CompiledDataType & toTypeCDT)
     :
         CodegenConstCastFromTypeUnaryOp(cg, fromConst, toTypeCDT)
     {
@@ -123,11 +207,71 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-// Cast From: Array
+// Cast From: uint128
 //-----------------------------------------------------------------------------
-class CodegenConstCastFromArrayUnaryOp final : public CodegenConstCastFromTypeUnaryOp {
+class CodegenConstCastFromUInt128UnaryOp final : public CodegenConstCastFromTypeUnaryOp {
 public:
-    CodegenConstCastFromArrayUnaryOp(ConstCodegen & cg,
+    CodegenConstCastFromUInt128UnaryOp(ConstCodegen & cg,
+                                       const Constant & fromConst,
+                                       const CompiledDataType & toTypeCDT)
+    :
+        CodegenConstCastFromTypeUnaryOp(cg, fromConst, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: uint16
+//-----------------------------------------------------------------------------
+class CodegenConstCastFromUInt16UnaryOp final : public CodegenConstCastFromTypeUnaryOp {
+public:
+    CodegenConstCastFromUInt16UnaryOp(ConstCodegen & cg,
+                                      const Constant & fromConst,
+                                      const CompiledDataType & toTypeCDT)
+    :
+        CodegenConstCastFromTypeUnaryOp(cg, fromConst, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: uint32
+//-----------------------------------------------------------------------------
+class CodegenConstCastFromUInt32UnaryOp final : public CodegenConstCastFromTypeUnaryOp {
+public:
+    CodegenConstCastFromUInt32UnaryOp(ConstCodegen & cg,
+                                      const Constant & fromConst,
+                                      const CompiledDataType & toTypeCDT)
+    :
+        CodegenConstCastFromTypeUnaryOp(cg, fromConst, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: uint64
+//-----------------------------------------------------------------------------
+class CodegenConstCastFromUInt64UnaryOp final : public CodegenConstCastFromTypeUnaryOp {
+public:
+    CodegenConstCastFromUInt64UnaryOp(ConstCodegen & cg,
+                                      const Constant & fromConst,
+                                      const CompiledDataType & toTypeCDT)
+    :
+        CodegenConstCastFromTypeUnaryOp(cg, fromConst, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
+// Cast From: uint8
+//-----------------------------------------------------------------------------
+class CodegenConstCastFromUInt8UnaryOp final : public CodegenConstCastFromTypeUnaryOp {
+public:
+    CodegenConstCastFromUInt8UnaryOp(ConstCodegen & cg,
                                      const Constant & fromConst,
                                      const CompiledDataType & toTypeCDT)
     :
@@ -138,12 +282,12 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-// Cast From: Func
+// Cast From: void
 //-----------------------------------------------------------------------------
-class CodegenConstCastFromFuncUnaryOp final : public CodegenConstCastFromTypeUnaryOp {
+class CodegenConstCastFromVoidUnaryOp final : public CodegenConstCastFromTypeUnaryOp {
 public:
-    CodegenConstCastFromFuncUnaryOp(ConstCodegen & cg,
-                                    const Constant & fromConst,
+    CodegenConstCastFromVoidUnaryOp(ConstCodegen & cg, const
+                                    Constant & fromConst,
                                     const CompiledDataType & toTypeCDT)
     :
         CodegenConstCastFromTypeUnaryOp(cg, fromConst, toTypeCDT)
@@ -206,8 +350,17 @@ void CodegenConstCastUnaryOp::codegen() {
 IMPL_CAST_FROM_TYPE_FUNC(Array)
 IMPL_CAST_FROM_TYPE_FUNC(Bool)
 IMPL_CAST_FROM_TYPE_FUNC(Func)
+IMPL_CAST_FROM_TYPE_FUNC(Int128)
+IMPL_CAST_FROM_TYPE_FUNC(Int16)
+IMPL_CAST_FROM_TYPE_FUNC(Int32)
 IMPL_CAST_FROM_TYPE_FUNC(Int64)
+IMPL_CAST_FROM_TYPE_FUNC(Int8)
 IMPL_CAST_FROM_TYPE_FUNC(Str)
+IMPL_CAST_FROM_TYPE_FUNC(UInt128)
+IMPL_CAST_FROM_TYPE_FUNC(UInt16)
+IMPL_CAST_FROM_TYPE_FUNC(UInt32)
+IMPL_CAST_FROM_TYPE_FUNC(UInt64)
+IMPL_CAST_FROM_TYPE_FUNC(UInt8)
 IMPL_CAST_FROM_TYPE_FUNC(Void)
 
 /* Done with this */

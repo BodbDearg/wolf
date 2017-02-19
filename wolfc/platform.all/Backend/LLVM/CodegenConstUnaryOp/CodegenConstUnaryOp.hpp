@@ -46,9 +46,18 @@ public:
     virtual void visit(const ArrayDataType & dataType) override;
     virtual void visit(const BoolDataType & dataType) override;
     virtual void visit(const FuncDataType & dataType) override;
+    virtual void visit(const Int128DataType & dataType) override;
+    virtual void visit(const Int16DataType & dataType) override;
+    virtual void visit(const Int32DataType & dataType) override;
     virtual void visit(const Int64DataType & dataType) override;
+    virtual void visit(const Int8DataType & dataType) override;
     virtual void visit(const InvalidDataType & dataType) override;
     virtual void visit(const StrDataType & dataType) override;
+    virtual void visit(const UInt128DataType & dataType) override;
+    virtual void visit(const UInt16DataType & dataType) override;
+    virtual void visit(const UInt32DataType & dataType) override;
+    virtual void visit(const UInt64DataType & dataType) override;
+    virtual void visit(const UInt8DataType & dataType) override;
     virtual void visit(const VoidDataType & dataType) override;
     
 protected:
@@ -71,6 +80,13 @@ protected:
     /* This are generated and cached by the codegen() function */
     Constant mExprConst;
 };
+
+/* This macro saves a lot of code */
+#define WC_IMPL_BASIC_CONST_UNARY_OP(VisitorClass, DataTypeName, ConstExprGetterFunc)\
+    void VisitorClass::visit(const DataTypeName##DataType & dataType) {\
+        WC_UNUSED_PARAM(dataType);\
+        pushOpResult(llvm::ConstantExpr::ConstExprGetterFunc(mExprConst.mLLVMConst));\
+    }
 
 WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

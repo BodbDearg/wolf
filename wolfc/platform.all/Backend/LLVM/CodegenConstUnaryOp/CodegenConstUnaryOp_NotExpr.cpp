@@ -34,10 +34,16 @@ CodegenConstBNotUnaryOp::CodegenConstBNotUnaryOp(ConstCodegen & cg,
     WC_EMPTY_FUNC_BODY();
 }
 
-void CodegenConstBNotUnaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(llvm::ConstantExpr::getNot(mExprConst.mLLVMConst));
-}
+WC_IMPL_BASIC_CONST_UNARY_OP(CodegenConstBNotUnaryOp, Int128, getNot)
+WC_IMPL_BASIC_CONST_UNARY_OP(CodegenConstBNotUnaryOp, Int16, getNot)
+WC_IMPL_BASIC_CONST_UNARY_OP(CodegenConstBNotUnaryOp, Int32, getNot)
+WC_IMPL_BASIC_CONST_UNARY_OP(CodegenConstBNotUnaryOp, Int64, getNot)
+WC_IMPL_BASIC_CONST_UNARY_OP(CodegenConstBNotUnaryOp, Int8, getNot)
+WC_IMPL_BASIC_CONST_UNARY_OP(CodegenConstBNotUnaryOp, UInt128, getNot)
+WC_IMPL_BASIC_CONST_UNARY_OP(CodegenConstBNotUnaryOp, UInt16, getNot)
+WC_IMPL_BASIC_CONST_UNARY_OP(CodegenConstBNotUnaryOp, UInt32, getNot)
+WC_IMPL_BASIC_CONST_UNARY_OP(CodegenConstBNotUnaryOp, UInt64, getNot)
+WC_IMPL_BASIC_CONST_UNARY_OP(CodegenConstBNotUnaryOp, UInt8, getNot)
 
 WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

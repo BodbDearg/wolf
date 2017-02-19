@@ -13,7 +13,7 @@
 #include "DataType/Primitives/ArrayDataType.hpp"
 #include "DataType/Primitives/BoolDataType.hpp"
 #include "DataType/Primitives/FuncDataType.hpp"
-#include "DataType/Primitives/Int64DataType.hpp"
+#include "DataType/Primitives/IntDataTypes.hpp"
 #include "DataType/Primitives/InvalidDataType.hpp"
 #include "DataType/Primitives/StrDataType.hpp"
 #include "DataType/Primitives/VoidDataType.hpp"
@@ -271,9 +271,72 @@ void CodegenDataType::visit(const FuncDataType & dataType) {
     mCtx.pushCompiledDataType(CompiledDataType(dataType, funcLLVMType));
 }
 
+void CodegenDataType::visit(const Int128DataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Type * llvmType = llvm::Type::getInt128Ty(mCtx.mLLVMCtx);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const Int16DataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Type * llvmType = llvm::Type::getInt16Ty(mCtx.mLLVMCtx);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const Int32DataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Type * llvmType = llvm::Type::getInt32Ty(mCtx.mLLVMCtx);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
 void CodegenDataType::visit(const Int64DataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     llvm::Type * llvmType = llvm::Type::getInt64Ty(mCtx.mLLVMCtx);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const Int8DataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Type * llvmType = llvm::Type::getInt8Ty(mCtx.mLLVMCtx);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const UInt128DataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Type * llvmType = llvm::Type::getInt128Ty(mCtx.mLLVMCtx);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const UInt16DataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Type * llvmType = llvm::Type::getInt16Ty(mCtx.mLLVMCtx);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const UInt32DataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Type * llvmType = llvm::Type::getInt32Ty(mCtx.mLLVMCtx);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const UInt64DataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Type * llvmType = llvm::Type::getInt64Ty(mCtx.mLLVMCtx);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const UInt8DataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Type * llvmType = llvm::Type::getInt8Ty(mCtx.mLLVMCtx);
     WC_ASSERT(llvmType);
     mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
 }

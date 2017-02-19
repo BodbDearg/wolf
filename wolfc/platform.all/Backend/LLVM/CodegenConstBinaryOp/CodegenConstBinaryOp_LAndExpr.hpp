@@ -11,7 +11,7 @@ public:
                              const AST::ASTNode & leftExpr,
                              const AST::ASTNode & rightExpr);
     
-    void visit(const BoolDataType & dataType) override;
+    virtual void visit(const BoolDataType & dataType) override;
 };
 
 WC_LLVM_BACKEND_END_NAMESPACE

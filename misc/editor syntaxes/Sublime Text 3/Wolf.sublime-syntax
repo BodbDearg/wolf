@@ -50,8 +50,8 @@ contexts:
       scope: keyword.functions.wolf
     - match: \b(let|noop)\b
       scope: keyword.misc.wolf
-    - match: \b(void|bool|int|int64|int32|int16|int8|uint|uint64|uint32|uint16|uint8|float|char|uchar|string|ustring)\b
-      scope: storage.type.wolf      
+    - match: \b(void|bool|int|int128|int64|int32|int16|int8|uint|uint128|uint64|uint32|uint16|uint8|float|char|uchar|string|ustring)\b
+      scope: storage.type.wolf
   multiline_comment:
     - meta_scope: comment.multiline.wolf
     - match: ';/'

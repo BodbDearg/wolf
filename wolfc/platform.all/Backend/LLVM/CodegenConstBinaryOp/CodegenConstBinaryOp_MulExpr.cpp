@@ -19,11 +19,16 @@ CodegenConstMulBinaryOp::CodegenConstMulBinaryOp(ConstCodegen & cg,
     WC_EMPTY_FUNC_BODY();
 }
 
-void CodegenConstMulBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(llvm::ConstantExpr::getMul(mLeftConst.mLLVMConst,
-                                            mRightConst.mLLVMConst));
-}
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstMulBinaryOp, Int128, getMul)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstMulBinaryOp, Int16, getMul)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstMulBinaryOp, Int32, getMul)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstMulBinaryOp, Int64, getMul)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstMulBinaryOp, Int8, getMul)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstMulBinaryOp, UInt128, getMul)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstMulBinaryOp, UInt16, getMul)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstMulBinaryOp, UInt32, getMul)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstMulBinaryOp, UInt64, getMul)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstMulBinaryOp, UInt8, getMul)
 
 //-----------------------------------------------------------------------------
 // CodegenConstDivBinaryOp
@@ -37,11 +42,16 @@ CodegenConstDivBinaryOp::CodegenConstDivBinaryOp(ConstCodegen & cg,
     WC_EMPTY_FUNC_BODY();
 }
 
-void CodegenConstDivBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(llvm::ConstantExpr::getSDiv(mLeftConst.mLLVMConst,
-                                             mRightConst.mLLVMConst));
-}
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstDivBinaryOp, Int128, getSDiv)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstDivBinaryOp, Int16, getSDiv)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstDivBinaryOp, Int32, getSDiv)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstDivBinaryOp, Int64, getSDiv)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstDivBinaryOp, Int8, getSDiv)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstDivBinaryOp, UInt128, getUDiv)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstDivBinaryOp, UInt16, getUDiv)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstDivBinaryOp, UInt32, getUDiv)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstDivBinaryOp, UInt64, getUDiv)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstDivBinaryOp, UInt8, getUDiv)
 
 //-----------------------------------------------------------------------------
 // CodegenConstModBinaryOp
@@ -55,11 +65,16 @@ CodegenConstModBinaryOp::CodegenConstModBinaryOp(ConstCodegen & cg,
     WC_EMPTY_FUNC_BODY();
 }
 
-void CodegenConstModBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(llvm::ConstantExpr::getSRem(mLeftConst.mLLVMConst,
-                                             mRightConst.mLLVMConst));
-}
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, Int128, getSRem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, Int16, getSRem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, Int32, getSRem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, Int64, getSRem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, Int8, getSRem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, UInt128, getURem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, UInt16, getURem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, UInt32, getURem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, UInt64, getURem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, UInt8, getURem)
 
 //-----------------------------------------------------------------------------
 // CodegenConstBAndBinaryOp
@@ -72,12 +87,16 @@ CodegenConstBAndBinaryOp::CodegenConstBAndBinaryOp(ConstCodegen & cg,
 {
     WC_EMPTY_FUNC_BODY();
 }
-
-void CodegenConstBAndBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(llvm::ConstantExpr::getAnd(mLeftConst.mLLVMConst,
-                                            mRightConst.mLLVMConst));
-}
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstBAndBinaryOp, Int128, getAnd)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstBAndBinaryOp, Int16, getAnd)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstBAndBinaryOp, Int32, getAnd)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstBAndBinaryOp, Int64, getAnd)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstBAndBinaryOp, Int8, getAnd)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstBAndBinaryOp, UInt128, getAnd)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstBAndBinaryOp, UInt16, getAnd)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstBAndBinaryOp, UInt32, getAnd)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstBAndBinaryOp, UInt64, getAnd)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstBAndBinaryOp, UInt8, getAnd)
 
 WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

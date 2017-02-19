@@ -132,8 +132,28 @@ enum class TokenType : uint8_t {
     kVoid,
     /* 'int' */
     kInt,
+    /* 'int8' */
+    kInt8,
+    /* 'int16' */
+    kInt16,
+    /* 'int32' */
+    kInt32,
     /* 'int64' */
     kInt64,
+    /* 'int128' */
+    kInt128,
+    /* 'uint' */
+    kUInt,
+    /* 'uint8' */
+    kUInt8,
+    /* 'uint16' */
+    kUInt16,
+    /* 'uint32' */
+    kUInt32,
+    /* 'uint64' */
+    kUInt64,
+    /* 'uint128' */
+    kUInt128,
     /* 'bool' */
     kBool,
     /* 'string' */  // TODO: this is a temporary data type, will eventually be a built-in class

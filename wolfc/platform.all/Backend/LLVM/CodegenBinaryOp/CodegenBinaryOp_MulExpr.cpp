@@ -23,13 +23,17 @@ CodegenMulBinaryOp::CodegenMulBinaryOp(Codegen & cg,
 {
     WC_EMPTY_FUNC_BODY();
 }
-    
-void CodegenMulBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(mCG.mCtx.mIRBuilder.CreateMul(mLeftVal.mLLVMVal,
-                                               mRightVal.mLLVMVal,
-                                               "Int64:Mul:Result"));
-}
+
+WC_IMPL_BASIC_BINARY_OP(CodegenMulBinaryOp, Int128, CreateMul)
+WC_IMPL_BASIC_BINARY_OP(CodegenMulBinaryOp, Int16, CreateMul)
+WC_IMPL_BASIC_BINARY_OP(CodegenMulBinaryOp, Int32, CreateMul)
+WC_IMPL_BASIC_BINARY_OP(CodegenMulBinaryOp, Int64, CreateMul)
+WC_IMPL_BASIC_BINARY_OP(CodegenMulBinaryOp, Int8, CreateMul)
+WC_IMPL_BASIC_BINARY_OP(CodegenMulBinaryOp, UInt128, CreateMul)
+WC_IMPL_BASIC_BINARY_OP(CodegenMulBinaryOp, UInt16, CreateMul)
+WC_IMPL_BASIC_BINARY_OP(CodegenMulBinaryOp, UInt32, CreateMul)
+WC_IMPL_BASIC_BINARY_OP(CodegenMulBinaryOp, UInt64, CreateMul)
+WC_IMPL_BASIC_BINARY_OP(CodegenMulBinaryOp, UInt8, CreateMul)
 
 //-----------------------------------------------------------------------------
 // CodegenDivBinaryOp
@@ -48,13 +52,17 @@ CodegenDivBinaryOp::CodegenDivBinaryOp(Codegen & cg,
 {
     WC_EMPTY_FUNC_BODY();
 }
-    
-void CodegenDivBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(mCG.mCtx.mIRBuilder.CreateSDiv(mLeftVal.mLLVMVal,
-                                                mRightVal.mLLVMVal,
-                                                "Int64:Div:Result"));
-}
+
+WC_IMPL_BASIC_BINARY_OP(CodegenDivBinaryOp, Int128, CreateSDiv)
+WC_IMPL_BASIC_BINARY_OP(CodegenDivBinaryOp, Int16, CreateSDiv)
+WC_IMPL_BASIC_BINARY_OP(CodegenDivBinaryOp, Int32, CreateSDiv)
+WC_IMPL_BASIC_BINARY_OP(CodegenDivBinaryOp, Int64, CreateSDiv)
+WC_IMPL_BASIC_BINARY_OP(CodegenDivBinaryOp, Int8, CreateSDiv)
+WC_IMPL_BASIC_BINARY_OP(CodegenDivBinaryOp, UInt128, CreateUDiv)
+WC_IMPL_BASIC_BINARY_OP(CodegenDivBinaryOp, UInt16, CreateUDiv)
+WC_IMPL_BASIC_BINARY_OP(CodegenDivBinaryOp, UInt32, CreateUDiv)
+WC_IMPL_BASIC_BINARY_OP(CodegenDivBinaryOp, UInt64, CreateUDiv)
+WC_IMPL_BASIC_BINARY_OP(CodegenDivBinaryOp, UInt8, CreateUDiv)
 
 //-----------------------------------------------------------------------------
 // CodegenModBinaryOp
@@ -73,13 +81,17 @@ CodegenModBinaryOp::CodegenModBinaryOp(Codegen & cg,
 {
     WC_EMPTY_FUNC_BODY();
 }
-    
-void CodegenModBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(mCG.mCtx.mIRBuilder.CreateSRem(mLeftVal.mLLVMVal,
-                                                mRightVal.mLLVMVal,
-                                                "Int64:Mod:Result"));
-}
+
+WC_IMPL_BASIC_BINARY_OP(CodegenModBinaryOp, Int128, CreateSRem)
+WC_IMPL_BASIC_BINARY_OP(CodegenModBinaryOp, Int16, CreateSRem)
+WC_IMPL_BASIC_BINARY_OP(CodegenModBinaryOp, Int32, CreateSRem)
+WC_IMPL_BASIC_BINARY_OP(CodegenModBinaryOp, Int64, CreateSRem)
+WC_IMPL_BASIC_BINARY_OP(CodegenModBinaryOp, Int8, CreateSRem)
+WC_IMPL_BASIC_BINARY_OP(CodegenModBinaryOp, UInt128, CreateURem)
+WC_IMPL_BASIC_BINARY_OP(CodegenModBinaryOp, UInt16, CreateURem)
+WC_IMPL_BASIC_BINARY_OP(CodegenModBinaryOp, UInt32, CreateURem)
+WC_IMPL_BASIC_BINARY_OP(CodegenModBinaryOp, UInt64, CreateURem)
+WC_IMPL_BASIC_BINARY_OP(CodegenModBinaryOp, UInt8, CreateURem)
 
 //-----------------------------------------------------------------------------
 // CodegenBAndBinaryOp
@@ -98,13 +110,17 @@ CodegenBAndBinaryOp::CodegenBAndBinaryOp(Codegen & cg,
 {
     WC_EMPTY_FUNC_BODY();
 }
-    
-void CodegenBAndBinaryOp::visit(const Int64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    pushOpResult(mCG.mCtx.mIRBuilder.CreateAnd(mLeftVal.mLLVMVal,
-                                               mRightVal.mLLVMVal,
-                                               "Int64:BAnd:Result"));
-}
+
+WC_IMPL_BASIC_BINARY_OP(CodegenBAndBinaryOp, Int128, CreateAnd)
+WC_IMPL_BASIC_BINARY_OP(CodegenBAndBinaryOp, Int16, CreateAnd)
+WC_IMPL_BASIC_BINARY_OP(CodegenBAndBinaryOp, Int32, CreateAnd)
+WC_IMPL_BASIC_BINARY_OP(CodegenBAndBinaryOp, Int64, CreateAnd)
+WC_IMPL_BASIC_BINARY_OP(CodegenBAndBinaryOp, Int8, CreateAnd)
+WC_IMPL_BASIC_BINARY_OP(CodegenBAndBinaryOp, UInt128, CreateAnd)
+WC_IMPL_BASIC_BINARY_OP(CodegenBAndBinaryOp, UInt16, CreateAnd)
+WC_IMPL_BASIC_BINARY_OP(CodegenBAndBinaryOp, UInt32, CreateAnd)
+WC_IMPL_BASIC_BINARY_OP(CodegenBAndBinaryOp, UInt64, CreateAnd)
+WC_IMPL_BASIC_BINARY_OP(CodegenBAndBinaryOp, UInt8, CreateAnd)
 
 WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

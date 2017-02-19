@@ -84,8 +84,26 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
         const DataType & exprDataType = exprVal.mCompiledType.getDataType();
         
         switch (exprDataType.getTypeId()) {
+            case DataTypeId::kInt8:
+            case DataTypeId::kInt16:
+            case DataTypeId::kInt32:
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%d");
+                break;
+                
             case DataTypeId::kInt64:
+            case DataTypeId::kInt128:
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%lld");
+                break;
+                
+            case DataTypeId::kUInt8:
+            case DataTypeId::kUInt16:
+            case DataTypeId::kUInt32:
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%u");
+                break;
+                
+            case DataTypeId::kUInt64:
+            case DataTypeId::kUInt128:
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%llu");
                 break;
                 
             case DataTypeId::kBool:
