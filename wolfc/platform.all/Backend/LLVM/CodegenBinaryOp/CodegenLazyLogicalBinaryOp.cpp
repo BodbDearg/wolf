@@ -62,6 +62,11 @@ void CodegenLazyLogicalBinaryOp::codegen() {
     Value leftVal = mCG.mCtx.popValue();
     WC_ASSERT(!leftVal.mRequiresLoad || !leftVal.isValid());
     
+    // Save the basic block which the left value came from, we'll need it later for a PHI node.
+    // Since there could be multiple sub expressions and operations on the left side, this
+    // might not be the same as the start block for evaluating the left side...
+    llvm::BasicBlock * evalLeftEndBB = mCG.mCtx.mIRBuilder.GetInsertBlock();
+    
     // Okay, create a basic block for starting the evaluation of the right side
     std::string evalRightStartBBLbl = StringUtils::appendLineInfo(
         mOpType == OpType::kAnd ? "EvalLAndRightExpr" : "EvalLOrRightExpr",
@@ -136,7 +141,7 @@ void CodegenLazyLogicalBinaryOp::codegen() {
     const char * phiNodeLbl = mOpType == OpType::kAnd ? "EvalLAndPHI" : "EvalLOrPHI";
     llvm::PHINode * phiNode = mCG.mCtx.mIRBuilder.CreatePHI(leftVal.mCompiledType.getLLVMType(), 2, phiNodeLbl);
     WC_ASSERT(phiNode);
-    phiNode->addIncoming(leftVal.mLLVMVal, startBB);
+    phiNode->addIncoming(leftVal.mLLVMVal, evalLeftEndBB);
     phiNode->addIncoming(rightVal.mLLVMVal, evalRightEndBB);
     
     // The result is the PHI node:

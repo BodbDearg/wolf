@@ -507,19 +507,39 @@ func testLazyEvalFalseNoCall() -> bool
 end
 
 func testLazyEval() 
-    assert((testLazyEvalTrue() or
-            testLazyEvalTrueNoCall() or
-            testLazyEvalFalseNoCall()) is true
-    )
+    assert((
+        testLazyEvalTrue() or
+        testLazyEvalTrueNoCall() or
+        testLazyEvalFalseNoCall()
+    ) is true)
 
-    assert((testLazyEvalFalse() and
-            testLazyEvalTrueNoCall() and
-            testLazyEvalFalseNoCall()) is false
-    )
+    assert((
+        testLazyEvalFalse() and
+        testLazyEvalTrueNoCall() and
+        testLazyEvalFalseNoCall()
+    ) is false)
 
-    assert((testLazyEvalFalse() and 
-            (testLazyEvalTrueNoCall() or testLazyEvalTrueNoCall() and testLazyEvalFalseNoCall()) and 
-            testLazyEvalFalseNoCall()) is false)
+    assert((
+        testLazyEvalFalse() and (
+            testLazyEvalTrueNoCall() or 
+            testLazyEvalTrueNoCall() and testLazyEvalFalseNoCall()
+        ) and
+        testLazyEvalFalseNoCall()
+    ) is false)
+
+    assert((
+        testLazyEvalFalse() or (
+            testLazyEvalTrue() and 
+            testLazyEvalTrue() or
+            testLazyEvalFalseNoCall()
+        ) and (
+            testLazyEvalFalse() or (
+                testLazyEvalFalse() or
+                testLazyEvalTrue()
+            ) or
+            testLazyEvalFalseNoCall()
+        )
+    ) is true)
 end
 
 ;==================================================================================================
