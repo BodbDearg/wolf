@@ -53,6 +53,18 @@ public:
     /* Done with this now! */
     #undef IMPL_UNSUPPORTED_CAST_OP_FUNC
     
+    /* Save the operator result in the codegen context */
+    void pushOpResult(llvm::Constant * result) {
+        const AST::ASTNode * declaringNode = nullptr;
+        const auto & astNodeStack = mCG.mCtx.getASTNodeStack();
+        
+        if (astNodeStack.empty()) {
+            declaringNode = astNodeStack.back();
+        }
+        
+        mCG.mCtx.pushConstant(Constant(result, mToTypeCDT, declaringNode));
+    }
+    
     /* The codegen function */
     void codegen() {
         mToTypeCDT.getDataType().accept(*this);
@@ -70,6 +82,13 @@ private:
                        mToTypeCDT.getDataType().name().c_str());
     }
 };
+
+/* This macro saves a lot of repetition */
+#define WC_IMPL_BASIC_CAST(CastGetFunc, ToDataTypeName)\
+    virtual void visit(const ToDataTypeName##DataType & toType) override {\
+        WC_UNUSED_PARAM(toType);\
+        pushOpResult(llvm::ConstantExpr::CastGetFunc(mFromConst.mLLVMConst, mToTypeCDT.getLLVMType()));\
+    }
 
 //-----------------------------------------------------------------------------
 // Cast From: Array
@@ -129,6 +148,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(getBitCast, Int128)
+    WC_IMPL_BASIC_CAST(getTrunc, Int64)
+    WC_IMPL_BASIC_CAST(getTrunc, Int32)
+    WC_IMPL_BASIC_CAST(getTrunc, Int16)
+    WC_IMPL_BASIC_CAST(getTrunc, Int8)
+    WC_IMPL_BASIC_CAST(getBitCast, UInt128)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt64)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt32)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt16)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -144,6 +174,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(getSExt, Int128)
+    WC_IMPL_BASIC_CAST(getSExt, Int64)
+    WC_IMPL_BASIC_CAST(getSExt, Int32)
+    WC_IMPL_BASIC_CAST(getBitCast, Int16)
+    WC_IMPL_BASIC_CAST(getTrunc, Int8)
+    WC_IMPL_BASIC_CAST(getSExt, UInt128)
+    WC_IMPL_BASIC_CAST(getSExt, UInt64)
+    WC_IMPL_BASIC_CAST(getSExt, UInt32)
+    WC_IMPL_BASIC_CAST(getBitCast, UInt16)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -159,6 +200,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(getSExt, Int128)
+    WC_IMPL_BASIC_CAST(getSExt, Int64)
+    WC_IMPL_BASIC_CAST(getBitCast, Int32)
+    WC_IMPL_BASIC_CAST(getTrunc, Int16)
+    WC_IMPL_BASIC_CAST(getTrunc, Int8)
+    WC_IMPL_BASIC_CAST(getSExt, UInt128)
+    WC_IMPL_BASIC_CAST(getSExt, UInt64)
+    WC_IMPL_BASIC_CAST(getBitCast, UInt32)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt16)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -174,6 +226,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(getSExt, Int128)
+    WC_IMPL_BASIC_CAST(getBitCast, Int64)
+    WC_IMPL_BASIC_CAST(getTrunc, Int32)
+    WC_IMPL_BASIC_CAST(getTrunc, Int16)
+    WC_IMPL_BASIC_CAST(getTrunc, Int8)
+    WC_IMPL_BASIC_CAST(getSExt, UInt128)
+    WC_IMPL_BASIC_CAST(getBitCast, UInt64)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt32)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt16)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -189,6 +252,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(getSExt, Int128)
+    WC_IMPL_BASIC_CAST(getSExt, Int64)
+    WC_IMPL_BASIC_CAST(getSExt, Int32)
+    WC_IMPL_BASIC_CAST(getSExt, Int16)
+    WC_IMPL_BASIC_CAST(getBitCast, Int8)
+    WC_IMPL_BASIC_CAST(getSExt, UInt128)
+    WC_IMPL_BASIC_CAST(getSExt, UInt64)
+    WC_IMPL_BASIC_CAST(getSExt, UInt32)
+    WC_IMPL_BASIC_CAST(getSExt, UInt16)
+    WC_IMPL_BASIC_CAST(getBitCast, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -219,6 +293,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(getBitCast, Int128)
+    WC_IMPL_BASIC_CAST(getTrunc, Int64)
+    WC_IMPL_BASIC_CAST(getTrunc, Int32)
+    WC_IMPL_BASIC_CAST(getTrunc, Int16)
+    WC_IMPL_BASIC_CAST(getTrunc, Int8)
+    WC_IMPL_BASIC_CAST(getBitCast, UInt128)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt64)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt32)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt16)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -234,6 +319,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(getZExt, Int128)
+    WC_IMPL_BASIC_CAST(getZExt, Int64)
+    WC_IMPL_BASIC_CAST(getZExt, Int32)
+    WC_IMPL_BASIC_CAST(getBitCast, Int16)
+    WC_IMPL_BASIC_CAST(getTrunc, Int8)
+    WC_IMPL_BASIC_CAST(getZExt, UInt128)
+    WC_IMPL_BASIC_CAST(getZExt, UInt64)
+    WC_IMPL_BASIC_CAST(getZExt, UInt32)
+    WC_IMPL_BASIC_CAST(getBitCast, UInt16)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -249,6 +345,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(getZExt, Int128)
+    WC_IMPL_BASIC_CAST(getZExt, Int64)
+    WC_IMPL_BASIC_CAST(getBitCast, Int32)
+    WC_IMPL_BASIC_CAST(getTrunc, Int16)
+    WC_IMPL_BASIC_CAST(getTrunc, Int8)
+    WC_IMPL_BASIC_CAST(getZExt, UInt128)
+    WC_IMPL_BASIC_CAST(getZExt, UInt64)
+    WC_IMPL_BASIC_CAST(getBitCast, UInt32)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt16)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -264,6 +371,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(getZExt, Int128)
+    WC_IMPL_BASIC_CAST(getBitCast, Int64)
+    WC_IMPL_BASIC_CAST(getTrunc, Int32)
+    WC_IMPL_BASIC_CAST(getTrunc, Int16)
+    WC_IMPL_BASIC_CAST(getTrunc, Int8)
+    WC_IMPL_BASIC_CAST(getZExt, UInt128)
+    WC_IMPL_BASIC_CAST(getBitCast, UInt64)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt32)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt16)
+    WC_IMPL_BASIC_CAST(getTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -279,6 +397,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(getZExt, Int128)
+    WC_IMPL_BASIC_CAST(getZExt, Int64)
+    WC_IMPL_BASIC_CAST(getZExt, Int32)
+    WC_IMPL_BASIC_CAST(getZExt, Int16)
+    WC_IMPL_BASIC_CAST(getBitCast, Int8)
+    WC_IMPL_BASIC_CAST(getZExt, UInt128)
+    WC_IMPL_BASIC_CAST(getZExt, UInt64)
+    WC_IMPL_BASIC_CAST(getZExt, UInt32)
+    WC_IMPL_BASIC_CAST(getZExt, UInt16)
+    WC_IMPL_BASIC_CAST(getBitCast, UInt8)
 };
 
 //-----------------------------------------------------------------------------

@@ -53,6 +53,18 @@ public:
     /* Done with this now! */
     #undef IMPL_UNSUPPORTED_CAST_OP_FUNC
     
+    /* Save the operator result in the codegen context */
+    void pushOpResult(llvm::Value * result) {
+        const AST::ASTNode * declaringNode = nullptr;
+        const auto & astNodeStack = mCG.mCtx.getASTNodeStack();
+        
+        if (astNodeStack.empty()) {
+            declaringNode = astNodeStack.back();
+        }
+        
+        mCG.mCtx.pushValue(Value(result, mToTypeCDT, false, declaringNode));
+    }
+    
     /* The codegen function */
     void codegen() {
         mToTypeCDT.getDataType().accept(*this);
@@ -70,6 +82,13 @@ private:
                        mToTypeCDT.getDataType().name().c_str());
     }
 };
+
+/* This macro saves a lot of repetition */
+#define WC_IMPL_BASIC_CAST(CastCreateFunc, ToDataTypeName)\
+    virtual void visit(const ToDataTypeName##DataType & toType) override {\
+        WC_UNUSED_PARAM(toType);\
+        pushOpResult(mCG.mCtx.mIRBuilder.CastCreateFunc(mFromVal.mLLVMVal, mToTypeCDT.getLLVMType()));\
+    }
 
 //-----------------------------------------------------------------------------
 // Cast From: Array
@@ -117,6 +136,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(CreateBitCast, Int128)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int64)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int32)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int8)
+    WC_IMPL_BASIC_CAST(CreateBitCast, UInt128)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt64)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt32)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -129,6 +159,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(CreateSExt, Int128)
+    WC_IMPL_BASIC_CAST(CreateSExt, Int64)
+    WC_IMPL_BASIC_CAST(CreateSExt, Int32)
+    WC_IMPL_BASIC_CAST(CreateBitCast, Int16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int8)
+    WC_IMPL_BASIC_CAST(CreateSExt, UInt128)
+    WC_IMPL_BASIC_CAST(CreateSExt, UInt64)
+    WC_IMPL_BASIC_CAST(CreateSExt, UInt32)
+    WC_IMPL_BASIC_CAST(CreateBitCast, UInt16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -141,6 +182,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(CreateSExt, Int128)
+    WC_IMPL_BASIC_CAST(CreateSExt, Int64)
+    WC_IMPL_BASIC_CAST(CreateBitCast, Int32)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int8)
+    WC_IMPL_BASIC_CAST(CreateSExt, UInt128)
+    WC_IMPL_BASIC_CAST(CreateSExt, UInt64)
+    WC_IMPL_BASIC_CAST(CreateBitCast, UInt32)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -153,6 +205,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(CreateSExt, Int128)
+    WC_IMPL_BASIC_CAST(CreateBitCast, Int64)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int32)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int8)
+    WC_IMPL_BASIC_CAST(CreateSExt, UInt128)
+    WC_IMPL_BASIC_CAST(CreateBitCast, UInt64)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt32)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -165,6 +228,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(CreateSExt, Int128)
+    WC_IMPL_BASIC_CAST(CreateSExt, Int64)
+    WC_IMPL_BASIC_CAST(CreateSExt, Int32)
+    WC_IMPL_BASIC_CAST(CreateSExt, Int16)
+    WC_IMPL_BASIC_CAST(CreateBitCast, Int8)
+    WC_IMPL_BASIC_CAST(CreateSExt, UInt128)
+    WC_IMPL_BASIC_CAST(CreateSExt, UInt64)
+    WC_IMPL_BASIC_CAST(CreateSExt, UInt32)
+    WC_IMPL_BASIC_CAST(CreateSExt, UInt16)
+    WC_IMPL_BASIC_CAST(CreateBitCast, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -189,6 +263,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(CreateBitCast, Int128)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int64)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int32)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int8)
+    WC_IMPL_BASIC_CAST(CreateBitCast, UInt128)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt64)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt32)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -201,6 +286,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(CreateZExt, Int128)
+    WC_IMPL_BASIC_CAST(CreateZExt, Int64)
+    WC_IMPL_BASIC_CAST(CreateZExt, Int32)
+    WC_IMPL_BASIC_CAST(CreateBitCast, Int16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int8)
+    WC_IMPL_BASIC_CAST(CreateZExt, UInt128)
+    WC_IMPL_BASIC_CAST(CreateZExt, UInt64)
+    WC_IMPL_BASIC_CAST(CreateZExt, UInt32)
+    WC_IMPL_BASIC_CAST(CreateBitCast, UInt16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -213,6 +309,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(CreateZExt, Int128)
+    WC_IMPL_BASIC_CAST(CreateZExt, Int64)
+    WC_IMPL_BASIC_CAST(CreateBitCast, Int32)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int8)
+    WC_IMPL_BASIC_CAST(CreateZExt, UInt128)
+    WC_IMPL_BASIC_CAST(CreateZExt, UInt64)
+    WC_IMPL_BASIC_CAST(CreateBitCast, UInt32)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -225,6 +332,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(CreateZExt, Int128)
+    WC_IMPL_BASIC_CAST(CreateBitCast, Int64)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int32)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, Int8)
+    WC_IMPL_BASIC_CAST(CreateZExt, UInt128)
+    WC_IMPL_BASIC_CAST(CreateBitCast, UInt64)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt32)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt16)
+    WC_IMPL_BASIC_CAST(CreateTrunc, UInt8)
 };
 
 //-----------------------------------------------------------------------------
@@ -237,6 +355,17 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    WC_IMPL_BASIC_CAST(CreateZExt, Int128)
+    WC_IMPL_BASIC_CAST(CreateZExt, Int64)
+    WC_IMPL_BASIC_CAST(CreateZExt, Int32)
+    WC_IMPL_BASIC_CAST(CreateZExt, Int16)
+    WC_IMPL_BASIC_CAST(CreateBitCast, Int8)
+    WC_IMPL_BASIC_CAST(CreateZExt, UInt128)
+    WC_IMPL_BASIC_CAST(CreateZExt, UInt64)
+    WC_IMPL_BASIC_CAST(CreateZExt, UInt32)
+    WC_IMPL_BASIC_CAST(CreateZExt, UInt16)
+    WC_IMPL_BASIC_CAST(CreateBitCast, UInt8)
 };
 
 //-----------------------------------------------------------------------------
