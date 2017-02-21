@@ -7,7 +7,11 @@ WC_AST_BEGIN_NAMESPACE
 
 /*
 PrimitiveType:
-	void|int|int64|bool|string
+	void
+	int|int8|int16|int32|int64|int128
+	uint|uint8|uint16|uint32|uint64|uint128
+	bool
+	string
 */
 class PrimitiveType final : public ASTNode {
 public:
