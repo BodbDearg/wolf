@@ -11,22 +11,13 @@ WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 void Codegen::visit(const AST::IntLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
+    // This just uses the constant code generator, it's the same thing:
+    astNode.accept(mConstCodegen);
     
-    // Codegen the data type for the int
-    {
-        const DataType & dataType = PrimitiveDataTypes::getDefaultIntType();
-        WC_ASSERT(dataType.isInteger());
-        dataType.accept(mCodegenDataType);
-    }
-    
-    CompiledDataType compiledType = mCtx.popCompiledDataType();
-    
-    // Create the value and save to the stack
-    WC_ASSERT(compiledType.isValid());
-    llvm::Value * llvmValue = llvm::ConstantInt::get(compiledType.getLLVMType(), astNode.mToken.data.intVal);
-    WC_ASSERT(llvmValue);
-    mCtx.pushValue(Value(llvmValue, compiledType, false, &astNode));
+    // Rebrand the result as a non constant however,
+    Constant intConstant = mCtx.popConstant();
+    WC_GUARD(intConstant.isValid());
+    mCtx.pushValue(Value(intConstant.mLLVMConst, intConstant.mCompiledType, false, &astNode));
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

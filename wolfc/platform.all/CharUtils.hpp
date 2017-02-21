@@ -19,14 +19,54 @@ namespace CharUtils {
     /* Tell if a unicode character is an alpha (regular letter) character. */
     bool isAlpha(char32_t c);
     
+    /* Tell if a unicode character is alpha numeric (regular letter or decimal digit) */
+    bool isAlphaNumeric(char32_t c);
+    
     /* Tells if a unicode character is an underscore */
     inline constexpr bool isUnderscore(char32_t c) {
         return c == '_';
     }
     
     /* Tells if a unicode character is 0-9 */
-    inline constexpr bool isDigit(char32_t c) {
+    inline constexpr bool isDecimalDigit(char32_t c) {
         return c >= '0' && c <= '9';
+    }
+    
+    /* Tells if a unicode character is a hex digit or underscore */
+    inline constexpr bool isDecimalDigitOrUnderscore(char32_t c) {
+        return isDecimalDigit(c) || isUnderscore(c);
+    }
+    
+    /* Tells if a unicode character is a digit in hexidecimal */
+    inline constexpr bool isHexDigit(char32_t c) {
+        return  (c >= '0' && c <= '9') ||
+                (c >= 'a' && c <= 'f') ||
+                (c >= 'A' && c <= 'F');
+    }
+    
+    /* Tells if a unicode character is a hex digit or underscore */
+    inline constexpr bool isHexDigitOrUnderscore(char32_t c) {
+        return isHexDigit(c) || isUnderscore(c);
+    }
+    
+    /* Tells if a unicode character is 0-7 */
+    inline constexpr bool isOctalDigit(char32_t c) {
+        return c >= '0' && c <= '7';
+    }
+    
+    /* Tells if a unicode character is an octal digit or underscore */
+    inline constexpr bool isOctalDigitOrUnderscore(char32_t c) {
+        return isOctalDigit(c) || isUnderscore(c);
+    }
+    
+    /* Tells if a unicode character is 0 or 1 */
+    inline constexpr bool isBinaryDigit(char32_t c) {
+        return c == '0' || c == '1';
+    }
+    
+    /* Tells if a unicode character is a binary digit or underscore */
+    inline constexpr bool isBinaryDigitOrUnderscore(char32_t c) {
+        return isBinaryDigit(c) || isUnderscore(c);
     }
     
     /* Tells if a unicode character is a line separator */

@@ -4,6 +4,7 @@
 #include "CharUtils.hpp"
 #include "StringUtils.hpp"
 #include "Token.hpp"
+#include "DataType/PrimitiveDataTypes.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <memory>
@@ -396,36 +397,180 @@ Lexer::ParseResult Lexer::parseBasicToken(TokenType tokenType, size_t numCharsIn
 
 Lexer::ParseResult Lexer::parseNumericLiteral() {
     // Must start with a digit to be a numeric
-    WC_GUARD(CharUtils::isDigit(mLexerState.currentChar), ParseResult::kNone);
+    const char32_t firstChar = mLexerState.currentChar;
+    WC_GUARD(CharUtils::isDecimalDigit(firstChar), ParseResult::kNone);
     
-    // Continue until the end of the numeric literal
+    // Save the start of the literal and move onto the next char
     const char * tokStartPtr = mLexerState.srcPtr;
-    size_t tokStartLine = mLexerState.srcLine;
-    size_t tokStartCol = mLexerState.srcCol;
+    const size_t tokStartLine = mLexerState.srcLine;
+    const size_t tokStartCol = mLexerState.srcCol;
+    WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
     
-    if (!moveOntoNextChar()) {
-        return ParseResult::kFail;
+    // See what type of literal we are dealing with, base 2, 8, 10, or 16.
+    // Once we figure out that parse until the end of the iteral:
+    const char32_t secondChar = mLexerState.currentChar;
+    size_t numberBase = 10;
+    
+    if (firstChar == '0') {
+        if (secondChar == 'b' || secondChar == 'B') {
+            // 0b or 0B: Binary integer literal:
+            if (!CharUtils::isBinaryDigit(mLexerState.currentChar)) {
+                error("Expect a binary digit (0 or 1) at start of binary integer literal!");
+                return ParseResult::kFail;
+            }
+            
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            numberBase = 2;
+            
+            while (CharUtils::isBinaryDigitOrUnderscore(mLexerState.currentChar)) {
+                WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            }
+        }
+        else if (secondChar == 'x' || secondChar == 'X') {
+            // 0x or 0X: Hex integer literal:
+            if (!CharUtils::isHexDigit(mLexerState.currentChar)) {
+                error("Expect a hex digit (0-9 or a-f/A-F) at start of hex integer literal!");
+                return ParseResult::kFail;
+            }
+            
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            numberBase = 16;
+            
+            while (CharUtils::isHexDigitOrUnderscore(mLexerState.currentChar)) {
+                WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            }
+        }
+        else if (secondChar == 'o' || secondChar == 'O') {
+            // 0o or 0O: Octal integer literal:
+            if (!CharUtils::isOctalDigit(mLexerState.currentChar)) {
+                error("Expect an octal digit (0-7) at start of octal integer literal!");
+                return ParseResult::kFail;
+            }
+            
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            numberBase = 8;
+            
+            while (CharUtils::isOctalDigitOrUnderscore(mLexerState.currentChar)) {
+                WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            }
+        }
+        else {
+            // Regular decimal integer literal
+            while (CharUtils::isDecimalDigitOrUnderscore(mLexerState.currentChar)) {
+                WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            }
+        }
     }
-    
-    while (CharUtils::isDigit(mLexerState.currentChar)) {
-        if (!moveOntoNextChar()) {
-            return ParseResult::kFail;
+    else {
+        // Regular decimal integer literal
+        while (CharUtils::isDecimalDigitOrUnderscore(mLexerState.currentChar)) {
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
         }
     }
     
-    const char * tokEndPtr = mLexerState.srcPtr;
-    size_t tokEndLine = mLexerState.srcLine;
-    size_t tokEndCol = mLexerState.srcCol;
+    // Save the end of the integer literal digits
+    const char * intDigitsEndPtr = mLexerState.srcPtr;
     
-    // Parse the number itself
-    const char * currentCharPtr = tokStartPtr;
-    uint64_t value = 0;
+    // Okay, parse the integer data type if there:
+    DataTypeId dataTypeId = PrimitiveDataTypes::getDefaultIntTypeId();
     
-    while (currentCharPtr != tokEndPtr) {
-        // TODO: check for numeric overflow
-        uint64_t digit = static_cast<uint64_t>(currentCharPtr[0] - '0');
-        value = value * 10 + digit;
-        ++currentCharPtr;
+    if (mLexerState.currentChar == 'i' || mLexerState.currentChar == 'I') {
+        WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+        
+        if (mLexerState.currentChar == '8') {
+            // i8:
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            dataTypeId = DataTypeId::kInt8;
+        }
+        else if (mLexerState.currentChar == '1') {
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+
+            if (mLexerState.currentChar == '2') {
+                WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+                
+                if (mLexerState.currentChar == '8') {
+                    // i128:
+                    WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+                    dataTypeId = DataTypeId::kInt128;
+                }
+            }
+            else if (mLexerState.currentChar == '6') {
+                // i16:
+                WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+                dataTypeId = DataTypeId::kInt16;
+            }
+        }
+        else if (mLexerState.currentChar == '3') {
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            
+            if (mLexerState.currentChar == '2') {
+                // i32:
+                WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+                dataTypeId = DataTypeId::kInt32;
+            }
+        }
+        else if (mLexerState.currentChar == '6') {
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            
+            if (mLexerState.currentChar == '4') {
+                // i64:
+                WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+                dataTypeId = DataTypeId::kInt64;
+            }
+        }
+    }
+    else if (mLexerState.srcPtr[0] == 'u' || mLexerState.srcPtr[0] == 'U') {
+        WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+        
+        if (mLexerState.currentChar == '8') {
+            // u8:
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            dataTypeId = DataTypeId::kUInt8;
+        }
+        else if (mLexerState.currentChar == '1') {
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+
+            if (mLexerState.currentChar == '2') {
+                WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+                
+                if (mLexerState.currentChar == '8') {
+                    // u128:
+                    WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+                    dataTypeId = DataTypeId::kUInt128;
+                }
+            }
+            else if (mLexerState.currentChar == '6') {
+                // u16:
+                WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+                dataTypeId = DataTypeId::kUInt16;
+            }
+        }
+        else if (mLexerState.currentChar == '3') {
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            
+            if (mLexerState.currentChar == '2') {
+                // u32:
+                WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+                dataTypeId = DataTypeId::kUInt32;
+            }
+        }
+        else if (mLexerState.currentChar == '6') {
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            
+            if (mLexerState.currentChar == '4') {
+                // u64:
+                WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+                dataTypeId = DataTypeId::kUInt64;
+            }
+        }
+    }
+    
+    // Literal should end on a non alpha numeric character:
+    if (CharUtils::isAlphaNumeric(mLexerState.currentChar)) {
+        error("Expect a non alpha numeric character (like space) or a valid integer precision suffix like 'i' "
+              "or 'i32' etc. to follow the end of an integer literal!");
+        
+        return ParseResult::kFail;
     }
     
     // Now make the token and finish up
@@ -433,11 +578,50 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
     token.startSrcPtr = tokStartPtr;
     token.startLine = tokStartLine;
     token.startCol = tokStartCol;
-    token.endSrcPtr = tokEndPtr;
-    token.endLine = tokEndLine;
-    token.endCol = tokEndCol;
-    token.data.intVal = value;
+    token.endSrcPtr = mLexerState.srcPtr;
+    token.endLine = mLexerState.srcLine;
+    token.endCol = mLexerState.srcCol;
     
+    auto & tokIntData = token.data.intData;
+    tokIntData.base = numberBase;
+    tokIntData.dataTypeId = dataTypeId;
+    
+    // Makeup the string for the integer literal without underscores:
+    // TODO: What allocates this string?
+    char * intLitStrWithoutUS = new char[
+        static_cast<size_t>(intDigitsEndPtr - token.startSrcPtr) + 1
+    ];
+    
+    tokIntData.strMinusUS = intLitStrWithoutUS;
+    size_t & tokLenMinusUS = tokIntData.strMinusUSLen;
+    tokLenMinusUS = 0;
+    
+    {
+        // Run through the string and make it up without underscores
+        const char * src = token.startSrcPtr;
+        char * dst = intLitStrWithoutUS;
+        
+        while (src < intDigitsEndPtr) {
+            char c = src[0];
+            
+            if (c == 0) {
+                break;
+            }
+            
+            if (c != '_') {
+                *dst = c;
+                ++dst;
+                ++tokLenMinusUS;
+            }
+            
+            ++src;
+        }
+        
+        // Null termiante the string
+        *dst = 0;
+    }
+    
+    // All went well
     return ParseResult::kSuccess;
 }
 

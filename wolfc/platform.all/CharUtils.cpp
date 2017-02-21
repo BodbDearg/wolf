@@ -7,7 +7,7 @@ bool CharUtils::isValidIdentifierStartChar(char32_t c) {
 }
 
 bool CharUtils::isValidIdentifierMiddleChar(char32_t c) {
-    return isValidIdentifierStartChar(c) || isDigit(c);
+    return isValidIdentifierStartChar(c) || isDecimalDigit(c);
 }
 
 bool CharUtils::isAlpha(char32_t c) {
@@ -32,6 +32,10 @@ bool CharUtils::isAlpha(char32_t c) {
     }
     
     return !isWhitespace(c);    // Unicode: accept any char that is not whitespace
+}
+
+bool CharUtils::isAlphaNumeric(char32_t c) {
+    return isDecimalDigit(c) || isAlpha(c);
 }
 
 WC_END_NAMESPACE

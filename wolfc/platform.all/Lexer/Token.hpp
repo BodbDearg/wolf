@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DataType/DataTypeId.hpp"
 #include "Macros.hpp"
 #include "TokenType.hpp"
 
@@ -45,10 +46,19 @@ struct Token {
     /* This holds the actual data for the token. Unused/undefined for anything other than a literal or identifier. */
     union {
         /* The raw bytes of the data */
-        uint8_t rawBytes[16];
+        uint8_t rawBytes[32];
         
-        /* The data when interpreted as a 64-bit int */
-        uint64_t intVal;
+        /* Additional data for when the string is interpreted as an int */
+        struct IntData {
+            /* The string representation of the integer literal minus underscores */
+            const char * strMinusUS;
+            /* The length of the string representation of the integer literal minus underscores */
+            size_t strMinusUSLen;
+            /* What base the number is to be interpreted in: 2, 8, 10, 16 */
+            size_t base;
+            /* What data type the integer literal should be stored in */
+            DataTypeId dataTypeId;
+        } intData;
         
         /* The data when interpreted as a string */
         struct StrData {

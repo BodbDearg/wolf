@@ -3,15 +3,15 @@
 StrLit:
     " DblQuotedStrChars "
 
-DblQuotedStrChars
+DblQuotedStrChars:
     DblQuotedStrChar
     DblQuotedStrChar DblQuotedStrChars
 
-DblQuotedStrChar
+DblQuotedStrChar:
     EscapedChar
     <Any char, excluding newlines, blackslash and double quotes>
 
-EscapedChar
+EscapedChar:
     \"
     \'
     \0
@@ -27,20 +27,49 @@ EscapedChar
 *** Numeric literals ***
 
 IntLit:
-	Digits
+    DecIntLit [IntTypeSuffix]
+    BinIntLit [IntTypeSuffix]
+    OctIntLit [IntTypeSuffix]
+    HexIntLit [IntTypeSuffix]
 
-Digits:
-	Digit
-	Digit Digits
+DecIntLit:
+    DecDigit [0..N: DecDigitOrUS]
 
-Digit:
-    0
-	1
-	2
-	3
-	4
-	5
-	6
-	7
-	8
-	9
+DecDigit:
+    0|1|2|3|4|5|6|7|8|9
+
+DecDigitOrUS:
+    DecDigit|_
+
+BinIntLit:
+    BinIntPrefix BinDigitOrUS [0..N: BinDigitOrUS]
+
+BinIntPrefix:
+    0b
+    0B
+
+BinDigitOrUS:
+    0|1|_
+
+OctIntLit:
+    OctIntPrefix OctDigitOrUS [0..N: OctDigitOrUS]
+
+OctIntPrefix:
+    0o
+    0O
+
+OctDigitOrUS:
+    0|1|2|3|4|5|6|7
+
+HexIntLit:
+    HexIntPrefix HexDigitOrUS [0..N: HexDigitOrUS]
+
+HexIntPrefix:
+    0x
+    0X
+
+HexDigitOrUS:
+    0|1|2|3|4|5|6|7|8|9|a|A|b|B|c|C|d|D|e|E|f|F
+
+IntTypeSuffix:
+    i|I|u|U[8|16|32|64|128]

@@ -76,10 +76,10 @@ private:
      */
     ParseResult parseBasicToken(TokenType tokenType, size_t numCharsInToken);
     
-    /* Try to parse a numeric literal. Return false if no numeric literal was parsed. */
+    /* Try to parse a numeric literal. */
     ParseResult parseNumericLiteral();
     
-    /* Try to parse a double quoted string literal. Return false if no string literal was parsed. */
+    /* Try to parse a double quoted string literal. */
     ParseResult parseDoubleQuotedStringLiteral();
     
     /* Try to parse keywords and literals. */
