@@ -9,11 +9,11 @@ let decLit5 = 21u8
 let decLit6 = 202u16
 let decLit7 = 2003_u32
 let decLit8 = 20004u64
-let decLit9 = 200005u128
+let decLit9 = 200005U128
 let decLit10 = -2i
-let decLit11 = -21i8
+let decLit11 = -21I8
 let decLit12 = -202i16
-let decLit13 = -2003i32
+let decLit13 = -2003_I32
 let decLit14 = -20004_i64
 let decLit15 = -200005i128
 
@@ -32,28 +32,118 @@ func testDecimalLiterals()
     assert(decLit12 == cast(-202 to int16))
     assert(decLit13 == cast(-2003 to int32))
     assert(decLit14 == cast(-20004 to int64))
-    assert(decLit15 == cast(-200005 to int128))    
+    assert(decLit15 == cast(-200005 to int128))
 end
 
 ;==================================================================================================
 ; Test various binary (base 2) literals
 ;==================================================================================================
-func testBinaryLiterals()
+let binLit1 = 0b0111_1011
+let binLit2 = 0B_1111_0100_0010_0100_0000
+let binLit3 = 0b_1011
+let binLit4 = 0B_10u
+let binLit5 = 0b_10101u8
+let binLit6 = 0B1100_1010u16
+let binLit7 = 0b_0111_1101_0011_u32
+let binLit8 = 0b_0100_1110_0010_0100_u64
+let binLit9 = 0B_11_0000_1101_0100_0101_U128
+let binLit10 = -0B_10i
+let binLit11 = -0b_10101I8
+let binLit12 = -0B1100_1010i16
+let binLit13 = -0b_0111_1101_0011_I32
+let binLit14 = -0b_0100_1110_0010_0100_i64
+let binLit15 = -0B_11_0000_1101_0100_0101i128
 
+func testBinaryLiterals()
+    assert(binLit1 == 123)
+    assert(binLit2 == 1_000_000)
+    assert(binLit3 == 11)
+    assert(binLit4 == cast(2 to uint))
+    assert(binLit5 == cast(21 to uint8))
+    assert(binLit6 == cast(202 to uint16))
+    assert(binLit7 == cast(2003 to uint32))
+    assert(binLit8 == cast(20004 to uint64))
+    assert(binLit9 == cast(200005 to uint128))
+    assert(binLit10 == cast(-2 to int))
+    assert(binLit11 == cast(-21 to int8))
+    assert(binLit12 == cast(-202 to int16))
+    assert(binLit13 == cast(-2003 to int32))
+    assert(binLit14 == cast(-20004 to int64))
+    assert(binLit15 == cast(-200005 to int128))
 end
 
 ;==================================================================================================
 ; Test various hexidecimal (base 16) literals
 ;==================================================================================================
-func testHexLiterals()
+let hexLit1 = 0x7B
+let hexLit2 = 0X_f4240
+let hexLit3 = 0xB_
+let hexLit4 = 0x2u
+let hexLit5 = 0X15u8
+let hexLit6 = 0x_ca_u16
+let hexLit7 = 0x7D3_U32
+let hexLit8 = 0x4e24u64
+let hexLit9 = 0x30D45u128
+let hexLit10 = -0x2i
+let hexLit11 = -0X15I8
+let hexLit12 = -0x_ca_i16
+let hexLit13 = -0x7D3_I32
+let hexLit14 = -0x4e24_i64
+let hexLit15 = -0x30D45i128
 
+func testHexLiterals()
+    assert(hexLit1 == 123)
+    assert(hexLit2 == 1_000_000)
+    assert(hexLit3 == 11)
+    assert(hexLit4 == cast(2 to uint))
+    assert(hexLit5 == cast(21 to uint8))
+    assert(hexLit6 == cast(202 to uint16))
+    assert(hexLit7 == cast(2003 to uint32))
+    assert(hexLit8 == cast(20004 to uint64))
+    assert(hexLit9 == cast(200005 to uint128))
+    assert(hexLit10 == cast(-2 to int))
+    assert(hexLit11 == cast(-21 to int8))
+    assert(hexLit12 == cast(-202 to int16))
+    assert(hexLit13 == cast(-2003 to int32))
+    assert(hexLit14 == cast(-20004 to int64))
+    assert(hexLit15 == cast(-200005 to int128))
 end
 
 ;==================================================================================================
 ; Test various octal (base 8) literals
 ;==================================================================================================
-func testOctalLiterals()
+let octLit1 = 0o173
+let octLit2 = 0O_3641100
+let octLit3 = 0o13_
+let octLit4 = 0o2u
+let octLit5 = 0O_25u8
+let octLit6 = 0o_312_u16
+let octLit7 = 0O3723U32
+let octLit8 = 0o47044u64
+let octLit9 = 0o_606505_u128
+let octLit10 = -0o2i
+let octLit11 = -0O_25i8
+let octLit12 = -0o_312_i16
+let octLit13 = -0O3723I32
+let octLit14 = -0o47_044i64
+let octLit15 = -0o_606505i128
 
+func testOctalLiterals()
+    assert(octLit1 == 123)
+    assert(octLit2 == 1_000_000)
+    assert(octLit3 == 11)
+    assert(octLit4 == cast(2 to uint))
+    assert(octLit5 == cast(21 to uint8))
+    assert(octLit6 == cast(202 to uint16))
+    assert(octLit7 == cast(2003 to uint32))
+    assert(octLit8 == cast(20004 to uint64))
+    assert(octLit9 == cast(200005 to uint128))
+    assert(octLit10 == cast(-2 to int))
+    assert(octLit11 == cast(-21 to int8))
+    assert(octLit12 == cast(-202 to int16))
+    assert(octLit13 == cast(-2003 to int32))
+    assert(octLit14 == cast(-20004 to int64))
+    assert(octLit15 == cast(-200005 to int128))
 end
 
 ;==================================================================================================
