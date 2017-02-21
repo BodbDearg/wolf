@@ -400,10 +400,16 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
     const char32_t firstChar = mLexerState.currentChar;
     WC_GUARD(CharUtils::isDecimalDigit(firstChar), ParseResult::kNone);
     
-    // Save the start of the literal and move onto the next char
+    // Save the start of the literal
     const char * tokStartPtr = mLexerState.srcPtr;
     const size_t tokStartLine = mLexerState.srcLine;
     const size_t tokStartCol = mLexerState.srcCol;
+    
+    // Save the start of the integer literal digits.
+    // Note: may need to move this on later below...
+    const char * intDigitsStartPtr = mLexerState.srcPtr;
+    
+    // Move past the first decimal digit
     WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
     
     // See what type of literal we are dealing with, base 2, 8, 10, or 16.
@@ -414,13 +420,14 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
     if (firstChar == '0') {
         if (secondChar == 'b' || secondChar == 'B') {
             // 0b or 0B: Binary integer literal:
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            numberBase = 2;
+            intDigitsStartPtr += 2;
+            
             if (!CharUtils::isBinaryDigit(mLexerState.currentChar)) {
                 error("Expect a binary digit (0 or 1) at start of binary integer literal!");
                 return ParseResult::kFail;
             }
-            
-            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
-            numberBase = 2;
             
             while (CharUtils::isBinaryDigitOrUnderscore(mLexerState.currentChar)) {
                 WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
@@ -428,13 +435,14 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
         }
         else if (secondChar == 'x' || secondChar == 'X') {
             // 0x or 0X: Hex integer literal:
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            numberBase = 16;
+            intDigitsStartPtr += 2;
+            
             if (!CharUtils::isHexDigit(mLexerState.currentChar)) {
                 error("Expect a hex digit (0-9 or a-f/A-F) at start of hex integer literal!");
                 return ParseResult::kFail;
             }
-            
-            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
-            numberBase = 16;
             
             while (CharUtils::isHexDigitOrUnderscore(mLexerState.currentChar)) {
                 WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
@@ -442,13 +450,14 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
         }
         else if (secondChar == 'o' || secondChar == 'O') {
             // 0o or 0O: Octal integer literal:
+            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+            numberBase = 8;
+            intDigitsStartPtr += 2;
+            
             if (!CharUtils::isOctalDigit(mLexerState.currentChar)) {
                 error("Expect an octal digit (0-7) at start of octal integer literal!");
                 return ParseResult::kFail;
             }
-            
-            WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
-            numberBase = 8;
             
             while (CharUtils::isOctalDigitOrUnderscore(mLexerState.currentChar)) {
                 WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
@@ -573,7 +582,7 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
         return ParseResult::kFail;
     }
     
-    // Now make the token and finish up
+    // Fill in the basic info for the token
     Token & token = allocToken(TokenType::kIntLit);
     token.startSrcPtr = tokStartPtr;
     token.startLine = tokStartLine;
@@ -582,6 +591,7 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
     token.endLine = mLexerState.srcLine;
     token.endCol = mLexerState.srcCol;
     
+    // Set the integer base and data type
     auto & tokIntData = token.data.intData;
     tokIntData.base = numberBase;
     tokIntData.dataTypeId = dataTypeId;
@@ -589,7 +599,7 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
     // Makeup the string for the integer literal without underscores:
     // TODO: What allocates this string?
     char * intLitStrWithoutUS = new char[
-        static_cast<size_t>(intDigitsEndPtr - token.startSrcPtr) + 1
+        static_cast<size_t>(intDigitsEndPtr - intDigitsStartPtr) + 1
     ];
     
     tokIntData.strMinusUS = intLitStrWithoutUS;
@@ -598,7 +608,7 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
     
     {
         // Run through the string and make it up without underscores
-        const char * src = token.startSrcPtr;
+        const char * src = intDigitsStartPtr;
         char * dst = intLitStrWithoutUS;
         
         while (src < intDigitsEndPtr) {
