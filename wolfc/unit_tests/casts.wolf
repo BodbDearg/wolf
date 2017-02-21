@@ -1,0 +1,326 @@
+;==================================================================================================
+; Cast from int128
+;==================================================================================================
+let castFrom_i128_to_i = cast(0x20000_i128 to int)
+let castFrom_i128_to_i8 = cast(100_i128 to int8)
+let castFrom_i128_to_i16 = cast(20000_i128 to int16)
+let castFrom_i128_to_i32 = cast(0x7f00_0000_i128 to int32)
+let castFrom_i128_to_i64 = cast(0x0f00_0000_1000_0000i128 to int64)
+let castFrom_i128_to_i128 = cast(1_000_000_000_000_000_000_000i128 to int128)
+let castFrom_i128_to_u = cast(0x20000_i128 to uint)
+let castFrom_i128_to_u8 = cast(100_i128 to uint8)
+let castFrom_i128_to_u16 = cast(20000_i128 to uint16)
+let castFrom_i128_to_u32 = cast(0x7f00_0000_i128 to uint32)
+let castFrom_i128_to_u64 = cast(0x0f00_0000_1000_0000i128 to uint64)
+let castFrom_i128_to_u128 = cast(1_000_000_000_000_000_000_000i128 to uint128)
+
+func testCastFromInt128()
+    assert(castFrom_i128_to_i == cast(0x20000_i128 to int))
+    assert(castFrom_i128_to_i8 == cast(100_i128 to int8))
+    assert(castFrom_i128_to_i16 == cast(20000_i128 to int16))
+    assert(castFrom_i128_to_i32 == cast(0x7f00_0000_i128 to int32))
+    assert(castFrom_i128_to_i64 == cast(0x0f00_0000_1000_0000i128 to int64))
+    assert(castFrom_i128_to_i128 == cast(1_000_000_000_000_000_000_000i128 to int128))
+    assert(castFrom_i128_to_u == cast(0x20000_i128 to uint))
+    assert(castFrom_i128_to_u8 == cast(100_i128 to uint8))
+    assert(castFrom_i128_to_u16 == cast(20000_i128 to uint16))
+    assert(castFrom_i128_to_u32 == cast(0x7f00_0000_i128 to uint32))
+    assert(castFrom_i128_to_u64 == cast(0x0f00_0000_1000_0000i128 to uint64))
+    assert(castFrom_i128_to_u128 == cast(1_000_000_000_000_000_000_000i128 to uint128))
+end
+
+;==================================================================================================
+; Cast from int64
+;==================================================================================================
+let castFrom_i64_to_i = cast(0x20000_i64 to int)
+let castFrom_i64_to_i8 = cast(100_i64 to int8)
+let castFrom_i64_to_i16 = cast(20000_i64 to int16)
+let castFrom_i64_to_i32 = cast(0x7f00_0000_i64 to int32)
+let castFrom_i64_to_i64 = cast(0x0f00_0000_1000_0000i64 to int64)
+let castFrom_i64_to_i128 = cast(9_223_372_036_854_775_807_i64 to int128)
+let castFrom_i64_to_u = cast(0x20000_i64 to uint)
+let castFrom_i64_to_u8 = cast(100_i64 to uint8)
+let castFrom_i64_to_u16 = cast(20000_i64 to uint16)
+let castFrom_i64_to_u32 = cast(0x7f00_0000_i64 to uint32)
+let castFrom_i64_to_u64 = cast(0x0f00_0000_1000_0000i64 to uint64)
+let castFrom_i64_to_u128 = cast(9_223_372_036_854_775_807_i64 to uint128)
+
+func testCastFromInt64()
+    assert(castFrom_i64_to_i == cast(0x20000_i64 to int))
+    assert(castFrom_i64_to_i8 == cast(100_i64 to int8))
+    assert(castFrom_i64_to_i16 == cast(20000_i64 to int16))
+    assert(castFrom_i64_to_i32 == cast(0x7f00_0000_i64 to int32))
+    assert(castFrom_i64_to_i64 == cast(0x0f00_0000_1000_0000i64 to int64))
+    assert(castFrom_i64_to_i128 == cast(9_223_372_036_854_775_807_i64 to int128))
+    assert(castFrom_i64_to_u == cast(0x20000_i64 to uint))
+    assert(castFrom_i64_to_u8 == cast(100_i64 to uint8))
+    assert(castFrom_i64_to_u16 == cast(20000_i64 to uint16))
+    assert(castFrom_i64_to_u32 == cast(0x7f00_0000_i64 to uint32))
+    assert(castFrom_i64_to_u64 == cast(0x0f00_0000_1000_0000i64 to uint64))
+    assert(castFrom_i64_to_u128 == cast(9_223_372_036_854_775_807_i64 to uint128))
+end
+
+;==================================================================================================
+; Cast from int32
+;==================================================================================================
+let castFrom_i32_to_i = cast(0x20000_i32 to int)
+let castFrom_i32_to_i8 = cast(100_i32 to int8)
+let castFrom_i32_to_i16 = cast(20000_i32 to int16)
+let castFrom_i32_to_i32 = cast(0x7f00_0000_i32 to int32)
+let castFrom_i32_to_i64 = cast(0x0f00_0000i32 to int64)
+let castFrom_i32_to_i128 = cast(2_147_483_647_i32 to int128)
+let castFrom_i32_to_u = cast(0x20000_i32 to uint)
+let castFrom_i32_to_u8 = cast(100_i32 to uint8)
+let castFrom_i32_to_u16 = cast(20000_i32 to uint16)
+let castFrom_i32_to_u32 = cast(0x7f00_0000_i32 to uint32)
+let castFrom_i32_to_u64 = cast(0x1f00_0000I32 to uint64)
+let castFrom_i32_to_u128 = cast(2_147_483_647_i32 to uint128)
+
+func testCastFromInt32()
+    assert(castFrom_i32_to_i == cast(0x20000_i32 to int))
+    assert(castFrom_i32_to_i8 == cast(100_i32 to int8))
+    assert(castFrom_i32_to_i16 == cast(20000_i32 to int16))
+    assert(castFrom_i32_to_i32 == cast(0x7f00_0000_i32 to int32))
+    assert(castFrom_i32_to_i64 == cast(0x0f00_0000i32 to int64))
+    assert(castFrom_i32_to_i128 == cast(2_147_483_647_i32 to int128))
+    assert(castFrom_i32_to_u == cast(0x20000_i32 to uint))
+    assert(castFrom_i32_to_u8 == cast(100_i32 to uint8))
+    assert(castFrom_i32_to_u16 == cast(20000_i32 to uint16))
+    assert(castFrom_i32_to_u32 == cast(0x7f00_0000_i32 to uint32))
+    assert(castFrom_i32_to_u64 == cast(0x1f00_0000I32 to uint64))
+    assert(castFrom_i32_to_u128 == cast(2_147_483_647_i32 to uint128))
+end
+
+;==================================================================================================
+; Cast from int16
+;==================================================================================================
+let castFrom_i16_to_i = cast(0x2000_i16 to int)
+let castFrom_i16_to_i8 = cast(100_i16 to int8)
+let castFrom_i16_to_i16 = cast(20000_i16 to int16)
+let castFrom_i16_to_i32 = cast(0x7f00_i16 to int32)
+let castFrom_i16_to_i64 = cast(32_767_i16 to int64)
+let castFrom_i16_to_i128 = cast(-32_768_i16 to int128)
+let castFrom_i16_to_u = cast(0X_2000I16 to uint)
+let castFrom_i16_to_u8 = cast(100_i16 to uint8)
+let castFrom_i16_to_u16 = cast(20000_i16 to uint16)
+let castFrom_i16_to_u32 = cast(0x7f00_i16 to uint32)
+let castFrom_i16_to_u64 = cast(0x7FFF_i16 to uint64)
+let castFrom_i16_to_u128 = cast(33_333_i16 to uint128)
+
+func testCastFromInt16()
+    assert(castFrom_i16_to_i == cast(0x2000_i16 to int))
+    assert(castFrom_i16_to_i8 == cast(100_i16 to int8))
+    assert(castFrom_i16_to_i16 == cast(20000_i16 to int16))
+    assert(castFrom_i16_to_i32 == cast(0x7f00_i16 to int32))
+    assert(castFrom_i16_to_i64 == cast(32_767_i16 to int64))
+    assert(castFrom_i16_to_i128 == cast(-32_768_i16 to int128))
+    assert(castFrom_i16_to_u == cast(0X_2000I16 to uint))
+    assert(castFrom_i16_to_u8 == cast(100_i16 to uint8))
+    assert(castFrom_i16_to_u16 == cast(20000_i16 to uint16))
+    assert(castFrom_i16_to_u32 == cast(0x7f00_i16 to uint32))
+    assert(castFrom_i16_to_u64 == cast(0x7FFF_i16 to uint64))
+    assert(castFrom_i16_to_u128 == cast(33_333_i16 to uint128))
+end
+
+;==================================================================================================
+; Cast from int8
+;==================================================================================================
+let castFrom_i8_to_i = cast(0x20_i8 to int)
+let castFrom_i8_to_i8 = cast(100_i8 to int8)
+let castFrom_i8_to_i16 = cast(200_i8 to int16)
+let castFrom_i8_to_i32 = cast(0x7f_i8 to int32)
+let castFrom_i8_to_i64 = cast(127_i8 to int64)
+let castFrom_i8_to_i128 = cast(-128_i8 to int128)
+let castFrom_i8_to_u = cast(0X20_i8 to uint)
+let castFrom_i8_to_u8 = cast(100_i8 to uint8)
+let castFrom_i8_to_u16 = cast(200_i8 to uint16)
+let castFrom_i8_to_u32 = cast(0x7f_i8 to uint32)
+let castFrom_i8_to_u64 = cast(0x80_i8 to uint64)
+let castFrom_i8_to_u128 = cast(33_i8 to uint128)
+
+func testCastFromInt8()
+    assert(castFrom_i8_to_i == cast(0x20_i8 to int))
+    assert(castFrom_i8_to_i8 == cast(100_i8 to int8))
+    assert(castFrom_i8_to_i16 == cast(200_i8 to int16))
+    assert(castFrom_i8_to_i32 == cast(0x7f_i8 to int32))
+    assert(castFrom_i8_to_i64 == cast(127_i8 to int64))
+    assert(castFrom_i8_to_i128 == cast(-128_i8 to int128))
+    assert(castFrom_i8_to_u == cast(0X20_i8 to uint))
+    assert(castFrom_i8_to_u8 == cast(100_i8 to uint8))
+    assert(castFrom_i8_to_u16 == cast(200_i8 to uint16))
+    assert(castFrom_i8_to_u32 == cast(0x7f_i8 to uint32))
+    assert(castFrom_i8_to_u64 == cast(0x80_i8 to uint64))
+    assert(castFrom_i8_to_u128 == cast(33_i8 to uint128))
+end
+
+;==================================================================================================
+; Cast from uint128
+;==================================================================================================
+let castFrom_u128_to_i = cast(0x20000_u128 to int)
+let castFrom_u128_to_i8 = cast(100_u128 to int8)
+let castFrom_u128_to_i16 = cast(20000_u128 to int16)
+let castFrom_u128_to_i32 = cast(0x7f00_0000_u128 to int32)
+let castFrom_u128_to_i64 = cast(0x0f00_0000_1000_0000u128 to int64)
+let castFrom_u128_to_i128 = cast(1_000_000_000_000_000_000_000u128 to int128)
+let castFrom_u128_to_u = cast(0x20000_U128 to uint)
+let castFrom_u128_to_u8 = cast(100_u128 to uint8)
+let castFrom_u128_to_u16 = cast(20000_u128 to uint16)
+let castFrom_u128_to_u32 = cast(0x7f00_0000_u128 to uint32)
+let castFrom_u128_to_u64 = cast(0x0f00_0000_1000_0000u128 to uint64)
+let castFrom_u128_to_u128 = cast(1_000_000_000_000_000_000_000u128 to uint128)
+
+func testCastFromUInt128()
+    assert(castFrom_u128_to_i == cast(0x20000_u128 to int))
+    assert(castFrom_u128_to_i8 == cast(100_u128 to int8))
+    assert(castFrom_u128_to_i16 == cast(20000_u128 to int16))
+    assert(castFrom_u128_to_i32 == cast(0x7f00_0000_U128 to int32))
+    assert(castFrom_u128_to_i64 == cast(0x0f00_0000_1000_0000u128 to int64))
+    assert(castFrom_u128_to_i128 == cast(1_000_000_000_000_000_000_000u128 to int128))
+    assert(castFrom_u128_to_u == cast(0x20000_u128 to uint))
+    assert(castFrom_u128_to_u8 == cast(100_u128 to uint8))
+    assert(castFrom_u128_to_u16 == cast(20000_u128 to uint16))
+    assert(castFrom_u128_to_u32 == cast(0x7f00_0000_u128 to uint32))
+    assert(castFrom_u128_to_u64 == cast(0x0f00_0000_1000_0000u128 to uint64))
+    assert(castFrom_u128_to_u128 == cast(1_000_000_000_000_000_000_000u128 to uint128))
+end
+
+;==================================================================================================
+; Cast from uint64
+;==================================================================================================
+let castFrom_u64_to_i = cast(0x20000_u64 to int)
+let castFrom_u64_to_i8 = cast(100_u64 to int8)
+let castFrom_u64_to_i16 = cast(20000_u64 to int16)
+let castFrom_u64_to_i32 = cast(0x7f00_0000_u64 to int32)
+let castFrom_u64_to_i64 = cast(0x0f00_0000_1000_0000u64 to int64)
+let castFrom_u64_to_i128 = cast(9_223_372_036_854_775_807_u64 to int128)
+let castFrom_u64_to_u = cast(0x20000_u64 to uint)
+let castFrom_u64_to_u8 = cast(100_u64 to uint8)
+let castFrom_u64_to_u16 = cast(20000_u64 to uint16)
+let castFrom_u64_to_u32 = cast(0x7f00_0000_u64 to uint32)
+let castFrom_u64_to_u64 = cast(0x0f00_0000_1000_0000u64 to uint64)
+let castFrom_u64_to_u128 = cast(9_223_372_036_854_775_807_u64 to uint128)
+
+func testCastFromUInt64()
+    assert(castFrom_u64_to_i == cast(0x20000_u64 to int))
+    assert(castFrom_u64_to_i8 == cast(100_u64 to int8))
+    assert(castFrom_u64_to_i16 == cast(20000_U64 to int16))
+    assert(castFrom_u64_to_i32 == cast(0x7f00_0000_u64 to int32))
+    assert(castFrom_u64_to_i64 == cast(0x0f00_0000_1000_0000u64 to int64))
+    assert(castFrom_u64_to_i128 == cast(9_223_372_036_854_775_807_u64 to int128))
+    assert(castFrom_u64_to_u == cast(0x20000_u64 to uint))
+    assert(castFrom_u64_to_u8 == cast(100_u64 to uint8))
+    assert(castFrom_u64_to_u16 == cast(20000_u64 to uint16))
+    assert(castFrom_u64_to_u32 == cast(0x7f00_0000_u64 to uint32))
+    assert(castFrom_u64_to_u64 == cast(0x0f00_0000_1000_0000u64 to uint64))
+    assert(castFrom_u64_to_u128 == cast(9_223_372_036_854_775_807_u64 to uint128))
+end
+
+;==================================================================================================
+; Cast from uint32
+;==================================================================================================
+let castFrom_u32_to_i = cast(0x20000_u32 to int)
+let castFrom_u32_to_i8 = cast(100_u32 to int8)
+let castFrom_u32_to_i16 = cast(20000_u32 to int16)
+let castFrom_u32_to_i32 = cast(0x7f00_0000_u32 to int32)
+let castFrom_u32_to_i64 = cast(0x0f00_0000u32 to int64)
+let castFrom_u32_to_i128 = cast(2_147_483_647_u32 to int128)
+let castFrom_u32_to_u = cast(0x20000_u32 to uint)
+let castFrom_u32_to_u8 = cast(100_u32 to uint8)
+let castFrom_u32_to_u16 = cast(20000_u32 to uint16)
+let castFrom_u32_to_u32 = cast(0x7f00_0000_u32 to uint32)
+let castFrom_u32_to_u64 = cast(0x1f00_0000u32 to uint64)
+let castFrom_u32_to_u128 = cast(2_147_483_647_u32 to uint128)
+
+func testCastFromUInt32()
+    assert(castFrom_u32_to_i == cast(0x20000_u32 to int))
+    assert(castFrom_u32_to_i8 == cast(100_u32 to int8))
+    assert(castFrom_u32_to_i16 == cast(20000_u32 to int16))
+    assert(castFrom_u32_to_i32 == cast(0x7f00_0000_u32 to int32))
+    assert(castFrom_u32_to_i64 == cast(0x0f00_0000u32 to int64))
+    assert(castFrom_u32_to_i128 == cast(2_147_483_647_u32 to int128))
+    assert(castFrom_u32_to_u == cast(0x20000_U32 to uint))
+    assert(castFrom_u32_to_u8 == cast(100_u32 to uint8))
+    assert(castFrom_u32_to_u16 == cast(20000_u32 to uint16))
+    assert(castFrom_u32_to_u32 == cast(0x7f00_0000_u32 to uint32))
+    assert(castFrom_u32_to_u64 == cast(0x1f00_0000u32 to uint64))
+    assert(castFrom_u32_to_u128 == cast(2_147_483_647_u32 to uint128))
+end
+
+;==================================================================================================
+; Cast from uint16
+;==================================================================================================
+let castFrom_u16_to_i = cast(0x2000_u16 to int)
+let castFrom_u16_to_i8 = cast(100_U16 to int8)
+let castFrom_u16_to_i16 = cast(20000_u16 to int16)
+let castFrom_u16_to_i32 = cast(0x7f00_u16 to int32)
+let castFrom_u16_to_i64 = cast(32_767_u16 to int64)
+let castFrom_u16_to_i128 = cast(12_000_u16 to int128)
+let castFrom_u16_to_u = cast(0X_2000u16 to uint)
+let castFrom_u16_to_u8 = cast(100_u16 to uint8)
+let castFrom_u16_to_u16 = cast(20000_u16 to uint16)
+let castFrom_u16_to_u32 = cast(0x7f00_U16 to uint32)
+let castFrom_u16_to_u64 = cast(0x7FFF_u16 to uint64)
+let castFrom_u16_to_u128 = cast(33_333_u16 to uint128)
+
+func testCastFromUInt16()
+    assert(castFrom_u16_to_i == cast(0x2000_u16 to int))
+    assert(castFrom_u16_to_i8 == cast(100_u16 to int8))
+    assert(castFrom_u16_to_i16 == cast(20000_u16 to int16))
+    assert(castFrom_u16_to_i32 == cast(0x7f00_u16 to int32))
+    assert(castFrom_u16_to_i64 == cast(32_767_U16 to int64))
+    assert(castFrom_u16_to_i128 == cast(12_000_u16 to int128))
+    assert(castFrom_u16_to_u == cast(0X_2000u16 to uint))
+    assert(castFrom_u16_to_u8 == cast(100_u16 to uint8))
+    assert(castFrom_u16_to_u16 == cast(20000_u16 to uint16))
+    assert(castFrom_u16_to_u32 == cast(0x7f00_u16 to uint32))
+    assert(castFrom_u16_to_u64 == cast(0x7FFF_u16 to uint64))
+    assert(castFrom_u16_to_u128 == cast(33_333_u16 to uint128))
+end
+
+;==================================================================================================
+; Cast from uint8
+;==================================================================================================
+let castFrom_u8_to_i = cast(0x20_u8 to int)
+let castFrom_u8_to_i8 = cast(100_U8 to int8)
+let castFrom_u8_to_i16 = cast(200_u8 to int16)
+let castFrom_u8_to_i32 = cast(0x7f_U8 to int32)
+let castFrom_u8_to_i64 = cast(127_u8 to int64)
+let castFrom_u8_to_i128 = cast(128_u8 to int128)
+let castFrom_u8_to_u = cast(0X20_u8 to uint)
+let castFrom_u8_to_u8 = cast(100_u8 to uint8)
+let castFrom_u8_to_u16 = cast(200_U8 to uint16)
+let castFrom_u8_to_u32 = cast(0x7f_u8 to uint32)
+let castFrom_u8_to_u64 = cast(0x80_u8 to uint64)
+let castFrom_u8_to_u128 = cast(33_u8 to uint128)
+
+func testCastFromUInt8()
+    assert(castFrom_u8_to_i == cast(0x20_u8 to int))
+    assert(castFrom_u8_to_i8 == cast(100_u8 to int8))
+    assert(castFrom_u8_to_i16 == cast(200_u8 to int16))
+    assert(castFrom_u8_to_i32 == cast(0x7f_U8 to int32))
+    assert(castFrom_u8_to_i64 == cast(127_u8 to int64))
+    assert(castFrom_u8_to_i128 == cast(128_u8 to int128))
+    assert(castFrom_u8_to_u == cast(0X20_u8 to uint))
+    assert(castFrom_u8_to_u8 == cast(100_u8 to uint8))
+    assert(castFrom_u8_to_u16 == cast(200_u8 to uint16))
+    assert(castFrom_u8_to_u32 == cast(0x7f_u8 to uint32))
+    assert(castFrom_u8_to_u64 == cast(0x80_u8 to uint64))
+    assert(castFrom_u8_to_u128 == cast(33_u8 to uint128))
+end
+
+;==================================================================================================
+; Run all the tests in this module
+;==================================================================================================
+func main() -> int
+    testCastFromInt128()
+    testCastFromInt64()
+    testCastFromInt32()
+    testCastFromInt16()
+    testCastFromInt8()
+    testCastFromUInt128()
+    testCastFromUInt64()
+    testCastFromUInt32()
+    testCastFromUInt16()
+    testCastFromUInt8()
+    return 0
+end
