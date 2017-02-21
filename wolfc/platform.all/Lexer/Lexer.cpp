@@ -424,11 +424,6 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
             numberBase = 2;
             intDigitsStartPtr += 2;
             
-            if (!CharUtils::isBinaryDigit(mLexerState.currentChar)) {
-                error("Expect a binary digit (0 or 1) at start of binary integer literal!");
-                return ParseResult::kFail;
-            }
-            
             while (CharUtils::isBinaryDigitOrUnderscore(mLexerState.currentChar)) {
                 WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
             }
@@ -439,11 +434,6 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
             numberBase = 16;
             intDigitsStartPtr += 2;
             
-            if (!CharUtils::isHexDigit(mLexerState.currentChar)) {
-                error("Expect a hex digit (0-9 or a-f/A-F) at start of hex integer literal!");
-                return ParseResult::kFail;
-            }
-            
             while (CharUtils::isHexDigitOrUnderscore(mLexerState.currentChar)) {
                 WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
             }
@@ -453,11 +443,6 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
             WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
             numberBase = 8;
             intDigitsStartPtr += 2;
-            
-            if (!CharUtils::isOctalDigit(mLexerState.currentChar)) {
-                error("Expect an octal digit (0-7) at start of octal integer literal!");
-                return ParseResult::kFail;
-            }
             
             while (CharUtils::isOctalDigitOrUnderscore(mLexerState.currentChar)) {
                 WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
@@ -576,8 +561,8 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
     
     // Literal should end on a non alpha numeric character:
     if (CharUtils::isAlphaNumeric(mLexerState.currentChar)) {
-        error("Expect a non alpha numeric character (like space) or a valid integer precision suffix like 'i' "
-              "or 'i32' etc. to follow the end of an integer literal!");
+        error("Expect a non alpha numeric character (like space) or a valid integer precision suffix "
+              "like 'i' or 'i32' etc. to follow the end of an integer literal!");
         
         return ParseResult::kFail;
     }
@@ -629,6 +614,12 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
         
         // Null termiante the string
         *dst = 0;
+    }
+    
+    // There must be at least one non underscore character in the integer literal:
+    if (tokLenMinusUS <= 0) {
+        error("An integer literal must have at least 1 digit character that is not an underscore!");
+        return ParseResult::kFail;
     }
     
     // All went well

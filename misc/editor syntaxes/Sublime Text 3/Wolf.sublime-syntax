@@ -26,8 +26,14 @@ contexts:
           scope: constant.character.escape.wolf
         - match: '\\u\{[0-9a-fA-F]{,7}\}'
           scope: constant.character.escape.wolf
-    - match: '(?<![\d.])\b0[xX][a-fA-F\d\.]+([pP][\-\+]?\d+)?|\b\d+(\.\d+)?([eE]-?\d+)?|\.\d+([eE]-?\d+)?'
-      scope: constant.numeric.wolf   
+    - match: '\b[0-9][0-9|_]*((u|U|i|I)(8|16|32|64|128)?)?\b'
+      scope: constant.numeric.decimal_int.wolf
+    - match: '\b0[b|B][0-1|_]*((u|U|i|I)(8|16|32|64|128)?)?\b'
+      scope: constant.numeric.binary_int.wolf
+    - match: '\b0[x|X][0-9|a-f|A-F|_]*((u|U|i|I)(8|16|32|64|128)?)?\b'
+      scope: constant.numeric.hex_int.wolf
+    - match: '\b0[o|O][0-7|_]*((u|U|i|I)(8|16|32|64|128)?)?\b'
+      scope: constant.numeric.oct_int.wolf
     - match: '(?<![^.]\.|:)\b(false|true)\b|(?<![.])\.{3}(?!\.)'
       scope: constant.language.wolf
     - match: '\+|-|\*|\/|%|&|\||\^|!|=|<|>'
