@@ -470,6 +470,7 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
     
     if (mLexerState.currentChar == 'i' || mLexerState.currentChar == 'I') {
         WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+        dataTypeId = PrimitiveDataTypes::getDefaultIntTypeId();
         
         if (mLexerState.currentChar == '8') {
             // i8:
@@ -515,6 +516,7 @@ Lexer::ParseResult Lexer::parseNumericLiteral() {
     }
     else if (mLexerState.srcPtr[0] == 'u' || mLexerState.srcPtr[0] == 'U') {
         WC_GUARD(moveOntoNextChar(), ParseResult::kFail);
+        dataTypeId = PrimitiveDataTypes::getDefaultUIntTypeId();
         
         if (mLexerState.currentChar == '8') {
             // u8:

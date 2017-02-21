@@ -1,0 +1,68 @@
+;==================================================================================================
+; Test various decimal (base 10) literals
+;==================================================================================================
+let decLit1 = 123
+let decLit2 = 1_000_000
+let decLit3 = 011
+let decLit4 = 2u
+let decLit5 = 21u8
+let decLit6 = 202u16
+let decLit7 = 2003_u32
+let decLit8 = 20004u64
+let decLit9 = 200005u128
+let decLit10 = -2i
+let decLit11 = -21i8
+let decLit12 = -202i16
+let decLit13 = -2003i32
+let decLit14 = -20004_i64
+let decLit15 = -200005i128
+
+func testDecimalLiterals()
+    assert(decLit1 == 123)
+    assert(decLit2 == 1000000)
+    assert(decLit3 == 11)
+    assert(decLit4 == cast(2 to uint))
+    assert(decLit5 == cast(21 to uint8))
+    assert(decLit6 == cast(202 to uint16))
+    assert(decLit7 == cast(2003 to uint32))
+    assert(decLit8 == cast(20004 to uint64))
+    assert(decLit9 == cast(200005 to uint128))
+    assert(decLit10 == cast(-2 to int))
+    assert(decLit11 == cast(-21 to int8))
+    assert(decLit12 == cast(-202 to int16))
+    assert(decLit13 == cast(-2003 to int32))
+    assert(decLit14 == cast(-20004 to int64))
+    assert(decLit15 == cast(-200005 to int128))    
+end
+
+;==================================================================================================
+; Test various binary (base 2) literals
+;==================================================================================================
+func testBinaryLiterals()
+
+end
+
+;==================================================================================================
+; Test various hexidecimal (base 16) literals
+;==================================================================================================
+func testHexLiterals()
+
+end
+
+;==================================================================================================
+; Test various octal (base 8) literals
+;==================================================================================================
+func testOctalLiterals()
+
+end
+
+;==================================================================================================
+; Run all the tests in this module
+;==================================================================================================
+func main() -> int
+    testDecimalLiterals()
+    testBinaryLiterals()
+    testHexLiterals()
+    testOctalLiterals()
+    return 0
+end
