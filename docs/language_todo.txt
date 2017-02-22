@@ -1,8 +1,18 @@
 ** Language TODO / IDEAS **
 
 General:
-    - Pointers?
-    - References?
+    - Pointers:
+        - behave exactly like 'c' pointers
+        - pointer dereference operator is '$'
+    - References:
+        like c++ references for the most part
+            - must be initialized to something valid
+            - can be reassigned howver if not const
+                - v @= something else
+            - can do like pointer arith
+                - v @= v @+ 2
+            - can take address of reference with '@v'
+            - references can be initialized with 'undefined' if required
     - automatic type promotion
     - automatic type demotion, if fitting, for constant expressions
     - 'extern' functions
