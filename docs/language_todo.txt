@@ -6,7 +6,16 @@ General:
     - automatic type promotion
     - automatic type demotion, if fitting, for constant expressions
     - 'extern' functions
-	- var x = Type(2)
+	- Constructor like syntax for primitives, like Swift: 
+        e.g let x = int(2)
+    - 4 Variable storage classes:
+        - let <CLASS> x = 
+        - 'mut' = modifiable and addressible
+        - 'const' = not modifiable but addressible, may be modified elsewhere
+        - 'immut' = guaranteed NEVER modifiable (e.g ROM variable, data section string literal) but addressible
+            - default for all types except those that default to ssa
+        - 'ssa' = (pure functional or single static assignment form) guaranteed NEVER modifiable and NOT addressible
+            - can be used by default for integer etc. types
 	- parsing float numbers
 	- parsing chars
     - for .. do
@@ -19,7 +28,6 @@ General:
     - Variables must be initialized when declared
         - '= undefined' for no initialization
         - '= default' for default init
-    - SSA style 'const' variables. Maybe make optimizer detect constness?
     - Branch prediction constructs.
     - typeof and istype expressions
     - Support assign expressions that both return void and non void
@@ -31,6 +39,16 @@ General:
     - Arbitrary precision integers
     - Fixed point types
     - Built in vector types (e.g vec2f, vec3f64)
+    - let ssa x =     
+    - 'ssa' modifier for name values
+        - applied by default to primitive types
+        - classes can be marked 'ssa' meanining they support ssa
+            - if marked 'ssa' then 'ssa' by default
+        - member functions must be 'ssa func' to operate on an ssa value
+        - though can compile a function in two+ modes by doing 'ssa, const, immut?'
+    - 'type_func' type functions that operate types rather than variables.
+        - Can use for template param type checking
+        - Can return either a value or another type
 
 Modules:
     - Each translation unit compiles to a module stub
