@@ -5,3 +5,15 @@
     - '?' for nullable pointer
     - '!' to convert a nullable into non nullable pointer
     - 'null' keyword for null pointers
+
+
+Fix this bug:
+	func blah()
+	    print("Hello")
+	end
+
+	func main() -> int
+	    let test = blah
+	    test()
+	    return 0
+	end
