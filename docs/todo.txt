@@ -1,0 +1,7 @@
+- Pointers:
+    - behave exactly like 'c' pointers
+    - pointer dereference operator is '$'
+    - '^' for non nullable pointer
+    - '?' for nullable pointer
+    - '!' to convert a nullable into non nullable pointer
+    - 'null' keyword for null pointers

@@ -4,18 +4,23 @@ General:
     - Pointers:
         - behave exactly like 'c' pointers
         - pointer dereference operator is '$'
+        - '^' for non nullable pointer
+        - '?' for nullable pointer
+        - '!' to convert a nullable into non nullable pointer
+        - 'null' keyword for null pointers
+    - if let blah = (like swift) syntax for converting nullable into non nullable pointers
     - References:
-        like c++ references for the most part
-            - must be initialized to something valid
-            - can be reassigned howver if not const
-                - v @= something else
-            - can do like pointer arith
-                - v @= v @+ 2
-            - can take address of reference with '@v'
-            - references can be initialized with 'undefined' if required
+        - exact same properties as c++ references
+        - declared using ref blah = 
+        - once initialized, cannot be (validly) changed
     - automatic type promotion
     - automatic type demotion, if fitting, for constant expressions
     - 'extern' functions
+    - 'any' type
+        - Can only be stored by reference or by pointer
+        - Cannot be dereferenced if a pointer (must be cast first)
+        - Cannot be accessed if a reference (must be cast first)
+        - Cannot be copied by value into functions, assigned etc.
 	- Constructor like syntax for primitives, like Swift: 
         e.g let x = int(2)
     - 4 Variable storage classes:
