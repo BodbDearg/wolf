@@ -13,6 +13,7 @@
 #include "AST/Nodes/Module.hpp"
 #include "AST/Nodes/NextStmnt.hpp"
 #include "AST/Nodes/NoOpStmnt.hpp"
+#include "AST/Nodes/PrefixExpr.hpp"
 #include "AST/Nodes/PrintStmnt.hpp"
 #include "AST/Nodes/RandExpr.hpp"
 #include "AST/Nodes/ReadnumExpr.hpp"
@@ -112,6 +113,11 @@ void ConstCodegen::visit(const AST::NextStmntWithCond & astNode) {
 void ConstCodegen::visit(const AST::NoOpStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "NoOpStmnt");
+}
+
+void ConstCodegen::visit(const AST::PrefixExprAddrOf & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    mCtx.error(astNode, "Can't take the address of an expression at compile time!");
 }
 
 void ConstCodegen::visit(const AST::PrintStmnt & astNode) {

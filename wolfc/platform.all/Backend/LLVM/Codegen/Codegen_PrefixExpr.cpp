@@ -24,6 +24,11 @@ void Codegen::visit(const AST::PrefixExprMinus & astNode) {
     CodegenMinusUnaryOp(*this, astNode.mExpr, false).codegen();
 }
 
+void Codegen::visit(const AST::PrefixExprAddrOf & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    CodegenAddrOfUnaryOp(*this, astNode.mExpr, false).codegen();
+}
+
 void Codegen::visit(const AST::PrefixExprParen & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mExpr.accept(*this);

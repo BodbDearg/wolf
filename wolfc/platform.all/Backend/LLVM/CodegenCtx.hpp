@@ -113,6 +113,9 @@ public:
         return mASTNodeStack;
     }
     
+    /* Get the current AST node being visited or return nullptr if none is being visited */
+    const AST::ASTNode * getCurrentASTNode() const;
+    
     /**
      * Push/pop the current scope being visited during code generation from the scope visitation stack.
      * The behavior of pop is undefined if the visited scope stack is empty.

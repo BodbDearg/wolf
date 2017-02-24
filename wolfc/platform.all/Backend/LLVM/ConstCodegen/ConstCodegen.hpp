@@ -83,6 +83,7 @@ public:
     virtual void visit(const AST::PostfixExprFuncCall & astNode) override;
     virtual void visit(const AST::PostfixExprInc & astNode) override;
     virtual void visit(const AST::PostfixExprNoOp & astNode) override;
+    virtual void visit(const AST::PrefixExprAddrOf & astNode) override;
     virtual void visit(const AST::PrefixExprMinus & astNode) override;
     virtual void visit(const AST::PrefixExprNoOp & astNode) override;
     virtual void visit(const AST::PrefixExprParen & astNode) override;

@@ -69,6 +69,7 @@ class PostfixExprDec;
 class PostfixExprFuncCall;
 class PostfixExprInc;
 class PostfixExprNoOp;
+class PrefixExprAddrOf;
 class PrefixExprMinus;
 class PrefixExprNoOp;
 class PrefixExprParen;
@@ -124,7 +125,6 @@ class ASTNodeVisitor {
 public:
     virtual ~ASTNodeVisitor() = default;
     
-
     virtual void visit(const AddExprAdd & astNode) = 0;
     virtual void visit(const AddExprBOr & astNode) = 0;
     virtual void visit(const AddExprBXor & astNode) = 0;
@@ -189,6 +189,7 @@ public:
     virtual void visit(const PostfixExprFuncCall & astNode) = 0;
     virtual void visit(const PostfixExprInc & astNode) = 0;
     virtual void visit(const PostfixExprNoOp & astNode) = 0;
+    virtual void visit(const PrefixExprAddrOf & astNode) = 0;
     virtual void visit(const PrefixExprMinus & astNode) = 0;
     virtual void visit(const PrefixExprNoOp & astNode) = 0;
     virtual void visit(const PrefixExprParen & astNode) = 0;

@@ -149,6 +149,7 @@ PrefixExpr:
 	PostfixExpr
 	+ PrefixExpr
 	- PrefixExpr
+	& PrefixExpr
 	( AssignExpr )
 
 PostfixExpr:

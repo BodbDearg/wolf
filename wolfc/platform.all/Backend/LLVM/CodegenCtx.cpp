@@ -253,6 +253,10 @@ void CodegenCtx::popASTNode() {
     mASTNodeStack.pop_back();
 }
 
+const AST::ASTNode * CodegenCtx::getCurrentASTNode() const {
+    return mASTNodeStack.empty() ? nullptr : mASTNodeStack.back();
+}
+
 void CodegenCtx::pushScope(const AST::Scope & node) {
     mScopeStack.push_back(&node);
 }

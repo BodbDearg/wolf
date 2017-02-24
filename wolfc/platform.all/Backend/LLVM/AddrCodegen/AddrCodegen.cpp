@@ -407,6 +407,11 @@ void AddrCodegen::visit(const AST::NotExprNoOp & astNode) {
     astNode.mExpr.accept(*this);
 }
 
+void AddrCodegen::visit(const AST::PrefixExprAddrOf & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    cantTakeAddressOfUnaryOpError(astNode, "&", "address of");
+}
+
 void AddrCodegen::visit(const AST::PrefixExprMinus & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     cantTakeAddressOfUnaryOpError(astNode, "-", "minus");

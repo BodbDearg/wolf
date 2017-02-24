@@ -12,6 +12,11 @@
     - '!' to convert a nullable into non nullable pointer
     - 'null' keyword for null pointers
 
+- Primitive Data types folder is contains lots of non primitive types. Remove?
+
+- Fix up random 'new' allocations throughout the codebase
+	- Use linear alloc
+
 - Fix this bug:
 	func blah()
 	    print("Hello")

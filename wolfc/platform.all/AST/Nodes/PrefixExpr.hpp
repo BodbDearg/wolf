@@ -14,6 +14,7 @@ PrefixExpr:
 	PostfixExpr
 	+ PrefixExpr
 	- PrefixExpr
+	& PrefixExpr
 	( AssignExpr )
 */
 class PrefixExpr : public ASTNode, public IExpr {
@@ -34,20 +35,20 @@ public:
     PostfixExpr & mExpr;
 };
 
-/* Base class for '+' or '-' unary expression */
-class PrefixExprPlusMinusBase : public PrefixExpr {
+/* Base class for '+' or '-' etc. unary expression */
+class PrefixExprWithUnaryOp : public PrefixExpr {
 public:
-    PrefixExprPlusMinusBase(const Token & startToken, PrefixExpr & expr);
+    PrefixExprWithUnaryOp(const Token & startToken, PrefixExpr & expr);
     
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
     
     const Token &   mStartToken;
-    PrefixExpr &     mExpr;
+    PrefixExpr &    mExpr;
 };
 
 /* + PrefixExpr */
-class PrefixExprPlus final : public PrefixExprPlusMinusBase {
+class PrefixExprPlus final : public PrefixExprWithUnaryOp {
 public:
     PrefixExprPlus(const Token & startToken, PrefixExpr & expr);
     
@@ -55,9 +56,17 @@ public:
 };
 
 /* - PrefixExpr */
-class PrefixExprMinus final : public PrefixExprPlusMinusBase {
+class PrefixExprMinus final : public PrefixExprWithUnaryOp {
 public:
     PrefixExprMinus(const Token & startToken, PrefixExpr & expr);
+    
+    virtual void accept(ASTNodeVisitor & visitor) const override;
+};
+
+/* & PrefixExpr */
+class PrefixExprAddrOf final : public PrefixExprWithUnaryOp {
+public:
+    PrefixExprAddrOf(const Token & startToken, PrefixExpr & expr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
 };
