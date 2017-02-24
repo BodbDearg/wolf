@@ -13,13 +13,33 @@ WC_AST_BEGIN_NAMESPACE
 // Type
 //-----------------------------------------------------------------------------
 bool Type::peek(const Token * currentToken) {
-    return  currentToken->type == TokenType::kLBrack ||
+    TokenType currentTokenType = currentToken->type;
+    return  currentTokenType == TokenType::kHat ||
+            currentTokenType == TokenType::kQMark ||
+            currentTokenType == TokenType::kLBrack ||
             PrimitiveType::peek(currentToken);
 }
 
 Type * Type::parse(ParseCtx & parseCtx) {
+    // See if there is a pointer type following:
+    TokenType currentTokType = parseCtx.tok()->type;
+    
+    if (currentTokType == TokenType::kHat || currentTokType == TokenType::kQMark) {
+        // Array type ahead: skip the '^' or '?' and any newlines that follow
+        const Token * startToken = parseCtx.tok();
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
+        
+        // Parse the type pointed to:
+        Type * pointedToType = Type::parse(parseCtx);
+        WC_GUARD(pointedToType, nullptr);
+        
+        // Create the pointer type:
+        return WC_NEW_AST_NODE(parseCtx, TypePtr, *startToken, *pointedToType);
+    }
+    
     // See if there is an array type following:
-    if (parseCtx.tok()->type == TokenType::kLBrack) {
+    if (currentTokType == TokenType::kLBrack) {
         // Array type ahead: skip the '[' and any newlines that follow
         const Token * startToken = parseCtx.tok();
         parseCtx.nextTok();
@@ -74,6 +94,32 @@ const Token & TypePrimitive::getStartToken() const {
 
 const Token & TypePrimitive::getEndToken() const {
     return mType.getEndToken();
+}
+
+//-----------------------------------------------------------------------------
+// TypePtr
+//-----------------------------------------------------------------------------
+TypePtr::TypePtr(const Token & startToken, Type & pointedToType) :
+    mStartToken(startToken),
+    mPointedToType(pointedToType)
+{
+    mPointedToType.mParent = this;
+}
+
+void TypePtr::accept(ASTNodeVisitor & visitor) const {
+    visitor.visit(*this);
+}
+
+const Token & TypePtr::getStartToken() const {
+    return mStartToken;
+}
+
+const Token & TypePtr::getEndToken() const {
+    return mPointedToType.getEndToken();
+}
+
+bool TypePtr::isNullablePtr() const {
+    return mStartToken.type == TokenType::kQMark;
 }
 
 //-----------------------------------------------------------------------------

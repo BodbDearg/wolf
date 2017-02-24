@@ -1,3 +1,9 @@
+- Pointer arithmetic: add
+- Pointer arithmetic: sub
+- Pointer arithmetic: inc
+- Pointer arithmetic: dec
+- Pointer casting
+
 - Pointers:
     - behave exactly like 'c' pointers
     - pointer dereference operator is '$'
@@ -6,8 +12,7 @@
     - '!' to convert a nullable into non nullable pointer
     - 'null' keyword for null pointers
 
-
-Fix this bug:
+- Fix this bug:
 	func blah()
 	    print("Hello")
 	end

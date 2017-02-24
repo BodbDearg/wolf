@@ -61,12 +61,11 @@ public:
      * does not make sense the function will simply return 'false'.
      */
     virtual bool isSigned() const;
+
+    /* Utility. Tell if this data type is a pointer data type. */
+    virtual bool isPointer() const;
     
-    /**
-     * Utility. Tell if this data type is an array data type.
-     * Returns true if the array is either an array with a known type
-     * or an unknown type.
-     */
+    /* Utility. Tell if this data type is an array data type. */
     virtual bool isArray() const;
     
     /* Utility. Tell if this data type is a function data type */

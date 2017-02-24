@@ -9,6 +9,7 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // CodegenAddBinaryOp
 //-----------------------------------------------------------------------------
+#warning Impl Ptr Arithmetic: Add
 CodegenAddBinaryOp::CodegenAddBinaryOp(Codegen & cg,
                                        const AST::ASTNode & leftExpr,
                                        const AST::ASTNode & rightExpr,
@@ -38,6 +39,7 @@ WC_IMPL_BASIC_BINARY_OP(CodegenAddBinaryOp, UInt8, CreateAdd)
 //-----------------------------------------------------------------------------
 // CodegenSubBinaryOp
 //-----------------------------------------------------------------------------
+#warning Impl Ptr Arithmetic: Sub
 CodegenSubBinaryOp::CodegenSubBinaryOp(Codegen & cg,
                                        const AST::ASTNode & leftExpr,
                                        const AST::ASTNode & rightExpr,

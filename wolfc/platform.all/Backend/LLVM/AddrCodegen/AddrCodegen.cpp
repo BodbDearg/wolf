@@ -643,6 +643,11 @@ void AddrCodegen::visit(const AST::TypePrimitive & astNode) {
     codegenNotSupportedForNodeTypeError(astNode, "TypePrimitive");
 }
 
+void AddrCodegen::visit(const AST::TypePtr & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    codegenNotSupportedForNodeTypeError(astNode, "TypePtr");
+}
+
 void AddrCodegen::visit(const AST::VarDeclExplicitType & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "VarDeclExplicitType");

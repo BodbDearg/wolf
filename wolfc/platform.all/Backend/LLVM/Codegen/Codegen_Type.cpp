@@ -17,5 +17,10 @@ void Codegen::visit(const AST::TypePrimitive & astNode) {
     astNode.mType.accept(*this);
 }
 
+void Codegen::visit(const AST::TypePtr & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    mCodegenDataType.visitASTNode(astNode);
+}
+
 WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

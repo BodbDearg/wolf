@@ -10,6 +10,7 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 // CodegenIncUnaryOp
 //-----------------------------------------------------------------------------
+#warning Impl Ptr Arithmetic: Inc
 CodegenIncUnaryOp::CodegenIncUnaryOp(Codegen & cg,
                                      const AST::ASTNode & expr,
                                      bool storeResultInExpr)
@@ -47,6 +48,7 @@ WC_IMPL_INC_UNARY_OP(UInt8, Int8)
 //-----------------------------------------------------------------------------
 // CodegenDecUnaryOp
 //----------------------------------------------------------------------------
+#warning Impl Ptr Arithmetic: Dec
 CodegenDecUnaryOp::CodegenDecUnaryOp(Codegen & cg,
                                      const AST::ASTNode & expr,
                                      bool storeResultInExpr)

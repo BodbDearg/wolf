@@ -109,6 +109,10 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
             case DataTypeId::kBool:
                 codegenBoolPrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal);
                 break;
+
+            case DataTypeId::kPtr:
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%zuX");
+                break;
                 
             case DataTypeId::kStr:
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%s");

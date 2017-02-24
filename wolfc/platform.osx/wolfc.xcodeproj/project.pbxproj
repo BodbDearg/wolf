@@ -168,6 +168,7 @@
 		1F94A7ED1E516B2900DF80F9 /* CodegenUnaryOp_CastExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F94A7EB1E516B2900DF80F9 /* CodegenUnaryOp_CastExpr.cpp */; };
 		1FA292611D000FF600B0F975 /* LinearAlloc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FA292601D000FF600B0F975 /* LinearAlloc.cpp */; };
 		1FA3BD9A1E447EEC0068A403 /* CompiledDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FA3BD991E447EEC0068A403 /* CompiledDataType.cpp */; };
+		1FB16FF11E5FE5A70075D8CA /* PtrDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB16FEF1E5FE5A70075D8CA /* PtrDataType.cpp */; };
 		1FB40C671E0AFE4000D34587 /* GenericIntDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB40C651E0AFE4000D34587 /* GenericIntDataType.cpp */; };
 		1FB68FEF1E593D1E00B4A815 /* GenericSignedIntDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB68FEE1E593D1E00B4A815 /* GenericSignedIntDataType.cpp */; };
 		1FB68FF21E593D8B00B4A815 /* GenericUnsignedIntDataType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FB68FF01E593D8B00B4A815 /* GenericUnsignedIntDataType.cpp */; };
@@ -450,6 +451,8 @@
 		1FA2925F1D000B9C00B0F975 /* LinearAlloc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LinearAlloc.hpp; sourceTree = "<group>"; };
 		1FA292601D000FF600B0F975 /* LinearAlloc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LinearAlloc.cpp; sourceTree = "<group>"; };
 		1FA3BD991E447EEC0068A403 /* CompiledDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompiledDataType.cpp; sourceTree = "<group>"; };
+		1FB16FEF1E5FE5A70075D8CA /* PtrDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtrDataType.cpp; sourceTree = "<group>"; };
+		1FB16FF01E5FE5A70075D8CA /* PtrDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PtrDataType.hpp; sourceTree = "<group>"; };
 		1FB40C651E0AFE4000D34587 /* GenericIntDataType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericIntDataType.cpp; sourceTree = "<group>"; };
 		1FB40C661E0AFE4000D34587 /* GenericIntDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GenericIntDataType.hpp; sourceTree = "<group>"; };
 		1FB40C691E0B3E5200D34587 /* GenericSignedIntDataType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GenericSignedIntDataType.hpp; sourceTree = "<group>"; };
@@ -860,6 +863,8 @@
 				1FCD4E0C1D0161A60076E358 /* IntDataTypes.hpp */,
 				1FCD4E041D0160DB0076E358 /* InvalidDataType.cpp */,
 				1FCD4E051D0160DB0076E358 /* InvalidDataType.hpp */,
+				1FB16FEF1E5FE5A70075D8CA /* PtrDataType.cpp */,
+				1FB16FF01E5FE5A70075D8CA /* PtrDataType.hpp */,
 				1F54B4B01D02A4DB0016BF70 /* StrDataType.cpp */,
 				1F54B4B11D02A4DB0016BF70 /* StrDataType.hpp */,
 				1FCD4E061D0160DB0076E358 /* VoidDataType.cpp */,
@@ -1181,6 +1186,7 @@
 				1F59F61B1E3F250500F2FC78 /* Codegen_ReadnumExpr.cpp in Sources */,
 				1F0308AC1E2AF2510097D223 /* Scope.cpp in Sources */,
 				1F2985B01E3EFAEB00DC17CC /* Codegen_IntLit.cpp in Sources */,
+				1FB16FF11E5FE5A70075D8CA /* PtrDataType.cpp in Sources */,
 				1F5B59241E2D5FEF00609CDD /* ParseCtx.cpp in Sources */,
 				1F2985AC1E3EFAEB00DC17CC /* Codegen_Func.cpp in Sources */,
 				1F0308AA1E2AF2510097D223 /* ReadnumExpr.cpp in Sources */,

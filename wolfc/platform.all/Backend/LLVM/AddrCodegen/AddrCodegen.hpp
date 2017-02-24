@@ -136,6 +136,7 @@ public:
     virtual void visit(const AST::TimeExpr & astNode) override;
     virtual void visit(const AST::TypeArray & astNode) override;
     virtual void visit(const AST::TypePrimitive & astNode) override;
+    virtual void visit(const AST::TypePtr & astNode) override;
     virtual void visit(const AST::VarDeclExplicitType & astNode) override;
     virtual void visit(const AST::VarDeclInferType & astNode) override;
     virtual void visit(const AST::WhileStmnt & astNode) override;

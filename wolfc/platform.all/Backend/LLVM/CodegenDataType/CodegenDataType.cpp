@@ -3,24 +3,38 @@
 #include "../CodegenCtx.hpp"
 #include "../CompiledDataType.hpp"
 #include "../ConstCodegen/ConstCodegen.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/Func.hpp"
 #include "AST/Nodes/FuncArg.hpp"
 #include "AST/Nodes/PrimitiveType.hpp"
 #include "AST/Nodes/Type.hpp"
+#include "Assert.hpp"
 #include "DataType/PrimitiveDataTypes.hpp"
 #include "DataType/Primitives/ArrayDataType.hpp"
 #include "DataType/Primitives/BoolDataType.hpp"
 #include "DataType/Primitives/FuncDataType.hpp"
 #include "DataType/Primitives/IntDataTypes.hpp"
 #include "DataType/Primitives/InvalidDataType.hpp"
+#include "DataType/Primitives/PtrDataType.hpp"
 #include "DataType/Primitives/StrDataType.hpp"
 #include "DataType/Primitives/VoidDataType.hpp"
 #include "Lexer/Token.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
+
+/* A useful macro for data type codegen */
+#define WC_RETURN_CACHED_DATA_TYPE_FOR_NODE_IF_AVAILABLE(astNode)\
+    /* If the result of this has been cached then use that instead */\
+    if (const DataType * evaluatedDataType = mCtx.getNodeEvaluatedDataType(astNode)) {\
+        /* Only codegen if valid, don't keep spewing out errors for the same thing over and over. */\
+        /* If we have an invalid type generated for a node then we've already done errors for it earlier. */\
+        if (evaluatedDataType->isValid()) {\
+            evaluatedDataType->accept(*this);\
+        }\
+        \
+        return;\
+    }
 
 CodegenDataType::CodegenDataType(CodegenCtx & ctx, ConstCodegen & constCodegen) :
     mCtx(ctx),
@@ -30,11 +44,7 @@ CodegenDataType::CodegenDataType(CodegenCtx & ctx, ConstCodegen & constCodegen) 
 }
 
 void CodegenDataType::visitASTNode(const AST::Func & func) {
-    // If we already figured this stuff out, then just return the answer:
-    if (const DataType * evaluatedDataType = mCtx.getNodeEvaluatedDataType(func)) {
-        evaluatedDataType->accept(*this);
-        return;
-    }
+    WC_RETURN_CACHED_DATA_TYPE_FOR_NODE_IF_AVAILABLE(func);
     
     // Generate the compiled data type for the function return type.
     // If no explicit data type for the function return is given, assume 'void':
@@ -103,11 +113,11 @@ void CodegenDataType::visitASTNode(const AST::FuncArg & funcArg) {
 void CodegenDataType::visit(const ArrayDataType & dataType) {
     // Codegen the element type. If that fails then bail out.
     dataType.mElemType.accept(*this);
-    CompiledDataType elemCompiledType = mCtx.popCompiledDataType();
-    WC_GUARD(elemCompiledType.getLLVMType());
+    CompiledDataType elemCDT = mCtx.popCompiledDataType();
+    WC_GUARD(elemCDT.getLLVMType());
     
     // The type must be sized in order to be code generated as an array type.
-    const DataType & elemDataType = elemCompiledType.getDataType();
+    const DataType & elemDataType = elemCDT.getDataType();
     
     if (!elemDataType.isSized()) {
         mCtx.error("Can't generate an array of unsized type '%s'!", elemDataType.name().c_str());
@@ -121,7 +131,7 @@ void CodegenDataType::visit(const ArrayDataType & dataType) {
     }
     
     // Alright, make the array type:
-    llvm::Type * llvmType = llvm::ArrayType::get(elemCompiledType.getLLVMType(), dataType.mSize);
+    llvm::Type * llvmType = llvm::ArrayType::get(elemCDT.getLLVMType(), dataType.mSize);
     WC_ASSERT(llvmType);
     mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
 }
@@ -133,20 +143,11 @@ void CodegenDataType::visitASTNode(const AST::PrimitiveType & primitiveType) {
 }
 
 void CodegenDataType::visitASTNode(const AST::TypeArray & typeArray) {
-    // If the result of this has been cached then use that instead
-    if (const DataType * evaluatedDataType = mCtx.getNodeEvaluatedDataType(typeArray)) {
-        // Only codegen if valid, don't keep spewing out errors for the same thing over and over.
-        // If we have an invalid type generated for a node then we've already done errors for it earlier.
-        if (evaluatedDataType->isValid()) {
-            evaluatedDataType->accept(*this);
-        }
-        
-        return;
-    }
+    WC_RETURN_CACHED_DATA_TYPE_FOR_NODE_IF_AVAILABLE(typeArray);
     
     // Codegen the element type:
     typeArray.mElemType.accept(mConstCodegen);
-    CompiledDataType elemCompiledType = mCtx.popCompiledDataType();
+    CompiledDataType elemCDT = mCtx.popCompiledDataType();
     
     // Evaluate the size expression for the array
     typeArray.mSizeExpr.accept(mConstCodegen);
@@ -176,7 +177,7 @@ void CodegenDataType::visitASTNode(const AST::TypeArray & typeArray) {
                 //
                 // TODO: Use linear allocator here?
                 size_t arraySize = sizeAPInt.getZExtValue();
-                evaluatedDataType.reset(new ArrayDataType(elemCompiledType.getDataType(), arraySize));
+                evaluatedDataType.reset(new ArrayDataType(elemCDT.getDataType(), arraySize));
             }
             else {
                 mCtx.error("Array size is too big for array! Max supported size: %zu", UINT64_MAX);
@@ -206,6 +207,30 @@ void CodegenDataType::visitASTNode(const AST::TypeArray & typeArray) {
     mCtx.setNodeEvaluatedDataType(typeArray, evaluatedDataType);
 }
 
+void CodegenDataType::visitASTNode(const AST::TypePtr & typePtr) {
+    WC_RETURN_CACHED_DATA_TYPE_FOR_NODE_IF_AVAILABLE(typePtr);
+    
+    // Codgen the type pointed to
+    typePtr.mPointedToType.accept(mConstCodegen);
+    CompiledDataType pointedToTypeCDT = mCtx.popCompiledDataType();
+    
+    // Save the evaluated data type here:
+    //
+    // TODO: Use linear allocator here?
+    std::unique_ptr<const DataType> evaluatedDataType;
+    PtrDataType * ptrDataType = new PtrDataType(pointedToTypeCDT.getDataType(), typePtr.isNullablePtr());
+    evaluatedDataType.reset(ptrDataType);
+    
+    // Codegen the evaluated type (if valid).
+    // If it's not valid we don't do anything because we've already done errors earlier.
+    if (evaluatedDataType->isValid()) {
+        evaluatedDataType->accept(*this);
+    }
+    
+    // Save the evaluated type so we don't have to go through this again:
+    mCtx.setNodeEvaluatedDataType(typePtr, evaluatedDataType);
+}
+
 void CodegenDataType::visit(const BoolDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     llvm::Type * llvmType = llvm::Type::getInt1Ty(mCtx.mLLVMCtx);
@@ -216,7 +241,7 @@ void CodegenDataType::visit(const BoolDataType & dataType) {
 void CodegenDataType::visit(const FuncDataType & dataType) {
     // Codegen the return type
     dataType.mReturnType.accept(*this);
-    CompiledDataType returnCompiledType = mCtx.popCompiledDataType();
+    CompiledDataType returnTypeCDT = mCtx.popCompiledDataType();
     
     // Codegen all the arg types
     std::vector<CompiledDataType> argCompiledTypes;
@@ -228,7 +253,7 @@ void CodegenDataType::visit(const FuncDataType & dataType) {
     }
     
     // See if everything is valid
-    bool funcTypeValid = returnCompiledType.isValid();
+    bool funcTypeValid = returnTypeCDT.isValid();
     
     for (const CompiledDataType & argCompiledType : argCompiledTypes) {
         if (argCompiledType.isValid()) {
@@ -260,7 +285,7 @@ void CodegenDataType::visit(const FuncDataType & dataType) {
         //
         // TODO: support varargs
         // TODO: support different linkage types
-        funcLLVMType = llvm::FunctionType::get(returnCompiledType.getLLVMType(),
+        funcLLVMType = llvm::FunctionType::get(returnTypeCDT.getLLVMType(),
                                                argLLVMTypes,
                                                false);
         
@@ -338,6 +363,19 @@ void CodegenDataType::visit(const UInt8DataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     llvm::Type * llvmType = llvm::Type::getInt8Ty(mCtx.mLLVMCtx);
     WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const PtrDataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    
+    // Get the data type for the pointed to type. If it's invalid then proceed no further:
+    dataType.mPointedToType.accept(*this);
+    CompiledDataType pointedToTypeCDT = mCtx.popCompiledDataType();
+    WC_GUARD(pointedToTypeCDT.isValid());
+    
+    // Now make a pointer to that type and push the result:
+    llvm::Type * llvmType = pointedToTypeCDT.getLLVMType()->getPointerTo();
     mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
 }
 

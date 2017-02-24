@@ -46,6 +46,7 @@ const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
         case DataTypeId::kStr: return gStrDataType;
             
         // All these types are customized types, hence non-primitive:
+        case DataTypeId::kPtr:
         case DataTypeId::kArray:
         case DataTypeId::kFunc:
             break;

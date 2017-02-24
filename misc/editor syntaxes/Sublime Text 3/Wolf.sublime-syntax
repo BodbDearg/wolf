@@ -34,7 +34,7 @@ contexts:
       scope: constant.numeric.hex_int.wolf
     - match: '\b0[o|O][0-7|_]*((u|U|i|I)(8|16|32|64|128)?)?\b'
       scope: constant.numeric.oct_int.wolf
-    - match: '(?<![^.]\.|:)\b(false|true)\b|(?<![.])\.{3}(?!\.)'
+    - match: '(?<![^.]\.|:)\b(false|true|null)\b|(?<![.])\.{3}(?!\.)'
       scope: constant.language.wolf
     - match: '\+|-|\*|\/|%|&|\?|\$|\||\^|!|=|<|>'
       scope: keyword.operator.wolf

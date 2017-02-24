@@ -114,6 +114,7 @@ class TernaryExprWithCond;
 class TimeExpr;
 class TypeArray;
 class TypePrimitive;
+class TypePtr;
 class VarDeclExplicitType;
 class VarDeclInferType;
 class WhileStmnt;
@@ -233,6 +234,7 @@ public:
     virtual void visit(const TimeExpr & astNode) = 0;
     virtual void visit(const TypeArray & astNode) = 0;
     virtual void visit(const TypePrimitive & astNode) = 0;
+    virtual void visit(const TypePtr & astNode) = 0;
     virtual void visit(const VarDeclExplicitType & astNode) = 0;
     virtual void visit(const VarDeclInferType & astNode) = 0;
     virtual void visit(const WhileStmnt & astNode) = 0;

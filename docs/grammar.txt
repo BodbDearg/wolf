@@ -13,6 +13,7 @@ FuncArg:
 
 Type:
 	PrimitiveType
+	^|? Type
 	[ AssignExpr ] Type
 
 PrimitiveType:

@@ -9,6 +9,7 @@ namespace AST {
     class FuncArg;
     class PrimitiveType;
     class TypeArray;
+    class TypePtr;
 }
 
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -26,6 +27,7 @@ public:
     void visitASTNode(const AST::FuncArg & funcArg);
     void visitASTNode(const AST::PrimitiveType & primitiveType);
     void visitASTNode(const AST::TypeArray & typeArray);
+    void visitASTNode(const AST::TypePtr & typePtr);
     
     /* DataType visitor functions */
     virtual void visit(const ArrayDataType & dataType) override;
@@ -37,6 +39,7 @@ public:
     virtual void visit(const Int64DataType & dataType) override;
     virtual void visit(const Int8DataType & dataType) override;
     virtual void visit(const InvalidDataType & dataType) override;
+    virtual void visit(const PtrDataType & dataType) override;
     virtual void visit(const StrDataType & dataType) override;
     virtual void visit(const UInt128DataType & dataType) override;
     virtual void visit(const UInt16DataType & dataType) override;

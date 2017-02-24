@@ -11,6 +11,7 @@ class PrimitiveType;
 /*
 Type:
 	PrimitiveType
+	^|? Type
 	[ AssignExpr ] Type
 */
 class Type : public ASTNode {
@@ -29,6 +30,21 @@ public:
     virtual const Token & getEndToken() const override;
     
     PrimitiveType & mType;
+};
+
+/* ^|? Type */
+class TypePtr final : public Type {
+public:
+    TypePtr(const Token & startToken, Type & pointedToType);
+    
+    virtual void accept(ASTNodeVisitor & visitor) const override;
+    virtual const Token & getStartToken() const override;
+    virtual const Token & getEndToken() const override;
+    
+    bool isNullablePtr() const;
+    
+    const Token &   mStartToken;
+    Type &          mPointedToType;
 };
 
 /* [ AssignExpr ] Type */

@@ -22,15 +22,19 @@ bool DataType::isInteger() const {
 }
 
 bool DataType::isSigned() const {
-    return false;   // False by default for everything
+    return false;   // False for all types by default
+}
+
+bool DataType::isPointer() const {
+    return false;   // False for everything except pointers
 }
 
 bool DataType::isArray() const {
-    return false;   // False by most types by default
+    return false;   // False for everything except arrays
 }
 
 bool DataType::isFunc() const {
-    return false;   // False by most types by default
+    return false;   // False for everything except functions
 }
 
 bool DataType::requiresStorage() const {

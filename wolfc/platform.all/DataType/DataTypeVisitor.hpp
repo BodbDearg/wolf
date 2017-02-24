@@ -13,6 +13,7 @@ class Int32DataType;
 class Int64DataType;
 class Int8DataType;
 class InvalidDataType;
+class PtrDataType;
 class StrDataType;
 class UInt128DataType;
 class UInt16DataType;
@@ -35,6 +36,7 @@ public:
     virtual void visit(const Int64DataType & dataType) = 0;
     virtual void visit(const Int8DataType & dataType) = 0;
     virtual void visit(const InvalidDataType & dataType) = 0;
+    virtual void visit(const PtrDataType & dataType) = 0;
     virtual void visit(const StrDataType & dataType) = 0;
     virtual void visit(const UInt128DataType & dataType) = 0;
     virtual void visit(const UInt16DataType & dataType) = 0;

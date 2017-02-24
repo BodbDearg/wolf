@@ -41,6 +41,8 @@ enum class DataTypeId : uint8_t {
      * TODO: will probably change once we have a string class and once we support pointers to chars.
      */
     kStr,
+    /* Pointer type */
+    kPtr,
     /* Array type */
     kArray,
     /* Function type */
