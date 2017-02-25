@@ -60,6 +60,7 @@ func testTernaryExpr()
     assert((true ? 1 : 2) == 1)
     assert((false ? 1 : 2) == 2)
 
+    ; Make sure the constant expression tests pass
     let testNum = 0
     while testNum < 2
         assert(testOrExprConstexpr[testNum])
@@ -83,6 +84,7 @@ func testOrExpr()
     assert(true or true)
     assert(false or true)
 
+    ; Make sure the constant expression tests pass
     let testNum = 0
     while testNum < 4
         assert(testOrExprConstexpr[testNum])
@@ -106,6 +108,7 @@ func testAndExpr()
     assert(not (false and true))
     assert(true and true)
 
+    ; Make sure the constant expression tests pass
     let testNum = 0
     while testNum < 4
         assert(testAndExprConstexpr[testNum])
@@ -133,6 +136,7 @@ func testNotExpr()
     assert((~-1) == 0)
     assert((~-2) == 1)
 
+    ; Make sure the constant expression tests pass
     let testNum = 0
     while testNum < 6 
         assert(testNotExprConstexpr[testNum])
@@ -196,6 +200,7 @@ func testCmpExpr()
     assert(1234 is not 5678)
     assert(not 1234 is not 1234)
 
+    ; Make sure the constant expression tests pass
     let testNum = 0
     while testNum < 22
         assert(testCmpExprConstexpr[testNum])
@@ -239,6 +244,7 @@ func testAddExpr()
     assert(1 ^ 1 == 0)
     assert(0 ^ 1 == 1)
 
+    ; Make sure the constant expression tests pass
     let testNum = 0
     while testNum < 14
         assert(testAddExprConstexpr[testNum])
@@ -276,6 +282,7 @@ func testMulExpr()
     assert(3 & 1 == 1)
     assert(6 & 2 == 2)
 
+    ; Make sure the constant expression tests pass
     let testNum = 0
     while testNum < 11
         assert(testMulExprConstexpr[testNum])
@@ -365,6 +372,14 @@ let testPrefixExprConstexpr = [
     - - 1  == 1
 ]
 
+func testPrefixExprFunc1(someVal: ^int)
+    $someVal *= 10
+end
+
+func testPrefixExprFunc2(someVal: ^^int)
+    $$someVal *= 10
+end
+
 func testPrefixExpr()
     ; Test: + and - prefix operators
     assert(+1 == 1)
@@ -381,6 +396,18 @@ func testPrefixExpr()
     assert(- - 1  == - - 1)
     assert(- - 1  == 1)
 
+    ; Test address of (&) and pointer dereference ($)
+    let intVal = 5
+    testPrefixExprFunc1(&intVal)
+    assert(intVal == 50)
+    let ptrToIntVal = &intVal
+    testPrefixExprFunc2(&ptrToIntVal)
+    assert(intVal == 500)
+    let arrayVal = [ 5, 10, 15, 20 ]
+    testPrefixExprFunc1(&arrayVal[3])
+    assert(arrayVal[3] == 200)
+
+    ; Make sure the constant expression tests passed
     let testNum = 0
     while testNum < 9
         assert(testPrefixExprConstexpr[testNum])
