@@ -86,15 +86,13 @@ WC_IMPL_NEG_NOT_ALLOWED_FOR_UNSIGNED_TYPE(UInt8)
 //-----------------------------------------------------------------------------
 // CodegenAddrOfUnaryOp
 //-----------------------------------------------------------------------------
-CodegenAddrOfUnaryOp::CodegenAddrOfUnaryOp(Codegen & cg,
-                                           const AST::ASTNode & expr,
-                                           bool storeResultInExpr)
+CodegenAddrOfUnaryOp::CodegenAddrOfUnaryOp(Codegen & cg, const AST::ASTNode & expr)
 :
     CodegenUnaryOp(cg,
                    expr,
                    "&",
                    "address of",
-                    storeResultInExpr)
+                    false)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -139,13 +137,14 @@ void CodegenAddrOfUnaryOp::codegen() {
 //-----------------------------------------------------------------------------
 CodegenPtrDerefUnaryOp::CodegenPtrDerefUnaryOp(Codegen & cg,
                                                const AST::ASTNode & expr,
-                                               bool storeResultInExpr)
+                                               bool loadExprResult)
 :
     CodegenUnaryOp(cg,
                    expr,
                    "$",
                    "dereference pointer",
-                    storeResultInExpr)
+                    false),
+    mLoadExprResult(loadExprResult)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -192,9 +191,17 @@ void CodegenPtrDerefUnaryOp::codegen() {
     CompiledDataType dereferencedValCDT(ptrDataType.mPointedToType,
                                         exprCDT.getLLVMType()->getPointerElementType());
     
-    // Makeup the return value (load of pointed to value) and save the result
-    llvm::Value * derefLLVMVal = mCG.mCtx.mIRBuilder.CreateLoad(exprVal.mLLVMVal, "CodegenPtrDerefUnaryOp:Load");
-    mCG.mCtx.pushValue(Value(derefLLVMVal, dereferencedValCDT, false, mCG.mCtx.getCurrentASTNode()));
+    // Makeup the return value:
+    if (mLoadExprResult) {
+        // Require a load of the result - do it and return that as the result
+        llvm::Value * derefLLVMVal = mCG.mCtx.mIRBuilder.CreateLoad(exprVal.mLLVMVal, "CodegenPtrDerefUnaryOp:Load");
+        mCG.mCtx.pushValue(Value(derefLLVMVal, dereferencedValCDT, false, mCG.mCtx.getCurrentASTNode()));
+    }
+    else {
+        // No load required, just use the expression result directly but mark the value as needing a load.
+        // This codepath will be used on the left side of an assign expression.
+        mCG.mCtx.pushValue(Value(exprVal.mLLVMVal, dereferencedValCDT, true, mCG.mCtx.getCurrentASTNode()));
+    }
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

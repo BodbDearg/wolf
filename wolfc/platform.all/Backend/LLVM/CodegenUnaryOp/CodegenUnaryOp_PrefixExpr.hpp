@@ -43,9 +43,7 @@ public:
 
 class CodegenAddrOfUnaryOp final : public CodegenUnaryOp {
 public:
-    CodegenAddrOfUnaryOp(Codegen & cg,
-                         const AST::ASTNode & expr,
-                         bool storeResultInExpr);
+    CodegenAddrOfUnaryOp(Codegen & cg, const AST::ASTNode & expr);
     
     virtual void codegen() override;
 };
@@ -54,9 +52,11 @@ class CodegenPtrDerefUnaryOp final : public CodegenUnaryOp {
 public:
     CodegenPtrDerefUnaryOp(Codegen & cg,
                            const AST::ASTNode & expr,
-                           bool storeResultInExpr);
+                           bool loadExprResult);
     
     virtual void codegen() override;
+    
+    bool mLoadExprResult;
 };
 
 WC_LLVM_BACKEND_END_NAMESPACE

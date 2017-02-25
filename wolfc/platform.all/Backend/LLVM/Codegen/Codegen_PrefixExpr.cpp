@@ -26,12 +26,13 @@ void Codegen::visit(const AST::PrefixExprMinus & astNode) {
 
 void Codegen::visit(const AST::PrefixExprAddrOf & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenAddrOfUnaryOp(*this, astNode.mExpr, false).codegen();
+    CodegenAddrOfUnaryOp(*this, astNode.mExpr).codegen();
 }
 
 void Codegen::visit(const AST::PrefixExprPtrDeref & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenPtrDerefUnaryOp(*this, astNode.mExpr, false).codegen();
+    constexpr const bool kLoadExprResult = true;
+    CodegenPtrDerefUnaryOp(*this, astNode.mExpr, kLoadExprResult).codegen();
 }
 
 void Codegen::visit(const AST::PrefixExprParen & astNode) {
