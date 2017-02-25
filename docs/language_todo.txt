@@ -9,6 +9,7 @@ General:
         - '!' to convert a nullable into non nullable pointer
         - 'null' keyword for null pointers
     - if let blah = (like swift) syntax for converting nullable into non nullable pointers
+    - Allow right side of shift expression to be an integer of any type
     - References:
         - exact same properties as c++ references
         - declared using ref blah = 
