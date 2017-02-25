@@ -24,9 +24,9 @@ void Codegen::visit(const AST::MulExprDiv & astNode) {
     CodegenDivBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, false).codegen();
 }
 
-void Codegen::visit(const AST::MulExprMod & astNode) {
+void Codegen::visit(const AST::MulExprRem & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenModBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, false).codegen();
+    CodegenRemBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, false).codegen();
 }
 
 void Codegen::visit(const AST::MulExprBAnd & astNode) {

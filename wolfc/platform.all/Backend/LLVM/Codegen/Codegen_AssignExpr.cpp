@@ -91,9 +91,9 @@ void Codegen::visit(const AST::AssignExprAssignDiv & astNode) {
     CodegenDivBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, true).codegen();
 }
 
-void Codegen::visit(const AST::AssignExprAssignMod & astNode) {
+void Codegen::visit(const AST::AssignExprAssignRem & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenModBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, true).codegen();
+    CodegenRemBinaryOp(*this, astNode.mLeftExpr, astNode.mRightExpr, true).codegen();
 }
 
 void Codegen::visit(const AST::AssignExprAssignBAnd & astNode) {

@@ -86,7 +86,7 @@ enum class TokenType : uint8_t {
     /* '/=' */
     kAssignDiv,
     /* '%=' */
-    kAssignMod,
+    kAssignRem,
     /* '==' */
     kCmpEQ,
     /* '!=' */

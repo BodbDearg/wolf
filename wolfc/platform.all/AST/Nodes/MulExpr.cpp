@@ -37,7 +37,7 @@ MulExpr * MulExpr::parse(ParseCtx & parseCtx) {
     switch (parseCtx.tok()->type) {
         PARSE_OP(TokenType::kAsterisk, MulExprMul)      // *
         PARSE_OP(TokenType::kSlash, MulExprDiv)         // /
-        PARSE_OP(TokenType::kPercent, MulExprMod)       // %
+        PARSE_OP(TokenType::kPercent, MulExprRem)       // %
         PARSE_OP(TokenType::kAmpersand, MulExprBAnd)    // &
             
         default:
@@ -113,15 +113,15 @@ void MulExprDiv::accept(ASTNodeVisitor & visitor) const {
 }
 
 //-----------------------------------------------------------------------------
-// MulExprMod
+// MulExprRem
 //-----------------------------------------------------------------------------
-MulExprMod::MulExprMod(ShiftExpr & leftExpr, MulExpr & rightExpr) :
+MulExprRem::MulExprRem(ShiftExpr & leftExpr, MulExpr & rightExpr) :
     MulExprTwoOps(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-void MulExprMod::accept(ASTNodeVisitor & visitor) const {
+void MulExprRem::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

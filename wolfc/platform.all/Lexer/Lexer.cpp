@@ -219,7 +219,7 @@ Lexer::ParseResult Lexer::parseBasicTokens() {
         case '%': {
             if (mLexerState.srcPtr[1] == '=') {
                 // '%=' operator
-                return parseBasicToken(TokenType::kAssignMod, 2);
+                return parseBasicToken(TokenType::kAssignRem, 2);
             }
             else {
                 // '%' operator

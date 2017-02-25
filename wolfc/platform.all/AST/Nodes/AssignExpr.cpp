@@ -44,7 +44,7 @@ AssignExpr * AssignExpr::parse(ParseCtx & parseCtx) {
         PARSE_OP(TokenType::kAssignSub, AssignExprAssignSub)            // -=
         PARSE_OP(TokenType::kAssignMul, AssignExprAssignMul)            // *=
         PARSE_OP(TokenType::kAssignDiv, AssignExprAssignDiv)            // /=
-        PARSE_OP(TokenType::kAssignMod, AssignExprAssignMod)            // %=
+        PARSE_OP(TokenType::kAssignRem, AssignExprAssignRem)            // %=
         PARSE_OP(TokenType::kAssignLShift, AssignExprAssignLShift)      // <<=
         PARSE_OP(TokenType::kAssignARShift, AssignExprAssignARShift)    // >>=
         PARSE_OP(TokenType::kAssignLRShift, AssignExprAssignLRShift)    // >>>=
@@ -198,15 +198,15 @@ void AssignExprAssignDiv::accept(ASTNodeVisitor & visitor) const {
 }
 
 //-----------------------------------------------------------------------------
-// AssignExprAssignMod
+// AssignExprAssignRem
 //-----------------------------------------------------------------------------
-AssignExprAssignMod::AssignExprAssignMod(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
+AssignExprAssignRem::AssignExprAssignRem(TernaryExpr & leftExpr, AssignExpr & rightExpr) :
     AssignExprBinaryOpBase(leftExpr, rightExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-void AssignExprAssignMod::accept(ASTNodeVisitor & visitor) const {
+void AssignExprAssignRem::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

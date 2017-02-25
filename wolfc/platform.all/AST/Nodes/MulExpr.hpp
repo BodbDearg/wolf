@@ -62,9 +62,9 @@ public:
 };
 
 /* ShiftExpr % MulExpr */
-class MulExprMod final : public MulExprTwoOps {
+class MulExprRem final : public MulExprTwoOps {
 public:
-    MulExprMod(ShiftExpr & leftExpr, MulExpr & rightExpr);
+    MulExprRem(ShiftExpr & leftExpr, MulExpr & rightExpr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
 };

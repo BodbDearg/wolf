@@ -47,9 +47,9 @@ void ConstCodegen::visit(const AST::AssignExprAssignDiv & astNode) {
     codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssignDiv");
 }
 
-void ConstCodegen::visit(const AST::AssignExprAssignMod & astNode) {
+void ConstCodegen::visit(const AST::AssignExprAssignRem & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssignMod");
+    codegenNotSupportedForNodeTypeError(astNode, "AssignExprAssignRem");
 }
 
 void ConstCodegen::visit(const AST::AssignExprAssignBAnd & astNode) {

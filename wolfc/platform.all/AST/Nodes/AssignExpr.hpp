@@ -117,9 +117,9 @@ public:
 };
 
 /* TernaryExpr %= AssignExpr */
-class AssignExprAssignMod final : public AssignExprBinaryOpBase {
+class AssignExprAssignRem final : public AssignExprBinaryOpBase {
 public:
-    AssignExprAssignMod(TernaryExpr & leftExpr, AssignExpr & rightExpr);
+    AssignExprAssignRem(TernaryExpr & leftExpr, AssignExpr & rightExpr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
 };

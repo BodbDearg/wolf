@@ -147,12 +147,12 @@ void AddrCodegen::visit(const AST::AssignExprAssignLShift & astNode) {
     mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
 
-void AddrCodegen::visit(const AST::AssignExprAssignMod & astNode) {
+void AddrCodegen::visit(const AST::AssignExprAssignMul & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
 
-void AddrCodegen::visit(const AST::AssignExprAssignMul & astNode) {
+void AddrCodegen::visit(const AST::AssignExprAssignRem & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     mCtx.error(astNode, "Can't take the address of an assign expression!");
 }
@@ -356,14 +356,6 @@ void AddrCodegen::visit(const AST::MulExprDiv & astNode) {
                                    "divide");
 }
 
-void AddrCodegen::visit(const AST::MulExprMod & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "%",
-                                   "modulus");
-}
-
 void AddrCodegen::visit(const AST::MulExprMul & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
@@ -375,6 +367,14 @@ void AddrCodegen::visit(const AST::MulExprMul & astNode) {
 void AddrCodegen::visit(const AST::MulExprNoOp & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mExpr.accept(*this);
+}
+
+void AddrCodegen::visit(const AST::MulExprRem & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
+                                   astNode.mRightExpr,
+                                   "%",
+                                   "remainder");
 }
 
 void AddrCodegen::visit(const AST::NextStmntNoCond & astNode) {

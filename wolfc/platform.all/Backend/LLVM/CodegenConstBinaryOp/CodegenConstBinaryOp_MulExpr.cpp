@@ -54,27 +54,27 @@ WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstDivBinaryOp, UInt64, getUDiv)
 WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstDivBinaryOp, UInt8, getUDiv)
 
 //-----------------------------------------------------------------------------
-// CodegenConstModBinaryOp
+// CodegenConstRemBinaryOp
 //-----------------------------------------------------------------------------
-CodegenConstModBinaryOp::CodegenConstModBinaryOp(ConstCodegen & cg,
+CodegenConstRemBinaryOp::CodegenConstRemBinaryOp(ConstCodegen & cg,
                                                  const AST::ASTNode & leftExpr,
                                                  const AST::ASTNode & rightExpr)
 :
-    CodegenConstBinaryOp(cg, leftExpr, rightExpr, "%", "modulus")
+    CodegenConstBinaryOp(cg, leftExpr, rightExpr, "%", "remainder")
 {
     WC_EMPTY_FUNC_BODY();
 }
 
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, Int128, getSRem)
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, Int16, getSRem)
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, Int32, getSRem)
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, Int64, getSRem)
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, Int8, getSRem)
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, UInt128, getURem)
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, UInt16, getURem)
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, UInt32, getURem)
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, UInt64, getURem)
-WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstModBinaryOp, UInt8, getURem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstRemBinaryOp, Int128, getSRem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstRemBinaryOp, Int64, getSRem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstRemBinaryOp, Int32, getSRem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstRemBinaryOp, Int16, getSRem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstRemBinaryOp, Int8, getSRem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstRemBinaryOp, UInt128, getURem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstRemBinaryOp, UInt64, getURem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstRemBinaryOp, UInt32, getURem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstRemBinaryOp, UInt16, getURem)
+WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstRemBinaryOp, UInt8, getURem)
 
 //-----------------------------------------------------------------------------
 // CodegenConstBAndBinaryOp

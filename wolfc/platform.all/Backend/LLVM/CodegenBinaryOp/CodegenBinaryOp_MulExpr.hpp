@@ -41,9 +41,9 @@ public:
     virtual void visit(const UInt8DataType & dataType) override;
 };
 
-class CodegenModBinaryOp final : public CodegenBinaryOp {
+class CodegenRemBinaryOp final : public CodegenBinaryOp {
 public:
-    CodegenModBinaryOp(Codegen & cg,
+    CodegenRemBinaryOp(Codegen & cg,
                        const AST::ASTNode & leftExpr,
                        const AST::ASTNode & rightExpr,
                        bool storeResultOnLeft);
