@@ -432,6 +432,11 @@ void AddrCodegen::visit(const AST::PrefixExprPlus & astNode) {
     cantTakeAddressOfUnaryOpError(astNode, "+", "plus");
 }
 
+void AddrCodegen::visit(const AST::PrefixExprPtrDeref & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    #warning TODO
+}
+
 void AddrCodegen::visit(const AST::PrimaryExprArrayLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mLit.accept(*this);

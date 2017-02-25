@@ -25,7 +25,7 @@ bool DataType::isSigned() const {
     return false;   // False for all types by default
 }
 
-bool DataType::isPointer() const {
+bool DataType::isPtr() const {
     return false;   // False for everything except pointers
 }
 

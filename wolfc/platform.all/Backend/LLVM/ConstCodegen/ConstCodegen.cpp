@@ -120,6 +120,11 @@ void ConstCodegen::visit(const AST::PrefixExprAddrOf & astNode) {
     mCtx.error(astNode, "Can't take the address of an expression at compile time!");
 }
 
+void ConstCodegen::visit(const AST::PrefixExprPtrDeref & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    mCtx.error(astNode, "Can't dereference pointers at compile time!");
+}
+
 void ConstCodegen::visit(const AST::PrintStmnt & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     mCtx.error(astNode, "Can't evaluate an 'print()' statement at compile time!");

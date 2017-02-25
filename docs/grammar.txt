@@ -150,6 +150,7 @@ PrefixExpr:
 	+ PrefixExpr
 	- PrefixExpr
 	& PrefixExpr
+	$ PrefixExpr
 	( AssignExpr )
 
 PostfixExpr:

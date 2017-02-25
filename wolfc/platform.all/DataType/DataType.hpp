@@ -63,7 +63,7 @@ public:
     virtual bool isSigned() const;
 
     /* Utility. Tell if this data type is a pointer data type. */
-    virtual bool isPointer() const;
+    virtual bool isPtr() const;
     
     /* Utility. Tell if this data type is an array data type. */
     virtual bool isArray() const;

@@ -14,7 +14,7 @@ public:
     virtual const std::string & name() const override;
     virtual bool equals(const DataType & other) const override;
     virtual bool isValid() const override;
-    virtual bool isPointer() const override;
+    virtual bool isPtr() const override;
 
     /* The type this pointer points to */
     const DataType & mPointedToType;

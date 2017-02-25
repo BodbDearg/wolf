@@ -14,15 +14,17 @@ WC_AST_BEGIN_NAMESPACE
 //-----------------------------------------------------------------------------
 bool PrefixExpr::peek(const Token * currentToken) {
     /*
-    - PrefixExpr
-    + PrefixExpr
-    & PrefixExpr
+        - PrefixExpr
+        + PrefixExpr
+        & PrefixExpr
+        $ PrefixExpr
     */
     TokenType currentTokenType = currentToken->type;
     
     if (currentTokenType == TokenType::kMinus ||
         currentTokenType == TokenType::kPlus ||
-        currentTokenType == TokenType::kAmpersand)
+        currentTokenType == TokenType::kAmpersand ||
+        currentTokenType == TokenType::kDollar)
     {
         ++currentToken;
         WC_PARSER_SKIP_NEWLINE_TOKENS(currentToken);
@@ -80,6 +82,20 @@ PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
             WC_GUARD(expr, nullptr);
             return WC_NEW_AST_NODE(parseCtx, PrefixExprAddrOf, *plusTok, *expr);
         }   break;
+            
+        /* $ PostfixExpr */
+        case TokenType::kDollar: {
+            // Skip '$' and any newlines that follow
+            const Token * plusTok = parseCtx.tok();
+            parseCtx.nextTok();
+            parseCtx.skipNewlines();
+            
+            // Parse the operand and create the AST node
+            PrefixExpr * expr = PrefixExpr::parse(parseCtx);
+            WC_GUARD(expr, nullptr);
+            return WC_NEW_AST_NODE(parseCtx, PrefixExprPtrDeref, *plusTok, *expr);
+        }   break;
+            
             
         /* ( AssignExpr ) */
         case TokenType::kLParen: {
@@ -192,6 +208,19 @@ PrefixExprAddrOf::PrefixExprAddrOf(const Token & startToken, PrefixExpr & expr) 
 }
 
 void PrefixExprAddrOf::accept(ASTNodeVisitor & visitor) const {
+    visitor.visit(*this);
+}
+
+//-----------------------------------------------------------------------------
+// PrefixExprPtrDeref
+//-----------------------------------------------------------------------------
+PrefixExprPtrDeref::PrefixExprPtrDeref(const Token & startToken, PrefixExpr & expr) :
+    PrefixExprWithUnaryOp(startToken, expr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+    
+void PrefixExprPtrDeref::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

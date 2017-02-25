@@ -96,6 +96,7 @@ public:
     virtual void visit(const AST::PrefixExprNoOp & astNode) override;
     virtual void visit(const AST::PrefixExprParen & astNode) override;
     virtual void visit(const AST::PrefixExprPlus & astNode) override;
+    virtual void visit(const AST::PrefixExprPtrDeref & astNode) override;
     virtual void visit(const AST::PrimaryExprArrayLit & astNode) override;
     virtual void visit(const AST::PrimaryExprBoolLit & astNode) override;
     virtual void visit(const AST::PrimaryExprIdentifier & astNode) override;

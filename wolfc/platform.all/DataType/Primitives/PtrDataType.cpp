@@ -53,7 +53,7 @@ bool PtrDataType::isValid() const {
     return mPointedToType.isValid();
 }
 
-bool PtrDataType::isPointer() const {
+bool PtrDataType::isPtr() const {
     return true;
 }
 

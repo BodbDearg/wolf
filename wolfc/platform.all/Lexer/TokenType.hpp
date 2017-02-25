@@ -119,6 +119,8 @@ enum class TokenType : uint8_t {
     kTilde,
     /* & */
     kAmpersand,
+    /* $ */
+    kDollar,
     /* ^ */
     kHat,
     /* | */

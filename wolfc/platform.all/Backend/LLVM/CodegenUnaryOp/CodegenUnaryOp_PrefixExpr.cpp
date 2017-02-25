@@ -134,5 +134,68 @@ void CodegenAddrOfUnaryOp::codegen() {
     mCG.mCtx.pushValue(Value(exprAddrVal.mLLVMVal, addressOfExprCDT, false, mCG.mCtx.getCurrentASTNode()));
 }
 
+//-----------------------------------------------------------------------------
+// CodegenPtrDerefUnaryOp
+//-----------------------------------------------------------------------------
+CodegenPtrDerefUnaryOp::CodegenPtrDerefUnaryOp(Codegen & cg,
+                                               const AST::ASTNode & expr,
+                                               bool storeResultInExpr)
+:
+    CodegenUnaryOp(cg,
+                   expr,
+                   "$",
+                   "dereference pointer",
+                    storeResultInExpr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+void CodegenPtrDerefUnaryOp::codegen() {
+    // Sanity check, this is not allowed for this op type:
+    if (mStoreResultInExpr) {
+        mCG.mCtx.error("Internal error! Storing the result of a unary 'pointer dereference' op in "
+                       "the same operand is not allowed!");
+        
+        return;
+    }
+    
+    // Get the type for the operand:
+    const AST::IExpr * nodeAsExpr = dynamic_cast<const AST::IExpr*>(&mExpr);
+    
+    if (!nodeAsExpr) {
+        mCG.mCtx.error(mExpr,
+                       "Operand of '%s' (%s) operator must be an expression with a value result!",
+                       mOpSymbol,
+                       mOpName);
+    }
+    
+    // Evaluate the operand expression. If that fails then bail out:
+    mExpr.accept(mCG);
+    Value exprVal = mCG.mCtx.popValue();
+    WC_GUARD(exprVal.isValid());
+    
+    // The expression must be a pointer type:
+    const CompiledDataType & exprCDT = exprVal.mCompiledType;
+    const DataType & exprDataType = exprCDT.getDataType();
+    
+    if (!exprDataType.isPtr()) {
+        mCG.mCtx.error("Can only dereference an expression that is of a pointer type! The expression type ('%s') "
+                       "being dereferenced is not a pointer!",
+                       exprDataType.name().c_str());
+        
+        return;
+    }
+    
+    const PtrDataType & ptrDataType = static_cast<const PtrDataType&>(exprDataType);
+    
+    // Makeup the data type for the returned value
+    CompiledDataType dereferencedValCDT(ptrDataType.mPointedToType,
+                                        exprCDT.getLLVMType()->getPointerElementType());
+    
+    // Makeup the return value (load of pointed to value) and save the result
+    llvm::Value * derefLLVMVal = mCG.mCtx.mIRBuilder.CreateLoad(exprVal.mLLVMVal, "CodegenPtrDerefUnaryOp:Load");
+    mCG.mCtx.pushValue(Value(derefLLVMVal, dereferencedValCDT, false, mCG.mCtx.getCurrentASTNode()));
+}
+
 WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

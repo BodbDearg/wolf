@@ -50,5 +50,14 @@ public:
     virtual void codegen() override;
 };
 
+class CodegenPtrDerefUnaryOp final : public CodegenUnaryOp {
+public:
+    CodegenPtrDerefUnaryOp(Codegen & cg,
+                           const AST::ASTNode & expr,
+                           bool storeResultInExpr);
+    
+    virtual void codegen() override;
+};
+
 WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE
