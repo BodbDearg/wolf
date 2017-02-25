@@ -2,32 +2,49 @@
 ; AssignExpr
 ;==================================================================================================
 func testAssignExpr()
+    ; Test: basic '=' assign
     let i = 0
     assert(i == 0)
     i = 1
     assert(i == 1)
+
+    ; Test: '+=' operator
     i += 2
     assert(i == 3)
+
+    ; Test: '-=' operator
     i -= 2
     assert(i == 1)
+
+    ; Test: '|=' operator
     i |= 4
     assert(i == 5)
     i |= 1
     assert(i == 5)
     i |= 2
     assert(i == 7)
+
+    ; Test: '^=' operator
     i ^= 1    
     assert(i == 6)
     i ^= 4
     assert(i == 2)
+
+    ; Test: '*=' operator
     i *= 5
     assert(i == 10)
+
+    ; Test: '/=' operator
     i /= 5
     assert(i == 2)
-    i %= 3    
+
+    ; Test: '%=' operator
+    i %= 3
     assert(i == 2)
     i %= 2
     assert(i == 0)
+
+    ; Test: '&=' operator
     i = 7
     i &= 3
     assert(i == 3)
@@ -35,14 +52,20 @@ func testAssignExpr()
     assert(i == 3)
     i &= 4
     assert(i == 0)
+
+    ; Test: '<<=' operator
     i = 10
     i <<= 1
     assert(i == 20)
+
+    ; Test: '>>=' operator
     i >>= 2
     assert(i == 5)
     i = -10
     i >>= 1
     assert(i == -5)
+
+    ; Test: '>>>=' operator
     i = -1
     i >>>= 63
     assert(i == 1)  ; FIXME - this won't work if int type is 32-bit    
@@ -52,11 +75,13 @@ end
 ; TernaryExpr
 ;==================================================================================================
 let testTernaryExprConstexpr = [
+    ; Test: ternary '? : ' expression
     (true ? 1 : 2) == 1,
     (false ? 1 : 2) == 2
 ]
 
 func testTernaryExpr()
+    ; Test: ternary '? : ' expression
     assert((true ? 1 : 2) == 1)
     assert((false ? 1 : 2) == 2)
 
@@ -72,6 +97,7 @@ end
 ; OrExpr
 ;==================================================================================================
 let testOrExprConstexpr = [
+    ; Test: logical or
     not (false or false),
     true or false,
     true or true,
@@ -79,6 +105,7 @@ let testOrExprConstexpr = [
 ]
 
 func testOrExpr()
+    ; Test: logical or
     assert(not (false or false))
     assert(true or false)
     assert(true or true)
@@ -96,6 +123,7 @@ end
 ; AndExpr
 ;==================================================================================================
 let testAndExprConstexpr = [
+    ; Test: logical and
     not (false and false),
     not (true and false),
     not (false and true),
@@ -103,6 +131,7 @@ let testAndExprConstexpr = [
 ]
 
 func testAndExpr()
+    ; Test: logical and
     assert(not (false and false))
     assert(not (true and false))
     assert(not (false and true))
@@ -120,19 +149,25 @@ end
 ; NotExpr
 ;==================================================================================================
 let testNotExprConstexpr = [
+    ; Test: logical not
     not false,
     not 1 > 2,
     not not true,
     not not 1 < 2,
+
+    ; Test: bitwise not
     (~-1) == 0,
     (~-2) == 1
 ]
 
 func testNotExpr()
+    ; Test: logical not
     assert(not false)
     assert(not 1 > 2)
     assert(not not true)
     assert(not not 1 < 2)
+
+    ; Test: bitwise not
     assert((~-1) == 0)
     assert((~-2) == 1)
 
@@ -148,61 +183,99 @@ end
 ; CmpExpr
 ;==================================================================================================
 let testCmpExprConstexpr = [
+    ; Test: ==
     2 == 2,
     not 1 == 2,
     not 3 == 2,
+
+    ; Test: !=
     not 2 != 2,
     1 != 2,
     3 != 2,
+
+    ; Test: <
     1 < 2,
     not 2 < 2,
     not 3 < 2,
+
+    ; Test: <=
     1 <= 2,
     2 <= 2,
     not 3 <= 2,
+
+    ; Test: >
     2 > 1,
     not 1 > 1,
     not 0 > 1,
+
+    ; Test: >=
     2 >= 1,
     1 >= 1,
     not 0 >= 1,
+
+    ; Test: boolean literals
     true == true,
     false != true,
     not true == false,
-    not false != false
+    not false != false,
+
+    ; Test: is (alias for '==')
+    1234 is 1234,
+    not 1234 is 5678,
+
+    ; Test: is not (alias for '!=')
+    1234 is not 5678,
+    not 1234 is not 1234
 ]
 
 func testCmpExpr()
+    ; Test: ==
     assert(2 == 2)
     assert(not 1 == 2)
     assert(not 3 == 2)
+
+    ; Test: !=
     assert(not 2 != 2)
     assert(1 != 2)
     assert(3 != 2)
+
+    ; Test: <
     assert(1 < 2)
     assert(not 2 < 2)
     assert(not 3 < 2)
+
+    ; Test: <=
     assert(1 <= 2)
     assert(2 <= 2)
     assert(not 3 <= 2)
+
+    ; Test: >
     assert(2 > 1)
     assert(not 1 > 1)
     assert(not 0 > 1)
+
+    ; Test: >=
     assert(2 >= 1)
     assert(1 >= 1)
     assert(not 0 >= 1)
+
+    ; Test: boolean literals
     assert(true == true)
     assert(false != true)
     assert(not true == false)
     assert(not false != false)
+
+    ; Test: is (alias for '==')
     assert(1234 is 1234)
     assert(not 1234 is 5678)
+
+    ; Test: is not (alias for '!=')
     assert(1234 is not 5678)
     assert(not 1234 is not 1234)
 
     ; Make sure the constant expression tests pass
     let testNum = 0
-    while testNum < 22
+    while testNum < 26
         assert(testCmpExprConstexpr[testNum])
         testNum++
     end
@@ -212,34 +285,48 @@ end
 ; AddExpr
 ;==================================================================================================
 let testAddExprConstexpr = [
+    ; Test: add
     1 + 2 == 3,
     1 + +2 == 3,
     +1 + +2 == 3,
     1 + -2 == -1,
     -1 + -2 == -3,
+
+    ; Test: subtract
     2 - 5 == -3,
     2 - -5 == 7,
     -2 - -5 == 3,
+
+    ; Test: bitwise or
     1 | 2 == 3,
     1 | 1 == 1,
     0 | 1 == 1,
+
+    ; Test: bitwise xor
     1 ^ 2 == 3,
     1 ^ 1 == 0,
     0 ^ 1 == 1
 ]
 
 func testAddExpr()
+    ; Test: add
     assert(1 + 2 == 3)
     assert(1 + +2 == 3)
     assert(+1 + +2 == 3)
     assert(1 + -2 == -1)
     assert(-1 + -2 == -3)
+
+    ; Test: subtract
     assert(2 - 5 == -3)
     assert(2 - -5 == 7)
     assert(-2 - -5 == 3)
+
+    ; Test: bitwise or
     assert(1 | 2 == 3)
     assert(1 | 1 == 1)
     assert(0 | 1 == 1)
+
+    ; Test: bitwise xor
     assert(1 ^ 2 == 3)
     assert(1 ^ 1 == 0)
     assert(0 ^ 1 == 1)
@@ -256,13 +343,20 @@ end
 ; MulExpr
 ;==================================================================================================
 let testMulExprConstexpr = [
+    ; Test: multiply
     2 * 2 == 4,
     2 * -2 == -4,
     -2 * -2 == 4,
+
+    ; Test: divide
     10 / 2 == 5,
     10 / -2 == -5,
+
+    ; Test: remainder
     5 % 3 == 2,
     5 % 3 == 2,
+
+    ; Test: bitwise and
     1 & 1 == 1,
     2 & 1 == 0,
     3 & 1 == 1,
@@ -270,13 +364,20 @@ let testMulExprConstexpr = [
 ]
 
 func testMulExpr()
+    ; Test: multiply
     assert(2 * 2 == 4)
     assert(2 * -2 == -4)
     assert(-2 * -2 == 4)
+
+    ; Test: divide
     assert(10 / 2 == 5)
     assert(10 / -2 == -5)
+
+    ; Test: remainder
     assert(5 % 3 == 2)
     assert(5 % -3 == 2)
+
+    ; Test: bitwise and
     assert(1 & 1 == 1)
     assert(2 & 1 == 0)
     assert(3 & 1 == 1)
@@ -294,13 +395,18 @@ end
 ; ShiftExpr
 ;==================================================================================================
 let testShiftExprConstexpr = [
+    ; Test: left shift
     1 << 0 == 1,
     1 << 1 == 2,
     2 << 2 == 8,
+
+    ; Test: arithmetic right shift
     8 >> 0 == 8,
     8 >> 1 == 4,
     8 >> 2 == 2,
     -8 >> 2 == -2,
+
+    ; Test: logical right shift
     8 >>> 0 == 8,
     8 >>> 1 == 4,
     8 >>> 2 == 2,
@@ -320,13 +426,18 @@ let testShiftExprConstexpr = [
 ]
 
 func testShiftExpr()
+    ; Test: left shift
     assert(1 << 0 == 1)
     assert(1 << 1 == 2)
     assert(2 << 2 == 8)
+
+    ; Test: arithmetic right shift
     assert(8 >> 0 == 8)
     assert(8 >> 1 == 4)
     assert(8 >> 2 == 2)
     assert(-8 >> 2 == -2)
+
+    ; Test: logical right shift
     assert(8 >>> 0 == 8)
     assert(8 >>> 1 == 4)
     assert(8 >>> 2 == 2)
@@ -442,6 +553,7 @@ func testPostfixExprFuncCall5(v1: int, v2: int, v3: int) -> int
     return v1 * v2 * v3
 end
 
+; Test: constant array lookups
 let testPostfixExprConstexpr = [
     [1, 2, 3][2] == 3,
     [1, 2, 3][0] == 1
@@ -487,6 +599,7 @@ func testPostfixExpr()
     assert(array2[1][0] == 7)
     assert(array2[1][1] == 8)
 
+    ; Make sure the constant expression tests passed
     assert(testPostfixExprConstexpr[0])
     assert(testPostfixExprConstexpr[1])
 end
@@ -494,44 +607,49 @@ end
 ;==================================================================================================
 ; CastExpr
 ;==================================================================================================
+
+; Testing constant basic 'no-op' casts. 
+; Note: More detailed cast tests can be found in 'casts.wolf'
 let testConstCastExpr1 = cast(2 to int)
 let testConstCastExpr2 = cast(2 to int64)
 
 func testCastExpr()
-    assert(2 == cast(2 to int))     ; No-op cast
-    assert(2 == cast(2 to int64))   ; No-op cast
-    assert(2 == testConstCastExpr1) ; No-op cast
-    assert(2 == testConstCastExpr2) ; No-op cast
+    ; Testing basic 'no-op' casts.
+    ; Note: More detailed cast tests can be found in 'casts.wolf'
+    assert(2 == cast(2 to int))
+    assert(2 == cast(2 to int64))
+    assert(2 == testConstCastExpr1)
+    assert(2 == testConstCastExpr2)
 end
 
 ;==================================================================================================
 ; PrimaryExpr
 ;==================================================================================================
 
-; Testing constant primary expressions of various types
+; Test: constant primary expressions of various types
 let testPrimaryExprConst1 = 234
 let testPrimaryExprConst2 = false
 let testPrimaryExprConst3 = [44, 55, 66]
 let testPrimaryExprConst4 = "Hello world!"  ; TODO: In future do more here?
 
 func testPrimaryExpr()
-    ; IntLit
+    ; Test: IntLit
     let v1 = 1
     let v2 = 1234
     assert(v1 == 1)
     assert(v2 == 1234)
 
-    ; BoolLit
+    ; Test: BoolLit
     let v3 = false
     let v4 = true
     assert(not v3)
     assert(v4)
 
-    ; StrLit
+    ; Test: StrLit
     ; TODO: In future do more here?
     let v5 = "Hello world!"
 
-    ; ArrayLit
+    ; Test: ArrayLit
     let v6 = [
         [ [ 1 ] ],
         [ [ 2 ] ]
@@ -542,7 +660,7 @@ func testPrimaryExpr()
     assert([11, 22, 33, 44][1] == 22)
     assert([11, 22, 33, 44][2] == 33)
 
-    ; Test constant primary expression literals
+    ; Make sure the constant expression tests passed
     assert(testPrimaryExprConst1 == 234)
     assert(not testPrimaryExprConst2)
     assert(testPrimaryExprConst3[1] == 55)
@@ -571,19 +689,22 @@ func testLazyEvalFalseNoCall() -> bool
     return false
 end
 
-func testLazyEval() 
+func testLazyEval()
+    ; Test: lazy 'or'
     assert((
         testLazyEvalTrue() or
         testLazyEvalTrueNoCall() or
         testLazyEvalFalseNoCall()
     ) is true)
 
+    ; Test: lazy 'and'
     assert((
         testLazyEvalFalse() and
         testLazyEvalTrueNoCall() and
         testLazyEvalFalseNoCall()
     ) is false)
 
+    ; Test: lazy 'or' within sub expression which won't be called
     assert((
         testLazyEvalFalse() and (
             testLazyEvalTrueNoCall() or 
@@ -592,6 +713,7 @@ func testLazyEval()
         testLazyEvalFalseNoCall()
     ) is false)
 
+    ; Test: yeah this one is a bit mad...
     assert((
         testLazyEvalFalse() or (
             testLazyEvalTrue() and 
