@@ -346,31 +346,44 @@ func testShiftExpr()
 end
 
 ;==================================================================================================
-; UnaryExpr
+; PrefixExpr
 ;==================================================================================================
-let testUnaryExprConstexpr = [
+let testPrefixExprConstexpr = [
+    ; Test: + and - prefix operators
     +1 == 1,
     -1 == -1,
+
+    ; Test: parentheses
     (1 + 2) * 2 == 6,
     1 + (2 * 2) == 5,
-    ((1 + 2) * (3 + 4)) * 2 == 42
+    ((1 + 2) * (3 + 4)) * 2 == 42,
+
+    ; Test nested prefix expressions
+    + + 1  == + + 1,
+    + + 1  == 1,
+    - - 1  == - - 1,
+    - - 1  == 1
 ]
 
-func testUnaryExpr()
+func testPrefixExpr()
+    ; Test: + and - prefix operators
     assert(+1 == 1)
     assert(-1 == -1)
+    
+    ; Test: parentheses
     assert((1 + 2) * 2 == 6)
     assert(1 + (2 * 2) == 5)
     assert(((1 + 2) * (3 + 4)) * 2 == 42)
 
+    ; Test nested prefix expressions
     assert(+ + 1  == + + 1)
     assert(+ + 1  == 1)
     assert(- - 1  == - - 1)
     assert(- - 1  == 1)
 
     let testNum = 0
-    while testNum < 5
-        assert(testUnaryExprConstexpr[testNum])
+    while testNum < 9
+        assert(testPrefixExprConstexpr[testNum])
         testNum++
     end
 end
@@ -581,7 +594,7 @@ func main() -> int
     testAddExpr()
     testMulExpr()
     testShiftExpr()
-    testUnaryExpr()
+    testPrefixExpr()
     testPostfixExpr()
     testCastExpr()
     testPrimaryExpr()
