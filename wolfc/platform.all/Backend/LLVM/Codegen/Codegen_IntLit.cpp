@@ -1,10 +1,10 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/IntLit.hpp"
+#include "Assert.hpp"
 #include "DataType/DataType.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "Lexer/Token.hpp"
 
 WC_BEGIN_NAMESPACE

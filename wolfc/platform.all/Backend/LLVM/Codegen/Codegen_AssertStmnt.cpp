@@ -1,9 +1,9 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/AssertStmnt.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
+#include "Assert.hpp"
 #include "DataType/DataType.hpp"
 #include "Lexer/Token.hpp"
 #include "StringUtils.hpp"

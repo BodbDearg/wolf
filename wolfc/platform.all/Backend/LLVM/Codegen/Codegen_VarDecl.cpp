@@ -2,12 +2,12 @@
 
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/Identifier.hpp"
 #include "AST/Nodes/Scope.hpp"
 #include "AST/Nodes/Type.hpp"
 #include "AST/Nodes/VarDecl.hpp"
+#include "Assert.hpp"
 #include "DataType/DataType.hpp"
 #include "StringUtils.hpp"
 

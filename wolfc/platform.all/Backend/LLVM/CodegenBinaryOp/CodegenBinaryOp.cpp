@@ -2,12 +2,12 @@
 
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/ASTNode.hpp"
 #include "AST/Nodes/IExpr.hpp"
+#include "Assert.hpp"
 #include "DataType/DataType.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
-#include "DataType/Primitives/VoidDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
+#include "DataType/Types/VoidDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE

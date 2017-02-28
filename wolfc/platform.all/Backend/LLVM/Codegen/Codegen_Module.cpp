@@ -1,9 +1,9 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/DeclDef.hpp"
 #include "AST/Nodes/Module.hpp"
+#include "Assert.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE

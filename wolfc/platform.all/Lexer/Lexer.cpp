@@ -2,9 +2,9 @@
 
 #include "Assert.hpp"
 #include "CharUtils.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "StringUtils.hpp"
 #include "Token.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <memory>

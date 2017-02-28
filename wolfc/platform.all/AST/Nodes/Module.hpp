@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Assert.hpp"
 #include "ASTNode.hpp"
+#include "Assert.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <map>

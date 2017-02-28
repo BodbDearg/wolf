@@ -1,12 +1,12 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/Func.hpp"
 #include "AST/Nodes/FuncArg.hpp"
 #include "AST/Nodes/Scope.hpp"
+#include "Assert.hpp"
 #include "DataType/DataType.hpp"
-#include "DataType/Primitives/FuncDataType.hpp"
+#include "DataType/Types/FuncDataType.hpp"
 #include "Finally.hpp"
 #include "StringUtils.hpp"
 

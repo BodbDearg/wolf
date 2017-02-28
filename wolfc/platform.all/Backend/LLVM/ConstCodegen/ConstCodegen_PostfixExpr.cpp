@@ -1,12 +1,12 @@
 #include "ConstCodegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/CastExpr.hpp"
 #include "AST/Nodes/PostfixExpr.hpp"
+#include "Assert.hpp"
 #include "DataType/DataType.hpp"
-#include "DataType/Primitives/ArrayDataType.hpp"
+#include "DataType/Types/ArrayDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE

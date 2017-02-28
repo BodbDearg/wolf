@@ -1,9 +1,9 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/Scope.hpp"
 #include "AST/Nodes/Stmnt.hpp"
+#include "Assert.hpp"
 #include "Finally.hpp"
 
 WC_BEGIN_NAMESPACE

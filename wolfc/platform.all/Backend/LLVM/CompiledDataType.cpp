@@ -1,8 +1,8 @@
 #include "CompiledDataType.hpp"
 
 #include "Assert.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
-#include "DataType/Primitives/InvalidDataType.hpp"
+#include "DataType/Types/InvalidDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/IRBuilder.h>

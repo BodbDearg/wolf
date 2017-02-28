@@ -3,8 +3,8 @@
 #include "../CodegenCtx.hpp"
 #include "../ConstCodegen/ConstCodegen.hpp"
 #include "Assert.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
-#include "DataType/Primitives/BoolDataType.hpp"
+#include "DataType/Types/BoolDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE

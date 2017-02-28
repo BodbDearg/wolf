@@ -1,7 +1,6 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/AssertStmnt.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/BreakStmnt.hpp"
@@ -15,6 +14,7 @@
 #include "AST/Nodes/Stmnt.hpp"
 #include "AST/Nodes/VarDecl.hpp"
 #include "AST/Nodes/WhileStmnt.hpp"
+#include "Assert.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE

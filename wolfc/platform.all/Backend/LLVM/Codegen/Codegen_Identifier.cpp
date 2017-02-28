@@ -2,8 +2,8 @@
 
 #include "../CodegenCtx.hpp"
 #include "../Value.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/Identifier.hpp"
+#include "Assert.hpp"
 #include "Lexer/Token.hpp"
 
 WC_BEGIN_NAMESPACE

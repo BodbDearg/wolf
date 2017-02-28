@@ -2,10 +2,10 @@
 
 #include "../CodegenCtx.hpp"
 #include "../Constant.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/StrLit.hpp"
+#include "Assert.hpp"
 #include "DataType/DataType.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "Lexer/Token.hpp"
 
 WC_BEGIN_NAMESPACE

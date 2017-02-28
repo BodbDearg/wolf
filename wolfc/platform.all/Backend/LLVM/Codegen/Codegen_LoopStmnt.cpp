@@ -2,10 +2,10 @@
 
 #include "../CodegenCtx.hpp"
 #include "../RepeatableStmnt.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/LoopStmnt.hpp"
 #include "AST/Nodes/Scope.hpp"
+#include "Assert.hpp"
 #include "DataType/DataType.hpp"
 #include "Lexer/Token.hpp"
 #include "StringUtils.hpp"

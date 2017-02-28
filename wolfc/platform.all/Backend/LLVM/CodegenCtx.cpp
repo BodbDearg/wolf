@@ -1,11 +1,11 @@
 #include "CodegenCtx.hpp"
 
-#include "Assert.hpp"
 #include "AST/Nodes/ASTNode.hpp"
 #include "AST/Nodes/Func.hpp"
 #include "AST/Nodes/IRepeatableStmnt.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
-#include "DataType/Primitives/InvalidDataType.hpp"
+#include "Assert.hpp"
+#include "DataType/Types/InvalidDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "Lexer/Token.hpp"
 #include "RepeatableStmnt.hpp"
 

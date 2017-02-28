@@ -2,9 +2,9 @@
 
 #include "../CodegenCtx.hpp"
 #include "../ConstCodegen/ConstCodegen.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/ASTNode.hpp"
 #include "AST/Nodes/IExpr.hpp"
+#include "Assert.hpp"
 #include "DataType/DataType.hpp"
 
 WC_BEGIN_NAMESPACE

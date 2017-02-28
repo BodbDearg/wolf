@@ -1,11 +1,11 @@
 #include "PrimitiveDataTypes.hpp"
 
+#include "BoolDataType.hpp"
+#include "IntDataTypes.hpp"
+#include "InvalidDataType.hpp"
 #include "Lexer/TokenType.hpp"
-#include "Primitives/BoolDataType.hpp"
-#include "Primitives/IntDataTypes.hpp"
-#include "Primitives/InvalidDataType.hpp"
-#include "Primitives/StrDataType.hpp"
-#include "Primitives/VoidDataType.hpp"
+#include "StrDataType.hpp"
+#include "VoidDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 

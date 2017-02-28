@@ -4,12 +4,12 @@
 #include "../CodegenBinaryOp/CodegenBinaryOp_MulExpr.hpp"
 #include "../CodegenBinaryOp/CodegenBinaryOp_ShiftExpr.hpp"
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/TernaryExpr.hpp"
+#include "Assert.hpp"
 #include "DataType/DataType.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
-#include "DataType/Primitives/VoidDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
+#include "DataType/Types/VoidDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE

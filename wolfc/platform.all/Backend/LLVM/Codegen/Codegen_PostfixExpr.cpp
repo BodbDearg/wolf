@@ -2,11 +2,11 @@
 
 #include "../CodegenCtx.hpp"
 #include "../CodegenUnaryOp/CodegenUnaryOp_PostfixExpr.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/CastExpr.hpp"
 #include "AST/Nodes/PostfixExpr.hpp"
-#include "DataType/Primitives/FuncDataType.hpp"
+#include "Assert.hpp"
+#include "DataType/Types/FuncDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE

@@ -1,10 +1,10 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/IfStmnt.hpp"
 #include "AST/Nodes/Scope.hpp"
+#include "Assert.hpp"
 #include "DataType/DataType.hpp"
 #include "StringUtils.hpp"
 

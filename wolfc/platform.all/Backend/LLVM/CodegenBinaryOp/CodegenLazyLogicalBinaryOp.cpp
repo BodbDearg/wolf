@@ -2,9 +2,9 @@
 
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/ASTNode.hpp"
 #include "AST/Nodes/IExpr.hpp"
+#include "Assert.hpp"
 #include "DataType/DataType.hpp"
 #include "StringUtils.hpp"
 

@@ -1,7 +1,7 @@
 #include "DataType.hpp"
 
-#include "Assert.hpp"
 #include "AST/Nodes/ASTNode.hpp"
+#include "Assert.hpp"
 
 WC_BEGIN_NAMESPACE
 

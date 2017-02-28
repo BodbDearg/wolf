@@ -1,12 +1,12 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/ReturnStmnt.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
-#include "DataType/Primitives/FuncDataType.hpp"
-#include "DataType/Primitives/VoidDataType.hpp"
+#include "Assert.hpp"
+#include "DataType/Types/FuncDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
+#include "DataType/Types/VoidDataType.hpp"
 #include "StringUtils.hpp"
 
 WC_BEGIN_NAMESPACE

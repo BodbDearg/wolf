@@ -2,8 +2,8 @@
 
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/Type.hpp"
+#include "Assert.hpp"
 #include "DataType/DataType.hpp"
 
 WC_BEGIN_NAMESPACE

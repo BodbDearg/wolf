@@ -3,8 +3,8 @@
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
 #include "AssignExpr.hpp"
-#include "LinearAlloc.hpp"
 #include "LOrExpr.hpp"
+#include "LinearAlloc.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE

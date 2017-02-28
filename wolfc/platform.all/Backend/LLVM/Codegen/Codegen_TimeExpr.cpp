@@ -1,11 +1,11 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "Assert.hpp"
 #include "AST/Nodes/TimeExpr.hpp"
+#include "Assert.hpp"
 #include "DataType/DataType.hpp"
 #include "DataType/DataTypeId.hpp"
-#include "DataType/PrimitiveDataTypes.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
