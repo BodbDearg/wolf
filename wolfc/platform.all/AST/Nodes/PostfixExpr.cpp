@@ -1,3 +1,9 @@
+//==============================================================================
+// The Wolf Programming Language.
+//      Copyright (c) 2016, Darragh Coy.
+//      See LICENSE.txt for license details.
+//==============================================================================
+
 #include "PostfixExpr.hpp"
 
 #include "../ASTNodeVisitor.hpp"

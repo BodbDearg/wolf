@@ -1,5 +1,11 @@
 %YAML 1.2
 ---
+#==================================================================================================
+# The Wolf Programming Language.
+#       Copyright (c) 2016, Darragh Coy.
+#       See LICENSE.txt for license details.
+#==================================================================================================
+
 # http://www.sublimetext.com/docs/3/syntax.html
 name: Wolf Programming Language (0.03)
 file_extensions:

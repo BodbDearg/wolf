@@ -1,3 +1,9 @@
+//==============================================================================
+// The Wolf Programming Language.
+//      Copyright (c) 2016, Darragh Coy.
+//      See LICENSE.txt for license details.
+//==============================================================================
+
 #pragma once
 
 #include "AST/ASTNodeVisitor.hpp"

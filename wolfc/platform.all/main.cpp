@@ -1,3 +1,9 @@
+//==============================================================================
+// The Wolf Programming Language.
+//      Copyright (c) 2016, Darragh Coy.
+//      See LICENSE.txt for license details.
+//==============================================================================
+
 #include "AST/Nodes/Module.hpp"
 #include "Backend/LLVM/Codegen/Codegen.hpp"
 #include "Backend/LLVM/CodegenCtx.hpp"
