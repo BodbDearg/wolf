@@ -54,6 +54,11 @@ public:
         return getTypeId() == DataTypeId::kVoid;
     }
     
+    /* Utility. Tell if this data type is the 'any' data type. */
+    inline bool isAny() const {
+        return getTypeId() == DataTypeId::kAny;
+    }
+    
     /* Utility. Tell if this data type is the 'bool' data type. */
     inline bool isBool() const {
         return getTypeId() == DataTypeId::kBool;

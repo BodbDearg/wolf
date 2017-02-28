@@ -116,6 +116,12 @@ void CodegenDataType::visitASTNode(const AST::FuncArg & funcArg) {
     }
 }
 
+void CodegenDataType::visit(const AnyDataType & dataType) {
+    // We can't codegen an 'any' data type
+    WC_UNUSED_PARAM(dataType);
+    mCtx.error("Can't codegen the concrete llvm data type for type 'any' because it is ambiguous!");
+}
+
 void CodegenDataType::visit(const ArrayDataType & dataType) {
     // Codegen the element type. If that fails then bail out.
     dataType.mElemType.accept(*this);

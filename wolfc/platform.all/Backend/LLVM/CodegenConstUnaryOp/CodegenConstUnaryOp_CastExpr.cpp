@@ -39,6 +39,7 @@ public:
             issueUnsupportedCastError();\
         }
     
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(Any)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Array)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Bool)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Func)
@@ -96,6 +97,21 @@ private:
         WC_UNUSED_PARAM(toType);\
         pushOpResult(llvm::ConstantExpr::CastGetFunc(mFromConst.mLLVMConst, mToTypeCDT.getLLVMType()));\
     }
+
+//-----------------------------------------------------------------------------
+// Cast From: Any
+//-----------------------------------------------------------------------------
+class CodegenConstCastFromAnyUnaryOp final : public CodegenConstCastFromTypeUnaryOp {
+public:
+    CodegenConstCastFromAnyUnaryOp(ConstCodegen & cg,
+                                   const Constant & fromConst,
+                                   const CompiledDataType & toTypeCDT)
+    :
+        CodegenConstCastFromTypeUnaryOp(cg, fromConst, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
 
 //-----------------------------------------------------------------------------
 // Cast From: Array
@@ -483,6 +499,7 @@ void CodegenConstCastUnaryOp::codegen() {
                                                     mToTypeCDT).codegen();\
     }
 
+IMPL_CAST_FROM_TYPE_FUNC(Any)
 IMPL_CAST_FROM_TYPE_FUNC(Array)
 IMPL_CAST_FROM_TYPE_FUNC(Bool)
 IMPL_CAST_FROM_TYPE_FUNC(Func)

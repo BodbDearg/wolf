@@ -138,6 +138,8 @@ enum class TokenType : uint8_t {
     
     /* 'void' */
     kVoid,
+    /* 'any' */
+    kAny,
     /* 'int' */
     kInt,
     /* 'int8' */

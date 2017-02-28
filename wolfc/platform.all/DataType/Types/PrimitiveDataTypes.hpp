@@ -14,6 +14,7 @@ WC_THIRD_PARTY_INCLUDES_END
 
 WC_BEGIN_NAMESPACE
 
+class AnyDataType;
 class BoolDataType;
 class DataType;
 class InvalidDataType;
@@ -50,13 +51,16 @@ namespace PrimitiveDataTypes {
     /* Tells if the given language token is a primitive type. */
     bool isLangKeywordPrimitiveType(TokenType tokenType);
     
-    /* Get the invalid data type */
+    /* Get the '<invalid>' data type */
     const InvalidDataType & getInvalidDataType();
 
-    /* Get the void data type */
+    /* Get the 'void' data type */
     const VoidDataType & getVoidDataType();
     
-    /* Get the bool data type */
+    /* Get the 'any' data type */
+    const AnyDataType & getAnyDataType();
+    
+    /* Get the 'bool' data type */
     const BoolDataType & getBoolDataType();
     
     /**

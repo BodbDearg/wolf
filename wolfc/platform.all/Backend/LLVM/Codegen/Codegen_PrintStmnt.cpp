@@ -126,6 +126,7 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
                 
             case DataTypeId::kInvalid:
             case DataTypeId::kVoid:
+            case DataTypeId::kAny:
             case DataTypeId::kArray:
             case DataTypeId::kFunc:
                 mCtx.error(astNode,

@@ -10,7 +10,7 @@
 
 WC_BEGIN_NAMESPACE
 
-static const std::string kName = "<invalid>";
+static const std::string kName = "<Invalid>";
 
 void InvalidDataType::accept(DataTypeVisitor & visitor) const {
     visitor.visit(*this);

@@ -25,6 +25,7 @@ public:
     
     virtual void codegen() override;
     
+    virtual void visit(const AnyDataType & dataType) override;
     virtual void visit(const ArrayDataType & dataType) override;
     virtual void visit(const BoolDataType & dataType) override;
     virtual void visit(const FuncDataType & dataType) override;

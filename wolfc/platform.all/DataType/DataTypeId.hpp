@@ -18,8 +18,10 @@ WC_BEGIN_NAMESPACE
 enum class DataTypeId : uint8_t {
     /* Invalid data type. Used for compiler errors, when we can't tell the type of something. */
     kInvalid,
-    /* Void/null data type. No actual data held. */
+    /* Void/non-existant data type. No actual data held. */
     kVoid,
+    /* Any non void and valid data type. Can only be used for pointers and references. */
+    kAny,
     /* Boolean data type */
     kBool,
     /* Signed 8-bit integer data type */

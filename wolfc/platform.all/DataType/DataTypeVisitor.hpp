@@ -10,6 +10,7 @@
 
 WC_BEGIN_NAMESPACE
 
+class AnyDataType;
 class ArrayDataType;
 class BoolDataType;
 class FuncDataType;
@@ -33,6 +34,7 @@ class DataTypeVisitor {
 public:
     virtual ~DataTypeVisitor() = default;
     
+    virtual void visit(const AnyDataType & dataType) = 0;
     virtual void visit(const ArrayDataType & dataType) = 0;
     virtual void visit(const BoolDataType & dataType) = 0;
     virtual void visit(const FuncDataType & dataType) = 0;

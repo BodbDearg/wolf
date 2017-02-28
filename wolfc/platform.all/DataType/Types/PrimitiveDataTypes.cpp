@@ -6,6 +6,7 @@
 
 #include "PrimitiveDataTypes.hpp"
 
+#include "AnyDataType.hpp"
 #include "BoolDataType.hpp"
 #include "IntDataTypes.hpp"
 #include "InvalidDataType.hpp"
@@ -18,6 +19,7 @@ WC_BEGIN_NAMESPACE
 /* Instances of the types themselves! */
 static InvalidDataType  gInvalidDataType;
 static VoidDataType     gVoidDataType;
+static AnyDataType      gAnyDataType;
 static Int128DataType   gInt128DataType;
 static Int16DataType    gInt16DataType;
 static Int32DataType    gInt32DataType;
@@ -38,6 +40,7 @@ const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
             
         // The basic data types
         case DataTypeId::kVoid: return gVoidDataType;
+        case DataTypeId::kAny: return gAnyDataType;
         case DataTypeId::kInt8: return gInt8DataType;
         case DataTypeId::kInt16: return gInt16DataType;
         case DataTypeId::kInt32: return gInt32DataType;
@@ -64,6 +67,7 @@ const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
 DataTypeId PrimitiveDataTypes::getTypeIdForLangKeyword(TokenType tokenType) {
     switch (tokenType) {
         case TokenType::kVoid: return DataTypeId::kVoid;
+        case TokenType::kAny: return DataTypeId::kAny;
         case TokenType::kInt: return getDefaultIntTypeId();
         case TokenType::kInt8: return DataTypeId::kInt8;
         case TokenType::kInt16: return DataTypeId::kInt16;
@@ -100,6 +104,10 @@ const InvalidDataType & PrimitiveDataTypes::getInvalidDataType() {
 
 const VoidDataType & PrimitiveDataTypes::getVoidDataType() {
     return gVoidDataType;
+}
+
+const AnyDataType & PrimitiveDataTypes::getAnyDataType() {
+    return gAnyDataType;
 }
 
 const BoolDataType & PrimitiveDataTypes::getBoolDataType() {

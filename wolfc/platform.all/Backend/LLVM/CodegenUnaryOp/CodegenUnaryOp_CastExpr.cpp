@@ -39,6 +39,7 @@ public:
             issueUnsupportedCastError();\
         }
     
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(Any)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Array)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Bool)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Func)
@@ -96,6 +97,18 @@ private:
         WC_UNUSED_PARAM(toType);\
         pushOpResult(mCG.mCtx.mIRBuilder.CastCreateFunc(mFromVal.mLLVMVal, mToTypeCDT.getLLVMType()));\
     }
+
+//-----------------------------------------------------------------------------
+// Cast From: Any
+//-----------------------------------------------------------------------------
+class CodegenCastFromAnyUnaryOp final : public CodegenCastFromTypeUnaryOp {
+public:
+    CodegenCastFromAnyUnaryOp(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
+        CodegenCastFromTypeUnaryOp(cg, fromVal, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
 
 //-----------------------------------------------------------------------------
 // Cast From: Array
@@ -440,6 +453,7 @@ void CodegenCastUnaryOp::codegen() {
                                                mToTypeCDT).codegen();\
     }
 
+IMPL_CAST_FROM_TYPE_FUNC(Any)
 IMPL_CAST_FROM_TYPE_FUNC(Array)
 IMPL_CAST_FROM_TYPE_FUNC(Bool)
 IMPL_CAST_FROM_TYPE_FUNC(Func)
