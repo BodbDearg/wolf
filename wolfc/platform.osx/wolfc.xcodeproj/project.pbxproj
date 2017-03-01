@@ -198,6 +198,7 @@
 		1FFF4B401E66A67B006AF06C /* Codegen_NullLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FFF4B3F1E66A67B006AF06C /* Codegen_NullLit.cpp */; };
 		1FFF4B421E66A93D006AF06C /* ConstCodegen_NullLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FFF4B411E66A93D006AF06C /* ConstCodegen_NullLit.cpp */; };
 		1FFF4B461E66B385006AF06C /* CodegenCast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FFF4B441E66B385006AF06C /* CodegenCast.cpp */; };
+		1FFF4B4A1E66BF8A006AF06C /* CodegenConstCast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FFF4B481E66BF8A006AF06C /* CodegenConstCast.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -510,6 +511,8 @@
 		1FFF4B411E66A93D006AF06C /* ConstCodegen_NullLit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConstCodegen_NullLit.cpp; sourceTree = "<group>"; };
 		1FFF4B441E66B385006AF06C /* CodegenCast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodegenCast.cpp; sourceTree = "<group>"; };
 		1FFF4B451E66B385006AF06C /* CodegenCast.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CodegenCast.hpp; sourceTree = "<group>"; };
+		1FFF4B481E66BF8A006AF06C /* CodegenConstCast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodegenConstCast.cpp; sourceTree = "<group>"; };
+		1FFF4B491E66BF8A006AF06C /* CodegenConstCast.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CodegenConstCast.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -832,6 +835,7 @@
 				1F6B6BE41E3DEE1300B75BF4 /* CodegenBinaryOp */,
 				1FFF4B431E66B385006AF06C /* CodegenCast */,
 				1F6B6C041E3DF25C00B75BF4 /* CodegenConstBinaryOp */,
+				1FFF4B471E66BF8A006AF06C /* CodegenConstCast */,
 				1F6B6C1D1E3DFA7000B75BF4 /* CodegenConstUnaryOp */,
 				1F5B59281E2D773000609CDD /* CodegenCtx.cpp */,
 				1F5B59291E2D773000609CDD /* CodegenCtx.hpp */,
@@ -970,6 +974,15 @@
 				1FFF4B451E66B385006AF06C /* CodegenCast.hpp */,
 			);
 			path = CodegenCast;
+			sourceTree = "<group>";
+		};
+		1FFF4B471E66BF8A006AF06C /* CodegenConstCast */ = {
+			isa = PBXGroup;
+			children = (
+				1FFF4B481E66BF8A006AF06C /* CodegenConstCast.cpp */,
+				1FFF4B491E66BF8A006AF06C /* CodegenConstCast.hpp */,
+			);
+			path = CodegenConstCast;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1162,6 +1175,7 @@
 				1F59D4DF1CE45F1100B095AC /* CharUtils.cpp in Sources */,
 				1F59F6191E3F243400F2FC78 /* Codegen_ScopeStmnt.cpp in Sources */,
 				1FFF4B401E66A67B006AF06C /* Codegen_NullLit.cpp in Sources */,
+				1FFF4B4A1E66BF8A006AF06C /* CodegenConstCast.cpp in Sources */,
 				1F54D4F61E5847B900769617 /* CodegenLazyLogicalBinaryOp.cpp in Sources */,
 				1F03088A1E2AF2510097D223 /* AddExpr.cpp in Sources */,
 				1F6B6C261E3DFB9100B75BF4 /* CodegenConstUnaryOp_PrefixExpr.cpp in Sources */,

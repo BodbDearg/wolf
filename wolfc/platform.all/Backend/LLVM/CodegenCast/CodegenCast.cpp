@@ -15,7 +15,8 @@ WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
-// Abstract base class that converts from one type to many other types
+// Abstract base class that converts from one type at runtime to many other
+// types at runtime.
 //-----------------------------------------------------------------------------
 class CodegenCastFromDataType : public DataTypeVisitor {
 public:

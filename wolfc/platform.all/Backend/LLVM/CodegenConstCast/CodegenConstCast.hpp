@@ -6,18 +6,20 @@
 
 #pragma once
 
-#include "../Value.hpp"
+#include "../Constant.hpp"
 #include "DataType/DataTypeVisitor.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-class Codegen;
+class ConstCodegen;
 
-/* Helper class that creates a runtime cast from a value of one type to another type */
-class CodegenCast final : public DataTypeVisitor {
+/* Helper class that creates a compile time cast from a value of one type to another type */
+class CodegenConstCast final : public DataTypeVisitor {
 public:
-    CodegenCast(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT);
+    CodegenConstCast(ConstCodegen & cg,
+                     const Constant & fromConst,
+                     const CompiledDataType & toTypeCDT);
     
     void codegen();
     
@@ -41,8 +43,8 @@ public:
     virtual void visit(const VoidDataType & dataType) override;
     
 private:
-    Codegen &           mCG;
-    Value               mFromVal;
+    ConstCodegen &      mCG;
+    Constant            mFromConst;
     CompiledDataType    mToTypeCDT;
 };
 
