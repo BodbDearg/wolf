@@ -4,7 +4,7 @@
 //      See LICENSE.txt for license details.
 //==============================================================================
 
-#include "CodegenUnaryOp.hpp"
+#include "CodegenBasicUnaryOp.hpp"
 
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
@@ -18,11 +18,11 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-CodegenUnaryOp::CodegenUnaryOp(Codegen & cg,
-                               const AST::ASTNode & expr,
-                               const char * opSymbol,
-                               const char * opName,
-                               bool storeResultInExpr)
+CodegenBasicUnaryOp::CodegenBasicUnaryOp(Codegen & cg,
+                                         const AST::ASTNode & expr,
+                                         const char * opSymbol,
+                                         const char * opName,
+                                         bool storeResultInExpr)
 :
     mCG(cg),
     mExpr(expr),
@@ -34,7 +34,7 @@ CodegenUnaryOp::CodegenUnaryOp(Codegen & cg,
     WC_ASSERT(mExpr.mParent);
 }
 
-void CodegenUnaryOp::codegen() {
+void CodegenBasicUnaryOp::codegen() {
     // Get the type for the operand:
     const AST::IExpr * nodeAsExpr = dynamic_cast<const AST::IExpr*>(&mExpr);
     
@@ -111,7 +111,7 @@ void CodegenUnaryOp::codegen() {
 }
 
 #define WC_IMPL_UNARY_OP_NOT_SUPPORTED_FOR_TYPE(DataTypeName)\
-    void CodegenUnaryOp::visit(const DataTypeName##DataType & dataType) {\
+    void CodegenBasicUnaryOp::visit(const DataTypeName##DataType & dataType) {\
         WC_UNUSED_PARAM(dataType);\
         issueUnaryOpNotSupportedError();\
     }
@@ -135,7 +135,7 @@ WC_IMPL_UNARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt64)
 WC_IMPL_UNARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt8)
 WC_IMPL_UNARY_OP_NOT_SUPPORTED_FOR_TYPE(Void)
 
-void CodegenUnaryOp::issueUnaryOpNotSupportedError() {
+void CodegenBasicUnaryOp::issueUnaryOpNotSupportedError() {
     AST::ASTNode * parent = mExpr.mParent;
     WC_ASSERT(parent);
     mCG.mCtx.error(*parent,
@@ -145,15 +145,15 @@ void CodegenUnaryOp::issueUnaryOpNotSupportedError() {
                    mExprVal.mCompiledType.getDataType().name().c_str());
 }
 
-void CodegenUnaryOp::pushOpResult(llvm::Value * result) {
+void CodegenBasicUnaryOp::pushOpResult(llvm::Value * result) {
     pushOpResult(result, false);
 }
 
-void CodegenUnaryOp::pushOpResult(llvm::Value * result, bool requiresLoad) {
+void CodegenBasicUnaryOp::pushOpResult(llvm::Value * result, bool requiresLoad) {
     pushOpResult(result, requiresLoad, mExprVal.mCompiledType);
 }
 
-void CodegenUnaryOp::pushOpResult(llvm::Value * result, bool requiresLoad, const CompiledDataType & resultType) {
+void CodegenBasicUnaryOp::pushOpResult(llvm::Value * result, bool requiresLoad, const CompiledDataType & resultType) {
     mCG.mCtx.pushValue(Value(result, resultType, requiresLoad, mExpr.mParent));
 }
 

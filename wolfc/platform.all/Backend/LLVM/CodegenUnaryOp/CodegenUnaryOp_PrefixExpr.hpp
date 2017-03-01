@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include "CodegenUnaryOp.hpp"
+#include "CodegenBasicUnaryOp.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-class CodegenPlusUnaryOp final : public CodegenUnaryOp {
+class CodegenPlusUnaryOp final : public CodegenBasicUnaryOp {
 public:
     CodegenPlusUnaryOp(Codegen & cg,
                        const AST::ASTNode & expr,
@@ -29,7 +29,7 @@ public:
     virtual void visit(const UInt8DataType & dataType) override;
 };
 
-class CodegenMinusUnaryOp final : public CodegenUnaryOp {
+class CodegenMinusUnaryOp final : public CodegenBasicUnaryOp {
 public:
     CodegenMinusUnaryOp(Codegen & cg,
                         const AST::ASTNode & expr,
@@ -47,14 +47,14 @@ public:
     virtual void visit(const UInt8DataType & dataType) override;
 };
 
-class CodegenAddrOfUnaryOp final : public CodegenUnaryOp {
+class CodegenAddrOfUnaryOp final : public CodegenBasicUnaryOp {
 public:
     CodegenAddrOfUnaryOp(Codegen & cg, const AST::ASTNode & expr);
     
     virtual void codegen() override;
 };
 
-class CodegenPtrDerefUnaryOp final : public CodegenUnaryOp {
+class CodegenPtrDerefUnaryOp final : public CodegenBasicUnaryOp {
 public:
     CodegenPtrDerefUnaryOp(Codegen & cg,
                            const AST::ASTNode & expr,

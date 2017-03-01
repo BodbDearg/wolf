@@ -22,7 +22,7 @@ void Codegen::visit(const AST::CastExprNoCast & astNode) {
 
 void Codegen::visit(const AST::CastExprCast & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenCastUnaryOp(*this, astNode.mExpr, astNode.mType, false).codegen();
+    CodegenCastUnaryOp(*this, astNode.mExpr, astNode.mType).codegen();
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

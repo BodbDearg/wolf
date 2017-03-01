@@ -21,11 +21,11 @@ CodegenIncUnaryOp::CodegenIncUnaryOp(Codegen & cg,
                                      const AST::ASTNode & expr,
                                      bool storeResultInExpr)
 :
-    CodegenUnaryOp(cg,
-                   expr,
-                   "++",
-                   "increment",
-                   storeResultInExpr)
+    CodegenBasicUnaryOp(cg,
+                        expr,
+                        "++",
+                        "increment",
+                        storeResultInExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -59,11 +59,11 @@ CodegenDecUnaryOp::CodegenDecUnaryOp(Codegen & cg,
                                      const AST::ASTNode & expr,
                                      bool storeResultInExpr)
 :
-    CodegenUnaryOp(cg,
-                   expr,
-                   "--",
-                   "decrement",
-                   storeResultInExpr)
+    CodegenBasicUnaryOp(cg,
+                        expr,
+                        "--",
+                        "decrement",
+                        storeResultInExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }

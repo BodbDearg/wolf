@@ -23,11 +23,11 @@ CodegenPlusUnaryOp::CodegenPlusUnaryOp(Codegen & cg,
                                        const AST::ASTNode & expr,
                                        bool storeResultInExpr)
 :
-    CodegenUnaryOp(cg,
-                   expr,
-                   "+",
-                   "plus",
-                   storeResultInExpr)
+    CodegenBasicUnaryOp(cg,
+                        expr,
+                        "+",
+                        "plus",
+                        storeResultInExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -58,11 +58,11 @@ CodegenMinusUnaryOp::CodegenMinusUnaryOp(Codegen & cg,
                                          const AST::ASTNode & expr,
                                          bool storeResultInExpr)
 :
-    CodegenUnaryOp(cg,
-                   expr,
-                   "-",
-                   "minus",
-                   storeResultInExpr)
+    CodegenBasicUnaryOp(cg,
+                        expr,
+                        "-",
+                        "minus",
+                        storeResultInExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -94,11 +94,11 @@ WC_IMPL_NEG_NOT_ALLOWED_FOR_UNSIGNED_TYPE(UInt8)
 //-----------------------------------------------------------------------------
 CodegenAddrOfUnaryOp::CodegenAddrOfUnaryOp(Codegen & cg, const AST::ASTNode & expr)
 :
-    CodegenUnaryOp(cg,
-                   expr,
-                   "&",
-                   "address of",
-                    false)
+    CodegenBasicUnaryOp(cg,
+                        expr,
+                        "&",
+                        "address of",
+                        false)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -145,11 +145,11 @@ CodegenPtrDerefUnaryOp::CodegenPtrDerefUnaryOp(Codegen & cg,
                                                const AST::ASTNode & expr,
                                                bool loadExprResult)
 :
-    CodegenUnaryOp(cg,
-                   expr,
-                   "$",
-                   "dereference pointer",
-                    false),
+    CodegenBasicUnaryOp(cg,
+                        expr,
+                        "$",
+                        "dereference pointer",
+                        false),
     mLoadExprResult(loadExprResult)
 {
     WC_EMPTY_FUNC_BODY();

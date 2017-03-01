@@ -19,11 +19,11 @@ CodegenLNotUnaryOp::CodegenLNotUnaryOp(Codegen & cg,
                                        const AST::ASTNode & expr,
                                        bool storeResultInExpr)
 :
-    CodegenUnaryOp(cg,
-                   expr,
-                   "not",
-                   "logical not",
-                   storeResultInExpr)
+    CodegenBasicUnaryOp(cg,
+                        expr,
+                        "not",
+                        "logical not",
+                        storeResultInExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -40,11 +40,11 @@ CodegenBNotUnaryOp::CodegenBNotUnaryOp(Codegen & cg,
                                        const AST::ASTNode & expr,
                                        bool storeResultInExpr)
 :
-    CodegenUnaryOp(cg,
-                   expr,
-                   "~",
-                   "bitwise not",
-                   storeResultInExpr)
+    CodegenBasicUnaryOp(cg,
+                        expr,
+                        "~",
+                        "bitwise not",
+                        storeResultInExpr)
 {
     WC_EMPTY_FUNC_BODY();
 }
