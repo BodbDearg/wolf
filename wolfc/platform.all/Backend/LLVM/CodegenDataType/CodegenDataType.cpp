@@ -116,38 +116,6 @@ void CodegenDataType::visitASTNode(const AST::FuncArg & funcArg) {
     }
 }
 
-void CodegenDataType::visit(const AnyDataType & dataType) {
-    // We can't codegen an 'any' data type
-    WC_UNUSED_PARAM(dataType);
-    mCtx.error("Can't codegen the concrete llvm data type for type 'any' because it is ambiguous!");
-}
-
-void CodegenDataType::visit(const ArrayDataType & dataType) {
-    // Codegen the element type. If that fails then bail out.
-    dataType.mElemType.accept(*this);
-    CompiledDataType elemCDT = mCtx.popCompiledDataType();
-    WC_GUARD(elemCDT.getLLVMType());
-    
-    // The type must be sized in order to be code generated as an array type.
-    const DataType & elemDataType = elemCDT.getDataType();
-    
-    if (!elemDataType.isSized()) {
-        mCtx.error("Can't generate an array of unsized type '%s'!", elemDataType.name().c_str());
-        return;
-    }
-    
-    // The array size must be > 0 for it to be valid
-    if (dataType.mSize <= 0) {
-        mCtx.error("Can't generate a zero sized array!");
-        return;
-    }
-    
-    // Alright, make the array type:
-    llvm::Type * llvmType = llvm::ArrayType::get(elemCDT.getLLVMType(), dataType.mSize);
-    WC_ASSERT(llvmType);
-    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
-}
-
 void CodegenDataType::visitASTNode(const AST::PrimitiveType & primitiveType) {
     // Get the data type object for this primitive and codegen
     const DataType & dataType = PrimitiveDataTypes::getUsingLangKeyword(primitiveType.mToken.type);
@@ -241,6 +209,40 @@ void CodegenDataType::visitASTNode(const AST::TypePtr & typePtr) {
     
     // Save the evaluated type so we don't have to go through this again:
     mCtx.setNodeEvaluatedDataType(typePtr, evaluatedDataType);
+}
+
+void CodegenDataType::visit(const AnyDataType & dataType) {
+    // We can't codegen an 'any' data type
+    WC_UNUSED_PARAM(dataType);
+    mCtx.error("Can't codegen the datatype for a value of type 'any' because the size of this "
+               "data type is ambiguous! Only pointers and references to type 'any' are allowed "
+               "because the size of those derived types can be determined.");
+}
+
+void CodegenDataType::visit(const ArrayDataType & dataType) {
+    // Codegen the element type. If that fails then bail out.
+    dataType.mElemType.accept(*this);
+    CompiledDataType elemCDT = mCtx.popCompiledDataType();
+    WC_GUARD(elemCDT.getLLVMType());
+    
+    // The type must be sized in order to be code generated as an array type.
+    const DataType & elemDataType = elemCDT.getDataType();
+    
+    if (!elemDataType.isSized()) {
+        mCtx.error("Can't generate an array of unsized type '%s'!", elemDataType.name().c_str());
+        return;
+    }
+    
+    // The array size must be > 0 for it to be valid
+    if (dataType.mSize <= 0) {
+        mCtx.error("Can't generate a zero sized array!");
+        return;
+    }
+    
+    // Alright, make the array type:
+    llvm::Type * llvmType = llvm::ArrayType::get(elemCDT.getLLVMType(), dataType.mSize);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
 }
 
 void CodegenDataType::visit(const BoolDataType & dataType) {
