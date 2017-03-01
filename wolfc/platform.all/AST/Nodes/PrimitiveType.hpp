@@ -31,6 +31,9 @@ public:
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
     
+    /* Tell if this type is the 'any' data type */
+    bool isAny() const;
+    
     const Token & mToken;
 };
 

@@ -49,5 +49,9 @@ const Token & PrimitiveType::getEndToken() const {
     return mToken;
 }
 
+bool PrimitiveType::isAny() const {
+    return mToken.type == TokenType::kAny;
+}
+
 WC_AST_END_NAMESPACE
 WC_END_NAMESPACE

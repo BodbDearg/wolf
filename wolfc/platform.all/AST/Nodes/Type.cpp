@@ -83,6 +83,10 @@ Type * Type::parse(ParseCtx & parseCtx) {
     return WC_NEW_AST_NODE(parseCtx, TypePrimitive, *primitiveType);
 }
 
+bool Type::isAny() const {
+    return false;   // False for all types by default
+}
+
 //-----------------------------------------------------------------------------
 // TypePrimitive
 //-----------------------------------------------------------------------------
@@ -100,6 +104,10 @@ const Token & TypePrimitive::getStartToken() const {
 
 const Token & TypePrimitive::getEndToken() const {
     return mType.getEndToken();
+}
+
+bool TypePrimitive::isAny() const {
+    return mType.isAny();
 }
 
 //-----------------------------------------------------------------------------

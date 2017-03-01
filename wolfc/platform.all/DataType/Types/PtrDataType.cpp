@@ -55,6 +55,13 @@ bool PtrDataType::equals(const DataType & other) const {
 }
 
 bool PtrDataType::isValid() const {
+    // Special case: pointers to type 'any' are valid, even though the 'any' data type is
+    // not a valid type on it's own. We can have pointers and references to 'any', but not
+    // value types of type 'any':
+    if (mPointedToType.isAny()) {
+        return true;
+    }
+    
     // Only valid if the pointed to type is valid!
     return mPointedToType.isValid();
 }

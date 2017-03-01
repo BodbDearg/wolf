@@ -15,6 +15,7 @@
 #include "AST/Nodes/PrimitiveType.hpp"
 #include "AST/Nodes/Type.hpp"
 #include "Assert.hpp"
+#include "DataType/Types/AnyDataType.hpp"
 #include "DataType/Types/ArrayDataType.hpp"
 #include "DataType/Types/BoolDataType.hpp"
 #include "DataType/Types/FuncDataType.hpp"
@@ -190,8 +191,23 @@ void CodegenDataType::visitASTNode(const AST::TypeArray & typeArray) {
 void CodegenDataType::visitASTNode(const AST::TypePtr & typePtr) {
     WC_RETURN_CACHED_DATA_TYPE_FOR_NODE_IF_AVAILABLE(typePtr);
     
-    // Codgen the type pointed to
-    typePtr.mPointedToType.accept(mConstCodegen);
+    // Codgen the type pointed to, unless it's the 'any' data type.
+    // If we encounter the 'any' data type then hardcode the results of 'compiling' this type.
+    {
+        const AST::Type & pointedToType = typePtr.mPointedToType;
+        
+        if (pointedToType.isAny()) {
+            // Codegen the 'any' type as a pointer to 'i1':
+            llvm::Type * llvmType = llvm::Type::getInt1PtrTy(mCtx.mLLVMCtx);
+            WC_ASSERT(llvmType);
+            mCtx.pushCompiledDataType(CompiledDataType(PrimitiveDataTypes::getAnyDataType(), llvmType));
+        }
+        else {
+            // Regular case, codegen a normal type pointed to:
+            pointedToType.accept(mConstCodegen);
+        }
+    }
+    
     CompiledDataType pointedToTypeCDT = mCtx.popCompiledDataType();
     
     // Save the evaluated data type here:
@@ -383,8 +399,18 @@ void CodegenDataType::visit(const UInt8DataType & dataType) {
 void CodegenDataType::visit(const PtrDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     
-    // Get the data type for the pointed to type. If it's invalid then proceed no further:
-    dataType.mPointedToType.accept(*this);
+    // Special case, for pointers to type 'any' codegen the the data type as a pointer to 'i1':
+    const DataType & pointedToType = dataType.mPointedToType;
+    
+    if (pointedToType.isAny()) {
+        llvm::Type * llvmType = llvm::Type::getInt1PtrTy(mCtx.mLLVMCtx);
+        WC_ASSERT(llvmType);
+        mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+        return;
+    }
+    
+    // Normal case: compile the data type for the pointed to type. If it's invalid then proceed no further:
+    pointedToType.accept(*this);
     CompiledDataType pointedToTypeCDT = mCtx.popCompiledDataType();
     WC_GUARD(pointedToTypeCDT.isValid());
     

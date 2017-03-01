@@ -24,6 +24,9 @@ class Type : public ASTNode {
 public:
     static bool peek(const Token * currentToken);
     static Type * parse(ParseCtx & parseCtx);
+    
+    /* Tell if this type is the 'any' data type */
+    virtual bool isAny() const;
 };
 
 /* PrimitiveType */
@@ -34,6 +37,8 @@ public:
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
     virtual const Token & getEndToken() const override;
+    
+    virtual bool isAny() const override;
     
     PrimitiveType & mType;
 };
