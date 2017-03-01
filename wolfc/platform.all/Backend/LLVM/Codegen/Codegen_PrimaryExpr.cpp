@@ -11,6 +11,7 @@
 #include "AST/Nodes/BoolLit.hpp"
 #include "AST/Nodes/Identifier.hpp"
 #include "AST/Nodes/IntLit.hpp"
+#include "AST/Nodes/NullLit.hpp"
 #include "AST/Nodes/PrimaryExpr.hpp"
 #include "AST/Nodes/RandExpr.hpp"
 #include "AST/Nodes/ReadnumExpr.hpp"
@@ -21,6 +22,11 @@ WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 void Codegen::visit(const AST::PrimaryExprIntLit & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    astNode.mLit.accept(*this);
+}
+
+void Codegen::visit(const AST::PrimaryExprNullLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mLit.accept(*this);
 }
@@ -45,12 +51,12 @@ void Codegen::visit(const AST::PrimaryExprIdentifier & astNode) {
     astNode.mIdent.accept(*this);
 }
 
-void Codegen::visit(const AST::PrimaryExprReadnum & astNode) {
+void Codegen::visit(const AST::PrimaryExprReadnumExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mExpr.accept(*this);
 }
 
-void Codegen::visit(const AST::PrimaryExprTime & astNode) {
+void Codegen::visit(const AST::PrimaryExprTimeExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mExpr.accept(*this);
 }

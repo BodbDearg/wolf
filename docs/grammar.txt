@@ -169,6 +169,7 @@ PrimaryExpr:
 	IntLit
 	BoolLit
 	StrLit
+	NullLit
     ArrayLit
     Identifier
     ReadnumExpr

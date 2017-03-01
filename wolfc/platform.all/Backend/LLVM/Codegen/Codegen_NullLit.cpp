@@ -7,12 +7,12 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/IntLit.hpp"
+#include "AST/Nodes/NullLit.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-void Codegen::visit(const AST::IntLit & astNode) {
+void Codegen::visit(const AST::NullLit & astNode) {
     // This just uses the constant code generator, it's the same thing:
     astNode.accept(mConstCodegen);
     

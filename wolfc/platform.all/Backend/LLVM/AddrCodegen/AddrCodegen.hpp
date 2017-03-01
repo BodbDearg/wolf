@@ -92,6 +92,7 @@ public:
     virtual void visit(const AST::NotExprBNot & astNode) override;
     virtual void visit(const AST::NotExprLNot & astNode) override;
     virtual void visit(const AST::NotExprNoOp & astNode) override;
+    virtual void visit(const AST::NullLit & astNode) override;
     virtual void visit(const AST::PostfixExprArrayLookup & astNode) override;
     virtual void visit(const AST::PostfixExprDec & astNode) override;
     virtual void visit(const AST::PostfixExprFuncCall & astNode) override;
@@ -107,10 +108,11 @@ public:
     virtual void visit(const AST::PrimaryExprBoolLit & astNode) override;
     virtual void visit(const AST::PrimaryExprIdentifier & astNode) override;
     virtual void visit(const AST::PrimaryExprIntLit & astNode) override;
+    virtual void visit(const AST::PrimaryExprNullLit & astNode) override;
     virtual void visit(const AST::PrimaryExprRandExpr & astNode) override;
-    virtual void visit(const AST::PrimaryExprReadnum & astNode) override;
+    virtual void visit(const AST::PrimaryExprReadnumExpr & astNode) override;
     virtual void visit(const AST::PrimaryExprStrLit & astNode) override;
-    virtual void visit(const AST::PrimaryExprTime & astNode) override;
+    virtual void visit(const AST::PrimaryExprTimeExpr & astNode) override;
     virtual void visit(const AST::PrimitiveType & astNode) override;
     virtual void visit(const AST::PrintStmnt & astNode) override;
     virtual void visit(const AST::RandExprRand & astNode) override;

@@ -11,6 +11,7 @@
 #include "AST/Nodes/BoolLit.hpp"
 #include "AST/Nodes/Identifier.hpp"
 #include "AST/Nodes/IntLit.hpp"
+#include "AST/Nodes/NullLit.hpp"
 #include "AST/Nodes/PrimaryExpr.hpp"
 #include "AST/Nodes/StrLit.hpp"
 
@@ -18,6 +19,11 @@ WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 void ConstCodegen::visit(const AST::PrimaryExprIntLit & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    astNode.mLit.accept(*this);
+}
+
+void ConstCodegen::visit(const AST::PrimaryExprNullLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mLit.accept(*this);
 }
@@ -42,12 +48,12 @@ void ConstCodegen::visit(const AST::PrimaryExprIdentifier & astNode) {
     astNode.mIdent.accept(*this);
 }
 
-void ConstCodegen::visit(const AST::PrimaryExprReadnum & astNode) {
+void ConstCodegen::visit(const AST::PrimaryExprReadnumExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "PrimaryExprReadnum");
 }
 
-void ConstCodegen::visit(const AST::PrimaryExprTime & astNode) {
+void ConstCodegen::visit(const AST::PrimaryExprTimeExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "PrimaryExprTime");
 }

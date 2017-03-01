@@ -38,10 +38,12 @@ enum class TokenType : uint8_t {
     kIntLit,
     /* String literal, like "Hello World". The value is store in the 'data' field as 'strVal'. */
     kStrLit,
-    /* 'true' keyword/bool-literal */
+    /* 'true' keyword for 'true' boolean literal */
     kTrue,
-    /* 'false' keyword/bool-literal */
+    /* 'false' keyword for 'false' boolean literal */
     kFalse,
+    /* 'null' keyword for null pointer literal */
+    kNull,
     
     /*=========================================================================
     | Tokens and operators

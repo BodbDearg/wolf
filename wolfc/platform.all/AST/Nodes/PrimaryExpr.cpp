@@ -13,6 +13,7 @@
 #include "Identifier.hpp"
 #include "IntLit.hpp"
 #include "LinearAlloc.hpp"
+#include "NullLit.hpp"
 #include "RandExpr.hpp"
 #include "ReadnumExpr.hpp"
 #include "StrLit.hpp"
@@ -28,6 +29,7 @@ bool PrimaryExpr::peek(const Token * currentToken) {
     return  IntLit::peek(currentToken) ||
             BoolLit::peek(currentToken) ||
             StrLit::peek(currentToken) ||
+            NullLit::peek(currentToken) ||
             ArrayLit::peek(currentToken) ||
             Identifier::peek(currentToken) ||
             ReadnumExpr::peek(currentToken) ||
@@ -36,46 +38,25 @@ bool PrimaryExpr::peek(const Token * currentToken) {
 }
 
 PrimaryExpr * PrimaryExpr::parse(ParseCtx & parseCtx) {
-    if (IntLit::peek(parseCtx.tok())) {
-        IntLit * uintLit = IntLit::parse(parseCtx);
-        WC_GUARD(uintLit, nullptr);
-        return WC_NEW_AST_NODE(parseCtx, PrimaryExprIntLit, *uintLit);
-    }
-    else if (BoolLit::peek(parseCtx.tok())) {
-        BoolLit * boolLit = BoolLit::parse(parseCtx);
-        WC_GUARD(boolLit, nullptr);
-        return WC_NEW_AST_NODE(parseCtx, PrimaryExprBoolLit, *boolLit);
-    }
-    else if (StrLit::peek(parseCtx.tok())) {
-        StrLit * strLit = StrLit::parse(parseCtx);
-        WC_GUARD(strLit, nullptr);
-        return WC_NEW_AST_NODE(parseCtx, PrimaryExprStrLit, *strLit);
-    }
-    else if (ArrayLit::peek(parseCtx.tok())) {
-        ArrayLit * arrayLit = ArrayLit::parse(parseCtx);
-        WC_GUARD(arrayLit, nullptr);
-        return WC_NEW_AST_NODE(parseCtx, PrimaryExprArrayLit, *arrayLit);
-    }
-    else if (Identifier::peek(parseCtx.tok())) {
-        Identifier * identifier = Identifier::parse(parseCtx);
-        WC_GUARD(identifier, nullptr);
-        return WC_NEW_AST_NODE(parseCtx, PrimaryExprIdentifier, *identifier);
-    }
-    else if (ReadnumExpr::peek(parseCtx.tok())) {
-        ReadnumExpr * expr = ReadnumExpr::parse(parseCtx);
-        WC_GUARD(expr, nullptr);
-        return WC_NEW_AST_NODE(parseCtx, PrimaryExprReadnum, *expr);
-    }
-    else if (TimeExpr::peek(parseCtx.tok())) {
-        TimeExpr * expr = TimeExpr::parse(parseCtx);
-        WC_GUARD(expr, nullptr);
-        return WC_NEW_AST_NODE(parseCtx, PrimaryExprTime, *expr);
-    }
-    else if (RandExpr::peek(parseCtx.tok())) {
-        RandExpr * expr = RandExpr::parse(parseCtx);
-        WC_GUARD(expr, nullptr);
-        return WC_NEW_AST_NODE(parseCtx, PrimaryExprRandExpr, *expr);
-    }
+    /* Useful macro to eliminate a lot of repetition */
+    #define TRY_PARSE_PRIMARY_EXPR_TYPE(ExprType)\
+        if (ExprType::peek(parseCtx.tok())) {\
+            ExprType * expr = ExprType::parse(parseCtx);\
+            WC_GUARD(expr, nullptr);\
+            return WC_NEW_AST_NODE(parseCtx, PrimaryExpr##ExprType, *expr);\
+        }
+    
+    TRY_PARSE_PRIMARY_EXPR_TYPE(IntLit)
+    TRY_PARSE_PRIMARY_EXPR_TYPE(BoolLit)
+    TRY_PARSE_PRIMARY_EXPR_TYPE(StrLit)
+    TRY_PARSE_PRIMARY_EXPR_TYPE(NullLit)
+    TRY_PARSE_PRIMARY_EXPR_TYPE(ArrayLit)
+    TRY_PARSE_PRIMARY_EXPR_TYPE(Identifier)
+    TRY_PARSE_PRIMARY_EXPR_TYPE(ReadnumExpr)
+    TRY_PARSE_PRIMARY_EXPR_TYPE(TimeExpr)
+    TRY_PARSE_PRIMARY_EXPR_TYPE(RandExpr)
+
+    #undef TRY_PARSE_PRIMARY_EXPR_TYPE
     
     parseCtx.error("Expected primary expression!");
     return nullptr;
@@ -139,6 +120,25 @@ const Token & PrimaryExprStrLit::getEndToken() const {
 }
 
 //-----------------------------------------------------------------------------
+// PrimaryExprNullLit
+//-----------------------------------------------------------------------------
+PrimaryExprNullLit::PrimaryExprNullLit(NullLit & lit) : mLit(lit) {
+    mLit.mParent = this;
+}
+
+void PrimaryExprNullLit::accept(ASTNodeVisitor & visitor) const {
+    visitor.visit(*this);
+}
+
+const Token & PrimaryExprNullLit::getStartToken() const {
+    return mLit.getStartToken();
+}
+
+const Token & PrimaryExprNullLit::getEndToken() const {
+    return mLit.getEndToken();
+}
+
+//-----------------------------------------------------------------------------
 // PrimaryExprArrayLit
 //-----------------------------------------------------------------------------
 PrimaryExprArrayLit::PrimaryExprArrayLit(ArrayLit & lit) : mLit(lit) {
@@ -181,40 +181,40 @@ const char * PrimaryExprIdentifier::name() const {
 }
 
 //-----------------------------------------------------------------------------
-// PrimaryExprReadnum
+// PrimaryExprReadnumExpr
 //-----------------------------------------------------------------------------
-PrimaryExprReadnum::PrimaryExprReadnum(ReadnumExpr & expr) : mExpr(expr) {
+PrimaryExprReadnumExpr::PrimaryExprReadnumExpr(ReadnumExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void PrimaryExprReadnum::accept(ASTNodeVisitor & visitor) const {
+void PrimaryExprReadnumExpr::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
     
-const Token & PrimaryExprReadnum::getStartToken() const {
+const Token & PrimaryExprReadnumExpr::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & PrimaryExprReadnum::getEndToken() const {
+const Token & PrimaryExprReadnumExpr::getEndToken() const {
     return mExpr.getEndToken();
 }
 
 //-----------------------------------------------------------------------------
-// PrimaryExprTime
+// PrimaryExprTimeExpr
 //-----------------------------------------------------------------------------
-PrimaryExprTime::PrimaryExprTime(TimeExpr & expr) : mExpr(expr) {
+PrimaryExprTimeExpr::PrimaryExprTimeExpr(TimeExpr & expr) : mExpr(expr) {
     mExpr.mParent = this;
 }
 
-void PrimaryExprTime::accept(ASTNodeVisitor & visitor) const {
+void PrimaryExprTimeExpr::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 
-const Token & PrimaryExprTime::getStartToken() const {
+const Token & PrimaryExprTimeExpr::getStartToken() const {
     return mExpr.getStartToken();
 }
 
-const Token & PrimaryExprTime::getEndToken() const {
+const Token & PrimaryExprTimeExpr::getEndToken() const {
     return mExpr.getEndToken();
 }
 

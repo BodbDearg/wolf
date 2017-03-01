@@ -911,6 +911,7 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
     
     if (parseKeyword("true", TokenType::kTrue) ||
         parseKeyword("false", TokenType::kFalse) ||
+        parseKeyword("null", TokenType::kNull) ||
         parseKeyword("void", TokenType::kVoid) ||
         parseKeyword("any", TokenType::kAny) ||
         parseKeyword("int", TokenType::kInt) ||

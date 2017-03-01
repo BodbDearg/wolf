@@ -16,6 +16,7 @@ class ArrayLit;
 class BoolLit;
 class Identifier;
 class IntLit;
+class NullLit;
 class RandExpr;
 class ReadnumExpr;
 class StrLit;
@@ -26,6 +27,7 @@ PrimaryExpr:
 	IntLit
 	BoolLit
 	StrLit
+	NullLit
     ArrayLit
     Identifier
     ReadnumExpr
@@ -74,6 +76,18 @@ public:
     StrLit & mLit;
 };
 
+/* NullLit */
+class PrimaryExprNullLit final : public PrimaryExpr {
+public:
+    PrimaryExprNullLit(NullLit & lit);
+    
+    virtual void accept(ASTNodeVisitor & visitor) const override;
+    virtual const Token & getStartToken() const override;
+    virtual const Token & getEndToken() const override;
+    
+    NullLit & mLit;
+};
+
 /* ArrayLit */
 class PrimaryExprArrayLit final : public PrimaryExpr {
 public:
@@ -101,9 +115,9 @@ public:
 };
 
 /* ReadnumExpr */
-class PrimaryExprReadnum final : public PrimaryExpr {
+class PrimaryExprReadnumExpr final : public PrimaryExpr {
 public:
-    PrimaryExprReadnum(ReadnumExpr & expr);
+    PrimaryExprReadnumExpr(ReadnumExpr & expr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;
@@ -113,9 +127,9 @@ public:
 };
 
 /* TimeExpr */
-class PrimaryExprTime final : public PrimaryExpr {
+class PrimaryExprTimeExpr final : public PrimaryExpr {
 public:
-    PrimaryExprTime(TimeExpr & expr);
+    PrimaryExprTimeExpr(TimeExpr & expr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
     virtual const Token & getStartToken() const override;

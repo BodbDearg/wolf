@@ -11,6 +11,7 @@
 #include "IntDataTypes.hpp"
 #include "InvalidDataType.hpp"
 #include "Lexer/TokenType.hpp"
+#include "PtrDataType.hpp"
 #include "StrDataType.hpp"
 #include "VoidDataType.hpp"
 
@@ -31,7 +32,12 @@ static UInt32DataType   gUInt32DataType;
 static UInt64DataType   gUInt64DataType;
 static UInt8DataType    gUInt8DataType;
 static BoolDataType     gBoolDataType;
-static StrDataType      gStrDataType;           // TODO: remove, this is a temporary data type
+
+/* This is a special case for 'null' pointer literals. */
+static PtrDataType gNullLitDataType(gAnyDataType, true);
+
+/* TODO: remove, this is a temporary data type */
+static StrDataType gStrDataType;
 
 const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
     switch (type) {
@@ -112,6 +118,10 @@ const AnyDataType & PrimitiveDataTypes::getAnyDataType() {
 
 const BoolDataType & PrimitiveDataTypes::getBoolDataType() {
     return gBoolDataType;
+}
+
+const PtrDataType & PrimitiveDataTypes::getNullLitDataType() {
+    return gNullLitDataType;
 }
 
 const DataType & PrimitiveDataTypes::getDefaultUIntType() {

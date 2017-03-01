@@ -19,6 +19,7 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 void Codegen::visit(const AST::StrLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
+    #warning TODO: Use constant code generator
     // Codegen the data type for the string
     {
         const DataType & dataType = PrimitiveDataTypes::getUsingTypeId(DataTypeId::kStr);

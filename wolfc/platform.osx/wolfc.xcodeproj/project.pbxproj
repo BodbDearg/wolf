@@ -194,6 +194,9 @@
 		1FFD98A91CD9B3AD00398CA6 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FFD98A81CD9B3AD00398CA6 /* Main.cpp */; };
 		1FFD98B31CD9D48A00398CA6 /* libpthread.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FFD98B21CD9D48A00398CA6 /* libpthread.tbd */; };
 		1FFD98B51CD9D49500398CA6 /* libcurses.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FFD98B41CD9D49500398CA6 /* libcurses.tbd */; };
+		1FFF4B3E1E66A1A4006AF06C /* NullLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FFF4B3C1E66A1A4006AF06C /* NullLit.cpp */; };
+		1FFF4B401E66A67B006AF06C /* Codegen_NullLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FFF4B3F1E66A67B006AF06C /* Codegen_NullLit.cpp */; };
+		1FFF4B421E66A93D006AF06C /* ConstCodegen_NullLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FFF4B411E66A93D006AF06C /* ConstCodegen_NullLit.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -500,6 +503,10 @@
 		1FFD98B21CD9D48A00398CA6 /* libpthread.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libpthread.tbd; path = usr/lib/libpthread.tbd; sourceTree = SDKROOT; };
 		1FFD98B41CD9D49500398CA6 /* libcurses.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurses.tbd; path = usr/lib/libcurses.tbd; sourceTree = SDKROOT; };
 		1FFD98B71CD9D82A00398CA6 /* Macros.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Macros.hpp; sourceTree = "<group>"; };
+		1FFF4B3C1E66A1A4006AF06C /* NullLit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NullLit.cpp; sourceTree = "<group>"; };
+		1FFF4B3D1E66A1A4006AF06C /* NullLit.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NullLit.hpp; sourceTree = "<group>"; };
+		1FFF4B3F1E66A67B006AF06C /* Codegen_NullLit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Codegen_NullLit.cpp; sourceTree = "<group>"; };
+		1FFF4B411E66A93D006AF06C /* ConstCodegen_NullLit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConstCodegen_NullLit.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -568,6 +575,8 @@
 				1F0308631E2AF2510097D223 /* NoOpStmnt.hpp */,
 				1F0308641E2AF2510097D223 /* NotExpr.cpp */,
 				1F0308651E2AF2510097D223 /* NotExpr.hpp */,
+				1FFF4B3C1E66A1A4006AF06C /* NullLit.cpp */,
+				1FFF4B3D1E66A1A4006AF06C /* NullLit.hpp */,
 				1F0308661E2AF2510097D223 /* PostfixExpr.cpp */,
 				1F0308671E2AF2510097D223 /* PostfixExpr.hpp */,
 				1F0308841E2AF2510097D223 /* PrefixExpr.cpp */,
@@ -644,6 +653,7 @@
 				1F0FE7281E41C6490047D568 /* Codegen_NextStmnt.cpp */,
 				1F2985971E3EFAEB00DC17CC /* Codegen_NoOpStmnt.cpp */,
 				1F2985981E3EFAEB00DC17CC /* Codegen_NotExpr.cpp */,
+				1FFF4B3F1E66A67B006AF06C /* Codegen_NullLit.cpp */,
 				1F2985991E3EFAEB00DC17CC /* Codegen_PostfixExpr.cpp */,
 				1F2985A21E3EFAEB00DC17CC /* Codegen_PrefixExpr.cpp */,
 				1F29859A1E3EFAEB00DC17CC /* Codegen_PrimaryExpr.cpp */,
@@ -683,6 +693,7 @@
 				1F2985CC1E3EFB5400DC17CC /* ConstCodegen_LOrExpr.cpp */,
 				1F2985CD1E3EFB5400DC17CC /* ConstCodegen_MulExpr.cpp */,
 				1F2985CE1E3EFB5400DC17CC /* ConstCodegen_NotExpr.cpp */,
+				1FFF4B411E66A93D006AF06C /* ConstCodegen_NullLit.cpp */,
 				1F2985CF1E3EFB5400DC17CC /* ConstCodegen_PostfixExpr.cpp */,
 				1F2985D51E3EFB5400DC17CC /* ConstCodegen_PrefixExpr.cpp */,
 				1F2985D01E3EFB5400DC17CC /* ConstCodegen_PrimaryExpr.cpp */,
@@ -1051,6 +1062,7 @@
 				1F2985E71E3EFB5400DC17CC /* ConstCodegen_PrefixExpr.cpp in Sources */,
 				1F03088D1E2AF2510097D223 /* AssertStmnt.cpp in Sources */,
 				1F2985A81E3EFAEB00DC17CC /* Codegen_BoolLit.cpp in Sources */,
+				1FFF4B421E66A93D006AF06C /* ConstCodegen_NullLit.cpp in Sources */,
 				1F0308A71E2AF2510097D223 /* PrimitiveType.cpp in Sources */,
 				1F2985A41E3EFAEB00DC17CC /* Codegen.cpp in Sources */,
 				1F0308B41E2AF2510097D223 /* PrefixExpr.cpp in Sources */,
@@ -1066,6 +1078,7 @@
 				1F0308A21E2AF2510097D223 /* NextStmnt.cpp in Sources */,
 				1F0308921E2AF2510097D223 /* CastExpr.cpp in Sources */,
 				1F2985DF1E3EFB5400DC17CC /* ConstCodegen_MulExpr.cpp in Sources */,
+				1FFF4B3E1E66A1A4006AF06C /* NullLit.cpp in Sources */,
 				1F6B6C0A1E3DF31E00B75BF4 /* CodegenConstBinaryOp_AddExpr.cpp in Sources */,
 				1F0308931E2AF2510097D223 /* CmpExpr.cpp in Sources */,
 				1F0308B11E2AF2510097D223 /* TernaryExpr.cpp in Sources */,
@@ -1135,6 +1148,7 @@
 				1F0308941E2AF2510097D223 /* DeclDef.cpp in Sources */,
 				1F59D4DF1CE45F1100B095AC /* CharUtils.cpp in Sources */,
 				1F59F6191E3F243400F2FC78 /* Codegen_ScopeStmnt.cpp in Sources */,
+				1FFF4B401E66A67B006AF06C /* Codegen_NullLit.cpp in Sources */,
 				1F54D4F61E5847B900769617 /* CodegenLazyLogicalBinaryOp.cpp in Sources */,
 				1F03088A1E2AF2510097D223 /* AddExpr.cpp in Sources */,
 				1F6B6C261E3DFB9100B75BF4 /* CodegenConstUnaryOp_PrefixExpr.cpp in Sources */,

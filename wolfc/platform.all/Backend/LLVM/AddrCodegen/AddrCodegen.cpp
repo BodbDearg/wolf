@@ -30,6 +30,7 @@
 #include "AST/Nodes/NextStmnt.hpp"
 #include "AST/Nodes/NoOpStmnt.hpp"
 #include "AST/Nodes/NotExpr.hpp"
+#include "AST/Nodes/NullLit.hpp"
 #include "AST/Nodes/PostfixExpr.hpp"
 #include "AST/Nodes/PrefixExpr.hpp"
 #include "AST/Nodes/PrimaryExpr.hpp"
@@ -413,6 +414,11 @@ void AddrCodegen::visit(const AST::NotExprNoOp & astNode) {
     astNode.mExpr.accept(*this);
 }
 
+void AddrCodegen::visit(const AST::NullLit & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    mCtx.error(astNode, "Can't take the address of a 'null' pointer literal!");
+}
+
 void AddrCodegen::visit(const AST::PrimaryExprArrayLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mLit.accept(*this);
@@ -433,12 +439,17 @@ void AddrCodegen::visit(const AST::PrimaryExprIntLit & astNode) {
     astNode.mLit.accept(*this);
 }
 
+void AddrCodegen::visit(const AST::PrimaryExprNullLit & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    astNode.mLit.accept(*this);
+}
+
 void AddrCodegen::visit(const AST::PrimaryExprRandExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mExpr.accept(*this);
 }
 
-void AddrCodegen::visit(const AST::PrimaryExprReadnum & astNode) {
+void AddrCodegen::visit(const AST::PrimaryExprReadnumExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mExpr.accept(*this);
 }
@@ -448,7 +459,7 @@ void AddrCodegen::visit(const AST::PrimaryExprStrLit & astNode) {
     astNode.mLit.accept(*this);
 }
 
-void AddrCodegen::visit(const AST::PrimaryExprTime & astNode) {
+void AddrCodegen::visit(const AST::PrimaryExprTimeExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mExpr.accept(*this);
 }
