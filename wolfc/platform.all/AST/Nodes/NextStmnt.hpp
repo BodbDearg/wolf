@@ -16,8 +16,8 @@ class AssignExpr;
 
 /*
 NextStmnt:
-	next
-	next if|unless AssignExpr
+    next
+    next if|unless AssignExpr
 */
 class NextStmnt : public ASTNode, public IStmnt {
 public:

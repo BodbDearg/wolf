@@ -16,11 +16,11 @@ class MulExpr;
 
 /*
 AddExpr:
-	MulExpr
-	MulExpr + AddExpr
-	MulExpr - AddExpr
-	MulExpr | AddExpr
-	MulExpr ^ AddExpr
+    MulExpr
+    MulExpr + AddExpr
+    MulExpr - AddExpr
+    MulExpr | AddExpr
+    MulExpr ^ AddExpr
 */
 class AddExpr : public ASTNode, public IExpr {
 public:

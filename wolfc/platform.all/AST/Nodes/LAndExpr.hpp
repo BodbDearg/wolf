@@ -16,8 +16,8 @@ class NotExpr;
 
 /*
 LAndExpr:
-	NotExpr
-	NotExpr and LAndExpr
+    NotExpr
+    NotExpr and LAndExpr
 */
 class LAndExpr : public ASTNode, public IExpr {
 public:

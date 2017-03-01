@@ -16,15 +16,15 @@ class AddExpr;
 
 /*
 CmpExpr:
-	AddExpr
-	AddExpr == CmpExpr
-	AddExpr is CmpExpr
-	AddExpr != CmpExpr
-	AddExpr is not CmpExpr
-	AddExpr < CmpExpr
-	AddExpr <= CmpExpr
-	AddExpr > CmpExpr
-	AddExpr >= CmpExpr
+    AddExpr
+    AddExpr == CmpExpr
+    AddExpr is CmpExpr
+    AddExpr != CmpExpr
+    AddExpr is not CmpExpr
+    AddExpr < CmpExpr
+    AddExpr <= CmpExpr
+    AddExpr > CmpExpr
+    AddExpr >= CmpExpr
 */
 class CmpExpr : public ASTNode, public IExpr {
 public:

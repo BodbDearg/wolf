@@ -18,7 +18,7 @@ class StrLit;
 /*
 RandExpr:
     rand ( )
-	srand ( AssignExpr )
+    srand ( AssignExpr )
 */
 class RandExpr : public ASTNode, public IExpr {
 public:

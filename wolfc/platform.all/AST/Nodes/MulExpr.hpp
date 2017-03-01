@@ -16,10 +16,10 @@ class ShiftExpr;
 
 /*
 MulExpr:
-	ShiftExpr
-	ShiftExpr * MulExpr
-	ShiftExpr / MulExpr
-	ShiftExpr % MulExpr
+    ShiftExpr
+    ShiftExpr * MulExpr
+    ShiftExpr / MulExpr
+    ShiftExpr % MulExpr
 */
 class MulExpr : public ASTNode, public IExpr {
 public:

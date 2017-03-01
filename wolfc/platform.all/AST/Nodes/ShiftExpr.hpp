@@ -17,9 +17,9 @@ class PrefixExpr;
 /*
 ShiftExpr:
     PrefixExpr
-	PrefixExpr << ShiftExpr
-	PrefixExpr >> ShiftExpr
-	PrefixExpr >>> ShiftExpr
+    PrefixExpr << ShiftExpr
+    PrefixExpr >> ShiftExpr
+    PrefixExpr >>> ShiftExpr
 */
 class ShiftExpr : public ASTNode, public IExpr {
 public:

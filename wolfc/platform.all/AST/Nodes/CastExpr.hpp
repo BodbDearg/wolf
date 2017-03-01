@@ -18,8 +18,8 @@ class Type;
 
 /*
 CastExpr:
-	PrimaryExpr
-	cast ( AssignExpr to Type )
+    PrimaryExpr
+    cast ( AssignExpr to Type )
 */
 class CastExpr : public ASTNode, public IExpr {
 public:

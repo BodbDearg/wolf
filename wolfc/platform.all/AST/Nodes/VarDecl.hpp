@@ -38,7 +38,7 @@ public:
     
     const Token &   mStartToken;
     Identifier &    mIdent;
-    AssignExpr & 	mInitExpr;
+    AssignExpr &    mInitExpr;
 };
 
 /* let Identifier = AssignExpr */

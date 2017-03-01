@@ -16,8 +16,8 @@ class LAndExpr;
 
 /*
 LOrExpr:
-	LAndExpr
-	LAndExpr or LOrExpr
+    LAndExpr
+    LAndExpr or LOrExpr
 */
 class LOrExpr : public ASTNode, public IExpr {
 public:

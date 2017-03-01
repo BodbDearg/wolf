@@ -20,15 +20,15 @@ AssignExpr:
     TernaryExpr = AssignExpr
     TernaryExpr += AssignExpr
     TernaryExpr -= AssignExpr
-	TernaryExpr |= AssignExpr
-	TernaryExpr ^= AssignExpr
+    TernaryExpr |= AssignExpr
+    TernaryExpr ^= AssignExpr
     TernaryExpr *= AssignExpr
     TernaryExpr /= AssignExpr
     TernaryExpr %= AssignExpr
-	TernaryExpr &= AssignExpr
-	TernaryExpr <<= AssignExpr
-	TernaryExpr >>= AssignExpr
-	TernaryExpr >>>= AssignExpr
+    TernaryExpr &= AssignExpr
+    TernaryExpr <<= AssignExpr
+    TernaryExpr >>= AssignExpr
+    TernaryExpr >>>= AssignExpr
 */
 class AssignExpr : public ASTNode, public IExpr {
 public:

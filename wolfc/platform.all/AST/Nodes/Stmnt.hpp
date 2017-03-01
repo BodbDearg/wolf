@@ -27,7 +27,7 @@ class WhileStmnt;
 
 /*
 Stmnt:
-	NoOpStmnt
+    NoOpStmnt
     PrintStmnt
     AssertStmnt
     VarDecl
@@ -35,10 +35,10 @@ Stmnt:
     WhileStmnt
     LoopStmnt
     ScopeStmnt
-	BreakStmnt
-	NextStmnt
-	ReturnStmnt
-	AssignExpr
+    BreakStmnt
+    NextStmnt
+    ReturnStmnt
+    AssignExpr
 */
 class Stmnt : public ASTNode, public IStmnt {
 public:

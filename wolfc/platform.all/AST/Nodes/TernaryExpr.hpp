@@ -17,8 +17,8 @@ class LOrExpr;
 
 /*
 TernaryExpr:
-	LOrExpr
-	LOrExpr ? AssignExpr : AssignExpr
+    LOrExpr
+    LOrExpr ? AssignExpr : AssignExpr
 */
 class TernaryExpr : public ASTNode, public IExpr {
 public:

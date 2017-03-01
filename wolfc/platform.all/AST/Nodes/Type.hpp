@@ -16,9 +16,9 @@ class PrimitiveType;
 
 /*
 Type:
-	PrimitiveType
-	^|? Type
-	[ AssignExpr ] Type
+    PrimitiveType
+    ^|? Type
+    [ AssignExpr ] Type
 */
 class Type : public ASTNode {
 public:

@@ -16,7 +16,7 @@ class AssignExpr;
 
 /*
 WhileStmnt:
-	while|until AssignExpr [do] Scope end
+    while|until AssignExpr [do] Scope end
 */
 class WhileStmnt final : public ASTNode, public IRepeatableStmnt {
 public:

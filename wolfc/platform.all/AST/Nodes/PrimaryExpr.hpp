@@ -24,10 +24,10 @@ class TimeExpr;
 
 /*
 PrimaryExpr:
-	IntLit
-	BoolLit
-	StrLit
-	NullLit
+    IntLit
+    BoolLit
+    StrLit
+    NullLit
     ArrayLit
     Identifier
     ReadnumExpr

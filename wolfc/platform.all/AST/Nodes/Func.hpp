@@ -22,7 +22,7 @@ class Type;
 
 /*
 Func:
-	func Identifier ( [0..N: FuncArg ,][FuncArg] ) [-> Type] [do] Scope end
+    func Identifier ( [0..N: FuncArg ,][FuncArg] ) [-> Type] [do] Scope end
 */
 class Func final : public ASTNode {
 public:

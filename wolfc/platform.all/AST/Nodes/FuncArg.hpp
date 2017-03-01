@@ -16,7 +16,7 @@ class Type;
 
 /*
 FuncArg:
-	Identifier : Type
+    Identifier : Type
 */
 class FuncArg final : public ASTNode {
 public:

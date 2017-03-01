@@ -17,7 +17,7 @@ class AssignExpr;
 /*
 LoopStmnt:
     loop Scope end
-	loop Scope repeat while|until AssignExpr
+    loop Scope repeat while|until AssignExpr
 */
 class LoopStmnt : public ASTNode, public IRepeatableStmnt {
 public:

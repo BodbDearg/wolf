@@ -17,12 +17,12 @@ class PostfixExpr;
 
 /*
 PrefixExpr:
-	PostfixExpr
-	+ PrefixExpr
-	- PrefixExpr
-	& PrefixExpr
-	$ PrefixExpr
-	( AssignExpr )
+    PostfixExpr
+    + PrefixExpr
+    - PrefixExpr
+    & PrefixExpr
+    $ PrefixExpr
+    ( AssignExpr )
 */
 class PrefixExpr : public ASTNode, public IExpr {
 public:

@@ -16,7 +16,7 @@ class Scope;
 
 /*
 ScopeStmnt:
-	scope Scope end
+    scope Scope end
 */
 class ScopeStmnt final : public ASTNode, public IStmnt {
 public:

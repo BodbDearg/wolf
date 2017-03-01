@@ -16,8 +16,8 @@ class VarDecl;
 
 /*
 DeclDef:
-	Func
-	VarDecl
+    Func
+    VarDecl
 */
 class DeclDef : public ASTNode {
 public:

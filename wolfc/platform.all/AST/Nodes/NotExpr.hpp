@@ -16,9 +16,9 @@ class CmpExpr;
 
 /*
 NotExpr:
-	CmpExpr
-	not NotExpr
-	~ NotExpr
+    CmpExpr
+    not NotExpr
+    ~ NotExpr
 */
 class NotExpr : public ASTNode, public IExpr {
 public:
