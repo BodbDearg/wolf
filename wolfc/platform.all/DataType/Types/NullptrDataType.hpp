@@ -11,15 +11,11 @@
 WC_BEGIN_NAMESPACE
 
 /**
- * A special data type that represents 'any' kind of non void data type.
- * Used for pointers and references that can point to anything.
- *
- * In C++ the equivalent of this type would be 'void *'.
- *
- * Values of type 'any' are special in that they cannot be copied or accessed 
- * by value, you can only pass them around by pointer or reference.
+ * A special data type that represents the type of the 'null' literal.
+ * Not intended to be used actual variables but for automatic type conversions 
+ * from the 'null' literal to other pointer types.
  */
-class AnyDataType final : public DataType {
+class NullptrDataType final : public DataType {
 public:
     virtual void accept(DataTypeVisitor & visitor) const override;
     virtual DataTypeId getTypeId() const override;

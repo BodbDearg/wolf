@@ -914,6 +914,7 @@ Lexer::ParseResult Lexer::parseKeywordsAndLiterals() {
         parseKeyword("null", TokenType::kNull) ||
         parseKeyword("void", TokenType::kVoid) ||
         parseKeyword("any", TokenType::kAny) ||
+        parseKeyword("nullptr", TokenType::kNullptr) ||
         parseKeyword("int", TokenType::kInt) ||
         parseKeyword("int8", TokenType::kInt8) ||
         parseKeyword("int16", TokenType::kInt16) ||

@@ -9,8 +9,8 @@
 #include "../CodegenCtx.hpp"
 #include "AST/Nodes/NullLit.hpp"
 #include "Assert.hpp"
+#include "DataType/Types/NullptrDataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
-#include "DataType/Types/PtrDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -19,7 +19,7 @@ void ConstCodegen::visit(const AST::NullLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
     // Codegen the data type for the null literal
-    const DataType & nullLitDT = PrimitiveDataTypes::getNullLitDataType();
+    const NullptrDataType & nullLitDT = PrimitiveDataTypes::getNullptrDataType();
     nullLitDT.accept(mCodegenDataType);
     CompiledDataType nullLitCDT = mCtx.popCompiledDataType();
     WC_ASSERT(nullLitCDT.isValid());

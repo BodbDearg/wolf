@@ -21,6 +21,7 @@
 #include "DataType/Types/FuncDataType.hpp"
 #include "DataType/Types/IntDataTypes.hpp"
 #include "DataType/Types/InvalidDataType.hpp"
+#include "DataType/Types/NullptrDataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "DataType/Types/PtrDataType.hpp"
 #include "DataType/Types/StrDataType.hpp"
@@ -361,37 +362,15 @@ void CodegenDataType::visit(const Int8DataType & dataType) {
     mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
 }
 
-void CodegenDataType::visit(const UInt128DataType & dataType) {
+void CodegenDataType::visit(const InvalidDataType & dataType) {
+    // We can't codegen an unknown data type
     WC_UNUSED_PARAM(dataType);
-    llvm::Type * llvmType = llvm::Type::getInt128Ty(mCtx.mLLVMCtx);
-    WC_ASSERT(llvmType);
-    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+    mCtx.error("Can't codegen an invalid data type!");
 }
 
-void CodegenDataType::visit(const UInt16DataType & dataType) {
+void CodegenDataType::visit(const NullptrDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
-    llvm::Type * llvmType = llvm::Type::getInt16Ty(mCtx.mLLVMCtx);
-    WC_ASSERT(llvmType);
-    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
-}
-
-void CodegenDataType::visit(const UInt32DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    llvm::Type * llvmType = llvm::Type::getInt32Ty(mCtx.mLLVMCtx);
-    WC_ASSERT(llvmType);
-    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
-}
-
-void CodegenDataType::visit(const UInt64DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    llvm::Type * llvmType = llvm::Type::getInt64Ty(mCtx.mLLVMCtx);
-    WC_ASSERT(llvmType);
-    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
-}
-
-void CodegenDataType::visit(const UInt8DataType & dataType) {
-    WC_UNUSED_PARAM(dataType);
-    llvm::Type * llvmType = llvm::Type::getInt8Ty(mCtx.mLLVMCtx);
+    llvm::Type * llvmType = llvm::Type::getInt1PtrTy(mCtx.mLLVMCtx);
     WC_ASSERT(llvmType);
     mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
 }
@@ -426,10 +405,39 @@ void CodegenDataType::visit(const StrDataType & dataType) {
     mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
 }
 
-void CodegenDataType::visit(const InvalidDataType & dataType) {
-    // We can't codegen an unknown data type
+void CodegenDataType::visit(const UInt128DataType & dataType) {
     WC_UNUSED_PARAM(dataType);
-    mCtx.error("Can't codegen an invalid data type!");
+    llvm::Type * llvmType = llvm::Type::getInt128Ty(mCtx.mLLVMCtx);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const UInt16DataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Type * llvmType = llvm::Type::getInt16Ty(mCtx.mLLVMCtx);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const UInt32DataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Type * llvmType = llvm::Type::getInt32Ty(mCtx.mLLVMCtx);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const UInt64DataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Type * llvmType = llvm::Type::getInt64Ty(mCtx.mLLVMCtx);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const UInt8DataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Type * llvmType = llvm::Type::getInt8Ty(mCtx.mLLVMCtx);
+    WC_ASSERT(llvmType);
+    mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
 }
 
 void CodegenDataType::visit(const VoidDataType & dataType) {

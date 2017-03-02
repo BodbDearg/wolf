@@ -49,6 +49,7 @@ public:
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Int64)
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Int8)
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Invalid)
+    IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Nullptr)
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Ptr)
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Str)
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(UInt128)
@@ -274,6 +275,18 @@ public:
 };
 
 //-----------------------------------------------------------------------------
+// Cast From: nullptr
+//-----------------------------------------------------------------------------
+class CodegenCastFromNullptrDataType final : public CodegenCastFromDataType {
+public:
+    CodegenCastFromNullptrDataType(Codegen & cg, const Value & fromVal, const CompiledDataType & toTypeCDT) :
+        CodegenCastFromDataType(cg, fromVal, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
 // Cast From: Ptr
 //-----------------------------------------------------------------------------
 class CodegenCastFromPtrDataType final : public CodegenCastFromDataType {
@@ -488,6 +501,7 @@ IMPL_CAST_FROM_TYPE_FUNC(Int32)
 IMPL_CAST_FROM_TYPE_FUNC(Int64)
 IMPL_CAST_FROM_TYPE_FUNC(Int8)
 IMPL_CAST_FROM_TYPE_FUNC(Invalid)
+IMPL_CAST_FROM_TYPE_FUNC(Nullptr)
 IMPL_CAST_FROM_TYPE_FUNC(Ptr)
 IMPL_CAST_FROM_TYPE_FUNC(Str)
 IMPL_CAST_FROM_TYPE_FUNC(UInt128)

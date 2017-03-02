@@ -22,6 +22,8 @@ enum class DataTypeId : uint8_t {
     kVoid,
     /* Any non void and valid data type. Can only be used for pointers and references. */
     kAny,
+    /* Type of the 'null' pointer literal */
+    kNullptr,
     /* Boolean data type */
     kBool,
     /* Signed 8-bit integer data type */

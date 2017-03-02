@@ -11,6 +11,7 @@
 #include "IntDataTypes.hpp"
 #include "InvalidDataType.hpp"
 #include "Lexer/TokenType.hpp"
+#include "NullptrDataType.hpp"
 #include "PtrDataType.hpp"
 #include "StrDataType.hpp"
 #include "VoidDataType.hpp"
@@ -18,26 +19,24 @@
 WC_BEGIN_NAMESPACE
 
 /* Instances of the types themselves! */
-static InvalidDataType  gInvalidDataType;
-static VoidDataType     gVoidDataType;
-static AnyDataType      gAnyDataType;
-static Int128DataType   gInt128DataType;
-static Int16DataType    gInt16DataType;
-static Int32DataType    gInt32DataType;
-static Int64DataType    gInt64DataType;
-static Int8DataType     gInt8DataType;
-static UInt128DataType  gUInt128DataType;
-static UInt16DataType   gUInt16DataType;
-static UInt32DataType   gUInt32DataType;
-static UInt64DataType   gUInt64DataType;
-static UInt8DataType    gUInt8DataType;
-static BoolDataType     gBoolDataType;
-
-/* This is a special case for 'null' pointer literals. */
-static PtrDataType gNullLitDataType(gAnyDataType, true);
+static const InvalidDataType    gInvalidDataType{};
+static const VoidDataType       gVoidDataType{};
+static const AnyDataType        gAnyDataType{};
+static const NullptrDataType    gNullptrDataType{};
+static const Int128DataType     gInt128DataType{};
+static const Int16DataType      gInt16DataType{};
+static const Int32DataType      gInt32DataType{};
+static const Int64DataType      gInt64DataType{};
+static const Int8DataType       gInt8DataType{};
+static const UInt128DataType    gUInt128DataType{};
+static const UInt16DataType     gUInt16DataType{};
+static const UInt32DataType     gUInt32DataType{};
+static const UInt64DataType     gUInt64DataType{};
+static const UInt8DataType      gUInt8DataType{};
+static const BoolDataType       gBoolDataType{};
 
 /* TODO: remove, this is a temporary data type */
-static StrDataType gStrDataType;
+static const StrDataType gStrDataType{};
 
 const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
     switch (type) {
@@ -47,6 +46,7 @@ const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
         // The basic data types
         case DataTypeId::kVoid: return gVoidDataType;
         case DataTypeId::kAny: return gAnyDataType;
+        case DataTypeId::kNullptr: return gNullptrDataType;
         case DataTypeId::kInt8: return gInt8DataType;
         case DataTypeId::kInt16: return gInt16DataType;
         case DataTypeId::kInt32: return gInt32DataType;
@@ -74,6 +74,7 @@ DataTypeId PrimitiveDataTypes::getTypeIdForLangKeyword(TokenType tokenType) {
     switch (tokenType) {
         case TokenType::kVoid: return DataTypeId::kVoid;
         case TokenType::kAny: return DataTypeId::kAny;
+        case TokenType::kNullptr: return DataTypeId::kNullptr;
         case TokenType::kInt: return getDefaultIntTypeId();
         case TokenType::kInt8: return DataTypeId::kInt8;
         case TokenType::kInt16: return DataTypeId::kInt16;
@@ -116,12 +117,12 @@ const AnyDataType & PrimitiveDataTypes::getAnyDataType() {
     return gAnyDataType;
 }
 
-const BoolDataType & PrimitiveDataTypes::getBoolDataType() {
-    return gBoolDataType;
+const NullptrDataType & PrimitiveDataTypes::getNullptrDataType() {
+    return gNullptrDataType;
 }
 
-const PtrDataType & PrimitiveDataTypes::getNullLitDataType() {
-    return gNullLitDataType;
+const BoolDataType & PrimitiveDataTypes::getBoolDataType() {
+    return gBoolDataType;
 }
 
 const DataType & PrimitiveDataTypes::getDefaultUIntType() {

@@ -18,6 +18,7 @@ class AnyDataType;
 class BoolDataType;
 class DataType;
 class InvalidDataType;
+class NullptrDataType;
 class PtrDataType;
 class VoidDataType;
 enum class DataTypeId : uint8_t;
@@ -61,17 +62,11 @@ namespace PrimitiveDataTypes {
     /* Get the 'any' data type */
     const AnyDataType & getAnyDataType();
     
+    /* Get the 'nullptr' data type */
+    const NullptrDataType & getNullptrDataType();
+    
     /* Get the 'bool' data type */
     const BoolDataType & getBoolDataType();
-    
-    /**
-     * Get the data type for the 'null' pointer literal. Technically pointers are not normally 
-     * primitive types since they are user defined and can be composed of any number of other 
-     * types recursively. The 'null' pointer literal however is an exception since is a fixed type, 
-     * and always the same. Hence we give it the primitive treatment here so we can access it's type
-     * easily...
-     */
-    const PtrDataType & getNullLitDataType();
     
     /**
      * Get the default unsigned integer type or the type of the 'uint' alias. Will be a 32-bit

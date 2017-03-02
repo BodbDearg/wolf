@@ -46,6 +46,7 @@ public:
     virtual void visit(const Int64DataType & dataType) override;
     virtual void visit(const Int8DataType & dataType) override;
     virtual void visit(const InvalidDataType & dataType) override;
+    virtual void visit(const NullptrDataType & dataType) override;
     virtual void visit(const PtrDataType & dataType) override;
     virtual void visit(const StrDataType & dataType) override;
     virtual void visit(const UInt128DataType & dataType) override;
