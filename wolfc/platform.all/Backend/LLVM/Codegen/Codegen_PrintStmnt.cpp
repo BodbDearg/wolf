@@ -91,23 +91,41 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
         
         switch (exprDataType.getTypeId()) {
             case DataTypeId::kInt8:
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%hhd");
+                break;
+                
             case DataTypeId::kInt16:
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%hd");
+                break;
+                
             case DataTypeId::kInt32:
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%d");
                 break;
                 
             case DataTypeId::kInt64:
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%ld");
+                break;
+                
             case DataTypeId::kInt128:
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%lld");
                 break;
                 
             case DataTypeId::kUInt8:
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%hhu");
+                break;
+                
             case DataTypeId::kUInt16:
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%hu");
+                break;
+                
             case DataTypeId::kUInt32:
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%u");
                 break;
                 
             case DataTypeId::kUInt64:
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%lu");
+                break;
+                
             case DataTypeId::kUInt128:
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%llu");
                 break;
