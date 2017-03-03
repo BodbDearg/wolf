@@ -10,6 +10,7 @@
 #include "../CodegenCtx.hpp"
 #include "Assert.hpp"
 #include "DataType/DataType.hpp"
+#include "DataType/Types/PtrDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -80,16 +81,16 @@ public:
     }
     
 protected:
-    ConstCodegen &              mCG;
-    const Constant &            mFromConst;
-    const CompiledDataType &    mToTypeCDT;
-    
-private:
+    /* Spit out an error that a cast is not supported */
     void issueUnsupportedCastError() const {
         mCG.mCtx.error("Illegal cast! Cannot do a compile time cast from an expression of type '%s' to type '%s'!",
                        mFromConst.mCompiledType.getDataType().name().c_str(),
                        mToTypeCDT.getDataType().name().c_str());
     }
+    
+    ConstCodegen &              mCG;
+    const Constant &            mFromConst;
+    const CompiledDataType &    mToTypeCDT;
 };
 
 /* This macro saves a lot of repetition */
@@ -316,6 +317,19 @@ public:
         CodegenConstCastFromDataType(cg, fromConst, toTypeCDT)
     {
         WC_EMPTY_FUNC_BODY();
+    }
+    
+    #warning TODO: nullptr: allow cast to bool and integers
+    virtual void visit(const PtrDataType & toType) override {
+        // Only allowed to store nullptrs in nullable pointers
+        if (toType.mIsNullable) {
+            mCG.mCtx.pushConstant(Constant(llvm::Constant::getNullValue(mToTypeCDT.getLLVMType()),
+                                           mToTypeCDT,
+                                           mCG.mCtx.getCurrentASTNode()));
+        }
+        else {
+            issueUnsupportedCastError();
+        }
     }
 };
 

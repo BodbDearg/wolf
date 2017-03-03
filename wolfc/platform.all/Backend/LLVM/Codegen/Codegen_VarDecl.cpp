@@ -8,6 +8,7 @@
 
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
+#include "../ImplicitCasts.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/Identifier.hpp"
 #include "AST/Nodes/Scope.hpp"
@@ -95,6 +96,17 @@ static void codegenLocalVarDecl(Codegen & cg,
     varDecl.mInitExpr.accept(cg);
     Value varInitVal = cg.mCtx.popValue();
     
+    // The type of the variable is either the explicitly specified type or based on the
+    // initializer expression type (if the var type is inferred)
+    const CompiledDataType & varCompiledType = varExplicitType ?
+        *varExplicitType :
+        varInitVal.mCompiledType;
+    
+    // If possible, do any implicit casts that may be required for the initial value:
+    varInitVal = ImplicitCasts::castSingleValueIfRequired(cg,
+                                                          varInitVal,
+                                                          varCompiledType);
+    
     // Do the type checks for the var decl
     bool varInitializerTypeIsOk = false;
     bool varTypeIsOk = false;
@@ -114,11 +126,6 @@ static void codegenLocalVarDecl(Codegen & cg,
     if (!varInitializerTypeIsOk) {
         varInitVal.mLLVMVal = nullptr;
     }
-    
-    // Decide what the var compiled type is:
-    CompiledDataType varCompiledType = varExplicitType ?
-        *varExplicitType :
-        varInitVal.mCompiledType;
     
     // Makeup the label we will give the var in the IR
     std::string varLabel = kVarLabelPrefix + varDecl.mIdent.name();
@@ -151,7 +158,18 @@ static void codegenGlobalVarDecl(Codegen & cg,
 {
     // Evaluate the initializer expression as a constant
     varDecl.mInitExpr.accept(cg.mConstCodegen);
-    Constant varInitVal = cg.mCtx.popConstant();
+    Constant varInitConst = cg.mCtx.popConstant();
+    
+    // The type of the variable is either the explicitly specified type or based on the
+    // initializer expression type (if the var type is inferred)
+    const CompiledDataType & varCompiledType = varExplicitType ?
+        *varExplicitType :
+        varInitConst.mCompiledType;
+    
+    // If possible, do any implicit casts that may be required for the initial value:
+    varInitConst = ImplicitCasts::castSingleConstantIfRequired(cg.mConstCodegen,
+                                                               varInitConst,
+                                                               varCompiledType);
     
     // Do the type checks for the var decl
     bool varInitializerTypeIsOk = false;
@@ -160,7 +178,7 @@ static void codegenGlobalVarDecl(Codegen & cg,
     doVarDeclTypeChecks(cg,
                         varDecl,
                         varExplicitType,
-                        varInitVal.mCompiledType,
+                        varInitConst.mCompiledType,
                         varInitializerTypeIsOk,
                         varTypeIsOk);
     
@@ -169,13 +187,8 @@ static void codegenGlobalVarDecl(Codegen & cg,
     
     // If the initializer is bad then codegen without it
     if (!varInitializerTypeIsOk) {
-        varInitVal.mLLVMConst = nullptr;
+        varInitConst.mLLVMConst = nullptr;
     }
-    
-    // Decide what the var compiled type is:
-    CompiledDataType varCompiledType = varExplicitType ?
-        *varExplicitType :
-        varInitVal.mCompiledType;
     
     // Register the variable. If it's registered more than once then this will generate an error.
     // We'll fill in the llvm value later once the unique name has been determined...
@@ -196,7 +209,7 @@ static void codegenGlobalVarDecl(Codegen & cg,
         varCompiledType.getLLVMType(),
         false,                               // Not constant
         llvm::GlobalValue::PrivateLinkage,
-        varInitVal.mLLVMConst,
+        varInitConst.mLLVMConst,
         value.mName
     );
     
@@ -207,7 +220,7 @@ static void codegenGlobalVarDecl(Codegen & cg,
     cg.mCtx.mModuleValHolder.createConst(
         cg.mCtx,
         varDecl.mIdent.name(),
-        varInitVal.mLLVMConst,
+        varInitConst.mLLVMConst,
         varCompiledType,
         varDecl,
         true

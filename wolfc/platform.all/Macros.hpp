@@ -15,11 +15,13 @@
 #define WC_BEGIN_NAMESPACE namespace WC_NAMESPACE_NAME {
 #define WC_AST_BEGIN_NAMESPACE namespace WC_AST_NAMESPACE_NAME {
 #define WC_LLVM_BACKEND_BEGIN_NAMESPACE namespace WC_LLVM_BACKEND_NAMESPACE_NAME {
+#define WC_BEGIN_NAMED_NAMESPACE(Name) namespace Name {
 
 /* End namespace macros for different compiler namespaces. */
 #define WC_END_NAMESPACE }
 #define WC_AST_END_NAMESPACE }
 #define WC_LLVM_BACKEND_END_NAMESPACE }
+#define WC_END_NAMED_NAMESPACE(Name) }
 
 /* Documentation macro. Clarify an empty function body is intentional. */
 #define WC_EMPTY_FUNC_BODY()\
