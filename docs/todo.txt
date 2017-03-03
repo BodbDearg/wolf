@@ -4,7 +4,11 @@
 - Pointer arithmetic: dec
 - Pointer casting
 
-- Implement 'null' literal of type ?Any
+- Unit test implicit casting of 'null'
+- Unit test various runtime integer implicit casting
+- Unit test allowed compile time implicit casts
+- Unit test implicit casting non nullable pointer to nullable pointer of the same type
+
 - Don't allow dereference of nullable pointers
 - Allow auto promotion from non nullable to nullable pointers of the same type
 

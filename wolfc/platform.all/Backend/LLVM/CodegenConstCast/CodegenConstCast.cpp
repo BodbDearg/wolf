@@ -320,16 +320,12 @@ public:
     }
     
     #warning TODO: nullptr: allow cast to bool and integers
-    virtual void visit(const PtrDataType & toType) override {
-        // Only allowed to store nullptrs in nullable pointers
-        if (toType.mIsNullable) {
-            mCG.mCtx.pushConstant(Constant(llvm::Constant::getNullValue(mToTypeCDT.getLLVMType()),
-                                           mToTypeCDT,
-                                           mCG.mCtx.getCurrentASTNode()));
-        }
-        else {
-            issueUnsupportedCastError();
-        }
+    virtual void visit(const PtrDataType & dataType) override {
+        // Just do a simple pointer cast
+        WC_UNUSED_PARAM(dataType);
+        llvm::Constant * llvmConstCast = llvm::Constant::getNullValue(mToTypeCDT.getLLVMType());
+        WC_ASSERT(llvmConstCast);
+        mCG.mCtx.pushConstant(Constant(llvmConstCast, mToTypeCDT, mCG.mCtx.getCurrentASTNode()));
     }
 };
 
@@ -345,6 +341,15 @@ public:
         CodegenConstCastFromDataType(cg, fromConst, toTypeCDT)
     {
         WC_EMPTY_FUNC_BODY();
+    }
+    
+    #warning TODO: nullptr: allow cast to bool and integers
+    virtual void visit(const PtrDataType & dataType) override {
+        // Just do a simple pointer cast
+        WC_UNUSED_PARAM(dataType);
+        llvm::Constant * llvmConstCast = llvm::ConstantExpr::getPointerCast(mFromConst.mLLVMConst, mToTypeCDT.getLLVMType());
+        WC_ASSERT(llvmConstCast);
+        mCG.mCtx.pushConstant(Constant(llvmConstCast, mToTypeCDT, mCG.mCtx.getCurrentASTNode()));
     }
 };
 

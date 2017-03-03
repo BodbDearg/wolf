@@ -284,6 +284,23 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    virtual void visit(const PtrDataType & dataType) override {
+        // Implicit cast for pointers is only allowed if going from a non nullable pointer of
+        // one type to a nullable pointer of the same type...
+        //
+        // TODO: Some day we should support implicit casts for structs, classes etc. going from
+        // derived types back to base types.
+        WC_UNUSED_PARAM(dataType);
+        const PtrDataType & fromType = static_cast<const PtrDataType&>(mFromType.getDataType());
+        const PtrDataType & toType = static_cast<const PtrDataType&>(mToType.getDataType());
+        
+        if (!fromType.mIsNullable && toType.mIsNullable) {
+            if (fromType.mPointedToType.equals(toType.mPointedToType)) {
+                mCastAllowed = true;
+            }
+        }
+    }
 };
 
 //------------------------------------------------------------------------------

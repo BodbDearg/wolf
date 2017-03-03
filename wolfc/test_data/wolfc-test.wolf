@@ -5,8 +5,8 @@
 ;==================================================================================================
 
 func main() -> int
-    let blah : ?int8 = null
-    let blah2 : int = 1u8
+    let blah: ?int8 = null
+    let blah2: ^int8 = cast(blah to ^int8)
     print(blah)
     return 0
 end

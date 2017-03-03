@@ -50,6 +50,9 @@ bool PtrDataType::equals(const DataType & other) const {
     const PtrDataType * otherType = dynamic_cast<const PtrDataType*>(&other);
     WC_GUARD(otherType, false);
     
+    // Nullability must match:
+    WC_GUARD(mIsNullable == otherType->mIsNullable, false);
+    
     // Pointed to types must match
     return mPointedToType.equals(otherType->mPointedToType);
 }

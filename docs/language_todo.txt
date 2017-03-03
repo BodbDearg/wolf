@@ -40,6 +40,8 @@ General:
     - break out of labeled loop
     - continue to labeled loop
     - 'in' expression
+    - disallow casting away nullability with 'cast'
+    - disallow casting away constness with 'cast'
     - 'defer' statement for delayed logic
     - Variables must be initialized when declared
         - '= undefined' for no initialization
