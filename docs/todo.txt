@@ -31,6 +31,11 @@
 	let blah : uint = 18_446_744_073_709_551_615
 
 - Fix this bug:
+    let blah = [1, 2, 3, 4]
+    let blahPtr = &blah
+    print(($blahPtr)[1])
+
+- Fix this bug:
 	func blah()
 	    print("Hello")
 	end
