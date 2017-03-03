@@ -3,7 +3,6 @@
 - Pointer arithmetic: inc
 - Pointer arithmetic: dec
 - Don't allow dereference of nullable pointers
-- Allow integer implicit down casts for constant values
 - Unit test implicit type promotion to bool for:
 	while()
 	if()
@@ -12,6 +11,7 @@
 - Unit test implicit casting of 'null'
 - Unit test various runtime integer implicit casting
 - Unit test allowed compile time implicit casts
+	- Especially for ints
 - Unit test implicit casting non nullable pointer to nullable pointer of the same type
 - Unit test implicit type promotion for binary expressions
 - Unit test implicit type promotion to bool for:
@@ -26,6 +26,9 @@
 
 - Fix up random 'new' allocations throughout the codebase
 	- Use linear alloc
+
+- Fix this bug:
+	let blah : uint = 18_446_744_073_709_551_615
 
 - Fix this bug:
 	func blah()

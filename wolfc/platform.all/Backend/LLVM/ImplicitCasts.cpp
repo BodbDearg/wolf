@@ -19,6 +19,77 @@ WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 WC_BEGIN_NAMED_NAMESPACE(ImplicitCasts)
 
+/**
+ * Utility function, checks to see if we can implicitly cast from one integer type to another 
+ * without losing any data.
+ *
+ * If a constant value is known for the integer, this enables additional casts that might not
+ * have otherwise been possible.
+ */
+static bool canImplicitCastIntToIntType(const CompiledDataType & fromTypeCDT,
+                                        const CompiledDataType & toTypeCDT,
+                                        llvm::Constant * fromConst)
+{
+    // If the types are equal no implicit casting is allowed:
+    const DataType & fromType = fromTypeCDT.getDataType();
+    const DataType & toType = toTypeCDT.getDataType();
+    WC_GUARD(!fromType.equals(toType), false);
+    
+    // Get the llvm integer types we are casting from and to.
+    // If either types are not integers then the cast will not be possible...
+    llvm::IntegerType * fromLLVMIntType = llvm::dyn_cast<llvm::IntegerType>(fromTypeCDT.getLLVMType());
+    WC_GUARD(fromLLVMIntType, false);
+    llvm::IntegerType * toLLVMIntType = llvm::dyn_cast<llvm::IntegerType>(toTypeCDT.getLLVMType());
+    WC_GUARD(toLLVMIntType, false);
+    
+    // If we have no known constant integer value to play with then the rules are simple:
+    //
+    // 1 - Can only cast to a larger integer type.
+    // 2 - Can't cast from a signed type to an unsigned type.
+    if (!fromConst) {
+        if (fromType.isSigned() && !toType.isSigned()) {
+            // Signed check failed: can't implicitly cast signed to unsigned!
+            return false;
+        }
+        
+        if (fromLLVMIntType->getBitWidth() >= toLLVMIntType->getBitWidth()) {
+            // Bigger check failed: only allow to go from a smaller int type to a larger one
+            return false;
+        }
+        
+        // If we got to here then all is well, return the value
+        return true;
+    }
+    
+    // Cast the value to a constant int and grab it's value:
+    llvm::ConstantInt * fromConstInt = llvm::cast<llvm::ConstantInt>(fromConst);
+    const llvm::APInt & fromIntVal = fromConstInt->getValue();
+    
+    // Sign check: if the integer is negative and the destination positive then no cast possible
+    if (fromIntVal.isNegative()) {
+        if (!toType.isSigned()) {
+            return false;
+        }
+    }
+    
+    // Okay, figure out how many bits are required to store the number and how many bits we have
+    // to play with in the destination type:
+    unsigned bitsRequired = fromIntVal.isNegative() ?
+        fromIntVal.getMinSignedBits() :
+        fromIntVal.getActiveBits();
+    
+    unsigned bitsAvailable = toLLVMIntType->getBitWidth();
+    
+    if (!fromIntVal.isNegative() && toType.isSigned()) {
+        // If we are casting from unsigned to signed then we have 1 less bit to play with in the
+        // target data type, since that is reserved for the sign bit in 2's complement format:
+        bitsAvailable--;
+    }
+    
+    // Implicit cast is allowed if we have enough bits available
+    return bitsRequired <= bitsAvailable;
+}
+
 //------------------------------------------------------------------------------
 // Base class to check if a cast is allowed from a particular type to any
 // number of other types.
@@ -85,6 +156,26 @@ protected:
         WC_UNUSED_PARAM(dataType);\
         mCastAllowed = true;\
     }
+
+/* Useful macro */
+#define IMPL_CAST_TO_INT_TYPE_IF_POSSIBLE(DataTypeName)\
+    virtual void visit(const DataTypeName##DataType & dataType) override {\
+        WC_UNUSED_PARAM(dataType);\
+        mCastAllowed = canImplicitCastIntToIntType(mFromType, mToType, mFromConst);\
+    }
+
+/* Useful macro */
+#define IMPL_CAST_TO_ALL_INT_TYPES_IF_POSSIBLE()\
+    IMPL_CAST_TO_INT_TYPE_IF_POSSIBLE(Int8)\
+    IMPL_CAST_TO_INT_TYPE_IF_POSSIBLE(Int16)\
+    IMPL_CAST_TO_INT_TYPE_IF_POSSIBLE(Int32)\
+    IMPL_CAST_TO_INT_TYPE_IF_POSSIBLE(Int64)\
+    IMPL_CAST_TO_INT_TYPE_IF_POSSIBLE(Int128)\
+    IMPL_CAST_TO_INT_TYPE_IF_POSSIBLE(UInt8)\
+    IMPL_CAST_TO_INT_TYPE_IF_POSSIBLE(UInt16)\
+    IMPL_CAST_TO_INT_TYPE_IF_POSSIBLE(UInt32)\
+    IMPL_CAST_TO_INT_TYPE_IF_POSSIBLE(UInt64)\
+    IMPL_CAST_TO_INT_TYPE_IF_POSSIBLE(UInt128)
 
 //------------------------------------------------------------------------------
 // Check cast allowed from: any
@@ -159,6 +250,8 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    IMPL_CAST_TO_ALL_INT_TYPES_IF_POSSIBLE()
 };
 
 //------------------------------------------------------------------------------
@@ -175,9 +268,7 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int32)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int64)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int128)
+    IMPL_CAST_TO_ALL_INT_TYPES_IF_POSSIBLE()
 };
 
 //------------------------------------------------------------------------------
@@ -194,8 +285,8 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int64)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int128)
+    
+    IMPL_CAST_TO_ALL_INT_TYPES_IF_POSSIBLE()
 };
 
 //------------------------------------------------------------------------------
@@ -212,7 +303,7 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int128)
+    IMPL_CAST_TO_ALL_INT_TYPES_IF_POSSIBLE()
 };
 
 //------------------------------------------------------------------------------
@@ -229,10 +320,7 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int16)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int32)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int64)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int128)
+    IMPL_CAST_TO_ALL_INT_TYPES_IF_POSSIBLE()
 };
 
 //------------------------------------------------------------------------------
@@ -331,6 +419,8 @@ public:
     {
         WC_EMPTY_FUNC_BODY();
     }
+    
+    IMPL_CAST_TO_ALL_INT_TYPES_IF_POSSIBLE()
 };
 
 //------------------------------------------------------------------------------
@@ -347,12 +437,7 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int32)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int64)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int128)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(UInt32)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(UInt64)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(UInt128)
+    IMPL_CAST_TO_ALL_INT_TYPES_IF_POSSIBLE()
 };
 
 //------------------------------------------------------------------------------
@@ -369,10 +454,7 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int64)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int128)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(UInt64)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(UInt128)
+    IMPL_CAST_TO_ALL_INT_TYPES_IF_POSSIBLE()
 };
 
 //------------------------------------------------------------------------------
@@ -389,8 +471,7 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int128)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(UInt128)
+    IMPL_CAST_TO_ALL_INT_TYPES_IF_POSSIBLE()
 };
 
 //------------------------------------------------------------------------------
@@ -407,14 +488,7 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int16)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int32)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int64)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Int128)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(UInt16)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(UInt32)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(UInt64)
-    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(UInt128)
+    IMPL_CAST_TO_ALL_INT_TYPES_IF_POSSIBLE()
 };
 
 //------------------------------------------------------------------------------
@@ -512,7 +586,7 @@ Value castSingleValueIfRequired(Codegen & cg,
     
     // If the implicit cast is not allowed then do not proceed.
     // In this case also return the value given:
-    WC_GUARD(canDoImplicitCast(valueCDT, toTypeCDT, nullptr), value);
+    WC_GUARD(canDoImplicitCast(valueCDT, toTypeCDT, value.mLLVMVal), value);
     
     // Otherwise do the cast and return the result:
     CodegenCast(cg, value, toTypeCDT).codegen();
