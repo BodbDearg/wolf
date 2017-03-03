@@ -17,7 +17,7 @@ void NullptrDataType::accept(DataTypeVisitor & visitor) const {
 }
 
 DataTypeId NullptrDataType::getTypeId() const {
-    return DataTypeId::kAny;
+    return DataTypeId::kNullptr;
 }
 
 const std::string & NullptrDataType::name() const {

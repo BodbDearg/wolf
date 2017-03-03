@@ -138,6 +138,10 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "0x%zX");
                 break;
                 
+            case DataTypeId::kNullptr:
+                codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "null");
+                break;
+                
             case DataTypeId::kStr:
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%s");
                 break;
