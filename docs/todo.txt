@@ -3,11 +3,21 @@
 - Pointer arithmetic: inc
 - Pointer arithmetic: dec
 - Don't allow dereference of nullable pointers
+- Allow integer implicit down casts for constant values
+- Unit test implicit type promotion to bool for:
+	while()
+	if()
+	loop repeat()
 
 - Unit test implicit casting of 'null'
 - Unit test various runtime integer implicit casting
 - Unit test allowed compile time implicit casts
 - Unit test implicit casting non nullable pointer to nullable pointer of the same type
+- Unit test implicit type promotion for binary expressions
+- Unit test implicit type promotion to bool for:
+	while()
+	if()
+	loop repeat()
 
 - Pointers:
     - '?' for nullable pointer
