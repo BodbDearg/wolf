@@ -14,6 +14,9 @@ WC_BEGIN_NAMESPACE
 class GenericIntDataType : public DataType {
 public:
     virtual bool isInteger() const final override;
+    
+    /* Get the width of the integer type in terms of bits */
+    virtual size_t getIntegerBitCount() const = 0;
 };
 
 WC_END_NAMESPACE

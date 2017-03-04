@@ -22,7 +22,7 @@ static const std::string kUInt64DataTypeName = "uint64";
 static const std::string kUInt128DataTypeName = "uint128";
 
 /* A helpful macro to avoid a lot of repetition */
-#define IMPL_INT_DATA_TYPE(Name)\
+#define IMPL_INT_DATA_TYPE(Name, BitCount)\
 \
 void Name##DataType::accept(DataTypeVisitor & visitor) const {\
     visitor.visit(*this);\
@@ -38,19 +38,23 @@ const std::string & Name##DataType::name() const {\
 \
 bool Name##DataType::equals(const DataType & other) const {\
     return this == &other || dynamic_cast<const Name##DataType*>(&other) != nullptr;\
+}\
+\
+size_t Name##DataType::getIntegerBitCount() const {\
+    return BitCount;\
 }
 
 /* The integer data type implementations */
-IMPL_INT_DATA_TYPE(Int8)
-IMPL_INT_DATA_TYPE(Int16)
-IMPL_INT_DATA_TYPE(Int32)
-IMPL_INT_DATA_TYPE(Int64)
-IMPL_INT_DATA_TYPE(Int128)
-IMPL_INT_DATA_TYPE(UInt8)
-IMPL_INT_DATA_TYPE(UInt16)
-IMPL_INT_DATA_TYPE(UInt32)
-IMPL_INT_DATA_TYPE(UInt64)
-IMPL_INT_DATA_TYPE(UInt128)
+IMPL_INT_DATA_TYPE(Int8, 8)
+IMPL_INT_DATA_TYPE(Int16, 16)
+IMPL_INT_DATA_TYPE(Int32, 32)
+IMPL_INT_DATA_TYPE(Int64, 64)
+IMPL_INT_DATA_TYPE(Int128, 128)
+IMPL_INT_DATA_TYPE(UInt8, 8)
+IMPL_INT_DATA_TYPE(UInt16, 16)
+IMPL_INT_DATA_TYPE(UInt32, 32)
+IMPL_INT_DATA_TYPE(UInt64, 64)
+IMPL_INT_DATA_TYPE(UInt128, 128)
 
 /* Done with this */
 #undef IMPL_INT_DATA_TYPE

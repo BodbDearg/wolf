@@ -19,6 +19,7 @@ WC_BEGIN_NAMESPACE
         virtual DataTypeId getTypeId() const override;\
         virtual const std::string & name() const override;\
         virtual bool equals(const DataType & other) const override;\
+        virtual size_t getIntegerBitCount() const override;\
     };
 
 /* The integer data types */
