@@ -3,6 +3,8 @@
 - Pointer arithmetic: inc
 - Pointer arithmetic: dec
 - Don't allow dereference of nullable pointers
+- '! operator'
+- Emit a compile error if an integer literal can't fit in it's type
 - Unit test implicit type promotion to bool for:
 	while()
 	if()
