@@ -46,6 +46,8 @@ General:
     - Declare multiple variables with same 'let'
     - Allow global variables to reference each other in an order independent way
     - Lexer: '\' to allow explicit multi line statements
+    - Allow 'noalias' specification for variables
+        - Instructs compiler that a value will not be modified through another pointer etc.
     - Arbitrary precision integers
     - Fixed point types
     - Built in vector types (e.g vec2f, vec3f64)
