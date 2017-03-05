@@ -1,6 +1,7 @@
 - Casting pointers to integers and visa versa
 - Casting pointers to other pointer types
 - Implicit casting of pointers to 'any' pointers
+- Improve error messages for void pointers
 - [] operator should dereference pointers
 - Impl codegen for const add/sub pointer arithmetic
 	- Issue appropriate error msg

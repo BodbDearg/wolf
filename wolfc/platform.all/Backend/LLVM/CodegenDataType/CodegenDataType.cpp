@@ -388,6 +388,14 @@ void CodegenDataType::visit(const PtrDataType & dataType) {
         return;
     }
     
+    // The pointed to type must be sized and valid:
+    if (!pointedToType.isSized() || !pointedToType.isValid()) {
+        mCtx.error("Can't declare pointers to unsized or invalid type '%s'!",
+                   pointedToType.name().c_str());
+        
+        return;
+    }
+    
     // Normal case: compile the data type for the pointed to type. If it's invalid then proceed no further:
     pointedToType.accept(*this);
     CompiledDataType pointedToTypeCDT = mCtx.popCompiledDataType();
