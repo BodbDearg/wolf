@@ -32,9 +32,20 @@ CodegenIncUnaryOp::CodegenIncUnaryOp(Codegen & cg,
 #define WC_IMPL_INC_UNARY_OP(DataTypeName, LLVMType)\
     void CodegenIncUnaryOp::visit(const DataTypeName##DataType & dataType) {\
         WC_UNUSED_PARAM(dataType);\
-        llvm::ConstantInt * incByConstant = llvm::ConstantInt::get(llvm::Type::get##LLVMType##Ty(mCG.mCtx.mLLVMCtx), 1);\
+        llvm::ConstantInt * incByConstant = llvm::ConstantInt::get(\
+            llvm::Type::get##LLVMType##Ty(mCG.mCtx.mLLVMCtx),\
+            1\
+        );\
+        \
         WC_ASSERT(incByConstant);\
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateAdd(mExprVal.mLLVMVal, incByConstant, #DataTypeName ":IncResult"));\
+        llvm::Value * addResultVal = mCG.mCtx.mIRBuilder.CreateAdd(\
+            mExprVal.mLLVMVal,\
+            incByConstant,\
+            #DataTypeName ":IncResult"\
+        );\
+        \
+        WC_ASSERT(addResultVal);\
+        pushOpResult(addResultVal);\
     }
 
 WC_IMPL_INC_UNARY_OP(Int128, Int128)
@@ -70,9 +81,19 @@ CodegenDecUnaryOp::CodegenDecUnaryOp(Codegen & cg,
 #define WC_IMPL_DEC_UNARY_OP(DataTypeName, LLVMType)\
     void CodegenDecUnaryOp::visit(const DataTypeName##DataType & dataType) {\
         WC_UNUSED_PARAM(dataType);\
-        llvm::ConstantInt * decByConstant = llvm::ConstantInt::get(llvm::Type::get##LLVMType##Ty(mCG.mCtx.mLLVMCtx), 1);\
+        llvm::ConstantInt * decByConstant = llvm::ConstantInt::get(\
+            llvm::Type::get##LLVMType##Ty(mCG.mCtx.mLLVMCtx), 1\
+        );\
+        \
         WC_ASSERT(decByConstant);\
-        pushOpResult(mCG.mCtx.mIRBuilder.CreateSub(mExprVal.mLLVMVal, decByConstant, #DataTypeName ":DecResult"));\
+        llvm::Value * subResultVal = mCG.mCtx.mIRBuilder.CreateSub(\
+            mExprVal.mLLVMVal,\
+            decByConstant,\
+            #DataTypeName ":DecResult"\
+        );\
+        \
+        WC_ASSERT(subResultVal);\
+        pushOpResult(subResultVal);\
     }
 
 WC_IMPL_DEC_UNARY_OP(Int128, Int128)
