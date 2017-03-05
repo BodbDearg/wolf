@@ -22,11 +22,6 @@
 	loop repeat()
 - Unit test binary expression left to right and right to left implicit casting
 
-- Pointers:
-    - '?' for nullable pointer
-    - '!' to convert a nullable into non nullable pointer
-    - 'null' keyword for null pointers
-
 - Fix up random 'new' allocations throughout the codebase
 	- Use linear alloc
 

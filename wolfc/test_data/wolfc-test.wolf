@@ -4,7 +4,7 @@
 ;       See LICENSE.txt for license details.
 ;==================================================================================================
 
-let blah = 1u16 + 1u
+let blah = 1u16 + 1i
 
 func main() -> int
     print(blah)

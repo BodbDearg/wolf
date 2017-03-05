@@ -618,6 +618,52 @@ Constant castSingleConstantIfRequired(ConstCodegen & cg,
     return cg.mCtx.popConstant();
 }
 
+/**
+ * Tries to resolve an ambiguous implicit cast for two binary operands.
+ * Returns true if the ambiguity was resolved, false otherwise.
+ * If the ambiguity is not resolved then an error is emitted, otherwise the function
+ * sets to 'false' which of the two casts is NOT to be done.
+ */
+static bool resolveAmbiguousBinaryOpImplicitCasts(CodegenCtx & cgCtx,
+                                                  const DataType & leftType,
+                                                  const DataType & rightType,
+                                                  bool & castLToROut,
+                                                  bool & castRToLOut)
+{
+    // See if we are dealing with integer types so we can resolve:
+    if (leftType.isInteger() && rightType.isInteger()) {
+        const GenericIntDataType & leftIntType = static_cast<const GenericIntDataType&>(leftType);
+        const GenericIntDataType & rightIntType = static_cast<const GenericIntDataType&>(rightType);
+        
+        // Only allow this resolution if the signs match:
+        if (leftIntType.isSigned() == rightIntType.isSigned()) {
+            // Okay, see if either of the integer types is bigger than the other
+            if (leftIntType.getIntegerBitCount() > rightIntType.getIntegerBitCount()) {
+                // Prefer to cast to the left type
+                castLToROut = false;
+            }
+            else if (leftIntType.getIntegerBitCount() < rightIntType.getIntegerBitCount()) {
+                // Prefer to cast to the right type
+                castRToLOut = false;
+            }
+        }
+    }
+    
+    // See if the ambiguity was resolved:
+    if (castLToROut == castRToLOut) {
+        cgCtx.error("Ambiguous implicit casts found for a binary expression with a left operand type of '%s' and "
+                    "a right operand of type '%s'! Can cast the left type to the right type and visa versa - "
+                    "don't know which cast we should pick. Resolve this ambiguity by using the cast() operator!",
+                    leftType.name().c_str(),
+                    rightType.name().c_str());
+        
+        return false;
+    }
+    
+    // Resolved the ambiguity!
+    return true;
+}
+
 void castBinaryOpValuesIfRequired(Codegen & cg,
                                   Value & leftVal,
                                   Value & rightVal)
@@ -655,38 +701,18 @@ void castBinaryOpValuesIfRequired(Codegen & cg,
         // If we can cast both ways the cast might be ambiguous. We can resolve however for integer types
         // by simply taking the larger of the two types, lets see:
         if (canCastRToL) {
-            // See if we are dealing with integer types so we can resolve:
-            if (leftType.isInteger() && rightType.isInteger()) {
-                const GenericIntDataType & leftIntType = static_cast<const GenericIntDataType&>(leftType);
-                const GenericIntDataType & rightIntType = static_cast<const GenericIntDataType&>(rightType);
-                
-                // Only allow this resolution if the signs match:
-                if (leftIntType.isSigned() == rightIntType.isSigned()) {
-                    // Okay, see if either of the integer types is bigger than the other
-                    if (leftIntType.getIntegerBitCount() > rightIntType.getIntegerBitCount()) {
-                        // Prefer to cast to the left type
-                        canCastLToR = false;
-                    }
-                    else if (leftIntType.getIntegerBitCount() < rightIntType.getIntegerBitCount()) {
-                        // Prefer to cast to the right type
-                        canCastRToL = false;
-                    }
+            if (resolveAmbiguousBinaryOpImplicitCasts(cg.mCtx,
+                                                      leftType,
+                                                      rightType,
+                                                      canCastLToR,
+                                                      canCastRToL))
+            {
+                if (canCastLToR) {
+                    IMPLICIT_CAST_L_TO_R();
                 }
-            }
-            
-            // See if the ambiguity was resolved:
-            if (canCastLToR && !canCastRToL) {
-                IMPLICIT_CAST_L_TO_R();
-            }
-            else if (canCastRToL && !canCastLToR) {
-                IMPLICIT_CAST_R_TO_L();
-            }
-            else {
-                cg.mCtx.error("Ambiguous implicit casts found for a binary expression with a left operand type of '%s' and "
-                              "a right operand of type '%s'! Can cast the left type to the right type and visa versa - "
-                              "don't know which cast we should pick. Resolve this ambiguity by using the cast() operator!",
-                              leftType.name().c_str(),
-                              rightType.name().c_str());
+                else {
+                    IMPLICIT_CAST_R_TO_L();
+                }
             }
         }
         else {
@@ -740,39 +766,18 @@ void castBinaryOpValuesIfRequired(ConstCodegen & cg,
         // If we can cast both ways the cast might be ambiguous. We can resolve however for integer types
         // by simply taking the larger of the two types, lets see:
         if (canCastRToL) {
-            // See if we are dealing with integer types so we can resolve:
-            if (leftType.isInteger() && rightType.isInteger()) {
-                const GenericIntDataType & leftIntType = static_cast<const GenericIntDataType&>(leftType);
-                const GenericIntDataType & rightIntType = static_cast<const GenericIntDataType&>(rightType);
-                
-                // Only allow this resolution if the signs match:
-                if (leftIntType.isSigned() == rightIntType.isSigned()) {
-                    // Okay, see if either of the integer types is bigger than the other
-                    if (leftIntType.getIntegerBitCount() > rightIntType.getIntegerBitCount()) {
-                        // Prefer to cast to the left type
-                        canCastLToR = false;
-                    }
-                    else if (leftIntType.getIntegerBitCount() < rightIntType.getIntegerBitCount()) {
-                        // Prefer to cast to the right type
-                        canCastRToL = false;
-                    }
+            if (resolveAmbiguousBinaryOpImplicitCasts(cg.mCtx,
+                                                      leftType,
+                                                      rightType,
+                                                      canCastLToR,
+                                                      canCastRToL))
+            {
+                if (canCastLToR) {
+                    IMPLICIT_CAST_L_TO_R();
                 }
-            }
-            
-            // See if the ambiguity was resolved:
-            if (canCastLToR && !canCastRToL) {
-                IMPLICIT_CAST_L_TO_R();
-            }
-            else if (canCastRToL && !canCastLToR) {
-                IMPLICIT_CAST_R_TO_L();
-            }
-            else {
-                cg.mCtx.error("Ambiguous implicit casts found for a compile time binary expression with a left operand "
-                              "type of '%s' and a right operand of type '%s'! Can cast the left type to the right type "
-                              "and visa versa - don't know which cast we should pick. Resolve this ambiguity by using "
-                              "the cast() operator!",
-                              leftType.name().c_str(),
-                              rightType.name().c_str());
+                else {
+                    IMPLICIT_CAST_R_TO_L();
+                }
             }
         }
         else {
