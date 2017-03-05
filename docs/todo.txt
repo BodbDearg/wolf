@@ -1,4 +1,3 @@
-- Pointer arithmetic: distance
 - Casting pointers to integers and visa versa
 - Casting pointers to other pointer types
 - [] operator should dereference pointers

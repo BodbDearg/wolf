@@ -9,6 +9,7 @@
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
 #include "DataType/DataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "DataType/Types/PtrDataType.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -39,9 +40,38 @@ bool CodegenAddOrSubBinaryOp::verifyLeftAndRightTypesAreOkForOp() {
     const DataType & leftType = mLeftVal.mCompiledType.getDataType();
     
     if (leftType.isPtr()) {
+        // Get the right type and left type as a pointer
+        const PtrDataType & leftPtrType = static_cast<const PtrDataType&>(leftType);
+        const DataType & rightType = mRightVal.mCompiledType.getDataType();
+        
+        // If this a 'sub' operation it might be pointer distance if the right type is a pointer:
+        bool isSubBinaryOp = dynamic_cast<CodegenSubBinaryOp*>(this);
+        
+        if (isSubBinaryOp && rightType.isPtr()) {
+            // Dealing with pointer difference operation. Pointed to types must be the same:
+            const PtrDataType & rightPtrType = static_cast<const PtrDataType&>(rightType);
+            const DataType & leftPointedToType = leftPtrType.mPointedToType;
+            const DataType & rightPointedToType =  rightPtrType.mPointedToType;
+            
+            if (leftPointedToType.equals(rightPointedToType)) {
+                // All good, pointer difference operation where the left and right pointer types match
+                return true;
+            }
+            else {
+                // Pointer difference operation but pointer types are different, issue an error:
+                mCG.mCtx.error("Pointed to types for left and right pointers involved in '%s' (%s) "
+                               "pointer difference op must be the same! Can't get pointer difference "
+                               "when the pointed to types are different! Left side pointer operand is "
+                               "of type '%s' and right side pointer operand is of type '%s'!",
+                               mOpSymbol,
+                               mOpName,
+                               leftPtrType.name().c_str(),
+                               rightPtrType.name().c_str());
+            }
+        }
+        
         // Dealing with pointer arithmetic. Left side must firstly be a pointer to a valid type for
         // us to be able to figure out pointer offsets:
-        const PtrDataType & leftPtrType = static_cast<const PtrDataType&>(leftType);
         const DataType & pointedToType = leftPtrType.mPointedToType;
         
         if (!pointedToType.isValid() || !pointedToType.isSized()) {
@@ -56,14 +86,17 @@ bool CodegenAddOrSubBinaryOp::verifyLeftAndRightTypesAreOkForOp() {
         }
 
         // Okay, now make sure the right type is a valid integer type:
-        const DataType & rightType = mRightVal.mCompiledType.getDataType();
-        
         if (rightType.isInteger()) {
             return true;
         }
         else {
-            mCG.mCtx.error("Right side of '%s' (%s) pointer arithmetic operation must be an "
-                           "integer type not '%s'!",
+            const char * msgFmtStr = isSubBinaryOp ?
+                "Right side of '%s' (%s) pointer arithmetic operation must be an "
+                "integer or pointer type not '%s'!" :
+                "Right side of '%s' (%s) pointer arithmetic operation must be an "
+                "integer type not '%s'!";
+            
+            mCG.mCtx.error(msgFmtStr,
                            mOpSymbol,
                            mOpName,
                            rightType.name().c_str());
@@ -145,16 +178,41 @@ WC_IMPL_BASIC_BINARY_OP(CodegenSubBinaryOp, UInt8, CreateSub)
 
 void CodegenSubBinaryOp::visit(const PtrDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
-    llvm::Value * rightValNegated = mCG.mCtx.mIRBuilder.CreateNeg(mRightVal.mLLVMVal);
-    WC_ASSERT(rightValNegated);
     
-    llvm::Value * resultVal = mCG.mCtx.mIRBuilder.CreateGEP(
-        mLeftVal.mLLVMVal,
-        rightValNegated,
-        "CodegenSubBinaryOp:Result"
-    );
+    // See if the right side is a pointer (pointer difference operation)
+    const DataType & rightType = mRightVal.mCompiledType.getDataType();
     
-    pushOpResult(resultVal);
+    if (rightType.isPtr()) {
+        // Pointer difference operation:
+        llvm::Value * resultVal = mCG.mCtx.mIRBuilder.CreatePtrDiff(mLeftVal.mLLVMVal, mRightVal.mLLVMVal);
+        WC_ASSERT(resultVal);
+        
+        // Get the compiled data type for the result (int)
+        const DataType & resultType = PrimitiveDataTypes::getDefaultIntType();
+        resultType.accept(mCG.mCodegenDataType);
+        CompiledDataType resultCDT = mCG.mCtx.popCompiledDataType();
+        
+        // Sanity checks in debug:
+        WC_ASSERT(resultCDT.isValid());
+        WC_ASSERT(resultCDT.getLLVMType() == resultVal->getType());
+        
+        // Save the result:
+        pushOpResult(resultVal, false, resultCDT);
+    }
+    else {
+        // Regular pointer '-' (subtract) pointer arithmetic.
+        // Moves the pointer along by subtracting it whatever number of elements:
+        llvm::Value * rightValNegated = mCG.mCtx.mIRBuilder.CreateNeg(mRightVal.mLLVMVal);
+        WC_ASSERT(rightValNegated);
+        
+        llvm::Value * resultVal = mCG.mCtx.mIRBuilder.CreateGEP(
+            mLeftVal.mLLVMVal,
+            rightValNegated,
+            "CodegenSubBinaryOp:Result"
+        );
+        
+        pushOpResult(resultVal);
+    }
 }
 
 //-----------------------------------------------------------------------------
