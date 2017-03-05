@@ -46,8 +46,8 @@ bool CodegenAddOrSubBinaryOp::verifyLeftAndRightTypesAreOkForOp() {
         
         if (!pointedToType.isValid() || !pointedToType.isSized()) {
             mCG.mCtx.error("Can't perform pointer arithmetic on pointers of type '%s'! "
-                           "The pointed to type must be valid and have a size in order for pointer "
-                           "arithmetic to be performed!",
+                           "The pointed to type must be valid and have a size that is known at compile "
+                           "time in order for pointer arithmetic to be performed!",
                            leftPtrType.name().c_str());
             
             return false;
