@@ -8,7 +8,6 @@
 
 #include "../CodegenCtx.hpp"
 #include "../ConstCodegen/ConstCodegen.hpp"
-#include "Assert.hpp"
 #include "DataType/Types/BoolDataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 

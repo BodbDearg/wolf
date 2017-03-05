@@ -7,6 +7,7 @@
 #pragma once
 
 #include "../Value.hpp"
+#include "Assert.hpp"
 #include "DataType/DataTypeVisitor.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -97,8 +98,13 @@ protected:
 #define WC_IMPL_BASIC_UNARY_OP(VisitorClass, DataTypeName, OpCreateFunc)\
     void VisitorClass::visit(const DataTypeName##DataType & dataType) {\
         WC_UNUSED_PARAM(dataType);\
-        pushOpResult(mCG.mCtx.mIRBuilder.OpCreateFunc(mExprVal.mLLVMVal,\
-                                                      #DataTypeName ":" #OpCreateFunc ":Result"));\
+        llvm::Value * resultVal = mCG.mCtx.mIRBuilder.OpCreateFunc(\
+            mExprVal.mLLVMVal,\
+            #DataTypeName ":" #OpCreateFunc ":Result"\
+        );\
+        \
+        WC_ASSERT(resultVal);\
+        pushOpResult(resultVal);\
     }
 
 WC_LLVM_BACKEND_END_NAMESPACE

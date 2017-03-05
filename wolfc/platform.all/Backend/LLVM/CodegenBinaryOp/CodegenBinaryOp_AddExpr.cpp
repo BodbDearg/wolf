@@ -8,25 +8,82 @@
 
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
+#include "DataType/DataType.hpp"
+#include "DataType/Types/PtrDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 //-----------------------------------------------------------------------------
+// CodegenAddOrSubBinaryOp
+//-----------------------------------------------------------------------------
+CodegenAddOrSubBinaryOp::CodegenAddOrSubBinaryOp(Codegen & cg,
+                                                 const AST::ASTNode & leftExpr,
+                                                 const AST::ASTNode & rightExpr,
+                                                 const char * opSymbol,
+                                                 const char * opName,
+                                                 bool storeResultOnLeft)
+:
+    CodegenBinaryOp(cg,
+                    leftExpr,
+                    rightExpr,
+                    opSymbol,
+                    opName,
+                    storeResultOnLeft)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+bool CodegenAddOrSubBinaryOp::verifyLeftAndRightTypesAreOkForOp() {
+    // Special case logic for pointer arithmetic:
+    const DataType & leftType = mLeftVal.mCompiledType.getDataType();
+    
+    if (leftType.isPtr()) {
+        // Dealing with pointer arithmetic. Left side must firstly be a pointer to a valid type for
+        // us to be able to figure out pointer offsets:
+        const PtrDataType & leftPtrType = static_cast<const PtrDataType&>(leftType);
+        const DataType & pointedToType = leftPtrType.mPointedToType;
+        
+        if (!pointedToType.isValid() || !pointedToType.isSized()) {
+            mCG.mCtx.error("Can't perform pointer arithmetic on pointers of type '%s'! "
+                           "The pointed to type must be valid and have a size in order for pointer "
+                           "arithmetic to be performed!",
+                           leftPtrType.name().c_str());
+            
+            return false;
+        }
+
+        // Okay, now make sure the right type is a valid integer type:
+        const DataType & rightType = mRightVal.mCompiledType.getDataType();
+        
+        if (rightType.isInteger()) {
+            return true;
+        }
+        else {
+            mCG.mCtx.error("Right side of '+' pointer arithmetic operation must be an "
+                           "integer type not '%s'!",
+                           rightType.name().c_str());
+        }
+    }
+    
+    // Normal case, left and right types must match:
+    return CodegenBinaryOp::verifyLeftAndRightTypesAreOkForOp();
+}
+
+//-----------------------------------------------------------------------------
 // CodegenAddBinaryOp
 //-----------------------------------------------------------------------------
-#warning Impl Ptr Arithmetic: Add
 CodegenAddBinaryOp::CodegenAddBinaryOp(Codegen & cg,
                                        const AST::ASTNode & leftExpr,
                                        const AST::ASTNode & rightExpr,
                                        bool storeResultOnLeft)
 :
-    CodegenBinaryOp(cg,
-                    leftExpr,
-                    rightExpr,
-                    "+",
-                    "add",
-                    storeResultOnLeft)
+    CodegenAddOrSubBinaryOp(cg,
+                            leftExpr,
+                            rightExpr,
+                            "+",
+                            "add",
+                            storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -42,21 +99,31 @@ WC_IMPL_BASIC_BINARY_OP(CodegenAddBinaryOp, UInt32, CreateAdd)
 WC_IMPL_BASIC_BINARY_OP(CodegenAddBinaryOp, UInt64, CreateAdd)
 WC_IMPL_BASIC_BINARY_OP(CodegenAddBinaryOp, UInt8, CreateAdd)
 
+void CodegenAddBinaryOp::visit(const PtrDataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Value * resultVal = mCG.mCtx.mIRBuilder.CreateGEP(
+        mLeftVal.mLLVMVal,
+        mRightVal.mLLVMVal,
+        "CodegenAddBinaryOp:Result"
+    );
+    
+    pushOpResult(resultVal);
+}
+
 //-----------------------------------------------------------------------------
 // CodegenSubBinaryOp
 //-----------------------------------------------------------------------------
-#warning Impl Ptr Arithmetic: Sub
 CodegenSubBinaryOp::CodegenSubBinaryOp(Codegen & cg,
                                        const AST::ASTNode & leftExpr,
                                        const AST::ASTNode & rightExpr,
                                        bool storeResultOnLeft)
 :
-    CodegenBinaryOp(cg,
-                    leftExpr,
-                    rightExpr,
-                    "-",
-                    "subtract",
-                    storeResultOnLeft)
+    CodegenAddOrSubBinaryOp(cg,
+                            leftExpr,
+                            rightExpr,
+                            "-",
+                            "subtract",
+                            storeResultOnLeft)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -71,6 +138,20 @@ WC_IMPL_BASIC_BINARY_OP(CodegenSubBinaryOp, UInt16, CreateSub)
 WC_IMPL_BASIC_BINARY_OP(CodegenSubBinaryOp, UInt32, CreateSub)
 WC_IMPL_BASIC_BINARY_OP(CodegenSubBinaryOp, UInt64, CreateSub)
 WC_IMPL_BASIC_BINARY_OP(CodegenSubBinaryOp, UInt8, CreateSub)
+
+void CodegenSubBinaryOp::visit(const PtrDataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    llvm::Value * rightValNegated = mCG.mCtx.mIRBuilder.CreateNeg(mRightVal.mLLVMVal);
+    WC_ASSERT(rightValNegated);
+    
+    llvm::Value * resultVal = mCG.mCtx.mIRBuilder.CreateGEP(
+        mLeftVal.mLLVMVal,
+        rightValNegated,
+        "CodegenSubBinaryOp:Result"
+    );
+    
+    pushOpResult(resultVal);
+}
 
 //-----------------------------------------------------------------------------
 // CodegenBOrBinaryOp

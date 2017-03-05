@@ -9,7 +9,20 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-class CodegenAddBinaryOp final : public CodegenBinaryOp {
+class CodegenAddOrSubBinaryOp : public CodegenBinaryOp {
+public:
+    CodegenAddOrSubBinaryOp(Codegen & cg,
+                            const AST::ASTNode & leftExpr,
+                            const AST::ASTNode & rightExpr,
+                            const char * opSymbol,
+                            const char * opName,
+                            bool storeResultOnLeft);
+    
+protected:
+    virtual bool verifyLeftAndRightTypesAreOkForOp() final override;
+};
+
+class CodegenAddBinaryOp final : public CodegenAddOrSubBinaryOp {
 public:
     CodegenAddBinaryOp(Codegen & cg,
                        const AST::ASTNode & leftExpr,
@@ -21,6 +34,7 @@ public:
     virtual void visit(const Int32DataType & dataType) override;
     virtual void visit(const Int64DataType & dataType) override;
     virtual void visit(const Int8DataType & dataType) override;
+    virtual void visit(const PtrDataType & dataType) override;
     virtual void visit(const UInt128DataType & dataType) override;
     virtual void visit(const UInt16DataType & dataType) override;
     virtual void visit(const UInt32DataType & dataType) override;
@@ -28,7 +42,7 @@ public:
     virtual void visit(const UInt8DataType & dataType) override;
 };
 
-class CodegenSubBinaryOp final : public CodegenBinaryOp {
+class CodegenSubBinaryOp final : public CodegenAddOrSubBinaryOp {
 public:
     CodegenSubBinaryOp(Codegen & cg,
                        const AST::ASTNode & leftExpr,
@@ -40,6 +54,7 @@ public:
     virtual void visit(const Int32DataType & dataType) override;
     virtual void visit(const Int64DataType & dataType) override;
     virtual void visit(const Int8DataType & dataType) override;
+    virtual void visit(const PtrDataType & dataType) override;
     virtual void visit(const UInt128DataType & dataType) override;
     virtual void visit(const UInt16DataType & dataType) override;
     virtual void visit(const UInt32DataType & dataType) override;

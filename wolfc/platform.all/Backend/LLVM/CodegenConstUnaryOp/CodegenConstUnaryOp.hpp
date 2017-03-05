@@ -7,6 +7,7 @@
 #pragma once
 
 #include "../Constant.hpp"
+#include "Assert.hpp"
 #include "DataType/DataTypeVisitor.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
@@ -94,7 +95,9 @@ protected:
 #define WC_IMPL_BASIC_CONST_UNARY_OP(VisitorClass, DataTypeName, ConstExprGetterFunc)\
     void VisitorClass::visit(const DataTypeName##DataType & dataType) {\
         WC_UNUSED_PARAM(dataType);\
-        pushOpResult(llvm::ConstantExpr::ConstExprGetterFunc(mExprConst.mLLVMConst));\
+        llvm::Constant * resultConst = llvm::ConstantExpr::ConstExprGetterFunc(mExprConst.mLLVMConst);\
+        WC_ASSERT(resultConst);\
+        pushOpResult(resultConst);\
     }
 
 WC_LLVM_BACKEND_END_NAMESPACE

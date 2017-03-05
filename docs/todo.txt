@@ -1,7 +1,10 @@
-- Pointer arithmetic: add
-- Pointer arithmetic: sub
+- Pointer arithmetic: distance
 - Pointer arithmetic: inc
 - Pointer arithmetic: dec
+- Casting pointers to integers and visa versa
+- Casting pointers to other pointer types
+- Impl codegen for const add/sub pointer arithmetic
+	- Issue appropriate error msg
 - Don't allow dereference of nullable pointers
 - '! operator'
 - Emit a compile error if an integer literal can't fit in it's type
@@ -11,6 +14,10 @@
 	loop repeat()
 
 - Unit test implicit casting of 'null'
+- Unit test pointer arithmetic
+	- add/sub
+	- inc/dec
+	- ptr distance
 - Unit test various runtime integer implicit casting
 - Unit test allowed compile time implicit casts
 	- Especially for ints
