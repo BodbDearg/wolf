@@ -71,6 +71,12 @@ public:
     virtual void visit(const VoidDataType & dataType) override;
     
 protected:
+    /**
+     * Checks to see if types for the left and right hand side operands are okay.
+     * Issues a compile error and returns false if they are not okay.
+     */
+    virtual bool verifyLeftAndRightTypesAreOkForOp();
+    
     /* Issue a compile error that a binary operation is not supported! */
     void issueBinaryOpNotSupportedError();
     

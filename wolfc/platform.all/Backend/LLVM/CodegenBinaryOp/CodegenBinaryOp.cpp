@@ -97,24 +97,11 @@ void CodegenBinaryOp::codegen() {
     // Don't do anything if either side is not valid:
     WC_GUARD(mLeftVal.isValid() && mRightVal.isValid());
     
-    // The left and right types must match:
-    const DataType & leftType = mLeftVal.mCompiledType.getDataType();
-    const DataType & rightType = mRightVal.mCompiledType.getDataType();
-    
-    if (!leftType.equals(rightType)) {
-        mCG.mCtx.error(*mLeftExpr.mParent,
-                       "Left and right side expressions for binary operator '%s' (%s) must be "
-                       "of the same type! Left expression type is '%s', right expression type is "
-                       "'%s'!",
-                       mOpSymbol,
-                       mOpName,
-                       leftType.name().c_str(),
-                       rightType.name().c_str());
-        
-        return;
-    }
+    // Make sure the left and right types are valid:
+    WC_GUARD(verifyLeftAndRightTypesAreOkForOp());
 
     // Code generate the actual operation itself
+    const DataType & leftType = mLeftVal.mCompiledType.getDataType();
     leftType.accept(*this);
     
     // See if we are to store the result on the left, if not then we are done.
@@ -122,7 +109,9 @@ void CodegenBinaryOp::codegen() {
     WC_GUARD(mStoreResultOnLeft);
     Value opResultVal = mCG.mCtx.popValue();
 
-    // The operator result type must match the left side type
+    // The operator result type must match the left side type.
+    //
+    // TODO: Someday lift this restriction for user defined operator overloads.
     const DataType & opResultType = opResultVal.mCompiledType.getDataType();
     
     if (!opResultType.equals(leftType)){
@@ -173,6 +162,27 @@ WC_IMPL_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt32)
 WC_IMPL_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt64)
 WC_IMPL_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt8)
 WC_IMPL_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(Void)
+
+bool CodegenBinaryOp::verifyLeftAndRightTypesAreOkForOp() {
+    // By default the left and right types must match exactly:
+    const DataType & leftType = mLeftVal.mCompiledType.getDataType();
+    const DataType & rightType = mRightVal.mCompiledType.getDataType();
+    
+    if (!leftType.equals(rightType)) {
+        mCG.mCtx.error(*mLeftExpr.mParent,
+                       "Left and right side expressions for binary operator '%s' (%s) must be "
+                       "of the same type! Left expression type is '%s', right expression type is "
+                       "'%s'!",
+                       mOpSymbol,
+                       mOpName,
+                       leftType.name().c_str(),
+                       rightType.name().c_str());
+        
+        return false;
+    }
+    
+    return true;    // All is good!
+}
 
 void CodegenBinaryOp::issueBinaryOpNotSupportedError() {
     AST::ASTNode * parent = mLeftExpr.mParent;

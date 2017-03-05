@@ -65,24 +65,12 @@ void CodegenConstBinaryOp::codegen() {
     ImplicitCasts::castBinaryOpValuesIfRequired(mCG, mLeftConst, mRightConst);
     
     // The left and right types must match:
-    const DataType & leftType = mLeftConst.mCompiledType.getDataType();
-    const DataType & rightType = mRightConst.mCompiledType.getDataType();
+    WC_GUARD(verifyLeftAndRightTypesAreOkForOp());
     
-    // TODO: Support auto type promotion
-    if (leftType.equals(rightType)) {
-        if (mLeftConst.isValid() && mRightConst.isValid()) {
-            leftType.accept(*this);
-        }
-    }
-    else {
-        mCG.mCtx.error(*mLeftExpr.mParent,
-                       "Left and right side expressions for binary operator '%s' (%s) must be "
-                       "of the same type! Left expression type is '%s', right expression type is "
-                       "'%s'!",
-                       mOpSymbol,
-                       mOpName,
-                       leftType.name().c_str(),
-                       rightType.name().c_str());
+    // Codegen if the values are valid!    
+    if (mLeftConst.isValid() && mRightConst.isValid()) {
+        const DataType & leftType = mLeftConst.mCompiledType.getDataType();
+        leftType.accept(*this);
     }
 }
 
@@ -111,6 +99,27 @@ WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt32)
 WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt64)
 WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt8)
 WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(Void)
+
+bool CodegenConstBinaryOp::verifyLeftAndRightTypesAreOkForOp() {
+    // By default left and right types must match:
+    const DataType & leftType = mLeftConst.mCompiledType.getDataType();
+    const DataType & rightType = mRightConst.mCompiledType.getDataType();
+    
+    if (!leftType.equals(rightType)) {
+        mCG.mCtx.error(*mLeftExpr.mParent,
+                       "Left and right side expressions for binary operator '%s' (%s) must be "
+                       "of the same type! Left expression type is '%s', right expression type is "
+                       "'%s'!",
+                       mOpSymbol,
+                       mOpName,
+                       leftType.name().c_str(),
+                       rightType.name().c_str());
+        
+        return false;
+    }
+    
+    return true;    // All is good!
+}
 
 void CodegenConstBinaryOp::issueBinaryOpNotSupportedError() {
     AST::ASTNode * parent = mLeftExpr.mParent;
