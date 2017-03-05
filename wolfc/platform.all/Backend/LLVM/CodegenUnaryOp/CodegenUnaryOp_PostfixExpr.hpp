@@ -13,9 +13,7 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 class CodegenIncUnaryOp final : public CodegenBasicUnaryOp {
 public:
-    CodegenIncUnaryOp(Codegen & cg,
-                      const AST::ASTNode & expr,
-                      bool storeResultInExpr);
+    CodegenIncUnaryOp(Codegen & cg, const AST::ASTNode & expr);
     
     virtual void visit(const Int128DataType & dataType) override;
     virtual void visit(const Int16DataType & dataType) override;
@@ -31,9 +29,7 @@ public:
 
 class CodegenDecUnaryOp final : public CodegenBasicUnaryOp {
 public:
-    CodegenDecUnaryOp(Codegen & cg,
-                      const AST::ASTNode & expr,
-                      bool storeResultInExpr);
+    CodegenDecUnaryOp(Codegen & cg, const AST::ASTNode & expr);
     
     virtual void visit(const Int128DataType & dataType) override;
     virtual void visit(const Int16DataType & dataType) override;

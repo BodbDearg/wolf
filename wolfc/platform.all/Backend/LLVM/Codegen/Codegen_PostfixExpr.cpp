@@ -24,12 +24,12 @@ void Codegen::visit(const AST::PostfixExprNoOp & astNode) {
 
 void Codegen::visit(const AST::PostfixExprInc & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenIncUnaryOp(*this, astNode.mExpr, true).codegen();
+    CodegenIncUnaryOp(*this, astNode.mExpr).codegen();
 }
 
 void Codegen::visit(const AST::PostfixExprDec & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    CodegenDecUnaryOp(*this, astNode.mExpr, true).codegen();
+    CodegenDecUnaryOp(*this, astNode.mExpr).codegen();
 }
 
 void Codegen::visit(const AST::PostfixExprFuncCall & astNode) {

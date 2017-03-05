@@ -16,15 +16,8 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 // CodegenIncUnaryOp
 //-----------------------------------------------------------------------------
 #warning Impl Ptr Arithmetic: Inc
-CodegenIncUnaryOp::CodegenIncUnaryOp(Codegen & cg,
-                                     const AST::ASTNode & expr,
-                                     bool storeResultInExpr)
-:
-    CodegenBasicUnaryOp(cg,
-                        expr,
-                        "++",
-                        "increment",
-                        storeResultInExpr)
+CodegenIncUnaryOp::CodegenIncUnaryOp(Codegen & cg, const AST::ASTNode & expr) :
+    CodegenBasicUnaryOp(cg, expr, "++", "increment", true)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -65,15 +58,8 @@ WC_IMPL_INC_UNARY_OP(UInt8, Int8)
 // CodegenDecUnaryOp
 //----------------------------------------------------------------------------
 #warning Impl Ptr Arithmetic: Dec
-CodegenDecUnaryOp::CodegenDecUnaryOp(Codegen & cg,
-                                     const AST::ASTNode & expr,
-                                     bool storeResultInExpr)
-:
-    CodegenBasicUnaryOp(cg,
-                        expr,
-                        "--",
-                        "decrement",
-                        storeResultInExpr)
+CodegenDecUnaryOp::CodegenDecUnaryOp(Codegen & cg, const AST::ASTNode & expr) :
+    CodegenBasicUnaryOp(cg, expr, "--", "decrement", true)
 {
     WC_EMPTY_FUNC_BODY();
 }
