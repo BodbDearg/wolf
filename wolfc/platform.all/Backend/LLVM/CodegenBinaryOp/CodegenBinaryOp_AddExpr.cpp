@@ -45,9 +45,11 @@ bool CodegenAddOrSubBinaryOp::verifyLeftAndRightTypesAreOkForOp() {
         const DataType & pointedToType = leftPtrType.mPointedToType;
         
         if (!pointedToType.isValid() || !pointedToType.isSized()) {
-            mCG.mCtx.error("Can't perform pointer arithmetic on pointers of type '%s'! "
+            mCG.mCtx.error("Can't perform '%s' (%s) pointer arithmetic on pointers of type '%s'! "
                            "The pointed to type must be valid and have a size that is known at compile "
                            "time in order for pointer arithmetic to be performed!",
+                           mOpSymbol,
+                           mOpName,
                            leftPtrType.name().c_str());
             
             return false;
@@ -60,8 +62,10 @@ bool CodegenAddOrSubBinaryOp::verifyLeftAndRightTypesAreOkForOp() {
             return true;
         }
         else {
-            mCG.mCtx.error("Right side of '+' pointer arithmetic operation must be an "
+            mCG.mCtx.error("Right side of '%s' (%s) pointer arithmetic operation must be an "
                            "integer type not '%s'!",
+                           mOpSymbol,
+                           mOpName,
                            rightType.name().c_str());
         }
     }
