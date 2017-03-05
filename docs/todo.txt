@@ -1,6 +1,4 @@
 - Pointer arithmetic: distance
-- Pointer arithmetic: inc
-- Pointer arithmetic: dec
 - Casting pointers to integers and visa versa
 - Casting pointers to other pointer types
 - Impl codegen for const add/sub pointer arithmetic
