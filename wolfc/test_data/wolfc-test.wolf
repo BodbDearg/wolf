@@ -6,7 +6,8 @@
 
 func main() -> int
     let blah = [1, 2, 3, 4]
-    let blahPtr = &blah[3] - 2
+    let blahPtr = &blah[1]
+    blahPtr--
     print($blahPtr)
     return 0
 end
