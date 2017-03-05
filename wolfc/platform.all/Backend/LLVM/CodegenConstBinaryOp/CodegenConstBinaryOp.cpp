@@ -106,15 +106,7 @@ bool CodegenConstBinaryOp::verifyLeftAndRightTypesAreOkForOp() {
     const DataType & rightType = mRightConst.mCompiledType.getDataType();
     
     if (!leftType.equals(rightType)) {
-        mCG.mCtx.error(*mLeftExpr.mParent,
-                       "Left and right side expressions for binary operator '%s' (%s) must be "
-                       "of the same type! Left expression type is '%s', right expression type is "
-                       "'%s'!",
-                       mOpSymbol,
-                       mOpName,
-                       leftType.name().c_str(),
-                       rightType.name().c_str());
-        
+        issueBinaryOpNotSupportedError();
         return false;
     }
     
