@@ -13,6 +13,7 @@
 #include "ConstCodegen/ConstCodegen.hpp"
 #include "DataType/DataType.hpp"
 #include "DataType/DataTypeVisitor.hpp"
+#include "DataType/Types/GenericIntDataType.hpp"
 #include "DataType/Types/PtrDataType.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -579,6 +580,9 @@ Value castSingleValueIfRequired(Codegen & cg,
                                 const Value & value,
                                 const CompiledDataType & toTypeCDT)
 {
+    // If either the value or types are invalid then bail out
+    WC_GUARD(value.isValid() && toTypeCDT.isValid(), value);
+    
     // If the data type of the value equals the type given then no cast is required.
     // In this case return the value given:
     const CompiledDataType & valueCDT = value.mCompiledType;
@@ -597,6 +601,9 @@ Constant castSingleConstantIfRequired(ConstCodegen & cg,
                                       const Constant & constant,
                                       const CompiledDataType & toTypeCDT)
 {
+    // If either the value or types are invalid then bail out
+    WC_GUARD(constant.isValid() && toTypeCDT.isValid(), constant);
+    
     // If the data type of the value equals the type given then no cast is required.
     // In this case return the value given:
     const CompiledDataType & constantCDT = constant.mCompiledType;
@@ -609,6 +616,177 @@ Constant castSingleConstantIfRequired(ConstCodegen & cg,
     // Otherwise do the cast and return the result:
     CodegenConstCast(cg, constant, toTypeCDT).codegen();
     return cg.mCtx.popConstant();
+}
+
+void castBinaryOpValuesIfRequired(Codegen & cg,
+                                  Value & leftVal,
+                                  Value & rightVal)
+{
+    // If either the value is invalid then bail out
+    WC_GUARD(leftVal.isValid() && rightVal.isValid());
+    
+    // If the left or right types are the same then bail out:
+    const CompiledDataType & leftCDT = leftVal.mCompiledType;
+    const DataType & leftType = leftCDT.getDataType();
+    const CompiledDataType & rightCDT = rightVal.mCompiledType;
+    const DataType & rightType = rightCDT.getDataType();
+    
+    WC_GUARD(!leftType.equals(rightType));
+    
+    // Okay, see which ways we can cast:
+    bool canCastLToR = canDoImplicitCast(leftCDT, rightCDT, leftVal.mLLVMVal);
+    bool canCastRToL = canDoImplicitCast(rightCDT, leftCDT, rightVal.mLLVMVal);
+    
+    // These are useful
+    #define IMPLICIT_CAST_L_TO_R()\
+        do {\
+            CodegenCast(cg, leftVal, rightCDT).codegen();\
+            leftVal = cg.mCtx.popValue();\
+        } while (0)
+    
+    #define IMPLICIT_CAST_R_TO_L()\
+        do {\
+            CodegenCast(cg, rightVal, leftCDT).codegen();\
+            rightVal = cg.mCtx.popValue();\
+        } while (0)
+    
+    // See which ways we can implicitly cast:
+    if (canCastLToR) {
+        // If we can cast both ways the cast might be ambiguous. We can resolve however for integer types
+        // by simply taking the larger of the two types, lets see:
+        if (canCastRToL) {
+            // See if we are dealing with integer types so we can resolve:
+            if (leftType.isInteger() && rightType.isInteger()) {
+                const GenericIntDataType & leftIntType = static_cast<const GenericIntDataType&>(leftType);
+                const GenericIntDataType & rightIntType = static_cast<const GenericIntDataType&>(rightType);
+                
+                // Only allow this resolution if the signs match:
+                if (leftIntType.isSigned() == rightIntType.isSigned()) {
+                    // Okay, see if either of the integer types is bigger than the other
+                    if (leftIntType.getIntegerBitCount() > rightIntType.getIntegerBitCount()) {
+                        // Prefer to cast to the left type
+                        canCastLToR = false;
+                    }
+                    else if (leftIntType.getIntegerBitCount() < rightIntType.getIntegerBitCount()) {
+                        // Prefer to cast to the right type
+                        canCastRToL = false;
+                    }
+                }
+            }
+            
+            // See if the ambiguity was resolved:
+            if (canCastLToR && !canCastRToL) {
+                IMPLICIT_CAST_L_TO_R();
+            }
+            else if (canCastRToL && !canCastLToR) {
+                IMPLICIT_CAST_R_TO_L();
+            }
+            else {
+                cg.mCtx.error("Ambiguous implicit casts found for a binary expression with a left operand type of '%s' and "
+                              "a right operand of type '%s'! Can cast the left type to the right type and visa versa - "
+                              "don't know which cast we should pick. Resolve this ambiguity by using the cast() operator!",
+                              leftType.name().c_str(),
+                              rightType.name().c_str());
+            }
+        }
+        else {
+            IMPLICIT_CAST_L_TO_R();
+        }
+    }
+    else {
+        if (canCastRToL) {
+            IMPLICIT_CAST_R_TO_L();
+        }
+    }
+    
+    #undef IMPLICIT_CAST_L_TO_R
+    #undef IMPLICIT_CAST_R_TO_L
+}
+
+void castBinaryOpValuesIfRequired(ConstCodegen & cg,
+                                  Constant & leftConst,
+                                  Constant & rightConst)
+{
+    // If either the value is invalid then bail out
+    WC_GUARD(leftConst.isValid() && rightConst.isValid());
+    
+    // If the left or right types are the same then bail out:
+    const CompiledDataType & leftCDT = leftConst.mCompiledType;
+    const DataType & leftType = leftCDT.getDataType();
+    const CompiledDataType & rightCDT = rightConst.mCompiledType;
+    const DataType & rightType = rightCDT.getDataType();
+    
+    WC_GUARD(!leftType.equals(rightType));
+    
+    // Okay, see which ways we can cast:
+    bool canCastLToR = canDoImplicitCast(leftCDT, rightCDT, leftConst.mLLVMConst);
+    bool canCastRToL = canDoImplicitCast(rightCDT, leftCDT, rightConst.mLLVMConst);
+    
+    // These are useful
+    #define IMPLICIT_CAST_L_TO_R()\
+        do {\
+            CodegenConstCast(cg, leftConst, rightCDT).codegen();\
+            leftConst = cg.mCtx.popConstant();\
+        } while (0)
+    
+    #define IMPLICIT_CAST_R_TO_L()\
+        do {\
+            CodegenConstCast(cg, rightConst, leftCDT).codegen();\
+            rightConst = cg.mCtx.popConstant();\
+        } while (0)
+    
+    // See which ways we can implicitly cast:
+    if (canCastLToR) {
+        // If we can cast both ways the cast might be ambiguous. We can resolve however for integer types
+        // by simply taking the larger of the two types, lets see:
+        if (canCastRToL) {
+            // See if we are dealing with integer types so we can resolve:
+            if (leftType.isInteger() && rightType.isInteger()) {
+                const GenericIntDataType & leftIntType = static_cast<const GenericIntDataType&>(leftType);
+                const GenericIntDataType & rightIntType = static_cast<const GenericIntDataType&>(rightType);
+                
+                // Only allow this resolution if the signs match:
+                if (leftIntType.isSigned() == rightIntType.isSigned()) {
+                    // Okay, see if either of the integer types is bigger than the other
+                    if (leftIntType.getIntegerBitCount() > rightIntType.getIntegerBitCount()) {
+                        // Prefer to cast to the left type
+                        canCastLToR = false;
+                    }
+                    else if (leftIntType.getIntegerBitCount() < rightIntType.getIntegerBitCount()) {
+                        // Prefer to cast to the right type
+                        canCastRToL = false;
+                    }
+                }
+            }
+            
+            // See if the ambiguity was resolved:
+            if (canCastLToR && !canCastRToL) {
+                IMPLICIT_CAST_L_TO_R();
+            }
+            else if (canCastRToL && !canCastLToR) {
+                IMPLICIT_CAST_R_TO_L();
+            }
+            else {
+                cg.mCtx.error("Ambiguous implicit casts found for a compile time binary expression with a left operand "
+                              "type of '%s' and a right operand of type '%s'! Can cast the left type to the right type "
+                              "and visa versa - don't know which cast we should pick. Resolve this ambiguity by using "
+                              "the cast() operator!",
+                              leftType.name().c_str(),
+                              rightType.name().c_str());
+            }
+        }
+        else {
+            IMPLICIT_CAST_L_TO_R();
+        }
+    }
+    else {
+        if (canCastRToL) {
+            IMPLICIT_CAST_R_TO_L();
+        }
+    }
+    
+    #undef IMPLICIT_CAST_L_TO_R
+    #undef IMPLICIT_CAST_R_TO_L
 }
 
 WC_END_NAMED_NAMESPACE(ImplicitCast)

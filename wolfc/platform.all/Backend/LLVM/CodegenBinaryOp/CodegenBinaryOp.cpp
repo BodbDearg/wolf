@@ -8,6 +8,7 @@
 
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
+#include "../ImplicitCasts.hpp"
 #include "AST/Nodes/ASTNode.hpp"
 #include "AST/Nodes/IExpr.hpp"
 #include "Assert.hpp"
@@ -89,6 +90,9 @@ void CodegenBinaryOp::codegen() {
     mRightExpr.accept(mCG);
     mRightVal = mCG.mCtx.popValue();
     WC_ASSERT(!mRightVal.mRequiresLoad || !mRightVal.isValid());
+    
+    // Do any automatic type promotion required and allowed:
+    ImplicitCasts::castBinaryOpValuesIfRequired(mCG, mLeftVal, mRightVal);
     
     // Don't do anything if either side is not valid:
     WC_GUARD(mLeftVal.isValid() && mRightVal.isValid());

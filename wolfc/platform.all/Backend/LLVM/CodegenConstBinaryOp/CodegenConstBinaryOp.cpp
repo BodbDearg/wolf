@@ -8,6 +8,7 @@
 
 #include "../CodegenCtx.hpp"
 #include "../ConstCodegen/ConstCodegen.hpp"
+#include "../ImplicitCasts.hpp"
 #include "AST/Nodes/ASTNode.hpp"
 #include "AST/Nodes/IExpr.hpp"
 #include "Assert.hpp"
@@ -59,6 +60,9 @@ void CodegenConstBinaryOp::codegen() {
     mLeftConst = mCG.mCtx.popConstant();
     mRightExpr.accept(mCG);
     mRightConst = mCG.mCtx.popConstant();
+    
+    // Do any automatic type promotion required and allowed:
+    ImplicitCasts::castBinaryOpValuesIfRequired(mCG, mLeftConst, mRightConst);
     
     // The left and right types must match:
     const DataType & leftType = mLeftConst.mCompiledType.getDataType();

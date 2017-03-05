@@ -4,8 +4,9 @@
 ;       See LICENSE.txt for license details.
 ;==================================================================================================
 
+let blah = 1u16 + 1u
+
 func main() -> int
-    let blah : int8 = 12
     print(blah)
     return 0
 end
