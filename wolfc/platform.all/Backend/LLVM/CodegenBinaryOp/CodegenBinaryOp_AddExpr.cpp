@@ -54,8 +54,23 @@ bool CodegenAddOrSubBinaryOp::verifyLeftAndRightTypesAreOkForOp() {
             const DataType & rightPointedToType =  rightPtrType.mPointedToType;
             
             if (leftPointedToType.equals(rightPointedToType)) {
-                // All good, pointer difference operation where the left and right pointer types match
-                return true;
+                // All good, pointer difference operation where the left and right pointer types match.
+                // For the last check we must ensure that the types pointed to are valid and sized.
+                if (leftPointedToType.isValid() && leftPointedToType.isSized()) {
+                    // All is well with this operation:
+                    return true;
+                }
+                else {
+                    // Can't do pointer operation on unknown sized or invalid type:
+                    mCG.mCtx.error("Can't perform '%s' (%s) pointer arithmetic op on pointers of type '%s'! "
+                                   "The pointed to type must be valid and have a size that is known at "
+                                   "compile time in order for pointer arithmetic to be performed!",
+                                   mOpSymbol,
+                                   mOpName,
+                                   leftPtrType.name().c_str());
+                    
+                    return false;
+                }
             }
             else {
                 // Pointer difference operation but pointer types are different, issue an error:
