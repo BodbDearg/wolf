@@ -26,6 +26,7 @@
 		let blah : bool = null
 - Unit test various runtime integer implicit casting
 - Unit test implicit cast of pointers to bool
+	- Don't allow for non nullable pointers
 - Unit test allowed compile time implicit casts
 	- Especially for ints
 - Unit test implicit casting non nullable pointer to nullable pointer of the same type

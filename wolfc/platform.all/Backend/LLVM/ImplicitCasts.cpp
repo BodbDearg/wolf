@@ -353,6 +353,8 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
+    IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Bool)
+    
     virtual void visit(const PtrDataType & dataType) override {
         // Cast to a pointer type is allowe if the pointer is nullable
         WC_UNUSED_PARAM(dataType);

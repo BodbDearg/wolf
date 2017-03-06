@@ -4,10 +4,8 @@
 ;       See LICENSE.txt for license details.
 ;==================================================================================================
 
-func blah(v: ?any)
-
-end
-
 func main() -> int
+    let blah : bool = null
+    print(blah)
     return 0
 end
