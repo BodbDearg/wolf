@@ -233,7 +233,7 @@ let testCmpExprConstexpr = [
     1234 is not 5678,
     not 1234 is not 1234,
 
-    ; Pointer comparison tests
+    ; Test: pointer comparison tests
     cast(0 to ^int) < cast(1 to ?int),
     cast(0 to ^int) <= cast(1 to ?int),
     cast(1 to ^int) <= cast(1 to ?int),
@@ -241,7 +241,15 @@ let testCmpExprConstexpr = [
     cast(1 to ^int) != cast(0 to ?int),
     cast(2 to ^int) >= cast(1 to ^int),
     cast(2 to ^int) >= cast(2 to ^int),
-    cast(2 to ^int) > cast(1 to ^int)
+    cast(2 to ^int) > cast(1 to ^int),
+
+    ; Test: nullptr comparisons,
+    not null < null,
+    null <= null,
+    null == null,
+    not null != null,
+    null >= null,
+    not null > null
 ]
 
 func testCmpExpr()
@@ -316,11 +324,19 @@ func testCmpExpr()
         let f = cast(cast(&theArray[2] to int) - 1 to ?int64)
         assert(b < e)
         assert(b > f)
+
+        ; Nullptr comparisons
+        assert(not null < null)
+        assert(null <= null)
+        assert(null == null)
+        assert(not null != null)
+        assert(null >= null)
+        assert(not null > null)
     end
 
     ; Make sure the constant expression tests pass
     let testNum = 0
-    while testNum < 34
+    while testNum < 40
         assert(testCmpExprConstexpr[testNum])
         testNum++
     end
