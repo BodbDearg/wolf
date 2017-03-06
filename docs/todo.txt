@@ -4,9 +4,17 @@
 	- loop repeat
 	- assert
 	- next if/break if
+	- return if
 	- ternary operator
 	- logical and/or and not
 - Implement and unit test implicit casting on 'return'
+- Implement and unit test implicit casting in assign expressions
+- Implement and unit test implicit casting in passing function args
+- Implement and unit test implicit casting in ternary operator
+- Test implicit casting in several types of binary expressions
+	Cmp/Add/Mul/Shift
+- Test implicit casting in var decls
+	- Global and local
 - Allow an extra ',' at the end of array literals
 	- Also write a test for this
 - '! operator'
