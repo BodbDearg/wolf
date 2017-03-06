@@ -1,18 +1,24 @@
 - Const cast pointers to int and visa versa
 	- Including 'null'
+- Implement implicit type promotion to bool for:
+	- while
+	- if
+	- loop repeat
+	- assert
+	- next if/break if
+	- ternary operator
+	- logical and/or and not
 - Implicit casting of pointers to 'any' pointers
+- Implement and unit test implicit casting on 'return'
 - [] operator should dereference pointers
 - Impl codegen for const add/sub pointer arithmetic
 	- Issue appropriate error msg
 - Don't allow dereference of nullable pointers
 - '! operator'
 - Emit a compile error if an integer literal can't fit in it's type
-- Unit test implicit type promotion to bool for:
-	while()
-	if()
-	loop repeat()
-
 - Unit test implicit casting of 'null'
+	- This DOESN'T WORK:
+		let blah : bool = null
 - Unit test pointer arithmetic
 	- add/sub
 	- inc/dec
@@ -30,14 +36,22 @@
 	- Including 'null'
 	- At runtime
 	- At compile time
+- Unit test cast of pointers to other pointer types
+	- Including 'null'
+	- At runtime
+	- At compile time	
 - Unit test allowed compile time implicit casts
 	- Especially for ints
 - Unit test implicit casting non nullable pointer to nullable pointer of the same type
 - Unit test implicit type promotion for binary expressions
 - Unit test implicit type promotion to bool for:
-	while()
-	if()
-	loop repeat()
+	- while
+	- if
+	- loop repeat
+	- assert
+	- next if/break if
+	- ternary operator
+	- logical and/or and not
 - Unit test binary expression left to right and right to left implicit casting
 
 - Fix up random 'new' allocations throughout the codebase
