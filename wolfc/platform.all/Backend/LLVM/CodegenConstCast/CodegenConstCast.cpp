@@ -324,7 +324,17 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, Int128)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, Int16)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, Int32)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, Int64)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, Int8)
     WC_IMPL_BASIC_CONST_CAST(getPointerCast, Ptr)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt128)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt16)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt32)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt64)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt8)
     
     virtual void visit(const BoolDataType & dataType) override {
         // 'null' will always equate to 'false' so just fastrack that comparison here
@@ -349,7 +359,17 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, Int128)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, Int16)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, Int32)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, Int64)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, Int8)
     WC_IMPL_BASIC_CONST_CAST(getPointerCast, Ptr)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt128)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt16)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt32)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt64)
+    WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt8)
     
     virtual void visit(const BoolDataType & dataType) override {
         WC_UNUSED_PARAM(dataType);

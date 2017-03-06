@@ -1,5 +1,3 @@
-- Const cast pointers to int and visa versa
-	- Including 'null'
 - Implement implicit type promotion to bool for:
 	- while
 	- if

@@ -4,8 +4,9 @@
 ;       See LICENSE.txt for license details.
 ;==================================================================================================
 
-let blah = cast(1u8 to ^int8)
+let blah = cast(cast(53u8 to ^int8) to int)
 
 func main() -> int
+    print(blah)
     return 0
 end
