@@ -184,13 +184,16 @@ void CodegenConstSubBinaryOp::visit(const PtrDataType & dataType) {
     const DataType & rightType = mRightConst.mCompiledType.getDataType();
     
     if (rightType.isPtr()) {
-        // Pointer difference operation: convert the two pointers to integers firstly.
-        //
-        // FIXME: This code will break for 32-bit. Pointer size is assumed here.
-        llvm::Type * llvmInt64Ty = llvm::Type::getInt64Ty(mCG.mCtx.mLLVMCtx);
-        WC_ASSERT(llvmInt64Ty);
-        llvm::Constant * ptr1AsInt = llvm::ConstantExpr::getPtrToInt(mLeftConst.mLLVMConst, llvmInt64Ty);
-        llvm::Constant * ptr2AsInt = llvm::ConstantExpr::getPtrToInt(mRightConst.mLLVMConst, llvmInt64Ty);
+        // Get the compiled data type for the result (int)
+        const DataType & resultType = PrimitiveDataTypes::getDefaultIntType();
+        resultType.accept(mCG.mCodegenDataType);
+        CompiledDataType resultCDT = mCG.mCtx.popCompiledDataType();
+        
+        // Pointer difference operation: convert the two pointers to integers firstly:
+        llvm::Type * llvmIntTy = resultCDT.getLLVMType();
+        WC_ASSERT(llvmIntTy);
+        llvm::Constant * ptr1AsInt = llvm::ConstantExpr::getPtrToInt(mLeftConst.mLLVMConst, llvmIntTy);
+        llvm::Constant * ptr2AsInt = llvm::ConstantExpr::getPtrToInt(mRightConst.mLLVMConst, llvmIntTy);
         WC_ASSERT(ptr1AsInt);
         WC_ASSERT(ptr2AsInt);
         
@@ -205,15 +208,10 @@ void CodegenConstSubBinaryOp::visit(const PtrDataType & dataType) {
         WC_ASSERT(typePointedToSize > 0);
         
         // The result is the diff divided by the size:
-        llvm::Constant * typePointedToSizeConst = llvm::ConstantInt::get(llvmInt64Ty, typePointedToSize);
+        llvm::Constant * typePointedToSizeConst = llvm::ConstantInt::get(llvmIntTy, typePointedToSize);
         WC_ASSERT(typePointedToSizeConst);
         llvm::Constant * resultConst = llvm::ConstantExpr::getSDiv(ptrDiff, typePointedToSizeConst);
         WC_ASSERT(resultConst);
-        
-        // Get the compiled data type for the result (int)
-        const DataType & resultType = PrimitiveDataTypes::getDefaultIntType();
-        resultType.accept(mCG.mCodegenDataType);
-        CompiledDataType resultCDT = mCG.mCtx.popCompiledDataType();
         
         // Sanity checks in debug:
         WC_ASSERT(resultCDT.isValid());

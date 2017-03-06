@@ -208,6 +208,10 @@ void CodegenSubBinaryOp::visit(const PtrDataType & dataType) {
         resultType.accept(mCG.mCodegenDataType);
         CompiledDataType resultCDT = mCG.mCtx.popCompiledDataType();
         
+        // Ensure that the pointer difference is in the format of the native int type we are compiling for:
+        resultVal = mCG.mCtx.mIRBuilder.CreateTruncOrBitCast(resultVal, resultCDT.getLLVMType());
+        WC_ASSERT(resultVal);
+        
         // Sanity checks in debug:
         WC_ASSERT(resultCDT.isValid());
         WC_ASSERT(resultCDT.getLLVMType() == resultVal->getType());
