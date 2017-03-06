@@ -296,6 +296,7 @@ public:
     WC_IMPL_BASIC_CAST(CreatePtrToInt, Int32)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, Int64)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, Int128)
+    WC_IMPL_BASIC_CAST(CreatePointerCast, Ptr)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt8)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt16)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt32)
@@ -308,14 +309,6 @@ public:
         llvm::Constant * falseConst = llvm::ConstantInt::get(llvm::Type::getInt1Ty(mCG.mCtx.mLLVMCtx), 0);
         WC_ASSERT(falseConst);
         mCG.mCtx.pushValue(Value(falseConst, mToTypeCDT, false, mCG.mCtx.getCurrentASTNode()));
-    }
-    
-    virtual void visit(const PtrDataType & dataType) override {
-        // Just do a simple pointer cast of the null value
-        WC_UNUSED_PARAM(dataType);
-        llvm::Constant * llvmValCast = llvm::Constant::getNullValue(mToTypeCDT.getLLVMType());
-        WC_ASSERT(llvmValCast);
-        mCG.mCtx.pushValue(Value(llvmValCast, mToTypeCDT, false, mCG.mCtx.getCurrentASTNode()));
     }
 };
 
@@ -335,6 +328,7 @@ public:
     WC_IMPL_BASIC_CAST(CreatePtrToInt, Int32)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, Int64)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, Int128)
+    WC_IMPL_BASIC_CAST(CreatePointerCast, Ptr)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt8)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt16)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt32)
@@ -348,14 +342,6 @@ public:
         WC_ASSERT(nullConst);
         llvm::Value * resultVal = mCG.mCtx.mIRBuilder.CreateICmpNE(mFromVal.mLLVMVal, nullConst);
         mCG.mCtx.pushValue(Value(resultVal, mToTypeCDT, false, mCG.mCtx.getCurrentASTNode()));
-    }
-    
-    virtual void visit(const PtrDataType & dataType) override {
-        // Just do a simple pointer cast
-        WC_UNUSED_PARAM(dataType);
-        llvm::Value * llvmValCast = mCG.mCtx.mIRBuilder.CreatePointerCast(mFromVal.mLLVMVal, mToTypeCDT.getLLVMType());
-        WC_ASSERT(llvmValCast);
-        mCG.mCtx.pushValue(Value(llvmValCast, mToTypeCDT, false, mCG.mCtx.getCurrentASTNode()));
     }
 };
 
