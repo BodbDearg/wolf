@@ -1,3 +1,4 @@
+- Pointer comparisons
 - Implement implicit type promotion to bool for:
 	- while
 	- if
