@@ -16,7 +16,12 @@
 - Emit a compile error if an integer literal can't fit in it's type
 
 - Unit test use of 'any' pointers and casting to/from them
+- Unit test implicit casting to and from any pointers
+	- Check logic for all the cases
 - Unit test implicit casting of 'null'
+	- Test to 'any' ptrs, 
+	- Test to nullable ptrs.
+	- Test to bool
 	- This DOESN'T WORK:
 		let blah : bool = null
 - Unit test various runtime integer implicit casting

@@ -375,18 +375,38 @@ public:
     }
     
     virtual void visit(const PtrDataType & dataType) override {
-        // Implicit cast for pointers is only allowed if going from a non nullable pointer of
-        // one type to a nullable pointer of the same type...
+        // Implicit cast for pointers allowed in the following cases:
+        //  (a) regular ptr to nullable regular ptr of same type (e.g ^int -> ?int)
+        //  (b) regular ptr to any pointer (e.g ^int -> ^any)
+        //  (c) regular ptr to nullable any pointer (e.g ^int -> ?any)
+        //  (d) any ptr to nullable any pointer (e.g ^any -> ?any)
         //
         // TODO: Some day we should support implicit casts for structs, classes etc. going from
         // derived types back to base types.
         WC_UNUSED_PARAM(dataType);
-        const PtrDataType & fromType = static_cast<const PtrDataType&>(mFromType.getDataType());
-        const PtrDataType & toType = static_cast<const PtrDataType&>(mToType.getDataType());
         
-        if (!fromType.mIsNullable && toType.mIsNullable) {
-            if (fromType.mPointedToType.equals(toType.mPointedToType)) {
+        const PtrDataType & fromType = static_cast<const PtrDataType&>(mFromType.getDataType());
+        const DataType & fromPointedToType = fromType.mPointedToType;
+        const PtrDataType & toType = static_cast<const PtrDataType&>(mToType.getDataType());
+        const DataType & toPointedToType = toType.mPointedToType;
+        
+        if (fromPointedToType.isAny()) {
+            // Potentially case (d), see if that is so:
+            if (toPointedToType.isAny() && !fromType.mIsNullable && toType.mIsNullable) {
                 mCastAllowed = true;
+            }
+        }
+        else {
+            // Potentially case (a), (b) or (c):
+            if (toPointedToType.isAny()) {
+                // Case (b) or (c) - allow it:
+                mCastAllowed = true;
+            }
+            else {
+                // Potentially case (a), see if that is so:
+                if (!fromType.mIsNullable && toType.mIsNullable) {
+                    mCastAllowed = true;
+                }
             }
         }
     }
