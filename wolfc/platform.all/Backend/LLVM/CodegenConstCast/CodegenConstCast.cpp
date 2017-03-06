@@ -350,7 +350,18 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
-    #warning TODO: nullptr: allow cast to bool and integers
+    virtual void visit(const BoolDataType & dataType) override {
+        WC_UNUSED_PARAM(dataType);
+        
+        // If the value is non null push a true value, otherwise push false
+        llvm::Constant * boolConst = mFromConst.mLLVMConst->isNullValue() ?
+            llvm::ConstantInt::get(llvm::Type::getInt1Ty(mCG.mCtx.mLLVMCtx), 0) :
+            llvm::ConstantInt::get(llvm::Type::getInt1Ty(mCG.mCtx.mLLVMCtx), 1);
+        
+        WC_ASSERT(boolConst);
+        mCG.mCtx.pushConstant(Constant(boolConst, mToTypeCDT, mCG.mCtx.getCurrentASTNode()));
+    }
+    
     virtual void visit(const PtrDataType & dataType) override {
         // Just do a simple pointer cast
         WC_UNUSED_PARAM(dataType);

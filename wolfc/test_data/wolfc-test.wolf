@@ -4,12 +4,8 @@
 ;       See LICENSE.txt for license details.
 ;==================================================================================================
 
-func blahFunc()
-    let v1AsInt = cast(1u8 to ?int)
-    print(v1AsInt)
-end
+let blah = cast(cast(null to ^int8) to bool)
 
 func main() -> int
-    blahFunc()
     return 0
 end
