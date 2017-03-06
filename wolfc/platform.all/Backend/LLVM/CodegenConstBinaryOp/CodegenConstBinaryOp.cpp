@@ -117,7 +117,7 @@ void CodegenConstBinaryOp::issueBinaryOpNotSupportedError() {
     AST::ASTNode * parent = mLeftExpr.mParent;
     WC_ASSERT(parent);
     mCG.mCtx.error(*parent,
-                   "Binary operator '%s' (%s) is not supported for a left expression "
+                   "Compile time binary operator '%s' (%s) is not supported for a left expression "
                    "of type '%s' and right expression of type '%s'!",
                    mOpSymbol,
                    mOpName,

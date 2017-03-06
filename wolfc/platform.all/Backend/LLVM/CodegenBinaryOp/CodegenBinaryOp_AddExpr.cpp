@@ -158,7 +158,8 @@ void CodegenAddBinaryOp::visit(const PtrDataType & dataType) {
         mRightVal.mLLVMVal,
         "CodegenAddBinaryOp:Result"
     );
-    
+
+    WC_ASSERT(resultVal);
     pushOpResult(resultVal);
 }
 
@@ -226,6 +227,7 @@ void CodegenSubBinaryOp::visit(const PtrDataType & dataType) {
             "CodegenSubBinaryOp:Result"
         );
         
+        WC_ASSERT(resultVal);
         pushOpResult(resultVal);
     }
 }

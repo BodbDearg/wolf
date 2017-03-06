@@ -21,6 +21,8 @@
 	- add/sub
 	- inc/dec
 	- ptr distance
+	- At runtime
+	- At compile time	
 - Unit test various runtime integer implicit casting
 - Unit test implicit cast of pointers to bool
 - Unit test cast pointers to bool
