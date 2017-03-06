@@ -311,7 +311,7 @@ public:
     }
     
     virtual void visit(const PtrDataType & dataType) override {
-        // Just do a simple pointer cast
+        // Just do a simple pointer cast of the null value
         WC_UNUSED_PARAM(dataType);
         llvm::Constant * llvmValCast = llvm::Constant::getNullValue(mToTypeCDT.getLLVMType());
         WC_ASSERT(llvmValCast);
