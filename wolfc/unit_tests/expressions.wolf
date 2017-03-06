@@ -231,7 +231,17 @@ let testCmpExprConstexpr = [
 
     ; Test: is not (alias for '!=')
     1234 is not 5678,
-    not 1234 is not 1234
+    not 1234 is not 1234,
+
+    ; Pointer comparison tests
+    cast(0 to ^int) < cast(1 to ?int),
+    cast(0 to ^int) <= cast(1 to ?int),
+    cast(1 to ^int) <= cast(1 to ?int),
+    cast(1 to ^int) == cast(1 to ?int),
+    cast(1 to ^int) != cast(0 to ?int),
+    cast(2 to ^int) >= cast(1 to ^int),
+    cast(2 to ^int) >= cast(2 to ^int),
+    cast(2 to ^int) > cast(1 to ^int)
 ]
 
 func testCmpExpr()
@@ -310,7 +320,7 @@ func testCmpExpr()
 
     ; Make sure the constant expression tests pass
     let testNum = 0
-    while testNum < 26
+    while testNum < 34
         assert(testCmpExprConstexpr[testNum])
         testNum++
     end

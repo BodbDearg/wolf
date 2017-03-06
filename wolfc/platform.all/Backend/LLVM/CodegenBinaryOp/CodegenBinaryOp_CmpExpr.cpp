@@ -61,7 +61,7 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
         CompiledDataType compiledType = mCG.mCtx.popCompiledDataType();\
         WC_ASSERT(compiledType.isValid());\
         \
-        /* Codegen the default integer type - we'll both pointers to this */\
+        /* Codegen the default integer type - we'll cast both pointers to this before the comparison */\
         PrimitiveDataTypes::getDefaultIntType().accept(mCG.mCodegenDataType);\
         CompiledDataType intTypeCDT = mCG.mCtx.popCompiledDataType();\
         llvm::Type * llvmIntTy = intTypeCDT.getLLVMType();\

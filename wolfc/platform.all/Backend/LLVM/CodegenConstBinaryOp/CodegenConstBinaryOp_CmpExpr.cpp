@@ -43,6 +43,45 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
         pushOpResult(cmpResult, compiledType);\
     }
 
+/* This macro saves a lot of code */
+#define WC_IMPL_CONST_PTR_CMP_OP(VisitorClass,\
+                                 ConstCmpExprGetterFunc,\
+                                 CmpPredicate)\
+    \
+    void VisitorClass::visit(const PtrDataType & dataType) {\
+        WC_UNUSED_PARAM(dataType);\
+        \
+        /* Codegen the datatype for type 'bool', this is the datatype for the operator result */\
+        {\
+            const BoolDataType & boolDataType = PrimitiveDataTypes::getBoolDataType();\
+            boolDataType.accept(mCG.mCodegenDataType);\
+        }\
+        \
+        CompiledDataType compiledType = mCG.mCtx.popCompiledDataType();\
+        WC_ASSERT(compiledType.isValid());\
+        \
+        /* Codegen the default integer type - we'll cast both pointers to this before the comparison */\
+        PrimitiveDataTypes::getDefaultIntType().accept(mCG.mCodegenDataType);\
+        CompiledDataType intTypeCDT = mCG.mCtx.popCompiledDataType();\
+        llvm::Type * llvmIntTy = intTypeCDT.getLLVMType();\
+        \
+        /* Cast both pointers to the default integer type */\
+        llvm::Constant * leftPtrAsInt = llvm::ConstantExpr::getPtrToInt(mLeftConst.mLLVMConst, llvmIntTy);\
+        llvm::Constant * rightPtrAsInt = llvm::ConstantExpr::getPtrToInt(mRightConst.mLLVMConst, llvmIntTy);\
+        WC_ASSERT(leftPtrAsInt);\
+        WC_ASSERT(rightPtrAsInt);\
+        \
+        /* Generate the op result and push it */\
+        llvm::Constant * cmpResult = llvm::ConstantExpr::ConstCmpExprGetterFunc(\
+            CmpPredicate,\
+            leftPtrAsInt,\
+            rightPtrAsInt\
+        );\
+        \
+        WC_ASSERT(cmpResult);\
+        pushOpResult(cmpResult, compiledType);\
+    }
+
 //-----------------------------------------------------------------------------
 // CodegenConstCmpBinaryOp
 //-----------------------------------------------------------------------------
@@ -75,6 +114,7 @@ WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpEQBinaryOp, Int16, getICmp, llvm::ICmp
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpEQBinaryOp, Int32, getICmp, llvm::ICmpInst::Predicate::ICMP_EQ)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpEQBinaryOp, Int64, getICmp, llvm::ICmpInst::Predicate::ICMP_EQ)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpEQBinaryOp, Int8, getICmp, llvm::ICmpInst::Predicate::ICMP_EQ)
+WC_IMPL_CONST_PTR_CMP_OP(CodegenConstCmpEQBinaryOp, getICmp, llvm::ICmpInst::Predicate::ICMP_EQ)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpEQBinaryOp, UInt128, getICmp, llvm::ICmpInst::Predicate::ICMP_EQ)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpEQBinaryOp, UInt16, getICmp, llvm::ICmpInst::Predicate::ICMP_EQ)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpEQBinaryOp, UInt32, getICmp, llvm::ICmpInst::Predicate::ICMP_EQ)
@@ -99,6 +139,7 @@ WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpNEBinaryOp, Int16, getICmp, llvm::ICmp
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpNEBinaryOp, Int32, getICmp, llvm::ICmpInst::Predicate::ICMP_NE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpNEBinaryOp, Int64, getICmp, llvm::ICmpInst::Predicate::ICMP_NE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpNEBinaryOp, Int8, getICmp, llvm::ICmpInst::Predicate::ICMP_NE)
+WC_IMPL_CONST_PTR_CMP_OP(CodegenConstCmpNEBinaryOp, getICmp, llvm::ICmpInst::Predicate::ICMP_NE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpNEBinaryOp, UInt128, getICmp, llvm::ICmpInst::Predicate::ICMP_NE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpNEBinaryOp, UInt16, getICmp, llvm::ICmpInst::Predicate::ICMP_NE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpNEBinaryOp, UInt32, getICmp, llvm::ICmpInst::Predicate::ICMP_NE)
@@ -122,6 +163,7 @@ WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpLTBinaryOp, Int16, getICmp, llvm::ICmp
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpLTBinaryOp, Int32, getICmp, llvm::ICmpInst::Predicate::ICMP_SLT)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpLTBinaryOp, Int64, getICmp, llvm::ICmpInst::Predicate::ICMP_SLT)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpLTBinaryOp, Int8, getICmp, llvm::ICmpInst::Predicate::ICMP_SLT)
+WC_IMPL_CONST_PTR_CMP_OP(CodegenConstCmpLTBinaryOp, getICmp, llvm::ICmpInst::Predicate::ICMP_SLT)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpLTBinaryOp, UInt128, getICmp, llvm::ICmpInst::Predicate::ICMP_ULT)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpLTBinaryOp, UInt16, getICmp, llvm::ICmpInst::Predicate::ICMP_ULT)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpLTBinaryOp, UInt32, getICmp, llvm::ICmpInst::Predicate::ICMP_ULT)
@@ -145,6 +187,7 @@ WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpLEBinaryOp, Int16, getICmp, llvm::ICmp
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpLEBinaryOp, Int32, getICmp, llvm::ICmpInst::Predicate::ICMP_SLE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpLEBinaryOp, Int64, getICmp, llvm::ICmpInst::Predicate::ICMP_SLE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpLEBinaryOp, Int8, getICmp, llvm::ICmpInst::Predicate::ICMP_SLE)
+WC_IMPL_CONST_PTR_CMP_OP(CodegenConstCmpLEBinaryOp, getICmp, llvm::ICmpInst::Predicate::ICMP_SLE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpLEBinaryOp, UInt128, getICmp, llvm::ICmpInst::Predicate::ICMP_ULE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpLEBinaryOp, UInt16, getICmp, llvm::ICmpInst::Predicate::ICMP_ULE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpLEBinaryOp, UInt32, getICmp, llvm::ICmpInst::Predicate::ICMP_ULE)
@@ -168,6 +211,7 @@ WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpGTBinaryOp, Int16, getICmp, llvm::ICmp
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpGTBinaryOp, Int32, getICmp, llvm::ICmpInst::Predicate::ICMP_SGT)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpGTBinaryOp, Int64, getICmp, llvm::ICmpInst::Predicate::ICMP_SGT)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpGTBinaryOp, Int8, getICmp, llvm::ICmpInst::Predicate::ICMP_SGT)
+WC_IMPL_CONST_PTR_CMP_OP(CodegenConstCmpGTBinaryOp, getICmp, llvm::ICmpInst::Predicate::ICMP_SGT)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpGTBinaryOp, UInt128, getICmp, llvm::ICmpInst::Predicate::ICMP_UGT)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpGTBinaryOp, UInt16, getICmp, llvm::ICmpInst::Predicate::ICMP_UGT)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpGTBinaryOp, UInt32, getICmp, llvm::ICmpInst::Predicate::ICMP_UGT)
@@ -191,6 +235,7 @@ WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpGEBinaryOp, Int16, getICmp, llvm::ICmp
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpGEBinaryOp, Int32, getICmp, llvm::ICmpInst::Predicate::ICMP_SGE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpGEBinaryOp, Int64, getICmp, llvm::ICmpInst::Predicate::ICMP_SGE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpGEBinaryOp, Int8, getICmp, llvm::ICmpInst::Predicate::ICMP_SGE)
+WC_IMPL_CONST_PTR_CMP_OP(CodegenConstCmpGEBinaryOp, getICmp, llvm::ICmpInst::Predicate::ICMP_SGE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpGEBinaryOp, UInt128, getICmp, llvm::ICmpInst::Predicate::ICMP_UGE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpGEBinaryOp, UInt16, getICmp, llvm::ICmpInst::Predicate::ICMP_UGE)
 WC_IMPL_BASIC_CONST_CMP_OP(CodegenConstCmpGEBinaryOp, UInt32, getICmp, llvm::ICmpInst::Predicate::ICMP_UGE)

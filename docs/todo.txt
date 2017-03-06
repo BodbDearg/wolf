@@ -1,3 +1,4 @@
+- Compare ops for 'nullptr' type
 - Pointer comparisons and unit tests
 	- Runtime
 	- Compile time
