@@ -1,5 +1,5 @@
-- Casting pointers to integers and visa versa
-- Casting pointers to other pointer types
+- Const cast pointers to int and visa versa
+- Casting integers to pointers
 - Implicit casting of pointers to 'any' pointers
 - [] operator should dereference pointers
 - Impl codegen for const add/sub pointer arithmetic

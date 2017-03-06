@@ -5,7 +5,7 @@
 ;==================================================================================================
 
 func blahFunc(v1: ^int)
-    let v1AsInt = cast(v1 to int) + 2
+    let v1AsInt = cast(v1 to bool)
     print(v1AsInt)
 end
 

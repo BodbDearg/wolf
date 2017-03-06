@@ -318,16 +318,6 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
-    #warning TODO: nullptr: allow cast to bool
-    virtual void visit(const PtrDataType & dataType) override {
-        // Just do a simple pointer cast
-        WC_UNUSED_PARAM(dataType);
-        llvm::Value * llvmValCast = mCG.mCtx.mIRBuilder.CreatePointerCast(mFromVal.mLLVMVal, mToTypeCDT.getLLVMType());
-        WC_ASSERT(llvmValCast);
-        mCG.mCtx.pushValue(Value(llvmValCast, mToTypeCDT, false, mCG.mCtx.getCurrentASTNode()));
-    }
-    
-    WC_IMPL_BASIC_CAST(CreatePtrToInt, Bool)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, Int8)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, Int16)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, Int32)
@@ -338,6 +328,23 @@ public:
     WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt32)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt64)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt128)
+
+    virtual void visit(const BoolDataType & dataType) override {
+        // Compare the pointer against 'null'
+        WC_UNUSED_PARAM(dataType);
+        llvm::Constant * nullConst = llvm::Constant::getNullValue(mFromVal.mCompiledType.getLLVMType());
+        WC_ASSERT(nullConst);
+        llvm::Value * resultVal = mCG.mCtx.mIRBuilder.CreateICmpNE(mFromVal.mLLVMVal, nullConst);
+        mCG.mCtx.pushValue(Value(resultVal, mToTypeCDT, false, mCG.mCtx.getCurrentASTNode()));
+    }
+    
+    virtual void visit(const PtrDataType & dataType) override {
+        // Just do a simple pointer cast
+        WC_UNUSED_PARAM(dataType);
+        llvm::Value * llvmValCast = mCG.mCtx.mIRBuilder.CreatePointerCast(mFromVal.mLLVMVal, mToTypeCDT.getLLVMType());
+        WC_ASSERT(llvmValCast);
+        mCG.mCtx.pushValue(Value(llvmValCast, mToTypeCDT, false, mCG.mCtx.getCurrentASTNode()));
+    }
 };
 
 //-----------------------------------------------------------------------------
