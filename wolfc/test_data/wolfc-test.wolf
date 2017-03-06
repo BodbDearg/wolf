@@ -4,12 +4,10 @@
 ;       See LICENSE.txt for license details.
 ;==================================================================================================
 
-let ptr1 = cast(16 to ^int128)
-let ptr2 = ptr1 - 1u8
-let ptr3 = ptr1 + 2i8
-let ptrDiff = ptr2 - ptr2
+func blah(v: ?any)
+
+end
 
 func main() -> int
-    print(ptrDiff)
     return 0
 end

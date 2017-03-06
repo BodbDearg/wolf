@@ -9,11 +9,6 @@ General:
         - declared using ref blah = 
         - once initialized, cannot be (validly) changed
     - 'extern' functions
-    - 'any' type
-        - Can only be stored by reference or by pointer
-        - Cannot be dereferenced if a pointer (must be cast first)
-        - Cannot be accessed if a reference (must be cast first)
-        - Cannot be copied by value into functions, assigned etc.
 	- Constructor like syntax for primitives, like Swift: 
         e.g let x = int(2)
     - 4 Variable storage classes:

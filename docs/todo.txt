@@ -15,6 +15,7 @@
 - Don't allow dereference of nullable pointers
 - Emit a compile error if an integer literal can't fit in it's type
 
+- Unit test use of 'any' pointers and casting to/from them
 - Unit test implicit casting of 'null'
 	- This DOESN'T WORK:
 		let blah : bool = null
