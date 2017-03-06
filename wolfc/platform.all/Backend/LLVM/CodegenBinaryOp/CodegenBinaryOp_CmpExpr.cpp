@@ -9,6 +9,7 @@
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
 #include "DataType/Types/BoolDataType.hpp"
+#include "DataType/Types/PtrDataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -30,12 +31,52 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
         }\
         \
         CompiledDataType compiledType = mCG.mCtx.popCompiledDataType();\
+        WC_ASSERT(compiledType.isValid());\
         \
         /* Generate the op result and push it */\
         llvm::Value * cmpResult = mCG.mCtx.mIRBuilder.CmpExprCreateFunc(\
             mLeftVal.mLLVMVal,\
             mRightVal.mLLVMVal,\
             #DataTypeName ":" CmpLabel ":Result"\
+        );\
+        \
+        WC_ASSERT(cmpResult);\
+        pushOpResult(cmpResult, false, compiledType);\
+    }
+
+/* This macro saves a lot of code */
+#define WC_IMPL_PTR_CMP_OP(VisitorClass,\
+                           CmpExprCreateFunc,\
+                           CmpLabel)\
+    \
+    void VisitorClass::visit(const PtrDataType & dataType) {\
+        WC_UNUSED_PARAM(dataType);\
+        \
+        /* Codegen the datatype for type 'bool', this is the datatype for the operator result */\
+        {\
+            const BoolDataType & boolDataType = PrimitiveDataTypes::getBoolDataType();\
+            boolDataType.accept(mCG.mCodegenDataType);\
+        }\
+        \
+        CompiledDataType compiledType = mCG.mCtx.popCompiledDataType();\
+        WC_ASSERT(compiledType.isValid());\
+        \
+        /* Codegen the default integer type - we'll both pointers to this */\
+        PrimitiveDataTypes::getDefaultIntType().accept(mCG.mCodegenDataType);\
+        CompiledDataType intTypeCDT = mCG.mCtx.popCompiledDataType();\
+        llvm::Type * llvmIntTy = intTypeCDT.getLLVMType();\
+        \
+        /* Cast both pointers to the default integer type */\
+        llvm::Value * leftPtrAsInt = mCG.mCtx.mIRBuilder.CreatePtrToInt(mLeftVal.mLLVMVal, llvmIntTy);\
+        llvm::Value * rightPtrAsInt = mCG.mCtx.mIRBuilder.CreatePtrToInt(mRightVal.mLLVMVal, llvmIntTy);\
+        WC_ASSERT(leftPtrAsInt);\
+        WC_ASSERT(rightPtrAsInt);\
+        \
+        /* Generate the op result against those integers and push it */\
+        llvm::Value * cmpResult = mCG.mCtx.mIRBuilder.CmpExprCreateFunc(\
+            leftPtrAsInt,\
+            rightPtrAsInt,\
+            "PtrDataType:" CmpLabel ":Result"\
         );\
         \
         WC_ASSERT(cmpResult);\
@@ -86,6 +127,7 @@ WC_IMPL_BASIC_CMP_OP(CodegenCmpEQBinaryOp, Int16, CreateICmpEQ, "CmpEQ")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpEQBinaryOp, Int32, CreateICmpEQ, "CmpEQ")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpEQBinaryOp, Int64, CreateICmpEQ, "CmpEQ")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpEQBinaryOp, Int8, CreateICmpEQ, "CmpEQ")
+WC_IMPL_PTR_CMP_OP(CodegenCmpEQBinaryOp, CreateICmpEQ, "CmpEQ")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpEQBinaryOp, UInt128, CreateICmpEQ, "CmpEQ")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpEQBinaryOp, UInt16, CreateICmpEQ, "CmpEQ")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpEQBinaryOp, UInt32, CreateICmpEQ, "CmpEQ")
@@ -116,6 +158,7 @@ WC_IMPL_BASIC_CMP_OP(CodegenCmpNEBinaryOp, Int16, CreateICmpNE, "CmpNE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpNEBinaryOp, Int32, CreateICmpNE, "CmpNE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpNEBinaryOp, Int64, CreateICmpNE, "CmpNE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpNEBinaryOp, Int8, CreateICmpNE, "CmpNE")
+WC_IMPL_PTR_CMP_OP(CodegenCmpNEBinaryOp, CreateICmpNE, "CmpNE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpNEBinaryOp, UInt128, CreateICmpNE, "CmpNE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpNEBinaryOp, UInt16, CreateICmpNE, "CmpNE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpNEBinaryOp, UInt32, CreateICmpNE, "CmpNE")
@@ -145,6 +188,7 @@ WC_IMPL_BASIC_CMP_OP(CodegenCmpLTBinaryOp, Int16, CreateICmpSLT, "CmpLT")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpLTBinaryOp, Int32, CreateICmpSLT, "CmpLT")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpLTBinaryOp, Int64, CreateICmpSLT, "CmpLT")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpLTBinaryOp, Int8, CreateICmpSLT, "CmpLT")
+WC_IMPL_PTR_CMP_OP(CodegenCmpLTBinaryOp, CreateICmpSLT, "CmpLT")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpLTBinaryOp, UInt128, CreateICmpULT, "CmpLT")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpLTBinaryOp, UInt16, CreateICmpULT, "CmpLT")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpLTBinaryOp, UInt32, CreateICmpULT, "CmpLT")
@@ -174,6 +218,7 @@ WC_IMPL_BASIC_CMP_OP(CodegenCmpLEBinaryOp, Int16, CreateICmpSLE, "CmpLE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpLEBinaryOp, Int32, CreateICmpSLE, "CmpLE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpLEBinaryOp, Int64, CreateICmpSLE, "CmpLE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpLEBinaryOp, Int8, CreateICmpSLE, "CmpLE")
+WC_IMPL_PTR_CMP_OP(CodegenCmpLEBinaryOp, CreateICmpSLE, "CmpLE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpLEBinaryOp, UInt128, CreateICmpULE, "CmpLE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpLEBinaryOp, UInt16, CreateICmpULE, "CmpLE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpLEBinaryOp, UInt32, CreateICmpULE, "CmpLE")
@@ -203,6 +248,7 @@ WC_IMPL_BASIC_CMP_OP(CodegenCmpGTBinaryOp, Int16, CreateICmpSGT, "CmpGT")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpGTBinaryOp, Int32, CreateICmpSGT, "CmpGT")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpGTBinaryOp, Int64, CreateICmpSGT, "CmpGT")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpGTBinaryOp, Int8, CreateICmpSGT, "CmpGT")
+WC_IMPL_PTR_CMP_OP(CodegenCmpGTBinaryOp, CreateICmpSGT, "CmpGT")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpGTBinaryOp, UInt128, CreateICmpUGT, "CmpGT")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpGTBinaryOp, UInt16, CreateICmpUGT, "CmpGT")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpGTBinaryOp, UInt32, CreateICmpUGT, "CmpGT")
@@ -232,6 +278,7 @@ WC_IMPL_BASIC_CMP_OP(CodegenCmpGEBinaryOp, Int16, CreateICmpSGE, "CmpGE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpGEBinaryOp, Int32, CreateICmpSGE, "CmpGE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpGEBinaryOp, Int64, CreateICmpSGE, "CmpGE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpGEBinaryOp, Int8, CreateICmpSGE, "CmpGE")
+WC_IMPL_PTR_CMP_OP(CodegenCmpGEBinaryOp, CreateICmpSGE, "CmpGE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpGEBinaryOp, UInt128, CreateICmpUGE, "CmpGE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpGEBinaryOp, UInt16, CreateICmpUGE, "CmpGE")
 WC_IMPL_BASIC_CMP_OP(CodegenCmpGEBinaryOp, UInt32, CreateICmpUGE, "CmpGE")

@@ -30,6 +30,7 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
         }\
         \
         CompiledDataType compiledType = mCG.mCtx.popCompiledDataType();\
+        WC_ASSERT(compiledType.isValid());\
         \
         /* Generate the op result and push it */\
         llvm::Constant * cmpResult = llvm::ConstantExpr::ConstCmpExprGetterFunc(\

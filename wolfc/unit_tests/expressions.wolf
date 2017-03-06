@@ -279,6 +279,35 @@ func testCmpExpr()
     assert(1234 is not 5678)
     assert(not 1234 is not 1234)
 
+    ; Pointer comparison tests 
+    scope
+        ; All permutations of comparisons
+        let theArray = [ 10, 20, 30, 40, 50 ]
+        let a = &theArray[1]
+        let b = &theArray[2]
+        let c = &theArray[2]
+        let d = &theArray[3]
+        assert(a < b and a <= b and not a == b and a != b and not a >= b and not a > b)
+        assert(a < c and a <= c and not a == c and a != c and not a >= c and not a > c)
+        assert(a < d and a <= d and not a == d and a != d and not a >= d and not a > d)
+        assert(not b < a and not b <= a and not b == a and b != a and b >= a and b > a)
+        assert(not b < c and b <= c and b == c and not b != c and b >= c and not b > c)
+        assert(b < d and b <= d and not b == d and b != d and not b >= d and not b > d)
+        assert(not c < a and not c <= a and not c == a and c != a and c >= a and c > a)
+        assert(not c < b and c <= b and c == b and not c != b and c >= b and not c > b)
+        assert(c < d and c <= d and not c == d and c != d and not c >= d and not c > d)
+        assert(not d < a and not d <= a and not d == a and d != a and d >= a and d > a)
+        assert(not d < b and not d <= b and not d == b and d != b and d >= b and d > b)
+        assert(not d < c and not d <= c and not d == c and d != c and d >= c and d > c)
+
+        ; Make sure even a 1 byte offset matters
+        ; Also use this opportunity to sneak in a '^int' vs '?int' comparison
+        let e = cast(cast(&theArray[2] to int) + 1 to ?int64)
+        let f = cast(cast(&theArray[2] to int) - 1 to ?int64)
+        assert(b < e)
+        assert(b > f)
+    end
+
     ; Make sure the constant expression tests pass
     let testNum = 0
     while testNum < 26

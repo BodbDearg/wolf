@@ -1,4 +1,6 @@
-- Pointer comparisons
+- Pointer comparisons and unit tests
+	- Runtime
+	- Compile time
 - Implement implicit type promotion to bool for:
 	- while
 	- if
