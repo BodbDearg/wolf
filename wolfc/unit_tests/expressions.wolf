@@ -311,7 +311,21 @@ let testAddExprConstexpr = [
     ; Test: bitwise xor
     1 ^ 2 == 3,
     1 ^ 1 == 0,
-    0 ^ 1 == 1
+    0 ^ 1 == 1,
+
+    ; Test: pointer add
+    cast(cast(32 to ^int64) + 2 to int) == 48,
+    cast(cast(32 to ^int8) + 2 to int) == 34,
+
+    ; Test: pointer sub
+    cast(cast(32 to ^int64) - 2 to int) == 16,
+    cast(cast(32 to ^int8) - 2 to int) == 30,
+
+    ; Test: pointer difference
+    cast(32 to ^int32) - cast(20 to ^int32) == 3,
+    cast(32 to ^int32) - cast(40 to ^int32) == -2,
+    cast(32 to ^int8) - cast(20 to ^int8) == 12,
+    cast(32 to ^int8) - cast(40 to ^int8) == -8
 ]
 
 func testAddExpr()
@@ -337,9 +351,25 @@ func testAddExpr()
     assert(1 ^ 1 == 0)
     assert(0 ^ 1 == 1)
 
+    ; Test: pointer add and subtract
+    let theArray = [ 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 ]
+    let ptr = &theArray[5]
+
+    assert($ptr == 50)
+    assert($(ptr + 1) == 60)
+    assert($(ptr + 2) == 70)
+    assert($(ptr - 2) == 30)
+    assert($(ptr - 1) == 40)
+
+    ; Test: pointer difference
+    let ptr2 = &theArray[7]
+    let ptr1 = cast(&theArray[3] to ?int)
+    assert(ptr - ptr2 == -2)
+    assert(ptr - ptr1 == 2)
+
     ; Make sure the constant expression tests pass
     let testNum = 0
-    while testNum < 14
+    while testNum < 22
         assert(testAddExprConstexpr[testNum])
         testNum++
     end
@@ -566,7 +596,7 @@ let testPostfixExprConstexpr = [
 ]
 
 func testPostfixExpr()
-    ; Increment and decrement
+    ; Test: increment and decrement
     let i = 0
     i++ 
     assert(i == 1)
@@ -579,7 +609,7 @@ func testPostfixExpr()
     i--
     assert(i == -1)
 
-    ; Function calls
+    ; Test: function calls
     assert(testPostfixExprFuncCall1() == 5)
     assert(testPostfixExprFuncCall1() == testPostfixExprFuncCall1())
     assert(testPostfixExprFuncCall2(5) == 25)
@@ -589,7 +619,7 @@ func testPostfixExpr()
     assert(testPostfixExprFuncCall4([1, 2, 3])[2] == 3)
     assert(testPostfixExprFuncCall5(1, 2, 3) == 6)
     
-    ; Array indexing
+    ; Test: array indexing
     let array1 = [ 1, 2, 3, 4]
     assert(array1[0] == 1)
     assert(array1[1] == 2)
@@ -605,7 +635,7 @@ func testPostfixExpr()
     assert(array2[1][0] == 7)
     assert(array2[1][1] == 8)
 
-    ; Pointer increment and decrement
+    ; Test: pointer increment and decrement
     let ptr = &array1[2]
     assert($ptr == 3)
     ptr++

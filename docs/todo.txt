@@ -7,6 +7,8 @@
 	- next if/break if
 	- ternary operator
 	- logical and/or and not
+- Allow an extra ',' at the end of array literals
+	- Also write a test for this
 - Implicit casting of pointers to 'any' pointers
 - Implement and unit test implicit casting on 'return'
 - [] operator should dereference pointers
@@ -18,11 +20,6 @@
 - Unit test implicit casting of 'null'
 	- This DOESN'T WORK:
 		let blah : bool = null
-- Unit test pointer arithmetic
-	- add/sub
-	- ptr distance
-	- At runtime
-	- At compile time
 - Unit test various runtime integer implicit casting
 - Unit test implicit cast of pointers to bool
 - Unit test cast int to pointers
