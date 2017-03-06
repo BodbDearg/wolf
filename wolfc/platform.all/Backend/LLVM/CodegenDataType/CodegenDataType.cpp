@@ -92,8 +92,10 @@ void CodegenDataType::visitASTNode(const AST::Func & func) {
         mCtx.setNodeEvaluatedDataType(func, ownershipPtr);
     }
     
-    // Codegen the func data type
-    funcDataType->accept(*this);
+    // Codegen the func data type itself if everything is good
+    if (funcDataType->areAllArgsAndReturnTypesValid()) {
+        funcDataType->accept(*this);
+    }
 }
 
 void CodegenDataType::visitASTNode(const AST::FuncArg & funcArg) {
@@ -270,7 +272,7 @@ void CodegenDataType::visit(const BoolDataType & dataType) {
 }
 
 void CodegenDataType::visit(const FuncDataType & dataType) {
-    // Codegen the return type
+    // Codegen the return type if it is valid
     dataType.mReturnType.accept(*this);
     CompiledDataType returnTypeCDT = mCtx.popCompiledDataType();
     

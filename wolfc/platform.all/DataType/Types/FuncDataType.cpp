@@ -103,4 +103,18 @@ bool FuncDataType::isFunc() const {
     return true;
 }
 
+bool FuncDataType::areAllArgsAndReturnTypesValid() const {
+    if (!mReturnType.isValid()) {
+        return false;
+    }
+    
+    for (const DataType * argDataType : mArgTypes) {
+        if (!argDataType->isValid()) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
 WC_END_NAMESPACE

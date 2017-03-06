@@ -162,8 +162,9 @@ void Codegen::visit(const AST::Func & astNode) {
     // Get the val holder for the function scope, will register the function argument variables in this
     ValHolder & funcValHolder = mCtx.getScopeValHolder(astNode.getScope());
     
-    // Register the function arguments for lookup by variables:
-    {
+    // Register the function arguments for lookup by variables.
+    // If code generating the function signature failed then skip this step:
+    if (fnCompiledTy.isValid()) {
         auto & llvmArgList = llvmFn->getArgumentList();
         auto & funcArgs = astNode.getArgs();
         

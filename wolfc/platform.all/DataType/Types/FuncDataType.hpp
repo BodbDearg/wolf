@@ -26,6 +26,9 @@ public:
     virtual bool isValid() const override;
     virtual bool isFunc() const override;
     
+    /* Tells if all args and return types for the function are valid */
+    bool areAllArgsAndReturnTypesValid() const;
+    
     /* The return type for the function */
     const DataType & mReturnType;
     

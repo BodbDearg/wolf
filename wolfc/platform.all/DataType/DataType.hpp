@@ -39,7 +39,7 @@ public:
     
     /**
      * Tells if the data type is valid. 
-     * Returns 'true' for all data types except unknown data types.
+     * Returns 'true' for all data types except invalid ones which can't be used.
      */
     virtual bool isValid() const;
     
