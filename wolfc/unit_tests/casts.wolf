@@ -5,7 +5,7 @@
 ;==================================================================================================
 
 ;==================================================================================================
-; Cast from int128
+; Test: cast from int128
 ;==================================================================================================
 let castFrom_i128_to_i = cast(0x20000_i128 to int)
 let castFrom_i128_to_i8 = cast(100_i128 to int8)
@@ -36,7 +36,7 @@ func testCastFromInt128()
 end
 
 ;==================================================================================================
-; Cast from int64
+; Test: cast from int64
 ;==================================================================================================
 let castFrom_i64_to_i = cast(0x20000_i64 to int)
 let castFrom_i64_to_i8 = cast(100_i64 to int8)
@@ -67,7 +67,7 @@ func testCastFromInt64()
 end
 
 ;==================================================================================================
-; Cast from int32
+; Test: cast from int32
 ;==================================================================================================
 let castFrom_i32_to_i = cast(0x20000_i32 to int)
 let castFrom_i32_to_i8 = cast(100_i32 to int8)
@@ -98,7 +98,7 @@ func testCastFromInt32()
 end
 
 ;==================================================================================================
-; Cast from int16
+; Test: cast from int16
 ;==================================================================================================
 let castFrom_i16_to_i = cast(0x2000_i16 to int)
 let castFrom_i16_to_i8 = cast(100_i16 to int8)
@@ -129,7 +129,7 @@ func testCastFromInt16()
 end
 
 ;==================================================================================================
-; Cast from int8
+; Test: cast from int8
 ;==================================================================================================
 let castFrom_i8_to_i = cast(0x20_i8 to int)
 let castFrom_i8_to_i8 = cast(100_i8 to int8)
@@ -160,7 +160,42 @@ func testCastFromInt8()
 end
 
 ;==================================================================================================
-; Cast from Ptr
+; Test: cast from Nullptr
+;==================================================================================================
+let castFrom_nullptr_to_i = cast(null to int)
+let castFrom_nullptr_to_i8 = cast(null to int8)
+let castFrom_nullptr_to_i16 = cast(null to int16)
+let castFrom_nullptr_to_i32 = cast(null to int32)
+let castFrom_nullptr_to_i64 = cast(null to int64)
+let castFrom_nullptr_to_i128 = cast(null to int128)
+let castFrom_nullptr_to_u = cast(null to uint)
+let castFrom_nullptr_to_u8 = cast(null to uint8)
+let castFrom_nullptr_to_u16 = cast(null to uint16)
+let castFrom_nullptr_to_u32 = cast(null to uint32)
+let castFrom_nullptr_to_u64 = cast(null to uint64)
+let castFrom_nullptr_to_u128 = cast(null to uint128)
+let castFrom_nullptr_to_ptr1 = cast(cast(null to ^int) to int)
+let castFrom_nullptr_to_ptr2 = cast(cast(null to ?bool) to int)
+
+func testCastFromNullptr()
+    assert(castFrom_nullptr_to_i == cast(null to int))
+    assert(castFrom_nullptr_to_i8 == cast(null to int8))
+    assert(castFrom_nullptr_to_i16 == cast(null to int16))
+    assert(castFrom_nullptr_to_i32 == cast(null to int32))
+    assert(castFrom_nullptr_to_i64 == cast(null to int64))
+    assert(castFrom_nullptr_to_i128 == cast(null to int128))
+    assert(castFrom_nullptr_to_u == cast(null to uint))
+    assert(castFrom_nullptr_to_u8 == cast(null to uint8))
+    assert(castFrom_nullptr_to_u16 == cast(null to uint16))
+    assert(castFrom_nullptr_to_u32 == cast(null to uint32))
+    assert(castFrom_nullptr_to_u64 == cast(null to uint64))
+    assert(castFrom_nullptr_to_u128 == cast(null to uint128))
+    assert(castFrom_nullptr_to_ptr1 == cast(cast(null to ^int) to int))
+    assert(castFrom_nullptr_to_ptr2 == cast(cast(null to ?bool) to int))
+end
+
+;==================================================================================================
+; Test: cast from Ptr
 ;==================================================================================================
 let castFromPtr_to_i = cast(cast(1 to ^int) to int)
 let castFromPtr_to_i8 = cast(cast(2 to ?int) to int8)
@@ -205,7 +240,7 @@ func testCastFromPtr()
 end
 
 ;==================================================================================================
-; Cast from uint128
+; Test: cast from uint128
 ;==================================================================================================
 let castFrom_u128_to_i = cast(0x20000_u128 to int)
 let castFrom_u128_to_i8 = cast(100_u128 to int8)
@@ -236,7 +271,7 @@ func testCastFromUInt128()
 end
 
 ;==================================================================================================
-; Cast from uint64
+; Test: cast from uint64
 ;==================================================================================================
 let castFrom_u64_to_i = cast(0x20000_u64 to int)
 let castFrom_u64_to_i8 = cast(100_u64 to int8)
@@ -267,7 +302,7 @@ func testCastFromUInt64()
 end
 
 ;==================================================================================================
-; Cast from uint32
+; Test: cast from uint32
 ;==================================================================================================
 let castFrom_u32_to_i = cast(0x20000_u32 to int)
 let castFrom_u32_to_i8 = cast(100_u32 to int8)
@@ -298,7 +333,7 @@ func testCastFromUInt32()
 end
 
 ;==================================================================================================
-; Cast from uint16
+; Test: cast from uint16
 ;==================================================================================================
 let castFrom_u16_to_i = cast(0x2000_u16 to int)
 let castFrom_u16_to_i8 = cast(100_U16 to int8)
@@ -329,7 +364,7 @@ func testCastFromUInt16()
 end
 
 ;==================================================================================================
-; Cast from uint8
+; Test: cast from uint8
 ;==================================================================================================
 let castFrom_u8_to_i = cast(0x20_u8 to int)
 let castFrom_u8_to_i8 = cast(100_U8 to int8)
@@ -368,6 +403,7 @@ func main() -> int
     testCastFromInt32()
     testCastFromInt16()
     testCastFromInt8()
+    testCastFromNullptr()
     testCastFromPtr()
     testCastFromUInt128()
     testCastFromUInt64()
