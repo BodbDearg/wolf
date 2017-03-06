@@ -4,13 +4,12 @@
 ;       See LICENSE.txt for license details.
 ;==================================================================================================
 
-func blahFunc(v1: ^int)
-    let v1AsInt = cast(v1 to bool)
+func blahFunc()
+    let v1AsInt = cast(1u8 to ?int)
     print(v1AsInt)
 end
 
 func main() -> int
-    let blahArray = [1, 2, 3, 4]
-    blahFunc(&blahArray[1])
+    blahFunc()
     return 0
 end
