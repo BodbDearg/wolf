@@ -1,4 +1,5 @@
 - Const cast pointers to int and visa versa
+	- Including 'null'
 - Casting integers to pointers
 - Implicit casting of pointers to 'any' pointers
 - [] operator should dereference pointers
@@ -20,12 +21,14 @@
 - Unit test various runtime integer implicit casting
 - Unit test implicit cast of pointers to bool
 - Unit test cast pointers to bool
+	- Including 'null'
 	- At runtime
 	- At compile time
 - Unit test cast int to pointers
 	- At runtime
 	- At compile time
 - Unit test cast pointer to int
+	- Including 'null'
 	- At runtime
 	- At compile time
 - Unit test allowed compile time implicit casts

@@ -286,15 +286,6 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
-    #warning TODO: nullptr: allow cast to bool
-    virtual void visit(const PtrDataType & dataType) override {
-        // Just do a simple pointer cast
-        WC_UNUSED_PARAM(dataType);
-        llvm::Constant * llvmValCast = llvm::Constant::getNullValue(mToTypeCDT.getLLVMType());
-        WC_ASSERT(llvmValCast);
-        mCG.mCtx.pushValue(Value(llvmValCast, mToTypeCDT, false, mCG.mCtx.getCurrentASTNode()));
-    }
-    
     WC_IMPL_BASIC_CAST(CreatePtrToInt, Int8)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, Int16)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, Int32)
@@ -305,6 +296,22 @@ public:
     WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt32)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt64)
     WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt128)
+    
+    virtual void visit(const BoolDataType & dataType) override {
+        // 'null' will always equate to 'false' so just fastrack that comparison here
+        WC_UNUSED_PARAM(dataType);
+        llvm::Constant * falseConst = llvm::ConstantInt::get(llvm::Type::getInt1Ty(mCG.mCtx.mLLVMCtx), 0);
+        WC_ASSERT(falseConst);
+        mCG.mCtx.pushValue(Value(falseConst, mToTypeCDT, false, mCG.mCtx.getCurrentASTNode()));
+    }
+    
+    virtual void visit(const PtrDataType & dataType) override {
+        // Just do a simple pointer cast
+        WC_UNUSED_PARAM(dataType);
+        llvm::Constant * llvmValCast = llvm::Constant::getNullValue(mToTypeCDT.getLLVMType());
+        WC_ASSERT(llvmValCast);
+        mCG.mCtx.pushValue(Value(llvmValCast, mToTypeCDT, false, mCG.mCtx.getCurrentASTNode()));
+    }
 };
 
 //-----------------------------------------------------------------------------
