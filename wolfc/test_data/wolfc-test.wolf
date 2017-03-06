@@ -4,9 +4,13 @@
 ;       See LICENSE.txt for license details.
 ;==================================================================================================
 
+func blahFunc(v1: ^int)
+    let v1AsInt = cast(v1 to int) + 2
+    print(v1AsInt)
+end
+
 func main() -> int
-    let blah = [1, 2, 3, 4]
-    let diff = &blah[3] - &blah[1]
-    print(diff)
+    let blahArray = [1, 2, 3, 4]
+    blahFunc(&blahArray[1])
     return 0
 end

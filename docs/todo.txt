@@ -19,6 +19,15 @@
 	- ptr distance
 - Unit test various runtime integer implicit casting
 - Unit test implicit cast of pointers to bool
+- Unit test cast pointers to bool
+	- At runtime
+	- At compile time
+- Unit test cast int to pointers
+	- At runtime
+	- At compile time
+- Unit test cast pointer to int
+	- At runtime
+	- At compile time
 - Unit test allowed compile time implicit casts
 	- Especially for ints
 - Unit test implicit casting non nullable pointer to nullable pointer of the same type

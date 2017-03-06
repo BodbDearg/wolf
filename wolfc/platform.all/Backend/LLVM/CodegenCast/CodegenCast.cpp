@@ -286,7 +286,7 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
-    #warning TODO: nullptr: allow cast to bool and integers
+    #warning TODO: nullptr: allow cast to bool
     virtual void visit(const PtrDataType & dataType) override {
         // Just do a simple pointer cast
         WC_UNUSED_PARAM(dataType);
@@ -294,6 +294,17 @@ public:
         WC_ASSERT(llvmValCast);
         mCG.mCtx.pushValue(Value(llvmValCast, mToTypeCDT, false, mCG.mCtx.getCurrentASTNode()));
     }
+    
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, Int8)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, Int16)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, Int32)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, Int64)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, Int128)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt8)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt16)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt32)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt64)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt128)
 };
 
 //-----------------------------------------------------------------------------
@@ -307,7 +318,7 @@ public:
         WC_EMPTY_FUNC_BODY();
     }
     
-    #warning TODO: nullptr: allow cast to bool and integers
+    #warning TODO: nullptr: allow cast to bool
     virtual void visit(const PtrDataType & dataType) override {
         // Just do a simple pointer cast
         WC_UNUSED_PARAM(dataType);
@@ -315,6 +326,18 @@ public:
         WC_ASSERT(llvmValCast);
         mCG.mCtx.pushValue(Value(llvmValCast, mToTypeCDT, false, mCG.mCtx.getCurrentASTNode()));
     }
+    
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, Bool)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, Int8)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, Int16)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, Int32)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, Int64)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, Int128)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt8)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt16)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt32)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt64)
+    WC_IMPL_BASIC_CAST(CreatePtrToInt, UInt128)
 };
 
 //-----------------------------------------------------------------------------
