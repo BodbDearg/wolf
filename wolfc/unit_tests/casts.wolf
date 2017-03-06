@@ -19,6 +19,7 @@ let castFrom_i128_to_u16 = cast(20000_i128 to uint16)
 let castFrom_i128_to_u32 = cast(0x7f00_0000_i128 to uint32)
 let castFrom_i128_to_u64 = cast(0x0f00_0000_1000_0000i128 to uint64)
 let castFrom_i128_to_u128 = cast(1_000_000_000_000_000_000_000i128 to uint128)
+let castFrom_i128_to_ptr = cast(20000_i128 to ^uint128)
 
 func testCastFromInt128()
     assert(castFrom_i128_to_i == cast(0x20000_i128 to int))
@@ -33,6 +34,7 @@ func testCastFromInt128()
     assert(castFrom_i128_to_u32 == cast(0x7f00_0000_i128 to uint32))
     assert(castFrom_i128_to_u64 == cast(0x0f00_0000_1000_0000i128 to uint64))
     assert(castFrom_i128_to_u128 == cast(1_000_000_000_000_000_000_000i128 to uint128))
+    assert(castFrom_i128_to_ptr == cast(20000_i128 to ^uint128))
 end
 
 ;==================================================================================================
@@ -50,6 +52,7 @@ let castFrom_i64_to_u16 = cast(20000_i64 to uint16)
 let castFrom_i64_to_u32 = cast(0x7f00_0000_i64 to uint32)
 let castFrom_i64_to_u64 = cast(0x0f00_0000_1000_0000i64 to uint64)
 let castFrom_i64_to_u128 = cast(9_223_372_036_854_775_807_i64 to uint128)
+let castFrom_i64_to_ptr = cast(0x7f00_0000_i64 to ?bool)
 
 func testCastFromInt64()
     assert(castFrom_i64_to_i == cast(0x20000_i64 to int))
@@ -64,6 +67,7 @@ func testCastFromInt64()
     assert(castFrom_i64_to_u32 == cast(0x7f00_0000_i64 to uint32))
     assert(castFrom_i64_to_u64 == cast(0x0f00_0000_1000_0000i64 to uint64))
     assert(castFrom_i64_to_u128 == cast(9_223_372_036_854_775_807_i64 to uint128))
+    assert(castFrom_i64_to_ptr == cast(0x7f00_0000_i64 to ?bool))
 end
 
 ;==================================================================================================
@@ -81,6 +85,7 @@ let castFrom_i32_to_u16 = cast(20000_i32 to uint16)
 let castFrom_i32_to_u32 = cast(0x7f00_0000_i32 to uint32)
 let castFrom_i32_to_u64 = cast(0x1f00_0000I32 to uint64)
 let castFrom_i32_to_u128 = cast(2_147_483_647_i32 to uint128)
+let castFrom_i32_to_ptr = cast(100_i32 to ^int8)
 
 func testCastFromInt32()
     assert(castFrom_i32_to_i == cast(0x20000_i32 to int))
@@ -95,6 +100,7 @@ func testCastFromInt32()
     assert(castFrom_i32_to_u32 == cast(0x7f00_0000_i32 to uint32))
     assert(castFrom_i32_to_u64 == cast(0x1f00_0000I32 to uint64))
     assert(castFrom_i32_to_u128 == cast(2_147_483_647_i32 to uint128))
+    assert(castFrom_i32_to_ptr == cast(100_i32 to ^int8))
 end
 
 ;==================================================================================================
@@ -112,6 +118,7 @@ let castFrom_i16_to_u16 = cast(20000_i16 to uint16)
 let castFrom_i16_to_u32 = cast(0x7f00_i16 to uint32)
 let castFrom_i16_to_u64 = cast(0x7FFF_i16 to uint64)
 let castFrom_i16_to_u128 = cast(33_333_i16 to uint128)
+let castFrom_i16_to_ptr = cast(0x7f00_i16 to ^uint32)
 
 func testCastFromInt16()
     assert(castFrom_i16_to_i == cast(0x2000_i16 to int))
@@ -126,6 +133,7 @@ func testCastFromInt16()
     assert(castFrom_i16_to_u32 == cast(0x7f00_i16 to uint32))
     assert(castFrom_i16_to_u64 == cast(0x7FFF_i16 to uint64))
     assert(castFrom_i16_to_u128 == cast(33_333_i16 to uint128))
+    assert(castFrom_i16_to_ptr == cast(0x7f00_i16 to ^uint32))
 end
 
 ;==================================================================================================
@@ -143,6 +151,7 @@ let castFrom_i8_to_u16 = cast(200_i8 to uint16)
 let castFrom_i8_to_u32 = cast(0x7f_i8 to uint32)
 let castFrom_i8_to_u64 = cast(0x80_i8 to uint64)
 let castFrom_i8_to_u128 = cast(33_i8 to uint128)
+let castFrom_i8_to_ptr = cast(33_i8 to ?uint128)
 
 func testCastFromInt8()
     assert(castFrom_i8_to_i == cast(0x20_i8 to int))
@@ -157,6 +166,7 @@ func testCastFromInt8()
     assert(castFrom_i8_to_u32 == cast(0x7f_i8 to uint32))
     assert(castFrom_i8_to_u64 == cast(0x80_i8 to uint64))
     assert(castFrom_i8_to_u128 == cast(33_i8 to uint128))
+    assert(castFrom_i8_to_ptr == cast(33_i8 to ?uint128))
 end
 
 ;==================================================================================================
@@ -254,6 +264,7 @@ let castFrom_u128_to_u16 = cast(20000_u128 to uint16)
 let castFrom_u128_to_u32 = cast(0x7f00_0000_u128 to uint32)
 let castFrom_u128_to_u64 = cast(0x0f00_0000_1000_0000u128 to uint64)
 let castFrom_u128_to_u128 = cast(1_000_000_000_000_000_000_000u128 to uint128)
+let castFrom_u128_to_ptr = cast(20000_u128 to ?uint16)
 
 func testCastFromUInt128()
     assert(castFrom_u128_to_i == cast(0x20000_u128 to int))
@@ -268,6 +279,7 @@ func testCastFromUInt128()
     assert(castFrom_u128_to_u32 == cast(0x7f00_0000_u128 to uint32))
     assert(castFrom_u128_to_u64 == cast(0x0f00_0000_1000_0000u128 to uint64))
     assert(castFrom_u128_to_u128 == cast(1_000_000_000_000_000_000_000u128 to uint128))
+    assert(castFrom_u128_to_ptr == cast(20000_u128 to ?uint16))
 end
 
 ;==================================================================================================
@@ -285,6 +297,7 @@ let castFrom_u64_to_u16 = cast(20000_u64 to uint16)
 let castFrom_u64_to_u32 = cast(0x7f00_0000_u64 to uint32)
 let castFrom_u64_to_u64 = cast(0x0f00_0000_1000_0000u64 to uint64)
 let castFrom_u64_to_u128 = cast(9_223_372_036_854_775_807_u64 to uint128)
+let castFrom_u64_to_ptr = cast(0x7f00_0000_u64 to ?uint32)
 
 func testCastFromUInt64()
     assert(castFrom_u64_to_i == cast(0x20000_u64 to int))
@@ -299,6 +312,7 @@ func testCastFromUInt64()
     assert(castFrom_u64_to_u32 == cast(0x7f00_0000_u64 to uint32))
     assert(castFrom_u64_to_u64 == cast(0x0f00_0000_1000_0000u64 to uint64))
     assert(castFrom_u64_to_u128 == cast(9_223_372_036_854_775_807_u64 to uint128))
+    assert(castFrom_u64_to_ptr == cast(0x7f00_0000_u64 to ?uint32))
 end
 
 ;==================================================================================================
@@ -316,6 +330,7 @@ let castFrom_u32_to_u16 = cast(20000_u32 to uint16)
 let castFrom_u32_to_u32 = cast(0x7f00_0000_u32 to uint32)
 let castFrom_u32_to_u64 = cast(0x1f00_0000u32 to uint64)
 let castFrom_u32_to_u128 = cast(2_147_483_647_u32 to uint128)
+let castFrom_u32_to_ptr = cast(100_u32 to ?uint8)
 
 func testCastFromUInt32()
     assert(castFrom_u32_to_i == cast(0x20000_u32 to int))
@@ -330,6 +345,7 @@ func testCastFromUInt32()
     assert(castFrom_u32_to_u32 == cast(0x7f00_0000_u32 to uint32))
     assert(castFrom_u32_to_u64 == cast(0x1f00_0000u32 to uint64))
     assert(castFrom_u32_to_u128 == cast(2_147_483_647_u32 to uint128))
+    assert(castFrom_u32_to_ptr == cast(100_u32 to ?uint8))
 end
 
 ;==================================================================================================
@@ -347,6 +363,7 @@ let castFrom_u16_to_u16 = cast(20000_u16 to uint16)
 let castFrom_u16_to_u32 = cast(0x7f00_U16 to uint32)
 let castFrom_u16_to_u64 = cast(0x7FFF_u16 to uint64)
 let castFrom_u16_to_u128 = cast(33_333_u16 to uint128)
+let castFrom_u16_to_ptr = cast(0x7FFF_u16 to ^uint64)
 
 func testCastFromUInt16()
     assert(castFrom_u16_to_i == cast(0x2000_u16 to int))
@@ -361,6 +378,7 @@ func testCastFromUInt16()
     assert(castFrom_u16_to_u32 == cast(0x7f00_u16 to uint32))
     assert(castFrom_u16_to_u64 == cast(0x7FFF_u16 to uint64))
     assert(castFrom_u16_to_u128 == cast(33_333_u16 to uint128))
+    assert(castFrom_u16_to_ptr == cast(0x7FFF_u16 to ^uint64))
 end
 
 ;==================================================================================================
@@ -378,6 +396,7 @@ let castFrom_u8_to_u16 = cast(200_U8 to uint16)
 let castFrom_u8_to_u32 = cast(0x7f_u8 to uint32)
 let castFrom_u8_to_u64 = cast(0x80_u8 to uint64)
 let castFrom_u8_to_u128 = cast(33_u8 to uint128)
+let castFrom_u8_to_ptr = cast(0x7f_u8 to ?uint32)
 
 func testCastFromUInt8()
     assert(castFrom_u8_to_i == cast(0x20_u8 to int))
@@ -392,6 +411,7 @@ func testCastFromUInt8()
     assert(castFrom_u8_to_u32 == cast(0x7f_u8 to uint32))
     assert(castFrom_u8_to_u64 == cast(0x80_u8 to uint64))
     assert(castFrom_u8_to_u128 == cast(33_u8 to uint128))
+    assert(castFrom_u8_to_ptr == cast(0x7f_u8 to ?uint32))
 end
 
 ;==================================================================================================

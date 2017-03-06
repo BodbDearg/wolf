@@ -1,4 +1,4 @@
-- Implement implicit type promotion to bool for:
+- Implement and test implicit type promotion to bool for:
 	- while
 	- if
 	- loop repeat
@@ -6,23 +6,20 @@
 	- next if/break if
 	- ternary operator
 	- logical and/or and not
+- Implement and unit test implicit casting on 'return'
 - Allow an extra ',' at the end of array literals
 	- Also write a test for this
 - Implicit casting of pointers to 'any' pointers
-- Implement and unit test implicit casting on 'return'
+- '! operator'
 - [] operator should dereference pointers
 - Don't allow dereference of nullable pointers
-- '! operator'
 - Emit a compile error if an integer literal can't fit in it's type
+
 - Unit test implicit casting of 'null'
 	- This DOESN'T WORK:
 		let blah : bool = null
 - Unit test various runtime integer implicit casting
 - Unit test implicit cast of pointers to bool
-- Unit test cast int to pointers
-	- Including 'null'
-	- At runtime
-	- At compile time
 - Unit test allowed compile time implicit casts
 	- Especially for ints
 - Unit test implicit casting non nullable pointer to nullable pointer of the same type
