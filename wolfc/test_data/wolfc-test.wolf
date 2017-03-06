@@ -5,7 +5,7 @@
 ;==================================================================================================
 
 func main() -> int
-    let blah : bool = null
+    let blah : bool = cast(null to ?int)
     print(blah)
     return 0
 end

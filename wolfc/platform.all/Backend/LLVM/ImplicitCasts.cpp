@@ -356,7 +356,7 @@ public:
     IMPL_CAST_TO_TYPE_ALWAYS_SUPPORTED(Bool)
     
     virtual void visit(const PtrDataType & dataType) override {
-        // Cast to a pointer type is allowe if the pointer is nullable
+        // Cast to a pointer type is allowed only if the pointer is nullable
         WC_UNUSED_PARAM(dataType);
         mCastAllowed = dataType.mIsNullable;
     }
@@ -374,6 +374,13 @@ public:
         CheckCastAllowedFromType(fromType, toType, fromConst)
     {
         WC_EMPTY_FUNC_BODY();
+    }
+    
+    virtual void visit(const BoolDataType & dataType) override {
+        // Implicit casts of pointers to bool is only allowed if the pointer is nullable
+        WC_UNUSED_PARAM(dataType);
+        const PtrDataType & fromPtrType = static_cast<const PtrDataType&>(mFromType.getDataType());
+        mCastAllowed = fromPtrType.mIsNullable;
     }
     
     virtual void visit(const PtrDataType & dataType) override {
