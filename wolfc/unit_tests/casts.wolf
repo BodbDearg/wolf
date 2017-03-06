@@ -160,6 +160,45 @@ func testCastFromInt8()
 end
 
 ;==================================================================================================
+; Cast from Ptr
+;==================================================================================================
+let castFromPtr_to_i = cast(cast(1 to ^int) to int)
+let castFromPtr_to_i8 = cast(cast(2 to ?int) to int8)
+let castFromPtr_to_i16 = cast(cast(3 to ^bool) to int16)
+let castFromPtr_to_i32 = cast(cast(4 to ?bool) to int32)
+let castFromPtr_to_i64 = cast(cast(5 to ^uint) to int64)
+let castFromPtr_to_i128 = cast(cast(6 to ?uint) to int128)
+let castFromPtr_to_u = cast(cast(1 to ^int) to uint)
+let castFromPtr_to_u8 = cast(cast(2 to ?int) to uint8)
+let castFromPtr_to_u16 = cast(cast(3 to ^bool) to uint16)
+let castFromPtr_to_u32 = cast(cast(4 to ?bool) to uint32)
+let castFromPtr_to_u64 = cast(cast(5 to ^uint) to uint64)
+let castFromPtr_to_u128 = cast(cast(6 to ?uint) to uint128)
+let castFromPtr_to_bool_1 = cast(cast(1 to ?uint) to bool)
+let castFromPtr_to_bool_2 = cast(cast(null to ?uint) to bool)
+
+func testCastFromPtr()
+    assert(castFromPtr_to_i == cast(cast(1 to ^int) to int))
+    assert(castFromPtr_to_i8 == cast(cast(2 to ?int) to int8))
+    assert(castFromPtr_to_i16 == cast(cast(3 to ^bool) to int16))
+    assert(castFromPtr_to_i32 == cast(cast(4 to ?bool) to int32))
+    assert(castFromPtr_to_i64 == cast(cast(5 to ^uint) to int64))
+    assert(castFromPtr_to_i128 == cast(cast(6 to ?uint) to int128))
+    assert(castFromPtr_to_u == cast(cast(1 to ^int) to uint))
+    assert(castFromPtr_to_u8 == cast(cast(2 to ?int) to uint8))
+    assert(castFromPtr_to_u16 == cast(cast(3 to ^bool) to uint16))
+    assert(castFromPtr_to_u32 == cast(cast(4 to ?bool) to uint32))
+    assert(castFromPtr_to_u64 == cast(cast(5 to ^uint) to uint64))
+    assert(castFromPtr_to_u128 == cast(cast(6 to ?uint) to uint128))
+    assert(castFromPtr_to_bool_1 = cast(cast(1 to ?uint) to bool))
+    assert(castFromPtr_to_bool_2 = cast(cast(null to ?uint) to bool))
+
+    ; Check the actual values in the case of conversion to bool
+    assert(castFromPtr_to_bool_1 is true)
+    assert(castFromPtr_to_bool_2 is false)
+end
+
+;==================================================================================================
 ; Cast from uint128
 ;==================================================================================================
 let castFrom_u128_to_i = cast(0x20000_u128 to int)
@@ -323,6 +362,7 @@ func main() -> int
     testCastFromInt32()
     testCastFromInt16()
     testCastFromInt8()
+    testCastFromPtr()
     testCastFromUInt128()
     testCastFromUInt64()
     testCastFromUInt32()
