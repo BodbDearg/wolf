@@ -9,7 +9,6 @@
 - Implement and unit test implicit casting on 'return'
 - Allow an extra ',' at the end of array literals
 	- Also write a test for this
-- Implicit casting of pointers to 'any' pointers
 - '! operator'
 - [] operator should dereference pointers
 - Don't allow dereference of nullable pointers
