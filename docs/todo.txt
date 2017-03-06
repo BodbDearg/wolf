@@ -20,10 +20,9 @@
 		let blah : bool = null
 - Unit test pointer arithmetic
 	- add/sub
-	- inc/dec
 	- ptr distance
 	- At runtime
-	- At compile time	
+	- At compile time
 - Unit test various runtime integer implicit casting
 - Unit test implicit cast of pointers to bool
 - Unit test cast int to pointers

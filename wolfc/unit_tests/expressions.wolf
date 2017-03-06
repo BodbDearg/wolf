@@ -605,6 +605,16 @@ func testPostfixExpr()
     assert(array2[1][0] == 7)
     assert(array2[1][1] == 8)
 
+    ; Pointer increment and decrement
+    let ptr = &array1[2]
+    assert($ptr == 3)
+    ptr++
+    assert($ptr == 4)
+    ptr--
+    assert($ptr == 3)
+    ptr--
+    assert($ptr == 99)
+
     ; Make sure the constant expression tests passed
     assert(testPostfixExprConstexpr[0])
     assert(testPostfixExprConstexpr[1])
