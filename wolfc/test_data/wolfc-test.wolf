@@ -4,7 +4,7 @@
 ;       See LICENSE.txt for license details.
 ;==================================================================================================
 
-let blah = cast(cast(null to ^int8) to bool)
+let blah = cast(1u8 to ^int8)
 
 func main() -> int
     return 0

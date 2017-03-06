@@ -30,6 +30,7 @@
 	- At runtime
 	- At compile time
 - Unit test cast int to pointers
+	- Including 'null'
 	- At runtime
 	- At compile time
 - Unit test cast pointer to int
