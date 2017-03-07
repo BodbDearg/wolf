@@ -185,18 +185,138 @@ end
 ; Test: cast from int32
 ;==================================================================================================
 func testCastFromInt32()
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is known at compile time:
+    ;----------------------------------------------------------------------------------------------
+
+    /; i128 < -i32 ;/   let val_i128: int128 = -2_147_483_648_i32
+    /; i128 < +i32 ;/   let val_i128_pos: int128 = 2_147_483_647_i32
+    /; i64  < -i32 ;/   let val_i64: int64 = -2_147_483_648_i32
+    /; i64  < +i32 ;/   let val_i64_pos: int64 = 2_147_483_647_i32
+    /; i32  < -i32 ;/   let val_i32: int32 = -2_147_483_648_i32
+    /; i32  < +i32 ;/   let val_i32_pos: int32 = 2_147_483_647_i32
+    /; i16  < -i32 ;/   let val_i16: int16 = -32_768_i32
+    /; i16  < +i32 ;/   let val_i16_pos: int16 = 32_767_i32
+    /; i8   < -i32 ;/   let val_i8: int8 = -128_i32
+    /; i8   < +i32 ;/   let val_i8_pos: int8 = 127_i32
+    /; u128 < -i32 ;/   ; Data loss! Not allowed.
+    /; u128 < +i32 ;/   let val_u128: uint128 = 2_147_483_647_i32
+    /; u64  < -i32 ;/   ; Data loss! Not allowed.
+    /; u64  < +i32 ;/   let val_u64: uint64 = 2_147_483_647_i32
+    /; u32  < -i32 ;/   ; Data loss! Not allowed.
+    /; u32  < +i32 ;/   let val_u32: uint32 = 2_147_483_647_i32
+    /; u16  < -i32 ;/   ; Data loss! Not allowed.
+    /; u16  < +i32 ;/   let val_u16: uint16 = 65535_i32
+    /; u8   < -i32 ;/   ; Data loss! Not allowed.
+    /; u8   < +i32 ;/   let val_u8: uint8 = 255_i32
+
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is not known at compile time:
+    ;----------------------------------------------------------------------------------------------
+    scope
+        /; i128 < i32 ;/    let val_i128: int128 = cast(rand() to int32)
+        /; i64  < i32 ;/    let val_i64: int64 = cast(rand() to int32)
+        /; i32  < i32 ;/    let val_i32: int32 = cast(rand() to int32)
+        /; i16  < i32 ;/    ; Potential Data loss! Not allowed.
+        /; i8   < i32 ;/    ; Potential Data loss! Not allowed.
+        /; u128 < i32 ;/    ; Potential Data loss! Not allowed.
+        /; u64  < i32 ;/    ; Potential Data loss! Not allowed.
+        /; u32  < i32 ;/    ; Potential Data loss! Not allowed.
+        /; u16  < i32 ;/    ; Potential Data loss! Not allowed.
+        /; u8   < i32 ;/    ; Potential Data loss! Not allowed.
+    end
 end
 
 ;==================================================================================================
 ; Test: cast from int16
 ;==================================================================================================
 func testCastFromInt16()
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is known at compile time:
+    ;----------------------------------------------------------------------------------------------
+
+    /; i128 < -i16 ;/   let val_i128: int128 = -32_768_i16
+    /; i128 < +i16 ;/   let val_i128_pos: int128 = 32_767_i16
+    /; i64  < -i16 ;/   let val_i64: int64 = -32_768_i16
+    /; i64  < +i16 ;/   let val_i64_pos: int64 = 32_767_i16
+    /; i32  < -i16 ;/   let val_i32: int32 = -32_768_i16
+    /; i32  < +i16 ;/   let val_i32_pos: int32 = 32_767_i16
+    /; i16  < -i16 ;/   let val_i16: int16 = -32_768_i16
+    /; i16  < +i16 ;/   let val_i16_pos: int16 = 32_767_i16
+    /; i8   < -i16 ;/   let val_i8: int8 = -128_i16
+    /; i8   < +i16 ;/   let val_i8_pos: int8 = 127_i16
+    /; u128 < -i16 ;/   ; Data loss! Not allowed.
+    /; u128 < +i16 ;/   let val_u128: uint128 = 32_767_i16
+    /; u64  < -i16 ;/   ; Data loss! Not allowed.
+    /; u64  < +i16 ;/   let val_u64: uint64 = 32_767_i16
+    /; u32  < -i16 ;/   ; Data loss! Not allowed.
+    /; u32  < +i16 ;/   let val_u32: uint32 = 32_767_i16
+    /; u16  < -i16 ;/   ; Data loss! Not allowed.
+    /; u16  < +i16 ;/   let val_u16: uint16 = 32_767_i16
+    /; u8   < -i16 ;/   ; Data loss! Not allowed.
+    /; u8   < +i16 ;/   let val_u8: uint8 = 255_i16
+
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is not known at compile time:
+    ;----------------------------------------------------------------------------------------------
+    scope
+        /; i128 < i16 ;/    let val_i128: int128 = cast(rand() to int16)
+        /; i64  < i16 ;/    let val_i64: int64 = cast(rand() to int16)
+        /; i32  < i16 ;/    let val_i32: int32 = cast(rand() to int16)
+        /; i16  < i16 ;/    let val_i16: int16 = cast(rand() to int16)
+        /; i8   < i16 ;/    ; Potential Data loss! Not allowed.
+        /; u128 < i16 ;/    ; Potential Data loss! Not allowed.
+        /; u64  < i16 ;/    ; Potential Data loss! Not allowed.
+        /; u32  < i16 ;/    ; Potential Data loss! Not allowed.
+        /; u16  < i16 ;/    ; Potential Data loss! Not allowed.
+        /; u8   < i16 ;/    ; Potential Data loss! Not allowed.
+    end
 end
 
 ;==================================================================================================
 ; Test: cast from int8
 ;==================================================================================================
 func testCastFromInt8()
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is known at compile time:
+    ;----------------------------------------------------------------------------------------------
+
+    /; i128 < -i8 ;/    let val_i128: int128 = -128_i8
+    /; i128 < +i8 ;/    let val_i128_pos: int128 = 127_i8
+    /; i64  < -i8 ;/    let val_i64: int64 = -128_i8
+    /; i64  < +i8 ;/    let val_i64_pos: int64 = 127_i8
+    /; i32  < -i8 ;/    let val_i32: int32 = -128_i8
+    /; i32  < +i8 ;/    let val_i32_pos: int32 = 127_i8
+    /; i16  < -i8 ;/    let val_i16: int16 = -128_i8
+    /; i16  < +i8 ;/    let val_i16_pos: int16 = 127_i8
+    /; i8   < -i8 ;/    let val_i8: int8 = -128_i8
+    /; i8   < +i8 ;/    let val_i8_pos: int8 = 127_i8
+    /; u128 < -i8 ;/    ; Data loss! Not allowed.
+    /; u128 < +i8 ;/    let val_u128: uint128 = 127_i8
+    /; u64  < -i8 ;/    ; Data loss! Not allowed.
+    /; u64  < +i8 ;/    let val_u64: uint64 = 127_i8
+    /; u32  < -i8 ;/    ; Data loss! Not allowed.
+    /; u32  < +i8 ;/    let val_u32: uint32 = 127_i8
+    /; u16  < -i8 ;/    ; Data loss! Not allowed.
+    /; u16  < +i8 ;/    let val_u16: uint16 = 127_i8
+    /; u8   < -i8 ;/    ; Data loss! Not allowed.
+    /; u8   < +i8 ;/    let val_u8: uint8 = 127_i8
+
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is not known at compile time:
+    ;----------------------------------------------------------------------------------------------
+    scope
+        /; i128 < i8 ;/     let val_i128: int128 = cast(rand() to int16)
+        /; i64  < i8 ;/     let val_i64: int64 = cast(rand() to int16)
+        /; i32  < i8 ;/     let val_i32: int32 = cast(rand() to int16)
+        /; i16  < i8 ;/     let val_i16: int16 = cast(rand() to int16)
+        /; i8   < i8 ;/     ; Potential Data loss! Not allowed.
+        /; u128 < i8 ;/     ; Potential Data loss! Not allowed.
+        /; u64  < i8 ;/     ; Potential Data loss! Not allowed.
+        /; u32  < i8 ;/     ; Potential Data loss! Not allowed.
+        /; u16  < i8 ;/     ; Potential Data loss! Not allowed.
+        /; u8   < i8 ;/     ; Potential Data loss! Not allowed.
+    end
 end
 
 ;==================================================================================================
