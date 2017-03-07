@@ -8,6 +8,46 @@
 ; Test: cast from int128
 ;==================================================================================================
 func testCastFromInt128()
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is known at compile time:
+    ;----------------------------------------------------------------------------------------------
+
+    /; i128 < -i128 ;/  let val_i128: int128 = ~0x7FFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_i128
+    /; i128 < +i128 ;/  let val_i128_pos: int128 = 0x7FFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_i128
+    /; i64  < -i128 ;/  let val_i64: int64 = -9_223_372_036_854_775_808_i128
+    /; i64  < +i128 ;/  let val_i64_pos: int64 = 9_223_372_036_854_775_807_i128
+    /; i32  < -i128 ;/  let val_i32: int32 = -2_147_483_648_i128
+    /; i32  < +i128 ;/  let val_i32_pos: int32 = 2_147_483_647_i128
+    /; i16  < -i128 ;/  let val_i16: int16 = -32_768_i128
+    /; i16  < +i128 ;/  let val_i16_pos: int16 = 32_767_i128
+    /; i8   < -i128 ;/  let val_i8: int8 = -128_i128
+    /; i8   < +i128 ;/  let val_i8_pos: int8 = 127_i128
+    /; u128 < -i128 ;/  ; Data loss! Not allowed.
+    /; u128 < +i128 ;/  let val_u128: uint128 = 0x7FFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_i128
+    /; u64  < -i128 ;/  ; Data loss! Not allowed.
+    /; u64  < +i128 ;/  let val_u64: uint64 = 18_446_744_073_709_551_615_i128
+    /; u32  < -i128 ;/  ; Data loss! Not allowed.
+    /; u32  < +i128 ;/  let val_u32: uint32 = 4_294_967_295_i128
+    /; u16  < -i128 ;/  ; Data loss! Not allowed.
+    /; u16  < +i128 ;/  let val_u16: uint16 = 65535_i128
+    /; u8   < -i128 ;/  ; Data loss! Not allowed.
+    /; u8   < +i128 ;/  let val_u8: uint8 = 255_i128
+
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is not known at compile time:
+    ;----------------------------------------------------------------------------------------------
+    scope
+        /; i128 < i128 ;/   let val_i128: int128 = cast(rand() to int128)
+        /; i64  < i128 ;/   ; Potential Data loss! Not allowed.
+        /; i32  < i128 ;/   ; Potential Data loss! Not allowed.
+        /; i16  < i128 ;/   ; Potential Data loss! Not allowed.
+        /; i8   < i128 ;/   ; Potential Data loss! Not allowed.
+        /; u128 < i128 ;/   ; Potential Data loss! Not allowed.
+        /; u64  < i128 ;/   ; Potential Data loss! Not allowed.
+        /; u32  < i128 ;/   ; Potential Data loss! Not allowed.
+        /; u16  < i128 ;/   ; Potential Data loss! Not allowed.
+        /; u8   < i128 ;/   ; Potential Data loss! Not allowed.
+    end
 end
 
 ;==================================================================================================

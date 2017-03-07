@@ -57,6 +57,7 @@ General:
     - 'type_func' type functions that operate types rather than variables.
         - Can use for template param type checking
         - Can return either a value or another type
+    - detect overflows, underflows in compile time expressions
 
 Modules:
     - Each translation unit compiles to a module stub
