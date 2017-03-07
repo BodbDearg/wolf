@@ -54,10 +54,12 @@ end
 ; Test: cast from int64
 ;==================================================================================================
 func testCastFromInt64()
+    ;----------------------------------------------------------------------------------------------
     ; Note: Doing a really really extensive test for the case of int64, which should be our most 
     ; common data type! For the other types we'll just to boundary case tests rather than such 
     ; exhaustive sweeps of all possible conversions. The same logic should be reused for other 
     ; integer types.
+    ;----------------------------------------------------------------------------------------------
 
     ;----------------------------------------------------------------------------------------------
     ; 1 way conversion where value is known at compile time:
@@ -335,6 +337,36 @@ end
 ; Test: cast from uint128
 ;==================================================================================================
 func testCastFromUInt128()
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is known at compile time:
+    ;----------------------------------------------------------------------------------------------
+
+    /; i128 < u128 ;/  let val_i128: int128 = 0x7FFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_u128
+    /; i64  < u128 ;/  let val_i64: int64 = 0x7FFF_FFFF_FFFF_FFFF_u128
+    /; i32  < u128 ;/  let val_i32: int32 = 0x7FFF_FFFF_u128
+    /; i16  < u128 ;/  let val_i16: int16 = 0x7FFF_u128
+    /; i8   < u128 ;/  let val_i8: int8 = 0x7F_u128
+    /; u128 < u128 ;/  let val_u128: uint128 = 0xFFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_u128
+    /; u64  < u128 ;/  let val_u64: uint64 = 0xFFFF_FFFF_FFFF_FFFF_u128
+    /; u32  < u128 ;/  let val_u32: uint32 = 0xFFFF_FFFF_u128
+    /; u16  < u128 ;/  let val_u16: uint16 = 0xFFFF_u128
+    /; u8   < u128 ;/  let val_u8: uint8 = 0xFF_u128
+
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is not known at compile time:
+    ;----------------------------------------------------------------------------------------------
+    scope
+        /; i128 < u128 ;/   ; Potential Data loss! Not allowed.   
+        /; i64  < u128 ;/   ; Potential Data loss! Not allowed.
+        /; i32  < u128 ;/   ; Potential Data loss! Not allowed.
+        /; i16  < u128 ;/   ; Potential Data loss! Not allowed.
+        /; i8   < u128 ;/   ; Potential Data loss! Not allowed.
+        /; u128 < u128 ;/   let val_u128: uint128 = cast(rand() to uint128)
+        /; u64  < u128 ;/   ; Potential Data loss! Not allowed.
+        /; u32  < u128 ;/   ; Potential Data loss! Not allowed.
+        /; u16  < u128 ;/   ; Potential Data loss! Not allowed.
+        /; u8   < u128 ;/   ; Potential Data loss! Not allowed.
+    end
 end
 
 ;==================================================================================================
