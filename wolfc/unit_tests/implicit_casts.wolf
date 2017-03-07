@@ -1,0 +1,221 @@
+;==================================================================================================
+; The Wolf Programming Language.
+;       Copyright (c) 2016, Darragh Coy.
+;       See LICENSE.txt for license details.
+;==================================================================================================
+
+;==================================================================================================
+; Test: cast from int128
+;==================================================================================================
+func testCastFromInt128()
+end
+
+;==================================================================================================
+; Test: cast from int64
+;==================================================================================================
+func testCastFromInt64()
+    ; Note: Doing a really really extensive test for the case of int64, which should be our most 
+    ; common data type! For the other types we'll just to boundary case tests rather than such 
+    ; exhaustive sweeps of all possible conversions. The same logic should be reused for other 
+    ; integer types.
+
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is known at compile time:
+    ;----------------------------------------------------------------------------------------------
+
+    /; i128 < -i64 ;/   let val_i128: int128 = -1_i64
+    /; i128 < +i64 ;/   let val_i128_pos: int128 = 0x7FFF_FFFF_FFFF_FFFF_i64
+    /; i64  < -i64 ;/   let val_i64: int64 = -1_i64
+    /; i64  < +i64 ;/   let val_i64_pos: int64 = 0x7FFF_FFFF_FFFF_FFFF_i64
+    /; i32  < -i64 ;/   let val_i32: int32 = -1_i64
+    /; i32  < +i64 ;/   let val_i32_pos: int32 = 0x7FFF_FFFF_i64
+    /; i16  < -i64 ;/   let val_i16: int16 = -1_i64
+    /; i16  < +i64 ;/   let val_i16_pos: int16 = 0x7FFF_i64
+    /; i8   < -i64 ;/   let val_i8: int8 = -1_i64
+    /; i8   < +i64 ;/   let val_i8_pos: int8 = 0x7F_i64
+    /; u128 < -i64 ;/   ; Data loss! Not allowed.
+    /; u128 < +i64 ;/   let val_u128: uint128 = 0x7FFF_FFFF_FFFF_FFFF_i64
+    /; u64  < -i64 ;/   ; Data loss! Not allowed.
+    /; u64  < +i64 ;/   let val_u64: uint64 = 0x7FFF_FFFF_FFFF_FFFF_i64
+    /; u32  < -i64 ;/   ; Data loss! Not allowed.
+    /; u32  < +i64 ;/   let val_u32: uint32 = 0x7FFF_FFFF_i64
+    /; u16  < -i64 ;/   ; Data loss! Not allowed.
+    /; u16  < +i64 ;/   let val_u16: uint16 = 0x7FFF_i64
+    /; u8   < -i64 ;/   ; Data loss! Not allowed.
+    /; u8   < +i64 ;/   let val_u8: uint8 = 0x7F_i64
+
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is not known at compile time:
+    ;----------------------------------------------------------------------------------------------
+    scope
+        /; i128 < i64 ;/    let val_i128: int128 = cast(rand() to int64)
+        /; i64  < i64 ;/    let val_i64: int128 = cast(rand() to int64)
+        /; i32  < i64 ;/    ; Potential Data loss! Not allowed.
+        /; i16  < i64 ;/    ; Potential Data loss! Not allowed.
+        /; i8   < i64 ;/    ; Potential Data loss! Not allowed.
+        /; u128 < i64 ;/    ; Potential Data loss! Not allowed.
+        /; u64  < i64 ;/    ; Potential Data loss! Not allowed.
+        /; u32  < i64 ;/    ; Potential Data loss! Not allowed.
+        /; u16  < i64 ;/    ; Potential Data loss! Not allowed.
+        /; u8   < i64 ;/    ; Potential Data loss! Not allowed.
+    end
+
+    ;----------------------------------------------------------------------------------------------
+    ; 2 way conversions where no values are known at compile time:
+    ;----------------------------------------------------------------------------------------------
+    scope
+        let z: int64 = 0, let p = &z
+
+        /; i128 <> i64: > i128  ;/  assert(val_i128 != $p), assert($p != val_i128)
+        /; i64  <> i64: no-op   ;/  assert(val_i64 != $p), assert($p != val_i64)
+        /; i32  <> i64: > i64   ;/  assert(val_i32 != $p), assert($p != val_i32)
+        /; i16  <> i64: > i64   ;/  assert(val_i16 != $p), assert($p != val_i16)
+        /; i8   <> i64: > i64   ;/  assert(val_i8 != $p), assert($p != val_i8)
+        /; u128 <> i64:         ;/  ; Potential Data loss! Not allowed.
+        /; u64  <> i64:         ;/  ; Potential Data loss! Not allowed.
+        /; u32  <> i64: > i64   ;/  assert(val_u32 != $p), assert($p != val_u32)
+        /; u16  <> i64: > i64   ;/  assert(val_u16 != $p), assert($p != val_u16)
+        /; u8   <> i64: > i64   ;/  assert(val_u8 != $p), assert($p != val_u8)
+    end
+
+    ;----------------------------------------------------------------------------------------------
+    ; 2 way conversions where one side is known at compile time:
+    ;----------------------------------------------------------------------------------------------
+    scope
+        /; i128 <> -i64: > i128 ;/  assert(val_i128 != -2_i64), assert(-2_i64 != val_i128)
+        /; i128 <> +i64: > i128 ;/  assert(val_i128 != 2_i64), assert(2_i64 != val_i128)
+        /; i64  <> -i64: no-op  ;/  assert(val_i64 != -2_i64), assert(-2_i64 != val_i64)
+        /; i64  <> +i64: no-op  ;/  assert(val_i64 != 2_i64), assert(2_i64 != val_i64)
+        /; i32  <> -i64: > i64  ;/  assert(val_i32 != -2_i64), assert(-2_i64 != val_i32)
+        /; i32  <> +i64: > i64  ;/  assert(val_i32 != 2_i64), assert(2_i64 != val_i32)
+        /; i16  <> -i64: > i64  ;/  assert(val_i16 != -2_i64), assert(-2_i64 != val_i16)
+        /; i16  <> +i64: > i64  ;/  assert(val_i16 != 2_i64), assert(2_i64 != val_i16)
+        /; i8   <> -i64: > i64  ;/  assert(val_i8 != -2_i64), assert(-2_i64 != val_i8)
+        /; i8   <> +i64: > i64  ;/  assert(val_i8 != 2_i64), assert(2_i64 != val_i8)
+        /; u128 <> -i64:        ;/  ; Data loss! Not allowed.
+        /; u128 <> +i64: > u128 ;/  assert(val_u128 != 2_i64), assert(2_i64 != val_u128)
+        /; u64  <> -i64:        ;/  ; Data loss! Not allowed.
+        /; u64  <> +i64: > i64  ;/  assert(val_u64 != 2_i64), assert(2_i64 != val_u64)
+        /; u32  <> -i64:        ;/  ; Data loss! Not allowed.
+        /; u32  <> +i64: > i64  ;/  assert(val_u32 != 2_i64), assert(2_i64 != val_u32)
+        /; u16  <> -i64:        ;/  ; Data loss! Not allowed.
+        /; u16  <> +i64: > i64  ;/  assert(val_u16 != 2_i64), assert(2_i64 != val_u16)
+        /; u8   <> -i64:        ;/  ; Data loss! Not allowed.
+        /; u8   <> +i64: > i64  ;/  assert(val_u8 != 2_i64), assert(2_i64 != val_u8)
+    end
+
+    ;----------------------------------------------------------------------------------------------
+    ; 2 way conversions where both sides are known at compile time:
+    ;----------------------------------------------------------------------------------------------
+    scope
+        /; +i128    <> +i64: > i128 ;/ assert(1_i128 == 1_i64), assert(1_i64 == 1_i128)
+        /; -i128    <> +i64: > i128 ;/ assert(-1_i128 != 1_i64), assert(1_i64 != -1_i128)
+        /; +i128    <> -i64: > i128 ;/ assert(1_i128 != -1_i64), assert(-1_i64 != 1_i128)
+        /; -i128    <> -i64: > i128 ;/ assert(-1_i128 == -1_i64), assert(-1_i64 == -1_i128)
+        /; +i64     <> +i64: no-op  ;/ assert(1_i64 == 1_i64), assert(1_i64 == 1_i64)
+        /; -i64     <> +i64: no-op  ;/ assert(-1_i64 != 1_i64), assert(1_i64 != -1_i64)
+        /; +i64     <> -i64: no-op  ;/ assert(1_i64 != -1_i64), assert(-1_i64 != 1_i64)
+        /; -i64     <> -i64: no-op  ;/ assert(-1_i64 == -1_i64), assert(-1_i64 == -1_i64)
+        /; +i32     <> +i64: > i64  ;/ assert(1_i32 == 1_i64), assert(1_i64 == 1_i32)
+        /; -i32     <> +i64: > i64  ;/ assert(-1_i32 != 1_i64), assert(1_i64 != -1_i32)
+        /; +i32     <> -i64: > i64  ;/ assert(1_i32 != -1_i64), assert(-1_i64 != 1_i32)
+        /; -i32     <> -i64: > i64  ;/ assert(-1_i32 == -1_i64), assert(-1_i64 == -1_i32)
+        /; +i16     <> +i64: > i64  ;/ assert(1_i16 == 1_i64), assert(1_i64 == 1_i16)
+        /; -i16     <> +i64: > i64  ;/ assert(-1_i16 != 1_i64), assert(1_i64 != -1_i16)
+        /; +i16     <> -i64: > i64  ;/ assert(1_i16 != -1_i64), assert(-1_i64 != 1_i16)
+        /; -i16     <> -i64: > i64  ;/ assert(-1_i16 == -1_i64), assert(-1_i64 == -1_i16)        
+        /; +i8      <> +i64: > i64  ;/ assert(1_i8 == 1_i64), assert(1_i64 == 1_i8)
+        /; -i8      <> +i64: > i64  ;/ assert(-1_i8 != 1_i64), assert(1_i64 != -1_i8)
+        /; +i8      <> -i64: > i64  ;/ assert(1_i8 != -1_i64), assert(-1_i64 != 1_i8)
+        /; -i8      <> -i64: > i64  ;/ assert(-1_i8 == -1_i64), assert(-1_i64 == -1_i8)
+        /; +u128    <> +i64: > i64  ;/ assert(1_u128 == 1_i64), assert(1_i64 == 1_u128)
+        /; +u128    <> -i64: > i64  ;/ assert(1_u128 != -1_i64), assert(-1_i64 != 1_u128)
+        /; +u64     <> +i64: > i64  ;/ assert(1_u64 == 1_i64), assert(1_i64 == 1_u64)
+        /; +u64     <> -i64: > i64  ;/ assert(1_u64 != -1_i64), assert(-1_i64 != 1_u64)
+        /; +u32     <> +i64: > i64  ;/ assert(1_u32 == 1_i64), assert(1_i64 == 1_u32)
+        /; +u32     <> -i64: > i64  ;/ assert(1_u32 != -1_i64), assert(-1_i64 != 1_u32)
+        /; +u16     <> +i64: > i64  ;/ assert(1_u16 == 1_i64), assert(1_i64 == 1_u16)
+        /; +u16     <> -i64: > i64  ;/ assert(1_u16 != -1_i64), assert(-1_i64 != 1_u16)
+        /; +u8      <> +i64: > i64  ;/ assert(1_u8 == 1_i64), assert(1_i64 == 1_u8)
+        /; +u8      <> -i64: > i64  ;/ assert(1_u8 != -1_i64), assert(-1_i64 != 1_u8)
+    end    
+end
+
+;==================================================================================================
+; Test: cast from int32
+;==================================================================================================
+func testCastFromInt32()
+end
+
+;==================================================================================================
+; Test: cast from int16
+;==================================================================================================
+func testCastFromInt16()
+end
+
+;==================================================================================================
+; Test: cast from int8
+;==================================================================================================
+func testCastFromInt8()
+end
+
+;==================================================================================================
+; Test: cast from Nullptr
+;==================================================================================================
+func testCastFromNullptr()
+end
+
+;==================================================================================================
+; Test: cast from Ptr
+;==================================================================================================
+func testCastFromPtr()
+end
+
+;==================================================================================================
+; Test: cast from uint128
+;==================================================================================================
+func testCastFromUInt128()
+end
+
+;==================================================================================================
+; Test: cast from uint64
+;==================================================================================================
+func testCastFromUInt64()
+end
+
+;==================================================================================================
+; Test: cast from uint32
+;==================================================================================================
+func testCastFromUInt32()
+end
+
+;==================================================================================================
+; Test: cast from uint16
+;==================================================================================================
+func testCastFromUInt16()
+end
+
+;==================================================================================================
+; Test: cast from uint8
+;==================================================================================================
+func testCastFromUInt8()
+end
+
+;==================================================================================================
+; Run all the tests in this module
+;==================================================================================================
+func main() -> int
+    testCastFromInt128()
+    testCastFromInt64()
+    testCastFromInt32()
+    testCastFromInt16()
+    testCastFromInt8()
+    testCastFromNullptr()
+    testCastFromPtr()
+    testCastFromUInt128()
+    testCastFromUInt64()
+    testCastFromUInt32()
+    testCastFromUInt16()
+    testCastFromUInt8()
+    return 0
+end
