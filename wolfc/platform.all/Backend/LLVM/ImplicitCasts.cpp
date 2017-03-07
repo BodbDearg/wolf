@@ -664,15 +664,18 @@ static bool resolveAmbiguousBinaryOpImplicitCasts(CodegenCtx & cgCtx,
         const GenericIntDataType & leftIntType = static_cast<const GenericIntDataType&>(leftType);
         const GenericIntDataType & rightIntType = static_cast<const GenericIntDataType&>(rightType);
         
-        // Only allow this resolution if the signs match:
-        if (leftIntType.isSigned() == rightIntType.isSigned()) {
-            // Okay, see if either of the integer types is bigger than the other
-            if (leftIntType.getIntegerBitCount() > rightIntType.getIntegerBitCount()) {
-                // Prefer to cast to the left type
+        // Okay, see if either of the integer types is bigger than the other
+        if (leftIntType.getIntegerBitCount() > rightIntType.getIntegerBitCount()) {
+            // Prefer to cast to the left type.
+            // Only allow however if the signs match or casting from unsigned:
+            if (leftIntType.isSigned() == rightIntType.isSigned() || !rightIntType.isSigned()) {
                 castLToROut = false;
             }
-            else if (leftIntType.getIntegerBitCount() < rightIntType.getIntegerBitCount()) {
-                // Prefer to cast to the right type
+        }
+        else if (leftIntType.getIntegerBitCount() < rightIntType.getIntegerBitCount()) {
+            // Prefer to cast to the right type.
+            // Only allow however if the signs match or casting from unsigned:
+            if (leftIntType.isSigned() == rightIntType.isSigned() || !leftType.isSigned()) {
                 castRToLOut = false;
             }
         }
