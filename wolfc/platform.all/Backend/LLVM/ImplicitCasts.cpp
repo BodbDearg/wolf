@@ -657,26 +657,71 @@ static bool resolveAmbiguousBinaryOpImplicitCasts(CodegenCtx & cgCtx,
                                                   const DataType & leftType,
                                                   const DataType & rightType,
                                                   bool & castLToROut,
-                                                  bool & castRToLOut)
+                                                  bool & castRToLOut,
+                                                  llvm::Value & leftVal,
+                                                  llvm::Value & rightVal)
 {
     // See if we are dealing with integer types so we can resolve:
     if (leftType.isInteger() && rightType.isInteger()) {
+        // Get the integer types
         const GenericIntDataType & leftIntType = static_cast<const GenericIntDataType&>(leftType);
         const GenericIntDataType & rightIntType = static_cast<const GenericIntDataType&>(rightType);
         
+        // See if we can get the left and right values as constant ints
+        llvm::ConstantInt * leftConstInt = llvm::dyn_cast<llvm::ConstantInt>(&leftVal);
+        llvm::ConstantInt * rightConstInt = llvm::dyn_cast<llvm::ConstantInt>(&rightVal);
+        
+        // Try to determine whether each side is negative:
+        bool leftIsDefinitelyNotNegative = leftConstInt ?
+            !leftConstInt->isNegative() :
+            false;
+        
+        bool rightIsDefinitelyNotNegative = rightConstInt ?
+            !rightConstInt->isNegative() :
+            false;
+        
         // Okay, see if either of the integer types is bigger than the other
         if (leftIntType.getIntegerBitCount() > rightIntType.getIntegerBitCount()) {
-            // Prefer to cast to the left type.
-            // Only allow however if the signs match or casting from unsigned:
-            if (leftIntType.isSigned() == rightIntType.isSigned() || !rightIntType.isSigned()) {
+            // Prefer to cast to the left type because it is bigger.
+            //
+            // Only allow the cast however in the following circumstances:
+            //  (a) The signedness of left and right match
+            //  (b) Left is signed and right is unsigned
+            //  (c) Left is unsigned and right is signed, but the right value is definitely not negative.
+            //
+            if (leftIntType.isSigned() == rightIntType.isSigned() ||    // (a)
+                !rightIntType.isSigned() ||                             // (b)
+                rightIsDefinitelyNotNegative)                           // (c)
+            {
                 castLToROut = false;
             }
         }
         else if (leftIntType.getIntegerBitCount() < rightIntType.getIntegerBitCount()) {
-            // Prefer to cast to the right type.
-            // Only allow however if the signs match or casting from unsigned:
-            if (leftIntType.isSigned() == rightIntType.isSigned() || !leftType.isSigned()) {
+            // Prefer to cast to the right type because it is bigger.
+            //
+            // Only allow the cast however in the following circumstances:
+            //  (a) The signedness of left and right match
+            //  (b) Right is signed and left is unsigned
+            //  (c) Right is unsigned and left is signed, but the right value is definitely not negative.
+            //
+            if (leftIntType.isSigned() == rightIntType.isSigned() ||    // (a)
+                !leftIntType.isSigned() ||                              // (b)
+                leftIsDefinitelyNotNegative)                            // (c)
+            {
                 castRToLOut = false;
+            }
+        }
+        else {
+            // Bit counts match, prefer the signed type to cast to:
+            if (leftIntType.isSigned() != rightIntType.isSigned()) {
+                if (leftIntType.isSigned()) {
+                    // Prefer to cast to the left because it is signed and the right is unsigned
+                    castLToROut = false;
+                }
+                else {
+                    // Prefer to cast to the right because it is signed and the left is unsigned
+                    castRToLOut = false;
+                }
             }
         }
     }
@@ -737,7 +782,9 @@ void castBinaryOpValuesIfRequired(Codegen & cg,
                                                       leftType,
                                                       rightType,
                                                       canCastLToR,
-                                                      canCastRToL))
+                                                      canCastRToL,
+                                                      *leftVal.mLLVMVal,
+                                                      *rightVal.mLLVMVal))
             {
                 if (canCastLToR) {
                     IMPLICIT_CAST_L_TO_R();
@@ -802,7 +849,9 @@ void castBinaryOpValuesIfRequired(ConstCodegen & cg,
                                                       leftType,
                                                       rightType,
                                                       canCastLToR,
-                                                      canCastRToL))
+                                                      canCastRToL,
+                                                      *leftConst.mLLVMConst,
+                                                      *rightConst.mLLVMConst))
             {
                 if (canCastLToR) {
                     IMPLICIT_CAST_L_TO_R();
