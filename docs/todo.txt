@@ -38,9 +38,6 @@
 	- Test at runtime
 	- Test at compile time
 
-- Fix this bug:
-	let blah : uint = 18_446_744_073_709_551_615
-
 ********************** 
 ***** Priority 2 *****
 ********************** 
@@ -62,6 +59,8 @@
 **********************
 
 - Emit a compile error if an integer literal can't fit in it's type
+- Fix this bug:
+	let blah : uint = 18_446_744_073_709_551_615
 
 - Fix up random 'new' allocations throughout the codebase
 	- Use linear alloc
