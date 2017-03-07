@@ -42,7 +42,7 @@ contexts:
       scope: constant.numeric.oct_int.wolf
     - match: '(?<![^.]\.|:)\b(false|true|null)\b|(?<![.])\.{3}(?!\.)'
       scope: constant.language.wolf
-    - match: '\+|-|\*|\/|%|&|\?|\$|\||\^|!|=|<|>'
+    - match: '\+|-|\*|\/|%|&|~|\?|\$|\||\^|!|=|<|>'
       scope: keyword.operator.wolf
     - match: '(?<![^.]\.|:)\b(time|assert|rand|srand|readnum|print)\b(?=[( {"''\[])'
       scope: support.function.wolf
