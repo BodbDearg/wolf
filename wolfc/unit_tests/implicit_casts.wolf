@@ -373,6 +373,36 @@ end
 ; Test: cast from uint64
 ;==================================================================================================
 func testCastFromUInt64()
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is known at compile time:
+    ;----------------------------------------------------------------------------------------------
+
+    /; i128 < u64 ;/    let val_i128: int128 = 0xFFFF_FFFF_FFFF_FFFF_u64
+    /; i64  < u64 ;/    let val_i64: int64 = 0x7FFF_FFFF_FFFF_FFFF_u64
+    /; i32  < u64 ;/    let val_i32: int32 = 0x7FFF_FFFF_u64
+    /; i16  < u64 ;/    let val_i16: int16 = 0x7FFF_u64
+    /; i8   < u64 ;/    let val_i8: int8 = 0x7F_u64
+    /; u128 < u64 ;/    let val_u128: uint128 = 0xFFFF_FFFF_FFFF_FFFF_u64
+    /; u64  < u64 ;/    let val_u64: uint64 = 0xFFFF_FFFF_FFFF_FFFF_u64
+    /; u32  < u64 ;/    let val_u32: uint32 = 0xFFFF_FFFF_u64
+    /; u16  < u64 ;/    let val_u16: uint16 = 0xFFFF_u64
+    /; u8   < u64 ;/    let val_u8: uint8 = 0xFF_u64
+
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is not known at compile time:
+    ;----------------------------------------------------------------------------------------------
+    scope
+        /; i128 < u64 ;/    let val_i128: int128 = cast(rand() to uint64)
+        /; i64  < u64 ;/    ; Potential Data loss! Not allowed.
+        /; i32  < u64 ;/    ; Potential Data loss! Not allowed.
+        /; i16  < u64 ;/    ; Potential Data loss! Not allowed.
+        /; i8   < u64 ;/    ; Potential Data loss! Not allowed.
+        /; u128 < u64 ;/    let val_u128: uint128 = cast(rand() to uint64)
+        /; u64  < u64 ;/    let val_u64: uint64 = cast(rand() to uint64)
+        /; u32  < u64 ;/    ; Potential Data loss! Not allowed.
+        /; u16  < u64 ;/    ; Potential Data loss! Not allowed.
+        /; u8   < u64 ;/    ; Potential Data loss! Not allowed.
+    end
 end
 
 ;==================================================================================================

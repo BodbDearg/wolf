@@ -66,8 +66,10 @@ static bool canImplicitCastIntToIntType(const CompiledDataType & fromTypeCDT,
     llvm::ConstantInt * fromConstInt = llvm::cast<llvm::ConstantInt>(fromConst);
     const llvm::APInt & fromIntVal = fromConstInt->getValue();
     
-    // Sign check: if the integer is negative and the destination positive then no cast possible
-    if (fromIntVal.isNegative()) {
+    // Sign check: if the integer is negative and the destination positive then no cast possible.
+    // Note: have to check fromType sign before calling 'isNegative()' here since APInt will always
+    // interpret the top bit as the sign bit in a number (llvm does not support unsigned int types).
+    if (fromType.isSigned() && fromIntVal.isNegative()) {
         if (!toType.isSigned()) {
             return false;
         }
