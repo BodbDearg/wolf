@@ -409,18 +409,108 @@ end
 ; Test: cast from uint32
 ;==================================================================================================
 func testCastFromUInt32()
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is known at compile time:
+    ;----------------------------------------------------------------------------------------------
+
+    /; i128 < u32 ;/    let val_i128: int128 = 0xFFFF_FFFF_u32
+    /; i64  < u32 ;/    let val_i64: int64 = 0xFFFF_FFFF_u32
+    /; i32  < u32 ;/    let val_i32: int32 = 0x7FFF_FFFF_u32
+    /; i16  < u32 ;/    let val_i16: int16 = 0x7FFF_u32
+    /; i8   < u32 ;/    let val_i8: int8 = 0x7F_u32
+    /; u128 < u32 ;/    let val_u128: uint128 = 0xFFFF_FFFF_u32
+    /; u64  < u32 ;/    let val_u64: uint64 = 0xFFFF_FFFF_u32
+    /; u32  < u32 ;/    let val_u32: uint32 = 0xFFFF_FFFF_u32
+    /; u16  < u32 ;/    let val_u16: uint16 = 0xFFFF_u32
+    /; u8   < u32 ;/    let val_u8: uint8 = 0xFF_u32
+
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is not known at compile time:
+    ;----------------------------------------------------------------------------------------------
+    scope
+        /; i128 < u32 ;/    let val_i128: int128 = cast(rand() to uint32)
+        /; i64  < u32 ;/    let val_i64: int64 = cast(rand() to uint32)
+        /; i32  < u32 ;/    ; Potential Data loss! Not allowed.
+        /; i16  < u32 ;/    ; Potential Data loss! Not allowed.
+        /; i8   < u32 ;/    ; Potential Data loss! Not allowed.
+        /; u128 < u32 ;/    let val_u128: uint128 = cast(rand() to uint32)
+        /; u64  < u32 ;/    let val_u64: uint64 = cast(rand() to uint32)
+        /; u32  < u32 ;/    let val_u32: uint32 = cast(rand() to uint32)
+        /; u16  < u32 ;/    ; Potential Data loss! Not allowed.
+        /; u8   < u32 ;/    ; Potential Data loss! Not allowed.
+    end
 end
 
 ;==================================================================================================
 ; Test: cast from uint16
 ;==================================================================================================
 func testCastFromUInt16()
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is known at compile time:
+    ;----------------------------------------------------------------------------------------------
+
+    /; i128 < u16 ;/    let val_i128: int128 = 0xFFFF_u16
+    /; i64  < u16 ;/    let val_i64: int64 = 0xFFFF_u16
+    /; i32  < u16 ;/    let val_i32: int32 = 0xFFFF_u16
+    /; i16  < u16 ;/    let val_i16: int16 = 0x7FFF_u16
+    /; i8   < u16 ;/    let val_i8: int8 = 0x7F_u16
+    /; u128 < u16 ;/    let val_u128: uint128 = 0xFFFF_u16
+    /; u64  < u16 ;/    let val_u64: uint64 = 0xFFFF_u16
+    /; u32  < u16 ;/    let val_u32: uint32 = 0xFFFF_u16
+    /; u16  < u16 ;/    let val_u16: uint16 = 0xFFFF_u16
+    /; u8   < u16 ;/    let val_u8: uint8 = 0xFF_u16
+
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is not known at compile time:
+    ;----------------------------------------------------------------------------------------------
+    scope
+        /; i128 < u16 ;/    let val_i128: int128 = cast(rand() to uint16)
+        /; i64  < u16 ;/    let val_i64: int64 = cast(rand() to uint16)
+        /; i32  < u16 ;/    let val_i32: int32 = cast(rand() to uint16)
+        /; i16  < u16 ;/    ; Potential Data loss! Not allowed.
+        /; i8   < u16 ;/    ; Potential Data loss! Not allowed.
+        /; u128 < u16 ;/    let val_u128: uint128 = cast(rand() to uint16)
+        /; u64  < u16 ;/    let val_u64: uint64 = cast(rand() to uint16)
+        /; u32  < u16 ;/    let val_u32: uint32 = cast(rand() to uint16)
+        /; u16  < u16 ;/    let val_u16: uint16 = cast(rand() to uint16)
+        /; u8   < u16 ;/    ; Potential Data loss! Not allowed.
+    end
 end
 
 ;==================================================================================================
 ; Test: cast from uint8
 ;==================================================================================================
 func testCastFromUInt8()
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is known at compile time:
+    ;----------------------------------------------------------------------------------------------
+
+    /; i128 < u8 ;/     let val_i128: int128 = 0xFF_u8
+    /; i64  < u8 ;/     let val_i64: int64 = 0xFF_u8
+    /; i32  < u8 ;/     let val_i32: int32 = 0xFF_u8
+    /; i16  < u8 ;/     let val_i16: int16 = 0xFF_u8
+    /; i8   < u8 ;/     let val_i8: int8 = 0x7F_u8
+    /; u128 < u8 ;/     let val_u128: uint128 = 0xFF_u8
+    /; u64  < u8 ;/     let val_u64: uint64 = 0xFF_u8
+    /; u32  < u8 ;/     let val_u32: uint32 = 0xFF_u8
+    /; u16  < u8 ;/     let val_u16: uint16 = 0xFF_u8
+    /; u8   < u8 ;/     let val_u8: uint8 = 0xFF_u8
+
+    ;----------------------------------------------------------------------------------------------
+    ; 1 way conversion where value is not known at compile time:
+    ;----------------------------------------------------------------------------------------------
+    scope
+        /; i128 < u8 ;/     let val_i128: int128 = cast(rand() to uint8)
+        /; i64  < u8 ;/     let val_i64: int64 = cast(rand() to uint8)
+        /; i32  < u8 ;/     let val_i32: int32 = cast(rand() to uint8)
+        /; i16  < u8 ;/     let val_i16: int16 = cast(rand() to uint8)
+        /; i8   < u8 ;/     ; Potential Data loss! Not allowed.
+        /; u128 < u8 ;/     let val_u128: uint128 = cast(rand() to uint8)
+        /; u64  < u8 ;/     let val_u64: uint64 = cast(rand() to uint8)
+        /; u32  < u8 ;/     let val_u32: uint32 = cast(rand() to uint8)
+        /; u16  < u8 ;/     let val_u16: uint16 = cast(rand() to uint8)
+        /; u8   < u8 ;/     let val_u8: uint8 = cast(rand() to uint8)
+    end
 end
 
 ;==================================================================================================
