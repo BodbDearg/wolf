@@ -18,9 +18,6 @@
 
 - Test implicit casting in several types of binary expressions
 	Cmp/Add/Mul/Shift
-- Test implicit casting in var decls
-	- Global and local
-
 - Test use of 'any' pointers and casting to/from them
 - Test implicit casting to and from any pointers
 	- Check logic for all the cases

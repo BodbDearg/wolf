@@ -525,9 +525,31 @@ func testCastFromUInt8()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'VarDecl'
+;==================================================================================================
+
+let varDeclImplicitCast_1: bool = null
+let varDeclImplicitCast_2: uint8 = cast(255 to uint64)
+let varDeclImplicitCast_3: ?any = null
+
+func testImplicitCastForVarDecl()
+    let local_varDeclImplicitCast_1: bool = null
+    let local_varDeclImplicitCast_2: uint8 = cast(255 to uint64)
+    let local_varDeclImplicitCast_3: ?any = null
+
+    assert(varDeclImplicitCast_1 == false)
+    assert(varDeclImplicitCast_2 == 255)
+    assert(varDeclImplicitCast_3 == null)
+    assert(local_varDeclImplicitCast_1 == false)
+    assert(local_varDeclImplicitCast_2 == 255)
+    assert(local_varDeclImplicitCast_3 == null)
+end
+
+;==================================================================================================
 ; Run all the tests in this module
 ;==================================================================================================
 func main() -> int
+    ; Implicit casts from types
     testCastFromInt128()
     testCastFromInt64()
     testCastFromInt32()
@@ -540,5 +562,9 @@ func main() -> int
     testCastFromUInt32()
     testCastFromUInt16()
     testCastFromUInt8()
+
+    ; Implicit casts in various AST nodes
+    testImplicitCastForVarDecl()
+
     return 0
 end
