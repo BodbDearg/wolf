@@ -1,14 +1,60 @@
 ** Language TODO / IDEAS **
 
+********************** 
+***** Priority 1 *****
+********************** 
+
 General:
     - Pointers:
         - '!' to convert a nullable into non nullable pointer
+    - 'extern' functions
+    - typeof and istype expressions
+    - parsing float numbers
+
+Primitives Types:
+    float16:    16-bit floating point number
+    float32:    32-bit floating point number
+    float64:    64-bit floating point number
+    float80:    80-bit floating point number
+    float128:   128-bit floating point number
+
+Primitive Type Aliases:
+    float:  float32 by default (for single precision)
+
+********************** 
+***** Priority 2 *****
+**********************
+
+General:
+    - Variables must be initialized when declared
+        - '= undefined' for no initialization
+        - '= default' for default init
+    - Allow global variables to reference each other in an order independent way
+    - Declare multiple variables with same 'let'  
+    - parsing chars
+    - 'defer' statement for delayed logic
+    - Lexer: '\' to allow explicit multi line statements    
+
+Primitives Types:
+    char8:      8-bit unsigned character type
+    char16:     16-bit unsigned character type
+    char32:     32-bit unsigend character type
+
+Primitive Type Aliases:
+    char:   char8 by default (for utf8)
+    uchar:  char32 by default (for utf32)
+
+********************** 
+***** Priority 3 *****
+**********************
+
+General:
+    - Widening of constant expressions to higher types if needed (on - prefix, +/-/* etc.)
     - if let blah = (like swift) syntax for converting nullable into non nullable pointers
     - References:
         - exact same properties as c++ references
         - declared using ref blah = 
         - once initialized, cannot be (validly) changed
-    - 'extern' functions
 	- Constructor like syntax for primitives, like Swift: 
         e.g let x = int(2)
     - 4 Variable storage classes:
@@ -19,8 +65,6 @@ General:
             - default for all types except those that default to ssa
         - 'ssa' = (pure functional or single static assignment form) guaranteed NEVER modifiable and NOT addressible
             - can be used by default for integer etc. types
-	- parsing float numbers
-	- parsing chars
     - for .. do
         - Completely range based for
     - rfor .. do
@@ -29,31 +73,23 @@ General:
     - 'in' expression
     - disallow casting away nullability with 'cast'
     - disallow casting away constness with 'cast'
-    - 'defer' statement for delayed logic
-    - Variables must be initialized when declared
-        - '= undefined' for no initialization
-        - '= default' for default init
     - Branch prediction constructs.
-    - typeof and istype expressions
     - Support assign expressions that both return void and non void
         Can define += operator which returns and which does not return
             - limited case of overloading based on return type
     - operator overloading
-    - Declare multiple variables with same 'let'
-    - Allow global variables to reference each other in an order independent way
-    - Lexer: '\' to allow explicit multi line statements
     - Allow 'noalias' specification for variables
         - Instructs compiler that a value will not be modified through another pointer etc.
     - Arbitrary precision integers
     - Fixed point types
     - Built in vector types (e.g vec2f, vec3f64)
     - let ssa x =     
-    - 'ssa' modifier for name values
-        - applied by default to primitive types
-        - classes can be marked 'ssa' meanining they support ssa
-            - if marked 'ssa' then 'ssa' by default
-        - member functions must be 'ssa func' to operate on an ssa value
-        - though can compile a function in two+ modes by doing 'ssa, const, immut?'
+        - 'ssa' modifier for name values
+            - applied by default to primitive types
+            - classes can be marked 'ssa' meanining they support ssa
+                - if marked 'ssa' then 'ssa' by default
+            - member functions must be 'ssa func' to operate on an ssa value
+            - though can compile a function in two+ modes by doing 'ssa, const, immut?'
     - 'type_func' type functions that operate types rather than variables.
         - Can use for template param type checking
         - Can return either a value or another type
@@ -71,18 +107,3 @@ Compound types:
         - No non trivial constructors (must be bitwise init,copy)
         - Intended for interfacing with C and low level code
     classes - eventually...
-
-Primitives Types:
-    char8:		8-bit unsigned character type
-    char16:		16-bit unsigned character type
-    char32:		32-bit unsigend character type
-    float16:    16-bit floating point number
-    float32:    32-bit floating point number
-    float64:    64-bit floating point number
-    float80:    80-bit floating point number
-    float128:   128-bit floating point number
-
-Primitive Type Aliases:
-    char: 	char8 by default (for utf8)
-    uchar:  char32 by default (for utf32)
-    float:  float32 by default (for single precision)
