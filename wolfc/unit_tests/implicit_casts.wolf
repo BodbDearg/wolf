@@ -564,6 +564,10 @@ func testImplicitCastForAssignExpr()
     blah1 = 123u8
     assert(blah1 == 123)
 
+    ; Test: +=
+    let blah2: int8 = 1
+    blah2 += 2
+    assert(blah2 == 3)
 end
 
 ;==================================================================================================

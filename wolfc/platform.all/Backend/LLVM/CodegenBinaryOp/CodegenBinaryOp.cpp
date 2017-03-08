@@ -91,8 +91,15 @@ void CodegenBinaryOp::codegen() {
     mRightVal = mCG.mCtx.popValue();
     WC_ASSERT(!mRightVal.mRequiresLoad || !mRightVal.isValid());
     
-    // Do any automatic type promotion required and allowed:
-    ImplicitCasts::castBinaryOpValuesIfRequired(mCG, mLeftVal, mRightVal);
+    // Do any automatic type promotion required and allowed.
+    // If we are storing the result on the left, then we do a basic 1-way cast.
+    // If we are doing a binary with no store, either value can potentially cast to the other...
+    if (mStoreResultOnLeft) {
+        mRightVal = ImplicitCasts::castSingleValueIfRequired(mCG, mRightVal, mLeftVal.mCompiledType);
+    }
+    else {
+        ImplicitCasts::castBinaryOpValuesIfRequired(mCG, mLeftVal, mRightVal);
+    }
     
     // Don't do anything if either side is not valid:
     WC_GUARD(mLeftVal.isValid() && mRightVal.isValid());
