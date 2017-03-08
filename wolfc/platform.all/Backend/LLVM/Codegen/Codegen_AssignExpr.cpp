@@ -16,6 +16,7 @@
 #include "DataType/DataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "DataType/Types/VoidDataType.hpp"
+#include "ImplicitCasts.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -36,8 +37,10 @@ void Codegen::visit(const AST::AssignExprAssign & astNode) {
     astNode.mRightExpr.accept(*this);
     Value rightVal = mCtx.popValue();
     
+    // Do type promotion for the right value if required:
+    rightVal = ImplicitCasts::castSingleValueIfRequired(*this, rightVal, leftAddr.mCompiledType);
+    
     // The left and right data types must match
-    // TODO: Handle auto type promotion here?
     const DataType & leftDataType = leftAddr.mCompiledType.getDataType();
     const DataType & rightDataType = rightVal.mCompiledType.getDataType();
     bool typesMatch = true;

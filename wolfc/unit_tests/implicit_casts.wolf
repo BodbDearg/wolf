@@ -556,9 +556,19 @@ func testCastFromUInt8()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'AssignExpr'
+;==================================================================================================
+func testImplicitCastForAssignExpr()
+    ; Test: = 
+    let blah1: int64 = 0
+    blah1 = 123u8
+    assert(blah1 == 123)
+
+end
+
+;==================================================================================================
 ; Test: Implicit casting for 'VarDecl'
 ;==================================================================================================
-
 let varDeclImplicitCast_1: bool = null
 let varDeclImplicitCast_2: uint8 = cast(255 to uint64)
 let varDeclImplicitCast_3: ?any = null
@@ -595,7 +605,7 @@ func main() -> int
     testCastFromUInt8()
 
     ; Implicit casts in various AST nodes
+    testImplicitCastForAssignExpr()
     testImplicitCastForVarDecl()
-
     return 0
 end
