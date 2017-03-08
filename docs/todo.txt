@@ -34,7 +34,6 @@
 	- TernaryExpr
 	- CmpExpr
 	- AddExpr
-	- MulExpr
 
 ********************** 
 ***** Priority 2 *****

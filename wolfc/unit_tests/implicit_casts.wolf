@@ -560,102 +560,133 @@ end
 ;==================================================================================================
 func testImplicitCastForAssignExpr()
     ; Test: = 
-    let blah1: int64 = 0
-    blah1 = 123u8
-    assert(blah1 == 123)
+    let v1: int64 = 0
+    v1 = 123u8
+    assert(v1 == 123)
 
     ; Test: +=
-    let blah2: int8 = 1
-    blah2 += 2
-    assert(blah2 == 3)
+    let v2: int8 = 1
+    v2 += 2
+    assert(v2 == 3)
 
     ; Test: -=
-    let blah3: int64 = 120
-    blah3 -= 3
-    assert(blah3 == 117)
+    let v3: int64 = 120
+    v3 -= 3
+    assert(v3 == 117)
 
     ; Test: |=
-    let blah4: int8 = 32
-    blah4 |= 1u128
-    assert(blah4 == 33)
+    let v4: int8 = 32
+    v4 |= 1u128
+    assert(v4 == 33)
 
     ; Test: ^=
-    let blah5: int8 = 33
-    blah5 ^= 1
-    assert(blah5 == 32u16)
+    let v5: int8 = 33
+    v5 ^= 1
+    assert(v5 == 32u16)
 
     ; Test: *=
-    let blah6: int16 = 12
-    blah6 *= 12u8
-    assert(blah6 == 144)
+    let v6: int16 = 12
+    v6 *= 12u8
+    assert(v6 == 144)
 
     ; Test: /=
-    let blah7: uint = 100
-    blah7 /= 10i8
-    assert(blah7 == 10)
+    let v7: uint = 100
+    v7 /= 10i8
+    assert(v7 == 10)
 
     ; Test: %=
-    let blah8: int = 123
-    blah8 %= 120u8
-    assert(blah8 == 3)
+    let v8: int = 123
+    v8 %= 120u8
+    assert(v8 == 3)
 
     ; Test: &=
-    let blah9: uint8 = 33
-    blah9 &= 32
-    assert(blah9 == 32)
-    blah9 &= 1
-    assert(blah9 == 0)
+    let v9: uint8 = 33
+    v9 &= 32
+    assert(v9 == 32)
+    v9 &= 1
+    assert(v9 == 0)
 
     ; Test: <<=
-    let blah10: uint16 = 1
-    blah10 <<= 3u64
-    assert(blah10 == 8)
+    let v10: uint16 = 1
+    v10 <<= 3u64
+    assert(v10 == 8)
 
     ; Test: >>=
-    let blah11: uint32 = 16
-    blah11 >>= 2u8
-    assert(blah11 == 4)
+    let v11: uint32 = 16
+    v11 >>= 2u8
+    assert(v11 == 4)
 
     ; Test: >>>=
-    let blah12: uint32 = 16
-    blah12 >>>= 2u8
-    assert(blah12 == 4)
+    let v12: uint32 = 16
+    v12 >>>= 2u8
+    assert(v12 == 4)
+end
+
+;==================================================================================================
+; Test: Implicit casting for 'MulExpr'
+;==================================================================================================
+let testImplicitCastForMulExpr_1 = 2i8 * 3i16
+let testImplicitCastForMulExpr_2 = 64i32 / 2i8
+let testImplicitCastForMulExpr_3 = 3i16 % 2i8
+let testImplicitCastForMulExpr_4 = 3i16 & 2i8
+
+func testImplicitCastForMulExpr()
+    assert(testImplicitCastForMulExpr_1 == 6)
+    assert(testImplicitCastForMulExpr_2 == 32)
+    assert(testImplicitCastForMulExpr_3 == 1)
+    assert(testImplicitCastForMulExpr_4 == 2)
+
+    let someVal1 = 2i8
+    let someVal2 = 3i16
+    let someVal3 = 64i32
+
+    let v1 = someVal1 * someVal2, assert(v1 == 6)
+    let v2 = someVal3 / someVal1, assert(v2 == 32)
+    let v3 = someVal2 % someVal1, assert(v3 == 1)
+    let v4 = someVal2 & someVal1, assert(v4 == 2)
 end
 
 ;==================================================================================================
 ; Test: Implicit casting for 'ShiftExpr'
 ;==================================================================================================
-func testImplicitCastForShiftExpr()
-    let val1_u8 = 1
-    let val2_u16 = 2
-    let val4_u32 = 4
 
-    let blah1 = val1_u8 << val4_u32
-    assert(blah1 == 16)
-    let blah2 = blah1 >> val2_u16
-    assert(blah2 == 4)
-    let blah3 = blah1 >>> val2_u16
-    assert(blah3 == 4)
+let testImplicitCastForShiftExpr_1 = 1u8 << 4u32
+let testImplicitCastForShiftExpr_2 = testImplicitCastForShiftExpr_1 >> 2u16
+let testImplicitCastForShiftExpr_3 = testImplicitCastForShiftExpr_1 >>> 2u16
+
+func testImplicitCastForShiftExpr()
+    assert(testImplicitCastForShiftExpr_1 == 16)
+    assert(testImplicitCastForShiftExpr_2 == 4)
+    assert(testImplicitCastForShiftExpr_3 == 4)
+
+    let someVal1 = 1u8
+    let someVal2 = 2u16
+    let someVal3 = 4u32
+
+    let v1 = someVal1 << someVal3, assert(v1 == 16)
+    let v2 = v1 >> someVal2, assert(v2 == 4)
+    let v3 = v1 >>> someVal2, assert(v3 == 4)
 end
 
 ;==================================================================================================
 ; Test: Implicit casting for 'VarDecl'
 ;==================================================================================================
-let varDeclImplicitCast_1: bool = null
-let varDeclImplicitCast_2: uint8 = cast(255 to uint64)
-let varDeclImplicitCast_3: ?any = null
+let testImplicitCastForVarDecl_1: bool = null
+let testImplicitCastForVarDecl_2: uint8 = cast(255 to uint64)
+let testImplicitCastForVarDecl_3: ?any = null
 
 func testImplicitCastForVarDecl()
-    let local_varDeclImplicitCast_1: bool = null
-    let local_varDeclImplicitCast_2: uint8 = cast(255 to uint64)
-    let local_varDeclImplicitCast_3: ?any = null
+    assert(testImplicitCastForVarDecl_1 == false)
+    assert(testImplicitCastForVarDecl_2 == 255)
+    assert(testImplicitCastForVarDecl_3 == null)
 
-    assert(varDeclImplicitCast_1 == false)
-    assert(varDeclImplicitCast_2 == 255)
-    assert(varDeclImplicitCast_3 == null)
-    assert(local_varDeclImplicitCast_1 == false)
-    assert(local_varDeclImplicitCast_2 == 255)
-    assert(local_varDeclImplicitCast_3 == null)
+    let v1: bool = null
+    let v2: uint8 = cast(255 to uint64)
+    let v3: ?any = null
+
+    assert(v1 == false)
+    assert(v2 == 255)
+    assert(v3 == null)
 end
 
 ;==================================================================================================
@@ -678,6 +709,7 @@ func main() -> int
 
     ; Implicit casts in various AST nodes
     testImplicitCastForAssignExpr()
+    testImplicitCastForMulExpr()
     testImplicitCastForShiftExpr()
     testImplicitCastForVarDecl()
     return 0
