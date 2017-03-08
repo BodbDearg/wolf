@@ -555,6 +555,36 @@ func testCastFromUInt8()
     end
 end
 
+
+;==================================================================================================
+; Test: Implicit casting for 'AddExpr'
+;==================================================================================================
+let testImplicitCastForAddExpr_1 = 12u16 + 32i32
+let testImplicitCastForAddExpr_2 = 12u16 - 32i32
+let testImplicitCastForAddExpr_3 = 32i32 | 1i64
+let testImplicitCastForAddExpr_4 = 32i32 ^ 1i64
+
+func testImplicitCastForAddExpr()
+    assert(testImplicitCastForAddExpr_1 == 44)
+    assert(testImplicitCastForAddExpr_2 == -20)
+    assert(testImplicitCastForAddExpr_3 == 33)
+    assert(testImplicitCastForAddExpr_4 == 33)
+    
+    let someval1 = 12u16
+    let someval2 = 32i32
+    let someval3 = 1i64
+
+    let v1 = someval1 + someval2
+    let v2 = someval1 - someval2
+    let v3 = someval2 | someval3
+    let v4 = someval2 ^ someval3
+
+    assert(v1 == 44)
+    assert(v2 == -20)
+    assert(v3 == 33)
+    assert(v4 == 33)
+end
+
 ;==================================================================================================
 ; Test: Implicit casting for 'AssignExpr'
 ;==================================================================================================
@@ -708,9 +738,11 @@ func main() -> int
     testCastFromUInt8()
 
     ; Implicit casts in various AST nodes
+    testImplicitCastForAddExpr()
     testImplicitCastForAssignExpr()
     testImplicitCastForMulExpr()
     testImplicitCastForShiftExpr()
     testImplicitCastForVarDecl()
+
     return 0
 end

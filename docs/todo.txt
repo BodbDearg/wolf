@@ -33,7 +33,6 @@
 - Impl and test implicit casting of binary expressions:
 	- TernaryExpr
 	- CmpExpr
-	- AddExpr
 
 ********************** 
 ***** Priority 2 *****
