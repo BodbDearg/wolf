@@ -35,7 +35,6 @@
 	- CmpExpr
 	- AddExpr
 	- MulExpr
-	- ShiftExpr
 
 ********************** 
 ***** Priority 2 *****

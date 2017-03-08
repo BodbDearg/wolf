@@ -623,6 +623,22 @@ func testImplicitCastForAssignExpr()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'ShiftExpr'
+;==================================================================================================
+func testImplicitCastForShiftExpr()
+    let val1_u8 = 1
+    let val2_u16 = 2
+    let val4_u32 = 4
+
+    let blah1 = val1_u8 << val4_u32
+    assert(blah1 == 16)
+    let blah2 = blah1 >> val2_u16
+    assert(blah2 == 4)
+    let blah3 = blah1 >>> val2_u16
+    assert(blah3 == 4)
+end
+
+;==================================================================================================
 ; Test: Implicit casting for 'VarDecl'
 ;==================================================================================================
 let varDeclImplicitCast_1: bool = null
@@ -662,6 +678,7 @@ func main() -> int
 
     ; Implicit casts in various AST nodes
     testImplicitCastForAssignExpr()
+    testImplicitCastForShiftExpr()
     testImplicitCastForVarDecl()
     return 0
 end
