@@ -324,7 +324,18 @@ end
 ;==================================================================================================
 ; Test: cast from Nullptr
 ;==================================================================================================
+let from_nullptr_to_ptr1: ?int = null
+let from_nullptr_to_ptr2: ?bool = null
+let from_nullptr_to_ptr3: ?any = null
+let from_nullptr_to_ptr4: nullptr = null
+let from_nullptr_to_ptr5: bool = null
+
 func testCastFromNullptr()
+    assert(from_nullptr_to_ptr1 == null)
+    assert(from_nullptr_to_ptr2 == null)
+    assert(from_nullptr_to_ptr3 == null)
+    assert(from_nullptr_to_ptr4 == null)
+    assert(from_nullptr_to_ptr5 == false)
 end
 
 ;==================================================================================================
