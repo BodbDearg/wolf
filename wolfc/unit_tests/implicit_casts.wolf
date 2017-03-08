@@ -341,7 +341,38 @@ end
 ;==================================================================================================
 ; Test: cast from Ptr
 ;==================================================================================================
+let testCastFromPtr_ptr1: ?int = null
+let testCastFromPtr_ptr2: ?any = testCastFromPtr_ptr1
+let testCastFromPtr_ptr3: ^int = cast(1 to ^int)
+let testCastFromPtr_ptr4: ^any = testCastFromPtr_ptr3
+let testCastFromPtr_ptr5: ?int = testCastFromPtr_ptr3
+let testCastFromPtr_ptr6: ?int = cast(testCastFromPtr_ptr4 to ^int)
+let testCastFromPtr_ptr7: ^any = cast(1234 to ^any)
+let testCastFromPtr_bool1: bool = testCastFromPtr_ptr1
+let testCastFromPtr_bool2: bool = testCastFromPtr_ptr6
+
 func testCastFromPtr()
+    assert(not testCastFromPtr_bool1)
+    assert(testCastFromPtr_bool2)
+
+    let local_testCastFromPtr_ptr1: ?int = null
+    let local_testCastFromPtr_ptr2: ?any = local_testCastFromPtr_ptr1
+    let local_testCastFromPtr_ptr3: ^int = cast(1 to ^int)
+    let local_testCastFromPtr_ptr4: ^any = local_testCastFromPtr_ptr3
+    let local_testCastFromPtr_ptr5: ?int = local_testCastFromPtr_ptr3
+    let local_testCastFromPtr_ptr6: ^int = cast(testCastFromPtr_ptr4 to ^int)
+    let local_testCastFromPtr_ptr7: ?any = cast(1234 to ?any)
+    let local_testCastFromPtr_bool1: bool = local_testCastFromPtr_ptr1
+    let local_testCastFromPtr_bool2: bool = local_testCastFromPtr_ptr7
+
+    assert(not local_testCastFromPtr_bool1)
+    assert(local_testCastFromPtr_bool2)
+
+    let blah = 12345
+    let blah_ptr1: ^int = &blah
+    assert($blah_ptr1 == 12345)
+    let blah_ptr2: ^any = blah_ptr1
+    assert($cast(blah_ptr2 to ^int) == 12345)
 end
 
 ;==================================================================================================
