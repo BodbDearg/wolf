@@ -568,6 +568,58 @@ func testImplicitCastForAssignExpr()
     let blah2: int8 = 1
     blah2 += 2
     assert(blah2 == 3)
+
+    ; Test: -=
+    let blah3: int64 = 120
+    blah3 -= 3
+    assert(blah3 == 117)
+
+    ; Test: |=
+    let blah4: int8 = 32
+    blah4 |= 1u128
+    assert(blah4 == 33)
+
+    ; Test: ^=
+    let blah5: int8 = 33
+    blah5 ^= 1
+    assert(blah5 == 32u16)
+
+    ; Test: *=
+    let blah6: int16 = 12
+    blah6 *= 12u8
+    assert(blah6 == 144)
+
+    ; Test: /=
+    let blah7: uint = 100
+    blah7 /= 10i8
+    assert(blah7 == 10)
+
+    ; Test: %=
+    let blah8: int = 123
+    blah8 %= 120u8
+    assert(blah8 == 3)
+
+    ; Test: &=
+    let blah9: uint8 = 33
+    blah9 &= 32
+    assert(blah9 == 32)
+    blah9 &= 1
+    assert(blah9 == 0)
+
+    ; Test: <<=
+    let blah10: uint16 = 1
+    blah10 <<= 3u64
+    assert(blah10 == 8)
+
+    ; Test: >>=
+    let blah11: uint32 = 16
+    blah11 >>= 2u8
+    assert(blah11 == 4)
+
+    ; Test: >>>=
+    let blah12: uint32 = 16
+    blah12 >>>= 2u8
+    assert(blah12 == 4)
 end
 
 ;==================================================================================================
