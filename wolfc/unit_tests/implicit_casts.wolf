@@ -586,6 +586,15 @@ func testImplicitCastForAddExpr()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'AssertStmnt'
+;==================================================================================================
+func testImplicitCastForAssertStmnt()
+    ; Test: implicit cast to 'bool'
+    let someInt = 1234
+    assert(cast(&someInt to ?int))
+end
+
+;==================================================================================================
 ; Test: Implicit casting for 'AssignExpr'
 ;==================================================================================================
 func testImplicitCastForAssignExpr()
@@ -679,15 +688,17 @@ end
 ;==================================================================================================
 ; Test: Implicit casting for 'NotExpr'
 ;==================================================================================================
+
+; Test implicit cast to 'bool' for logical not
 let testImplicitCastForNotExpr_1: ?int = null
 let testImplicitCastForNotExpr_2: ?int = cast(1 to ?int)
 let testImplicitCastForNotExpr_3: bool = testImplicitCastForNotExpr_1
 let testImplicitCastForNotExpr_4: bool = testImplicitCastForNotExpr_2
 
 func testImplicitCastForNotExpr()
+    ; Test implicit cast to 'bool' for logical not
     assert(not testImplicitCastForNotExpr_3)
     assert(testImplicitCastForNotExpr_4)
-
     let ptr1: ?int = null
     let ptr2: ?int = cast(1 to ?int)
     assert(not ptr1)
@@ -756,6 +767,7 @@ func main() -> int
 
     ; Implicit casts in various AST nodes
     testImplicitCastForAddExpr()
+    testImplicitCastForAssertStmnt()
     testImplicitCastForAssignExpr()
     testImplicitCastForMulExpr()
     testImplicitCastForNotExpr()

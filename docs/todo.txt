@@ -16,8 +16,6 @@
 	- ReturnStmnt
 		- To func return type
 		- To bool
-	- AssertStmnt
-		- To bool
 
 - Impl and test implicit casting of unary expressions:
 	- TernaryExpr
