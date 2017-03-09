@@ -34,7 +34,7 @@ void Codegen::visit(const AST::TernaryExprWithCond & astNode) {
     // Implicitly convert the condition expression to bool if we have to or can
     PrimitiveDataTypes::getBoolDataType().accept(mCodegenDataType);
     CompiledDataType boolCDT = mCtx.popCompiledDataType();
-    condVal = ImplicitCasts::castSingleValueIfRequired(*this, condVal, boolCDT);
+    ImplicitCasts::castSingleValueIfRequired(*this, condVal, boolCDT);
     
     // The condition value must be of type bool
     bool condValIsBool = true;

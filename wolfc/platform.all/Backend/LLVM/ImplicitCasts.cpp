@@ -607,46 +607,46 @@ bool canDoImplicitCast(const CompiledDataType & fromType,
     return castCheck.check();
 }
 
-Value castSingleValueIfRequired(Codegen & cg,
-                                const Value & value,
-                                const CompiledDataType & toTypeCDT)
+void castSingleValueIfRequired(Codegen & cg,
+                               Value & value,
+                               const CompiledDataType & toTypeCDT)
 {
     // If either the value or types are invalid then bail out
-    WC_GUARD(value.isValid() && toTypeCDT.isValid(), value);
+    WC_GUARD(value.isValid() && toTypeCDT.isValid());
     
     // If the data type of the value equals the type given then no cast is required.
     // In this case return the value given:
     const CompiledDataType & valueCDT = value.mCompiledType;
-    WC_GUARD(!valueCDT.getDataType().equals(toTypeCDT.getDataType()), value);
+    WC_GUARD(!valueCDT.getDataType().equals(toTypeCDT.getDataType()));
     
     // If the implicit cast is not allowed then do not proceed.
     // In this case also return the value given:
-    WC_GUARD(canDoImplicitCast(valueCDT, toTypeCDT, value.mLLVMVal), value);
+    WC_GUARD(canDoImplicitCast(valueCDT, toTypeCDT, value.mLLVMVal));
     
     // Otherwise do the cast and return the result:
     CodegenCast(cg, value, toTypeCDT).codegen();
-    return cg.mCtx.popValue();
+    value = cg.mCtx.popValue();
 }
 
-Constant castSingleConstantIfRequired(ConstCodegen & cg,
-                                      const Constant & constant,
-                                      const CompiledDataType & toTypeCDT)
+void castSingleConstantIfRequired(ConstCodegen & cg,
+                                  Constant & constant,
+                                  const CompiledDataType & toTypeCDT)
 {
     // If either the value or types are invalid then bail out
-    WC_GUARD(constant.isValid() && toTypeCDT.isValid(), constant);
+    WC_GUARD(constant.isValid() && toTypeCDT.isValid());
     
     // If the data type of the value equals the type given then no cast is required.
     // In this case return the value given:
     const CompiledDataType & constantCDT = constant.mCompiledType;
-    WC_GUARD(!constantCDT.getDataType().equals(toTypeCDT.getDataType()), constant);
+    WC_GUARD(!constantCDT.getDataType().equals(toTypeCDT.getDataType()));
     
     // If the implicit cast is not allowed then do not proceed.
     // In this case also return the value given:
-    WC_GUARD(canDoImplicitCast(constantCDT, toTypeCDT, constant.mLLVMConst), constant);
+    WC_GUARD(canDoImplicitCast(constantCDT, toTypeCDT, constant.mLLVMConst));
     
     // Otherwise do the cast and return the result:
     CodegenConstCast(cg, constant, toTypeCDT).codegen();
-    return cg.mCtx.popConstant();
+    constant = cg.mCtx.popConstant();
 }
 
 /**

@@ -38,7 +38,7 @@ void Codegen::visit(const AST::AssignExprAssign & astNode) {
     Value rightVal = mCtx.popValue();
     
     // Do type promotion for the right value if required:
-    rightVal = ImplicitCasts::castSingleValueIfRequired(*this, rightVal, leftAddr.mCompiledType);
+    ImplicitCasts::castSingleValueIfRequired(*this, rightVal, leftAddr.mCompiledType);
     
     // The left and right data types must match
     const DataType & leftDataType = leftAddr.mCompiledType.getDataType();

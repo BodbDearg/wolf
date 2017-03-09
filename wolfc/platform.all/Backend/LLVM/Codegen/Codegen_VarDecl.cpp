@@ -103,9 +103,9 @@ static void codegenLocalVarDecl(Codegen & cg,
         varInitVal.mCompiledType;
     
     // If possible, do any implicit casts that may be required for the initial value:
-    varInitVal = ImplicitCasts::castSingleValueIfRequired(cg,
-                                                          varInitVal,
-                                                          varCompiledType);
+    ImplicitCasts::castSingleValueIfRequired(cg,
+                                             varInitVal,
+                                             varCompiledType);
     
     // Do the type checks for the var decl
     bool varInitializerTypeIsOk = false;
@@ -167,9 +167,9 @@ static void codegenGlobalVarDecl(Codegen & cg,
         varInitConst.mCompiledType;
     
     // If possible, do any implicit casts that may be required for the initial value:
-    varInitConst = ImplicitCasts::castSingleConstantIfRequired(cg.mConstCodegen,
-                                                               varInitConst,
-                                                               varCompiledType);
+    ImplicitCasts::castSingleConstantIfRequired(cg.mConstCodegen,
+                                                varInitConst,
+                                                varCompiledType);
     
     // Do the type checks for the var decl
     bool varInitializerTypeIsOk = false;

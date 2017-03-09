@@ -43,7 +43,7 @@ void CodegenLNotUnaryOp::doAnyImplicitTypeCastingRequiredForExprVal() {
     CompiledDataType boolType = mCG.mCtx.popCompiledDataType();
     
     // Next, do any conversions that are required:
-    mExprVal = ImplicitCasts::castSingleValueIfRequired(mCG, mExprVal, boolType);
+    ImplicitCasts::castSingleValueIfRequired(mCG, mExprVal, boolType);
 }
 
 //-----------------------------------------------------------------------------

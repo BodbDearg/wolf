@@ -42,7 +42,7 @@ void CodegenConstLNotUnaryOp::doAnyImplicitTypeCastingRequiredForExprConst() {
     CompiledDataType boolType = mCG.mCtx.popCompiledDataType();
     
     // Next, do any conversions that are required:
-    mExprConst = ImplicitCasts::castSingleConstantIfRequired(mCG, mExprConst, boolType);
+    ImplicitCasts::castSingleConstantIfRequired(mCG, mExprConst, boolType);
 }
 
 //-----------------------------------------------------------------------------

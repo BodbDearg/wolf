@@ -52,8 +52,8 @@ void CodegenConstLogicalBinaryOp::codegen() {
     CompiledDataType boolCDT = mCG.mCtx.popCompiledDataType();
     
     // Do automatic type promotion to bool if required/allowed:
-    mLeftConst = ImplicitCasts::castSingleConstantIfRequired(mCG, mLeftConst, boolCDT);
-    mRightConst = ImplicitCasts::castSingleConstantIfRequired(mCG, mRightConst, boolCDT);
+    ImplicitCasts::castSingleConstantIfRequired(mCG, mLeftConst, boolCDT);
+    ImplicitCasts::castSingleConstantIfRequired(mCG, mRightConst, boolCDT);
 
     // Don't do anything if either side is not valid:
     WC_GUARD(mLeftConst.isValid() && mRightConst.isValid());

@@ -43,17 +43,17 @@ namespace ImplicitCasts {
      *
      * Notes:
      * (1) If the cast is not possible or allowed then the constant or value passed in
-     * will be returned. This allows the callee to issue errors about mismatching types etc.
-     * (2) If the cast fails then an invalid constant or value is returned.
-     * (3) If no cast is required then the constant or value passed in is returned.
+     * will be left unmodified. This allows the callee to issue errors about mismatching types etc.
+     * (2) If the cast fails then an invalid constant or value is set on the value/constant passed in.
+     * (3) If no cast is required then the constant or value passed in is left unmodified.
      */
-    Value castSingleValueIfRequired(Codegen & cg,
-                                    const Value & value,
-                                    const CompiledDataType & toTypeCDT);
+    void castSingleValueIfRequired(Codegen & cg,
+                                   Value & value,
+                                   const CompiledDataType & toTypeCDT);
     
-    Constant castSingleConstantIfRequired(ConstCodegen & cg,
-                                          const Constant & constant,
-                                          const CompiledDataType & toTypeCDT);
+    void castSingleConstantIfRequired(ConstCodegen & cg,
+                                      Constant & constant,
+                                      const CompiledDataType & toTypeCDT);
     
     /**
      * Do any required casting that is possible and allowed for the operands in runtime and

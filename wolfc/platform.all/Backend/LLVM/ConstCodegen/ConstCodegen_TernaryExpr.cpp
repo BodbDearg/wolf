@@ -32,7 +32,7 @@ void ConstCodegen::visit(const AST::TernaryExprWithCond & astNode) {
     // Implicitly convert the condition expression to bool if we have to or can
     PrimitiveDataTypes::getBoolDataType().accept(mCodegenDataType);
     CompiledDataType boolCDT = mCtx.popCompiledDataType();
-    condConst = ImplicitCasts::castSingleConstantIfRequired(*this, condConst, boolCDT);
+    ImplicitCasts::castSingleConstantIfRequired(*this, condConst, boolCDT);
     
     // Evaluate the left and right expressions
     astNode.mTrueExpr.accept(*this);

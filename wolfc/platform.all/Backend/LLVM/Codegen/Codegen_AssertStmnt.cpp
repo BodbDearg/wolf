@@ -44,7 +44,7 @@ void Codegen::visit(const AST::AssertStmnt & astNode) {
     // Codegen the bool data type and do any implicit casts required to bool
     PrimitiveDataTypes::getBoolDataType().accept(mCodegenDataType);
     CompiledDataType boolCDT = mCtx.popCompiledDataType();
-    exprVal = ImplicitCasts::castSingleValueIfRequired(*this, exprVal, boolCDT);
+    ImplicitCasts::castSingleValueIfRequired(*this, exprVal, boolCDT);
     
     // The expression being asserted must evaluate to a boolean.
     const DataType & exprDataType = exprVal.mCompiledType.getDataType();

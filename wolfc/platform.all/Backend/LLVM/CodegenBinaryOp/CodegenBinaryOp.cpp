@@ -83,7 +83,7 @@ void CodegenBinaryOp::codegen() {
     // If we are storing the result on the left, then we do a basic 1-way cast.
     // If we are doing a binary with no store, either value can potentially cast to the other...
     if (mStoreResultOnLeft) {
-        mRightVal = ImplicitCasts::castSingleValueIfRequired(mCG, mRightVal, mLeftVal.mCompiledType);
+        ImplicitCasts::castSingleValueIfRequired(mCG, mRightVal, mLeftVal.mCompiledType);
     }
     else {
         ImplicitCasts::castBinaryOpValuesIfRequired(mCG, mLeftVal, mRightVal);
