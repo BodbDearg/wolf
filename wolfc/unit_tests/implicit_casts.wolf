@@ -677,6 +677,17 @@ func testImplicitCastForMulExpr()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'NotExpr'
+;==================================================================================================
+func testImplicitCastForNotExpr()
+
+    let blahPtr1: ?int = null
+    let blahPtr2: ?int = cast(1 to ?int)
+    assert(not blahPtr1)
+    assert(not not blahPtr2)
+end
+
+;==================================================================================================
 ; Test: Implicit casting for 'ShiftExpr'
 ;==================================================================================================
 
@@ -741,6 +752,7 @@ func main() -> int
     testImplicitCastForAddExpr()
     testImplicitCastForAssignExpr()
     testImplicitCastForMulExpr()
+    testImplicitCastForNotExpr()
     testImplicitCastForShiftExpr()
     testImplicitCastForVarDecl()
 

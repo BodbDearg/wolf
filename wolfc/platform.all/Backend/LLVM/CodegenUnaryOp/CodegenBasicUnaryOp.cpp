@@ -75,6 +75,9 @@ void CodegenBasicUnaryOp::codegen() {
     // Don't do anything the expression value is not valid:
     WC_GUARD(mExprVal.isValid());
     
+    // Do any type conversions that are required:
+    doAnyImplicitTypeCastingRequiredForExprVal();
+    
     // Code generate the actual operation itself
     const DataType & exprType = mExprVal.mCompiledType.getDataType();
     exprType.accept(*this);
@@ -144,6 +147,11 @@ void CodegenBasicUnaryOp::issueUnaryOpNotSupportedError() {
                    mOpSymbol,
                    mOpName,
                    mExprVal.mCompiledType.getDataType().name().c_str());
+}
+
+void CodegenBasicUnaryOp::doAnyImplicitTypeCastingRequiredForExprVal() {
+    // The default impl of this is just a no-op...
+    WC_EMPTY_FUNC_BODY();
 }
 
 void CodegenBasicUnaryOp::pushOpResult(llvm::Value * result) {

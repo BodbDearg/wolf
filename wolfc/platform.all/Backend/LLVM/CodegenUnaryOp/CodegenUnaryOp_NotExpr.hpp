@@ -18,6 +18,9 @@ public:
                        bool storeResultInExpr);
     
     virtual void visit(const BoolDataType & dataType) override;
+    
+protected:
+    virtual void doAnyImplicitTypeCastingRequiredForExprVal() override;
 };
 
 class CodegenBNotUnaryOp final : public CodegenBasicUnaryOp {

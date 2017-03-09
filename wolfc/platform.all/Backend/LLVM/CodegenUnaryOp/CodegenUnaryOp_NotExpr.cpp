@@ -8,6 +8,9 @@
 
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
+#include "DataType/Types/BoolDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
+#include "ImplicitCasts.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -31,6 +34,16 @@ CodegenLNotUnaryOp::CodegenLNotUnaryOp(Codegen & cg,
 void CodegenLNotUnaryOp::visit(const BoolDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     pushOpResult(mCG.mCtx.mIRBuilder.CreateNot(mExprVal.mLLVMVal, "Bool:LNot:Result"));
+}
+
+void CodegenLNotUnaryOp::doAnyImplicitTypeCastingRequiredForExprVal() {
+    // The expression value must always be converted to the 'bool' type.
+    // The first step is to codegen this type:
+    PrimitiveDataTypes::getBoolDataType().accept(mCG.mCodegenDataType);
+    CompiledDataType boolType = mCG.mCtx.popCompiledDataType();
+    
+    // Next, do any conversions that are required:
+    mExprVal = ImplicitCasts::castSingleValueIfRequired(mCG, mExprVal, boolType);
 }
 
 //-----------------------------------------------------------------------------

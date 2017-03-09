@@ -75,6 +75,12 @@ protected:
     void issueUnaryOpNotSupportedError();
     
     /**
+     * Perform automatic type casting required for the expression value.
+     * The default implementation of this simply does nothing.
+     */
+    virtual void doAnyImplicitTypeCastingRequiredForExprVal();
+    
+    /**
      * Save the operator result in the codegen context. If the compiled type of the result 
      * is not specified then we use the compiled type of the operand. If the 'requiresLoad'
      * flag is not specified then it is defaulted to false.
