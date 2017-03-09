@@ -48,10 +48,13 @@ void AddrCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
     const DataType & exprValDT = exprValCDT.getDataType();
     
     if (!exprValDT.isSized()) {
-        mCtx.error(astNode,
-                   "Can't take the address of a function call result which returns "
-                   "unsized type '%s'!",
-                   exprValDT.name().c_str());
+        // Note: no error in the case of an 'undefined' type since this means an error was already emitted elsewhere.
+        if (!exprValDT.isUndefined()) {
+            mCtx.error(astNode,
+                       "Can't take the address of a function call result which returns "
+                       "unsized type '%s'!",
+                       exprValDT.name().c_str());
+        }
         
         return;
     }
@@ -86,30 +89,37 @@ void AddrCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
     // TODO: support the array lookup operator on custom types eventually.
     const CompiledDataType & arrayCDT = arrayAddrVal.mCompiledType;
     const DataType & arrayAbstractDT = arrayCDT.getDataType();
+    bool arrayTypeAndIndexTypesAreOk = true;
     
     if (!arrayAbstractDT.isArray()) {
-        mCtx.error("Can't perform array indexing on an expression of type '%s'! Only arrays can be indexed.",
-                   arrayAbstractDT.name().c_str());
+        // Note: no error in the case of an 'undefined' type since this means an error was already emitted elsewhere.
+        if (!arrayAbstractDT.isUndefined()) {
+            mCtx.error("Can't perform array indexing on an expression of type '%s'! Only arrays can be indexed.",
+                       arrayAbstractDT.name().c_str());
+        }
         
-        return;
+        arrayTypeAndIndexTypesAreOk = false;
     }
     
-    const ArrayDataType & arrayDT = static_cast<const ArrayDataType&>(arrayAbstractDT);
-
     // Index expression must be an integer
     const CompiledDataType & indexCDT = indexVal.mCompiledType;
     const DataType & indexDT = indexCDT.getDataType();
     
     if (!indexDT.isInteger()) {
-        mCtx.error("Index expression for array lookup must be an integer not type '%s'! "
-                   "Can't index an array with non-integer types!",
-                   indexDT.name().c_str());
+        // Note: no error in the case of an 'undefined' type since this means an error was already emitted elsewhere.
+        if (!indexDT.isUndefined()) {
+            mCtx.error("Index expression for array lookup must be an integer not type '%s'! "
+                       "Can't index an array with non-integer types!",
+                       indexDT.name().c_str());
+        }
 
-        return;
+        arrayTypeAndIndexTypesAreOk = false;
     }
     
-    // Proceed no further if either of these is invalid
-    WC_GUARD(indexVal.isValid() && arrayAddrVal.isValid());
+    // Proceed no further if any of these are invalid
+    WC_GUARD(indexVal.isValid() &&
+             arrayAddrVal.isValid() &&
+             arrayTypeAndIndexTypesAreOk);
     
     // Get the value for the array address:
     llvm::ConstantInt * zeroIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(mCtx.mLLVMCtx), 0);
@@ -121,6 +131,7 @@ void AddrCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
     WC_ASSERT(arrayElemAddr);
     
     // Figure out the compiled data type for the value loaded. If we fail in this then bail:
+    const ArrayDataType & arrayDT = static_cast<const ArrayDataType&>(arrayAbstractDT);
     arrayDT.mElemType.accept(mCodegenDataType);
     CompiledDataType arrayElemCDT = mCtx.popCompiledDataType();
     WC_GUARD(arrayElemCDT.isValid());
