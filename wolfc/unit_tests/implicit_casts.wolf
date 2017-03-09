@@ -662,6 +662,47 @@ func testImplicitCastForAssignExpr()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'CmpExpr'
+;==================================================================================================
+let testImplicitCastForCmpExpr_1 = 123u8 == 123i16
+let testImplicitCastForCmpExpr_2 = 256u32 is 256u64
+let testImplicitCastForCmpExpr_3 = 0xFF00_i64 != 0xFF0F_i32
+let testImplicitCastForCmpExpr_4 = 0x0F_i8 is not 0xFF_u16
+let testImplicitCastForCmpExpr_5 = 123u8 < 1234u64
+let testImplicitCastForCmpExpr_6 = 123i32 <= 123u8
+let testImplicitCastForCmpExpr_7 = 100u8 > 56u32
+let testImplicitCastForCmpExpr_8 = 100i16 >= 100u32
+
+func testImplicitCastForCmpExpr()
+    assert(testImplicitCastForCmpExpr_1)
+    assert(testImplicitCastForCmpExpr_2)
+    assert(testImplicitCastForCmpExpr_3)
+    assert(testImplicitCastForCmpExpr_4)
+    assert(testImplicitCastForCmpExpr_5)
+    assert(testImplicitCastForCmpExpr_6)
+    assert(testImplicitCastForCmpExpr_7)
+    assert(testImplicitCastForCmpExpr_8)
+
+    let v1 = 123u8 == 123i16
+    let v2 = 256u32 is 256u64
+    let v3 = 0xFF00_i64 != 0xFF0F_i32
+    let v4 = 0x0F_i8 is not 0xFF_u16
+    let v5 = 123u8 < 1234u64
+    let v6 = 123i32 <= 123u8
+    let v7 = 100u8 > 56u32
+    let v8 = 100i16 >= 100u32
+
+    assert(v1)
+    assert(v2)
+    assert(v3)
+    assert(v4)
+    assert(v5)
+    assert(v6)
+    assert(v7)
+    assert(v8)
+end
+
+;==================================================================================================
 ; Test: Implicit casting for 'LAndExpr'
 ;==================================================================================================
 let testImplicitCastForLAndExpr_1: ?int = null
@@ -811,6 +852,7 @@ func main() -> int
     testImplicitCastForAddExpr()
     testImplicitCastForAssertStmnt()
     testImplicitCastForAssignExpr()
+    testImplicitCastForCmpExpr()
     testImplicitCastForLAndExpr()
     testImplicitCastForLOrExpr()
     testImplicitCastForMulExpr()

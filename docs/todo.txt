@@ -24,7 +24,6 @@
 
 - Impl and test implicit casting of binary expressions:
 	- TernaryExpr
-	- CmpExpr
 
 ********************** 
 ***** Priority 2 *****
