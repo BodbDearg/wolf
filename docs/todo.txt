@@ -40,6 +40,8 @@
 ***** Priority 3 *****
 **********************
 
+- Do a review of error handling in all the AST node types and see if we are emitting redundant error msgs.
+
 - Emit a compile error if an integer literal can't fit in it's type
 - Fix this bug:
 	let blah : uint = 18_446_744_073_709_551_615
