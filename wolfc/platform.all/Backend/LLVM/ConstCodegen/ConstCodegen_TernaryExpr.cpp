@@ -7,10 +7,12 @@
 #include "ConstCodegen.hpp"
 
 #include "../CodegenCtx.hpp"
+#include "../ImplicitCasts.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/LOrExpr.hpp"
 #include "AST/Nodes/TernaryExpr.hpp"
-#include "DataType/DataType.hpp"
+#include "DataType/Types/BoolDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -23,9 +25,16 @@ void ConstCodegen::visit(const AST::TernaryExprNoCond & astNode) {
 void ConstCodegen::visit(const AST::TernaryExprWithCond & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
-    // Evaluate the condition expression, and the true & false expressions
+    // Evaluate the condition expression
     astNode.mCondExpr.accept(*this);
-    Constant condVal = mCtx.popConstant();
+    Constant condConst = mCtx.popConstant();
+    
+    // Implicitly convert the condition expression to bool if we have to or can
+    PrimitiveDataTypes::getBoolDataType().accept(mCodegenDataType);
+    CompiledDataType boolCDT = mCtx.popCompiledDataType();
+    condConst = ImplicitCasts::castSingleConstantIfRequired(*this, condConst, boolCDT);
+    
+    // Evaluate the left and right expressions
     astNode.mTrueExpr.accept(*this);
     Constant trueVal = mCtx.popConstant();
     astNode.mFalseExpr.accept(*this);
@@ -35,7 +44,7 @@ void ConstCodegen::visit(const AST::TernaryExprWithCond & astNode) {
     bool condValIsBool = true;
     
     {
-        const DataType & condValType = condVal.mCompiledType.getDataType();
+        const DataType & condValType = condConst.mCompiledType.getDataType();
         
         if (!condValType.isBool()) {
             mCtx.error(astNode.mCondExpr,
@@ -67,12 +76,12 @@ void ConstCodegen::visit(const AST::TernaryExprWithCond & astNode) {
     // Proceed no further if any of these checks fail
     WC_GUARD(condValIsBool);
     WC_GUARD(trueFalseValsTypeMatch);
-    WC_GUARD(condVal.isValid());
+    WC_GUARD(condConst.isValid());
     WC_GUARD(trueVal.isValid());
     WC_GUARD(falseVal.isValid());
     
     // Okay see which value to use:
-    if (condVal.mLLVMConst->isZeroValue()) {
+    if (condConst.mLLVMConst->isZeroValue()) {
         mCtx.pushConstant(Constant(falseVal.mLLVMConst, falseVal.mCompiledType, &astNode));
     }
     else {

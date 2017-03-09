@@ -7,11 +7,13 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
+#include "../ImplicitCasts.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/LOrExpr.hpp"
 #include "AST/Nodes/TernaryExpr.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
+#include "DataType/Types/BoolDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "StringUtils.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -28,6 +30,11 @@ void Codegen::visit(const AST::TernaryExprWithCond & astNode) {
     // Evalute the condition expression
     astNode.mCondExpr.accept(*this);
     Value condVal = mCtx.popValue();
+    
+    // Implicitly convert the condition expression to bool if we have to or can
+    PrimitiveDataTypes::getBoolDataType().accept(mCodegenDataType);
+    CompiledDataType boolCDT = mCtx.popCompiledDataType();
+    condVal = ImplicitCasts::castSingleValueIfRequired(*this, condVal, boolCDT);
     
     // The condition value must be of type bool
     bool condValIsBool = true;
