@@ -23,7 +23,7 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 CodegenConstPlusUnaryOp::CodegenConstPlusUnaryOp(ConstCodegen & cg,
                                                  const AST::ASTNode & expr)
 :
-    CodegenConstUnaryOp(cg, expr, "+", "plus")
+    CodegenBasicConstUnaryOp(cg, expr, "+", "plus")
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -53,7 +53,7 @@ WC_IMPL_CONST_PLUS_UNARY_OP(UInt8)
 CodegenConstMinusUnaryOp::CodegenConstMinusUnaryOp(ConstCodegen & cg,
                                                    const AST::ASTNode & expr)
 :
-    CodegenConstUnaryOp(cg, expr, "-", "minus")
+    CodegenBasicConstUnaryOp(cg, expr, "-", "minus")
 {
     WC_EMPTY_FUNC_BODY();
 }

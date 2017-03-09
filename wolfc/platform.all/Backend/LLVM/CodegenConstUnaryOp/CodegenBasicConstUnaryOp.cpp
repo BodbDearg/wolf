@@ -4,7 +4,7 @@
 //      See LICENSE.txt for license details.
 //==============================================================================
 
-#include "CodegenConstUnaryOp.hpp"
+#include "CodegenBasicConstUnaryOp.hpp"
 
 #include "../CodegenCtx.hpp"
 #include "../ConstCodegen/ConstCodegen.hpp"
@@ -16,10 +16,10 @@
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-CodegenConstUnaryOp::CodegenConstUnaryOp(ConstCodegen & cg,
-                                         const AST::ASTNode & expr,
-                                         const char * opSymbol,
-                                         const char * opName)
+CodegenBasicConstUnaryOp::CodegenBasicConstUnaryOp(ConstCodegen & cg,
+                                                   const AST::ASTNode & expr,
+                                                   const char * opSymbol,
+                                                   const char * opName)
 :
     mCG(cg),
     mExpr(expr),
@@ -30,7 +30,7 @@ CodegenConstUnaryOp::CodegenConstUnaryOp(ConstCodegen & cg,
     WC_ASSERT(mExpr.mParent);
 }
 
-void CodegenConstUnaryOp::codegen() {
+void CodegenBasicConstUnaryOp::codegen() {
     // Get the type for the operand:
     const AST::IExpr * nodeAsExpr = dynamic_cast<const AST::IExpr*>(&mExpr);
     
@@ -53,7 +53,7 @@ void CodegenConstUnaryOp::codegen() {
 }
 
 #define WC_IMPL_CONST_UNARY_OP_NOT_SUPPORTED_FOR_TYPE(DataTypeName)\
-    void CodegenConstUnaryOp::visit(const DataTypeName##DataType & dataType) {\
+    void CodegenBasicConstUnaryOp::visit(const DataTypeName##DataType & dataType) {\
         WC_UNUSED_PARAM(dataType);\
         issueUnaryOpNotSupportedError();\
     }
@@ -78,7 +78,7 @@ WC_IMPL_CONST_UNARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt64)
 WC_IMPL_CONST_UNARY_OP_NOT_SUPPORTED_FOR_TYPE(UInt8)
 WC_IMPL_CONST_UNARY_OP_NOT_SUPPORTED_FOR_TYPE(Void)
 
-void CodegenConstUnaryOp::issueUnaryOpNotSupportedError() {
+void CodegenBasicConstUnaryOp::issueUnaryOpNotSupportedError() {
     AST::ASTNode * parent = mExpr.mParent;
     WC_ASSERT(parent);
     mCG.mCtx.error(*parent,
@@ -88,11 +88,11 @@ void CodegenConstUnaryOp::issueUnaryOpNotSupportedError() {
                    mExprConst.mCompiledType.getDataType().name().c_str());
 }
 
-void CodegenConstUnaryOp::pushOpResult(llvm::Constant * result) {
+void CodegenBasicConstUnaryOp::pushOpResult(llvm::Constant * result) {
     pushOpResult(result, mExprConst.mCompiledType);
 }
 
-void CodegenConstUnaryOp::pushOpResult(llvm::Constant * result, const CompiledDataType & resultType) {
+void CodegenBasicConstUnaryOp::pushOpResult(llvm::Constant * result, const CompiledDataType & resultType) {
     WC_ASSERT(result);
     mCG.mCtx.pushConstant(Constant(result, resultType, mExpr.mParent));
 }

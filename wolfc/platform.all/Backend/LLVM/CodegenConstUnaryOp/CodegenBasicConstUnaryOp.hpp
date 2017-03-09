@@ -31,16 +31,15 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 class ConstCodegen;
 
 /**
- * Class that generates code for a constant unary operation for a specific data type.
- * The default implementation of each visitor function says that the op is not 
- * supported for the data type.
+ * Base class for most compile time unary operations that operate on an expression of a specific data type.
+ * The default implementation of each visitor function says that the op is not supported for the data type.
  */
-class CodegenConstUnaryOp : public DataTypeVisitor {
+class CodegenBasicConstUnaryOp : public DataTypeVisitor {
 public:
-    CodegenConstUnaryOp(ConstCodegen & cg,
-                        const AST::ASTNode & expr,
-                        const char * opSymbol,
-                        const char * opName);
+    CodegenBasicConstUnaryOp(ConstCodegen & cg,
+                             const AST::ASTNode & expr,
+                             const char * opSymbol,
+                             const char * opName);
     
     /**
      * Kicks off the codegen for the unary op.
