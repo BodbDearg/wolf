@@ -11,10 +11,11 @@
 WC_BEGIN_NAMESPACE
 
 /**
- * Data type that represents invalid data type.
- * Cannot be declared by the user, used by the compiler for errors.
+ * Data type that represents an undefined or invalid data type.
+ * Cannot be declared by the user, used by the compiler for errors, to indicate a type that 
+ * cannot be determined or which is undefined.
  */
-class InvalidDataType final : public DataType {
+class UndefinedDataType final : public DataType {
 public:
     virtual void accept(DataTypeVisitor & visitor) const override;
     virtual DataTypeId getTypeId() const override;

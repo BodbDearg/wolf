@@ -66,15 +66,16 @@ static void doVarDeclTypeChecks(Codegen & cg,
     // Ensure the variable data type is ok
     varTypeIsOkOut = true;
     
-    if (!varDataType.isValid()) {
-        // Note: no error for an invalid type because we've already done that elsewhere - the error is redundant
+    if (varDataType.isUndefined()) {
+        // Note: no error in the case of an undefined type because 'undefined' signifies we've already done
+        // the error elsewhere - this error would be redundant, so stay silent.
         varTypeIsOkOut = false;
     }
     else if (!varDataType.isSized()) {
         cg.mCtx.error(varDecl, "Can't declare a variable of type '%s' which has no size!", varDataType.name().c_str());
         varTypeIsOkOut = false;
     }
-    else if (!varCompiledType.getLLVMType()) {
+    else if (!varCompiledType.isValid()) {
         cg.mCtx.error(varDecl, "Internal compiler error! No llvm type generated for variable, can't declare!");
         varTypeIsOkOut = false;
     }

@@ -10,8 +10,8 @@
 #include "AST/Nodes/Func.hpp"
 #include "AST/Nodes/IRepeatableStmnt.hpp"
 #include "Assert.hpp"
-#include "DataType/Types/InvalidDataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
+#include "DataType/Types/UndefinedDataType.hpp"
 #include "Lexer/Token.hpp"
 #include "RepeatableStmnt.hpp"
 
@@ -327,7 +327,7 @@ CompiledDataType CodegenCtx::popCompiledDataType() {
         return type;
     }
     
-    return CompiledDataType(PrimitiveDataTypes::getInvalidDataType(), nullptr);
+    return CompiledDataType(PrimitiveDataTypes::getUndefinedDataType(), nullptr);
 }
 
 void CodegenCtx::clearCompiledDataTypes() {

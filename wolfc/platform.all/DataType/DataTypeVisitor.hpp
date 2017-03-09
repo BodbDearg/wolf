@@ -19,7 +19,6 @@ class Int16DataType;
 class Int32DataType;
 class Int64DataType;
 class Int8DataType;
-class InvalidDataType;
 class NullptrDataType;
 class PtrDataType;
 class StrDataType;
@@ -28,6 +27,7 @@ class UInt16DataType;
 class UInt32DataType;
 class UInt64DataType;
 class UInt8DataType;
+class UndefinedDataType;
 class VoidDataType;
 
 /* Interface for a visitor to data types */
@@ -44,7 +44,6 @@ public:
     virtual void visit(const Int32DataType & dataType) = 0;
     virtual void visit(const Int64DataType & dataType) = 0;
     virtual void visit(const Int8DataType & dataType) = 0;
-    virtual void visit(const InvalidDataType & dataType) = 0;
     virtual void visit(const NullptrDataType & dataType) = 0;
     virtual void visit(const PtrDataType & dataType) = 0;
     virtual void visit(const StrDataType & dataType) = 0;
@@ -53,6 +52,7 @@ public:
     virtual void visit(const UInt32DataType & dataType) = 0;
     virtual void visit(const UInt64DataType & dataType) = 0;
     virtual void visit(const UInt8DataType & dataType) = 0;
+    virtual void visit(const UndefinedDataType & dataType) = 0;
     virtual void visit(const VoidDataType & dataType) = 0;
 };
 

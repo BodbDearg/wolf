@@ -9,30 +9,30 @@
 #include "AnyDataType.hpp"
 #include "BoolDataType.hpp"
 #include "IntDataTypes.hpp"
-#include "InvalidDataType.hpp"
 #include "Lexer/TokenType.hpp"
 #include "NullptrDataType.hpp"
 #include "PtrDataType.hpp"
 #include "StrDataType.hpp"
+#include "UndefinedDataType.hpp"
 #include "VoidDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 
 /* Instances of the types themselves! */
-static const InvalidDataType    gInvalidDataType{};
+static const UndefinedDataType  gUndefinedDataType{};
 static const VoidDataType       gVoidDataType{};
 static const AnyDataType        gAnyDataType{};
 static const NullptrDataType    gNullptrDataType{};
-static const Int128DataType     gInt128DataType{};
+static const Int8DataType       gInt8DataType{};
 static const Int16DataType      gInt16DataType{};
 static const Int32DataType      gInt32DataType{};
 static const Int64DataType      gInt64DataType{};
-static const Int8DataType       gInt8DataType{};
-static const UInt128DataType    gUInt128DataType{};
+static const Int128DataType     gInt128DataType{};
+static const UInt8DataType      gUInt8DataType{};
 static const UInt16DataType     gUInt16DataType{};
 static const UInt32DataType     gUInt32DataType{};
 static const UInt64DataType     gUInt64DataType{};
-static const UInt8DataType      gUInt8DataType{};
+static const UInt128DataType    gUInt128DataType{};
 static const BoolDataType       gBoolDataType{};
 
 /* TODO: remove, this is a temporary data type */
@@ -41,7 +41,7 @@ static const StrDataType gStrDataType{};
 const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
     switch (type) {
         // Non user facing types:
-        case DataTypeId::kInvalid: return gInvalidDataType;
+        case DataTypeId::kUndefined: return gUndefinedDataType;
             
         // The basic data types
         case DataTypeId::kVoid: return gVoidDataType;
@@ -67,7 +67,7 @@ const DataType & PrimitiveDataTypes::getUsingTypeId(DataTypeId type) {
             break;
     }
     
-    return gInvalidDataType;
+    return gUndefinedDataType;
 }
 
 DataTypeId PrimitiveDataTypes::getTypeIdForLangKeyword(TokenType tokenType) {
@@ -94,7 +94,7 @@ DataTypeId PrimitiveDataTypes::getTypeIdForLangKeyword(TokenType tokenType) {
             break;
     }
     
-    return DataTypeId::kInvalid;
+    return DataTypeId::kUndefined;
 }
 
 const DataType & PrimitiveDataTypes::getUsingLangKeyword(TokenType tokenType) {
@@ -102,11 +102,11 @@ const DataType & PrimitiveDataTypes::getUsingLangKeyword(TokenType tokenType) {
 }
 
 bool PrimitiveDataTypes::isLangKeywordPrimitiveType(TokenType tokenType) {
-    return getTypeIdForLangKeyword(tokenType) != DataTypeId::kInvalid;
+    return getTypeIdForLangKeyword(tokenType) != DataTypeId::kUndefined;
 }
 
-const InvalidDataType & PrimitiveDataTypes::getInvalidDataType() {
-    return gInvalidDataType;
+const UndefinedDataType & PrimitiveDataTypes::getUndefinedDataType() {
+    return gUndefinedDataType;
 }
 
 const VoidDataType & PrimitiveDataTypes::getVoidDataType() {
@@ -149,7 +149,7 @@ const DataType & PrimitiveDataTypes::getDefaultFloatType() {
 
 DataTypeId PrimitiveDataTypes::getDefaultFloatTypeId() {
     // FIXME: implement for float
-    return DataTypeId::kInvalid;
+    return DataTypeId::kUndefined;
 }
 
 WC_END_NAMESPACE

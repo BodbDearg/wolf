@@ -133,7 +133,6 @@ public:
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Int32)
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Int64)
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Int8)
-    IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Invalid)
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Nullptr)
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Ptr)
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Str)
@@ -142,6 +141,7 @@ public:
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(UInt32)
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(UInt64)
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(UInt8)
+    IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Undefined)
     IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC(Void)
     
     #undef IMPL_CAST_TO_TYPE_UNSUPPORTED_FUNC
@@ -327,21 +327,6 @@ public:
 };
 
 //------------------------------------------------------------------------------
-// Check cast allowed from: <invalid>
-//------------------------------------------------------------------------------
-class CheckCastAllowedFromInvalid final : public CheckCastAllowedFromType {
-public:
-    CheckCastAllowedFromInvalid(const CompiledDataType & fromType,
-                                const CompiledDataType & toType,
-                                llvm::Constant * fromConst)
-    :
-        CheckCastAllowedFromType(fromType, toType, fromConst)
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-};
-
-//------------------------------------------------------------------------------
 // Check cast allowed from: nullptr
 //------------------------------------------------------------------------------
 class CheckCastAllowedFromNullptr final : public CheckCastAllowedFromType {
@@ -524,6 +509,21 @@ public:
 };
 
 //------------------------------------------------------------------------------
+// Check cast allowed from: <undefined>
+//------------------------------------------------------------------------------
+class CheckCastAllowedFromUndefined final : public CheckCastAllowedFromType {
+public:
+    CheckCastAllowedFromUndefined(const CompiledDataType & fromType,
+                                  const CompiledDataType & toType,
+                                  llvm::Constant * fromConst)
+    :
+        CheckCastAllowedFromType(fromType, toType, fromConst)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//------------------------------------------------------------------------------
 // Check cast allowed from: void
 //------------------------------------------------------------------------------
 class CheckCastAllowedFromVoid final : public CheckCastAllowedFromType {
@@ -581,7 +581,6 @@ public:
     IMPL_CAST_FROM_TYPE_FUNC(Int32)
     IMPL_CAST_FROM_TYPE_FUNC(Int64)
     IMPL_CAST_FROM_TYPE_FUNC(Int8)
-    IMPL_CAST_FROM_TYPE_FUNC(Invalid)
     IMPL_CAST_FROM_TYPE_FUNC(Nullptr)
     IMPL_CAST_FROM_TYPE_FUNC(Ptr)
     IMPL_CAST_FROM_TYPE_FUNC(Str)
@@ -590,6 +589,7 @@ public:
     IMPL_CAST_FROM_TYPE_FUNC(UInt32)
     IMPL_CAST_FROM_TYPE_FUNC(UInt64)
     IMPL_CAST_FROM_TYPE_FUNC(UInt8)
+    IMPL_CAST_FROM_TYPE_FUNC(Undefined)
     IMPL_CAST_FROM_TYPE_FUNC(Void)
     
 private:

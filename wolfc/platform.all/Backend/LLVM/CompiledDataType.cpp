@@ -7,8 +7,8 @@
 #include "CompiledDataType.hpp"
 
 #include "Assert.hpp"
-#include "DataType/Types/InvalidDataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
+#include "DataType/Types/UndefinedDataType.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/IRBuilder.h>
@@ -19,7 +19,7 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 CompiledDataType::CompiledDataType()
 :
-    mDataType(&PrimitiveDataTypes::getInvalidDataType()),
+    mDataType(&PrimitiveDataTypes::getUndefinedDataType()),
     mLLVMType(nullptr)
 {
     

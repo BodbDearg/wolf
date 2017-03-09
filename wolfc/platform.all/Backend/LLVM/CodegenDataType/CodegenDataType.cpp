@@ -20,11 +20,11 @@
 #include "DataType/Types/BoolDataType.hpp"
 #include "DataType/Types/FuncDataType.hpp"
 #include "DataType/Types/IntDataTypes.hpp"
-#include "DataType/Types/InvalidDataType.hpp"
 #include "DataType/Types/NullptrDataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "DataType/Types/PtrDataType.hpp"
 #include "DataType/Types/StrDataType.hpp"
+#include "DataType/Types/UndefinedDataType.hpp"
 #include "DataType/Types/VoidDataType.hpp"
 #include "Lexer/Token.hpp"
 
@@ -178,7 +178,7 @@ void CodegenDataType::visitASTNode(const AST::TypeArray & typeArray) {
         // Evaluated data type is hence an array with a bad size...
         //
         // TODO: Use linear allocator here?
-        evaluatedDataType.reset(new InvalidDataType());
+        evaluatedDataType.reset(new UndefinedDataType());
     }
     
     // Codegen the evaluated type (if valid).
@@ -364,12 +364,6 @@ void CodegenDataType::visit(const Int8DataType & dataType) {
     mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
 }
 
-void CodegenDataType::visit(const InvalidDataType & dataType) {
-    // We can't codegen an unknown data type
-    WC_UNUSED_PARAM(dataType);
-    mCtx.error("Can't codegen an invalid data type!");
-}
-
 void CodegenDataType::visit(const NullptrDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     llvm::Type * llvmType = llvm::Type::getInt1PtrTy(mCtx.mLLVMCtx);
@@ -448,6 +442,11 @@ void CodegenDataType::visit(const UInt8DataType & dataType) {
     llvm::Type * llvmType = llvm::Type::getInt8Ty(mCtx.mLLVMCtx);
     WC_ASSERT(llvmType);
     mCtx.pushCompiledDataType(CompiledDataType(dataType, llvmType));
+}
+
+void CodegenDataType::visit(const UndefinedDataType & dataType) {
+    WC_UNUSED_PARAM(dataType);
+    mCtx.error("Can't codegen an undefined data type!");
 }
 
 void CodegenDataType::visit(const VoidDataType & dataType) {

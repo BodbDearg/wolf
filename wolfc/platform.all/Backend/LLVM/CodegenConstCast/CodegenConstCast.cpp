@@ -49,7 +49,6 @@ public:
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Int32)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Int64)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Int8)
-    IMPL_UNSUPPORTED_CAST_OP_FUNC(Invalid)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Nullptr)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Ptr)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Str)
@@ -58,6 +57,7 @@ public:
     IMPL_UNSUPPORTED_CAST_OP_FUNC(UInt32)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(UInt64)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(UInt8)
+    IMPL_UNSUPPORTED_CAST_OP_FUNC(Undefined)
     IMPL_UNSUPPORTED_CAST_OP_FUNC(Void)
     
     /* Done with this now! */
@@ -296,21 +296,6 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-// Cast From: <invalid>
-//-----------------------------------------------------------------------------
-class CodegenConstCastFromInvalidDataType final : public CodegenConstCastFromDataType {
-public:
-    CodegenConstCastFromInvalidDataType(ConstCodegen & cg,
-                                        const Constant & fromConst,
-                                        const CompiledDataType & toTypeCDT)
-    :
-        CodegenConstCastFromDataType(cg, fromConst, toTypeCDT)
-    {
-        WC_EMPTY_FUNC_BODY();
-    }
-};
-
-//-----------------------------------------------------------------------------
 // Cast From: nullptr
 //-----------------------------------------------------------------------------
 class CodegenConstCastFromNullptrDataType final : public CodegenConstCastFromDataType {
@@ -535,6 +520,21 @@ public:
 };
 
 //-----------------------------------------------------------------------------
+// Cast From: <undefined>
+//-----------------------------------------------------------------------------
+class CodegenConstCastFromUndefinedDataType final : public CodegenConstCastFromDataType {
+public:
+    CodegenConstCastFromUndefinedDataType(ConstCodegen & cg,
+                                          const Constant & fromConst,
+                                          const CompiledDataType & toTypeCDT)
+    :
+        CodegenConstCastFromDataType(cg, fromConst, toTypeCDT)
+    {
+        WC_EMPTY_FUNC_BODY();
+    }
+};
+
+//-----------------------------------------------------------------------------
 // Cast From: void
 //-----------------------------------------------------------------------------
 class CodegenConstCastFromVoidDataType final : public CodegenConstCastFromDataType {
@@ -615,7 +615,6 @@ IMPL_CAST_FROM_TYPE_FUNC(Int16)
 IMPL_CAST_FROM_TYPE_FUNC(Int32)
 IMPL_CAST_FROM_TYPE_FUNC(Int64)
 IMPL_CAST_FROM_TYPE_FUNC(Int8)
-IMPL_CAST_FROM_TYPE_FUNC(Invalid)
 IMPL_CAST_FROM_TYPE_FUNC(Nullptr)
 IMPL_CAST_FROM_TYPE_FUNC(Ptr)
 IMPL_CAST_FROM_TYPE_FUNC(Str)
@@ -624,6 +623,7 @@ IMPL_CAST_FROM_TYPE_FUNC(UInt16)
 IMPL_CAST_FROM_TYPE_FUNC(UInt32)
 IMPL_CAST_FROM_TYPE_FUNC(UInt64)
 IMPL_CAST_FROM_TYPE_FUNC(UInt8)
+IMPL_CAST_FROM_TYPE_FUNC(Undefined)
 IMPL_CAST_FROM_TYPE_FUNC(Void)
 
 /* Done with this */

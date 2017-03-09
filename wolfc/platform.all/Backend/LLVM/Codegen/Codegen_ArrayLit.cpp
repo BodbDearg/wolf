@@ -12,7 +12,7 @@
 #include "Assert.hpp"
 #include "DataType/DataType.hpp"
 #include "DataType/Types/ArrayDataType.hpp"
-#include "DataType/Types/InvalidDataType.hpp"
+#include "DataType/Types/UndefinedDataType.hpp"
 #include "NoRTTIOps.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -107,7 +107,7 @@ void Codegen::visit(const AST::ArrayLit & astNode) {
             evalDataType->accept(mCodegenDataType);
         }
         else {
-            evalDataType.reset(new InvalidDataType());
+            evalDataType.reset(new UndefinedDataType());
         }
         
         mCtx.setNodeEvaluatedDataType(astNode, evalDataType);

@@ -16,8 +16,8 @@ WC_BEGIN_NAMESPACE
 
 /* Enum representing a data type id. Can be used to switch on data types. */
 enum class DataTypeId : uint8_t {
-    /* Invalid data type. Used for compiler errors, when we can't tell the type of something. */
-    kInvalid,
+    /* The 'undefined' data type. Used for compiler errors, when we can't tell the type of something. */
+    kUndefined,
     /* Void/non-existant data type. No actual data held. */
     kVoid,
     /* Any non void and valid data type. Can only be used for pointers and references. */

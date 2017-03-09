@@ -60,7 +60,6 @@ public:
     virtual void visit(const Int32DataType & dataType) override;
     virtual void visit(const Int64DataType & dataType) override;
     virtual void visit(const Int8DataType & dataType) override;
-    virtual void visit(const InvalidDataType & dataType) override;
     virtual void visit(const NullptrDataType & dataType) override;
     virtual void visit(const PtrDataType & dataType) override;
     virtual void visit(const StrDataType & dataType) override;
@@ -69,6 +68,7 @@ public:
     virtual void visit(const UInt32DataType & dataType) override;
     virtual void visit(const UInt64DataType & dataType) override;
     virtual void visit(const UInt8DataType & dataType) override;
+    virtual void visit(const UndefinedDataType & dataType) override;
     virtual void visit(const VoidDataType & dataType) override;
     
 protected:

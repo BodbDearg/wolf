@@ -38,8 +38,9 @@ public:
     virtual bool equals(const DataType & other) const = 0;
     
     /**
-     * Tells if the data type is valid. 
-     * Returns 'true' for all data types except invalid ones which can't be used.
+     * Tells if the data type is valid.
+     * Returns 'true' for all data types except 'undefined' and 'any'.
+     * Note that pointers to 'any' are actually considered valid though.
      */
     virtual bool isValid() const;
     
@@ -48,6 +49,11 @@ public:
      * Most data types are sized, with the exception of the unknown data type and void.
      */
     virtual bool isSized() const;
+    
+    /* Utility. Tell if this data type is the 'undefined' data type. */
+    inline bool isUndefined() const {
+        return getTypeId() == DataTypeId::kUndefined;
+    }
     
     /* Utility. Tell if this data type is the 'void' data type. */
     inline bool isVoid() const {
