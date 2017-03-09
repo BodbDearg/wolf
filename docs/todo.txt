@@ -22,7 +22,11 @@
 - [] operator should dereference pointers
 - '! operator'
 - Don't allow dereference of nullable pointers
+
 - Don't allow non nullable pointers to be convertable to 'bool'
+	- On implicit casts
+	- On explicit casts
+	- Disallow comparison with 'null'
 
 - Allow an extra ',' at the end of array literals
 	- Also write a test for this
