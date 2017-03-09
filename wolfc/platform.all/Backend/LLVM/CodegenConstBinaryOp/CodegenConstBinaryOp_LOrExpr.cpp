@@ -20,7 +20,7 @@ CodegenConstLOrBinaryOp::CodegenConstLOrBinaryOp(ConstCodegen & cg,
                                                  const AST::ASTNode & leftExpr, 
                                                  const AST::ASTNode & rightExpr)
 :
-    CodegenConstBinaryOp(cg, leftExpr, rightExpr, "or", "logical or")
+    CodegenConstLogicalBinaryOp(cg, leftExpr, rightExpr, "or", "logical or")
 {
     WC_EMPTY_FUNC_BODY();
 }

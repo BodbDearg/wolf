@@ -20,7 +20,7 @@ CodegenConstLAndBinaryOp::CodegenConstLAndBinaryOp(ConstCodegen & cg,
                                                    const AST::ASTNode & leftExpr,
                                                    const AST::ASTNode & rightExpr)
 :
-    CodegenConstBinaryOp(cg, leftExpr, rightExpr, "and", "logical and")
+    CodegenConstLogicalBinaryOp(cg, leftExpr, rightExpr, "and", "logical and")
 {
     WC_EMPTY_FUNC_BODY();
 }

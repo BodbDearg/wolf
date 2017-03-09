@@ -12,6 +12,9 @@
 #include "AST/Nodes/IExpr.hpp"
 #include "Assert.hpp"
 #include "DataType/DataType.hpp"
+#include "DataType/Types/BoolDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
+#include "ImplicitCasts.hpp"
 #include "StringUtils.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -68,6 +71,11 @@ void CodegenLazyLogicalBinaryOp::codegen() {
     Value leftVal = mCG.mCtx.popValue();
     WC_ASSERT(!leftVal.mRequiresLoad || !leftVal.isValid());
     
+    // Codegen the bool data type and do any implicit promotion to bool required for the left value
+    PrimitiveDataTypes::getBoolDataType().accept(mCG.mCodegenDataType);
+    CompiledDataType boolCDT = mCG.mCtx.popCompiledDataType();
+    leftVal = ImplicitCasts::castSingleValueIfRequired(mCG, leftVal, boolCDT);
+    
     // Save the basic block which the left value came from, we'll need it later for a PHI node.
     // Since there could be multiple sub expressions and operations on the left side, this
     // might not be the same as the start block for evaluating the left side...
@@ -89,6 +97,9 @@ void CodegenLazyLogicalBinaryOp::codegen() {
     mRightExpr.accept(mCG);
     Value rightVal = mCG.mCtx.popValue();
     WC_ASSERT(!rightVal.mRequiresLoad || !rightVal.isValid());
+    
+    // Do any implicit promotion to bool required for the right value:
+    rightVal = ImplicitCasts::castSingleValueIfRequired(mCG, rightVal, boolCDT);
     
     // Don't do anything more if either side is not valid:
     WC_GUARD(leftVal.isValid() && rightVal.isValid());

@@ -25,10 +25,6 @@
 - Impl and test implicit casting of binary expressions:
 	- TernaryExpr
 	- CmpExpr
-	- LOrExpr
-		- To bool
-	- LAndExpr
-		- To bool
 
 ********************** 
 ***** Priority 2 *****

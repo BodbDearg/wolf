@@ -662,6 +662,48 @@ func testImplicitCastForAssignExpr()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'LAndExpr'
+;==================================================================================================
+let testImplicitCastForLAndExpr_1: ?int = null
+let testImplicitCastForLAndExpr_2: ?int = cast(1 to ?int)
+let testImplicitCastForLAndExpr_3: bool = testImplicitCastForLAndExpr_1 and testImplicitCastForLAndExpr_2
+let testImplicitCastForLAndExpr_4: bool = testImplicitCastForLAndExpr_2 and testImplicitCastForLAndExpr_2
+
+func testImplicitCastForLAndExpr()
+    assert(not testImplicitCastForLAndExpr_3)
+    assert(testImplicitCastForLAndExpr_4)
+
+    let someVal1: ?int = null
+    let someVal2: ?int = cast(1 to ?int)
+    let v1 = someVal1 and someVal2
+    let v2 = someVal2 and someVal2
+
+    assert(not v1)
+    assert(v2)
+end
+
+;==================================================================================================
+; Test: Implicit casting for 'LOrExpr'
+;==================================================================================================
+let testImplicitCastForLOrExpr_1: ?int = null
+let testImplicitCastForLOrExpr_2: ?int = cast(1 to ?int)
+let testImplicitCastForLOrExpr_3: bool = testImplicitCastForLOrExpr_1 or testImplicitCastForLOrExpr_1
+let testImplicitCastForLOrExpr_4: bool = testImplicitCastForLOrExpr_1 or testImplicitCastForLOrExpr_2
+
+func testImplicitCastForLOrExpr()
+    assert(not testImplicitCastForLOrExpr_3)
+    assert(testImplicitCastForLOrExpr_4)
+
+    let someVal1: ?int = null
+    let someVal2: ?int = cast(1 to ?int)
+    let v1 = someVal1 or someVal1
+    let v2 = someVal1 or someVal2
+
+    assert(not v1)
+    assert(v2)
+end
+
+;==================================================================================================
 ; Test: Implicit casting for 'MulExpr'
 ;==================================================================================================
 let testImplicitCastForMulExpr_1 = 2i8 * 3i16
@@ -769,6 +811,8 @@ func main() -> int
     testImplicitCastForAddExpr()
     testImplicitCastForAssertStmnt()
     testImplicitCastForAssignExpr()
+    testImplicitCastForLAndExpr()
+    testImplicitCastForLOrExpr()
     testImplicitCastForMulExpr()
     testImplicitCastForNotExpr()
     testImplicitCastForShiftExpr()

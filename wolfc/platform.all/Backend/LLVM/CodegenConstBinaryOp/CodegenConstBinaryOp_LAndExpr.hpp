@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include "CodegenConstBinaryOp.hpp"
+#include "CodegenConstLogicalBinaryOp.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-class CodegenConstLAndBinaryOp : public CodegenConstBinaryOp {
+class CodegenConstLAndBinaryOp : public CodegenConstLogicalBinaryOp {
 public:
     CodegenConstLAndBinaryOp(ConstCodegen & cg,
                              const AST::ASTNode & leftExpr,
