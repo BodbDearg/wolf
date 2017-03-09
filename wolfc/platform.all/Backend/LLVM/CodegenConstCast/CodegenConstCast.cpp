@@ -9,7 +9,7 @@
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
+#include "DataType/Types/BoolDataType.hpp"
 #include "DataType/Types/PtrDataType.hpp"
 
 WC_BEGIN_NAMESPACE
@@ -357,7 +357,18 @@ public:
     WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt8)
     
     virtual void visit(const BoolDataType & dataType) override {
-        WC_UNUSED_PARAM(dataType);
+        // Doing this for a non nullable pointer type is an error:
+        const PtrDataType & fromPtrType = static_cast<const PtrDataType&>(mFromConst.mCompiledType.getDataType());
+        
+        if (!fromPtrType.mIsNullable) {
+            mCG.mCtx.error("Attempting to cast a non nullable pointer of type '%s' to type '%s' via a pointer "
+                           "nullness check! Non nullable pointers can never be null in well defined code, hence "
+                           "checking if they are null and converting to bool based on that result is not allowed!",
+                           fromPtrType.name().c_str(),
+                           dataType.name().c_str());
+            
+            return;
+        }
         
         // If the value is non null push a true value, otherwise push false
         llvm::Constant * boolConst = mFromConst.mLLVMConst->isNullValue() ?
