@@ -3,8 +3,6 @@
 ********************** 
 - Impl and test implicit casting for:
 	- Func call args
-	- IfStmnt
-		- To bool
 	- WhileStmnt
 		- To bool
 	- LoopStmnt

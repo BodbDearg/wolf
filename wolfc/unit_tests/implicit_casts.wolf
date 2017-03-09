@@ -703,6 +703,54 @@ func testImplicitCastForCmpExpr()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'IfStmnt'
+;==================================================================================================
+func testImplicitCastForIfStmnt()
+    ; Test that pointers will cast to bool ok
+    let nullPtr = null
+    let nonNullPtr: ?any = &nullPtr
+
+    ; If without an else
+    if nullPtr
+        assert(false)
+    end
+
+    unless nonNullPtr
+        assert(false)
+    end
+
+    ; If statement with else
+    if nullPtr
+        assert(false)
+    else
+        noop
+    end
+
+    unless nonNullPtr
+        assert(false)
+    else
+        noop
+    end
+
+    ; If statement with else if
+    if nullPtr
+        assert(false)
+    else if nonNullPtr
+        noop
+    else
+        assert(false)
+    end
+
+    unless nonNullPtr
+        assert(false)
+    else unless nullPtr
+        noop
+    else
+        assert(false)
+    end
+end
+
+;==================================================================================================
 ; Test: Implicit casting for 'LAndExpr'
 ;==================================================================================================
 let testImplicitCastForLAndExpr_1: ?int = null
@@ -873,6 +921,7 @@ func main() -> int
     testImplicitCastForAssertStmnt()
     testImplicitCastForAssignExpr()
     testImplicitCastForCmpExpr()
+    testImplicitCastForIfStmnt()
     testImplicitCastForLAndExpr()
     testImplicitCastForLOrExpr()
     testImplicitCastForMulExpr()
