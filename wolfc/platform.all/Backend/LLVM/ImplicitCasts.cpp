@@ -607,6 +607,28 @@ bool canDoImplicitCast(const CompiledDataType & fromType,
     return castCheck.check();
 }
 
+/**
+ * Utility.Check if we are trying to cast a non nullable pointer to bool and issue an error when that happens. 
+ * Casting non nullable pointers to bool is a useless op and not allowed.
+ * Returns true if this particular error was found.
+ */
+static bool checkForCastNonNullablePtrToBoolError(CodegenCtx & cgCtx,
+                                                  const DataType & fromTypeDT,
+                                                  const DataType & toTypeDT)
+{
+    WC_GUARD(fromTypeDT.isPtr() && toTypeDT.isBool(), false);
+    const PtrDataType & fromPtrDT = static_cast<const PtrDataType&>(fromTypeDT);
+    WC_GUARD(!fromPtrDT.mIsNullable, false);
+    
+    cgCtx.error("Attempting to cast a non nullable pointer of type '%s' to type '%s' via a pointer "
+                "nullness check! Non nullable pointers can never be null in well defined code, hence "
+                "checking if they are null and converting to bool based on that result is not allowed!",
+                fromTypeDT.name().c_str(),
+                toTypeDT.name().c_str());
+    
+    return true;
+}
+
 void castSingleValueIfRequired(Codegen & cg,
                                Value & value,
                                const CompiledDataType & toTypeCDT)
@@ -617,7 +639,16 @@ void castSingleValueIfRequired(Codegen & cg,
     // If the data type of the value equals the type given then no cast is required.
     // In this case return the value given:
     const CompiledDataType & valueCDT = value.mCompiledType;
-    WC_GUARD(!valueCDT.getDataType().equals(toTypeCDT.getDataType()));
+    const DataType & valueDT = valueCDT.getDataType();
+    const DataType & toTypeDT = toTypeCDT.getDataType();
+    WC_GUARD(!valueDT.equals(toTypeDT));
+    
+    // Special case: if trying to cast a non-nullable pointer to bool then issue
+    // an error and fail the cast:
+    if (checkForCastNonNullablePtrToBoolError(cg.mCtx, valueDT, toTypeDT)) {
+        value = Value();
+        return;
+    }
     
     // If the implicit cast is not allowed then do not proceed.
     // In this case also return the value given:
@@ -638,7 +669,16 @@ void castSingleConstantIfRequired(ConstCodegen & cg,
     // If the data type of the value equals the type given then no cast is required.
     // In this case return the value given:
     const CompiledDataType & constantCDT = constant.mCompiledType;
-    WC_GUARD(!constantCDT.getDataType().equals(toTypeCDT.getDataType()));
+    const DataType & constantDT = constantCDT.getDataType();
+    const DataType & toTypeDT = toTypeCDT.getDataType();
+    WC_GUARD(!constantDT.equals(toTypeDT));
+    
+    // Special case: if trying to cast a non-nullable pointer to bool then issue
+    // an error and fail the cast:
+    if (checkForCastNonNullablePtrToBoolError(cg.mCtx, constantDT, toTypeDT)) {
+        constant = Constant();
+        return;
+    }
     
     // If the implicit cast is not allowed then do not proceed.
     // In this case also return the value given:

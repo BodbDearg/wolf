@@ -46,6 +46,9 @@ void Codegen::visit(const AST::AssertStmnt & astNode) {
     CompiledDataType boolCDT = mCtx.popCompiledDataType();
     ImplicitCasts::castSingleValueIfRequired(*this, exprVal, boolCDT);
     
+    // If that failed don't issue any further errors, bail:
+    WC_GUARD(exprVal.isValid());
+    
     // The expression being asserted must evaluate to a boolean.
     const DataType & exprDataType = exprVal.mCompiledType.getDataType();
     bool exprIsBool = exprDataType.isBool();
