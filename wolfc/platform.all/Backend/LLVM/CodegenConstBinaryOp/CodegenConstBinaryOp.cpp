@@ -61,17 +61,21 @@ void CodegenConstBinaryOp::codegen() {
     mRightExpr.accept(mCG);
     mRightConst = mCG.mCtx.popConstant();
     
+    // Don't do anything if either side is not valid:
+    WC_GUARD(mLeftConst.isValid() && mRightConst.isValid());
+    
     // Do any automatic type promotion required and allowed:
     ImplicitCasts::castBinaryOpValuesIfRequired(mCG, mLeftConst, mRightConst);
+
+    // Don't do anything if either side is not valid:
+    WC_GUARD(mLeftConst.isValid() && mRightConst.isValid());
     
     // The left and right types must match:
     WC_GUARD(verifyLeftAndRightTypesAreOkForOp());
     
-    // Codegen if the values are valid!    
-    if (mLeftConst.isValid() && mRightConst.isValid()) {
-        const DataType & leftType = mLeftConst.mCompiledType.getDataType();
-        leftType.accept(*this);
-    }
+    // Codegen the operation
+    const DataType & leftType = mLeftConst.mCompiledType.getDataType();
+    leftType.accept(*this);
 }
 
 #define WC_IMPL_CONST_BINARY_OP_NOT_SUPPORTED_FOR_TYPE(DataTypeName)\
