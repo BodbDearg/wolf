@@ -679,18 +679,24 @@ end
 ;==================================================================================================
 ; Test: Implicit casting for 'NotExpr'
 ;==================================================================================================
-func testImplicitCastForNotExpr()
+let testImplicitCastForNotExpr_1: ?int = null
+let testImplicitCastForNotExpr_2: ?int = cast(1 to ?int)
+let testImplicitCastForNotExpr_3: bool = testImplicitCastForNotExpr_1
+let testImplicitCastForNotExpr_4: bool = testImplicitCastForNotExpr_2
 
-    let blahPtr1: ?int = null
-    let blahPtr2: ?int = cast(1 to ?int)
-    assert(not blahPtr1)
-    assert(not not blahPtr2)
+func testImplicitCastForNotExpr()
+    assert(not testImplicitCastForNotExpr_3)
+    assert(testImplicitCastForNotExpr_4)
+
+    let ptr1: ?int = null
+    let ptr2: ?int = cast(1 to ?int)
+    assert(not ptr1)
+    assert(not not ptr2)
 end
 
 ;==================================================================================================
 ; Test: Implicit casting for 'ShiftExpr'
 ;==================================================================================================
-
 let testImplicitCastForShiftExpr_1 = 1u8 << 4u32
 let testImplicitCastForShiftExpr_2 = testImplicitCastForShiftExpr_1 >> 2u16
 let testImplicitCastForShiftExpr_3 = testImplicitCastForShiftExpr_1 >>> 2u16

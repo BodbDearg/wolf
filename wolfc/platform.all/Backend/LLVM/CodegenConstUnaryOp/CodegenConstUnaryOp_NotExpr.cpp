@@ -6,6 +6,12 @@
 
 #include "CodegenConstUnaryOp_NotExpr.hpp"
 
+#include "../CodegenCtx.hpp"
+#include "../ConstCodegen/ConstCodegen.hpp"
+#include "../ImplicitCasts.hpp"
+#include "DataType/Types/BoolDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
+
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <llvm/IR/IRBuilder.h>
 WC_THIRD_PARTY_INCLUDES_END
@@ -27,6 +33,16 @@ CodegenConstLNotUnaryOp::CodegenConstLNotUnaryOp(ConstCodegen & cg,
 void CodegenConstLNotUnaryOp::visit(const BoolDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
     pushOpResult(llvm::ConstantExpr::getNot(mExprConst.mLLVMConst));
+}
+
+void CodegenConstLNotUnaryOp::doAnyImplicitTypeCastingRequiredForExprConst() {
+    // The expression value must always be converted to the 'bool' type.
+    // The first step is to codegen this type:
+    PrimitiveDataTypes::getBoolDataType().accept(mCG.mCodegenDataType);
+    CompiledDataType boolType = mCG.mCtx.popCompiledDataType();
+    
+    // Next, do any conversions that are required:
+    mExprConst = ImplicitCasts::castSingleConstantIfRequired(mCG, mExprConst, boolType);
 }
 
 //-----------------------------------------------------------------------------

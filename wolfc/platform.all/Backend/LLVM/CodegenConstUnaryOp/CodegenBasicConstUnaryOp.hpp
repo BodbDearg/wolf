@@ -74,6 +74,12 @@ protected:
     void issueUnaryOpNotSupportedError();
     
     /**
+     * Perform automatic type casting required for the expression constant.
+     * The default implementation of this simply does nothing.
+     */
+    virtual void doAnyImplicitTypeCastingRequiredForExprConst();
+    
+    /**
      * Save the operator result in the codegen context. If the compiled type of the result 
      * is not specified then we use the compiled type of the operand.
      */

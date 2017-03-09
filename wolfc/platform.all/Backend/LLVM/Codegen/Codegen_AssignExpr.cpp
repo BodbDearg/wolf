@@ -10,13 +10,13 @@
 #include "../CodegenBinaryOp/CodegenBinaryOp_MulExpr.hpp"
 #include "../CodegenBinaryOp/CodegenBinaryOp_ShiftExpr.hpp"
 #include "../CodegenCtx.hpp"
+#include "../ImplicitCasts.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/TernaryExpr.hpp"
 #include "Assert.hpp"
 #include "DataType/DataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "DataType/Types/VoidDataType.hpp"
-#include "ImplicitCasts.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE

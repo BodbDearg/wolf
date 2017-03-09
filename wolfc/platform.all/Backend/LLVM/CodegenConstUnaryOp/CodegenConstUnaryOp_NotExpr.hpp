@@ -17,6 +17,9 @@ public:
                             const AST::ASTNode & expr);
     
     virtual void visit(const BoolDataType & dataType) override;
+    
+protected:
+    virtual void doAnyImplicitTypeCastingRequiredForExprConst() override;
 };
 
 class CodegenConstBNotUnaryOp : public CodegenBasicConstUnaryOp {

@@ -44,12 +44,16 @@ void CodegenBasicConstUnaryOp::codegen() {
     // Okay, codegen the operand expression
     mExpr.accept(mCG);
     mExprConst = mCG.mCtx.popConstant();
-    
+
     // Must have a generated type and value to proceed any further:
-    if (mExprConst.isValid()) {
-        const DataType & exprType = mExprConst.mCompiledType.getDataType();
-        exprType.accept(*this);
-    }
+    WC_GUARD(mExprConst.isValid());
+    
+    // Do any type conversions that are required:
+    doAnyImplicitTypeCastingRequiredForExprConst();
+    
+    // Now codegen the operation for the expression type:
+    const DataType & exprType = mExprConst.mCompiledType.getDataType();
+    exprType.accept(*this);
 }
 
 #define WC_IMPL_CONST_UNARY_OP_NOT_SUPPORTED_FOR_TYPE(DataTypeName)\
@@ -86,6 +90,11 @@ void CodegenBasicConstUnaryOp::issueUnaryOpNotSupportedError() {
                    mOpSymbol,
                    mOpName,
                    mExprConst.mCompiledType.getDataType().name().c_str());
+}
+
+void CodegenBasicConstUnaryOp::doAnyImplicitTypeCastingRequiredForExprConst() {
+    // The default impl of this is just a no-op...
+    WC_EMPTY_FUNC_BODY();
 }
 
 void CodegenBasicConstUnaryOp::pushOpResult(llvm::Constant * result) {

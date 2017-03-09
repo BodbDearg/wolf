@@ -23,16 +23,14 @@
 	- TernaryExpr
 		- To bool
 		- To largest of true/false exprs.
-	- LOrExpr
-		- To bool
-	- LAndExpr
-		- To bool
-	- NotExpr
-		- To bool
 
 - Impl and test implicit casting of binary expressions:
 	- TernaryExpr
 	- CmpExpr
+	- LOrExpr
+		- To bool
+	- LAndExpr
+		- To bool
 
 ********************** 
 ***** Priority 2 *****
