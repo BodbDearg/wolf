@@ -21,10 +21,25 @@ class DataType;
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 class Codegen;
+class CodegenCtx;
 class ConstCodegen;
 
 /* Utilities for dealing with implicit casts performed by the compiler */
 namespace ImplicitCasts {
+    /* Enum representing a cast direction for a binary op */
+    enum class BinaryOpCastDir {
+        /* No cast possible. E.G Invalid input or can't find any possible implicit casts. */
+        kNoCastPossible,
+        /* No cast is required, binary op types are the same */
+        kNoCastRequired,
+        /* Can't determine which way to cast. */
+        kCastDirIsAmbiguous,
+        /* Cast the left value to the right type */
+        kCastLeftToRight,
+        /* Cast the right value to the left type */
+        kCastRightToLeft
+    };
+    
     /**
      * Check if an implicit cast is allowed between the given source and destination types.
      *
@@ -54,6 +69,24 @@ namespace ImplicitCasts {
     void castSingleConstantIfRequired(ConstCodegen & cg,
                                       Constant & constant,
                                       const CompiledDataType & toTypeCDT);
+    
+    /**
+     * Try to determine which way we should cast for the given binary op.
+     * If the cast dir to use is ambiguous then an error will be emitted. 
+     */
+    BinaryOpCastDir determineCastDirForBinaryOp(CodegenCtx & cgCtx,
+                                                llvm::Value & leftLLVMVal,
+                                                const CompiledDataType & leftTypeCDT,
+                                                llvm::Value & rightLLVMVal,
+                                                const CompiledDataType & rightTypeCDT);
+    
+    BinaryOpCastDir determineCastDirForBinaryOp(CodegenCtx & cgCtx,
+                                                const Value & leftVal,
+                                                const Value & rightVal);
+    
+    BinaryOpCastDir determineCastDirForBinaryOp(CodegenCtx & cgCtx,
+                                                const Constant & leftConst,
+                                                const Constant & rightConst);
     
     /**
      * Do any required casting that is possible and allowed for the operands in runtime and

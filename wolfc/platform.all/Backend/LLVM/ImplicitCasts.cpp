@@ -743,138 +743,124 @@ static bool resolveAmbiguousBinaryOpImplicitCasts(CodegenCtx & cgCtx,
     return true;
 }
 
-void castBinaryOpValuesIfRequired(Codegen & cg,
-                                  Value & leftVal,
-                                  Value & rightVal)
+BinaryOpCastDir determineCastDirForBinaryOp(CodegenCtx & cgCtx,
+                                            llvm::Value & leftLLVMVal,
+                                            const CompiledDataType & leftTypeCDT,
+                                            llvm::Value & rightLLVMVal,
+                                            const CompiledDataType & rightTypeCDT)
 {
-    // If either the value is invalid then bail out
-    WC_GUARD(leftVal.isValid() && rightVal.isValid());
+    // If either the type is invalid then bail out
+    WC_GUARD(leftTypeCDT.isValid() && rightTypeCDT.isValid(), BinaryOpCastDir::kNoCastPossible);
     
     // If the left or right types are the same then bail out:
-    const CompiledDataType & leftCDT = leftVal.mCompiledType;
-    const DataType & leftType = leftCDT.getDataType();
-    const CompiledDataType & rightCDT = rightVal.mCompiledType;
-    const DataType & rightType = rightCDT.getDataType();
+    const DataType & leftType = leftTypeCDT.getDataType();
+    const DataType & rightType = rightTypeCDT.getDataType();
     
-    WC_GUARD(!leftType.equals(rightType));
+    WC_GUARD(!leftType.equals(rightType), BinaryOpCastDir::kNoCastRequired);
     
     // Okay, see which ways we can cast:
-    bool canCastLToR = canDoImplicitCast(leftCDT, rightCDT, leftVal.mLLVMVal);
-    bool canCastRToL = canDoImplicitCast(rightCDT, leftCDT, rightVal.mLLVMVal);
-    
-    // These are useful
-    #define IMPLICIT_CAST_L_TO_R()\
-        do {\
-            CodegenCast(cg, leftVal, rightCDT).codegen();\
-            leftVal = cg.mCtx.popValue();\
-        } while (0)
-    
-    #define IMPLICIT_CAST_R_TO_L()\
-        do {\
-            CodegenCast(cg, rightVal, leftCDT).codegen();\
-            rightVal = cg.mCtx.popValue();\
-        } while (0)
-    
+    bool canCastLToR = canDoImplicitCast(leftTypeCDT, rightTypeCDT, &leftLLVMVal);
+    bool canCastRToL = canDoImplicitCast(rightTypeCDT, leftTypeCDT, &rightLLVMVal);
+
     // See which ways we can implicitly cast:
     if (canCastLToR) {
         // If we can cast both ways the cast might be ambiguous. We can resolve however for integer types
         // by simply taking the larger of the two types, lets see:
         if (canCastRToL) {
-            if (resolveAmbiguousBinaryOpImplicitCasts(cg.mCtx,
+            if (resolveAmbiguousBinaryOpImplicitCasts(cgCtx,
                                                       leftType,
                                                       rightType,
                                                       canCastLToR,
                                                       canCastRToL,
-                                                      *leftVal.mLLVMVal,
-                                                      *rightVal.mLLVMVal))
+                                                      leftLLVMVal,
+                                                      rightLLVMVal))
             {
                 if (canCastLToR) {
-                    IMPLICIT_CAST_L_TO_R();
+                    return BinaryOpCastDir::kCastLeftToRight;
                 }
                 else {
-                    IMPLICIT_CAST_R_TO_L();
+                    return BinaryOpCastDir::kCastRightToLeft;
                 }
+            }
+            else {
+                return BinaryOpCastDir::kCastDirIsAmbiguous;
             }
         }
         else {
-            IMPLICIT_CAST_L_TO_R();
+            return BinaryOpCastDir::kCastLeftToRight;
         }
     }
     else {
         if (canCastRToL) {
-            IMPLICIT_CAST_R_TO_L();
+            return BinaryOpCastDir::kCastRightToLeft;
         }
     }
     
-    #undef IMPLICIT_CAST_L_TO_R
-    #undef IMPLICIT_CAST_R_TO_L
+    return BinaryOpCastDir::kNoCastPossible;
+}
+
+BinaryOpCastDir determineCastDirForBinaryOp(CodegenCtx & cgCtx,
+                                            const Value & leftVal,
+                                            const Value & rightVal)
+{
+    // If either the value is invalid then bail out
+    WC_GUARD(leftVal.isValid() && rightVal.isValid(), BinaryOpCastDir::kNoCastPossible);
+    
+    // Determine the cast dir:
+    return determineCastDirForBinaryOp(cgCtx,
+                                       *leftVal.mLLVMVal,
+                                       leftVal.mCompiledType,
+                                       *rightVal.mLLVMVal,
+                                       rightVal.mCompiledType);
+}
+
+BinaryOpCastDir determineCastDirForBinaryOp(CodegenCtx & cgCtx,
+                                            const Constant & leftConst,
+                                            const Constant & rightConst)
+{
+    // If either the value is invalid then bail out
+    WC_GUARD(leftConst.isValid() && rightConst.isValid(), BinaryOpCastDir::kNoCastPossible);
+    
+    // Determine the cast dir:
+    return determineCastDirForBinaryOp(cgCtx,
+                                       *leftConst.mLLVMConst,
+                                       leftConst.mCompiledType,
+                                       *rightConst.mLLVMConst,
+                                       rightConst.mCompiledType);
+}
+
+void castBinaryOpValuesIfRequired(Codegen & cg,
+                                  Value & leftVal,
+                                  Value & rightVal)
+{
+    // Determine which way to cast and do it if we can:
+    BinaryOpCastDir castDir = determineCastDirForBinaryOp(cg.mCtx, leftVal, rightVal);
+    
+    if (castDir == BinaryOpCastDir::kCastLeftToRight) {
+        CodegenCast(cg, leftVal, rightVal.mCompiledType).codegen();
+        leftVal = cg.mCtx.popValue();
+    }
+    else if (castDir == BinaryOpCastDir::kCastRightToLeft) {
+        CodegenCast(cg, rightVal, leftVal.mCompiledType).codegen();
+        rightVal = cg.mCtx.popValue();
+    }
 }
 
 void castBinaryOpValuesIfRequired(ConstCodegen & cg,
                                   Constant & leftConst,
                                   Constant & rightConst)
 {
-    // If either the value is invalid then bail out
-    WC_GUARD(leftConst.isValid() && rightConst.isValid());
+    // Determine which way to cast and do it if we can:
+    BinaryOpCastDir castDir = determineCastDirForBinaryOp(cg.mCtx, leftConst, rightConst);
     
-    // If the left or right types are the same then bail out:
-    const CompiledDataType & leftCDT = leftConst.mCompiledType;
-    const DataType & leftType = leftCDT.getDataType();
-    const CompiledDataType & rightCDT = rightConst.mCompiledType;
-    const DataType & rightType = rightCDT.getDataType();
-    
-    WC_GUARD(!leftType.equals(rightType));
-    
-    // Okay, see which ways we can cast:
-    bool canCastLToR = canDoImplicitCast(leftCDT, rightCDT, leftConst.mLLVMConst);
-    bool canCastRToL = canDoImplicitCast(rightCDT, leftCDT, rightConst.mLLVMConst);
-    
-    // These are useful
-    #define IMPLICIT_CAST_L_TO_R()\
-        do {\
-            CodegenConstCast(cg, leftConst, rightCDT).codegen();\
-            leftConst = cg.mCtx.popConstant();\
-        } while (0)
-    
-    #define IMPLICIT_CAST_R_TO_L()\
-        do {\
-            CodegenConstCast(cg, rightConst, leftCDT).codegen();\
-            rightConst = cg.mCtx.popConstant();\
-        } while (0)
-    
-    // See which ways we can implicitly cast:
-    if (canCastLToR) {
-        // If we can cast both ways the cast might be ambiguous. We can resolve however for integer types
-        // by simply taking the larger of the two types, lets see:
-        if (canCastRToL) {
-            if (resolveAmbiguousBinaryOpImplicitCasts(cg.mCtx,
-                                                      leftType,
-                                                      rightType,
-                                                      canCastLToR,
-                                                      canCastRToL,
-                                                      *leftConst.mLLVMConst,
-                                                      *rightConst.mLLVMConst))
-            {
-                if (canCastLToR) {
-                    IMPLICIT_CAST_L_TO_R();
-                }
-                else {
-                    IMPLICIT_CAST_R_TO_L();
-                }
-            }
-        }
-        else {
-            IMPLICIT_CAST_L_TO_R();
-        }
+    if (castDir == BinaryOpCastDir::kCastLeftToRight) {
+        CodegenConstCast(cg, leftConst, rightConst.mCompiledType).codegen();
+        leftConst = cg.mCtx.popConstant();
     }
-    else {
-        if (canCastRToL) {
-            IMPLICIT_CAST_R_TO_L();
-        }
+    else if (castDir == BinaryOpCastDir::kCastRightToLeft) {
+        CodegenConstCast(cg, rightConst, leftConst.mCompiledType).codegen();
+        rightConst = cg.mCtx.popConstant();
     }
-    
-    #undef IMPLICIT_CAST_L_TO_R
-    #undef IMPLICIT_CAST_R_TO_L
 }
 
 WC_END_NAMED_NAMESPACE(ImplicitCast)
