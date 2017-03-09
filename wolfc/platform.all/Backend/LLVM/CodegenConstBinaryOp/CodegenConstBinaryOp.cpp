@@ -36,24 +36,9 @@ CodegenConstBinaryOp::CodegenConstBinaryOp(ConstCodegen & cg,
 }
 
 void CodegenConstBinaryOp::codegen() {
-    // Get the type for both left and right expressions:
-    const AST::IExpr * leftAsExpr = dynamic_cast<const AST::IExpr*>(&mLeftExpr);
-    
-    if (!leftAsExpr) {
-        mCG.mCtx.error(mLeftExpr,
-                       "Left side of '%s' (%s) operator must be an expression with a value result!",
-                       mOpSymbol,
-                       mOpName);
-    }
-    
-    const AST::IExpr * rightAsExpr = dynamic_cast<const AST::IExpr*>(&mRightExpr);
-    
-    if (!rightAsExpr) {
-        mCG.mCtx.error(mRightExpr,
-                       "Right side of '%s' (%s) operator must be an expression with a value result!",
-                       mOpSymbol,
-                       mOpName);
-    }
+    // Sanity check, left and right operands must be expressions:
+    WC_ASSERT(dynamic_cast<const AST::IExpr*>(&mLeftExpr));
+    WC_ASSERT(dynamic_cast<const AST::IExpr*>(&mRightExpr));
     
     // Okay, codegen both the left and right expressions
     mLeftExpr.accept(mCG);
