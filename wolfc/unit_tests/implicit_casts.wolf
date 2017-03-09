@@ -810,6 +810,26 @@ func testImplicitCastForShiftExpr()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'TernaryExpr'
+;==================================================================================================
+let testImplicitCastForTernaryExpr_1 = null
+let testImplicitCastForTernaryExpr_2 = cast(1 to ?int)
+let testImplicitCastForTernaryExpr_3 = testImplicitCastForTernaryExpr_1 ? 18u8 : -43i32
+let testImplicitCastForTernaryExpr_4 = testImplicitCastForTernaryExpr_2 ? 18i32 : 43u64
+
+func testImplicitCastForTernaryExpr()
+    assert(testImplicitCastForTernaryExpr_3 == -43)
+    assert(testImplicitCastForTernaryExpr_4 == 18)
+
+    let someVal1 = null
+    let someVal2 = cast(1 to ?int)
+    let v1 = someVal1 ? 18u8 : -43i32
+    let v2 = someVal2 ? 18u8 : -43i32
+    assert(v1 == -43)
+    assert(v2 == 18)
+end
+
+;==================================================================================================
 ; Test: Implicit casting for 'VarDecl'
 ;==================================================================================================
 let testImplicitCastForVarDecl_1: bool = null
@@ -858,6 +878,7 @@ func main() -> int
     testImplicitCastForMulExpr()
     testImplicitCastForNotExpr()
     testImplicitCastForShiftExpr()
+    testImplicitCastForTernaryExpr()
     testImplicitCastForVarDecl()
 
     return 0

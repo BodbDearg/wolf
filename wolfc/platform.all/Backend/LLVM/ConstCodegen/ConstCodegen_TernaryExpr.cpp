@@ -40,6 +40,9 @@ void ConstCodegen::visit(const AST::TernaryExprWithCond & astNode) {
     astNode.mFalseExpr.accept(*this);
     Constant falseVal = mCtx.popConstant();
     
+    // Do any implicit type conversions between the two types that may be required
+    ImplicitCasts::castBinaryOpValuesIfRequired(*this, trueVal, falseVal);
+    
     // The condition value must be of type bool
     bool condValIsBool = true;
     
@@ -47,9 +50,12 @@ void ConstCodegen::visit(const AST::TernaryExprWithCond & astNode) {
         const DataType & condValType = condConst.mCompiledType.getDataType();
         
         if (!condValType.isBool()) {
-            mCtx.error(astNode.mCondExpr,
-                       "Condition expression for ternary operator must be of type 'bool', not '%s'!",
-                       condValType.name().c_str());
+            // Note: no error msg in the case of 'undefined' since that means an error was triggered elsewhere
+            if (!condValType.isUndefined()) {
+                mCtx.error(astNode.mCondExpr,
+                           "Condition expression for ternary operator must be of type 'bool', not '%s'!",
+                           condValType.name().c_str());
+            }
             
             condValIsBool = false;
         }
@@ -63,11 +69,14 @@ void ConstCodegen::visit(const AST::TernaryExprWithCond & astNode) {
         const DataType & falseValType = falseVal.mCompiledType.getDataType();
         
         if (!trueValType.equals(falseValType)) {
-            mCtx.error(astNode,
-                       "The 'true' and 'false' expressions of the ternary operator must be of the same type! "
-                       "The true expression is of type '%s' while the false expression is of type '%s'!",
-                       trueValType.name().c_str(),
-                       falseValType.name().c_str());
+            // Note: no error msg in the case of 'undefined' since that means an error was triggered elsewhere
+            if (!trueValType.isUndefined() && !falseValType.isUndefined()) {
+                mCtx.error(astNode,
+                           "The 'true' and 'false' expressions of the ternary operator must be of the same type! "
+                           "The true expression is of type '%s' while the false expression is of type '%s'!",
+                           trueValType.name().c_str(),
+                           falseValType.name().c_str());
+            }
             
             trueFalseValsTypeMatch = false;
         }
