@@ -886,6 +886,30 @@ func testImplicitCastForNotExpr()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'ReturnStmnt'
+;==================================================================================================
+func testImplicitCastForReturnStmnt_call1() -> int8
+    return 100
+end
+
+func testImplicitCastForReturnStmnt_call2(ptr: ?int)
+    return unless ptr
+    assert(false)
+end
+
+func testImplicitCastForReturnStmnt_call3(ptr: ?int) -> int8
+    return 127 unless ptr
+    return 100
+end
+
+func testImplicitCastForReturnStmnt()
+    let thePtr: ?int = null
+    assert(testImplicitCastForReturnStmnt_call1() == 100)
+    testImplicitCastForReturnStmnt_call2(thePtr)
+    assert(testImplicitCastForReturnStmnt_call3(thePtr) == 127)
+end
+
+;==================================================================================================
 ; Test: Implicit casting for 'ShiftExpr'
 ;==================================================================================================
 let testImplicitCastForShiftExpr_1 = 1u8 << 4u32
@@ -993,6 +1017,7 @@ func main() -> int
     testImplicitCastForMulExpr()
     testImplicitCastForNextStmnt()
     testImplicitCastForNotExpr()
+    testImplicitCastForReturnStmnt()
     testImplicitCastForShiftExpr()
     testImplicitCastForTernaryExpr()
     testImplicitCastForVarDecl()

@@ -3,9 +3,6 @@
 ********************** 
 - Impl and test implicit casting for:
 	- Func call args
-	- ReturnStmnt
-		- To func return type
-		- To bool
 
 ********************** 
 ***** Priority 2 *****

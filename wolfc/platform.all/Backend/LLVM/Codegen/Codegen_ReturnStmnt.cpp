@@ -7,9 +7,11 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
+#include "../ImplicitCasts.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/ReturnStmnt.hpp"
 #include "Assert.hpp"
+#include "DataType/Types/BoolDataType.hpp"
 #include "DataType/Types/FuncDataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "DataType/Types/VoidDataType.hpp"
@@ -19,45 +21,87 @@ WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 /**
- * Verify that the data type for the type returned is correct for the current function.
- * Returns true if verification is okay, and false otherwise.
+ * Get the compiled return type for the current function.
+ * Issues an error if that fails to happen (should never happen if compiler has no bugs related to this).
  */
-static bool verifyReturnTypeForCurrentFunction(Codegen & cg,
-                                               const CompiledDataType & typeReturned)
-{
+static CompiledDataType getReturnTypeCDTForCurrentFunc(Codegen & cg) {
     // This should never be called when there isn't a valid function!
     if (!cg.mCtx.mCurFunc) {
-        cg.mCtx.error("Internal error! Can't verify the return statement for the current function because "
-                      "there is no current function set!");
+        cg.mCtx.error("Internal error! Can't determine the return type for the current function because "
+                      "there is no current function set! This is a compiler bug!");
         
-        return false;
+        return CompiledDataType();
     }
     
     // Get the compiled type for the current function
     const DataType & curFuncAbstractDataType = cg.mCtx.mCurFunc->mCompiledType.getDataType();
     
     if (curFuncAbstractDataType.getTypeId() != DataTypeId::kFunc) {
-        cg.mCtx.error("Can't verify the return type for a return statement because the data type "
-                      "determined for the current function is not valid!");
+        cg.mCtx.error("Internal error! Can't determine the return type for the current function because "
+                      "the data type for the current function is not set to be a function. "
+                      "This is a compiler bug!");
         
-        return false;
+        return CompiledDataType();
     }
     
     // Alright, cast to the function data type and compile the return type
     const FuncDataType & funcDataType = static_cast<const FuncDataType&>(curFuncAbstractDataType);
     funcDataType.mReturnType.accept(cg.mCodegenDataType);
-    CompiledDataType funcCompiledRetType = cg.mCtx.popCompiledDataType();
+    return cg.mCtx.popCompiledDataType();
+}
+
+/**
+ * Verify that the data type returned is type correct for the current function.
+ * Returns true if verification is okay, false otherwise.
+ */
+static bool verifyReturnTypeOkForCurrentFunc(Codegen & cg,
+                                             const CompiledDataType & returnValTypeCDT)
+{
+    // Get the return type for the current function. If invalid then return type is not okay.
+    // Don't issue an error if it is invalid since we'd have already done that:
+    CompiledDataType funcRetTypeCDT = getReturnTypeCDTForCurrentFunc(cg);
+    WC_GUARD(funcRetTypeCDT.isValid(), false);
     
-    // Now check that the types match:
-    if (!funcCompiledRetType.getDataType().equals(typeReturned.getDataType())) {
-        cg.mCtx.error("Invalid return type for current function! Function expects return type '%s' "
-                      "but instead return statement returns type '%s'!",
-                      funcCompiledRetType.getDataType().name().c_str(),
-                      typeReturned.getDataType().name().c_str());
+    // Now check that the types match, if they don't then return false for failure:
+    const DataType & funcRetType = funcRetTypeCDT.getDataType();
+    const DataType & returnValType = returnValTypeCDT.getDataType();
+    
+    if (!funcRetType.equals(returnValType)) {
+        // Note: don't issue an error in the case of one of these being undefined since we'd have
+        // already done that elsewhere:
+        if (!funcRetType.isUndefined() && !returnValType.isUndefined()) {
+            cg.mCtx.error("Invalid return type for current function! Function expects return type '%s' "
+                          "but instead return statement returns type '%s'!",
+                          funcRetType.name().c_str(),
+                          returnValType.name().c_str());
+        }
+        
+        // Failed:
+        return false;
     }
     
-    // All good
+    // All good!
     return true;
+}
+
+/**
+ * Verify that the value returned is type correct for the current function.
+ * Will attempt to implicit cast the value if possible.
+ * Returns true if verification and/or implicit casting went okay, false otherwise.
+ */
+static bool verifyAndAutoPromoteReturnValForCurrentFunc(Codegen & cg,
+                                                        Value & valReturned)
+{
+    // Get the return type for the current function. If invalid then the return value is not okay.
+    // Don't issue an error if it is invalid since we'd have already done that:
+    CompiledDataType funcRetTypeCDT = getReturnTypeCDTForCurrentFunc(cg);
+    WC_GUARD(funcRetTypeCDT.isValid(), false);
+    
+    // Implicitly cast the value to the return type if possible:
+    ImplicitCasts::castSingleValueIfRequired(cg, valReturned, funcRetTypeCDT);
+    
+    // Now return whether the type of the return value is valid for this function:
+    return verifyReturnTypeOkForCurrentFunc(cg, valReturned.mCompiledType);
 }
 
 void Codegen::visit(const AST::ReturnStmntNoCondVoid & astNode) {
@@ -65,10 +109,10 @@ void Codegen::visit(const AST::ReturnStmntNoCondVoid & astNode) {
     
     // Codegen the void return type
     PrimitiveDataTypes::getVoidDataType().accept(mCodegenDataType);
-    CompiledDataType returnedType = mCtx.popCompiledDataType();
+    CompiledDataType voidCDT = mCtx.popCompiledDataType();
     
     // Verify the return type is correct, if it isn't then bail
-    WC_GUARD(verifyReturnTypeForCurrentFunction(*this, returnedType));
+    WC_GUARD(verifyReturnTypeOkForCurrentFunc(*this, voidCDT));
     
     // Generate the code for the return and return true for success
     mCtx.mIRBuilder.CreateRetVoid();
@@ -100,10 +144,12 @@ void Codegen::visit(const AST::ReturnStmntNoCondWithValue & astNode) {
     astNode.mReturnExpr.accept(*this);
     Value returnVal = mCtx.popValue();
     
-    // Verify that the return type is correct:
-    WC_GUARD(verifyReturnTypeForCurrentFunction(*this, returnVal.mCompiledType));
+    // Verify the type of the return value is correct for this function and try to implicitly
+    // cast if it is mismatched to correct it. If we fail in this, then bail out...
+    WC_GUARD(verifyAndAutoPromoteReturnValForCurrentFunc(*this, returnVal));
     
-    // Make sure we have a valid value to return:
+    // Make sure we have a valid value to return.
+    // Note: do not expect this value to require a load either.
     WC_GUARD(returnVal.isValid());
     WC_ASSERT(!returnVal.mRequiresLoad);
     
@@ -135,26 +181,34 @@ void Codegen::visit(const AST::ReturnStmntWithCondVoid & astNode) {
     
     // Codegen the void return type
     PrimitiveDataTypes::getVoidDataType().accept(mCodegenDataType);
-    CompiledDataType returnedType = mCtx.popCompiledDataType();
+    CompiledDataType voidCDT = mCtx.popCompiledDataType();
 
     // Codegen the conditional expression
     astNode.mCondExpr.accept(*this);
     Value condVal = mCtx.popValue();
+    
+    // Codegen the bool data type and try to auto promote the condition expr to bool if it isn't already
+    PrimitiveDataTypes::getBoolDataType().accept(mCodegenDataType);
+    CompiledDataType boolCDT = mCtx.popCompiledDataType();
+    ImplicitCasts::castSingleValueIfRequired(*this, condVal, boolCDT);
     
     // Verify that the condition value is a bool
     const DataType & condValType = condVal.mCompiledType.getDataType();
     bool condValIsBool = true;
     
     if (!condValType.isBool()) {
-        mCtx.error(astNode.mCondExpr,
-                   "Condition for executing return statement must of type 'bool' not '%s'!",
-                   condValType.name().c_str());
+        // Note: no errors in the case of 'undefined' since they would have been raised elsewhere
+        if (!condValType.isUndefined()) {
+            mCtx.error(astNode.mCondExpr,
+                       "Condition for executing return statement must of type 'bool' not '%s'!",
+                       condValType.name().c_str());
+        }
         
         condValIsBool = false;
     }
     
     // Verify the return type is correct, if it isn't then bail
-    WC_GUARD(verifyReturnTypeForCurrentFunction(*this, returnedType));
+    WC_GUARD(verifyReturnTypeOkForCurrentFunc(*this, voidCDT));
     
     // Don't go any further if these checks do not pass
     WC_GUARD(condValIsBool);
@@ -197,14 +251,22 @@ void Codegen::visit(const AST::ReturnStmntWithCondAndValue & astNode) {
     astNode.mCondExpr.accept(*this);
     Value condVal = mCtx.popValue();
     
+    // Codegen the bool data type and try to auto promote the condition expr to bool if it isn't already
+    PrimitiveDataTypes::getBoolDataType().accept(mCodegenDataType);
+    CompiledDataType boolCDT = mCtx.popCompiledDataType();
+    ImplicitCasts::castSingleValueIfRequired(*this, condVal, boolCDT);
+    
     // Verify that the condition value is a bool
     const DataType & condValType = condVal.mCompiledType.getDataType();
     bool condValIsBool = true;
     
     if (!condValType.isBool()) {
-        mCtx.error(astNode.mCondExpr,
-                   "Condition for executing return statement must of type 'bool' not '%s'!",
-                   condValType.name().c_str());
+        // Note: no errors in the case of 'undefined' since they would have been raised elsewhere
+        if (!condValType.isUndefined()) {
+            mCtx.error(astNode.mCondExpr,
+                       "Condition for executing return statement must of type 'bool' not '%s'!",
+                       condValType.name().c_str());
+        }
         
         condValIsBool = false;
     }
@@ -231,9 +293,14 @@ void Codegen::visit(const AST::ReturnStmntWithCondAndValue & astNode) {
     astNode.mReturnExpr.accept(*this);
     Value returnVal = mCtx.popValue();
     
-    // Verify the return type is correct, if it isn't then bail
-    WC_GUARD(verifyReturnTypeForCurrentFunction(*this, returnVal.mCompiledType));
+    // Verify the type of the return value is correct for this function and try to implicitly
+    // cast if it is mismatched to correct it. If we fail in this, then bail out...
+    WC_GUARD(verifyAndAutoPromoteReturnValForCurrentFunc(*this, returnVal));
+    
+    // Make sure we have a valid value to return.
+    // Note: do not expect this value to require a load either.
     WC_GUARD(returnVal.isValid());
+    WC_ASSERT(!returnVal.mRequiresLoad);
     
     // Generate the code for the return:
     mCtx.mIRBuilder.CreateRet(returnVal.mLLVMVal);
