@@ -127,8 +127,7 @@ void Codegen::visit(const AST::ArrayLit & astNode) {
         // because CreateInsertValue() takes this data type rather than uint64_t...
         //
         // It may be possible to lift this restriction in future, though I doubt this limitation will be
-        // much of an issue in practice. Who throws arrays >~ 4 billion elements at their
-        // compilers anyways?!
+        // much of an issue in practice. Who throws arrays >~ 4 billion elements at their compilers anyways?!
         if (index > UINT_MAX) {
             mCtx.error(*subExprs[index],
                        "Array index '%zu' is too large! "
