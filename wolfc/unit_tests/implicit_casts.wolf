@@ -886,6 +886,26 @@ func testImplicitCastForNotExpr()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'PostfixExpr'
+;==================================================================================================
+
+; Test: Implicit cast of function call args
+func testImplicitCastForPostfixExpr_call1(v1: int64, v2: bool, v3: ?any)
+    assert(v1 == 255)
+    assert(v2)
+    assert(v3)
+end
+
+func testImplicitCastForPostfixExpr()
+    ; Test: Implicit cast of function call args
+    scope 
+        let blah = 0
+        let blahPtr: ?int = &blah
+        testImplicitCastForPostfixExpr_call1(255u8, blahPtr, blahPtr)
+    end
+end
+
+;==================================================================================================
 ; Test: Implicit casting for 'ReturnStmnt'
 ;==================================================================================================
 func testImplicitCastForReturnStmnt_call1() -> int8
@@ -1017,6 +1037,7 @@ func main() -> int
     testImplicitCastForMulExpr()
     testImplicitCastForNextStmnt()
     testImplicitCastForNotExpr()
+    testImplicitCastForPostfixExpr()
     testImplicitCastForReturnStmnt()
     testImplicitCastForShiftExpr()
     testImplicitCastForTernaryExpr()

@@ -1,37 +1,32 @@
 ********************** 
 ***** Priority 1 *****
 ********************** 
-- Impl and test implicit casting for:
-	- Func call args
-
-********************** 
-***** Priority 2 *****
-********************** 
 
 - [] operator should dereference pointers
 - '! operator'
 - Don't allow dereference of nullable pointers
-
 - Allow an extra ',' at the end of array literals
 	- Also write a test for this
+
+********************** 
+***** Priority 2 *****
+**********************
+
+- Do a review of error handling in all the AST node types and see if we are emitting redundant error msgs.
+
+- Emit a compile error if an integer literal can't fit in it's type
+
+- Fix up random 'new' allocations throughout the codebase
+	- Use linear alloc
+
+- Fix this bug:
+	let blah : uint = 18_446_744_073_709_551_615
 
 - Fix this bug:
     let blah = [1, 2, 3, 4]
     let blahPtr = &blah
     print(($blahPtr)[1])
 
-********************** 
-***** Priority 3 *****
-**********************
-
-- Do a review of error handling in all the AST node types and see if we are emitting redundant error msgs.
-
-- Emit a compile error if an integer literal can't fit in it's type
-- Fix this bug:
-	let blah : uint = 18_446_744_073_709_551_615
-
-- Fix up random 'new' allocations throughout the codebase
-	- Use linear alloc
 
 - Fix this bug:
 	func testImplicitCastForWhileStmnt()

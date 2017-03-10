@@ -8,6 +8,7 @@
 
 #include "../CodegenCtx.hpp"
 #include "../CodegenUnaryOp/CodegenUnaryOp_PostfixExpr.hpp"
+#include "../ImplicitCasts.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/CastExpr.hpp"
 #include "AST/Nodes/PostfixExpr.hpp"
@@ -87,22 +88,39 @@ void Codegen::visit(const AST::PostfixExprFuncCall & astNode) {
     
     // Make sure the number of args matches the number of args expected to the function.
     // If the arg counts match, make sure arg types agree.
+    //
+    // TODO: Someday support default args here.
     if (funcDataType) {
         if (funcArgVals.size() == funcDataType->mArgTypes.size()) {
             for (size_t i = 0; i < funcArgVals.size(); ++i) {
+                // Get the type of the arg in the function signature and compile it if we can:
+                const DataType & funcArgDT = *funcDataType->mArgTypes[i];
+                CompiledDataType funcArgCDT;
+                
+                if (funcArgDT.isValid()) {
+                    funcArgDT.accept(mCodegenDataType);
+                    funcArgCDT = mCtx.popCompiledDataType();
+                }
+                
+                // Okay, now get the argument value and try to implicitly promote it if we can to the type expected
+                Value & argVal = funcArgVals[i];
+                ImplicitCasts::castSingleValueIfRequired(*this, argVal, funcArgCDT);
+                
                 // Get the type of the arg expression and type of the arg in the function signature
                 const DataType & argExprDT = funcArgVals[i].mCompiledType.getDataType();
-                const DataType & funcArgDT = *funcDataType->mArgTypes[i];
                 
-                // TODO: support auto promotion
                 // Make sure the arg types match:
                 if (!argExprDT.equals(funcArgDT)) {
-                    mCtx.error(funcArgVals[i].mDeclaringNode ? *funcArgVals[i].mDeclaringNode : astNode,
-                               "Argument type mismatch for arg #%zu in function call! Expected type '%s' "
-                               "for the argument, instead got type '%s'!",
-                               i + 1,
-                               funcArgDT.name().c_str(),
-                               argExprDT.name().c_str());
+                    // Note: don't emit an error if we are dealing with 'undefined' types since an error
+                    // would have already been spat out for those:
+                    if (!argExprDT.isUndefined() && !argExprDT.isUndefined()) {
+                        mCtx.error(funcArgVals[i].mDeclaringNode ? *funcArgVals[i].mDeclaringNode : astNode,
+                                   "Argument type mismatch for arg #%zu in function call! Expected type '%s' "
+                                   "for the argument, instead got type '%s'!",
+                                   i + 1,
+                                   funcArgDT.name().c_str(),
+                                   argExprDT.name().c_str());
+                    }
                     
                     funcArgsOk = false;
                 }
@@ -110,9 +128,11 @@ void Codegen::visit(const AST::PostfixExprFuncCall & astNode) {
         }
         else {
             mCtx.error(astNode,
-                       "Invalid number of arguments to function called! Expected '%zu', got '%zu' instead!",
+                       "Invalid number of arguments to function called! Expected '%zu', got '%zu' instead! "
+                       "The signature for the function is: %s",
                        funcDataType->mArgTypes.size(),
-                       funcArgVals.size());
+                       funcArgVals.size(),
+                       funcDataType->name().c_str());
             
             funcArgsOk = false;
         }
