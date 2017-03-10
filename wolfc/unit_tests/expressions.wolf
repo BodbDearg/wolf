@@ -828,6 +828,46 @@ func testLazyEval()
             testLazyEvalFalseNoCall()
         )
     ) is true)
+
+    ; Test: 'while' loop lazy eval - there was a bug with this previously
+    let v = 0
+
+    while true and true
+        v++
+        break
+    end
+
+    assert(v == 1)
+
+    while true or true
+        v++
+        break
+    end
+
+    assert(v == 2)
+
+    ; Test 'loop repeat' lazy eval
+    loop
+        v++
+        break
+    repeat while true and true
+
+    assert(v == 3)
+
+    ; Test 'break' statement lazy eval
+    while true 
+        break if true and true
+        v++
+    end
+
+    ; Test 'next' statement lazy eval
+    loop
+        v++
+        next if true and true
+        v++
+    repeat while false or v < 4
+
+    assert(v == 4)
 end
 
 ;==================================================================================================

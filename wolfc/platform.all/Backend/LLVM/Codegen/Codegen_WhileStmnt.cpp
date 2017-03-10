@@ -50,6 +50,11 @@ void Codegen::visit(const AST::WhileStmnt & astNode) {
     astNode.mWhileExpr.accept(*this);
     Value whileExprVal = mCtx.popValue();
     
+    // Save the end basic block for the while condition. There might be multiple basic blocks due
+    // to lazy evaluation in the while condition expression:
+    llvm::BasicBlock * whileCondEndBB = mCtx.mIRBuilder.GetInsertBlock();
+    WC_ASSERT(whileCondEndBB);
+    
     // Codegen the 'bool' data type and implicitly cast the while statement condition
     // expression to it, if it is not already in 'bool' format:
     PrimitiveDataTypes::getBoolDataType().accept(mCodegenDataType);
@@ -85,7 +90,9 @@ void Codegen::visit(const AST::WhileStmnt & astNode) {
     
     // Generate the branch for the while condition.
     // Note: the condition must be a boolean for this codegen to happen
-    mCtx.mIRBuilder.SetInsertPoint(whileCondBB);
+    // Note: We must use the END basic block for the while condition also, since lazy evaluation might
+    // cause multiple basic blocks to be generated for the while condition.
+    mCtx.mIRBuilder.SetInsertPoint(whileCondEndBB);
     const DataType & whileExprType = whileExprVal.mCompiledType.getDataType();
     
     if (whileExprType.isBool()) {

@@ -1,6 +1,26 @@
 ********************** 
 ***** Priority 1 *****
-********************** 
+**********************
+
+- Test lazy logical and & or in the following statements:
+	AssertStmnt
+	VarDecl
+	IfStmnt
+	ReturnStmnt
+	AssignExpr
+	TernaryExpr
+	LOrExpr
+	LAndExpr
+	NotExpr
+	CmpExpr
+	AddExpr
+	MulExpr
+	ShiftExpr
+	PrefixExpr
+	PostfixExpr
+	CastExpr
+	ArrayLit
+	RandExpr
 
 - [] operator should dereference pointers
 - '! operator'
