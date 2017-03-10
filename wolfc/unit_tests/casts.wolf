@@ -184,8 +184,7 @@ let castFrom_nullptr_to_u16 = cast(null to uint16)
 let castFrom_nullptr_to_u32 = cast(null to uint32)
 let castFrom_nullptr_to_u64 = cast(null to uint64)
 let castFrom_nullptr_to_u128 = cast(null to uint128)
-let castFrom_nullptr_to_ptr1 = cast(null to ^int)
-let castFrom_nullptr_to_ptr2 = cast(null to ?bool)
+let castFrom_nullptr_to_ptr = cast(null to ?bool)
 
 func testCastFromNullptr()
     assert(castFrom_nullptr_to_i == cast(null to int))
@@ -200,8 +199,7 @@ func testCastFromNullptr()
     assert(castFrom_nullptr_to_u32 == cast(null to uint32))
     assert(castFrom_nullptr_to_u64 == cast(null to uint64))
     assert(castFrom_nullptr_to_u128 == cast(null to uint128))
-    assert(castFrom_nullptr_to_ptr1 == cast(null to ^int))
-    assert(castFrom_nullptr_to_ptr2 == cast(null to ?bool))
+    assert(castFrom_nullptr_to_ptr == cast(null to ?bool))
 end
 
 ;==================================================================================================
@@ -245,7 +243,7 @@ func testCastFromPtr()
     ; Do some additional spot checking of the actual values
     assert(castFromPtr_to_bool_1 is true)
     assert(castFromPtr_to_bool_2 is false)
-    assert(castFromPtr_to_Ptr_1 is cast(null to ^int))
+    assert(castFromPtr_to_Ptr_1 is cast(0 to ^int))
     assert(castFromPtr_to_Ptr_2 is not cast(null to ?uint32))
 end
 
