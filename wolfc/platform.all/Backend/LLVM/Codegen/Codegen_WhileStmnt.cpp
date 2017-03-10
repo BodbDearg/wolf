@@ -7,12 +7,14 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
+#include "../ImplicitCasts.hpp"
 #include "../RepeatableStmnt.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/Scope.hpp"
 #include "AST/Nodes/WhileStmnt.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
+#include "DataType/Types/BoolDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "Lexer/Token.hpp"
 #include "StringUtils.hpp"
 
@@ -47,6 +49,12 @@ void Codegen::visit(const AST::WhileStmnt & astNode) {
     mCtx.mIRBuilder.SetInsertPoint(whileCondBB);
     astNode.mWhileExpr.accept(*this);
     Value whileExprVal = mCtx.popValue();
+    
+    // Codegen the 'bool' data type and implicitly cast the while statement condition
+    // expression to it, if it is not already in 'bool' format:
+    PrimitiveDataTypes::getBoolDataType().accept(mCodegenDataType);
+    CompiledDataType boolCDT = mCtx.popCompiledDataType();
+    ImplicitCasts::castSingleValueIfRequired(*this, whileExprVal, boolCDT);
     
     // Create the 'body' basic block:
     std::string bodyBBLbl = StringUtils::appendLineInfo("WhileStmnt:body",
@@ -89,11 +97,15 @@ void Codegen::visit(const AST::WhileStmnt & astNode) {
         }
     }
     else {
-        // The loop condition must evaluate to a boolean
-        mCtx.error(astNode.mWhileExpr,
-                   "Condition expression for 'while' loop must evaluate to type "
-                   "'bool' not type '%s'!",
-                   whileExprType.name().c_str());
+        // The loop condition must evaluate to a boolean.
+        // Note: if the type of the loop condition is 'undefined' then don't spit out an error because
+        // generating the condition expression would have already done that.
+        if (!whileExprType.isUndefined()) {
+            mCtx.error(astNode.mWhileExpr,
+                       "Condition expression for 'while' loop must evaluate to type "
+                       "'bool' not type '%s'!",
+                       whileExprType.name().c_str());
+        }
         
         // Create an unreachable just to terminate the block
         mCtx.mIRBuilder.CreateUnreachable();

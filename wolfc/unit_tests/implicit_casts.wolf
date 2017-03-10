@@ -899,6 +899,21 @@ func testImplicitCastForVarDecl()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'WhileStmnt'
+;==================================================================================================
+func testImplicitCastForWhileStmnt()
+    let blah = 0
+    let blahPtr: ?int = &blah
+
+    while blahPtr
+        $blahPtr = $blahPtr + 1
+        blahPtr = null
+    end
+
+    assert(blah == 1)
+end
+
+;==================================================================================================
 ; Run all the tests in this module
 ;==================================================================================================
 func main() -> int
@@ -929,6 +944,7 @@ func main() -> int
     testImplicitCastForShiftExpr()
     testImplicitCastForTernaryExpr()
     testImplicitCastForVarDecl()
+    testImplicitCastForWhileStmnt()
 
     return 0
 end

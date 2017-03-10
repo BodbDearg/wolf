@@ -3,8 +3,6 @@
 ********************** 
 - Impl and test implicit casting for:
 	- Func call args
-	- WhileStmnt
-		- To bool
 	- LoopStmnt
 		- To bool
 	- BreakStmnt
@@ -46,6 +44,19 @@
 
 - Fix up random 'new' allocations throughout the codebase
 	- Use linear alloc
+
+- Fix this bug:
+	func testImplicitCastForWhileStmnt()
+	    let blah = 0
+	    let blahPtr: ?int = &blah
+
+	    while blahPtr
+	        $blahPtr++
+	        blahPtr = null
+	    end
+
+	    assert(blah == 1)
+	end
 
 - Fix this bug:
 	func blah()
