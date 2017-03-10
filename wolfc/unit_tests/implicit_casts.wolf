@@ -751,6 +751,21 @@ func testImplicitCastForIfStmnt()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'LoopStmnt'
+;==================================================================================================
+func testImplicitCastForLoopStmnt()
+    let blah = 0
+    let blahPtr: ?int = &blah
+
+    loop
+        $blahPtr = $blahPtr + 1
+        blahPtr = null
+    repeat while blahPtr
+
+    assert(blah == 1)
+end
+
+;==================================================================================================
 ; Test: Implicit casting for 'LAndExpr'
 ;==================================================================================================
 let testImplicitCastForLAndExpr_1: ?int = null
@@ -938,6 +953,7 @@ func main() -> int
     testImplicitCastForCmpExpr()
     testImplicitCastForIfStmnt()
     testImplicitCastForLAndExpr()
+    testImplicitCastForLoopStmnt()
     testImplicitCastForLOrExpr()
     testImplicitCastForMulExpr()
     testImplicitCastForNotExpr()

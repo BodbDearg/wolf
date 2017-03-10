@@ -7,12 +7,14 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
+#include "../ImplicitCasts.hpp"
 #include "../RepeatableStmnt.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/LoopStmnt.hpp"
 #include "AST/Nodes/Scope.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
+#include "DataType/Types/BoolDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "Lexer/Token.hpp"
 #include "StringUtils.hpp"
 
@@ -113,6 +115,11 @@ void Codegen::visit(const AST::LoopStmntWithCond & astNode) {
     astNode.mLoopCondExpr.accept(*this);
     Value loopExprVal = mCtx.popValue();
     
+    // Codegen the bool data type and implicitly cast the condition to bool if we can:
+    PrimitiveDataTypes::getBoolDataType().accept(mCodegenDataType);
+    CompiledDataType boolCDT = mCtx.popCompiledDataType();
+    ImplicitCasts::castSingleValueIfRequired(*this, loopExprVal, boolCDT);
+    
     // Generate the end basic block:
     // Note: This is also the target of the 'break' statement.
     std::string endBBLbl = StringUtils::appendLineInfo("LoopStmntWithCond:end",
@@ -138,11 +145,14 @@ void Codegen::visit(const AST::LoopStmntWithCond & astNode) {
         }
     }
     else {
-        // The loop condition must evaluate to a boolean
-        mCtx.error(astNode.mLoopCondExpr,
-                   "Condition expression for 'loop' statement must evaluate to type "
-                   "'bool' not type '%s'!",
-                   loopExprType.name().c_str());
+        // The loop condition must evaluate to a boolean.
+        // Note: if the type is 'undefined' do no error since, we've already done one elsewhere for this problem
+        if (!loopExprType.isUndefined()) {
+            mCtx.error(astNode.mLoopCondExpr,
+                       "Condition expression for 'loop' statement must evaluate to type "
+                       "'bool' not type '%s'!",
+                       loopExprType.name().c_str());
+        }
         
         // Create an unreachable just to terminate the block
         mCtx.mIRBuilder.CreateUnreachable();
