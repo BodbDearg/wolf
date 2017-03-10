@@ -5,7 +5,6 @@
 - Test lazy logical and & or in the following statements:
 	AssertStmnt
 	VarDecl
-	IfStmnt
 	ReturnStmnt
 	AssignExpr
 	NotExpr
@@ -16,7 +15,6 @@
 	PrefixExpr
 	PostfixExpr
 	CastExpr
-	ArrayLit
 	RandExpr
 
 - [] operator should dereference pointers

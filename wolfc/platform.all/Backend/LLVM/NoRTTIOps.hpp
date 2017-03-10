@@ -31,7 +31,8 @@ namespace NoRTTIOps {
         llvm::Value * CreateInsertValue(llvm::IRBuilder<> & irbuilder,
                                         llvm::Value & aggregate,
                                         llvm::Value & value,
-                                        const llvm::ArrayRef<unsigned> & indexes);
+                                        const llvm::ArrayRef<unsigned> & indexes,
+                                        const char * label);
     }
 }
 

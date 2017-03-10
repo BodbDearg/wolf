@@ -829,7 +829,7 @@ func testLazyEval()
         )
     ) is true)
 
-    ; Test: 'while' loop lazy eval - there was a bug with this previously
+    ; Test: 'WhileStmnt' lazy eval
     let v = 0
 
     while true and true
@@ -846,7 +846,7 @@ func testLazyEval()
 
     assert(v == 2)
 
-    ; Test 'loop repeat' lazy eval
+    ; Test: 'LoopStmnt' lazy eval
     loop
         v++
         break
@@ -854,13 +854,13 @@ func testLazyEval()
 
     assert(v == 3)
 
-    ; Test 'break' statement lazy eval
+    ; Test: 'BreakStmnt' statement lazy eval
     while true 
         break if true and true
         v++
     end
 
-    ; Test 'next' statement lazy eval
+    ; Test: 'NextStmnt' statement lazy eval
     loop
         v++
         next if true and true
@@ -869,9 +869,35 @@ func testLazyEval()
 
     assert(v == 4)
 
-    ; Test ternary expr lazy eval
+    ; Test: 'TernaryExpr' lazy eval
     let v2 = v > 4 ? true and false : false or true
     assert(v2)
+
+    ; Test: 'IfStmnt' lazy eval
+    if false or v2
+        v++
+    else
+        assert(false)
+    end
+
+    assert(v == 5)
+
+    unless v2
+        assert(false)
+    else if v < 2 or true
+        v++
+    end    
+
+    assert(v == 6)
+
+    ; Test: 'ArrayLit' lazy eval
+    let theArray = [
+        v2 ? 1 : 2,
+        v < 5 ? 3 : 4
+    ]
+
+    assert(theArray[0] == 1)
+    assert(theArray[1] == 4)
 end
 
 ;==================================================================================================

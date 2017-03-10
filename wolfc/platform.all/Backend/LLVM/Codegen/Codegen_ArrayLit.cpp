@@ -143,7 +143,8 @@ void Codegen::visit(const AST::ArrayLit & astNode) {
         arrayUndefVal = NoRTTIOps::IRB::CreateInsertValue(mCtx.mIRBuilder,
                                                           *arrayUndefVal,
                                                           *values[index].mLLVMVal,
-                                                          { static_cast<unsigned>(index) });
+                                                          { static_cast<unsigned>(index) },
+                                                          "ArrayLit:InsertVal");
     }
     
     // Now push the array type
