@@ -7,11 +7,13 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
+#include "../ImplicitCasts.hpp"
 #include "../RepeatableStmnt.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/NextStmnt.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
+#include "DataType/Types/BoolDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "Lexer/Token.hpp"
 #include "StringUtils.hpp"
 
@@ -100,12 +102,21 @@ void Codegen::visit(const AST::NextStmntWithCond & astNode) {
     // Evaluate the expression for the next condition
     astNode.mCondExpr.accept(*this);
     Value condExprVal = mCtx.popValue();
-    const DataType & condExprType = condExprVal.mCompiledType.getDataType();
+    
+    // Compile the bool data type and implicitly cast to it if we can
+    PrimitiveDataTypes::getBoolDataType().accept(mCodegenDataType);
+    CompiledDataType boolCDT = mCtx.popCompiledDataType();
+    ImplicitCasts::castSingleValueIfRequired(*this, condExprVal, boolCDT);
     
     // The assign expression must evaluate to bool:
+    const DataType & condExprType = condExprVal.mCompiledType.getDataType();
+    
     if (!condExprType.isBool()) {
-        mCtx.error("Condition for 'next' statement must evaluate to type 'bool', not '%s'!",
-                   condExprType.name().c_str());
+        // Note: don't issue an error in the case of 'undefined' since this means we've already done that for this expr
+        if (!condExprType.isUndefined()) {
+            mCtx.error("Condition for 'next' statement must evaluate to type 'bool', not '%s'!",
+                       condExprType.name().c_str());
+        }
         
         return;
     }

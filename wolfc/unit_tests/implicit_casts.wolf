@@ -848,6 +848,24 @@ func testImplicitCastForMulExpr()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'NextStmnt'
+;==================================================================================================
+func testImplicitCastForNextStmnt()
+    let blah = 123
+    let blahPtr: ?int = &blah
+
+    while blahPtr
+        blah += 1  
+        $blahPtr += 1
+        blahPtr = null
+        next unless blahPtr 
+        $blahPtr += 1
+    end
+
+    assert(blah == 125)
+end
+
+;==================================================================================================
 ; Test: Implicit casting for 'NotExpr'
 ;==================================================================================================
 
@@ -973,6 +991,7 @@ func main() -> int
     testImplicitCastForLoopStmnt()
     testImplicitCastForLOrExpr()
     testImplicitCastForMulExpr()
+    testImplicitCastForNextStmnt()
     testImplicitCastForNotExpr()
     testImplicitCastForShiftExpr()
     testImplicitCastForTernaryExpr()
