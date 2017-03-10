@@ -732,6 +732,7 @@ let testPrimaryExprConst1 = 234
 let testPrimaryExprConst2 = false
 let testPrimaryExprConst3 = [44, 55, 66]
 let testPrimaryExprConst4 = "Hello world!"  ; TODO: In future do more here?
+let testPrimaryExprConst5 = [44, 55, 66, ]  ; Testing extra ',' at the end
 
 func testPrimaryExpr()
     ; Test: IntLit
@@ -760,6 +761,7 @@ func testPrimaryExpr()
     assert(v6[0][1][0] == 2)
     assert([11, 22, 33, 44][1] == 22)
     assert([11, 22, 33, 44][2] == 33)
+    assert([11, 22, 33, 44,][2] == 33)  ; Testing extra ',' at the end
 
     ; Make sure the constant expression tests passed
     assert(testPrimaryExprConst1 == 234)
