@@ -8,9 +8,6 @@
 	IfStmnt
 	ReturnStmnt
 	AssignExpr
-	TernaryExpr
-	LOrExpr
-	LAndExpr
 	NotExpr
 	CmpExpr
 	AddExpr

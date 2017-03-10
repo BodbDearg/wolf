@@ -868,6 +868,10 @@ func testLazyEval()
     repeat while false or v < 4
 
     assert(v == 4)
+
+    ; Test ternary expr lazy eval
+    let v2 = v > 4 ? true and false : false or true
+    assert(v2)
 end
 
 ;==================================================================================================
