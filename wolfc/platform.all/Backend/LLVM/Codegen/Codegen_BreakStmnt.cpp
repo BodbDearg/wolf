@@ -7,11 +7,13 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
+#include "../ImplicitCasts.hpp"
 #include "../RepeatableStmnt.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/BreakStmnt.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
+#include "DataType/Types/BoolDataType.hpp"
+#include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "Lexer/Token.hpp"
 #include "StringUtils.hpp"
 
@@ -100,12 +102,21 @@ void Codegen::visit(const AST::BreakStmntWithCond & astNode) {
     // Evaluate the expression for the break condition
     astNode.mCondExpr.accept(*this);
     Value condExprVal = mCtx.popValue();
-    const DataType & condExprType = condExprVal.mCompiledType.getDataType();
+    
+    // Codegen the bool data type and implicitly cast the condition expression to this type if we can
+    PrimitiveDataTypes::getBoolDataType().accept(mCodegenDataType);
+    CompiledDataType boolCDT = mCtx.popCompiledDataType();
+    ImplicitCasts::castSingleValueIfRequired(*this, condExprVal, boolCDT);
     
     // The assign expression must evaluate to bool:
+    const DataType & condExprType = condExprVal.mCompiledType.getDataType();
+    
     if (!condExprType.isBool()) {
-        mCtx.error("Condition for 'break' statement must evaluate to type 'bool', not '%s'!",
-                   condExprType.name().c_str());
+        // Note: don't issue an error if 'undefined' since that means we've already done an error for this expr
+        if (!condExprType.isUndefined()) {
+            mCtx.error("Condition for 'break' statement must evaluate to type 'bool', not '%s'!",
+                       condExprType.name().c_str());
+        }
         
         return;
     }

@@ -595,6 +595,22 @@ func testImplicitCastForAssertStmnt()
 end
 
 ;==================================================================================================
+; Test: Implicit casting for 'BreakStmnt'
+;==================================================================================================
+func testImplicitCastForBreakStmnt()
+    let blah = 0
+    let blahPtr: ?int = &blah
+
+    loop
+        $blahPtr = $blahPtr + 1
+        blahPtr = null
+        break unless blahPtr
+    end
+
+    assert(blah == 1)
+end
+
+;==================================================================================================
 ; Test: Implicit casting for 'AssignExpr'
 ;==================================================================================================
 func testImplicitCastForAssignExpr()
@@ -950,6 +966,7 @@ func main() -> int
     testImplicitCastForAddExpr()
     testImplicitCastForAssertStmnt()
     testImplicitCastForAssignExpr()
+    testImplicitCastForBreakStmnt()
     testImplicitCastForCmpExpr()
     testImplicitCastForIfStmnt()
     testImplicitCastForLAndExpr()
