@@ -37,9 +37,12 @@ void Codegen::visit(const AST::IfStmntNoElse & astNode) {
     bool ifExprIsBool = ifExprDataType.isBool();
     
     if (!ifExprIsBool) {
-        mCtx.error(ifExpr,
-                   "Conditional expression for 'if' statement must evaluate to type 'bool' not '%s'!",
-                   ifExprDataType.name().c_str());
+        // Note: no error if the data type is undefined since that means an error was already emitted
+        if (!ifExprDataType.isUndefined()) {
+            mCtx.error(ifExpr,
+                       "Conditional expression for 'if' statement must evaluate to type 'bool' not '%s'!",
+                       ifExprDataType.name().c_str());
+        }
     }
     
     // Grab the parent function
@@ -112,9 +115,12 @@ void Codegen::visit(const AST::IfStmntElse & astNode) {
     bool ifExprIsBool = ifExprDataType.isBool();
     
     if (!ifExprIsBool) {
-        mCtx.error(ifExpr,
-                   "Conditional expression for 'if' statement must evaluate to type 'bool' not '%s'!",
-                   ifExprDataType.name().c_str());
+        // Note: no error if the data type is undefined since that means an error was already emitted
+        if (!ifExprDataType.isUndefined()) {
+            mCtx.error(ifExpr,
+                       "Conditional expression for 'if' statement must evaluate to type 'bool' not '%s'!",
+                       ifExprDataType.name().c_str());
+        }
     }
     
     // Grab the parent function
@@ -208,9 +214,12 @@ void Codegen::visit(const AST::IfStmntElseIf & astNode) {
     bool ifExprIsBool = ifExprDataType.isBool();
     
     if (!ifExprIsBool) {
-        mCtx.error(ifExpr,
-                   "Conditional expression for 'if' statement must evaluate to type 'bool' not '%s'!",
-                   ifExprDataType.name().c_str());
+        // Note: no error if the data type is undefined since that means an error was already emitted
+        if (!ifExprDataType.isUndefined()) {
+            mCtx.error(ifExpr,
+                       "Conditional expression for 'if' statement must evaluate to type 'bool' not '%s'!",
+                       ifExprDataType.name().c_str());
+        }
     }
     
     // Grab the parent function

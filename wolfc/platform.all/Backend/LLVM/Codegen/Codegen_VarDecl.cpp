@@ -49,11 +49,15 @@ static void doVarDeclTypeChecks(Codegen & cg,
         const DataType & varInitializerDataType = varInitializerType.getDataType();
         
         if (!varInitializerDataType.equals(varDataType)) {
-            cg.mCtx.error(varDecl,
-                          "Variable initializer type mismatch! Variable is of type '%s' and "
-                          "initializer is of type '%s'!",
-                          varDataType.name().c_str(),
-                          varInitializerDataType.name().c_str());
+            // Note: no error in the case of an undefined type because 'undefined' signifies we've already done
+            // the error elsewhere - this error would be redundant, so stay silent.
+            if (!varInitializerDataType.isUndefined() && !varDataType.isUndefined()) {
+                cg.mCtx.error(varDecl,
+                              "Variable initializer type mismatch! Variable is of type '%s' and "
+                              "initializer is of type '%s'!",
+                              varDataType.name().c_str(),
+                              varInitializerDataType.name().c_str());
+            }
             
             varInitializerTypeIsOkOut = false;
         }

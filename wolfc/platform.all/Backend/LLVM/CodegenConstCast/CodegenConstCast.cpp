@@ -314,7 +314,6 @@ public:
     WC_IMPL_BASIC_CONST_CAST(getPtrToInt, Int32)
     WC_IMPL_BASIC_CONST_CAST(getPtrToInt, Int64)
     WC_IMPL_BASIC_CONST_CAST(getPtrToInt, Int8)
-    WC_IMPL_BASIC_CONST_CAST(getPointerCast, Ptr)
     WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt128)
     WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt16)
     WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt32)
@@ -327,6 +326,19 @@ public:
         llvm::Constant * falseConst = llvm::ConstantInt::get(llvm::Type::getInt1Ty(mCG.mCtx.mLLVMCtx), 0);
         WC_ASSERT(falseConst);
         mCG.mCtx.pushConstant(Constant(falseConst, mToTypeCDT, mCG.mCtx.getCurrentASTNode()));
+    }
+    
+    virtual void visit(const PtrDataType & toType) override {
+        // Only allow a cast to the pointer data type if the pointer type is not null.
+        // Can't cast 'null' to a non nullable pointer type.
+        if (toType.mIsNullable) {
+            pushOpResult(llvm::ConstantExpr::getPointerCast(mFromConst.mLLVMConst, mToTypeCDT.getLLVMType()));
+        }
+        else {
+            mCG.mCtx.error("Casting the 'null' literal to a non nullable pointer of type '%s' is illegal! "
+                           "Non nullable pointers are not allowed to be null in well defined code.",
+                           toType.mName.c_str());
+        }
     }
 };
 
@@ -362,8 +374,8 @@ public:
         
         if (!fromPtrType.mIsNullable) {
             mCG.mCtx.error("Attempting to cast a non nullable pointer of type '%s' to type '%s' via a pointer "
-                           "nullness check! Non nullable pointers can never be null in well defined code, hence "
-                           "checking if they are null and converting to bool based on that result is not allowed!",
+                           "null check! Non nullable pointers can never be null in well defined code, hence "
+                           "checking if they are null and converting to bool based on that result is illegal!",
                            fromPtrType.name().c_str(),
                            dataType.name().c_str());
             
