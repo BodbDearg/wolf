@@ -153,7 +153,6 @@ PrefixExpr:
 	- PrefixExpr
 	& PrefixExpr
 	$ PrefixExpr
-	( AssignExpr )
 
 PostfixExpr:
 	CastExpr
@@ -176,6 +175,7 @@ PrimaryExpr:
     ReadnumExpr
     TimeExpr
     RandExpr
+    ( AssignExpr )
 
 ArrayLit:
     [ [0..N: AssignExpr ,] [AssignExpr] ]

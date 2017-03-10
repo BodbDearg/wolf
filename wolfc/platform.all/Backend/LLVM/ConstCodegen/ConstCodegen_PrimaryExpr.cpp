@@ -8,6 +8,7 @@
 
 #include "../CodegenCtx.hpp"
 #include "AST/Nodes/ArrayLit.hpp"
+#include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/BoolLit.hpp"
 #include "AST/Nodes/Identifier.hpp"
 #include "AST/Nodes/IntLit.hpp"
@@ -61,6 +62,11 @@ void ConstCodegen::visit(const AST::PrimaryExprTimeExpr & astNode) {
 void ConstCodegen::visit(const AST::PrimaryExprRandExpr & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     codegenNotSupportedForNodeTypeError(astNode, "PrimaryExprRandExpr");
+}
+
+void ConstCodegen::visit(const AST::PrimaryExprParen & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    astNode.mExpr.accept(*this);
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

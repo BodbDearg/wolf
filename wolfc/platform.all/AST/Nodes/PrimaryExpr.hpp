@@ -13,6 +13,7 @@ WC_BEGIN_NAMESPACE
 WC_AST_BEGIN_NAMESPACE
 
 class ArrayLit;
+class AssignExpr;
 class BoolLit;
 class Identifier;
 class IntLit;
@@ -24,15 +25,16 @@ class TimeExpr;
 
 /*
 PrimaryExpr:
-    IntLit
-    BoolLit
-    StrLit
-    NullLit
+	IntLit
+	BoolLit
+	StrLit
+	NullLit
     ArrayLit
     Identifier
     ReadnumExpr
     TimeExpr
     RandExpr
+    ( AssignExpr )
 */
 class PrimaryExpr : public ASTNode, public IExpr {
 public:
@@ -148,6 +150,20 @@ public:
     virtual const Token & getEndToken() const override;
     
     RandExpr & mExpr;
+};
+
+/* ( AssignExpr ) */
+class PrimaryExprParen final : public PrimaryExpr {
+public:
+    PrimaryExprParen(const Token & startToken, AssignExpr & expr, const Token & endToken);
+    
+    virtual void accept(ASTNodeVisitor & visitor) const override;
+    virtual const Token & getStartToken() const override;
+    virtual const Token & getEndToken() const override;
+
+    const Token &   mStartToken;
+    AssignExpr &    mExpr;
+    const Token &   mEndToken;
 };
 
 WC_AST_END_NAMESPACE

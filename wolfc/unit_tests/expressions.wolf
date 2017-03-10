@@ -586,11 +586,6 @@ func testPrefixExpr()
     ; Test: + and - prefix operators
     assert(+1 == 1)
     assert(-1 == -1)
-    
-    ; Test: parentheses
-    assert((1 + 2) * 2 == 6)
-    assert(1 + (2 * 2) == 5)
-    assert(((1 + 2) * (3 + 4)) * 2 == 42)
 
     ; Test nested prefix expressions
     assert(+ + 1  == + + 1)
@@ -762,6 +757,18 @@ func testPrimaryExpr()
     assert([11, 22, 33, 44][1] == 22)
     assert([11, 22, 33, 44][2] == 33)
     assert([11, 22, 33, 44,][2] == 33)  ; Testing extra ',' at the end
+
+    ; Test: parentheses
+    assert((1 + 2) * 2 == 6)
+    assert(1 + (2 * 2) == 5)
+    assert(((1 + 2) * (3 + 4)) * 2 == 42)
+
+    ; Test: more advanced parens. This was previously a bug.
+    scope
+        let blah = [1, 2, 3, 4]
+        let blahPtr = &blah
+        assert(($blahPtr)[1] == 2)
+    end   
 
     ; Make sure the constant expression tests passed
     assert(testPrimaryExprConst1 == 234)

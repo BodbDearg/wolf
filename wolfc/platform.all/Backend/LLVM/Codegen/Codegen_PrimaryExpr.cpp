@@ -8,6 +8,7 @@
 
 #include "../CodegenCtx.hpp"
 #include "AST/Nodes/ArrayLit.hpp"
+#include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/BoolLit.hpp"
 #include "AST/Nodes/Identifier.hpp"
 #include "AST/Nodes/IntLit.hpp"
@@ -62,6 +63,11 @@ void Codegen::visit(const AST::PrimaryExprTimeExpr & astNode) {
 }
 
 void Codegen::visit(const AST::PrimaryExprRandExpr & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    astNode.mExpr.accept(*this);
+}
+
+void Codegen::visit(const AST::PrimaryExprParen & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     astNode.mExpr.accept(*this);
 }

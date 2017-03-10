@@ -9,6 +9,7 @@
 #include "../ASTNodeVisitor.hpp"
 #include "../ParseCtx.hpp"
 #include "ArrayLit.hpp"
+#include "AssignExpr.hpp"
 #include "BoolLit.hpp"
 #include "Identifier.hpp"
 #include "IntLit.hpp"
@@ -34,7 +35,8 @@ bool PrimaryExpr::peek(const Token * currentToken) {
             Identifier::peek(currentToken) ||
             ReadnumExpr::peek(currentToken) ||
             TimeExpr::peek(currentToken) ||
-            RandExpr::peek(currentToken);
+            RandExpr::peek(currentToken) ||
+            currentToken->type == TokenType::kLParen;
 }
 
 PrimaryExpr * PrimaryExpr::parse(ParseCtx & parseCtx) {
@@ -57,6 +59,35 @@ PrimaryExpr * PrimaryExpr::parse(ParseCtx & parseCtx) {
     TRY_PARSE_PRIMARY_EXPR_TYPE(RandExpr)
 
     #undef TRY_PARSE_PRIMARY_EXPR_TYPE
+    
+    // ( AssignExpr )
+    if (parseCtx.tok()->type == TokenType::kLParen) {
+        // Save the opening '(' and skip it as well as any newlines that follow
+        const Token * openeingParen = parseCtx.tok();
+        parseCtx.nextTok();
+        parseCtx.skipNewlines();
+        
+        // Parse the expression inside:
+        AssignExpr * expr = AssignExpr::parse(parseCtx);
+        WC_GUARD(expr, nullptr);
+        
+        // Expect a closing ')' - but skip any newlines before it
+        parseCtx.skipNewlines();
+        
+        if (parseCtx.tok()->type != TokenType::kRParen) {
+            parseCtx.error("Expected closing ')' to match '(' at line %zu and column %zu!",
+                           openeingParen->startLine + 1,
+                           openeingParen->startCol + 1);
+            
+            return nullptr;
+        }
+        
+        const Token * closingParen = parseCtx.tok();
+        parseCtx.nextTok();
+        
+        // Done: return the parsed node
+        return WC_NEW_AST_NODE(parseCtx, PrimaryExprParen, *openeingParen, *expr, *closingParen);
+    }
     
     parseCtx.error("Expected primary expression!");
     return nullptr;
@@ -235,6 +266,29 @@ const Token & PrimaryExprRandExpr::getStartToken() const {
 
 const Token & PrimaryExprRandExpr::getEndToken() const {
     return mExpr.getEndToken();
+}
+
+//-----------------------------------------------------------------------------
+// PrimaryExprParen
+//-----------------------------------------------------------------------------
+PrimaryExprParen::PrimaryExprParen(const Token & startToken, AssignExpr & expr, const Token & endToken) :
+    mStartToken(startToken),
+    mExpr(expr),
+    mEndToken(endToken)
+{
+    mExpr.mParent = this;
+}
+
+void PrimaryExprParen::accept(ASTNodeVisitor & visitor) const {
+    visitor.visit(*this);
+}
+
+const Token & PrimaryExprParen::getStartToken() const {
+    return mStartToken;
+}
+
+const Token & PrimaryExprParen::getEndToken() const {
+    return mEndToken;
 }
 
 WC_AST_END_NAMESPACE

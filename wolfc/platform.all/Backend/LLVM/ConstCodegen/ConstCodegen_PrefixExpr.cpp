@@ -8,7 +8,6 @@
 
 #include "../CodegenConstUnaryOp/CodegenConstUnaryOp_PrefixExpr.hpp"
 #include "../CodegenCtx.hpp"
-#include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/PostfixExpr.hpp"
 #include "AST/Nodes/PrefixExpr.hpp"
 
@@ -28,11 +27,6 @@ void ConstCodegen::visit(const AST::PrefixExprPlus & astNode) {
 void ConstCodegen::visit(const AST::PrefixExprMinus & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     CodegenConstMinusUnaryOp(*this, astNode.mExpr).codegen();
-}
-
-void ConstCodegen::visit(const AST::PrefixExprParen & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

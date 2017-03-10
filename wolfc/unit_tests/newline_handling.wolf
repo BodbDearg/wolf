@@ -284,7 +284,7 @@ func testPostfixExpr()
     )
 end
 
-func testPrefixExpr() 
+func testPrefixExpr()
     let v1 = -
         1
     let v2 = +
@@ -298,6 +298,17 @@ func testPrefixExpr()
 
     let v5 = (
         1
+    )
+end
+
+func testPrimaryExpr() 
+    let v5 = (
+
+        (
+            1
+
+            )
+
     )
 end
 
@@ -451,6 +462,7 @@ func main() -> int
     testNotExpr()
     testPostfixExpr()
     testPrefixExpr()
+    testPrimaryExpr()
     testPrintStmnt()
     testRandExpr()
     testReturnStmnt()
