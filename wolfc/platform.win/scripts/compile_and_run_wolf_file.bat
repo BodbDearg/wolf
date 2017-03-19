@@ -31,7 +31,7 @@
 @set OUTPUT_BIN_FILE_PATH=%EXECUTABLE_OUTPUT_DIR%\%INPUT_FILENAME%.exe
 
 @rem # Run the executable
-@%OUTPUT_BIN_FILE_PATH%
+@"%OUTPUT_BIN_FILE_PATH%"
 
 @rem # Return the return code from that program
 @exit /B %ERRORLEVEL%

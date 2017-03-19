@@ -7,10 +7,10 @@
 @rem #	%4 - file to compile
 
 @rem # Setting up build paths
-@set VS_DIR=C:\Program Files (x86)\Microsoft Visual Studio 14.0
-@set MSVC_DIR=%VS_DIR%\VC
+@set VS_DIR=C:\Program Files (x86)\Microsoft Visual Studio\2017
+@set MSVC_DIR=%VS_DIR%\Community\VC
+@set MSVC_LIB_DIR=%MSVC_DIR%\Tools\MSVC\14.10.25017\lib\onecore\x64
 @set WIN_SDK_DIR=C:\Program Files (x86)\Windows Kits\10\Lib\10.0.14393.0
-@set MSVC_LIB_DIR=%MSVC_DIR%\LIB\AMD64
 @set WIN_LIB_DIR=%WIN_SDK_DIR%\um\x64
 @set CRT_LIB_DIR=%WIN_SDK_DIR%\ucrt\x64
 @set LIB=%MSVC_LIB_DIR%;%WIN_LIB_DIR%;%CRT_LIB_DIR%

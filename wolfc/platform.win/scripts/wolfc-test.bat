@@ -17,6 +17,3 @@
 	%OUTPUT_DIR% ^
 	%OUTPUT_DIR% ^
 	%INPUT_FILE%
-
-@rem # Return the error level from running that script
-@exit /B %ERRORLEVEL%
