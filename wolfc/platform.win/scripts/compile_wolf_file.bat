@@ -6,6 +6,9 @@
 @rem #	%3 - folder for output executable
 @rem #	%4 - file to compile
 
+@rem # Just to be safe - ensure this is not shadowed
+@set ERRORLEVEL=
+
 @rem # Setting up build paths
 @set VS_DIR=C:\Program Files (x86)\Microsoft Visual Studio\2017
 @set MSVC_DIR=%VS_DIR%\Community\VC
@@ -17,15 +20,15 @@
 
 @rem # Grab inputs
 @set WOLFC_PATH=%1
-@set INTERMEDIATE_OUTPUT_DIR=%2%
-@set EXECUTABLE_OUTPUT_DIR=%3%
+@set INTERMEDIATE_OUTPUT_DIR=%2
+@set EXECUTABLE_OUTPUT_DIR=%3
 
 @if not exist "%INTERMEDIATE_OUTPUT_DIR%" (
 	mkdir "%INTERMEDIATE_OUTPUT_DIR%"
 
 	@if %ERRORLEVEL% neq 0 (
 		@echo Failed to create intermidate output folder '%INTERMEDIATE_OUTPUT_DIR%'
-		@exit /B 1
+		@exit /b 1
 	)
 )
 
@@ -33,18 +36,18 @@
 	mkdir "%EXECUTABLE_OUTPUT_DIR%"
 
 	@if %ERRORLEVEL% neq 0 (
-		@echo Failed to create executable output folder '%${INTERMEDIATE_OUTPUT_DIR}%'
-		@exit /B 1
+		@echo Failed to create executable output folder '%EXECUTABLE_OUTPUT_DIR%'
+		@exit /b 1
 	)
 )
 
-@set INPUT_FILE_PATH=%4%
+@set INPUT_FILE_PATH=%4
 
 @rem # Get the name of the input file without the extension
 @for %%i in (%INPUT_FILE_PATH%) do @set INPUT_FILENAME=%%~ni
 
 @rem # Generate the llvm ir code using wolfc
-@set OUTPUT_LL_FILE_PATH=%INTERMEDIATE_OUTPUT_DIR%/%INPUT_FILENAME%.ll
+@set OUTPUT_LL_FILE_PATH=%INTERMEDIATE_OUTPUT_DIR%\%INPUT_FILENAME%.ll
 
 @"%WOLFC_PATH%" ^
 	"%INPUT_FILE_PATH%" ^
@@ -52,12 +55,12 @@
 
 @if %ERRORLEVEL% neq 0 (
     @echo A compiler error occurred for file '%INPUT_FILE_PATH%'! Error details follow:
-	@more "%OUTPUT_LL_FILE_PATH%"
-	@exit /B 1
+	@type "%OUTPUT_LL_FILE_PATH%"
+	@exit /b 1
 )
 
 @rem # Generate assembly
-@set OUTPUT_S_FILE_PATH=%INTERMEDIATE_OUTPUT_DIR%/%INPUT_FILENAME%.s
+@set OUTPUT_S_FILE_PATH=%INTERMEDIATE_OUTPUT_DIR%\%INPUT_FILENAME%.s
 
 @llc ^
 	-march=x86-64 ^
@@ -67,11 +70,11 @@
 
 @if %ERRORLEVEL% neq 0 (
     @echo Assembly code generation failed for IR code in file '%OUTPUT_LL_FILE_PATH%'!
-    @exit /B 1
+    @exit /b 1
 )
 
 @rem # Compile that assembly to an object file
-@set OUTPUT_OBJ_FILE_PATH=%INTERMEDIATE_OUTPUT_DIR%/%INPUT_FILENAME%.obj
+@set OUTPUT_OBJ_FILE_PATH=%INTERMEDIATE_OUTPUT_DIR%\%INPUT_FILENAME%.obj
 
 @llvm-mc ^
 	-arch=x86-64 ^
@@ -81,11 +84,11 @@
 
 @if %ERRORLEVEL% neq 0 (
     @echo Compiling failed for assembly file '%OUTPUT_S_FILE_PATH%'!
-    @exit /B 1
+    @exit /b 1
 )
 
 @rem # Link the object file
-@set OUTPUT_BIN_FILE_PATH=%EXECUTABLE_OUTPUT_DIR%/%INPUT_FILENAME%.exe
+@set OUTPUT_BIN_FILE_PATH=%EXECUTABLE_OUTPUT_DIR%\%INPUT_FILENAME%.exe
 
 @lld-link ^
 	/subsystem:console ^
@@ -96,8 +99,5 @@
 @if %ERRORLEVEL% neq 0 (
 	@echo Linking failed!
 	@pause
-	@exit /B 1
+	@exit /b 1
 )
-
-@rem # All went well!
-@exit /B 0

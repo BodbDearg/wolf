@@ -7,17 +7,17 @@
 @rem # 	%3 - folder for output executable
 @rem # 	%4 - file to compile and run
 
-@rem # Clear any errors firstly
-@set ERRORLEVEL=0
+@rem # Just to be safe - ensure this is not shadowed
+@set ERRORLEVEL=
 
 @rem # Get the folder that this file is in
 @set THIS_FILE_DIR=%~dp0
 
 @rem # Try to compile the file first, if compile fails then bail out
-@%THIS_FILE_DIR%compile_wolf_file.bat %1 %2 %3 %4
+@call "%THIS_FILE_DIR%compile_wolf_file.bat" %1 %2 %3 %4
 
 @if %ERRORLEVEL% neq 0 (
-	@exit /B %ERRORLEVEL%
+	@exit /b %ERRORLEVEL%
 )
 
 @rem # Get the output dir and input file path
@@ -25,7 +25,7 @@
 @set INPUT_FILE_PATH=%4
 
 @rem # Get the name of the input file without the extension
-@for %%i in (%1) do @set INPUT_FILENAME="%%~ni"
+@for %%i in ("%4") do @set INPUT_FILENAME="%%~ni"
 
 @rem # This is the path to the output executable
 @set OUTPUT_BIN_FILE_PATH=%EXECUTABLE_OUTPUT_DIR%\%INPUT_FILENAME%.exe
@@ -34,4 +34,4 @@
 @"%OUTPUT_BIN_FILE_PATH%"
 
 @rem # Return the return code from that program
-@exit /B %ERRORLEVEL%
+@exit /b %ERRORLEVEL%
