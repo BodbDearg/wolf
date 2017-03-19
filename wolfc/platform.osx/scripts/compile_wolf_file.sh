@@ -1,4 +1,4 @@
-# Small script that compiles a wolf script
+# Small script that compiles a Wolf Programming Language source file (.wolf)
 #
 # Args:
 # 	$1 - path to 'wolfc'
