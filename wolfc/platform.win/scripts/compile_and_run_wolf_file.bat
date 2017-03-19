@@ -14,15 +14,15 @@
 @set THIS_FILE_DIR=%~dp0
 
 @rem # Try to compile the file first, if compile fails then bail out
-@"%THIS_FILE_DIR%compile_wolf_file.bat" "%1%" "%2%" "%3%" "%4%"
+@%THIS_FILE_DIR%compile_wolf_file.bat %1 %2 %3 %4
 
 @if %ERRORLEVEL% neq 0 (
 	@exit /B %ERRORLEVEL%
 )
 
 @rem # Get the output dir and input file path
-@set EXECUTABLE_OUTPUT_DIR=%3%
-@set INPUT_FILE_PATH=%4%
+@set EXECUTABLE_OUTPUT_DIR=%3
+@set INPUT_FILE_PATH=%4
 
 @rem # Get the name of the input file without the extension
 @for %%i in (%1) do @set INPUT_FILENAME="%%~ni"
@@ -31,7 +31,7 @@
 @set OUTPUT_BIN_FILE_PATH=%EXECUTABLE_OUTPUT_DIR%\%INPUT_FILENAME%.exe
 
 @rem # Run the executable
-@"%OUTPUT_BIN_FILE_PATH%"
+@%OUTPUT_BIN_FILE_PATH%
 
 @rem # Return the return code from that program
 @exit /B %ERRORLEVEL%

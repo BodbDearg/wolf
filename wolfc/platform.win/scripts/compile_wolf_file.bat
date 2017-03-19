@@ -16,7 +16,7 @@
 @set LIB=%MSVC_LIB_DIR%;%WIN_LIB_DIR%;%CRT_LIB_DIR%
 
 @rem # Grab inputs
-@set WOLFC_PATH=%1%
+@set WOLFC_PATH=%1
 @set INTERMEDIATE_OUTPUT_DIR=%2%
 @set EXECUTABLE_OUTPUT_DIR=%3%
 
