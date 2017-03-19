@@ -14,423 +14,900 @@
     <Filter Include="platform.all\DataType">
       <UniqueIdentifier>{5ae50de5-1ab9-43ef-94d1-bd3fec65af25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="platform.all\DataType\Primitives">
-      <UniqueIdentifier>{771f6e78-48dc-4974-bc47-b00798580dbe}</UniqueIdentifier>
+    <Filter Include="platform.all\DataType\Types">
+      <UniqueIdentifier>{7d85b421-2eb8-4d9d-9282-b82ac1084883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform.all\AST\Nodes">
+      <UniqueIdentifier>{f83ecba4-262d-40e5-bc92-8e14991e3d76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform.all\Backend">
+      <UniqueIdentifier>{c71e117e-9260-4aee-b734-7abc86ba18c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform.all\Backend\LLVM">
+      <UniqueIdentifier>{2fd5958a-2460-407c-b778-f9e7e38cf60d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform.all\Backend\LLVM\AddrCodegen">
+      <UniqueIdentifier>{9ac4668d-2a0d-4b54-bdd4-5c1c6bcdc378}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform.all\Backend\LLVM\Codegen">
+      <UniqueIdentifier>{3157ee51-4bdc-4f26-a959-c212f3ebef34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform.all\Backend\LLVM\CodegenBinaryOp">
+      <UniqueIdentifier>{10ede683-2020-4284-bb92-e3431e41f160}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform.all\Backend\LLVM\CodegenCast">
+      <UniqueIdentifier>{01fd43a1-be1d-4a6d-9b5e-31933c2c946f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform.all\Backend\LLVM\CodegenConstBinaryOp">
+      <UniqueIdentifier>{8c4b056e-e5ef-41fd-b550-b9939c314eb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform.all\Backend\LLVM\CodegenConstCast">
+      <UniqueIdentifier>{3e3debad-0d28-49f1-a30f-2e68808b6724}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform.all\Backend\LLVM\CodegenConstUnaryOp">
+      <UniqueIdentifier>{1dd9b055-b98e-4c38-86de-0cc2a8e5df95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform.all\Backend\LLVM\CodegenDataType">
+      <UniqueIdentifier>{b29cf396-60fe-4dad-83fa-c9d2250a68c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform.all\Backend\LLVM\CodegenUnaryOp">
+      <UniqueIdentifier>{6506a180-f846-4360-946f-3f8c598324d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform.all\Backend\LLVM\ConstCodegen">
+      <UniqueIdentifier>{a5196031-5391-450c-8115-7664b2474a7a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\platform.all\main.cpp">
       <Filter>platform.all</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\WCCharUtils.cpp">
+    <ClCompile Include="..\platform.all\CharUtils.cpp">
       <Filter>platform.all</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\WCCodegenCtx.cpp">
+    <ClCompile Include="..\platform.all\DebugBreak.cpp">
       <Filter>platform.all</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\WCDebugBreak.cpp">
+    <ClCompile Include="..\platform.all\FileUtils.cpp">
       <Filter>platform.all</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\WCFileUtils.cpp">
+    <ClCompile Include="..\platform.all\LinearAlloc.cpp">
       <Filter>platform.all</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\WCLinearAlloc.cpp">
+    <ClCompile Include="..\platform.all\Logger.cpp">
       <Filter>platform.all</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\WCLogger.cpp">
+    <ClCompile Include="..\platform.all\StringUtils.cpp">
       <Filter>platform.all</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\WCStringUtils.cpp">
-      <Filter>platform.all</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCAddSubExpr.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCAndExpr.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCArrayLit.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCArrayLitExprs.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCAssignExpr.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCASTNode.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCBoolLit.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCBreakStmnt.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCDeclDef.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCDeclDefs.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCEqExpr.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCFunc.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCFuncArg.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCFuncArgList.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCFuncCall.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCFuncCallArgList.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCIdentifier.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCIfStmnt.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCIntLit.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCLoopStmnt.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCModule.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCMulDivExpr.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCNextStmnt.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCNopStmnt.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCOrExpr.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCPostfixExpr.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCPrimaryExpr.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCPrimitiveType.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCPrintStmnt.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCReadnumExpr.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCRelExpr.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCReturnStmnt.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCScope.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCScopeStmnt.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCStmnt.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCStmnts.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCStrLit.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCTernaryExpr.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCType.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCUnaryExpr.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCVarDecl.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCWhileStmnt.cpp">
-      <Filter>platform.all\AST</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform.all\Lexer\WCLexer.cpp">
+    <ClCompile Include="..\platform.all\Lexer\Lexer.cpp">
       <Filter>platform.all\Lexer</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\DataType\WCDataType.cpp">
+    <ClCompile Include="..\platform.all\DataType\DataType.cpp">
       <Filter>platform.all\DataType</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\DataType\WCPrimitiveDataTypes.cpp">
-      <Filter>platform.all\DataType</Filter>
+    <ClCompile Include="..\platform.all\DataType\Types\AnyDataType.cpp">
+      <Filter>platform.all\DataType\Types</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\DataType\Primitives\WCArrayDataType.cpp">
-      <Filter>platform.all\DataType\Primitives</Filter>
+    <ClCompile Include="..\platform.all\DataType\Types\ArrayDataType.cpp">
+      <Filter>platform.all\DataType\Types</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\DataType\Primitives\WCBoolDataType.cpp">
-      <Filter>platform.all\DataType\Primitives</Filter>
+    <ClCompile Include="..\platform.all\DataType\Types\BoolDataType.cpp">
+      <Filter>platform.all\DataType\Types</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\DataType\Primitives\WCIntDataType.cpp">
-      <Filter>platform.all\DataType\Primitives</Filter>
+    <ClCompile Include="..\platform.all\DataType\Types\FuncDataType.cpp">
+      <Filter>platform.all\DataType\Types</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\DataType\Primitives\WCStrDataType.cpp">
-      <Filter>platform.all\DataType\Primitives</Filter>
+    <ClCompile Include="..\platform.all\DataType\Types\GenericIntDataType.cpp">
+      <Filter>platform.all\DataType\Types</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\DataType\Primitives\WCUnknownDataType.cpp">
-      <Filter>platform.all\DataType\Primitives</Filter>
+    <ClCompile Include="..\platform.all\DataType\Types\GenericSignedIntDataType.cpp">
+      <Filter>platform.all\DataType\Types</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\DataType\Primitives\WCVoidDataType.cpp">
-      <Filter>platform.all\DataType\Primitives</Filter>
+    <ClCompile Include="..\platform.all\DataType\Types\GenericUnsignedIntDataType.cpp">
+      <Filter>platform.all\DataType\Types</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCRandExpr.cpp">
+    <ClCompile Include="..\platform.all\DataType\Types\IntDataTypes.cpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\DataType\Types\NullptrDataType.cpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\DataType\Types\PrimitiveDataTypes.cpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\DataType\Types\PtrDataType.cpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\DataType\Types\StrDataType.cpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\DataType\Types\UndefinedDataType.cpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\DataType\Types\VoidDataType.cpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\ParseCtx.cpp">
       <Filter>platform.all\AST</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCTimeExpr.cpp">
-      <Filter>platform.all\AST</Filter>
+    <ClCompile Include="..\platform.all\AST\Nodes\AddExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCNotOrBNotExpr.cpp">
-      <Filter>platform.all\AST</Filter>
+    <ClCompile Include="..\platform.all\AST\Nodes\ArrayLit.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform.all\AST\WCBAndExpr.cpp">
-      <Filter>platform.all\AST</Filter>
+    <ClCompile Include="..\platform.all\AST\Nodes\AssertStmnt.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\AssignExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\ASTNode.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\BoolLit.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\BreakStmnt.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\CastExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\CmpExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\DeclDef.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\Func.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\FuncArg.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\Identifier.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\IfStmnt.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\IntLit.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\LAndExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\LoopStmnt.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\LOrExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\Module.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\MulExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\NextStmnt.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\NoOpStmnt.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\NotExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\NullLit.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\PostfixExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\PrefixExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\PrimaryExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\PrimitiveType.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\PrintStmnt.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\RandExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\ReadnumExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\ReturnStmnt.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\Scope.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\ScopeStmnt.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\ShiftExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\Stmnt.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\StrLit.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\TernaryExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\TimeExpr.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\Type.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\VarDecl.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\AST\Nodes\WhileStmnt.cpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenCtx.cpp">
+      <Filter>platform.all\Backend\LLVM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CompiledDataType.cpp">
+      <Filter>platform.all\Backend\LLVM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ImplicitCasts.cpp">
+      <Filter>platform.all\Backend\LLVM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\NoRTTIOps.cpp">
+      <Filter>platform.all\Backend\LLVM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ValHolder.cpp">
+      <Filter>platform.all\Backend\LLVM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\AddrCodegen\AddrCodegen.cpp">
+      <Filter>platform.all\Backend\LLVM\AddrCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\AddrCodegen\AddrCodegen_ArrayLit.cpp">
+      <Filter>platform.all\Backend\LLVM\AddrCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\AddrCodegen\AddrCodegen_Identifier.cpp">
+      <Filter>platform.all\Backend\LLVM\AddrCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\AddrCodegen\AddrCodegen_PostfixExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\AddrCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\AddrCodegen\AddrCodegen_PrefixExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\AddrCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\AddrCodegen\AddrCodegen_PrimaryExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\AddrCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_AddExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_ArrayLit.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_AssertStmnt.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_AssignExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_BoolLit.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_BreakStmnt.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_CastExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_CmpExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_DeclDef.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_Func.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_FuncArg.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_Identifier.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_IfStmnt.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_IntLit.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_LAndExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_LoopStmnt.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_LOrExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_Module.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_MulExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_NextStmnt.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_NoOpStmnt.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_NotExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_NullLit.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_PostfixExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_PrefixExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_PrimaryExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_PrimitiveType.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_PrintStmnt.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_RandExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_ReadnumExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_ReturnStmnt.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_Scope.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_ScopeStmnt.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_ShiftExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_Stmnt.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_StrLit.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_TernaryExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_TimeExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_Type.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_VarDecl.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\Codegen\Codegen_WhileStmnt.cpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenBinaryOp\CodegenBinaryOp.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenBinaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenBinaryOp\CodegenBinaryOp_AddExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenBinaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenBinaryOp\CodegenBinaryOp_CmpExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenBinaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenBinaryOp\CodegenBinaryOp_MulExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenBinaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenBinaryOp\CodegenBinaryOp_ShiftExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenBinaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenBinaryOp\CodegenLazyLogicalBinaryOp.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenBinaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenCast\CodegenCast.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenCast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstBinaryOp.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstBinaryOp_AddExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstBinaryOp_CmpExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstBinaryOp_LAndExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstBinaryOp_LOrExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstBinaryOp_MulExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstBinaryOp_ShiftExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstLogicalBinaryOp.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenConstCast\CodegenConstCast.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstCast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenConstUnaryOp\CodegenBasicConstUnaryOp.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstUnaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenConstUnaryOp\CodegenConstUnaryOp_CastExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstUnaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenConstUnaryOp\CodegenConstUnaryOp_NotExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstUnaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenConstUnaryOp\CodegenConstUnaryOp_PrefixExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstUnaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenDataType\CodegenDataType.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenDataType</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenUnaryOp\CodegenBasicUnaryOp.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenUnaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenUnaryOp\CodegenUnaryOp_CastExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenUnaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenUnaryOp\CodegenUnaryOp_NotExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenUnaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenUnaryOp\CodegenUnaryOp_PostfixExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenUnaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\CodegenUnaryOp\CodegenUnaryOp_PrefixExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\CodegenUnaryOp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_AddExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_ArrayLit.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_AssignExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_BoolLit.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_CastExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_CmpExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_Identifier.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_IntLit.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_LAndExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_LOrExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_MulExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_NotExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_NullLit.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_PostfixExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_PrefixExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_PrimaryExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_PrimitiveType.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_ShiftExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_StrLit.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_TernaryExpr.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen_Type.cpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\platform.all\WCAssert.hpp">
+    <ClInclude Include="..\platform.all\Assert.hpp">
       <Filter>platform.all</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\WCCharUtils.hpp">
+    <ClInclude Include="..\platform.all\CharUtils.hpp">
       <Filter>platform.all</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\WCCodegenCtx.hpp">
+    <ClInclude Include="..\platform.all\CStrComparator.hpp">
       <Filter>platform.all</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\WCCStrComparator.hpp">
+    <ClInclude Include="..\platform.all\DebugBreak.hpp">
       <Filter>platform.all</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\WCDebugBreak.hpp">
+    <ClInclude Include="..\platform.all\FileUtils.hpp">
       <Filter>platform.all</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\WCFileUtils.hpp">
+    <ClInclude Include="..\platform.all\Finally.hpp">
       <Filter>platform.all</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\WCFinally.hpp">
+    <ClInclude Include="..\platform.all\LazyInit.hpp">
       <Filter>platform.all</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\WCLazyInit.hpp">
+    <ClInclude Include="..\platform.all\LinearAlloc.hpp">
       <Filter>platform.all</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\WCLinearAlloc.hpp">
+    <ClInclude Include="..\platform.all\Logger.hpp">
       <Filter>platform.all</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\WCLogger.hpp">
+    <ClInclude Include="..\platform.all\Macros.hpp">
       <Filter>platform.all</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\WCMacros.hpp">
+    <ClInclude Include="..\platform.all\StringUtils.hpp">
       <Filter>platform.all</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\WCStringUtils.hpp">
-      <Filter>platform.all</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCAddSubExpr.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCAndExpr.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCArrayLit.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCArrayLitExprs.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCAssignExpr.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCASTNode.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCBoolLit.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCBreakStmnt.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCDeclDef.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCDeclDefs.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCEqExpr.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCFunc.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCFuncArg.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCFuncArgList.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCFuncCall.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCFuncCallArgList.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCIBasicCodegenNode.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCIdentifier.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCIExpr.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCIfStmnt.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCIntLit.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCIRepeatableStmnt.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCIStmnt.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCLoopStmnt.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCModule.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCMulDivExpr.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCNextStmnt.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCNopStmnt.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCOrExpr.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCPostfixExpr.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCPrimaryExpr.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCPrimitiveType.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCPrintStmnt.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCReadnumExpr.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCRelExpr.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCReturnStmnt.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCScope.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCScopeStmnt.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCStmnt.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCStmnts.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCStrLit.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCTernaryExpr.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCType.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCUnaryExpr.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCVarDecl.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCWhileStmnt.hpp">
-      <Filter>platform.all\AST</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform.all\Lexer\WCLexer.hpp">
+    <ClInclude Include="..\platform.all\Lexer\Lexer.hpp">
       <Filter>platform.all\Lexer</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\Lexer\WCToken.hpp">
+    <ClInclude Include="..\platform.all\Lexer\Token.hpp">
       <Filter>platform.all\Lexer</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\Lexer\WCTokenType.hpp">
+    <ClInclude Include="..\platform.all\Lexer\TokenType.hpp">
       <Filter>platform.all\Lexer</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\DataType\WCDataType.hpp">
+    <ClInclude Include="..\platform.all\DataType\DataType.hpp">
       <Filter>platform.all\DataType</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\DataType\WCDataValue.hpp">
+    <ClInclude Include="..\platform.all\DataType\DataTypeId.hpp">
       <Filter>platform.all\DataType</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\DataType\WCPrimitiveDataTypes.hpp">
+    <ClInclude Include="..\platform.all\DataType\DataTypeVisitor.hpp">
       <Filter>platform.all\DataType</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\DataType\Primitives\WCArrayDataType.hpp">
-      <Filter>platform.all\DataType\Primitives</Filter>
+    <ClInclude Include="..\platform.all\DataType\Types\AnyDataType.hpp">
+      <Filter>platform.all\DataType\Types</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\DataType\Primitives\WCBoolDataType.hpp">
-      <Filter>platform.all\DataType\Primitives</Filter>
+    <ClInclude Include="..\platform.all\DataType\Types\ArrayDataType.hpp">
+      <Filter>platform.all\DataType\Types</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\DataType\Primitives\WCIntDataType.hpp">
-      <Filter>platform.all\DataType\Primitives</Filter>
+    <ClInclude Include="..\platform.all\DataType\Types\BoolDataType.hpp">
+      <Filter>platform.all\DataType\Types</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\DataType\Primitives\WCStrDataType.hpp">
-      <Filter>platform.all\DataType\Primitives</Filter>
+    <ClInclude Include="..\platform.all\DataType\Types\FuncDataType.hpp">
+      <Filter>platform.all\DataType\Types</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\DataType\Primitives\WCUnknownDataType.hpp">
-      <Filter>platform.all\DataType\Primitives</Filter>
+    <ClInclude Include="..\platform.all\DataType\Types\GenericIntDataType.hpp">
+      <Filter>platform.all\DataType\Types</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\DataType\Primitives\WCVoidDataType.hpp">
-      <Filter>platform.all\DataType\Primitives</Filter>
+    <ClInclude Include="..\platform.all\DataType\Types\GenericSignedIntDataType.hpp">
+      <Filter>platform.all\DataType\Types</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCRandExpr.hpp">
+    <ClInclude Include="..\platform.all\DataType\Types\GenericUnsignedIntDataType.hpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\Types\IntDataTypes.hpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\Types\NullptrDataType.hpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\Types\PrimitiveDataTypes.hpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\Types\PtrDataType.hpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\Types\StrDataType.hpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\Types\UndefinedDataType.hpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\DataType\Types\VoidDataType.hpp">
+      <Filter>platform.all\DataType\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\ASTNodeVisitor.hpp">
       <Filter>platform.all\AST</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCTimeExpr.hpp">
+    <ClInclude Include="..\platform.all\AST\ParseCtx.hpp">
       <Filter>platform.all\AST</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCNotOrBNotExpr.hpp">
-      <Filter>platform.all\AST</Filter>
+    <ClInclude Include="..\platform.all\AST\Nodes\AddExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
     </ClInclude>
-    <ClInclude Include="..\platform.all\AST\WCBAndExpr.hpp">
-      <Filter>platform.all\AST</Filter>
+    <ClInclude Include="..\platform.all\AST\Nodes\ArrayLit.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\AssertStmnt.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\AssignExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\ASTNode.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\BoolLit.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\BreakStmnt.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\CastExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\CmpExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\DeclDef.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\Func.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\FuncArg.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\IBasicCodegenNode.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\Identifier.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\IExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\IfStmnt.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\IntLit.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\IRepeatableStmnt.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\IStmnt.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\LAndExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\LoopStmnt.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\LOrExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\Module.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\MulExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\NextStmnt.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\NoOpStmnt.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\NotExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\NullLit.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\PostfixExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\PrefixExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\PrimaryExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\PrimitiveType.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\PrintStmnt.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\RandExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\ReadnumExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\ReturnStmnt.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\Scope.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\ScopeStmnt.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\ShiftExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\Stmnt.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\StrLit.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\TernaryExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\TimeExpr.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\Type.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\VarDecl.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\AST\Nodes\WhileStmnt.hpp">
+      <Filter>platform.all\AST\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenCtx.hpp">
+      <Filter>platform.all\Backend\LLVM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CompiledDataType.hpp">
+      <Filter>platform.all\Backend\LLVM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\Constant.hpp">
+      <Filter>platform.all\Backend\LLVM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\ImplicitCasts.hpp">
+      <Filter>platform.all\Backend\LLVM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\NoRTTIOps.hpp">
+      <Filter>platform.all\Backend\LLVM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\RepeatableStmnt.hpp">
+      <Filter>platform.all\Backend\LLVM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\ValHolder.hpp">
+      <Filter>platform.all\Backend\LLVM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\Value.hpp">
+      <Filter>platform.all\Backend\LLVM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\AddrCodegen\AddrCodegen.hpp">
+      <Filter>platform.all\Backend\LLVM\AddrCodegen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\Codegen\Codegen.hpp">
+      <Filter>platform.all\Backend\LLVM\Codegen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenBinaryOp\CodegenBinaryOp.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenBinaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenBinaryOp\CodegenBinaryOp_AddExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenBinaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenBinaryOp\CodegenBinaryOp_CmpExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenBinaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenBinaryOp\CodegenBinaryOp_MulExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenBinaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenBinaryOp\CodegenBinaryOp_ShiftExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenBinaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenBinaryOp\CodegenLazyLogicalBinaryOp.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenBinaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenCast\CodegenCast.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenCast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstBinaryOp.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstBinaryOp_AddExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstBinaryOp_CmpExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstBinaryOp_LAndExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstBinaryOp_LOrExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstBinaryOp_MulExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstBinaryOp_ShiftExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenConstBinaryOp\CodegenConstLogicalBinaryOp.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstBinaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenConstCast\CodegenConstCast.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstCast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenConstUnaryOp\CodegenBasicConstUnaryOp.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstUnaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenConstUnaryOp\CodegenConstUnaryOp_CastExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstUnaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenConstUnaryOp\CodegenConstUnaryOp_NotExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstUnaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenConstUnaryOp\CodegenConstUnaryOp_PrefixExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenConstUnaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenDataType\CodegenDataType.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenDataType</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenUnaryOp\CodegenBasicUnaryOp.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenUnaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenUnaryOp\CodegenUnaryOp_CastExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenUnaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenUnaryOp\CodegenUnaryOp_NotExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenUnaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenUnaryOp\CodegenUnaryOp_PostfixExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenUnaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\CodegenUnaryOp\CodegenUnaryOp_PrefixExpr.hpp">
+      <Filter>platform.all\Backend\LLVM\CodegenUnaryOp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platform.all\Backend\LLVM\ConstCodegen\ConstCodegen.hpp">
+      <Filter>platform.all\Backend\LLVM\ConstCodegen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
