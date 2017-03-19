@@ -40,10 +40,10 @@
 
 @set INPUT_FILE_PATH=%4%
 
-REM # Get the name of the input file without the extension
+@rem # Get the name of the input file without the extension
 @for %%i in (%INPUT_FILE_PATH%) do @set INPUT_FILENAME=%%~ni
 
-REM # Generate the llvm ir code using wolfc
+@rem # Generate the llvm ir code using wolfc
 @set OUTPUT_LL_FILE_PATH=%INTERMEDIATE_OUTPUT_DIR%/%INPUT_FILENAME%.ll
 
 @"%WOLFC_PATH%" ^
