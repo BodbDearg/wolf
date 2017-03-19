@@ -1,4 +1,4 @@
-@rem # Small script that compiles and runs a wolf script.
+@rem # Small script that compiles and runs a Wolf Programming Language source file <.wolf>
 @rem # Returns the exit code of the program run, or '1' if the build fails.
 @rem # 
 @rem # Args:
