@@ -7,9 +7,6 @@
 @rem # 	%3 - folder for output executable
 @rem # 	%4 - file to compile and run
 
-@rem # Just to be safe - ensure this is not shadowed
-@set ERRORLEVEL=
-
 @rem # Get the folder that this file is in
 @set THIS_FILE_DIR=%~dp0
 

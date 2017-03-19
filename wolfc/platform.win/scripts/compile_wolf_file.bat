@@ -6,9 +6,6 @@
 @rem #	%3 - folder for output executable
 @rem #	%4 - file to compile
 
-@rem # Just to be safe - ensure this is not shadowed
-@set ERRORLEVEL=
-
 @rem # Setting up build paths
 @set VS_DIR=C:\Program Files (x86)\Microsoft Visual Studio\2017
 @set MSVC_DIR=%VS_DIR%\Community\VC
@@ -27,8 +24,8 @@
 	mkdir "%INTERMEDIATE_OUTPUT_DIR%"
 
 	@if %ERRORLEVEL% neq 0 (
-		@echo Failed to create intermidate output folder '%INTERMEDIATE_OUTPUT_DIR%'
-		@exit /b 1
+		@echo Failed to create intermidate output folder '%INTERMEDIATE_OUTPUT_DIR%'^^!
+		@exit /b %ERRORLEVEL%
 	)
 )
 
@@ -36,8 +33,8 @@
 	mkdir "%EXECUTABLE_OUTPUT_DIR%"
 
 	@if %ERRORLEVEL% neq 0 (
-		@echo Failed to create executable output folder '%EXECUTABLE_OUTPUT_DIR%'
-		@exit /b 1
+		@echo Failed to create executable output folder '%EXECUTABLE_OUTPUT_DIR%'^^!
+		@exit /b %ERRORLEVEL%
 	)
 )
 
@@ -54,9 +51,9 @@
 	1> "%OUTPUT_LL_FILE_PATH%" 2>&1
 
 @if %ERRORLEVEL% neq 0 (
-    @echo A compiler error occurred for file '%INPUT_FILE_PATH%'! Error details follow:
+    @echo A compiler error occurred for file '%INPUT_FILE_PATH%'^^! Error details follow:
 	@type "%OUTPUT_LL_FILE_PATH%"
-	@exit /b 1
+	@exit /b %ERRORLEVEL%
 )
 
 @rem # Generate assembly
@@ -69,8 +66,8 @@
 	"%OUTPUT_LL_FILE_PATH%"
 
 @if %ERRORLEVEL% neq 0 (
-    @echo Assembly code generation failed for IR code in file '%OUTPUT_LL_FILE_PATH%'!
-    @exit /b 1
+    @echo Assembly code generation failed for IR code in file '%OUTPUT_LL_FILE_PATH%'^^!
+    @exit /b %ERRORLEVEL%
 )
 
 @rem # Compile that assembly to an object file
@@ -83,8 +80,8 @@
 	-o="%OUTPUT_OBJ_FILE_PATH%"
 
 @if %ERRORLEVEL% neq 0 (
-    @echo Compiling failed for assembly file '%OUTPUT_S_FILE_PATH%'!
-    @exit /b 1
+    @echo Compiling failed for assembly file '%OUTPUT_S_FILE_PATH%'^^!
+    @exit /b %ERRORLEVEL%
 )
 
 @rem # Link the object file
@@ -97,7 +94,10 @@
 	/out:"%OUTPUT_BIN_FILE_PATH%" "%OUTPUT_OBJ_FILE_PATH%"
 
 @if %ERRORLEVEL% neq 0 (
-	@echo Linking failed!
+	@echo Linking failed^^!
 	@pause
-	@exit /b 1
+	@exit /b %ERRORLEVEL%
 )
+
+@rem # All went well if we got to here
+@exit /b 0

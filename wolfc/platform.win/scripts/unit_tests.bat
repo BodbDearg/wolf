@@ -10,6 +10,9 @@
 @set OUTPUT_DIR=%THIS_FILE_DIR%..\x64\Debug
 @set INPUT_DIR=%THIS_FILE_DIR%..\..\unit_tests
 
+@rem # This is required for the error level checks in the loop to work
+setlocal EnableDelayedExpansion
+
 @rem # Run through all unit tests in the unit tests folder
 @for %%i in ("%INPUT_DIR%\*.wolf") do @(
 	@rem # Do the compile and run!
@@ -22,13 +25,14 @@
 		%%i
 
 	@rem # If that fails then exit
-	@if %ERRORLEVEL% neq 0 (
-		@echo Unit test failed for file '%%i'!
+	@if !ERRORLEVEL! neq 0 (
+		@echo Unit test failed for file '%%i'^^!
+		@pause
 		@exit \b 1
 	)
 )
 
 @rem # If we've got to here then all tests have passed
 @cls
-@echo All tests passed successfully!
+@echo All tests passed successfully^^!
 @pause
