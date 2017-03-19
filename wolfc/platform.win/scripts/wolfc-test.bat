@@ -12,8 +12,10 @@
 @set INPUT_FILE=%INPUT_DIR%\wolfc-test.wolf
 
 @rem # Do the compile and run!
-@%COMPILE_AND_RUN_SCRIPT% ^
+@call %COMPILE_AND_RUN_SCRIPT% ^
 	%OUTPUT_DIR%\wolfc.exe ^
 	%OUTPUT_DIR% ^
 	%OUTPUT_DIR% ^
 	%INPUT_FILE%
+
+@pause
