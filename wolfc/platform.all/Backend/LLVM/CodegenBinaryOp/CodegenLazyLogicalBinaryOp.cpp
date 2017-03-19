@@ -8,13 +8,13 @@
 
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
+#include "../ImplicitCasts.hpp"
+#include "Assert.hpp"
 #include "AST/Nodes/ASTNode.hpp"
 #include "AST/Nodes/IExpr.hpp"
-#include "Assert.hpp"
 #include "DataType/DataType.hpp"
 #include "DataType/Types/BoolDataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
-#include "ImplicitCasts.hpp"
 #include "StringUtils.hpp"
 
 WC_BEGIN_NAMESPACE

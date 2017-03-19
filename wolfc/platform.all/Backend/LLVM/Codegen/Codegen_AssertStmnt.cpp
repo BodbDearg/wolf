@@ -7,12 +7,12 @@
 #include "Codegen.hpp"
 
 #include "../CodegenCtx.hpp"
+#include "../ImplicitCasts.hpp"
 #include "AST/Nodes/AssertStmnt.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
 #include "Assert.hpp"
 #include "DataType/Types/BoolDataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
-#include "ImplicitCasts.hpp"
 #include "Lexer/Token.hpp"
 #include "StringUtils.hpp"
 

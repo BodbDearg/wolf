@@ -6,10 +6,10 @@
 
 #include "ConstCodegen.hpp"
 
+#include "../CodegenConstBinaryOp/CodegenConstBinaryOp_ShiftExpr.hpp"
 #include "../CodegenCtx.hpp"
 #include "AST/Nodes/PrefixExpr.hpp"
 #include "AST/Nodes/ShiftExpr.hpp"
-#include "CodegenConstBinaryOp_ShiftExpr.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE

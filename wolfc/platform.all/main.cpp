@@ -5,12 +5,12 @@
 //==============================================================================
 
 #include "AST/Nodes/Module.hpp"
+#include "AST/ParseCtx.hpp"
 #include "Backend/LLVM/Codegen/Codegen.hpp"
 #include "Backend/LLVM/CodegenCtx.hpp"
 #include "FileUtils.hpp"
 #include "Lexer/Lexer.hpp"
 #include "LinearAlloc.hpp"
-#include "ParseCtx.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <cstdio>
