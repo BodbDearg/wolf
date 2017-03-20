@@ -34,6 +34,9 @@ IsAddressable::IsAddressable(Codegen & cg) : mCG(cg) {
         mNodeIsAddressable = false;\
     }
 
+// TODO: Some day we might have to consider user operator overloading here,
+// since the user operands might produce a result which requires storage and
+// which can be addressed.
 WC_IMPL_NODE_NOT_ADDRESSABLE(AddExprAdd)
 WC_IMPL_NODE_NOT_ADDRESSABLE(AddExprBOr)
 WC_IMPL_NODE_NOT_ADDRESSABLE(AddExprBXor)
