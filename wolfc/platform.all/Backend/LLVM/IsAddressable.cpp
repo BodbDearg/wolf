@@ -142,6 +142,7 @@ WC_IMPL_NODE_NOT_ADDRESSABLE(WhileStmnt)
 WC_IMPL_NODE_IS_ADDRESSABLE(ArrayLit)
 WC_IMPL_NODE_IS_ADDRESSABLE(Identifier)
 WC_IMPL_NODE_IS_ADDRESSABLE(PostfixExprArrayLookup)
+WC_IMPL_NODE_IS_ADDRESSABLE(PrefixExprPtrDeref)
 WC_IMPL_NODE_IS_ADDRESSABLE(PrimaryExprArrayLit)
 WC_IMPL_NODE_IS_ADDRESSABLE(PrimaryExprIdentifier)
 
@@ -171,11 +172,7 @@ WC_IMPL_EXPR_DELEGATES_QUERY_TO_INNER_EXPR(TernaryExprNoCond)
 
 /* These nodes we implement the query manually for */
 void IsAddressable::visit(const AST::PostfixExprFuncCall & astNode) {
-    #warning TODO
-}
-
-void IsAddressable::visit(const AST::PrefixExprPtrDeref & astNode) {
-    #warning TODO
+    #warning TODO - addressible if function call return value requires storage (e.g array)
 }
  
 #undef WC_IMPL_NODE_NOT_ADDRESSABLE
