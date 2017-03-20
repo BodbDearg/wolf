@@ -14,6 +14,7 @@
 #include "Assert.hpp"
 #include "DataType/DataType.hpp"
 #include "DataType/Types/ArrayDataType.hpp"
+#include "DataType/Types/PtrDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -74,31 +75,51 @@ void AddrCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
 void AddrCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
-    // Codgen the address of the array first
+    // Codgen the address of the 'array' expression first.
+    // Note that the array expresion might not neccesarily be an array, could potentially be any other
+    // type that we support indexing on (such as pointers).
     astNode.mArrayExpr.accept(*this);
-    Value arrayAddrVal = mCtx.popValue();
-    WC_ASSERT(!arrayAddrVal.isValid() || arrayAddrVal.mRequiresLoad);
+    Value arrayExprAddr = mCtx.popValue();
+    WC_ASSERT(!arrayExprAddr.isValid() || arrayExprAddr.mRequiresLoad);
     
     // Codegen the expression for the array index
     astNode.mIndexExpr.accept(mCodegen);
     Value indexVal = mCtx.popValue();
     WC_ASSERT(!indexVal.isValid() || !indexVal.mRequiresLoad);
     
-    // Make sure the array is actually an array and figure out the element type.
+    // Figure out if we can do array indexing on the type being indexed and get the element type.
     //
     // TODO: support the array lookup operator on custom types eventually.
-    const CompiledDataType & arrayCDT = arrayAddrVal.mCompiledType;
-    const DataType & arrayAbstractDT = arrayCDT.getDataType();
-    bool arrayTypeAndIndexTypesAreOk = true;
+    const CompiledDataType & arrayExprCDT = arrayExprAddr.mCompiledType;
+    const DataType & arrayExprDT = arrayExprCDT.getDataType();
+    const DataType * arrayElemDT = nullptr;
+    bool exprTypeAndIndexTypesAreOk = true;
     
-    if (!arrayAbstractDT.isArray()) {
+    if (arrayExprDT.isArray()) {
+        // Indexing an array
+        const ArrayDataType & arrayDT = static_cast<const ArrayDataType&>(arrayExprDT);
+        arrayElemDT = &arrayDT.mElemType;
+    }
+    else if (arrayExprDT.isPtr()) {
+        // Indexing a pointer, similar to how it is done in the 'C' language
+        const PtrDataType & ptrDT = static_cast<const PtrDataType&>(arrayExprDT);
+        arrayElemDT = &ptrDT.mPointedToType;
+        
+        // The pointer value must be loaded first though:
+        arrayExprAddr.mLLVMVal = mCtx.mIRBuilder.CreateLoad(arrayExprAddr.mLLVMVal, "AddrCodegen:PostfixExprArrayLookup:LoadPtrVal");
+        arrayExprAddr.mRequiresLoad = false;
+        WC_ASSERT(arrayExprAddr.mLLVMVal);
+    }
+    else {
         // Note: no error in the case of an 'undefined' type since this means an error was already emitted elsewhere.
-        if (!arrayAbstractDT.isUndefined()) {
-            mCtx.error("Can't perform array indexing on an expression of type '%s'! Only arrays can be indexed.",
-                       arrayAbstractDT.name().c_str());
+        if (!arrayExprDT.isUndefined()) {
+            // TODO: this message will need to be updated once we support indexing on user types
+            mCtx.error("Can't perform array indexing on an expression of type '%s'! "
+                       "Currently only arrays and pointer data types can be indexed.",
+                       arrayExprDT.name().c_str());
         }
         
-        arrayTypeAndIndexTypesAreOk = false;
+        exprTypeAndIndexTypesAreOk = false;
     }
     
     // Index expression must be an integer
@@ -113,26 +134,37 @@ void AddrCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
                        indexDT.name().c_str());
         }
 
-        arrayTypeAndIndexTypesAreOk = false;
+        exprTypeAndIndexTypesAreOk = false;
     }
     
     // Proceed no further if any of these are invalid
     WC_GUARD(indexVal.isValid() &&
-             arrayAddrVal.isValid() &&
-             arrayTypeAndIndexTypesAreOk);
+             arrayExprAddr.isValid() &&
+             exprTypeAndIndexTypesAreOk);
     
     // Get the value for the array address:
-    llvm::ConstantInt * zeroIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(mCtx.mLLVMCtx), 0);
-    WC_ASSERT(zeroIndex);
-    llvm::Value * arrayElemAddr = mCtx.mIRBuilder.CreateGEP(arrayAddrVal.mLLVMVal,
-                                                            { zeroIndex, indexVal.mLLVMVal },
-                                                            "AddrCodegen:PostfixExprArrayLookup:ElemAddr");
+    llvm::Value * arrayElemAddr = nullptr;
+    
+    if (arrayExprDT.isArray()) {
+        // Array indexing an array
+        llvm::ConstantInt * zeroIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(mCtx.mLLVMCtx), 0);
+        WC_ASSERT(zeroIndex);
+        arrayElemAddr = mCtx.mIRBuilder.CreateGEP(arrayExprAddr.mLLVMVal,
+                                                  { zeroIndex, indexVal.mLLVMVal },
+                                                  "AddrCodegen:PostfixExprArrayLookup:ElemAddr");
+    }
+    else {
+        // Array indexing a pointer
+        arrayElemAddr = mCtx.mIRBuilder.CreateGEP(arrayExprAddr.mLLVMVal,
+                                                  indexVal.mLLVMVal,
+                                                  "AddrCodegen:PostfixExprArrayLookup:ElemAddr");
+    }
     
     WC_ASSERT(arrayElemAddr);
     
-    // Figure out the compiled data type for the value loaded. If we fail in this then bail:
-    const ArrayDataType & arrayDT = static_cast<const ArrayDataType&>(arrayAbstractDT);
-    arrayDT.mElemType.accept(mCodegenDataType);
+    // Figure out the compiled data type for the element type:
+    WC_ASSERT(arrayElemDT);
+    arrayElemDT->accept(mCodegenDataType);
     CompiledDataType arrayElemCDT = mCtx.popCompiledDataType();
     WC_GUARD(arrayElemCDT.isValid());
     

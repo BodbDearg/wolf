@@ -3,6 +3,10 @@
 **********************
 
 - [] operator should dereference pointers
+	- Add special message for trying to dereference compile time pointers
+	- Need to fix not being able to lookup pointer literals (should be allowable)
+	- need unit tests
+
 - '! operator'
 - Don't allow dereference of nullable pointers
 
