@@ -160,6 +160,7 @@
 		1F6B6C201E3DFA7000B75BF4 /* CodegenBasicConstUnaryOp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B6C1E1E3DFA7000B75BF4 /* CodegenBasicConstUnaryOp.cpp */; };
 		1F6B6C231E3DFACD00B75BF4 /* CodegenConstUnaryOp_NotExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B6C211E3DFACD00B75BF4 /* CodegenConstUnaryOp_NotExpr.cpp */; };
 		1F6B6C261E3DFB9100B75BF4 /* CodegenConstUnaryOp_PrefixExpr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F6B6C241E3DFB9100B75BF4 /* CodegenConstUnaryOp_PrefixExpr.cpp */; };
+		1F6C802B1E7FB5580052816C /* IsAddressable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F6C80291E7FB5580052816C /* IsAddressable.cpp */; };
 		1F72313C1DD0762D00D9E50D /* DebugBreak.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F72313B1DD0762D00D9E50D /* DebugBreak.cpp */; };
 		1F7B2A9C1E4D9591007F06FB /* NoRTTIOps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F7B2A9A1E4D9591007F06FB /* NoRTTIOps.cpp */; settings = {COMPILER_FLAGS = "-fno-rtti"; }; };
 		1F7B2A9E1E4DA1E1007F06FB /* AddrCodegen_ArrayLit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F7B2A9D1E4DA1E1007F06FB /* AddrCodegen_ArrayLit.cpp */; };
@@ -442,6 +443,8 @@
 		1F6B6C221E3DFACD00B75BF4 /* CodegenConstUnaryOp_NotExpr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CodegenConstUnaryOp_NotExpr.hpp; sourceTree = "<group>"; };
 		1F6B6C241E3DFB9100B75BF4 /* CodegenConstUnaryOp_PrefixExpr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodegenConstUnaryOp_PrefixExpr.cpp; sourceTree = "<group>"; };
 		1F6B6C251E3DFB9100B75BF4 /* CodegenConstUnaryOp_PrefixExpr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CodegenConstUnaryOp_PrefixExpr.hpp; sourceTree = "<group>"; };
+		1F6C80291E7FB5580052816C /* IsAddressable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IsAddressable.cpp; sourceTree = "<group>"; };
+		1F6C802A1E7FB5580052816C /* IsAddressable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IsAddressable.hpp; sourceTree = "<group>"; };
 		1F72313B1DD0762D00D9E50D /* DebugBreak.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DebugBreak.cpp; sourceTree = "<group>"; };
 		1F72313D1DD076C800D9E50D /* DebugBreak.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DebugBreak.hpp; sourceTree = "<group>"; };
 		1F7B2A9A1E4D9591007F06FB /* NoRTTIOps.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NoRTTIOps.cpp; sourceTree = "<group>"; };
@@ -861,6 +864,8 @@
 				1F2985C21E3EFB5400DC17CC /* ConstCodegen */,
 				1F48ACEB1E680BC1006F66C4 /* ImplicitCasts.cpp */,
 				1F48ACEC1E680BC1006F66C4 /* ImplicitCasts.hpp */,
+				1F6C80291E7FB5580052816C /* IsAddressable.cpp */,
+				1F6C802A1E7FB5580052816C /* IsAddressable.hpp */,
 				1F7B2A9A1E4D9591007F06FB /* NoRTTIOps.cpp */,
 				1F7B2A9B1E4D9591007F06FB /* NoRTTIOps.hpp */,
 				1F25171D1E40553300E34CF6 /* RepeatableStmnt.hpp */,
@@ -1155,6 +1160,7 @@
 				1F5B592A1E2D773000609CDD /* CodegenCtx.cpp in Sources */,
 				1F7B2A9E1E4DA1E1007F06FB /* AddrCodegen_ArrayLit.cpp in Sources */,
 				1FFD488D1CDC6A7F0084D66C /* StringUtils.cpp in Sources */,
+				1F6C802B1E7FB5580052816C /* IsAddressable.cpp in Sources */,
 				1FCD4DF41D0136360076E358 /* DataType.cpp in Sources */,
 				1F2985B71E3EFAEC00DC17CC /* Codegen_PostfixExpr.cpp in Sources */,
 				1F0308B51E2AF2510097D223 /* VarDecl.cpp in Sources */,

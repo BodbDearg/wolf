@@ -6,19 +6,28 @@
 
 #pragma once
 
-#include "../AddrCodegen/AddrCodegen.hpp"
-#include "../ConstCodegen/ConstCodegen.hpp"
 #include "AST/ASTNodeVisitor.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
-class CodegenCtx;
+class Codegen;
 
-/* Generates code for the LLVM backend */
-class Codegen final : public AST::ASTNodeVisitor {
+/**
+ * Helper object which implements a query to tell if an expression is potentially addressable or not, 
+ * or is an l-value versus r-value.
+ *
+ * Note: if something is regarded as addressible, this doesn't neccessarily mean there will NOT be
+ * compile errors when trying to generate that address!
+ *
+ * This helper is mainly intended for helping to compute the address of an array lookup expression.
+ * In some cases we have to compute the address of the base array expression (if an identifier for example)
+ * and in other cases we have to compute it as a value (e.g pointer from a cast expression).
+ */
+class IsAddressable final : public AST::ASTNodeVisitor {
 public:
-    Codegen(CodegenCtx & ctx);
+    /* Constructor */
+    IsAddressable(Codegen & cg);
     
     /* ASTNode visitor functions */
     virtual void visit(const AST::AddExprAdd & astNode) override;
@@ -139,17 +148,11 @@ public:
     virtual void visit(const AST::VarDeclInferType & astNode) override;
     virtual void visit(const AST::WhileStmnt & astNode) override;
     
-    /* The codegen context */
-    CodegenCtx & mCtx;
+    /* The codegen object */
+    Codegen & mCG;
     
-    /* Code generator in charge of constant code generation */
-    ConstCodegen mConstCodegen;
-    
-    /* Code generator in charge of data type generation */
-    CodegenDataType & mCodegenDataType;
-    
-    /* Code generator in charge of 'address of' code generation */
-    AddrCodegen mAddrCodegen;
+    /* The result of the query */
+    bool mNodeIsAddressable = false;
 };
 
 WC_LLVM_BACKEND_END_NAMESPACE
