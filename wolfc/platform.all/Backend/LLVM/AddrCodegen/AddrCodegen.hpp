@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "AST/ASTNodeVisitor.hpp"
+#include "../AddrOrValCodegen/AddrOrValCodegen.hpp"
 
 WC_BEGIN_NAMESPACE
 
@@ -162,6 +162,9 @@ public:
     
     /* Code generator in charge of data type generation */
     CodegenDataType & mCodegenDataType;
+    
+    /* An address or value code generator */
+    AddrOrValCodegen mAddrOrValCodegen;
      
 private:
     /* Issue a codegen not supported error for the given ASTNode type */

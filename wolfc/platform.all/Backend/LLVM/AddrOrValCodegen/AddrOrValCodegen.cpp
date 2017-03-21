@@ -183,6 +183,7 @@ WC_IMPL_CODEGEN_VALUE_FOR_NODE_TYPE(TimeExpr)
 WC_IMPL_CODEGEN_ADDR_FOR_NODE_TYPE(ArrayLit)
 WC_IMPL_CODEGEN_ADDR_FOR_NODE_TYPE(Identifier)
 WC_IMPL_CODEGEN_ADDR_FOR_NODE_TYPE(PostfixExprArrayLookup)
+WC_IMPL_CODEGEN_ADDR_FOR_NODE_TYPE(PrefixExprPtrDeref)
 
 #undef WC_IMPL_CODEGEN_ADDR_FOR_NODE_TYPE
 
@@ -222,10 +223,6 @@ WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(TernaryExprNoCond, mExpr)
 void AddrOrValCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
 
-    #warning TODO: Implement
-    mCtx.error("TODO: IMPLEMENT!");
-    
-    /*
     // Evaluate the expression first:
     astNode.accept(mCodegen);
     Value exprVal = mCtx.popValue();
@@ -233,44 +230,28 @@ void AddrOrValCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
     // The value must be valid for this to work
     WC_GUARD(exprVal.isValid());
     
-    // The data type for the return value must be sized
+    // If the value requires storage, allocate the storage on the stack and return a pointer to that storage.
+    // Otherwise return the raw value itself:
     const CompiledDataType & exprValCDT = exprVal.mCompiledType;
     const DataType & exprValDT = exprValCDT.getDataType();
     
-    if (!exprValDT.isSized()) {
-        // Note: no error in the case of an 'undefined' type since this means an error was already emitted elsewhere.
-        if (!exprValDT.isUndefined()) {
-            mCtx.error(astNode,
-                       "Can't take the address of a function call result which returns "
-                       "unsized type '%s'!",
-                       exprValDT.name().c_str());
-        }
+    if (exprValDT.requiresStorage()) {
+        // Dealing with a return type which requires storage.
+        // Create an alloca to hold the result of the function call and store the result there.
+        llvm::Value * llvmStackVal = mCtx.mIRBuilder.CreateAlloca(exprValCDT.getLLVMType(),
+                                                                  nullptr,
+                                                                  "AddrOrValCodegen:PostfixExprFuncCall:Alloca");
         
-        return;
+        WC_ASSERT(llvmStackVal);
+        mCtx.mIRBuilder.CreateStore(exprVal.mLLVMVal, llvmStackVal);
+        
+        // Push it onto the codegen context stack and mark it as requring a load
+        mCtx.pushValue(Value(llvmStackVal, exprValCDT, true, &astNode));
     }
-    
-    // Create an alloca to hold the result of the function call and store the result there.
-    llvm::Value * llvmStackVal = mCtx.mIRBuilder.CreateAlloca(exprValCDT.getLLVMType(),
-                                                              nullptr,
-                                                              "ArrayBaseAddrCodegen:PostfixExprFuncCall:Alloca");
-    
-    WC_ASSERT(llvmStackVal);
-    mCtx.mIRBuilder.CreateStore(exprVal.mLLVMVal, llvmStackVal);
-    
-    // Push it onto the codegen context stack
-    mCtx.pushValue(Value(llvmStackVal, exprValCDT, true, &astNode));
-    */
-}
-
-void AddrOrValCodegen::visit(const AST::PrefixExprPtrDeref & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    
-    #warning TODO: Implement
-    mCtx.error("TODO: IMPLEMENT!");
-    /*
-    constexpr const bool kLoadExprResult = false;
-    CodegenPtrDerefUnaryOp(mCodegen, astNode.mExpr, kLoadExprResult).codegen();
-    */
+    else {
+        // Return type which doesn't require any storage. Just return the value as-is:
+        mCtx.pushValue(exprVal);
+    }
 }
 
 void AddrOrValCodegen::codegenNotSupportedForNodeTypeError(const AST::ASTNode & node,

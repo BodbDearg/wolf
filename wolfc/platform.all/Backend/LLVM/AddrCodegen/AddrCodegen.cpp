@@ -64,7 +64,8 @@ AddrCodegen::AddrCodegen(CodegenCtx & ctx,
     mCtx(ctx),
     mCodegen(codegen),
     mConstCodegen(constCodegen),
-    mCodegenDataType(codegenDataType)
+    mCodegenDataType(codegenDataType),
+    mAddrOrValCodegen(ctx, codegen, *this)
 {
     WC_EMPTY_FUNC_BODY();
 }
@@ -306,54 +307,58 @@ void AddrCodegen::visit(const AST::Identifier & astNode) {
 void AddrCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
-    // Codgen the address of the 'array' expression first.
-    // Note that the array expresion might not neccesarily be an array, could potentially be any other
-    // type that we support indexing on (such as pointers).
-    astNode.mArrayExpr.accept(*this);
-    Value arrayExprAddr = mCtx.popValue();
-    WC_ASSERT(!arrayExprAddr.isValid() || arrayExprAddr.mRequiresLoad);
+    // Codgen either the address or value of the 'array' expression first, depending on whether we are
+    // dealing with an addressable expression (l-value) or not.
+    //
+    // Note: despite the terminology the array expresion might not neccesarily be an array, it could also
+    // potentially be any other type that we support indexing on (such as pointers).
+    astNode.mArrayExpr.accept(mAddrOrValCodegen);
+    Value arrayExprVal = mCtx.popValue();
     
     // Codegen the expression for the array index
     astNode.mIndexExpr.accept(mCodegen);
     Value indexVal = mCtx.popValue();
     WC_ASSERT(!indexVal.isValid() || !indexVal.mRequiresLoad);
     
-    // Figure out if we can do array indexing on the type being indexed and get the element type.
+    // Figure out if we can do array indexing on the type being indexed and get the element
+    // type if indexing is possible.
     //
     // TODO: support the array lookup operator on custom types eventually.
-    const CompiledDataType & arrayExprCDT = arrayExprAddr.mCompiledType;
-    const DataType & arrayExprDT = arrayExprCDT.getDataType();
+    const CompiledDataType & arrayExprValCDT = arrayExprVal.mCompiledType;
+    const DataType & arrayExprValDT = arrayExprValCDT.getDataType();
     const DataType * arrayElemDT = nullptr;
     bool exprTypeAndIndexTypesAreOk = true;
     
-    if (arrayExprDT.isArray()) {
+    if (arrayExprValDT.isArray()) {
         // Indexing an array
-        const ArrayDataType & arrayDT = static_cast<const ArrayDataType&>(arrayExprDT);
+        const ArrayDataType & arrayDT = static_cast<const ArrayDataType&>(arrayExprValDT);
         arrayElemDT = &arrayDT.mElemType;
-    }
-    else if (arrayExprDT.isPtr()) {
-        // Indexing a pointer, similar to how it is done in the 'C' language
-        const PtrDataType & ptrDT = static_cast<const PtrDataType&>(arrayExprDT);
-        arrayElemDT = &ptrDT.mPointedToType;
         
-        // The pointer value must be loaded first though:
-        arrayExprAddr.mLLVMVal = mCtx.mIRBuilder.CreateLoad(arrayExprAddr.mLLVMVal, "AddrCodegen:PostfixExprArrayLookup:LoadPtrVal");
-        arrayExprAddr.mRequiresLoad = false;
-        WC_ASSERT(arrayExprAddr.mLLVMVal);
+        // Arrays should always require a load
+        WC_ASSERT(arrayExprVal.mRequiresLoad);
+    }
+    else if (arrayExprValDT.isPtr()) {
+        // Indexing a pointer, similar to how it is done in the 'C' language.
+        //
+        // Note: pointers may or may not require a load, depending on whether we accessed them
+        // through an identifier (l-value) or some sort of r-value. Hence, we do no assert check in
+        // this case on whether the value should be loaded or not...
+        const PtrDataType & ptrDT = static_cast<const PtrDataType&>(arrayExprValDT);
+        arrayElemDT = &ptrDT.mPointedToType;
     }
     else {
         // Note: no error in the case of an 'undefined' type since this means an error was already emitted elsewhere.
-        if (!arrayExprDT.isUndefined()) {
+        if (!arrayExprValDT.isUndefined()) {
             // TODO: this message will need to be updated once we support indexing on user types
             mCtx.error("Can't perform array indexing on an expression of type '%s'! "
                        "Currently only arrays and pointer data types can be indexed.",
-                       arrayExprDT.name().c_str());
+                       arrayExprValDT.name().c_str());
         }
         
         exprTypeAndIndexTypesAreOk = false;
     }
     
-    // Index expression must be an integer
+    // Index expression must be an integer, perform that check here:
     const CompiledDataType & indexCDT = indexVal.mCompiledType;
     const DataType & indexDT = indexCDT.getDataType();
     
@@ -368,25 +373,31 @@ void AddrCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
         exprTypeAndIndexTypesAreOk = false;
     }
     
-    // Proceed no further if any of these are invalid
+    // Proceed no further if any of these checks fail
     WC_GUARD(indexVal.isValid() &&
-             arrayExprAddr.isValid() &&
+             arrayExprVal.isValid() &&
              exprTypeAndIndexTypesAreOk);
     
-    // Get the value for the array address:
+    // Get the address for array element being indexed:
     llvm::Value * arrayElemAddr = nullptr;
     
-    if (arrayExprDT.isArray()) {
-        // Array indexing an array
+    if (arrayExprValDT.isArray()) {
+        // Array indexing an array, use the array style GEP instruction:
         llvm::ConstantInt * zeroIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(mCtx.mLLVMCtx), 0);
         WC_ASSERT(zeroIndex);
-        arrayElemAddr = mCtx.mIRBuilder.CreateGEP(arrayExprAddr.mLLVMVal,
+        arrayElemAddr = mCtx.mIRBuilder.CreateGEP(arrayExprVal.mLLVMVal,
                                                   { zeroIndex, indexVal.mLLVMVal },
                                                   "AddrCodegen:PostfixExprArrayLookup:ElemAddr");
     }
     else {
-        // Array indexing a pointer
-        arrayElemAddr = mCtx.mIRBuilder.CreateGEP(arrayExprAddr.mLLVMVal,
+        // Array indexing a pointer.
+        // Note: the pointer may need a load if we got it through a variable (l-value), so that first:
+        llvm::Value * ptrVal = arrayExprVal.mRequiresLoad ?
+            mCtx.mIRBuilder.CreateLoad(arrayExprVal.mLLVMVal, "AddrCodegen:PostfixExprArrayLookup:LoadPtrVal") :
+            arrayExprVal.mLLVMVal;
+        
+        // Now do a pointer arithmetic style GEP instruction:
+        arrayElemAddr = mCtx.mIRBuilder.CreateGEP(ptrVal,
                                                   indexVal.mLLVMVal,
                                                   "AddrCodegen:PostfixExprArrayLookup:ElemAddr");
     }
@@ -436,9 +447,9 @@ void AddrCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
                                                               "AddrCodegen:PostfixExprFuncCall:Alloca");
     
     WC_ASSERT(llvmStackVal);
-    mCtx.mIRBuilder.CreateStore(exprVal.mLLVMVal, llvmStackVal);
+    WC_ASSERTED_OP(mCtx.mIRBuilder.CreateStore(exprVal.mLLVMVal, llvmStackVal));
     
-    // Push it onto the codegen context stack
+    // Push it onto the codegen context stack to save the result.
     mCtx.pushValue(Value(llvmStackVal, exprValCDT, true, &astNode));
 }
 
