@@ -6,30 +6,34 @@
 
 #pragma once
 
-#warning Can probably remove this now
-
 #include "AST/ASTNodeVisitor.hpp"
 
 WC_BEGIN_NAMESPACE
+
+namespace AST {
+    class ASTNode;
+}
+
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
+class AddrCodegen;
 class Codegen;
+class CodegenCtx;
 
 /**
- * Helper object which implements a query to tell if an expression is potentially addressable or not, 
- * or is an l-value versus r-value.
+ * Special code generator which will do an address codegen for expressions that can have their address
+ * taken (l-values) and which does a regular codegen for expressions which can't have their address 
+ * taken (r-values).
  *
- * Note: if something is regarded as addressible, this doesn't neccessarily mean there will NOT be
- * compile errors when trying to generate that address!
- *
- * This helper is mainly intended for helping to compute the address of an array lookup expression.
- * In some cases we have to compute the address of the base array expression (if an identifier for example)
- * and in other cases we have to compute it as a value (e.g pointer from a cast expression).
+ * This is used to calculate the array operand for the '[]' (array index) operator.
+ * For l-values we want to take the address of the operand but for expressions (e.g pointers) we want to
+ * use the value of the operand.
  */
-class IsAddressable final : public AST::ASTNodeVisitor {
+class AddrOrValCodegen final : public AST::ASTNodeVisitor {
 public:
-    /* Constructor */
-    IsAddressable(Codegen & cg);
+    AddrOrValCodegen(CodegenCtx & ctx,
+                     Codegen & codegen,
+                     AddrCodegen & addrCodegen);
     
     /* ASTNode visitor functions */
     virtual void visit(const AST::AddExprAdd & astNode) override;
@@ -150,11 +154,19 @@ public:
     virtual void visit(const AST::VarDeclInferType & astNode) override;
     virtual void visit(const AST::WhileStmnt & astNode) override;
     
-    /* The codegen object */
-    Codegen & mCG;
+    /* The codegen context */
+    CodegenCtx & mCtx;
     
-    /* The result of the query */
-    bool mNodeIsAddressable = false;
+    /* The regular code generator */
+    Codegen & mCodegen;
+    
+    /* The address code generator */
+    AddrCodegen & mAddrCodegen;
+    
+private:
+    /* Issue a codegen not supported error for the given ASTNode type */
+    void codegenNotSupportedForNodeTypeError(const AST::ASTNode & node,
+                                             const char * nodeClassName);
 };
 
 WC_LLVM_BACKEND_END_NAMESPACE
