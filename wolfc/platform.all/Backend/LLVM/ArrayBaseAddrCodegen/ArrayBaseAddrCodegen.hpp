@@ -6,30 +6,29 @@
 
 #pragma once
 
-#warning Can probably remove this now
-
 #include "AST/ASTNodeVisitor.hpp"
 
 WC_BEGIN_NAMESPACE
+
+namespace AST {
+    class ASTNode;
+}
+
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
 
 class Codegen;
+class CodegenCtx;
 
 /**
- * Helper object which implements a query to tell if an expression is potentially addressable or not, 
- * or is an l-value versus r-value.
- *
- * Note: if something is regarded as addressible, this doesn't neccessarily mean there will NOT be
- * compile errors when trying to generate that address!
- *
- * This helper is mainly intended for helping to compute the address of an array lookup expression.
- * In some cases we have to compute the address of the base array expression (if an identifier for example)
- * and in other cases we have to compute it as a value (e.g pointer from a cast expression).
+ * Code generates the base address for an array expression used as the operand for the '[]' (array indexing)
+ * operator. We need a special case code generator for the array base address because sometimes we have to
+ * evaluate the array expression using the 'address' code generator and sometimes using the regular code
+ * generator, depending on whether we are dealing with an l-value or r-value.
  */
-class IsAddressable final : public AST::ASTNodeVisitor {
+class ArrayBaseAddrCodegen final : public AST::ASTNodeVisitor {
 public:
-    /* Constructor */
-    IsAddressable(Codegen & cg);
+    ArrayBaseAddrCodegen(CodegenCtx & ctx,
+                         Codegen & codegen);
     
     /* ASTNode visitor functions */
     virtual void visit(const AST::AddExprAdd & astNode) override;
@@ -150,11 +149,16 @@ public:
     virtual void visit(const AST::VarDeclInferType & astNode) override;
     virtual void visit(const AST::WhileStmnt & astNode) override;
     
-    /* The codegen object */
-    Codegen & mCG;
+    /* The codegen context */
+    CodegenCtx & mCtx;
     
-    /* The result of the query */
-    bool mNodeIsAddressable = false;
+    /* The regular code generator */
+    Codegen & mCodegen;
+     
+private:
+    /* Issue a codegen not supported error for the given ASTNode type */
+    void codegenNotSupportedForNodeTypeError(const AST::ASTNode & node,
+                                             const char * nodeClassName);
 };
 
 WC_LLVM_BACKEND_END_NAMESPACE

@@ -8,6 +8,7 @@
 
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
+#include "../CodegenUnaryOp/CodegenUnaryOp_PrefixExpr.hpp"
 #include "AST/Nodes/AddExpr.hpp"
 #include "AST/Nodes/ArrayLit.hpp"
 #include "AST/Nodes/AssertStmnt.hpp"
@@ -49,7 +50,8 @@
 #include "AST/Nodes/Type.hpp"
 #include "AST/Nodes/VarDecl.hpp"
 #include "AST/Nodes/WhileStmnt.hpp"
-#include "DataType/DataType.hpp"
+#include "DataType/Types/ArrayDataType.hpp"
+#include "DataType/Types/PtrDataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
@@ -67,126 +69,200 @@ AddrCodegen::AddrCodegen(CodegenCtx & ctx,
     WC_EMPTY_FUNC_BODY();
 }
 
-void AddrCodegen::visit(const AST::AddExprAdd & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "+",
-                                   "add");
-}
+/* Nodes we should never expect to call this on */
+#define WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(NodeType)\
+    void AddrCodegen::visit(const AST::NodeType & astNode) {\
+        WC_CODEGEN_RECORD_VISITED_NODE();\
+        codegenNotSupportedForNodeTypeError(astNode, #NodeType);\
+    }
 
-void AddrCodegen::visit(const AST::AddExprBOr & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "|",
-                                   "bitwise or");
-}
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(AssertStmnt)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(BreakStmntNoCond)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(BreakStmntWithCond)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(DeclDefFunc)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(DeclDefVarDecl)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(Func)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(FuncArg)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(IfStmntElse)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(IfStmntElseIf)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(IfStmntNoElse)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(LoopStmntNoCond)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(LoopStmntWithCond)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(Module)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(NextStmntNoCond)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(NextStmntWithCond)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(NoOpStmnt)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(PrimitiveType)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(PrintStmnt)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(ReturnStmntNoCondVoid)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(ReturnStmntNoCondWithValue)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(ReturnStmntWithCondAndValue)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(ReturnStmntWithCondVoid)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(Scope)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(ScopeStmnt)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(StmntAssertStmnt)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(StmntBreakStmnt)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(StmntIfStmnt)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(StmntLoopStmnt)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(StmntNextStmnt)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(StmntNoOpStmnt)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(StmntPrintStmnt)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(StmntReturnStmnt)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(StmntScopeStmnt)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(StmntVarDecl)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(StmntWhileStmnt)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(TypeArray)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(TypePrimitive)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(TypePtr)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(VarDeclExplicitType)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(VarDeclInferType)
+WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE(WhileStmnt)
 
-void AddrCodegen::visit(const AST::AddExprBXor & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "^",
-                                   "bitwise xor");
-}
+#undef WC_IMPL_OP_UNSUPPORTED_FOR_NODE_TYPE
 
-void AddrCodegen::visit(const AST::AddExprNoOp & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
+/* Binary operations we can't take the address of */
+#define WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(NodeType, opSymbol, opName)\
+    void AddrCodegen::visit(const AST::NodeType & astNode) {\
+        WC_CODEGEN_RECORD_VISITED_NODE();\
+        cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,\
+                                       astNode.mRightExpr,\
+                                       opSymbol,\
+                                       opName);\
+    }
 
-void AddrCodegen::visit(const AST::AddExprSub & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "-",
-                                   "subtract");
-}
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(AddExprAdd, "+", "add")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(AddExprBOr, "|", "bitwise or")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(AddExprBXor, "^", "bitwise xor")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(AddExprSub, "-", "subtract")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(CmpExprEQ, "==", "equals")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(CmpExprGE, ">=", "greater than or equal to")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(CmpExprGT, ">", "greater than")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(CmpExprLE, "<=", "less than or equal to")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(CmpExprLT, "<", "less than")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(CmpExprNE, "!=", "not equals")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(LAndExprAnd, "and", "logical and")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(LOrExprOr, "or", "logical or")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(MulExprBAnd, "&", "bitwise and")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(MulExprDiv, "/", "divide")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(MulExprMul, "*", "multiply")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(MulExprRem, "%", "remainder")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(ShiftExprARShift, ">>", "arithmetic right shift")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(ShiftExprLRShift, ">>>", "logical right shift")
+WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(ShiftExprLShift, "<<", "left shift")
 
-void AddrCodegen::visit(const AST::AssertStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "AssertStmnt");
-}
+/* Unary operations we can't take the address of */
+#define WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(NodeType, opSymbol, opName)\
+    void AddrCodegen::visit(const AST::NodeType & astNode) {\
+        WC_CODEGEN_RECORD_VISITED_NODE();\
+        cantTakeAddressOfUnaryOpError(astNode, opSymbol, opName);\
+    }
 
-void AddrCodegen::visit(const AST::AssignExprAssign & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of an assign expression!");
-}
+WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(NotExprBNot, "~", "bitwise not")
+WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(NotExprLNot, "not", "logical not")
+WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(PrefixExprAddrOf, "&", "address of")
+WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(PrefixExprMinus, "-", "minus")
+WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(PrefixExprPlus, "+", "plus")
 
-void AddrCodegen::visit(const AST::AssignExprAssignAdd & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of an assign expression!");
-}
+#undef WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE
 
-void AddrCodegen::visit(const AST::AssignExprAssignARShift & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of an assign expression!");
-}
+/* Assign expressions we can't take the address of */
+#define WC_IMPL_CANT_TAKE_ASSIGN_EXPR_ADDR_FOR_NODE_TYPE(NodeType)\
+    void AddrCodegen::visit(const AST::NodeType & astNode) {\
+        WC_CODEGEN_RECORD_VISITED_NODE();\
+        mCtx.error(astNode, "Can't take the address of an assign expression!");\
+    }
 
-void AddrCodegen::visit(const AST::AssignExprAssignBAnd & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of an assign expression!");
-}
+WC_IMPL_CANT_TAKE_ASSIGN_EXPR_ADDR_FOR_NODE_TYPE(AssignExprAssign)
+WC_IMPL_CANT_TAKE_ASSIGN_EXPR_ADDR_FOR_NODE_TYPE(AssignExprAssignARShift)
+WC_IMPL_CANT_TAKE_ASSIGN_EXPR_ADDR_FOR_NODE_TYPE(AssignExprAssignAdd)
+WC_IMPL_CANT_TAKE_ASSIGN_EXPR_ADDR_FOR_NODE_TYPE(AssignExprAssignBAnd)
+WC_IMPL_CANT_TAKE_ASSIGN_EXPR_ADDR_FOR_NODE_TYPE(AssignExprAssignBOr)
+WC_IMPL_CANT_TAKE_ASSIGN_EXPR_ADDR_FOR_NODE_TYPE(AssignExprAssignBXor)
+WC_IMPL_CANT_TAKE_ASSIGN_EXPR_ADDR_FOR_NODE_TYPE(AssignExprAssignDiv)
+WC_IMPL_CANT_TAKE_ASSIGN_EXPR_ADDR_FOR_NODE_TYPE(AssignExprAssignLRShift)
+WC_IMPL_CANT_TAKE_ASSIGN_EXPR_ADDR_FOR_NODE_TYPE(AssignExprAssignLShift)
+WC_IMPL_CANT_TAKE_ASSIGN_EXPR_ADDR_FOR_NODE_TYPE(AssignExprAssignMul)
+WC_IMPL_CANT_TAKE_ASSIGN_EXPR_ADDR_FOR_NODE_TYPE(AssignExprAssignRem)
+WC_IMPL_CANT_TAKE_ASSIGN_EXPR_ADDR_FOR_NODE_TYPE(AssignExprAssignSub)
 
-void AddrCodegen::visit(const AST::AssignExprAssignBOr & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of an assign expression!");
-}
+#undef WC_IMPL_CANT_TAKE_ASSIGN_EXPR_ADDR_FOR_NODE_TYPE
 
-void AddrCodegen::visit(const AST::AssignExprAssignBXor & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of an assign expression!");
-}
+/* General node types we can't take the address of */
+#define WC_IMPL_CANT_TAKE_ADDR_FOR_NODE_TYPE(NodeType, msg)\
+    void AddrCodegen::visit(const AST::NodeType & astNode) {\
+        WC_CODEGEN_RECORD_VISITED_NODE();\
+        mCtx.error(astNode, msg);\
+    }
 
-void AddrCodegen::visit(const AST::AssignExprAssignDiv & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of an assign expression!");
-}
+WC_IMPL_CANT_TAKE_ADDR_FOR_NODE_TYPE(BoolLit, "Can't take the address of a bool literal!")
+WC_IMPL_CANT_TAKE_ADDR_FOR_NODE_TYPE(IntLit, "Can't take the address of a integer literal!")
+WC_IMPL_CANT_TAKE_ADDR_FOR_NODE_TYPE(NullLit, "Can't take the address of a 'null' pointer literal!")
+WC_IMPL_CANT_TAKE_ADDR_FOR_NODE_TYPE(RandExprRand, "Can't take the address of a rand() expression!")
+WC_IMPL_CANT_TAKE_ADDR_FOR_NODE_TYPE(RandExprSRand, "Can't take the address of a srand() expression!")
+WC_IMPL_CANT_TAKE_ADDR_FOR_NODE_TYPE(ReadnumExpr, "Can't take the address of a readnum() expression!")
+WC_IMPL_CANT_TAKE_ADDR_FOR_NODE_TYPE(StrLit, "Can't take the address of a string literal!")
+#warning TODO: Investigate what C does for this, feels like we shouldn't be able to do though
+WC_IMPL_CANT_TAKE_ADDR_FOR_NODE_TYPE(TernaryExprWithCond, "Can't take the address of a ternary expression!")
+WC_IMPL_CANT_TAKE_ADDR_FOR_NODE_TYPE(TimeExpr, "Can't take the address of a time() expression!")
 
-void AddrCodegen::visit(const AST::AssignExprAssignLRShift & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of an assign expression!");
-}
+#undef WC_IMPL_CANT_TAKE_ADDR_FOR_NODE_TYPE
 
-void AddrCodegen::visit(const AST::AssignExprAssignLShift & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of an assign expression!");
-}
+/* These expression nodes delegate the query to sub expressions */
+#define WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(NodeType, subExprField)\
+    void AddrCodegen::visit(const AST::NodeType & astNode) {\
+        WC_CODEGEN_RECORD_VISITED_NODE();\
+        astNode.subExprField.accept(*this);\
+    }
 
-void AddrCodegen::visit(const AST::AssignExprAssignMul & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of an assign expression!");
-}
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(AddExprNoOp, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(AssignExprNoAssign, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(CastExprNoCast, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(CmpExprNoOp, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(LAndExprNoOp, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(LOrExprNoOp, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(MulExprNoOp, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(NotExprNoOp, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PostfixExprDec, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PostfixExprInc, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PostfixExprNoOp, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PrefixExprNoOp, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PrimaryExprArrayLit, mLit)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PrimaryExprBoolLit, mLit)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PrimaryExprIdentifier, mIdent)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PrimaryExprIntLit, mLit)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PrimaryExprNullLit, mLit)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PrimaryExprParen, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PrimaryExprRandExpr, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PrimaryExprReadnumExpr, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PrimaryExprStrLit, mLit)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PrimaryExprTimeExpr, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(ShiftExprNoOp, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(StmntAssignExpr, mExpr)
+WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(TernaryExprNoCond, mExpr)
 
-void AddrCodegen::visit(const AST::AssignExprAssignRem & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of an assign expression!");
-}
+#undef WC_IMPL_DELEGATE_OP_TO_INNER_EXPR_FOR_NODE_TYPE
 
-void AddrCodegen::visit(const AST::AssignExprAssignSub & astNode) {
+void AddrCodegen::visit(const AST::ArrayLit & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of an assign expression!");
-}
-
-void AddrCodegen::visit(const AST::AssignExprNoAssign & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::BoolLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of a bool literal!");
-}
-
-void AddrCodegen::visit(const AST::BreakStmntNoCond & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "BreakStmntNoCond");
-}
-
-void AddrCodegen::visit(const AST::BreakStmntWithCond & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "BreakStmntWithCond");
+    
+    // Codegen the literal
+    astNode.accept(mCodegen);
+    Value exprVal = mCtx.popValue();
+    
+    // The value must be valid for this to work
+    WC_GUARD(exprVal.isValid());
+    
+    // Create an alloca to hold the literal on the stack so we can take it's address
+    const CompiledDataType & exprValCDT = exprVal.mCompiledType;
+    llvm::Value * llvmStackVal = mCtx.mIRBuilder.CreateAlloca(exprValCDT.getLLVMType(),
+                                                              nullptr,
+                                                              "AddrCodegen:ArrayLit:Alloca");
+    
+    WC_ASSERT(llvmStackVal);
+    mCtx.mIRBuilder.CreateStore(exprVal.mLLVMVal, llvmStackVal);
+    
+    // Push it onto the codegen context stack
+    mCtx.pushValue(Value(llvmStackVal, exprValCDT, true, &astNode));
 }
 
 void AddrCodegen::visit(const AST::CastExprCast & astNode) {
@@ -208,456 +284,167 @@ void AddrCodegen::visit(const AST::CastExprCast & astNode) {
                toType.getDataType().name().c_str());
 }
 
-void AddrCodegen::visit(const AST::CastExprNoCast & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::CmpExprEQ & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "==",
-                                   "equals");
-}
-
-void AddrCodegen::visit(const AST::CmpExprGE & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   ">=",
-                                   "greater than or equal to");
-}
-
-void AddrCodegen::visit(const AST::CmpExprGT & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   ">",
-                                   "greater than");
-}
-
-void AddrCodegen::visit(const AST::CmpExprLE & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "<=",
-                                   "less than or equal to");
-}
-
-void AddrCodegen::visit(const AST::CmpExprLT & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "<",
-                                   "less than");
-}
-
-void AddrCodegen::visit(const AST::CmpExprNE & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "!=",
-                                   "not equals");
-}
-
-void AddrCodegen::visit(const AST::CmpExprNoOp & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::DeclDefFunc & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "DeclDefFunc");
-}
-
-void AddrCodegen::visit(const AST::DeclDefVarDecl & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "DeclDefVarDecl");
-}
-
-void AddrCodegen::visit(const AST::Func & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "Func");
-}
-
-void AddrCodegen::visit(const AST::FuncArg & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "FuncArg");
-}
-
-void AddrCodegen::visit(const AST::IfStmntElse & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "IfStmntElse");
-}
-
-void AddrCodegen::visit(const AST::IfStmntElseIf & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "IfStmntElseIf");
-}
-
-void AddrCodegen::visit(const AST::IfStmntNoElse & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "IfStmntNoElse");
-}
-
-void AddrCodegen::visit(const AST::IntLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of a integer literal!");
-}
-
-void AddrCodegen::visit(const AST::LAndExprAnd & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "and",
-                                   "logical and");
-}
-
-void AddrCodegen::visit(const AST::LAndExprNoOp & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::LoopStmntNoCond & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "LoopStmntNoCond");
-}
-
-void AddrCodegen::visit(const AST::LoopStmntWithCond & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "LoopStmntWithCond");
-}
-
-void AddrCodegen::visit(const AST::LOrExprNoOp & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::LOrExprOr & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "or",
-                                   "logical or");
-}
-
-void AddrCodegen::visit(const AST::Module & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "Module");
-}
-
-void AddrCodegen::visit(const AST::MulExprBAnd & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "&",
-                                   "bitwise and");
-}
-
-void AddrCodegen::visit(const AST::MulExprDiv & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "/",
-                                   "divide");
-}
-
-void AddrCodegen::visit(const AST::MulExprMul & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "*",
-                                   "multiply");
-}
-
-void AddrCodegen::visit(const AST::MulExprNoOp & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::MulExprRem & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "%",
-                                   "remainder");
-}
-
-void AddrCodegen::visit(const AST::NextStmntNoCond & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "NextStmntNoCond");
-}
-
-void AddrCodegen::visit(const AST::NextStmntWithCond & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "NextStmntWithCond");
-}
-
-void AddrCodegen::visit(const AST::NoOpStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "NoOpStmnt");
-}
-
-void AddrCodegen::visit(const AST::NotExprBNot & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfUnaryOpError(astNode, "~", "bitwise not");
-}
-
-void AddrCodegen::visit(const AST::NotExprLNot & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfUnaryOpError(astNode, "not", "logical not");
-}
-
-void AddrCodegen::visit(const AST::NotExprNoOp & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::NullLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of a 'null' pointer literal!");
-}
-
-void AddrCodegen::visit(const AST::PrimaryExprArrayLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mLit.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::PrimaryExprBoolLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mLit.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::PrimaryExprIdentifier & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mIdent.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::PrimaryExprIntLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mLit.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::PrimaryExprNullLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mLit.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::PrimaryExprRandExpr & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::PrimaryExprReadnumExpr & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::PrimaryExprStrLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mLit.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::PrimaryExprTimeExpr & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::PrimitiveType & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "PrimitiveType");
-}
-
-void AddrCodegen::visit(const AST::PrintStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "PrintStmnt");
-}
-
-void AddrCodegen::visit(const AST::RandExprRand & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of a rand() expression!");
-}
-
-void AddrCodegen::visit(const AST::RandExprSRand & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of a srand() expression!");
-}
-
-void AddrCodegen::visit(const AST::ReadnumExpr & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of a readnum() expression!");
-}
-
-void AddrCodegen::visit(const AST::ReturnStmntNoCondVoid & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "ReturnStmntNoCondVoid");
-}
-
-void AddrCodegen::visit(const AST::ReturnStmntNoCondWithValue & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "ReturnStmntNoCondWithValue");
-}
-
-void AddrCodegen::visit(const AST::ReturnStmntWithCondAndValue & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "ReturnStmntWithCondAndValue");
-}
-
-void AddrCodegen::visit(const AST::ReturnStmntWithCondVoid & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "ReturnStmntWithCondVoid");
-}
-
-void AddrCodegen::visit(const AST::Scope & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "Scope");
-}
-
-void AddrCodegen::visit(const AST::ScopeStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "ScopeStmnt");
-}
-
-void AddrCodegen::visit(const AST::ShiftExprARShift & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   ">>",
-                                   "arithmetic right shift");
-}
-
-void AddrCodegen::visit(const AST::ShiftExprLRShift & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   ">>>",
-                                   "logical right shift");
-}
-
-void AddrCodegen::visit(const AST::ShiftExprLShift & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    cantTakeAddressOfBinaryOpError(astNode.mLeftExpr,
-                                   astNode.mRightExpr,
-                                   "<<",
-                                   "left shift");
-}
-
-void AddrCodegen::visit(const AST::ShiftExprNoOp & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::StmntAssertStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "StmntAssertStmnt");
-}
-
-void AddrCodegen::visit(const AST::StmntAssignExpr & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::StmntBreakStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "StmntBreakStmnt");
-}
-
-void AddrCodegen::visit(const AST::StmntIfStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "StmntIfStmnt");
-}
-
-void AddrCodegen::visit(const AST::StmntLoopStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "StmntLoopStmnt");
-}
-
-void AddrCodegen::visit(const AST::StmntNextStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "StmntNextStmnt");
-}
-
-void AddrCodegen::visit(const AST::StmntNoOpStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "StmntNoOpStmnt");
-}
-
-void AddrCodegen::visit(const AST::StmntPrintStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "StmntPrintStmnt");
-}
-
-void AddrCodegen::visit(const AST::StmntReturnStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "StmntReturnStmnt");
-}
-
-void AddrCodegen::visit(const AST::StmntScopeStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "StmntScopeStmnt");
-}
-
-void AddrCodegen::visit(const AST::StmntVarDecl & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "StmntVarDecl");
-}
-
-void AddrCodegen::visit(const AST::StmntWhileStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "StmntWhileStmnt");
-}
-
-void AddrCodegen::visit(const AST::StrLit & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of a string literal!");
-}
-
-void AddrCodegen::visit(const AST::TernaryExprNoCond & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    astNode.mExpr.accept(*this);
-}
-
-void AddrCodegen::visit(const AST::TernaryExprWithCond & astNode) {
+void AddrCodegen::visit(const AST::Identifier & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     
-    // FIXME: should we be able to do this?
-    mCtx.error(astNode, "Can't take the address of a ternary expression!");
+    // Search for a value declared in the current scope or parent scopes.
+    // When found just return the value, variables are stored by address.
+    const Value * value = mCtx.lookupValueByName(astNode.name());
+    
+    if (value) {
+        mCtx.pushValue(*value);
+        return;
+    }
+    
+    // Couldn't find any value with this name, issue a compile error:
+    mCtx.error(astNode,
+               "No symbol named '%s' (variable, function etc.) in the current scope! "
+               "Can't lookup the address of this symbol!",
+               astNode.name());
 }
 
-void AddrCodegen::visit(const AST::TimeExpr & astNode) {
+void AddrCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't take the address of a time() expression!");
+    
+    // Codgen the address of the 'array' expression first.
+    // Note that the array expresion might not neccesarily be an array, could potentially be any other
+    // type that we support indexing on (such as pointers).
+    astNode.mArrayExpr.accept(*this);
+    Value arrayExprAddr = mCtx.popValue();
+    WC_ASSERT(!arrayExprAddr.isValid() || arrayExprAddr.mRequiresLoad);
+    
+    // Codegen the expression for the array index
+    astNode.mIndexExpr.accept(mCodegen);
+    Value indexVal = mCtx.popValue();
+    WC_ASSERT(!indexVal.isValid() || !indexVal.mRequiresLoad);
+    
+    // Figure out if we can do array indexing on the type being indexed and get the element type.
+    //
+    // TODO: support the array lookup operator on custom types eventually.
+    const CompiledDataType & arrayExprCDT = arrayExprAddr.mCompiledType;
+    const DataType & arrayExprDT = arrayExprCDT.getDataType();
+    const DataType * arrayElemDT = nullptr;
+    bool exprTypeAndIndexTypesAreOk = true;
+    
+    if (arrayExprDT.isArray()) {
+        // Indexing an array
+        const ArrayDataType & arrayDT = static_cast<const ArrayDataType&>(arrayExprDT);
+        arrayElemDT = &arrayDT.mElemType;
+    }
+    else if (arrayExprDT.isPtr()) {
+        // Indexing a pointer, similar to how it is done in the 'C' language
+        const PtrDataType & ptrDT = static_cast<const PtrDataType&>(arrayExprDT);
+        arrayElemDT = &ptrDT.mPointedToType;
+        
+        // The pointer value must be loaded first though:
+        arrayExprAddr.mLLVMVal = mCtx.mIRBuilder.CreateLoad(arrayExprAddr.mLLVMVal, "AddrCodegen:PostfixExprArrayLookup:LoadPtrVal");
+        arrayExprAddr.mRequiresLoad = false;
+        WC_ASSERT(arrayExprAddr.mLLVMVal);
+    }
+    else {
+        // Note: no error in the case of an 'undefined' type since this means an error was already emitted elsewhere.
+        if (!arrayExprDT.isUndefined()) {
+            // TODO: this message will need to be updated once we support indexing on user types
+            mCtx.error("Can't perform array indexing on an expression of type '%s'! "
+                       "Currently only arrays and pointer data types can be indexed.",
+                       arrayExprDT.name().c_str());
+        }
+        
+        exprTypeAndIndexTypesAreOk = false;
+    }
+    
+    // Index expression must be an integer
+    const CompiledDataType & indexCDT = indexVal.mCompiledType;
+    const DataType & indexDT = indexCDT.getDataType();
+    
+    if (!indexDT.isInteger()) {
+        // Note: no error in the case of an 'undefined' type since this means an error was already emitted elsewhere.
+        if (!indexDT.isUndefined()) {
+            mCtx.error("Index expression for array lookup must be an integer not type '%s'! "
+                       "Can't index an array with non-integer types!",
+                       indexDT.name().c_str());
+        }
+
+        exprTypeAndIndexTypesAreOk = false;
+    }
+    
+    // Proceed no further if any of these are invalid
+    WC_GUARD(indexVal.isValid() &&
+             arrayExprAddr.isValid() &&
+             exprTypeAndIndexTypesAreOk);
+    
+    // Get the value for the array address:
+    llvm::Value * arrayElemAddr = nullptr;
+    
+    if (arrayExprDT.isArray()) {
+        // Array indexing an array
+        llvm::ConstantInt * zeroIndex = llvm::ConstantInt::get(llvm::Type::getInt64Ty(mCtx.mLLVMCtx), 0);
+        WC_ASSERT(zeroIndex);
+        arrayElemAddr = mCtx.mIRBuilder.CreateGEP(arrayExprAddr.mLLVMVal,
+                                                  { zeroIndex, indexVal.mLLVMVal },
+                                                  "AddrCodegen:PostfixExprArrayLookup:ElemAddr");
+    }
+    else {
+        // Array indexing a pointer
+        arrayElemAddr = mCtx.mIRBuilder.CreateGEP(arrayExprAddr.mLLVMVal,
+                                                  indexVal.mLLVMVal,
+                                                  "AddrCodegen:PostfixExprArrayLookup:ElemAddr");
+    }
+    
+    WC_ASSERT(arrayElemAddr);
+    
+    // Figure out the compiled data type for the element type:
+    WC_ASSERT(arrayElemDT);
+    arrayElemDT->accept(mCodegenDataType);
+    CompiledDataType arrayElemCDT = mCtx.popCompiledDataType();
+    WC_GUARD(arrayElemCDT.isValid());
+    
+    // All good, save the result!
+    mCtx.pushValue(Value(arrayElemAddr, arrayElemCDT, true, &astNode));
 }
 
-void AddrCodegen::visit(const AST::TypeArray & astNode) {
+void AddrCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "TypeArray");
+
+    // Evaluate the expression first:
+    astNode.accept(mCodegen);
+    Value exprVal = mCtx.popValue();
+    
+    // The value must be valid for this to work
+    WC_GUARD(exprVal.isValid());
+    
+    // The data type for the return value must be sized
+    const CompiledDataType & exprValCDT = exprVal.mCompiledType;
+    const DataType & exprValDT = exprValCDT.getDataType();
+    
+    if (!exprValDT.isSized()) {
+        // Note: no error in the case of an 'undefined' type since this means an error was already emitted elsewhere.
+        if (!exprValDT.isUndefined()) {
+            mCtx.error(astNode,
+                       "Can't take the address of a function call result which returns "
+                       "unsized type '%s'!",
+                       exprValDT.name().c_str());
+        }
+        
+        return;
+    }
+    
+    // Create an alloca to hold the result of the function call and store the result there.
+    llvm::Value * llvmStackVal = mCtx.mIRBuilder.CreateAlloca(exprValCDT.getLLVMType(),
+                                                              nullptr,
+                                                              "AddrCodegen:PostfixExprFuncCall:Alloca");
+    
+    WC_ASSERT(llvmStackVal);
+    mCtx.mIRBuilder.CreateStore(exprVal.mLLVMVal, llvmStackVal);
+    
+    // Push it onto the codegen context stack
+    mCtx.pushValue(Value(llvmStackVal, exprValCDT, true, &astNode));
 }
 
-void AddrCodegen::visit(const AST::TypePrimitive & astNode) {
+void AddrCodegen::visit(const AST::PrefixExprPtrDeref & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "TypePrimitive");
-}
-
-void AddrCodegen::visit(const AST::TypePtr & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "TypePtr");
-}
-
-void AddrCodegen::visit(const AST::VarDeclExplicitType & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "VarDeclExplicitType");
-}
-
-void AddrCodegen::visit(const AST::VarDeclInferType & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "VarDeclInferType");
-}
-
-void AddrCodegen::visit(const AST::WhileStmnt & astNode) {
-    WC_CODEGEN_RECORD_VISITED_NODE();
-    codegenNotSupportedForNodeTypeError(astNode, "WhileStmnt");
+    constexpr const bool kLoadExprResult = false;
+    CodegenPtrDerefUnaryOp(mCodegen, astNode.mExpr, kLoadExprResult).codegen();
 }
 
 void AddrCodegen::codegenNotSupportedForNodeTypeError(const AST::ASTNode & node,
