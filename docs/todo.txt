@@ -15,6 +15,9 @@
 ***** Priority 2 *****
 **********************
 
+- Don't allow taking the address (using '&' operator of object returned from function)
+	- Might need to introduce the concept of l-values versus r-values to fix this one...
+
 - Do a review of error handling in all the AST node types and see if we are emitting redundant error msgs.
 
 - Emit a compile error if an integer literal can't fit in it's type
