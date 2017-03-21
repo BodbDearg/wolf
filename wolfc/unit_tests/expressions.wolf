@@ -639,6 +639,16 @@ func testPostfixExprFuncCall5(v1: int, v2: int, v3: int) -> int
     return v1 * v2 * v3
 end
 
+let testPostfixExprGlobArray1 = [ 1, 2, 3, 4 ]
+
+func testPostfixExprFuncCall6() -> ^int
+    return &testPostfixExprGlobArray1[2]
+end
+
+func testPostfixExprFuncCall7() -> [4]int
+    return [ 1, 2, 3, 4 ]
+end
+
 ; Test: constant array lookups
 let testPostfixExprConstexpr = [
     [1, 2, 3][2] == 3,
@@ -685,7 +695,7 @@ func testPostfixExpr()
     assert(array2[1][0] == 7)
     assert(array2[1][1] == 8)
 
-    ; Test: array indexing via pointers
+    ; Test: array indexing via pointers (l-value pointers)
     scope
         let ptr1 = &array1[1]
         assert(ptr1[0] == 99)
@@ -697,6 +707,34 @@ func testPostfixExpr()
         assert(ptr2[0][1] == 2)
         assert(ptr2[1][0] == 7)
         assert(ptr2[1][1] == 8)
+    end
+
+    ; Test: array indexing via pointers (r-value pointers)
+    scope
+        let ptr1 = &array1[1]
+        assert(cast(ptr1 to ^uint)[0] == 99)
+        assert(cast(ptr1 to ^uint)[1] == 3)
+        assert(cast(ptr1 to ^uint)[2] == 4)
+
+        let ptr2 = &array2[0]
+        assert(cast(ptr2 to ^[2]uint)[0][0] == 1)
+        assert(cast(ptr2 to ^[2]uint)[0][1] == 2)
+        assert(cast(ptr2 to ^[2]uint)[1][0] == 7)
+        assert(cast(ptr2 to ^[2]uint)[1][1] == 8)
+    end
+
+    ; Various array indexing tests
+    scope
+        ; Dereferencing an array from a pointer and then indexing the result
+        assert(($&array2[1])[1] == 8)
+
+        ; Indexing a pointer returned from a function
+        assert(testPostfixExprFuncCall6()[0] == 3)
+        assert(testPostfixExprFuncCall6()[1] == 4)
+
+        ; Indexing an array returned from a function
+        assert(testPostfixExprFuncCall7()[1] == 2)
+        assert(testPostfixExprFuncCall7()[2] == 3)
     end
 
     ; Test: pointer increment and decrement

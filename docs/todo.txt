@@ -4,7 +4,6 @@
 
 - [] operator should dereference pointers
 	- Add special message for trying to dereference compile time pointers
-	- Need to fix not being able to lookup pointer literals (should be allowable)
 
 - Bug fix getting the address of a function call that returns a non array type (type that doesn't need storage)
 
