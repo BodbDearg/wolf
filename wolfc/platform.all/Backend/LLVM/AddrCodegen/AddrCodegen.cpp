@@ -351,7 +351,7 @@ void AddrCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
         if (!arrayExprValDT.isUndefined()) {
             // TODO: this message will need to be updated once we support indexing on user types
             mCtx.error("Can't perform array indexing on an expression of type '%s'! "
-                       "Currently only arrays and pointer data types can be indexed.",
+                       "Currently only arrays and pointers to valid types can be indexed.",
                        arrayExprValDT.name().c_str());
         }
         
