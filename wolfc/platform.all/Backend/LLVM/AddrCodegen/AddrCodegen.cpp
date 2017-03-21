@@ -159,6 +159,8 @@ WC_IMPL_CANT_TAKE_BINARY_OP_ADDR_FOR_NODE_TYPE(ShiftExprLShift, "<<", "left shif
 
 WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(NotExprBNot, "~", "bitwise not")
 WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(NotExprLNot, "not", "logical not")
+WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(PostfixExprDec, "--", "decrement")
+WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(PostfixExprInc, "++", "increment")
 WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(PrefixExprAddrOf, "&", "address of")
 WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(PrefixExprMinus, "-", "minus")
 WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(PrefixExprPlus, "+", "plus")
@@ -222,8 +224,6 @@ WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(LAndExprNoOp, mExpr)
 WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(LOrExprNoOp, mExpr)
 WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(MulExprNoOp, mExpr)
 WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(NotExprNoOp, mExpr)
-WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PostfixExprDec, mExpr)
-WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PostfixExprInc, mExpr)
 WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PostfixExprNoOp, mExpr)
 WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PrefixExprNoOp, mExpr)
 WC_IMPL_DELEGATE_OP_TO_SUB_EXPR_FOR_NODE_TYPE(PrimaryExprArrayLit, mLit)
@@ -406,6 +406,7 @@ void AddrCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
 void AddrCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
 
+    #warning TODO: Only allow taking the address of a type which requires storage
     // Evaluate the expression first:
     astNode.accept(mCodegen);
     Value exprVal = mCtx.popValue();
