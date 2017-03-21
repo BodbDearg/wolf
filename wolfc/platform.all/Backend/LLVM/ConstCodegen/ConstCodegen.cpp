@@ -128,7 +128,7 @@ void ConstCodegen::visit(const AST::PrefixExprAddrOf & astNode) {
 
 void ConstCodegen::visit(const AST::PrefixExprPtrDeref & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
-    mCtx.error(astNode, "Can't dereference pointers at compile time!");
+    mCtx.error(astNode, "Can't use the '$' (dereference) operator to dereference pointers at compile time!");
 }
 
 void ConstCodegen::visit(const AST::PrintStmnt & astNode) {

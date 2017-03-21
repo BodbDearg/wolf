@@ -56,7 +56,14 @@ void ConstCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
         const DataType & arrayDT = arrayConst.mCompiledType.getDataType();
         
         if (!arrayDT.isArray()) {
-            mCtx.error(astNode, "Can't perform array indexing on an expression that is not an array!");
+            // Do a special message if we are dealing with a pointer, otherwise do a generalized message:
+            if (arrayDT.isPtr()) {
+                mCtx.error(astNode, "Can't perform array indexing on pointer expressions at compile time!");
+            }
+            else {
+                mCtx.error(astNode, "Can't perform array indexing on an expression that is not an array!");
+            }
+            
             arrayIsValid = false;
         }
     }

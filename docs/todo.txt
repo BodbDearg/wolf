@@ -2,11 +2,6 @@
 ***** Priority 1 *****
 **********************
 
-- [] operator should dereference pointers
-	- Add special message for trying to dereference compile time pointers
-
-- Bug fix getting the address of a function call that returns a non array type (type that doesn't need storage)
-
 - '! operator'
 - Don't allow dereference of nullable pointers
 
@@ -16,6 +11,8 @@
 
 - Don't allow taking the address (using '&' operator of object returned from function)
 	- Might need to introduce the concept of l-values versus r-values to fix this one...
+
+- Bug fix getting the address of a function call that returns a non array type (type that doesn't need storage)
 
 - Do a review of error handling in all the AST node types and see if we are emitting redundant error msgs.
 
