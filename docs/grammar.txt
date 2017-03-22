@@ -153,6 +153,7 @@ PrefixExpr:
 	- PrefixExpr
 	& PrefixExpr
 	$ PrefixExpr
+	^ PrefixExpr
 
 PostfixExpr:
 	CastExpr

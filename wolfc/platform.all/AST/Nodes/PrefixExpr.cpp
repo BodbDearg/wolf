@@ -23,13 +23,15 @@ bool PrefixExpr::peek(const Token * currentToken) {
         + PrefixExpr
         & PrefixExpr
         $ PrefixExpr
+        ^ PrefixExpr
     */
     TokenType currentTokenType = currentToken->type;
     
     if (currentTokenType == TokenType::kMinus ||
         currentTokenType == TokenType::kPlus ||
         currentTokenType == TokenType::kAmpersand ||
-        currentTokenType == TokenType::kDollar)
+        currentTokenType == TokenType::kDollar ||
+        currentTokenType == TokenType::kHat)
     {
         ++currentToken;
         WC_PARSER_SKIP_NEWLINE_TOKENS(currentToken);
@@ -71,27 +73,40 @@ PrefixExpr * PrefixExpr::parse(ParseCtx & parseCtx) {
         /* & PostfixExpr */
         case TokenType::kAmpersand: {
             // Skip '&' and any newlines that follow
-            const Token * plusTok = parseCtx.tok();
+            const Token * ampersandTok = parseCtx.tok();
             parseCtx.nextTok();
             parseCtx.skipNewlines();
             
             // Parse the operand and create the AST node
             PrefixExpr * expr = PrefixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
-            return WC_NEW_AST_NODE(parseCtx, PrefixExprAddrOf, *plusTok, *expr);
+            return WC_NEW_AST_NODE(parseCtx, PrefixExprAddrOf, *ampersandTok, *expr);
         }   break;
             
         /* $ PostfixExpr */
         case TokenType::kDollar: {
             // Skip '$' and any newlines that follow
-            const Token * plusTok = parseCtx.tok();
+            const Token * dollarTok = parseCtx.tok();
             parseCtx.nextTok();
             parseCtx.skipNewlines();
             
             // Parse the operand and create the AST node
             PrefixExpr * expr = PrefixExpr::parse(parseCtx);
             WC_GUARD(expr, nullptr);
-            return WC_NEW_AST_NODE(parseCtx, PrefixExprPtrDeref, *plusTok, *expr);
+            return WC_NEW_AST_NODE(parseCtx, PrefixExprPtrDeref, *dollarTok, *expr);
+        }   break;
+            
+        /* ^ PostfixExpr */
+        case TokenType::kHat: {
+            // Skip '^' and any newlines that follow
+            const Token * hatTok = parseCtx.tok();
+            parseCtx.nextTok();
+            parseCtx.skipNewlines();
+            
+            // Parse the operand and create the AST node
+            PrefixExpr * expr = PrefixExpr::parse(parseCtx);
+            WC_GUARD(expr, nullptr);
+            return WC_NEW_AST_NODE(parseCtx, PrefixExprPtrDenull, *hatTok, *expr);
         }   break;
             
         /* PostfixExpr */
@@ -191,6 +206,19 @@ PrefixExprPtrDeref::PrefixExprPtrDeref(const Token & startToken, PrefixExpr & ex
 }
     
 void PrefixExprPtrDeref::accept(ASTNodeVisitor & visitor) const {
+    visitor.visit(*this);
+}
+
+//-----------------------------------------------------------------------------
+// PrefixExprPtrDenull
+//-----------------------------------------------------------------------------
+PrefixExprPtrDenull::PrefixExprPtrDenull(const Token & startToken, PrefixExpr & expr) :
+    PrefixExprWithUnaryOp(startToken, expr)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+void PrefixExprPtrDenull::accept(ASTNodeVisitor & visitor) const {
     visitor.visit(*this);
 }
 

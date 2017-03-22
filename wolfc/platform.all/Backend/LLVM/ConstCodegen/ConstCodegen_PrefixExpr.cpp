@@ -29,5 +29,10 @@ void ConstCodegen::visit(const AST::PrefixExprMinus & astNode) {
     CodegenConstMinusUnaryOp(*this, astNode.mExpr).codegen();
 }
 
+void ConstCodegen::visit(const AST::PrefixExprPtrDenull & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    CodegenConstPtrDenullUnaryOp(*this, astNode.mExpr).codegen();
+}
+
 WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

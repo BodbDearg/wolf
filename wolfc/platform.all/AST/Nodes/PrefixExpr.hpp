@@ -21,6 +21,7 @@ PrefixExpr:
 	- PrefixExpr
 	& PrefixExpr
 	$ PrefixExpr
+	^ PrefixExpr
 */
 class PrefixExpr : public ASTNode, public IExpr {
 public:
@@ -80,6 +81,14 @@ public:
 class PrefixExprPtrDeref final : public PrefixExprWithUnaryOp {
 public:
     PrefixExprPtrDeref(const Token & startToken, PrefixExpr & expr);
+    
+    virtual void accept(ASTNodeVisitor & visitor) const override;
+};
+
+/* ^ PrefixExpr */
+class PrefixExprPtrDenull final : public PrefixExprWithUnaryOp {
+public:
+    PrefixExprPtrDenull(const Token & startToken, PrefixExpr & expr);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
 };

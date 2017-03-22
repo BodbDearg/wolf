@@ -571,7 +571,10 @@ let testPrefixExprConstexpr = [
     + + 1  == + + 1,
     + + 1  == 1,
     - - 1  == - - 1,
-    - - 1  == 1
+    - - 1  == 1,
+
+    ; Test pointer denull
+    cast(cast(null to ?int) to ^int) == ^cast(null to ?int),
 ]
 
 func testPrefixExprFunc1(someVal: ^int)
@@ -594,19 +597,29 @@ func testPrefixExpr()
     assert(- - 1  == 1)
 
     ; Test address of (&) and pointer dereference ($)
-    let intVal = 5
-    testPrefixExprFunc1(&intVal)
-    assert(intVal == 50)
-    let ptrToIntVal = &intVal
-    testPrefixExprFunc2(&ptrToIntVal)
-    assert(intVal == 500)
-    let arrayVal = [ 5, 10, 15, 20 ]
-    testPrefixExprFunc1(&arrayVal[3])
-    assert(arrayVal[3] == 200)
+    scope
+        let intVal = 5
+        testPrefixExprFunc1(&intVal)
+        assert(intVal == 50)
+        let ptrToIntVal = &intVal
+        testPrefixExprFunc2(&ptrToIntVal)
+        assert(intVal == 500)
+        let arrayVal = [ 5, 10, 15, 20 ]
+        testPrefixExprFunc1(&arrayVal[3])
+        assert(arrayVal[3] == 200)
+    end
+
+    ; Test pointer denull (^)
+    scope 
+        let arrayVal = [3, 4, 5, 6]
+        let nullable_ptr: ?int = &arrayVal[1]
+        let non_nullable_ptr = ^nullable_ptr
+        assert(non_nullable_ptr[1] == 5)
+    end
 
     ; Make sure the constant expression tests passed
     let testNum = 0
-    while testNum < 9
+    while testNum < 10
         assert(testPrefixExprConstexpr[testNum])
         testNum++
     end

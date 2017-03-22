@@ -65,5 +65,12 @@ public:
     bool mLoadExprResult;
 };
 
+class CodegenPtrDenullUnaryOp final : public CodegenBasicUnaryOp {
+public:
+    CodegenPtrDenullUnaryOp(Codegen & cg, const AST::ASTNode & expr);
+    
+    virtual void codegen() override;
+};
+
 WC_LLVM_BACKEND_END_NAMESPACE
 WC_END_NAMESPACE

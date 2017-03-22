@@ -34,6 +34,11 @@ void Codegen::visit(const AST::PrefixExprAddrOf & astNode) {
     CodegenAddrOfUnaryOp(*this, astNode.mExpr).codegen();
 }
 
+void Codegen::visit(const AST::PrefixExprPtrDenull & astNode) {
+    WC_CODEGEN_RECORD_VISITED_NODE();
+    CodegenPtrDenullUnaryOp(*this, astNode.mExpr).codegen();
+}
+
 void Codegen::visit(const AST::PrefixExprPtrDeref & astNode) {
     WC_CODEGEN_RECORD_VISITED_NODE();
     constexpr const bool kLoadExprResult = true;

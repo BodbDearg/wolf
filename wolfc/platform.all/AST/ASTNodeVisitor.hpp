@@ -80,6 +80,7 @@ class PrefixExprAddrOf;
 class PrefixExprMinus;
 class PrefixExprNoOp;
 class PrefixExprPlus;
+class PrefixExprPtrDenull;
 class PrefixExprPtrDeref;
 class PrimaryExprArrayLit;
 class PrimaryExprBoolLit;
@@ -203,6 +204,7 @@ public:
     virtual void visit(const PrefixExprMinus & astNode) = 0;
     virtual void visit(const PrefixExprNoOp & astNode) = 0;
     virtual void visit(const PrefixExprPlus & astNode) = 0;
+    virtual void visit(const PrefixExprPtrDenull & astNode) = 0;
     virtual void visit(const PrefixExprPtrDeref & astNode) = 0;
     virtual void visit(const PrimaryExprArrayLit & astNode) = 0;
     virtual void visit(const PrimaryExprBoolLit & astNode) = 0;

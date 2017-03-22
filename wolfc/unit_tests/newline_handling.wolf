@@ -299,6 +299,9 @@ func testPrefixExpr()
     let v5 = (
         1
     )
+
+    let v6 = ^
+        cast(v3 to ?int)
 end
 
 func testPrimaryExpr() 

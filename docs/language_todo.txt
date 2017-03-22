@@ -5,8 +5,6 @@
 ********************** 
 
 General:
-    - Pointers:
-        - '!' to convert a nullable into non nullable pointer
     - 'extern' functions
     - typeof and istype expressions
     - parsing float numbers

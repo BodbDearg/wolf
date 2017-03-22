@@ -181,17 +181,17 @@ void CodegenPtrDerefUnaryOp::codegen() {
     
     // The expression must be a pointer type:
     const CompiledDataType & exprCDT = exprVal.mCompiledType;
-    const DataType & exprDataType = exprCDT.getDataType();
+    const DataType & exprDT = exprCDT.getDataType();
     
-    if (!exprDataType.isPtr()) {
+    if (!exprDT.isPtr()) {
         mCG.mCtx.error("Can only dereference an expression that is of a pointer type! The expression type ('%s') "
                        "being dereferenced is not a pointer!",
-                       exprDataType.name().c_str());
+                       exprDT.name().c_str());
         
         return;
     }
     
-    const PtrDataType & ptrDataType = static_cast<const PtrDataType&>(exprDataType);
+    const PtrDataType & ptrDataType = static_cast<const PtrDataType&>(exprDT);
     
     // Makeup the data type for the returned value
     CompiledDataType dereferencedValCDT(ptrDataType.mPointedToType,
@@ -208,6 +208,59 @@ void CodegenPtrDerefUnaryOp::codegen() {
         // This codepath will be used on the left side of an assign expression.
         mCG.mCtx.pushValue(Value(exprVal.mLLVMVal, dereferencedValCDT, true, mCG.mCtx.getCurrentASTNode()));
     }
+}
+
+//-----------------------------------------------------------------------------
+// CodegenPtrDenullUnaryOp
+//-----------------------------------------------------------------------------
+CodegenPtrDenullUnaryOp::CodegenPtrDenullUnaryOp(Codegen & cg, const AST::ASTNode & expr) :
+    CodegenBasicUnaryOp(cg,
+                        expr,
+                        "^",
+                        "pointer denull",
+                        false)
+{
+    WC_EMPTY_FUNC_BODY();
+}
+
+void CodegenPtrDenullUnaryOp::codegen() {
+    // Evaluate the operand expression. If that fails then bail out:
+    mExpr.accept(mCG);
+    Value exprVal = mCG.mCtx.popValue();
+    WC_GUARD(exprVal.isValid());
+    
+    // The expression must be a pointer type:
+    const CompiledDataType & exprCDT = exprVal.mCompiledType;
+    const DataType & exprDT = exprCDT.getDataType();
+    
+    if (!exprDT.isPtr()) {
+        mCG.mCtx.error("Can only apply the '^' (pointer denull) prefix operator to pointer types! The expression of type '%s' "
+                       "being denulled is not a pointer!",
+                       exprDT.name().c_str());
+        
+        return;
+    }
+    
+    // The pointer type must be nullable:
+    const PtrDataType & ptrDT = static_cast<const PtrDataType&>(exprDT);
+    
+    if (!ptrDT.mIsNullable) {
+        mCG.mCtx.error("Can only apply the '^' (denull) prefix operator to nullable pointer types! The expression of type '%s' "
+                       "is not a nullable pointer!",
+                       ptrDT.name().c_str());
+        
+        return;
+    }
+    
+    // Create the compiled data type for the result expression
+    //
+    // TODO: What allocates this memory?
+    PtrDataType * nonNullablePtrDT = new PtrDataType(ptrDT.mPointedToType, false);
+    nonNullablePtrDT->accept(mCG.mCodegenDataType);
+    CompiledDataType nonNullablePtrCDT = mCG.mCtx.popCompiledDataType();
+    
+    // Save the result:
+    mCG.mCtx.pushValue(Value(exprVal.mLLVMVal, nonNullablePtrCDT, exprVal.mRequiresLoad, &mExpr));
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

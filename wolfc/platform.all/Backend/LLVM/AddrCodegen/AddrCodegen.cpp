@@ -165,6 +165,7 @@ WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(PostfixExprInc, "++", "increment")
 WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(PrefixExprAddrOf, "&", "address of")
 WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(PrefixExprMinus, "-", "minus")
 WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(PrefixExprPlus, "+", "plus")
+WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE(PrefixExprPtrDenull, "^", "pointer denull")
 
 #undef WC_IMPL_CANT_TAKE_UNARY_OP_ADDR_FOR_NODE_TYPE
 

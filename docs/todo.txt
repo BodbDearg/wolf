@@ -2,7 +2,6 @@
 ***** Priority 1 *****
 **********************
 
-- '! operator'
 - Don't allow dereference of nullable pointers
 
 ********************** 
