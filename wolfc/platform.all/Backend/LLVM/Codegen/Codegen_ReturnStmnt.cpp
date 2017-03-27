@@ -148,12 +148,14 @@ void Codegen::visit(const AST::ReturnStmntNoCondWithValue & astNode) {
     // cast if it is mismatched to correct it. If we fail in this, then bail out...
     WC_GUARD(verifyAndAutoPromoteReturnValForCurrentFunc(*this, returnVal));
     
+    #warning VOID - does this work?
     // Make sure we have a valid value to return.
     // Note: do not expect this value to require a load either.
     WC_GUARD(returnVal.isValid());
     WC_ASSERT(!returnVal.mRequiresLoad);
     
     // Now generate the return and return true for success
+    WC_ASSERT(returnVal.mLLVMVal);
     mCtx.mIRBuilder.CreateRet(returnVal.mLLVMVal);
     
     // Grab the parent function
@@ -229,6 +231,8 @@ void Codegen::visit(const AST::ReturnStmntWithCondVoid & astNode) {
     WC_ASSERT(continueBB);
     
     // Now generate the code for the branch:
+    WC_ASSERT(condVal.mLLVMVal);
+    
     if (astNode.isCondExprInversed()) {
         mCtx.mIRBuilder.CreateCondBr(condVal.mLLVMVal, continueBB, returnBB);
     }
@@ -297,12 +301,14 @@ void Codegen::visit(const AST::ReturnStmntWithCondAndValue & astNode) {
     // cast if it is mismatched to correct it. If we fail in this, then bail out...
     WC_GUARD(verifyAndAutoPromoteReturnValForCurrentFunc(*this, returnVal));
     
+    #warning VOID - does this work?
     // Make sure we have a valid value to return.
     // Note: do not expect this value to require a load either.
     WC_GUARD(returnVal.isValid());
     WC_ASSERT(!returnVal.mRequiresLoad);
     
     // Generate the code for the return:
+    WC_ASSERT(returnVal.mLLVMVal);
     mCtx.mIRBuilder.CreateRet(returnVal.mLLVMVal);
     
     // Go back to the block where the branch is in
@@ -313,6 +319,8 @@ void Codegen::visit(const AST::ReturnStmntWithCondAndValue & astNode) {
     WC_GUARD(condVal.isValid());
     
     // Now generate the code for the branch:
+    WC_ASSERT(condVal.mLLVMVal);
+    
     if (astNode.isCondExprInversed()) {
         mCtx.mIRBuilder.CreateCondBr(condVal.mLLVMVal, continueBB, returnBB);
     }

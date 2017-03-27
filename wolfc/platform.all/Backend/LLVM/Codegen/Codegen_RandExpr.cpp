@@ -82,6 +82,7 @@ void Codegen::visit(const AST::RandExprSRand & astNode) {
     // Need to downcast the seed to a 32-bit int
     llvm::Type * int32Ty = mCtx.mIRBuilder.getInt32Ty();
     WC_ASSERT(int32Ty);
+    WC_ASSERT(seedExprVal.mLLVMVal);
     llvm::Value * seedExprVal32 = mCtx.mIRBuilder.CreateTrunc(seedExprVal.mLLVMVal, int32Ty);
     WC_ASSERT(seedExprVal32);
     

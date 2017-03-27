@@ -32,6 +32,7 @@ CodegenConstPlusUnaryOp::CodegenConstPlusUnaryOp(ConstCodegen & cg,
 #define WC_IMPL_CONST_PLUS_UNARY_OP(DataTypeName)\
     void CodegenConstPlusUnaryOp::visit(const DataTypeName##DataType & dataType) {\
         WC_UNUSED_PARAM(dataType);\
+        WC_ASSERT(mExprConst.mLLVMConst);\
         pushOpResult(mExprConst.mLLVMConst);\
     }
 

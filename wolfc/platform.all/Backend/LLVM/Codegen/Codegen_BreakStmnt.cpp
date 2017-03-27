@@ -123,6 +123,8 @@ void Codegen::visit(const AST::BreakStmntWithCond & astNode) {
     
     // Depending on the result of the condition expression, either jump to the
     // continue block or the break block.
+    WC_ASSERT(condExprVal.mLLVMVal);
+    
     if (astNode.isIfCondInverted()) {
         mCtx.mIRBuilder.CreateCondBr(condExprVal.mLLVMVal, continueBB, breakBB);
     }

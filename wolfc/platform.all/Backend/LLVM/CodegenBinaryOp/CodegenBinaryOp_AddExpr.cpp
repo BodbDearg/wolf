@@ -152,6 +152,9 @@ WC_IMPL_BASIC_BINARY_OP(CodegenAddBinaryOp, UInt8, CreateAdd)
 
 void CodegenAddBinaryOp::visit(const PtrDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
+    WC_ASSERT(mLeftVal.mLLVMVal);
+    WC_ASSERT(mRightVal.mLLVMVal);
+    
     llvm::Value * resultVal = mCG.mCtx.mIRBuilder.CreateGEP(
         mLeftVal.mLLVMVal,
         mRightVal.mLLVMVal,
@@ -199,6 +202,8 @@ void CodegenSubBinaryOp::visit(const PtrDataType & dataType) {
     
     if (rightType.isPtr()) {
         // Pointer difference operation:
+        WC_ASSERT(mLeftVal.mLLVMVal);
+        WC_ASSERT(mRightVal.mLLVMVal);
         llvm::Value * resultVal = mCG.mCtx.mIRBuilder.CreatePtrDiff(mLeftVal.mLLVMVal, mRightVal.mLLVMVal);
         WC_ASSERT(resultVal);
         
@@ -221,8 +226,10 @@ void CodegenSubBinaryOp::visit(const PtrDataType & dataType) {
     else {
         // Regular pointer '-' (subtract) pointer arithmetic.
         // Moves the pointer along by subtracting it whatever number of elements:
+        WC_ASSERT(mRightVal.mLLVMVal);
         llvm::Value * rightValNegated = mCG.mCtx.mIRBuilder.CreateNeg(mRightVal.mLLVMVal);
         WC_ASSERT(rightValNegated);
+        WC_ASSERT(mLeftVal.mLLVMVal);
         
         llvm::Value * resultVal = mCG.mCtx.mIRBuilder.CreateGEP(
             mLeftVal.mLLVMVal,

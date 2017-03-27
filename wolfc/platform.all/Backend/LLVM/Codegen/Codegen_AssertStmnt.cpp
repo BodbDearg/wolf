@@ -77,6 +77,7 @@ void Codegen::visit(const AST::AssertStmnt & astNode) {
     WC_ASSERT(passBB);
     
     // Create a branch to one of the two blocks:
+    WC_ASSERT(exprVal.mLLVMVal);
     WC_ASSERTED_OP(irb.CreateCondBr(exprVal.mLLVMVal, passBB, failBB));
     
     // Makeup the string for the assert failed message:

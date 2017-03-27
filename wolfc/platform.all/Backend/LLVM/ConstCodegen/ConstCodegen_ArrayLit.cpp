@@ -113,6 +113,7 @@ void ConstCodegen::visit(const AST::ArrayLit & astNode) {
         arraySubConstants.reserve(subExprsSize);
         
         for (const Constant & constant : constants) {
+            WC_ASSERT(constant.mLLVMConst);
             arraySubConstants.push_back(constant.mLLVMConst);
         }
         

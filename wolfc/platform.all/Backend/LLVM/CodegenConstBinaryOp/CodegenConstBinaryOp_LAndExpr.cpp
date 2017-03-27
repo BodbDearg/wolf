@@ -27,8 +27,9 @@ CodegenConstLAndBinaryOp::CodegenConstLAndBinaryOp(ConstCodegen & cg,
 
 void CodegenConstLAndBinaryOp::visit(const BoolDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
-    pushOpResult(llvm::ConstantExpr::getAnd(mLeftConst.mLLVMConst,
-                                            mRightConst.mLLVMConst));
+    WC_ASSERT(mLeftConst.mLLVMConst);
+    WC_ASSERT(mRightConst.mLLVMConst);
+    pushOpResult(llvm::ConstantExpr::getAnd(mLeftConst.mLLVMConst, mRightConst.mLLVMConst));
 }
 
 WC_LLVM_BACKEND_END_NAMESPACE

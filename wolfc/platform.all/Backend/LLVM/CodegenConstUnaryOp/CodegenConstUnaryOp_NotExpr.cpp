@@ -32,6 +32,7 @@ CodegenConstLNotUnaryOp::CodegenConstLNotUnaryOp(ConstCodegen & cg,
 
 void CodegenConstLNotUnaryOp::visit(const BoolDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
+    WC_ASSERT(mExprConst.mLLVMConst);
     pushOpResult(llvm::ConstantExpr::getNot(mExprConst.mLLVMConst));
 }
 

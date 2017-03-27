@@ -113,6 +113,9 @@ protected:
 #define WC_IMPL_BASIC_BINARY_OP(VisitorClass, DataTypeName, OpCreateFunc)\
     void VisitorClass::visit(const DataTypeName##DataType & dataType) {\
         WC_UNUSED_PARAM(dataType);\
+        WC_ASSERT(mLeftVal.mLLVMVal);\
+        WC_ASSERT(mRightVal.mLLVMVal);\
+        \
         llvm::Value * resultVal = mCG.mCtx.mIRBuilder.OpCreateFunc(\
             mLeftVal.mLLVMVal,\
             mRightVal.mLLVMVal,\

@@ -244,6 +244,7 @@ void AddrOrValCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
                                                                   "AddrOrValCodegen:PostfixExprFuncCall:Alloca");
         
         WC_ASSERT(llvmStackVal);
+        WC_ASSERT(exprVal.mLLVMVal);
         mCtx.mIRBuilder.CreateStore(exprVal.mLLVMVal, llvmStackVal);
         
         // Push it onto the codegen context stack and mark it as requring a load

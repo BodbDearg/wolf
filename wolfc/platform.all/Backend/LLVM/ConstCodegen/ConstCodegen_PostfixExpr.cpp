@@ -84,6 +84,7 @@ void ConstCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
     }
     
     // Make sure the index expression fits in 64-bits
+    WC_ASSERT(indexConst.mLLVMConst);
     llvm::APInt indexAPInt = indexConst.mLLVMConst->getUniqueInteger();
     
     if (indexAPInt.getActiveBits() > 64) {
@@ -140,6 +141,7 @@ void ConstCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
     CompiledDataType arrayElemCDT = mCtx.popCompiledDataType();
     
     // Get the element constant value
+    WC_ASSERT(arrayConst.mLLVMConst);
     llvm::Constant * elemConst = llvm::ConstantExpr::getExtractValue(arrayConst.mLLVMConst, { unsigned(index) });
     WC_ASSERT(elemConst);
     

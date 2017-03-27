@@ -33,6 +33,7 @@ CodegenLNotUnaryOp::CodegenLNotUnaryOp(Codegen & cg,
 
 void CodegenLNotUnaryOp::visit(const BoolDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
+    WC_ASSERT(mExprVal.mLLVMVal);
     pushOpResult(mCG.mCtx.mIRBuilder.CreateNot(mExprVal.mLLVMVal, "Bool:LNot:Result"));
 }
 

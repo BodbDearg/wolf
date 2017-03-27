@@ -138,6 +138,7 @@ void Codegen::visit(const AST::ArrayLit & astNode) {
         }
         
         // Do the actual store to the array element.
+        WC_ASSERT(values[index].mLLVMVal);
         arrayUndefVal = NoRTTIOps::IRB::CreateInsertValue(mCtx.mIRBuilder,
                                                           *arrayUndefVal,
                                                           *values[index].mLLVMVal,

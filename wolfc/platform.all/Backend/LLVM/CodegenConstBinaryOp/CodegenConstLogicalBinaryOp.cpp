@@ -58,6 +58,7 @@ void CodegenConstLogicalBinaryOp::codegen() {
     // Don't do anything if either side is not valid:
     WC_GUARD(mLeftConst.isValid() && mRightConst.isValid());
     
+    #warning WHAT if both types are not bool?
     // The left and right types must match:
     WC_GUARD(verifyLeftAndRightTypesAreOkForOp());
     

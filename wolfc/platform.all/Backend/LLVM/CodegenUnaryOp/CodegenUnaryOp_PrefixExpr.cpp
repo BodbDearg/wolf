@@ -34,6 +34,7 @@ CodegenPlusUnaryOp::CodegenPlusUnaryOp(Codegen & cg,
 #define WC_IMPL_PLUS_UNARY_OP(DataTypeName)\
     void CodegenPlusUnaryOp::visit(const DataTypeName##DataType & dataType) {\
         WC_UNUSED_PARAM(dataType);\
+        WC_ASSERT(mExprVal.mLLVMVal);\
         pushOpResult(mExprVal.mLLVMVal);\
     }
 
@@ -199,6 +200,7 @@ void CodegenPtrDerefUnaryOp::codegen() {
     // Makeup the return value:
     if (mLoadExprResult) {
         // Require a load of the result - do it and return that as the result
+        WC_ASSERT(exprVal.mLLVMVal);
         llvm::Value * derefLLVMVal = mCG.mCtx.mIRBuilder.CreateLoad(exprVal.mLLVMVal, "CodegenPtrDerefUnaryOp:Load");
         mCG.mCtx.pushValue(Value(derefLLVMVal, dereferencedValCDT, false, mCG.mCtx.getCurrentASTNode()));
     }

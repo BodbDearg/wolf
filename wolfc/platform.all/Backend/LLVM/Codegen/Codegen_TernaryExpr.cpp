@@ -140,6 +140,7 @@ void Codegen::visit(const AST::TernaryExprWithCond & astNode) {
     WC_GUARD(falseVal.isValid());
     
     // Generate the code for the condition branch:
+    WC_ASSERT(condVal.mLLVMVal);
     WC_ASSERTED_OP(mCtx.mIRBuilder.CreateCondBr(condVal.mLLVMVal, trueBB, falseBB));
     
     // All code after that goes into the end block:
@@ -148,6 +149,9 @@ void Codegen::visit(const AST::TernaryExprWithCond & astNode) {
     // Create a PHI node to merge the values:
     llvm::PHINode * phiNode = mCtx.mIRBuilder.CreatePHI(trueVal.mCompiledType.getLLVMType(), 2, "TernaryExprWithCond:PHI");
     WC_ASSERT(phiNode);
+    #warning VOID - Does this work?
+    WC_ASSERT(trueVal.mLLVMVal);
+    WC_ASSERT(falseVal.mLLVMVal);
     phiNode->addIncoming(trueVal.mLLVMVal, trueEndBB);
     phiNode->addIncoming(falseVal.mLLVMVal, falseEndBB);
     

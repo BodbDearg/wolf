@@ -151,6 +151,7 @@ void CodegenDataType::visitASTNode(const AST::TypeArray & typeArray) {
     std::unique_ptr<const DataType> evaluatedDataType;
     
     if (sizeExprIsInt && sizeConst.isValid()) {
+        WC_ASSERT(sizeConst.mLLVMConst);
         llvm::ConstantInt * sizeLLVMConst = llvm::dyn_cast<llvm::ConstantInt>(sizeConst.mLLVMConst);
         
         if (!sizeLLVMConst->isNegative()) {

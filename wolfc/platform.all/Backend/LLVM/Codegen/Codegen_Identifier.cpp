@@ -45,6 +45,7 @@ void Codegen::visit(const AST::Identifier & astNode) {
     
     // If the value requires a load then do that first, otherwise just push the value
     if (value->mRequiresLoad) {
+        WC_ASSERT(value->mLLVMVal);
         llvm::Value * loadedValue = mCtx.mIRBuilder.CreateLoad(value->mLLVMVal, "Identifier:Load");
         WC_ASSERT(loadedValue);
         mCtx.pushValue(Value(loadedValue, value->mCompiledType, false, &astNode));

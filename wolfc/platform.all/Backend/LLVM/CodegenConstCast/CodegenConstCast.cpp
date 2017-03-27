@@ -97,6 +97,8 @@ protected:
 #define WC_IMPL_BASIC_CONST_CAST(CastGetFunc, ToDataTypeName)\
     virtual void visit(const ToDataTypeName##DataType & toType) override {\
         WC_UNUSED_PARAM(toType);\
+        WC_ASSERT(mFromConst.mLLVMConst);\
+        WC_ASSERT(mToTypeCDT.getLLVMType());\
         pushOpResult(llvm::ConstantExpr::CastGetFunc(mFromConst.mLLVMConst, mToTypeCDT.getLLVMType()));\
     }
 
@@ -329,6 +331,10 @@ public:
     }
     
     virtual void visit(const PtrDataType & toType) override {
+        // Expect these to be valid
+        WC_ASSERT(mToTypeCDT.isValid());
+        WC_ASSERT(mFromConst.mLLVMConst);
+        
         // Only allow a cast to the pointer data type if the pointer type is not null.
         // Can't cast 'null' to a non nullable pointer type.
         if (toType.mIsNullable) {
@@ -369,6 +375,9 @@ public:
     WC_IMPL_BASIC_CONST_CAST(getPtrToInt, UInt8)
     
     virtual void visit(const BoolDataType & dataType) override {
+        // Expect this to be valid
+        WC_ASSERT(mFromConst.mLLVMConst);
+        
         // Doing this for a non nullable pointer type is an error:
         const PtrDataType & fromPtrType = static_cast<const PtrDataType&>(mFromConst.mCompiledType.getDataType());
         

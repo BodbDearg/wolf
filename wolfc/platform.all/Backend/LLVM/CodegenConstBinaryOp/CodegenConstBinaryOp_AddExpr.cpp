@@ -144,6 +144,9 @@ WC_IMPL_BASIC_CONST_BINARY_OP(CodegenConstAddBinaryOp, UInt8, getAdd)
 
 void CodegenConstAddBinaryOp::visit(const PtrDataType & dataType) {
     WC_UNUSED_PARAM(dataType);
+    WC_ASSERT(mLeftConst.mLLVMConst);
+    WC_ASSERT(mRightConst.mLLVMConst);
+    
     llvm::Constant * resultConst = llvm::ConstantExpr::getGetElementPtr(
         mLeftConst.mCompiledType.getLLVMType()->getContainedType(0),
         mLeftConst.mLLVMConst,
@@ -192,9 +195,13 @@ void CodegenConstSubBinaryOp::visit(const PtrDataType & dataType) {
         // Pointer difference operation: convert the two pointers to integers firstly:
         llvm::Type * llvmIntTy = resultCDT.getLLVMType();
         WC_ASSERT(llvmIntTy);
+        
+        WC_ASSERT(mLeftConst.mLLVMConst);
         llvm::Constant * ptr1AsInt = llvm::ConstantExpr::getPtrToInt(mLeftConst.mLLVMConst, llvmIntTy);
-        llvm::Constant * ptr2AsInt = llvm::ConstantExpr::getPtrToInt(mRightConst.mLLVMConst, llvmIntTy);
         WC_ASSERT(ptr1AsInt);
+        
+        WC_ASSERT(mRightConst.mLLVMConst);
+        llvm::Constant * ptr2AsInt = llvm::ConstantExpr::getPtrToInt(mRightConst.mLLVMConst, llvmIntTy);
         WC_ASSERT(ptr2AsInt);
         
         // Then get the difference between them as an integer:
@@ -223,8 +230,10 @@ void CodegenConstSubBinaryOp::visit(const PtrDataType & dataType) {
     else {
         // Regular pointer '-' (subtract) pointer arithmetic.
         // Moves the pointer along by subtracting it whatever number of elements:
+        WC_ASSERT(mRightConst.mLLVMConst);
         llvm::Constant * rightConstNegated = llvm::ConstantExpr::getNeg(mRightConst.mLLVMConst);
         WC_ASSERT(rightConstNegated);
+        WC_ASSERT(mLeftConst.mLLVMConst);
         
         llvm::Constant * resultConst = llvm::ConstantExpr::getGetElementPtr(
             mLeftConst.mCompiledType.getLLVMType()->getContainedType(0),

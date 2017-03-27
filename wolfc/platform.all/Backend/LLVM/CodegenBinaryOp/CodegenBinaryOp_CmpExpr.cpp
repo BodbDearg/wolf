@@ -34,6 +34,9 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
         WC_ASSERT(compiledType.isValid());\
         \
         /* Generate the op result and push it */\
+        WC_ASSERT(mLeftVal.mLLVMVal);\
+        WC_ASSERT(mRightVal.mLLVMVal);\
+        \
         llvm::Value * cmpResult = mCG.mCtx.mIRBuilder.CmpExprCreateFunc(\
             mLeftVal.mLLVMVal,\
             mRightVal.mLLVMVal,\
@@ -66,11 +69,15 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
         PrimitiveDataTypes::getDefaultIntType().accept(mCG.mCodegenDataType);\
         CompiledDataType intTypeCDT = mCG.mCtx.popCompiledDataType();\
         llvm::Type * llvmIntTy = intTypeCDT.getLLVMType();\
+        WC_ASSERT(llvmIntTy);\
         \
         /* Cast both pointers to the default integer type */\
+        WC_ASSERT(mLeftVal.mLLVMVal);\
         llvm::Value * leftPtrAsInt = mCG.mCtx.mIRBuilder.CreatePtrToInt(mLeftVal.mLLVMVal, llvmIntTy);\
-        llvm::Value * rightPtrAsInt = mCG.mCtx.mIRBuilder.CreatePtrToInt(mRightVal.mLLVMVal, llvmIntTy);\
         WC_ASSERT(leftPtrAsInt);\
+        \
+        WC_ASSERT(mRightVal.mLLVMVal);\
+        llvm::Value * rightPtrAsInt = mCG.mCtx.mIRBuilder.CreatePtrToInt(mRightVal.mLLVMVal, llvmIntTy);\
         WC_ASSERT(rightPtrAsInt);\
         \
         /* Generate the op result against those integers and push it */\

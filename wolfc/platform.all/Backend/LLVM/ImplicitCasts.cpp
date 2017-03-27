@@ -812,6 +812,7 @@ BinaryOpCastDir determineCastDirForBinaryOp(CodegenCtx & cgCtx,
     // If either the value is invalid then bail out
     WC_GUARD(leftVal.isValid() && rightVal.isValid(), BinaryOpCastDir::kNoCastPossible);
     
+    #warning VOID SAFETY
     // Determine the cast dir:
     return determineCastDirForBinaryOp(cgCtx,
                                        *leftVal.mLLVMVal,
@@ -827,6 +828,7 @@ BinaryOpCastDir determineCastDirForBinaryOp(CodegenCtx & cgCtx,
     // If either the value is invalid then bail out
     WC_GUARD(leftConst.isValid() && rightConst.isValid(), BinaryOpCastDir::kNoCastPossible);
     
+    #warning VOID SAFETY
     // Determine the cast dir:
     return determineCastDirForBinaryOp(cgCtx,
                                        *leftConst.mLLVMConst,

@@ -56,10 +56,12 @@ void CodegenBasicUnaryOp::codegen() {
     Value exprValBeforeLoad = mCG.mCtx.popValue();
     
     if (mStoreResultInExpr) {
+        #warning TODO: Does this work for void?
         // Storing the result in the operand, create the load if we can
         if (exprValBeforeLoad.isValid()) {
             // Since we are storing on the left, we expect there to be a load required.
             WC_ASSERT(exprValBeforeLoad.mRequiresLoad);
+            WC_ASSERT(exprValBeforeLoad.mLLVMVal);
             llvm::Value * exprValLoaded = mCG.mCtx.mIRBuilder.CreateLoad(exprValBeforeLoad.mLLVMVal, "UnaryOp:OperandLoaded");
             WC_ASSERT(exprValLoaded);
             mExprVal = Value(exprValLoaded, exprValBeforeLoad.mCompiledType, false, exprValBeforeLoad.mDeclaringNode);
@@ -104,6 +106,8 @@ void CodegenBasicUnaryOp::codegen() {
 
     // All good, do the actual store:
     WC_ASSERT(!opResultVal.mRequiresLoad);
+    WC_ASSERT(opResultVal.mLLVMVal);
+    WC_ASSERT(exprValBeforeLoad.mLLVMVal);
     WC_ASSERTED_OP(mCG.mCtx.mIRBuilder.CreateStore(opResultVal.mLLVMVal, exprValBeforeLoad.mLLVMVal));
     
     // The result of a stored operation is 'void'

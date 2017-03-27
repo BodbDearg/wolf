@@ -90,58 +90,72 @@ void Codegen::visit(const AST::PrintStmnt & astNode) {
         
         switch (exprDataType.getTypeId()) {
             case DataTypeId::kInt8:
+                WC_ASSERT(exprVal.mLLVMVal);
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%hhd");
                 break;
                 
             case DataTypeId::kInt16:
+                WC_ASSERT(exprVal.mLLVMVal);
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%hd");
                 break;
                 
             case DataTypeId::kInt32:
+                WC_ASSERT(exprVal.mLLVMVal);
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%d");
                 break;
                 
             case DataTypeId::kInt64:
+                WC_ASSERT(exprVal.mLLVMVal);
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%ld");
                 break;
                 
             case DataTypeId::kInt128:
+                WC_ASSERT(exprVal.mLLVMVal);
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%lld");
                 break;
                 
             case DataTypeId::kUInt8:
+                WC_ASSERT(exprVal.mLLVMVal);
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%hhu");
                 break;
                 
             case DataTypeId::kUInt16:
+                WC_ASSERT(exprVal.mLLVMVal);
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%hu");
                 break;
                 
             case DataTypeId::kUInt32:
+                WC_ASSERT(exprVal.mLLVMVal);
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%u");
                 break;
                 
             case DataTypeId::kUInt64:
+                WC_ASSERT(exprVal.mLLVMVal);
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%lu");
                 break;
                 
             case DataTypeId::kUInt128:
+                WC_ASSERT(exprVal.mLLVMVal);
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%llu");
                 break;
                 
             case DataTypeId::kBool:
+                WC_ASSERT(exprVal.mLLVMVal);
                 codegenBoolPrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal);
                 break;
 
             case DataTypeId::kPtr:
+                WC_ASSERT(exprVal.mLLVMVal);
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "0x%zX");
                 break;
                 
             case DataTypeId::kNullptr:
+                WC_ASSERT(exprVal.mLLVMVal);
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "null");
                 break;
                 
             case DataTypeId::kStr:
+                WC_ASSERT(exprVal.mLLVMVal);
                 codegenGenericValuePrintStmnt(mCtx, *printfFn, *exprVal.mLLVMVal, "%s");
                 break;
                 

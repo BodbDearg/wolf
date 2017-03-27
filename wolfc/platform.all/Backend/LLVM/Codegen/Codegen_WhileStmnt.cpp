@@ -96,6 +96,8 @@ void Codegen::visit(const AST::WhileStmnt & astNode) {
     const DataType & whileExprType = whileExprVal.mCompiledType.getDataType();
     
     if (whileExprType.isBool()) {
+        WC_ASSERT(whileExprVal.mLLVMVal);
+        
         if (astNode.isWhileExprInversed()) {
             WC_ASSERTED_OP(mCtx.mIRBuilder.CreateCondBr(whileExprVal.mLLVMVal, endBB, bodyBB));
         }

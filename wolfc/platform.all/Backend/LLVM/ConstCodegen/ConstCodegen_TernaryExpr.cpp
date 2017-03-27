@@ -11,6 +11,7 @@
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/LOrExpr.hpp"
 #include "AST/Nodes/TernaryExpr.hpp"
+#include "Assert.hpp"
 #include "DataType/Types/BoolDataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 
@@ -82,6 +83,7 @@ void ConstCodegen::visit(const AST::TernaryExprWithCond & astNode) {
         }
     }
     
+    #warning VOID - Does this work?
     // Proceed no further if any of these checks fail
     WC_GUARD(condValIsBool);
     WC_GUARD(trueFalseValsTypeMatch);
@@ -90,6 +92,8 @@ void ConstCodegen::visit(const AST::TernaryExprWithCond & astNode) {
     WC_GUARD(falseVal.isValid());
     
     // Okay see which value to use:
+    WC_ASSERT(condConst.mLLVMConst);
+    
     if (condConst.mLLVMConst->isZeroValue()) {
         mCtx.pushConstant(Constant(falseVal.mLLVMConst, falseVal.mCompiledType, &astNode));
     }

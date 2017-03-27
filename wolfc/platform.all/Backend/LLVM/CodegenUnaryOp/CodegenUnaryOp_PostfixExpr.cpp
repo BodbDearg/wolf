@@ -61,6 +61,8 @@ CodegenIncUnaryOp::CodegenIncUnaryOp(Codegen & cg, const AST::ASTNode & expr) :
         );\
         \
         WC_ASSERT(incByConstant);\
+        WC_ASSERT(mExprVal.mLLVMVal);\
+        \
         llvm::Value * addResultVal = mCG.mCtx.mIRBuilder.CreateAdd(\
             mExprVal.mLLVMVal,\
             incByConstant,\
@@ -93,6 +95,8 @@ void CodegenIncUnaryOp::visit(const PtrDataType & dataType) {
     WC_ASSERT(oneConst);
     
     // Compute the new value for the pointer
+    WC_ASSERT(mExprVal.mLLVMVal);
+    
     llvm::Value * resultVal = mCG.mCtx.mIRBuilder.CreateGEP(
         mExprVal.mLLVMVal,
         oneConst,
@@ -120,6 +124,7 @@ CodegenDecUnaryOp::CodegenDecUnaryOp(Codegen & cg, const AST::ASTNode & expr) :
         );\
         \
         WC_ASSERT(decByConstant);\
+        \
         llvm::Value * subResultVal = mCG.mCtx.mIRBuilder.CreateSub(\
             mExprVal.mLLVMVal,\
             decByConstant,\
@@ -154,6 +159,8 @@ void CodegenDecUnaryOp::visit(const PtrDataType & dataType) {
     WC_ASSERT(minusOneConst);
     
     // Compute the new value for the pointer
+    WC_ASSERT(mExprVal.mLLVMVal);
+    
     llvm::Value * resultVal = mCG.mCtx.mIRBuilder.CreateGEP(
         mExprVal.mLLVMVal,
         minusOneConst,

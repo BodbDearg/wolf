@@ -53,6 +53,8 @@ void Codegen::visit(const AST::AssignExprAssign & astNode) {
         typesMatch = false;
     }
     
+    #warning VOID errors?
+    
     // TODO: support operator overloading here eventually
     // Do the assign if we can:
     if (typesMatch && leftAddr.mLLVMVal && rightVal.mLLVMVal) {

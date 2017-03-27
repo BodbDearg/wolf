@@ -261,6 +261,7 @@ void AddrCodegen::visit(const AST::ArrayLit & astNode) {
                                                               "AddrCodegen:ArrayLit:Alloca");
     
     WC_ASSERT(llvmStackVal);
+    WC_ASSERT(exprVal.mLLVMVal);
     mCtx.mIRBuilder.CreateStore(exprVal.mLLVMVal, llvmStackVal);
     
     // Push it onto the codegen context stack
@@ -379,6 +380,10 @@ void AddrCodegen::visit(const AST::PostfixExprArrayLookup & astNode) {
              arrayExprVal.isValid() &&
              exprTypeAndIndexTypesAreOk);
     
+    // Sanity check, these should be non null by this point:
+    WC_ASSERT(indexVal.mLLVMVal);
+    WC_ASSERT(arrayExprVal.mLLVMVal);
+    
     // Get the address for array element being indexed:
     llvm::Value * arrayElemAddr = nullptr;
     
@@ -448,6 +453,7 @@ void AddrCodegen::visit(const AST::PostfixExprFuncCall & astNode) {
                                                               "AddrCodegen:PostfixExprFuncCall:Alloca");
     
     WC_ASSERT(llvmStackVal);
+    WC_ASSERT(exprVal.mLLVMVal);
     WC_ASSERTED_OP(mCtx.mIRBuilder.CreateStore(exprVal.mLLVMVal, llvmStackVal));
     
     // Push it onto the codegen context stack to save the result.

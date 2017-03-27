@@ -142,11 +142,13 @@ void CodegenLazyLogicalBinaryOp::codegen() {
     if (mOpType == OpType::kAnd) {
         // Logical AND:
         // Only evaluate the right side if the left side is true.
+        WC_ASSERT(leftVal.mLLVMVal);
         mCG.mCtx.mIRBuilder.CreateCondBr(leftVal.mLLVMVal, evalRightStartBB, evalEndBB);
     }
     else {
         // Logical OR:
         // Only evaluate the right side if the left side is not true.
+        WC_ASSERT(leftVal.mLLVMVal);
         mCG.mCtx.mIRBuilder.CreateCondBr(leftVal.mLLVMVal, evalEndBB, evalRightStartBB);
     }
     
@@ -157,6 +159,8 @@ void CodegenLazyLogicalBinaryOp::codegen() {
     const char * phiNodeLbl = mOpType == OpType::kAnd ? "EvalLAndPHI" : "EvalLOrPHI";
     llvm::PHINode * phiNode = mCG.mCtx.mIRBuilder.CreatePHI(leftVal.mCompiledType.getLLVMType(), 2, phiNodeLbl);
     WC_ASSERT(phiNode);
+    WC_ASSERT(leftVal.mLLVMVal);
+    WC_ASSERT(rightVal.mLLVMVal);
     phiNode->addIncoming(leftVal.mLLVMVal, evalLeftEndBB);
     phiNode->addIncoming(rightVal.mLLVMVal, evalRightEndBB);
     

@@ -104,6 +104,9 @@ protected:
 #define WC_IMPL_BASIC_CONST_BINARY_OP(VisitorClass, DataTypeName, ConstExprGetterFunc)\
     void VisitorClass::visit(const DataTypeName##DataType & dataType) {\
         WC_UNUSED_PARAM(dataType);\
+        WC_ASSERT(mLeftConst.mLLVMConst);\
+        WC_ASSERT(mRightConst.mLLVMConst);\
+        \
         llvm::Constant * resultConst = llvm::ConstantExpr::ConstExprGetterFunc(\
             mLeftConst.mLLVMConst,\
             mRightConst.mLLVMConst\

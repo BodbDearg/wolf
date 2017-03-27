@@ -33,6 +33,9 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
         WC_ASSERT(compiledType.isValid());\
         \
         /* Generate the op result and push it */\
+        WC_ASSERT(mLeftConst.mLLVMConst);\
+        WC_ASSERT(mRightConst.mLLVMConst);\
+        \
         llvm::Constant * cmpResult = llvm::ConstantExpr::ConstCmpExprGetterFunc(\
             CmpPredicate,\
             mLeftConst.mLLVMConst,\
@@ -67,9 +70,12 @@ WC_LLVM_BACKEND_BEGIN_NAMESPACE
         llvm::Type * llvmIntTy = intTypeCDT.getLLVMType();\
         \
         /* Cast both pointers to the default integer type */\
+        WC_ASSERT(mLeftConst.mLLVMConst);\
         llvm::Constant * leftPtrAsInt = llvm::ConstantExpr::getPtrToInt(mLeftConst.mLLVMConst, llvmIntTy);\
-        llvm::Constant * rightPtrAsInt = llvm::ConstantExpr::getPtrToInt(mRightConst.mLLVMConst, llvmIntTy);\
         WC_ASSERT(leftPtrAsInt);\
+        \
+        WC_ASSERT(mRightConst.mLLVMConst);\
+        llvm::Constant * rightPtrAsInt = llvm::ConstantExpr::getPtrToInt(mRightConst.mLLVMConst, llvmIntTy);\
         WC_ASSERT(rightPtrAsInt);\
         \
         /* Generate the op result and push it */\

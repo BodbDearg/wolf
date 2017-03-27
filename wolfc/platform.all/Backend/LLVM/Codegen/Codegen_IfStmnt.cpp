@@ -78,6 +78,8 @@ void Codegen::visit(const AST::IfStmntNoElse & astNode) {
     irb.SetInsertPoint(ifBranchBB);
     
     if (ifExprVal.isValid() && ifExprIsBool) {
+        WC_ASSERT(ifExprVal.mLLVMVal);
+        
         if (astNode.isIfExprInversed()) {
             WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal.mLLVMVal, endBB, thenBB));
         }
@@ -170,6 +172,8 @@ void Codegen::visit(const AST::IfStmntElse & astNode) {
     irb.SetInsertPoint(ifBranchBB);
     
     if (ifExprVal.isValid() && ifExprIsBool) {
+        WC_ASSERT(ifExprVal.mLLVMVal);
+        
         if (astNode.isIfExprInversed()) {
             WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal.mLLVMVal, elseBB, thenBB));
         }
@@ -269,6 +273,8 @@ void Codegen::visit(const AST::IfStmntElseIf & astNode) {
     irb.SetInsertPoint(ifBranchBB);
     
     if (ifExprVal.isValid() && ifExprIsBool) {
+        WC_ASSERT(ifExprVal.mLLVMVal);
+        
         if (astNode.isIfExprInversed()) {
             WC_ASSERTED_OP(irb.CreateCondBr(ifExprVal.mLLVMVal, outerIfBB, thenBB));
         }

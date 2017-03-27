@@ -57,8 +57,10 @@ void CodegenBinaryOp::codegen() {
     if (mStoreResultOnLeft) {
         // Storing the result on the left, create the load if we can
         if (leftValBeforeLoad.isValid()) {
+            #warning VOID SAFETY
             // Since we are storing on the left, we expect there to be a load required.
             WC_ASSERT(leftValBeforeLoad.mRequiresLoad);
+            WC_ASSERT(leftValBeforeLoad.mLLVMVal);
             llvm::Value * leftValLoaded = mCG.mCtx.mIRBuilder.CreateLoad(leftValBeforeLoad.mLLVMVal, "BinaryOp:LeftValLoaded");
             WC_ASSERT(leftValLoaded);
             mLeftVal = Value(leftValLoaded, leftValBeforeLoad.mCompiledType, false, leftValBeforeLoad.mDeclaringNode);
@@ -123,6 +125,8 @@ void CodegenBinaryOp::codegen() {
     
     // All good, do the actual store:
     WC_ASSERT(!opResultVal.mRequiresLoad);
+    WC_ASSERT(opResultVal.mLLVMVal);
+    WC_ASSERT(leftValBeforeLoad.mLLVMVal);
     WC_ASSERTED_OP(mCG.mCtx.mIRBuilder.CreateStore(opResultVal.mLLVMVal, leftValBeforeLoad.mLLVMVal));
     
     // The result of a stored operation is 'void'

@@ -104,6 +104,8 @@ protected:
 #define WC_IMPL_BASIC_UNARY_OP(VisitorClass, DataTypeName, OpCreateFunc)\
     void VisitorClass::visit(const DataTypeName##DataType & dataType) {\
         WC_UNUSED_PARAM(dataType);\
+        WC_ASSERT(mExprVal.mLLVMVal);\
+        \
         llvm::Value * resultVal = mCG.mCtx.mIRBuilder.OpCreateFunc(\
             mExprVal.mLLVMVal,\
             #DataTypeName ":" #OpCreateFunc ":Result"\

@@ -153,6 +153,7 @@ void Codegen::visit(const AST::PostfixExprFuncCall & astNode) {
         }
         
         // Get the llvm function
+        WC_ASSERT(operandVal.mLLVMVal);
         llvm::Function * llvmFunc = llvm::cast<llvm::Function>(operandVal.mLLVMVal);
         
         // Call it: note if non void we have to give the value a name
@@ -189,6 +190,7 @@ void Codegen::visit(const AST::PostfixExprArrayLookup & astNode) {
     WC_GUARD(elemAddrVal.isValid());
     
     // Create the load for the element:
+    WC_ASSERT(elemAddrVal.mLLVMVal);
     llvm::Value * loadedElemVal = mCtx.mIRBuilder.CreateLoad(elemAddrVal.mLLVMVal,
                                                              "PostfixExprArrayLookup:LoadElem");
     

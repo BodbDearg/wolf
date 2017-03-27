@@ -8,6 +8,7 @@
 
 #include "../CodegenCtx.hpp"
 #include "AST/Nodes/BoolLit.hpp"
+#include "Assert.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
