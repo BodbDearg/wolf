@@ -24,19 +24,6 @@
 	let blah : uint = 18_446_744_073_709_551_615
 
 - Fix this bug:
-	func testImplicitCastForWhileStmnt()
-	    let blah = 0
-	    let blahPtr: ?int = &blah
-
-	    while blahPtr
-	        $blahPtr++
-	        blahPtr = null
-	    end
-
-	    assert(blah == 1)
-	end
-
-- Fix this bug:
 	func blah()
 	    print("Hello")
 	end
