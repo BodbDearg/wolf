@@ -56,7 +56,6 @@ void CodegenBasicUnaryOp::codegen() {
     Value exprValBeforeLoad = mCG.mCtx.popValue();
     
     if (mStoreResultInExpr) {
-        #warning TODO: Does this work for void?
         // Storing the result in the operand, create the load if we can
         if (exprValBeforeLoad.isValid()) {
             // Since we are storing on the left, we expect there to be a load required.
