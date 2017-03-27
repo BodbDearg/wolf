@@ -24,43 +24,36 @@ bool PostfixExpr::peek(const Token * currentToken) {
 
 PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
     // Parse the initial expression
-    CastExpr * expr = CastExpr::parse(parseCtx);
-    WC_GUARD(expr, nullptr);
+    CastExpr * initialCastExpr = CastExpr::parse(parseCtx);
+    WC_GUARD(initialCastExpr, nullptr);
 
     // Save the outermost postfix expression here:
-    PostfixExpr * outerPostfixExpr = nullptr;
-
-    // See if '++' or '--' follow:
-    if (parseCtx.tok()->type == TokenType::kIncrement) {
-        // Consume the '++' token and save
-        const Token * endToken = parseCtx.tok();
-        parseCtx.nextTok();
-
-        // Create outer postfix expr
-        outerPostfixExpr = WC_NEW_AST_NODE(parseCtx, PostfixExprInc, *expr, *endToken);
-        WC_ASSERT(outerPostfixExpr);
-    }
-    else if (parseCtx.tok()->type == TokenType::kDecrement) {
-        // Consume the '--' token and save
-        const Token * endToken = parseCtx.tok();
-        parseCtx.nextTok();
-
-        // Create outer postfix expr
-        outerPostfixExpr = WC_NEW_AST_NODE(parseCtx, PostfixExprDec, *expr, *endToken);
-        WC_ASSERT(outerPostfixExpr);
-    }
-    else {
-        // Basic postfix outer expression with no increment or decrement
-        outerPostfixExpr = WC_NEW_AST_NODE(parseCtx, PostfixExprNoOp, *expr);
-        WC_ASSERT(outerPostfixExpr);
-    }
+    PostfixExpr * outerPostfixExpr = WC_NEW_AST_NODE(parseCtx, PostfixExprNoOp, *initialCastExpr);
+    WC_ASSERT(outerPostfixExpr);
     
-    // Continue parsing and wrapping function calls and array lookups while we can
-    while (parseCtx.tok()->type == TokenType::kLParen ||
-           parseCtx.tok()->type == TokenType::kLBrack)
-    {
-        // See if function call follows:
-        if (parseCtx.tok()->type == TokenType::kLParen) {
+    // Continue parsing and wrapping function calls, array lookups and
+    // increment/decrement etc. while we can...
+    while (true) {
+        if (parseCtx.tok()->type == TokenType::kIncrement) {
+            // Increment '++' operator. Consume the '++' token and save:
+            const Token * endToken = parseCtx.tok();
+            parseCtx.nextTok();
+            
+            // Create outer postfix expr:
+            outerPostfixExpr = WC_NEW_AST_NODE(parseCtx, PostfixExprInc, *outerPostfixExpr, *endToken);
+            WC_ASSERT(outerPostfixExpr);
+        }
+        else if (parseCtx.tok()->type == TokenType::kDecrement) {
+            // Decrement '--' operator. Consume the '--' token and save:
+            const Token * endToken = parseCtx.tok();
+            parseCtx.nextTok();
+            
+            // Create outer postfix expr:
+            outerPostfixExpr = WC_NEW_AST_NODE(parseCtx, PostfixExprDec, *outerPostfixExpr, *endToken);
+            WC_ASSERT(outerPostfixExpr);
+        }
+        else if (parseCtx.tok()->type == TokenType::kLParen) {
+            // Function call follows:
             // Save and consume the '(' token as well as newlines following:
             const Token * openingParen = parseCtx.tok();
             parseCtx.nextTok();
@@ -112,7 +105,7 @@ PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
                                                    *closingParen);
             }
         }
-        else {
+        else if (parseCtx.tok()->type == TokenType::kLBrack) {
             // An array lookup follows, skip the '[' and any newlines that follow.
             // Expect '[' to be here based on previous if() failing - see while loop.
             WC_ASSERT(parseCtx.tok()->type == TokenType::kLBrack);
@@ -142,6 +135,10 @@ PostfixExpr * PostfixExpr::parse(ParseCtx & parseCtx) {
             
             WC_ASSERT(outerPostfixExpr);
         }
+        else {
+            // No other postfix operator follows, done parsing...
+            break;
+        }
     }
     
     return outerPostfixExpr;
@@ -169,7 +166,7 @@ const Token & PostfixExprNoOp::getEndToken() const {
 //-----------------------------------------------------------------------------
 // PostfixExprIncDecBase
 //-----------------------------------------------------------------------------
-PostfixExprIncDecBase::PostfixExprIncDecBase(CastExpr & expr, const Token & endToken) :
+PostfixExprIncDecBase::PostfixExprIncDecBase(PostfixExpr & expr, const Token & endToken) :
     mExpr(expr),
     mEndToken(endToken)
 {
@@ -187,7 +184,7 @@ const Token & PostfixExprIncDecBase::getEndToken() const {
 //-----------------------------------------------------------------------------
 // PostfixExprInc
 //-----------------------------------------------------------------------------
-PostfixExprInc::PostfixExprInc(CastExpr & expr, const Token & endToken) :
+PostfixExprInc::PostfixExprInc(PostfixExpr & expr, const Token & endToken) :
     PostfixExprIncDecBase(expr, endToken)
 {
     WC_EMPTY_FUNC_BODY();
@@ -200,7 +197,7 @@ void PostfixExprInc::accept(ASTNodeVisitor & visitor) const {
 //-----------------------------------------------------------------------------
 // PostfixExprDec
 //-----------------------------------------------------------------------------
-PostfixExprDec::PostfixExprDec(CastExpr & expr, const Token & endToken) :
+PostfixExprDec::PostfixExprDec(PostfixExpr & expr, const Token & endToken) :
     PostfixExprIncDecBase(expr, endToken)
 {
     WC_EMPTY_FUNC_BODY();

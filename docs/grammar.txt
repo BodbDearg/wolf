@@ -157,8 +157,8 @@ PrefixExpr:
 
 PostfixExpr:
 	CastExpr
-	CastExpr ++
-	CastExpr --
+	PostfixExpr ++
+	PostfixExpr --
 	PostfixExpr ( [0..N: AssignExpr ,][AssignExpr] )
 	PostfixExpr [ AssignExpr ]
 

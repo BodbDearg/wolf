@@ -22,8 +22,8 @@ class CastExpr;
 /*
 PostfixExpr:
     CastExpr
-    CastExpr ++
-    CastExpr --
+    PostfixExpr ++
+    PostfixExpr --
     PostfixExpr ( [0..N: AssignExpr ,][AssignExpr] )
     PostfixExpr [ AssignExpr ]
 */
@@ -48,27 +48,27 @@ public:
 /* Base class for increment/decrement postfix expressions */
 class PostfixExprIncDecBase : public PostfixExpr {
 public:
-    PostfixExprIncDecBase(CastExpr & expr, const Token & endToken);
+    PostfixExprIncDecBase(PostfixExpr & expr, const Token & endToken);
 
     virtual const Token & getStartToken() const final override;
     virtual const Token & getEndToken() const final override;
     
-    CastExpr &      mExpr;
+    PostfixExpr &   mExpr;
     const Token &   mEndToken;
 };
 
-/* CastExpr ++ */
+/* PostfixExpr ++ */
 class PostfixExprInc final : public PostfixExprIncDecBase {
 public:
-    PostfixExprInc(CastExpr & expr, const Token & endToken);
+    PostfixExprInc(PostfixExpr & expr, const Token & endToken);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
 };
 
-/* CastExpr -- */
+/* PostfixExpr -- */
 class PostfixExprDec final : public PostfixExprIncDecBase {
 public:
-    PostfixExprDec(CastExpr & expr, const Token & endToken);
+    PostfixExprDec(PostfixExpr & expr, const Token & endToken);
     
     virtual void accept(ASTNodeVisitor & visitor) const override;
 };
