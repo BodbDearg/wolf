@@ -11,7 +11,6 @@
 #include "CodegenConstCast/CodegenConstCast.hpp"
 #include "CodegenCtx.hpp"
 #include "ConstCodegen/ConstCodegen.hpp"
-#include "DataType/DataType.hpp"
 #include "DataType/DataTypeVisitor.hpp"
 #include "DataType/Types/GenericIntDataType.hpp"
 #include "DataType/Types/PtrDataType.hpp"

@@ -10,7 +10,6 @@
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/PrintStmnt.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE

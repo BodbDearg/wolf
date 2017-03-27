@@ -10,7 +10,6 @@
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/RandExpr.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 
 WC_BEGIN_NAMESPACE

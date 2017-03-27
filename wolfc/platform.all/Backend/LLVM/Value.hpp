@@ -7,6 +7,7 @@
 #pragma once
 
 #include "CompiledDataType.hpp"
+#include "DataType/DataType.hpp"
 
 WC_THIRD_PARTY_INCLUDES_BEGIN
     #include <string>
@@ -69,7 +70,21 @@ struct Value {
     Value & operator = (const Value & other) = default;
     
     inline bool isValid() const {
-        return mLLVMVal != nullptr && mCompiledType.isValid();
+        if (mCompiledType.isValid()) {
+            // Note: for 'void' values allow the llvm value to be null.
+            // This does not affect the validity for void values.
+            if (mCompiledType.getDataType().isVoid()) {
+                return true;
+            }
+            
+            return mLLVMVal != nullptr;
+        }
+        
+        return false;
+    }
+    
+    inline bool isVoid() const {
+        return mCompiledType.getDataType().isVoid();
     }
     
     /* The name of the value */

@@ -12,7 +12,6 @@
 #include "Assert.hpp"
 #include "AST/Nodes/ASTNode.hpp"
 #include "AST/Nodes/IExpr.hpp"
-#include "DataType/DataType.hpp"
 #include "DataType/Types/BoolDataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "StringUtils.hpp"

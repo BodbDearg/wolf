@@ -11,7 +11,6 @@
 #include "AST/Nodes/FuncArg.hpp"
 #include "AST/Nodes/Scope.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
 #include "DataType/Types/FuncDataType.hpp"
 #include "Finally.hpp"
 #include "StringUtils.hpp"

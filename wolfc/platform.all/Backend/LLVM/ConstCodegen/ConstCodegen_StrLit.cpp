@@ -10,7 +10,6 @@
 #include "../Constant.hpp"
 #include "AST/Nodes/StrLit.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "Lexer/Token.hpp"
 

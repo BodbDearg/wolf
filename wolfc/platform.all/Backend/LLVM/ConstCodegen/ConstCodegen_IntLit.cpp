@@ -9,7 +9,6 @@
 #include "../CodegenCtx.hpp"
 #include "AST/Nodes/IntLit.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "Lexer/Token.hpp"
 

@@ -10,7 +10,6 @@
 #include "../CodegenCtx.hpp"
 #include "AST/Nodes/ASTNode.hpp"
 #include "AST/Nodes/IExpr.hpp"
-#include "DataType/DataType.hpp"
 #include "DataType/Types/PtrDataType.hpp"
 
 WC_BEGIN_NAMESPACE

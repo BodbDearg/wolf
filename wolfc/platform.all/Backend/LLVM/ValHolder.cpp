@@ -8,7 +8,6 @@
 
 #include "AST/Nodes/ASTNode.hpp"
 #include "CodegenCtx.hpp"
-#include "DataType/DataType.hpp"
 #include "Lexer/Token.hpp"
 
 WC_BEGIN_NAMESPACE

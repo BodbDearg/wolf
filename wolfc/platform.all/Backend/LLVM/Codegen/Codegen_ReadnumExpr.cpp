@@ -9,8 +9,6 @@
 #include "../CodegenCtx.hpp"
 #include "AST/Nodes/ReadnumExpr.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
-#include "DataType/DataTypeId.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 
 WC_BEGIN_NAMESPACE

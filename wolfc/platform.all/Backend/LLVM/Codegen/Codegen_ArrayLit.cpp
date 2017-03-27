@@ -11,7 +11,6 @@
 #include "Assert.hpp"
 #include "AST/Nodes/ArrayLit.hpp"
 #include "AST/Nodes/AssignExpr.hpp"
-#include "DataType/DataType.hpp"
 #include "DataType/Types/ArrayDataType.hpp"
 #include "DataType/Types/UndefinedDataType.hpp"
 

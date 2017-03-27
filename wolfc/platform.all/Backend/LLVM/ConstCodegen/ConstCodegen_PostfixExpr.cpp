@@ -11,7 +11,6 @@
 #include "AST/Nodes/CastExpr.hpp"
 #include "AST/Nodes/PostfixExpr.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
 #include "DataType/Types/ArrayDataType.hpp"
 
 WC_BEGIN_NAMESPACE

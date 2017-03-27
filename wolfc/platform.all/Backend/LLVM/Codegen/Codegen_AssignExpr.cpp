@@ -14,7 +14,6 @@
 #include "AST/Nodes/AssignExpr.hpp"
 #include "AST/Nodes/TernaryExpr.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "DataType/Types/VoidDataType.hpp"
 

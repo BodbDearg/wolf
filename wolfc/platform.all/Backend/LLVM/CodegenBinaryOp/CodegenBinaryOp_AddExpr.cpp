@@ -8,7 +8,6 @@
 
 #include "../Codegen/Codegen.hpp"
 #include "../CodegenCtx.hpp"
-#include "DataType/DataType.hpp"
 #include "DataType/Types/PrimitiveDataTypes.hpp"
 #include "DataType/Types/PtrDataType.hpp"
 

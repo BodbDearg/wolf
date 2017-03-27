@@ -15,7 +15,6 @@
 #include "AST/Nodes/Type.hpp"
 #include "AST/Nodes/VarDecl.hpp"
 #include "Assert.hpp"
-#include "DataType/DataType.hpp"
 #include "StringUtils.hpp"
 
 WC_BEGIN_NAMESPACE

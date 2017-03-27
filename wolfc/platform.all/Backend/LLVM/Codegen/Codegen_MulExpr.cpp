@@ -10,7 +10,6 @@
 #include "../CodegenCtx.hpp"
 #include "AST/Nodes/MulExpr.hpp"
 #include "AST/Nodes/ShiftExpr.hpp"
-#include "DataType/DataType.hpp"
 
 WC_BEGIN_NAMESPACE
 WC_LLVM_BACKEND_BEGIN_NAMESPACE
