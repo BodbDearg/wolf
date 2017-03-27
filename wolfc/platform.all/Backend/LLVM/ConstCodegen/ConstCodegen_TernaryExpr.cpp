@@ -62,30 +62,55 @@ void ConstCodegen::visit(const AST::TernaryExprWithCond & astNode) {
         }
     }
     
+    // The data types for the two expressions must be non void (sized):
+    bool trueAndFalseValsAreSized = true;
+    const DataType & trueValType = trueVal.mCompiledType.getDataType();
+    
+    if (!trueValType.isSized()) {
+        // Note: no error msg in the case of 'undefined' since that means an error was triggered elsewhere
+        if (!trueValType.isUndefined()) {
+            mCtx.error(astNode,
+                       "The 'true' expression value in a ternary operator must be of a valid "
+                       "sized data type not '%s'!",
+                       trueValType.name().c_str());
+        }
+        
+        trueAndFalseValsAreSized = false;
+    }
+    
+    const DataType & falseValType = falseVal.mCompiledType.getDataType();
+    
+    if (!falseValType.isSized()) {
+        // Note: no error msg in the case of 'undefined' since that means an error was triggered elsewhere
+        if (!falseValType.isUndefined()) {
+            mCtx.error(astNode,
+                       "The 'false' expression value in a ternary operator must be of a valid "
+                       "sized data type not '%s'!",
+                       falseValType.name().c_str());
+        }
+        
+        trueAndFalseValsAreSized = false;
+    }
+    
     // The two expressions must match in terms of type:
     bool trueFalseValsTypeMatch = true;
     
-    {
-        const DataType & trueValType = trueVal.mCompiledType.getDataType();
-        const DataType & falseValType = falseVal.mCompiledType.getDataType();
-        
-        if (!trueValType.equals(falseValType)) {
-            // Note: no error msg in the case of 'undefined' since that means an error was triggered elsewhere
-            if (!trueValType.isUndefined() && !falseValType.isUndefined()) {
-                mCtx.error(astNode,
-                           "The 'true' and 'false' expressions of the ternary operator must be of the same type! "
-                           "The true expression is of type '%s' while the false expression is of type '%s'!",
-                           trueValType.name().c_str(),
-                           falseValType.name().c_str());
-            }
-            
-            trueFalseValsTypeMatch = false;
+    if (!trueValType.equals(falseValType)) {
+        // Note: no error msg in the case of 'undefined' since that means an error was triggered elsewhere
+        if (!trueValType.isUndefined() && !falseValType.isUndefined()) {
+            mCtx.error(astNode,
+                       "The 'true' and 'false' expressions of the ternary operator must be of the same type! "
+                       "The true expression is of type '%s' while the false expression is of type '%s'!",
+                       trueValType.name().c_str(),
+                       falseValType.name().c_str());
         }
+        
+        trueFalseValsTypeMatch = false;
     }
     
-    #warning VOID - Does this work?
     // Proceed no further if any of these checks fail
     WC_GUARD(condValIsBool);
+    WC_GUARD(trueAndFalseValsAreSized);
     WC_GUARD(trueFalseValsTypeMatch);
     WC_GUARD(condConst.isValid());
     WC_GUARD(trueVal.isValid());
