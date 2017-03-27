@@ -406,6 +406,18 @@ func testReturnStmntFunc7(i: int) -> int
     return 0
 end
 
+func testReturnStmntFunc8()
+    ; Making sure returning a 'void' expression works for a return statement without a condition.
+    return testReturnStmntFunc1()
+    assert(false)
+end
+
+func testReturnStmntFunc9()
+    ; Making sure returning a 'void' expression works for a return statement with a condition.
+    return testReturnStmntFunc1() if true
+    assert(false)
+end
+
 func testReturnStmnt()
     testReturnStmntFunc1()
     testReturnStmntFunc2()
@@ -422,6 +434,8 @@ func testReturnStmnt()
     assert(testReturnStmntFunc7(0) == 0)
     assert(testReturnStmntFunc7(1) == 1)
     assert(testReturnStmntFunc7(2) == 1)
+    testReturnStmntFunc8()
+    testReturnStmntFunc9()
 end
 
 ;==================================================================================================

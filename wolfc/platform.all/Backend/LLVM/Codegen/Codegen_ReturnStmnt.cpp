@@ -148,15 +148,19 @@ void Codegen::visit(const AST::ReturnStmntNoCondWithValue & astNode) {
     // cast if it is mismatched to correct it. If we fail in this, then bail out...
     WC_GUARD(verifyAndAutoPromoteReturnValForCurrentFunc(*this, returnVal));
     
-    #warning VOID - does this work?
     // Make sure we have a valid value to return.
     // Note: do not expect this value to require a load either.
     WC_GUARD(returnVal.isValid());
     WC_ASSERT(!returnVal.mRequiresLoad);
     
-    // Now generate the return and return true for success
-    WC_ASSERT(returnVal.mLLVMVal);
-    mCtx.mIRBuilder.CreateRet(returnVal.mLLVMVal);
+    // Now generate the return
+    if (returnVal.isVoid()) {
+        mCtx.mIRBuilder.CreateRetVoid();
+    }
+    else {
+        WC_ASSERT(returnVal.mLLVMVal);
+        mCtx.mIRBuilder.CreateRet(returnVal.mLLVMVal);
+    }
     
     // Grab the parent function
     auto & irb = mCtx.mIRBuilder;
@@ -301,15 +305,19 @@ void Codegen::visit(const AST::ReturnStmntWithCondAndValue & astNode) {
     // cast if it is mismatched to correct it. If we fail in this, then bail out...
     WC_GUARD(verifyAndAutoPromoteReturnValForCurrentFunc(*this, returnVal));
     
-    #warning VOID - does this work?
     // Make sure we have a valid value to return.
     // Note: do not expect this value to require a load either.
     WC_GUARD(returnVal.isValid());
     WC_ASSERT(!returnVal.mRequiresLoad);
     
     // Generate the code for the return:
-    WC_ASSERT(returnVal.mLLVMVal);
-    mCtx.mIRBuilder.CreateRet(returnVal.mLLVMVal);
+    if (returnVal.isVoid()) {
+        mCtx.mIRBuilder.CreateRetVoid();
+    }
+    else {
+        WC_ASSERT(returnVal.mLLVMVal);
+        mCtx.mIRBuilder.CreateRet(returnVal.mLLVMVal);
+    }
     
     // Go back to the block where the branch is in
     mCtx.popInsertBlock();
